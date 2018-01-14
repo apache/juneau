@@ -16,53 +16,54 @@ import java.lang.reflect.*;
 
 /**
  * Utility class for merging POJOs behind a single interface.
- *
+ * 
  * <p>
  * Useful in cases where you want to define beans with 'default' values.
- *
+ * 
  * <p>
  * For example, given the following bean classes...
- *
+ * 
  * <p class='bcode'>
  * 	<jk>public interface</jk> IA {
  * 		String getX();
  * 		<jk>void</jk> setX(String x);
  * 	}
- *
+ * 
  * 	<jk>public class</jk> A <jk>implements</jk> IA {
  * 		<jk>private</jk> String <jf>x</jf>;
- *
+ * 
  * 		<jk>public</jk> A(String x) {
  * 			<jk>this</jk>.<jf>x</jf> = x;
  * 		}
- *
+ * 
  * 		<jk>public</jk> String getX() {
  * 			<jk>return</jk> <jf>x</jf>;
  * 		}
- *
+ * 
  * 		<jk>public void</jk> setX(String x) {
  * 			<jk>this</jk>.<jf>x</jf> = x;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <p>
  * The getters will be called in order until the first non-null value is returned...
- *
+ * 
  * <p class='bcode'>
  * 	PojoMerge m;
- *
+ * 
  * 	m = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
  * 	<jsm>assertEquals</jsm>(<js>"1"</js>, m.getX());
- *
+ * 
  * 	m = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
  * 	<jsm>assertEquals</jsm>(<js>"2"</js>, m.getX());
- *
+ * 
  * 	m = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
  * 	<jsm>assertEquals</jsm>(<jk>null</jk>, m.getX());
  * </p>
- *
- * <h5 class='section'>Notes:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul>
  * 	<li>Null POJOs are ignored.
  * 	<li>Non-getter methods are either invoked on the first POJO or all POJOs depending on the <code>callAllNonGetters</code> flag
@@ -74,10 +75,10 @@ public class PojoMerge {
 
 	/**
 	 * Create a proxy interface on top of zero or more POJOs.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut to calling <code>merge(interfaceClass, <jk>false</jk>, pojos);</code>
-	 *
+	 * 
 	 * @param interfaceClass The common interface class.
 	 * @param pojos
 	 * 	Zero or more POJOs to merge.
@@ -91,7 +92,7 @@ public class PojoMerge {
 
 	/**
 	 * Create a proxy interface on top of zero or more POJOs.
-	 *
+	 * 
 	 * @param interfaceClass The common interface class.
 	 * @param callAllNonGetters
 	 * 	If <jk>true</jk>, when calling a method that's not a getter, the method will be invoked on all POJOs.

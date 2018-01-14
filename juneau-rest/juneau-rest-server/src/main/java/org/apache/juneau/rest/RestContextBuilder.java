@@ -43,10 +43,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Defines the initial configuration of a <code>RestServlet</code> or <code>@RestResource</code> annotated object.
- *
+ * 
  * <p>
  * An extension of the {@link ServletConfig} object used during servlet initialization.
- *
+ * 
  * <p>
  * Provides access to the following initialized resources:
  * <ul>
@@ -54,12 +54,12 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link #getProperties()} - The modifiable configuration properties for this resource.
  * 	<li>{@link #getVarResolverBuilder()} - The variable resolver for this resource.
  * </ul>
- *
+ * 
  * <p>
  * Methods are provided for overriding or augmenting the information provided by the <ja>@RestResource</ja> annotation.
  * In general, most information provided in the <ja>@RestResource</ja> annotation can be specified programmatically
  * through calls on this object.
- *
+ * 
  * <p>
  * To interact with this object, simply implement the following init method in your resource class:
  * <p class='bcode'>
@@ -70,11 +70,11 @@ import org.apache.juneau.utils.*;
  * 		<jk>super</jk>.init(builder); <jc>// Make sure this is the last line! (or just leave it out entirely)</jc>
  * 	}
  * </p>
- *
+ * 
  * <p>
  * Note that this method is identical to {@link HttpServlet#init(ServletConfig)} except you get access to
  * this object instead.  Also, this method can throw any exception, not just a {@link ServletException}.
- *
+ * 
  * <p>
  * The parent <code>init(RestServletConfig)</code> method will construct a read-only {@link RestContext} object
  * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)</code> before
@@ -103,10 +103,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Constructor for top-level servlets when using dependency injection.
-	 *
+	 * 
 	 * <p>
 	 * Work-in-progress.
-	 *
+	 * 
 	 * @param config
 	 * 	The servlet config object we're extending.
 	 * @param resourceClass
@@ -119,7 +119,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param config The servlet config passed into the servlet by the servlet container.
 	 * @param resource The class annotated with <ja>@RestResource</ja>.
 	 * @throws ServletException Something bad happened.
@@ -320,14 +320,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Adds the specified {@link Var} classes to this config.
-	 *
+	 * 
 	 * <p>
 	 * These variables affect the variable resolver returned by {@link RestRequest#getVarResolverSession()} which is
 	 * used to resolve string variables of the form <js>"$X{...}"</js>.
-	 *
+	 * 
 	 * <p>
 	 * See {@link RestContext#getVarResolver()} for a list of predefined variables.
-	 *
+	 * 
 	 * @param vars The {@link Var} classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
@@ -338,11 +338,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Adds a var context object to this config.
-	 *
+	 * 
 	 * <p>
 	 * Var context objects are read-only objects associated with the variable resolver for vars that require external
 	 * information.
-	 *
+	 * 
 	 * <p>
 	 * For example, the {@link ConfigFileVar} needs access to this resource's {@link ConfigFile} through the
 	 * {@link ConfigFileVar#SESSION_config} object that can be specified as either a session object (temporary) or
@@ -351,7 +351,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p class='bcode'>
 	 * 	config.addVarContextObject(<jsf>SESSION_config</jsf>, configFile);
 	 * </p>
-	 *
+	 * 
 	 * @param name The context object key (i.e. the name that the Var class looks for).
 	 * @param object The context object.
 	 * @return This object (for method chaining).
@@ -363,12 +363,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Overwrites the default config file with a custom config file.
-	 *
+	 * 
 	 * <p>
 	 * By default, the config file is determined using the {@link RestResource#config() @RestResource.config()}
 	 * annotation.
 	 * This method allows you to programmatically override it with your own custom config file.
-	 *
+	 * 
 	 * @param configFile The new config file.
 	 * @return This object (for method chaining).
 	 */
@@ -379,10 +379,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Sets a property on this resource.
-	 *
+	 * 
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestResource#properties() @RestResource.properties()} annotation.
-	 *
+	 * 
 	 * @param key The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
@@ -394,13 +394,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Sets multiple properties on this resource.
-	 *
+	 * 
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestResource#properties() @RestResource.properties()} annotation.
-	 *
+	 * 
 	 * <p>
 	 * Values in the map are added to the existing properties and are overwritten if duplicates are found.
-	 *
+	 * 
 	 * @param properties The new properties to add to this config.
 	 * @return This object (for method chaining).
 	 */
@@ -420,7 +420,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Creates a new {@link PropertyStore} object initialized with the properties defined in this config.
-	 *
+	 * 
 	 * @return A new property store.
 	 */
 	protected PropertyStoreBuilder createPropertyStore() {
@@ -434,20 +434,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Returns the external configuration file for this resource.
-	 *
+	 * 
 	 * <p>
 	 * The configuration file location is determined via the {@link RestResource#config() @RestResource.config()}
 	 * annotation on the resource.
-	 *
+	 * 
 	 * <p>
 	 * The config file can be programmatically overridden by adding the following method to your resource:
 	 * <p class='bcode'>
 	 * 	<jk>public</jk> ConfigFile createConfigFile(ServletConfig servletConfig) <jk>throws</jk> ServletException;
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * If a config file is not set up, then an empty config file will be returned that is not backed by any file.
-	 *
+	 * 
 	 * @return The external config file for this resource.  Never <jk>null</jk>.
 	 */
 	public ConfigFile getConfigFile() {
@@ -456,20 +456,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Returns the configuration properties for this resource.
-	 *
+	 * 
 	 * <p>
 	 * The configuration properties are determined via the {@link RestResource#properties() @RestResource.properties()} annotation on the resource.
-	 *
+	 * 
 	 * <p>
 	 * The configuration properties can be augmented programmatically by adding the following method to your resource:
 	 * <p class='bcode'>
 	 * 	<jk>public</jk> ObjectMap createProperties(ServletConfig servletConfig) <jk>throws</jk> ServletException;
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * These properties can be modified during servlet initialization.
 	 * However, any modifications made after {@link RestServlet#init(ServletConfig)} has been called will have no effect.
-	 *
+	 * 
 	 * @return The configuration properties for this resource.  Never <jk>null</jk>.
 	 */
 	public ObjectMap getProperties() {
@@ -478,7 +478,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Creates the variable resolver for this resource.
-	 *
+	 * 
 	 * <p>
 	 * The variable resolver returned by this method can resolve the following variables:
 	 * <ul>
@@ -488,11 +488,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li>{@link IfVar}
 	 * 	<li>{@link SwitchVar}
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * Note that the variables supported here are only a subset of those returned by
 	 * {@link RestRequest#getVarResolverSession()}.
-	 *
+	 * 
 	 * @return The variable resolver for this resource.  Never <jk>null</jk>.
 	 */
 	public VarResolverBuilder getVarResolverBuilder() {
@@ -506,7 +506,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Allow body URL parameter.
-	 *
+	 * 
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
@@ -529,7 +529,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Allowed method parameters.
-	 *
+	 * 
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
@@ -552,7 +552,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Allow header URL parameters.
-	 *
+	 * 
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
@@ -574,7 +574,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  REST call handler.
-	 *
+	 * 
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
@@ -595,7 +595,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  REST call handler.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #callHandler(Class)} except input is a pre-constructed instance.
 	 * 
@@ -615,10 +615,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Children.
-	 *
+	 * 
 	 * <p>
 	 * Defines children of this resource.
-	 *
+	 * 
 	 * <p>
 	 * A REST child resource is simply another servlet that is initialized as part of the parent resource and has a
 	 * servlet path directly under the parent servlet path.
@@ -655,7 +655,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Children.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for adding a single child to this resource.
 	 * 
@@ -717,10 +717,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Client version header.
-	 *
+	 * 
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
-	 *
+	 * 
 	 * <p>
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
 	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod.clientVersion()} annotation.
@@ -741,10 +741,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Resource context path. 
-	 *
+	 * 
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
-	 *
+	 * 
 	 * <p>
 	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
 	 * the context path is not actually specified on the servlet container.
@@ -767,12 +767,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Class-level response converters.
-	 *
+	 * 
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
 	 * annotation.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_converters}
@@ -787,10 +787,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Response converters.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #converters(Class...)} except input is pre-constructed instances.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_converters}
@@ -808,7 +808,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
@@ -825,10 +825,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default request headers.
-	 *
+	 * 
 	 * <p>
 	 * Adds class-level default HTTP request headers to this resource.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
@@ -850,10 +850,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default request headers.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #defaultRequestHeaders(String...)} but adds a single header name/value pair.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
@@ -869,10 +869,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default response headers.
-	 *
+	 * 
 	 * <p>
 	 * Specifies default values for response headers.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
@@ -894,10 +894,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default response headers.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #defaultResponseHeaders(String...)} but adds a single header name/value pair.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
@@ -913,10 +913,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	
 	/**
 	 * Configuration property:  Compression encoders. 
-	 *
+	 * 
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
@@ -931,10 +931,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Compression encoders. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #encoders(Class...)} except input a pre-constructed instances.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
@@ -949,15 +949,15 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Class-level guards.
-	 *
+	 * 
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 * These guards get called immediately before execution of any REST method in this class.
-	 *
+	 * 
 	 * <p>
 	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
 	 * for other purposes like pre-call validation of a request.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_guards}
@@ -972,10 +972,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Class-level guards.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #guards(Class...)} except input is pre-constructed instances.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_guards}
@@ -990,10 +990,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  REST info provider. 
-	 *
+	 * 
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
@@ -1010,10 +1010,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  REST info provider. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #infoProvider(Class)} except input is a pre-constructed instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
@@ -1033,7 +1033,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Specifies the logger to use for logging.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
@@ -1054,7 +1054,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Same as {@link #logger(Class)} except input is a pre-constructed instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
@@ -1072,11 +1072,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
-	 *
+	 * 
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
@@ -1093,10 +1093,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Messages. 
-	 *
+	 * 
 	 * <p>
 	 * Identifies the location of the resource bundle for this class.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_messages}
@@ -1111,7 +1111,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Messages. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #messages(MessageBundleLocation...)} except allows you to pass in the base class and bundle
 	 * path separately.
@@ -1133,7 +1133,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	
 	/**
 	 * Configuration property:  Messages. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #messages(Class,String)} except assumes the base class is the resource class itself.
 	 * 
@@ -1151,7 +1151,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  MIME types. 
-	 *
+	 * 
 	 * <p>
 	 * Defines MIME-type file type mappings.
 	 * 
@@ -1169,12 +1169,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Java method parameter resolvers.
-	 *
+	 * 
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
 	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
@@ -1190,10 +1190,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Java method parameter resolvers.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #paramResolvers(Class...)} except input is pre-constructed instances.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
@@ -1211,7 +1211,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
@@ -1226,7 +1226,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Parsers. 
-	 *
+	 * 
 	 * <p>
 	 * Adds class-level parsers to this resource.
 	 * 
@@ -1244,7 +1244,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Parsers. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #parsers(Class...)} except allows you to overwrite the previous value.
 	 * 
@@ -1264,7 +1264,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Parsers. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #parsers(Class...)} except input is pre-constructed instances.
 	 * 
@@ -1286,7 +1286,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  HTTP part parser. 
-	 *
+	 * 
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
@@ -1306,10 +1306,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  HTTP part parser. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #partParser(Class)} except input is a pre-constructed instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
@@ -1326,7 +1326,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  HTTP part serializer. 
-	 *
+	 * 
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 * 
@@ -1346,10 +1346,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  HTTP part serializer. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #partSerializer(Class)} except input is a pre-constructed instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
@@ -1366,7 +1366,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Resource path.   
-	 *
+	 * 
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
 	 * 
@@ -1387,7 +1387,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Render response stack traces in responses.
-	 *
+	 * 
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 * 
@@ -1407,7 +1407,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Render response stack traces in responses.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)<code>.
 	 * 
@@ -1450,7 +1450,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Same as {@link #resourceResolver(Class)} except input is a pre-constructed instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
@@ -1467,7 +1467,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Response handlers.
-	 *
+	 * 
 	 * <p>
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
@@ -1486,10 +1486,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Response handlers.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #responseHandlers(Class...)} except input is pre-constructed instances.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
@@ -1507,7 +1507,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
@@ -1522,7 +1522,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Serializers. 
-	 *
+	 * 
 	 * <p>
 	 * Adds class-level serializers to this resource.
 	 * 
@@ -1540,7 +1540,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Serializers. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #serializers(Class...)} except allows you to overwrite the previous value.
 	 * 
@@ -1560,7 +1560,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Serializers. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #serializers(Class...)} except input is pre-constructed instances.
 	 * 
@@ -1582,7 +1582,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Static file response headers. 
-	 *
+	 * 
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 * 
@@ -1604,7 +1604,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Static file response headers. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #staticFileResponseHeaders(boolean, Map)} with append=<jk>true</jk> except headers are strings 
 	 * composed of key/value pairs.
@@ -1630,7 +1630,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Static file response headers. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #staticFileResponseHeaders(String...)} except header is broken into name/value pair.
 	 * 
@@ -1649,7 +1649,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Static file mappings. 
-	 *
+	 * 
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
 	 * 
@@ -1667,7 +1667,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Static file mappings. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #staticFiles(StaticFileMapping...)} except input is in the form of a mapping string.
 	 * 
@@ -1692,7 +1692,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Static file mappings. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #staticFiles(String)} except overrides the base class for retrieving the resource.
 	 * 
@@ -1720,7 +1720,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	
 	/**
 	 * Configuration property:  Static file mappings. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #staticFiles(String)} except path and location are already split values.
 	 * 
@@ -1743,7 +1743,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Static file mappings. 
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #staticFiles(String,String)} except overrides the base class for retrieving the resource.
 	 * 
@@ -1769,7 +1769,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Supported accept media types.
-	 *
+	 * 
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 * 
@@ -1789,10 +1789,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Supported accept media types.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #supportedAcceptTypes(boolean, String...)} except input is {@link MediaType} instances.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
@@ -1809,10 +1809,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Supported content media types.
-	 *
+	 * 
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
@@ -1829,10 +1829,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Supported content media types.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #supportedContentTypes(boolean, String...)} except input is {@link MediaType} instances.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
@@ -1849,7 +1849,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Use classpath resource caching. 
-	 *
+	 * 
 	 * <p>
 	 * When enabled, resources retrieved via {@link RestContext#getClasspathResource(String, Locale)} (and related 
 	 * methods) will be cached in memory to speed subsequent lookups.
@@ -1870,11 +1870,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Use stack trace hashes.
-	 *
+	 * 
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
@@ -1891,7 +1891,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  HTML Widgets. 
-	 *
+	 * 
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.

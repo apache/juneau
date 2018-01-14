@@ -19,7 +19,7 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a remote proxy interface.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -44,7 +44,7 @@ public class RemoteMethodArg {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The argument name pulled from name().
 	 * @param name2 The argument name pulled from value().
 	 * @param index The zero-based index of the argument on the Java method.

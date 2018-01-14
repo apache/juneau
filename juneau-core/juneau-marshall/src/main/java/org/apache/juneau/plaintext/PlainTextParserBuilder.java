@@ -32,7 +32,7 @@ public class PlainTextParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public PlainTextParserBuilder(PropertyStore ps) {

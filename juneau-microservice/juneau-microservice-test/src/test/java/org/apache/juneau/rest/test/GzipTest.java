@@ -26,7 +26,7 @@ import org.junit.*;
 
 /**
  * Test Accept-Encoding and Content-Encoding handling.
- *
+ * 
  * Note:  WAS does automatic gzip decompression on http request messages, so we have to invent
  * 	our own 'mycoding' compression.
  */

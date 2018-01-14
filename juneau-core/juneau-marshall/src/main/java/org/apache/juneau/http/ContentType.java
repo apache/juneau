@@ -18,30 +18,30 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Content-Type</l> HTTP request/response header.
- *
+ * 
  * <p>
  * The MIME type of this content.
- *
+ * 
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Content-Type: text/html; charset=utf-8
  * </p>
- *
+ * 
  * <h6 class='topic'>RFC2616 Specification</h6>
- *
+ * 
  * The Content-Type entity-header field indicates the media type of the entity-body sent to the recipient or, in the
  * case of the HEAD method, the media type that would have been sent had the request been a GET.
  * <p class='bcode'>
  * 	Content-Type   = "Content-Type" ":" media-type
  * </p>
- *
+ * 
  * <p>
  * Media types are defined in section 3.7.
  * An example of the field is...
  * <p class='bcode'>
  * 	Content-Type: text/html; charset=ISO-8859-4
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -57,7 +57,7 @@ public class ContentType extends MediaType {
 
 	/**
 	 * Returns a parsed <code>Content-Type</code> header.
-	 *
+	 * 
 	 * @param value The <code>Content-Type</code> header string.
 	 * @return The parsed <code>Content-Type</code> header, or <jk>null</jk> if the string was null.
 	 */
@@ -77,7 +77,7 @@ public class ContentType extends MediaType {
 
 	/**
 	 * Given a list of media types, returns the best match for this <code>Content-Type</code> header.
-	 *
+	 * 
 	 * <p>
 	 * Note that fuzzy matching is allowed on the media types where the <code>Content-Types</code> header may
 	 * contain additional subtype parts.
@@ -86,7 +86,7 @@ public class ContentType extends MediaType {
 	 * isn't found.
 	 * <br>The purpose for this is to allow parsers to match when artifacts such as <code>id</code> properties are
 	 * present in the header.
-	 *
+	 * 
 	 * @param mediaTypes The media types to match against.
 	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.
 	 */

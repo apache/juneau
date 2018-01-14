@@ -37,7 +37,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Clone an existing parser group builder.
-	 *
+	 * 
 	 * @param copyFrom The parser group that we're copying settings and parsers from.
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
@@ -48,7 +48,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Registers the specified parsers with this group.
-	 *
+	 * 
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -63,7 +63,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * <p>
 	 * When passing in pre-instantiated parsers to this group, applying properties and transforms to the group
 	 * do not affect them.
-	 *
+	 * 
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -77,7 +77,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Objects can either be instances of parsers or parser classes.
-	 *
+	 * 
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -91,7 +91,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Objects can either be instances of parsers or parser classes.
-	 *
+	 * 
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -102,10 +102,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Creates a new {@link ParserGroup} object using a snapshot of the settings defined in this builder.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to produce multiple parser groups.
-	 *
+	 * 
 	 * @return A new {@link ParserGroup} object.
 	 */
 	@Override /* Context */
@@ -132,10 +132,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  File charset.
-	 *
+	 * 
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
@@ -152,10 +152,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Input stream charset.
-	 *
+	 * 
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
@@ -172,10 +172,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Parser listener.
-	 *
+	 * 
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
@@ -190,10 +190,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parsers are enabled.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -210,10 +210,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -227,11 +227,11 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
@@ -248,10 +248,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}

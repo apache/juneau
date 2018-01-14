@@ -20,10 +20,10 @@ import org.apache.juneau.transform.*;
 
 /**
  * Utility class for efficiently converting objects between types.
- *
+ * 
  * <p>
  * If the value isn't an instance of the specified type, then converts the value if possible.
- *
+ * 
  * <p>
  * The following conversions are valid:
  * <table class='styled'>
@@ -155,7 +155,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Converts the specified object to the specified type.
-	 *
+	 * 
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
 	 * @param type The class type to convert the value to.
@@ -168,7 +168,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Converts the specified object to the specified type.
-	 *
+	 * 
 	 * @param <T> The class type to convert the value to.
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
@@ -184,10 +184,10 @@ public final class ObjectUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified objects are equal.
-	 *
+	 * 
 	 * <p>
 	 * Gracefully handles <jk>null</jk>s.
-	 *
+	 * 
 	 * @param o1 Object #1
 	 * @param o2 Object #2
 	 * @return <jk>true</jk> if the objects are equal or both <jk>null</jk>.
@@ -202,7 +202,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is empty.
-	 *
+	 * 
 	 * <p>
 	 * Return <jk>true</jk> if the value is any of the following:
 	 * <ul>
@@ -213,7 +213,7 @@ public final class ObjectUtils {
 	 * 	<li>An empty CharSequence
 	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
 	 * </ul>
-	 *
+	 * 
 	 * @param o The object to test.
 	 * @return <jk>true</jk> if the specified object is empty.
 	 */

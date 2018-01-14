@@ -16,7 +16,7 @@ import java.io.*;
 
 /**
  * Utility class for creating custom HTML.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	String table = <jk>new</jk> SimpleHtmlWriter().sTag(<js>"table"</js>).sTag(<js>"tr"</js>).sTag(<js>"td"</js>)

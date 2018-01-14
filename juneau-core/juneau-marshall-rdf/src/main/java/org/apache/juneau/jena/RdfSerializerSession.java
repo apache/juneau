@@ -28,7 +28,7 @@ import com.hp.hpl.jena.rdf.model.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.  
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -53,7 +53,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -133,7 +133,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
-	 *
+	 * 
 	 * @return The {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */

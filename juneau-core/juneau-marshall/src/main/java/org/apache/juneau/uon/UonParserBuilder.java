@@ -35,7 +35,7 @@ public class UonParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UonParserBuilder(PropertyStore ps) {
@@ -54,11 +54,11 @@ public class UonParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
-	 *
+	 * 
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
 	 * decoded before being passed to this parser.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
@@ -78,7 +78,7 @@ public class UonParserBuilder extends ParserBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>decodeChars(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}

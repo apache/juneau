@@ -23,7 +23,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -66,7 +66,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 
 	/**
 	 * Convenience method for serializing an object to a <code><jk>byte</jk></code>.
-	 *
+	 * 
 	 * @param o The object to serialize.
 	 * @return The output serialized to a byte array.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -78,7 +78,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 
 	/**
 	 * Convenience method for serializing an object to a hex-encoded String.
-	 *
+	 * 
 	 * @param o The object to serialize.
 	 * @return The output serialized to a hex-encoded string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.

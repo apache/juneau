@@ -34,7 +34,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public JsonSerializerBuilder(PropertyStore ps) {
@@ -53,10 +53,10 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
@@ -73,10 +73,10 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>escapeSolidus(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
@@ -90,11 +90,11 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Simple JSON mode.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * <br>Otherwise, they are always quoted.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
@@ -114,7 +114,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
@@ -131,7 +131,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>simple().sq()</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}

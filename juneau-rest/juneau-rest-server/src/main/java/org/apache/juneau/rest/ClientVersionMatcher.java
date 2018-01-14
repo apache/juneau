@@ -19,7 +19,7 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Specialized matcher for matching client versions.
- *
+ * 
  * <p>
  * See {@link RestResource#clientVersionHeader} and {@link RestMethod#clientVersion} for more info.
  */
@@ -30,7 +30,7 @@ public class ClientVersionMatcher extends RestMatcher {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param clientVersionHeader
 	 * 	The HTTP request header name containing the client version.
 	 * 	If <jk>null</jk> or an empty string, uses <js>"X-Client-Version"</js>

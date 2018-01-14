@@ -32,7 +32,7 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public PlainTextSerializerBuilder(PropertyStore ps) {

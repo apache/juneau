@@ -29,7 +29,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param bpm The metadata of the bean property of this additional metadata.
 	 */
 	public XmlBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -48,7 +48,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the XML namespace associated with this bean property.
-	 *
+	 * 
 	 * <p>
 	 * Namespace is determined in the following order of {@link Xml#prefix() @Xml.prefix()} annotation:
 	 * <ol>
@@ -62,7 +62,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * 	<li>Bean interfaces.
 	 * 	<li>Bean interface packages.
 	 * </ol>
-	 *
+	 * 
 	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	public Namespace getNamespace() {
@@ -71,7 +71,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the XML format of this property from the {@link Xml#format} annotation on this bean property.
-	 *
+	 * 
 	 * @return The XML format, or {@link XmlFormat#DEFAULT} if annotation not specified.
 	 */
 	protected XmlFormat getXmlFormat() {
@@ -80,7 +80,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the child element of this property from the {@link Xml#childName} annotation on this bean property.
-	 *
+	 * 
 	 * @return The child element, or <jk>null</jk> if annotation not specified.
 	 */
 	protected String getChildName() {

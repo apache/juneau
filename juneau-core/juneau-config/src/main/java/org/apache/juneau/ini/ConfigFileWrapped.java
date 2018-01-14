@@ -26,10 +26,10 @@ import org.apache.juneau.svl.*;
 /**
  * Wraps an instance of {@link ConfigFileImpl} in an interface that will automatically replace {@link VarResolver}
  * variables.
- *
+ * 
  * <p>
  * The {@link ConfigFile#getResolving(VarResolver)} returns an instance of this class.
- *
+ * 
  * <p>
  * This class overrides the {@link #getString(String, String)} to resolve string variables.
  * All other method calls are passed through to the inner config file.

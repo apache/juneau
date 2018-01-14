@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 
 /**
  * Various useful static methods for creating Swagger elements.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -38,7 +38,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Contact} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final Contact contact() {
@@ -47,7 +47,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Contact} element with the specified {@link Contact#name(String)} attribute.
-	 *
+	 * 
 	 * @param name The {@link Contact#name(String)} attribute.
 	 * @return The new element.
 	 */
@@ -58,7 +58,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link Contact} element with the specified {@link Contact#name(String)}, {@link Contact#url(Object)},
 	 * and {@link Contact#email(String)}, attributes.
-	 *
+	 * 
 	 * @param name The {@link Contact#name(String)} attribute.
 	 * @param url
 	 * 	The {@link Contact#url(Object)} attribute.
@@ -74,7 +74,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link ExternalDocumentation} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation() {
@@ -84,7 +84,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)}
 	 * attribute.
-	 *
+	 * 
 	 * @param url
 	 * 	The {@link ExternalDocumentation#url(Object)} attribute.
 	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -99,7 +99,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)}
 	 * and {@link ExternalDocumentation#description(String)} attributes.
-	 *
+	 * 
 	 * @param url
 	 * 	The {@link ExternalDocumentation#url(Object)} attribute.
 	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -114,7 +114,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link HeaderInfo} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final HeaderInfo headerInfo() {
@@ -123,7 +123,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#type(String)} attribute.
-	 *
+	 * 
 	 * @param type The {@link HeaderInfo#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -133,7 +133,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#type(String)} attribute.
-	 *
+	 * 
 	 * @param type The {@link HeaderInfo#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -143,7 +143,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Info} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final Info info() {
@@ -153,7 +153,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link Info} element with the specified {@link Info#title(String)} and {@link Info#version(String)}
 	 * attributes.
-	 *
+	 * 
 	 * @param title The {@link Info#title(String)} attribute.
 	 * @param version The {@link Info#version(String)} attribute.
 	 * @return The new element.
@@ -164,7 +164,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Items} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final Items items() {
@@ -173,7 +173,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Items} element with the specified {@link Items#type(String)} attribute.
-	 *
+	 * 
 	 * @param type The {@link Items#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -183,7 +183,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Items} element with the specified {@link Items#type(String)} attribute.
-	 *
+	 * 
 	 * @param type The {@link Items#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -193,7 +193,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link License} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final License license() {
@@ -202,7 +202,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link License} element with the specified {@link License#name(String)} attribute.
-	 *
+	 * 
 	 * @param name The {@link License#name(String)} attribute.
 	 * @return The new element.
 	 */
@@ -212,7 +212,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Operation} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final Operation operation() {
@@ -221,7 +221,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link ParameterInfo} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final ParameterInfo parameterInfo() {
@@ -231,7 +231,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#in(String)} and
 	 * {@link ParameterInfo#name(String)} attributes.
-	 *
+	 * 
 	 * @param in The {@link ParameterInfo#in(String)} attribute.
 	 * @param name The {@link ParameterInfo#name(String)} attribute.
 	 * @return The new element.
@@ -243,7 +243,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#in(String)} and
 	 * {@link ParameterInfo#name(String)} attributes.
-	 *
+	 * 
 	 * @param in The {@link ParameterInfo#in(String)} attribute.
 	 * @param name The {@link ParameterInfo#name(String)} attribute.
 	 * @return The new element.
@@ -254,7 +254,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link ResponseInfo} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final ResponseInfo responseInfo() {
@@ -263,7 +263,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link ResponseInfo} element with the specified {@link ResponseInfo#description(String)} attribute.
-	 *
+	 * 
 	 * @param description The {@link ResponseInfo#description(String)} attribute.
 	 * @return The new element.
 	 */
@@ -273,7 +273,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link SchemaInfo} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final SchemaInfo schemaInfo() {
@@ -282,7 +282,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link SecurityScheme} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final SecurityScheme securityScheme() {
@@ -291,7 +291,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#type(String)} attribute.
-	 *
+	 * 
 	 * @param type The {@link SecurityScheme#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -301,7 +301,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#type(String)} attribute.
-	 *
+	 * 
 	 * @param type The {@link SecurityScheme#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -311,7 +311,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Swagger} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final Swagger swagger() {
@@ -320,7 +320,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Swagger} element with the specified {@link Swagger#info(Info)} attribute.
-	 *
+	 * 
 	 * @param info The {@link Swagger#info(Info)} attribute.
 	 * @return The new element.
 	 */
@@ -330,7 +330,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Tag} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final Tag tag() {
@@ -339,7 +339,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Tag} element with the specified {@link Tag#name(String)} attribute.
-	 *
+	 * 
 	 * @param name The {@link Tag#name(String)} attribute.
 	 * @return The new element.
 	 */
@@ -349,7 +349,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Xml} element.
-	 *
+	 * 
 	 * @return The new element.
 	 */
 	public static final Xml xml() {

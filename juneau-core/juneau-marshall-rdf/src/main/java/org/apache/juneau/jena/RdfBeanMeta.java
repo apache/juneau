@@ -26,7 +26,7 @@ public class RdfBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
 	 */
 	public RdfBeanMeta(BeanMeta<?> beanMeta) {
@@ -45,7 +45,7 @@ public class RdfBeanMeta extends BeanMetaExtended {
 	/**
 	 * Returns <jk>true</jk> if one of the properties on this bean is annotated with {@link Rdf#beanUri() @Rdf.beanUri()} as 
 	 * <jk>true</jk>
-	 *
+	 * 
 	 * @return <jk>true</jk> if there is a URI property associated with this bean.
 	 */
 	public boolean hasBeanUri() {
@@ -54,7 +54,7 @@ public class RdfBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * Returns the bean property marked as the URI for the bean (annotated with {@link Rdf#beanUri() @Rdf.beanUri()} as <jk>true</jk>).
-	 *
+	 * 
 	 * @return The URI property, or <jk>null</jk> if no URI property exists on this bean.
 	 */
 	public BeanPropertyMeta getBeanUriProperty() {

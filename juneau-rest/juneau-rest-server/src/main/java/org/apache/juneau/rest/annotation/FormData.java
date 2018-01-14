@@ -23,7 +23,7 @@ import org.apache.juneau.rest.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a form post
  * entry converted to a POJO.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
@@ -32,7 +32,7 @@ import org.apache.juneau.rest.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -44,13 +44,13 @@ import org.apache.juneau.rest.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Important note concerning FORM posts</h6>
- *
+ * 
  * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody()} method
  * for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet
  * API to parse the body content as key-value pairs resulting in empty content.
- *
+ * 
  * <p>
  * The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
  * servlet to drain the body content.
@@ -68,13 +68,13 @@ public @interface FormData {
 
 	/**
 	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
-	 *
+	 * 
 	 * <p>
 	 * Normally, we expect single parameters to be specified in UON notation for representing collections of values
 	 * (e.g. <js>"key=(1,2,3)"</js>.
 	 * This annotation allows the use of multi-part parameters to represent collections (e.g.
 	 * <js>"key=1&amp;key=2&amp;key=3"</js>.
-	 *
+	 * 
 	 * <p>
 	 * This setting should only be applied to Java parameters of type array or Collection.
 	 */
@@ -87,7 +87,7 @@ public @interface FormData {
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
@@ -96,7 +96,7 @@ public @interface FormData {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 *
+	 * 
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

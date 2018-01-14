@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * A wrapper around an object that a parser reads its input from.
- *
+ * 
  * <p>
  * For character-based parsers, the input object can be any of the following:
  * <ul>
@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link File}
  * 	<li><code><jk>null</jk></code>
  * </ul>
- *
+ * 
  * <p>
  * For stream-based parsers, the input object can be any of the following:
  * <ul>
@@ -44,7 +44,7 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link String} - Hex-encoded bytes.  (not BASE-64!)
  * 	<li><code><jk>null</jk></code>
  * </ul>
- *
+ * 
  * <p>
  * Note that Readers and InputStreams will NOT be automatically closed when {@link #close()} is called, but
  * streams and readers created from other types (e.g. Files) WILL be automatically closed.
@@ -61,7 +61,7 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param input The parser input object.
 	 * @param debug
 	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
@@ -90,10 +90,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Shortcut constructor, typically for straight string input.
-	 *
+	 * 
 	 * <p>
 	 * Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>);</code>
-	 *
+	 * 
 	 * @param input The input object.
 	 */
 	public ParserPipe(Object input) {
@@ -102,10 +102,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Wraps the specified input object inside an input stream.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to implement their own input streams.
-	 *
+	 * 
 	 * @return The input object wrapped in an input stream, or <jk>null</jk> if the object is null.
 	 * @throws IOException If object could not be converted to an input stream.
 	 */
@@ -146,10 +146,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Wraps the specified input object inside a reader.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to implement their own readers.
-	 *
+	 * 
 	 * @return The input object wrapped in a Reader, or <jk>null</jk> if the object is null.
 	 * @throws IOException If object could not be converted to a reader.
 	 */
@@ -217,10 +217,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Returns the contents of this pipe as a buffered reader.
-	 *
+	 * 
 	 * <p>
 	 * If the reader passed into this pipe is already a buffered reader, that reader will be returned.
-	 *
+	 * 
 	 * @return The contents of this pipe as a buffered reader.
 	 * @throws Exception
 	 */
@@ -230,10 +230,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Returns the input to this parser as a plain string.
-	 *
+	 * 
 	 * <p>
 	 * This method only returns a value if {@link BeanContext#BEAN_debug} is enabled.
-	 *
+	 * 
 	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
 	 */
 	public String getInputAsString() {
@@ -242,7 +242,7 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Converts this pipe into a {@link ParserReader}.
-	 *
+	 * 
 	 * @return The converted pipe.
 	 * @throws Exception
 	 */
@@ -258,7 +258,7 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Returns <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
 	 */
 	public boolean isString() {

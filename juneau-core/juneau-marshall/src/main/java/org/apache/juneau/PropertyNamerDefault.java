@@ -16,15 +16,15 @@ import java.beans.*;
 
 /**
  * Default property namer.
- *
- * <h5 class='section'>Examples:</h5>
+ * 
+ * <h5 class='section'>Example:</h5>
  * <ul>
  * 	<li><js>"fooBar"</js> -&gt; <js>"fooBar"</js>
  * 	<li><js>"fooBarURL"</js> -&gt; <js>"fooBarURL"</js>
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"fooBarURL"</js>
  * 	<li><js>"URL"</js> -&gt; <js>"URL"</js>
  * </ul>
- *
+ * 
  * <p>
  * See {@link Introspector#decapitalize(String)} for exact rules.
  */

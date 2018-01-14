@@ -23,7 +23,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSerializer}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -37,7 +37,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -235,7 +235,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns the {@link JsonSerializer#JSON_addBeanTypeProperties} setting value for this session.
-	 *
+	 * 
 	 * @return The {@link JsonSerializer#JSON_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
@@ -245,7 +245,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Converts the specified output target object to an {@link JsonWriter}.
-	 *
+	 * 
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link JsonWriter}.
 	 * @throws Exception

@@ -20,15 +20,17 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO models to JSON.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>application/json, text/json</code>
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>application/json, text/json</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>application/json</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>application/json</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * The conversion is as follows...
  * <ul class='spaced-list'>
  * 	<li>
@@ -49,30 +51,30 @@ import org.apache.juneau.serializer.*;
  * 	<li>
  * 		{@code beans} are converted to JSON objects.
  * </ul>
- *
+ * 
  * <p>
  * The types above are considered "JSON-primitive" object types.
  * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
  * {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the
  * {@link BeanContextBuilder#pojoSwaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
- *
+ * 
  * <p>
  * This serializer provides several serialization options.
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
- *
+ * 
  * 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
  * 	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
- *
+ * 
  * 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
  * 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
- *
+ * 
  * 	<jc>// Serialize a POJO to JSON</jc>
  * 	String json = serializer.serialize(someObject);
  * </p>
@@ -88,7 +90,7 @@ public class YamlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypeProperties.b"</js>
@@ -100,12 +102,12 @@ public class YamlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#addBeanTypeProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 *
+	 * 
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -114,7 +116,7 @@ public class YamlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
@@ -127,7 +129,7 @@ public class YamlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
@@ -159,7 +161,7 @@ public class YamlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Simple JSON mode.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
@@ -173,7 +175,7 @@ public class YamlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#ssq()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
@@ -260,7 +262,7 @@ public class YamlSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -270,7 +272,7 @@ public class YamlSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces

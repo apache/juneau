@@ -17,21 +17,22 @@ import org.apache.juneau.svl.*;
 
 /**
  * Request form data variable resolver.
- *
+ * 
  * <p>
  * The format for this var is <js>"$RF{key1[,key2...]}"</js>.
- *
+ * 
  * <p>
  * Used to resolve values returned by {@link RestRequest#getFormData(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  * 
- * <h6 class='figure'>Example:</h6>
+ * <h6 class='section'>Example:</h6>
  * <p class='bcode'>
  * 	String foo = restRequest.resolveVars(<js>"$RF{foo}"</js>); 
  * 	String fooOrBar = restRequest.resolveVars(<js>"$RF{foo,bar}"</js>); 
  * </p>
  * 
- * <h5 class='section'>Notes:</h5>
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 

@@ -19,14 +19,14 @@ import org.apache.juneau.internal.*;
 
 /**
  * Similar to a {@link java.io.PushbackReader} with a pushback buffer of 1 character.
- *
+ * 
  * <p>
  * Code is optimized to work with a 1 character buffer.
- *
+ * 
  * <p>
  * Additionally keeps track of current line and column number, and provides the ability to set mark points and capture
  * characters from the previous mark point.
- *
+ * 
  * <p>
  * <b>Warning:</b>  Not thread safe.
  */
@@ -46,7 +46,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @throws IOException
 	 */
@@ -69,7 +69,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Returns the current line number position in this reader.
-	 *
+	 * 
 	 * @return The current line number.
 	 */
 	public final int getLine() {
@@ -78,7 +78,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Returns the current column number position in this reader.
-	 *
+	 * 
 	 * @return The current column number.
 	 */
 	public final int getColumn() {
@@ -87,12 +87,12 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Reads a single character.
-	 *
+	 * 
 	 * <p>
 	 * Note that this method does NOT process extended unicode characters (i.e. characters above 0x10000), but rather
 	 * returns them as two <jk>char</jk>s.
 	 * Use {@link #readCodePoint()} to ensure proper handling of extended unicode.
-	 *
+	 * 
 	 * @return The character read, or -1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -112,7 +112,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Same as {@link #read()} but skips over any whitespace characters.
-	 *
+	 * 
 	 * @return The first non-whitespace character, or -1 if the end of stream reached.
 	 * @throws IOException
 	 */
@@ -126,7 +126,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Same as {@link #read()} but detects and combines extended unicode characters (i.e. characters above 0x10000).
-	 *
+	 * 
 	 * @return The character read, or -1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -217,10 +217,10 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Peeks the next character in the stream.
-	 *
+	 * 
 	 * <p>
 	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
-	 *
+	 * 
 	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -233,10 +233,10 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Same as {@link #peek()} but skips over any whitespace characters.
-	 *
+	 * 
 	 * <p>
 	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
-	 *
+	 * 
 	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -253,7 +253,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Read the specified number of characters off the stream.
-	 *
+	 * 
 	 * @param num The number of characters to read.
 	 * @return The characters packaged as a String.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -271,7 +271,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Pushes the last read character back into the stream.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -285,7 +285,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Close this reader and the underlying reader.
-	 *
+	 * 
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	@Override /* Reader */
@@ -296,7 +296,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Returns the contents of the reusable character buffer as a string, and resets the buffer for next usage.
-	 *
+	 * 
 	 * @return The contents of the reusable character buffer as a string.
 	 */
 	public final String getMarked() {
@@ -305,13 +305,13 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Same as {@link #getMarked()} except allows you to specify offsets into the buffer.
-	 *
+	 * 
 	 * <p>
 	 * For example, to return the marked string, but trim the first and last characters, call the following:
 	 * <p class='bcode'>
 	 * 	getFromMarked(1, -1);
 	 * </p>
-	 *
+	 * 
 	 * @param offsetStart The offset of the start position.
 	 * @param offsetEnd The offset of the end position.
 	 * @return The contents of the reusable character buffer as a string.
@@ -338,10 +338,10 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Trims off the last character in the marking buffer.
-	 *
+	 * 
 	 * <p>
 	 * Useful for removing escape characters from sequences.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public final ParserReader delete() {
@@ -351,7 +351,7 @@ public class ParserReader extends Reader {
 	/**
 	 * Trims off the specified number of last characters in the marking buffer.
 	 * Useful for removing escape characters from sequences.
-	 *
+	 * 
 	 * @param count The number of characters to delete.
 	 * @return This object (for method chaining).
 	 */
@@ -364,11 +364,11 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Replaces the last character in the marking buffer with the specified character.
-	 *
+	 * 
 	 * <p>
 	 * <code>offset</code> must be at least <code>1</code> for normal characters, and <code>2</code> for extended
 	 * unicode characters in order for the replacement to fit into the buffer.
-	 *
+	 * 
 	 * @param c The new character.
 	 * @param offset The offset.
 	 * @return This object (for method chaining).
@@ -396,7 +396,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Replace the last read character in the buffer with the specified character.
-	 *
+	 * 
 	 * @param c The new character.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -407,7 +407,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Subclasses can override this method to provide additional filtering.
-	 *
+	 * 
 	 * <p>
 	 * Default implementation simply calls the same method on the underlying reader.
 	 */
@@ -418,7 +418,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Returns the combined location information on both this reader and the session.
-	 *
+	 * 
 	 * @param session The session object to read the last location on.
 	 * @return A new map describing the current parse location.
 	 */
@@ -428,7 +428,7 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Returns the pipe that was passed into the constructor.
-	 *
+	 * 
 	 * @return The pipe that was passed into the constructor.
 	 */
 	public final ParserPipe getPipe() {

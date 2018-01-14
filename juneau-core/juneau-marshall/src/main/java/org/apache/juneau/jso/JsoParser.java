@@ -19,10 +19,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses POJOs from HTTP responses as Java {@link ObjectInputStream ObjectInputStreams}.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Consumes <code>Content-Type</code> types: <code>application/x-java-serialized-object</code>
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Consumes <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>
  */
 public final class JsoParser extends InputStreamParser {
 
@@ -40,7 +41,7 @@ public final class JsoParser extends InputStreamParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public JsoParser(PropertyStore ps) {

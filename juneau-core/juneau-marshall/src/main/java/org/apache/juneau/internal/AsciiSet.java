@@ -20,7 +20,7 @@ public final class AsciiSet {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param chars The characters to keep in this store.
 	 */
 	public AsciiSet(String chars) {
@@ -33,7 +33,7 @@ public final class AsciiSet {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
-	 *
+	 * 
 	 * @param c The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
@@ -45,7 +45,7 @@ public final class AsciiSet {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
-	 *
+	 * 
 	 * @param c The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
@@ -57,7 +57,7 @@ public final class AsciiSet {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains at least one character in this set.
-	 *
+	 * 
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if the string is not null and contains at least one character in this set.
 	 */

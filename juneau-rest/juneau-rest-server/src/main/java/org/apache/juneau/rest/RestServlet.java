@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Servlet implementation of a REST resource.
- *
+ * 
  * <p>
  * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
  * class.
@@ -101,18 +101,18 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Returns the read-only context object that contains all the configuration information about this resource.
-	 *
+	 * 
 	 * <p>
 	 * This object is <jk>null</jk> during the call to {@link #init(ServletConfig)} but is populated by the time
 	 * {@link #init()} is called.
-	 *
+	 * 
 	 * <p>
 	 * Resource classes that don't extend from {@link RestServlet} can add the following method to their class to get
 	 * access to this context object:
 	 * <p class='bcode'>
 	 * 	<jk>public void</jk> init(RestServletContext context) <jk>throws</jk> Exception;
 	 * </p>
-	 *
+	 * 
 	 * @return The context information on this servlet.
 	 */
 	protected synchronized RestContext getContext() {
@@ -122,13 +122,13 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Convenience method if you want to perform initialization on your resource after all configuration settings
 	 * have been made.
-	 *
+	 * 
 	 * <p>
 	 * This allows you to get access to the {@link RestContext} object during initialization.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation does nothing.
-	 *
+	 * 
 	 * @param context The servlet context containing all the set-in-stone configurations for this resource.
 	 * @throws Exception Any exception can be thrown to signal an initialization failure.
 	 */
@@ -141,7 +141,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * The main service method.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
 	 */
@@ -169,7 +169,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getLogger().log(level, msg, args);</code>
-	 *
+	 * 
 	 * @param level The log level.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -181,7 +181,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getLogger().log(level, cause, msg, args);</code>
-	 *
+	 * 
 	 * @param level The log level.
 	 * @param cause The cause.
 	 * @param msg The message to log.
@@ -207,7 +207,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getMessages();</code>
-	 *
+	 * 
 	 * @return The resource bundle for this resource.  Never <jk>null</jk>.
 	 * @see RestContext#getProperties()
 	 */
@@ -217,7 +217,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getProperties();</code>
-	 *
+	 * 
 	 * @return The resource properties as an {@link ObjectMap}.
 	 * @see RestContext#getProperties()
 	 */
@@ -227,7 +227,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getBeanContext();</code>
-	 *
+	 * 
 	 * @return The bean context used for parsing path variables and header values.
 	 * @see RestContext#getBeanContext()
 	 */

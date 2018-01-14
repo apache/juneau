@@ -24,7 +24,7 @@ public class TeeWriter extends Writer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param writers The list of writers.
 	 */
 	public TeeWriter(Writer...writers) {
@@ -33,7 +33,7 @@ public class TeeWriter extends Writer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param writers The list of writers.
 	 */
 	public TeeWriter(Collection<Writer> writers) {
@@ -42,7 +42,7 @@ public class TeeWriter extends Writer {
 
 	/**
 	 * Adds a writer to this tee writer.
-	 *
+	 * 
 	 * @param w The writer to add to this tee writer.
 	 * @param close
 	 * 	If <jk>false</jk>, then calling {@link #close()} on this tee writer will not filter to the specified writer.
@@ -70,7 +70,7 @@ public class TeeWriter extends Writer {
 	/**
 	 * Same as {@link #add(Writer, boolean)} but associates the writer with an identifier so the writer can be retrieved
 	 * through {@link #getWriter(String)}.
-	 *
+	 * 
 	 * @param id The ID to associate the writer with.
 	 * @param w The writer to add.
 	 * @param close Close the specified writer afterwards.
@@ -87,7 +87,7 @@ public class TeeWriter extends Writer {
 
 	/**
 	 * Returns the number of inner writers in this tee writer.
-	 *
+	 * 
 	 * @return The number of writers.
 	 */
 	public int size() {
@@ -97,7 +97,7 @@ public class TeeWriter extends Writer {
 	/**
 	 * Returns the writer identified through the <code>id</code> parameter passed in through the
 	 * {@link #add(String, Writer, boolean)} method.
-	 *
+	 * 
 	 * @param id The ID associated with the writer.
 	 * @return The writer, or <jk>null</jk> if no identifier was specified when the writer was added.
 	 */

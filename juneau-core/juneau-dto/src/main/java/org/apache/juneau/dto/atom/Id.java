@@ -19,7 +19,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomId</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomId = element atom:id {
@@ -27,7 +27,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		(atomUri)
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -50,7 +50,7 @@ public class Id extends Common {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param text The id element contents.
 	 */
 	public Id(String text) {
@@ -67,7 +67,7 @@ public class Id extends Common {
 
 	/**
 	 * Returns the content of this identifier.
-	 *
+	 * 
 	 * @return The content of this identifier.
 	 */
 	@Xml(format=TEXT)
@@ -77,7 +77,7 @@ public class Id extends Common {
 
 	/**
 	 * Sets the content of this identifier.
-	 *
+	 * 
 	 * @param text The content of this identifier.
 	 * @return This object (for method chaining).
 	 */

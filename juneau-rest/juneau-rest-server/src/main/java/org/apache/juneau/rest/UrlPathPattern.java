@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * A parsed path pattern constructed from a {@link RestMethod#path() @RestMethod.path()} value.
- *
+ * 
  * <p>
  * Handles aspects of matching and precedence ordering.
  */
@@ -34,7 +34,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param patternString The raw pattern string from the {@link RestMethod#path() @RestMethod.path()} annotation.
 	 */
 	public UrlPathPattern(String patternString) {
@@ -75,7 +75,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
-	 *
+	 * 
 	 * @param path The path to match against.
 	 * @return
 	 * 	An array of values matched against <js>"{var}"</js> variable in the pattern, or an empty array if the
@@ -117,7 +117,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Comparator for this object.
-	 *
+	 * 
 	 * <p>
 	 * The comparator is designed to order URL pattern from most-specific to least-specific.
 	 * For example, the following patterns would be ordered as follows:
@@ -169,10 +169,10 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Returns this path pattern as the compiled regular expression.
-	 *
+	 * 
 	 * <p>
 	 * Useful for debugging.
-	 *
+	 * 
 	 * @return The path pattern.
 	 */
 	public String toRegEx() {
@@ -181,7 +181,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Bean property getter:  <property>vars</property>.
-	 *
+	 * 
 	 * @return The value of the <property>vars</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String[] getVars() {
@@ -190,7 +190,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Bean property getter:  <property>patternString</property>.
-	 *
+	 * 
 	 * @return The value of the <property>patternString</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getPatternString() {

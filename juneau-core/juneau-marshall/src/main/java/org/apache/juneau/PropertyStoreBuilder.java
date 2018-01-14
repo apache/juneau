@@ -98,7 +98,7 @@ public class PropertyStoreBuilder {
 	
 	/**
 	 * Sets a configuration property value on this object.
-	 *
+	 * 
 	 * @param key
 	 * 	The configuration property key.
 	 * 	<br>(e.g <js>"BeanContext.foo.ss/add.1"</js>)
@@ -172,10 +172,10 @@ public class PropertyStoreBuilder {
 
 	/**
 	 * Convenience method for setting multiple properties in one call.
-	 *
+	 * 
 	 * <p>
 	 * This replaces any previous configuration properties set on this store.
-	 *
+	 * 
 	 * @param newProperties The new properties to set.
 	 * @return This object (for method chaining).
 	 */
@@ -188,10 +188,10 @@ public class PropertyStoreBuilder {
 	
 	/**
 	 * Convenience method for setting multiple properties in one call.
-	 *
+	 * 
 	 * <p>
 	 * This appends to any previous configuration properties set on this store.
-	 *
+	 * 
 	 * @param newProperties The new properties to set.
 	 * @return This object (for method chaining).
 	 */
@@ -207,7 +207,7 @@ public class PropertyStoreBuilder {
 
 	/**
 	 * Adds one or more values to a SET, LIST, or MAP property.
-	 *
+	 * 
 	 * @param key The property key.
 	 * @param arg 
 	 * 	The argument.  
@@ -249,7 +249,7 @@ public class PropertyStoreBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>addTo(key, <jk>null</jk>, value);</code>.
-	 *
+	 * 
 	 * @param key The property key.
 	 * @param value 
 	 * 	The new value to add to the property.
@@ -266,7 +266,7 @@ public class PropertyStoreBuilder {
 
 	/**
 	 * Removes a value from a SET or LIST property.
-	 *
+	 * 
 	 * @param key The property key.
 	 * @param value The property value in the property.
 	 * @return This object (for method chaining).

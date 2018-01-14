@@ -33,7 +33,7 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public SimpleUonPartSerializerBuilder(PropertyStore ps) {

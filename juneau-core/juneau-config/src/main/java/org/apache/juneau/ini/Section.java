@@ -48,7 +48,7 @@ public final class Section implements Map<String,String> {
 
 	/**
 	 * Constructor with predefined contents.
-	 *
+	 * 
 	 * @param contents Predefined contents to copy into this section.
 	 */
 	public Section(Map<String,String> contents) {
@@ -64,7 +64,7 @@ public final class Section implements Map<String,String> {
 
 	/**
 	 * Sets the config file that this section belongs to.
-	 *
+	 * 
 	 * @param configFile The config file that this section belongs to.
 	 * @return This object (for method chaining).
 	 */
@@ -76,7 +76,7 @@ public final class Section implements Map<String,String> {
 
 	/**
 	 * Sets the section name
-	 *
+	 * 
 	 * @param name The section name.
 	 * @return This object (for method chaining).
 	 */
@@ -229,7 +229,7 @@ public final class Section implements Map<String,String> {
 
 	/**
 	 * Sets the specified value in this section.
-	 *
+	 * 
 	 * @param key The section key.
 	 * @param value The new value.
 	 * @param encoded Whether this value should be encoded during save.
@@ -311,7 +311,7 @@ public final class Section implements Map<String,String> {
 
 	/**
 	 * Returns <jk>true</jk> if the specified entry is encoded.
-	 *
+	 * 
 	 * @param key The key.
 	 * @return <jk>true</jk> if the specified entry is encoded.
 	 */
@@ -330,7 +330,7 @@ public final class Section implements Map<String,String> {
 
 	/**
 	 * Adds header comments to this section.
-	 *
+	 * 
 	 * @see ConfigFile#addHeaderComments(String, String...) for a description.
 	 * @param comments The comment lines to add to this section.
 	 * @return This object (for method chaining).
@@ -365,7 +365,7 @@ public final class Section implements Map<String,String> {
 
 	/**
 	 * Serialize this section.
-	 *
+	 * 
 	 * @param out What to serialize to.
 	 * @param format The format (e.g. INI, BATCH, SHELL).
 	 */

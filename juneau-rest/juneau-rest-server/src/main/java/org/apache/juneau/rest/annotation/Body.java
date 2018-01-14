@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the HTTP
  * request body converted to a POJO.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * {@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
  * When specified, any registered parsers are bypassed.

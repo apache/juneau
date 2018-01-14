@@ -453,7 +453,7 @@ public class TestUtils {
 	/**
 	 * Temporarily sets the default system timezone to the specified timezone ID.
 	 * Use {@link #unsetTimeZone()} to unset it.
-	 *
+	 * 
 	 * @param name
 	 */
 	public static void setTimeZone(String name) {
@@ -468,7 +468,7 @@ public class TestUtils {
 	/**
 	 * Temporarily sets the default system locale to the specified locale.
 	 * Use {@link #unsetLocale()} to unset it.
-	 *
+	 * 
 	 * @param name
 	 */
 	public static void setLocale(Locale locale) {

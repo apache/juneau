@@ -17,21 +17,22 @@ import org.apache.juneau.svl.*;
 
 /**
  * Request header variable resolver.
- *
+ * 
  * <p>
  * The format for this var is <js>"$RH{key1[,key2...]}"</js>.
- *
+ * 
  * <p>
  * Used to resolve values returned by {@link RestRequest#getHeader(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  * 
- * <h6 class='figure'>Example:</h6>
+ * <h6 class='section'>Example:</h6>
  * <p class='bcode'>
  * 	String foo = restRequest.resolveVars(<js>"$RH{Foo}"</js>); 
  * 	String fooOrBar = restRequest.resolveVars(<js>"$RH{Foo,Bar}"</js>); 
  * </p>
  * 
- * <h5 class='section'>Notes:</h5>
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
@@ -39,7 +40,7 @@ import org.apache.juneau.svl.*;
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
- *
+ * 
  * @see org.apache.juneau.svl
  */
 public class RequestHeaderVar extends MultipartResolvingVar {

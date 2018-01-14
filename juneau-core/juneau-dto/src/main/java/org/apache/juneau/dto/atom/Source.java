@@ -18,7 +18,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents an <code>atomSource</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomSource =
@@ -39,7 +39,7 @@ import org.apache.juneau.annotation.*;
  * 			&amp; extensionElement*)
  * 		}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -69,7 +69,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Returns the generator info of this source.
-	 *
+	 * 
 	 * @return The generator info of this source.
 	 */
 	public Generator getGenerator() {
@@ -78,7 +78,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Sets the generator info of this source.
-	 *
+	 * 
 	 * @param generator The generator info of this source.
 	 * @return This object (for method chaining).
 	 */
@@ -90,7 +90,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Returns the icon of this source.
-	 *
+	 * 
 	 * @return The icon of this source.
 	 */
 	public Icon getIcon() {
@@ -99,7 +99,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Sets the icon of this source.
-	 *
+	 * 
 	 * @param icon The icon of this source.
 	 * @return This object (for method chaining).
 	 */
@@ -111,7 +111,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Returns the logo of this source.
-	 *
+	 * 
 	 * @return The logo of this source.
 	 */
 	public Logo getLogo() {
@@ -120,7 +120,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Sets the logo of this source.
-	 *
+	 * 
 	 * @param logo The logo of this source.
 	 * @return This object (for method chaining).
 	 */
@@ -132,7 +132,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Returns the subtitle of this source.
-	 *
+	 * 
 	 * @return The subtitle of this source.
 	 */
 	public Text getSubtitle() {
@@ -141,7 +141,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Sets the subtitle of this source.
-	 *
+	 * 
 	 * @param subtitle The subtitle of this source.
 	 * @return This object (for method chaining).
 	 */
@@ -153,7 +153,7 @@ public class Source extends CommonEntry {
 
 	/**
 	 * Sets the subtitle of this source.
-	 *
+	 * 
 	 * @param subtitle The subtitle of this source.
 	 * @return This object (for method chaining).
 	 */

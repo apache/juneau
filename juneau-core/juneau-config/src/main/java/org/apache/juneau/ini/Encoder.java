@@ -19,7 +19,7 @@ public interface Encoder {
 
 	/**
 	 * Encode a string.
-	 *
+	 * 
 	 * @param fieldName The field name being encoded.
 	 * @param in The unencoded input string.
 	 * @return The encoded output string.
@@ -28,7 +28,7 @@ public interface Encoder {
 
 	/**
 	 * Decode a string.
-	 *
+	 * 
 	 * @param fieldName The field name being decoded.
 	 * @param in The encoded input string.
 	 * @return The decoded output string.

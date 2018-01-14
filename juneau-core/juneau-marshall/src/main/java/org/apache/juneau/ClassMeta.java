@@ -37,10 +37,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * A wrapper class around the {@link Class} object that provides cached information about that class.
- *
+ * 
  * <p>
  * Instances of this class can be created through the {@link BeanContext#getClassMeta(Class)} method.
- *
+ * 
  * <p>
  * The {@link BeanContext} class will cache and reuse instances of this class except for the following class types:
  * <ul>
@@ -48,11 +48,11 @@ import org.apache.juneau.utils.*;
  * 	<li>Maps with non-Object key/values.
  * 	<li>Collections with non-Object key/values.
  * </ul>
- *
+ * 
  * <p>
  * This class is tied to the {@link BeanContext} class because it's that class that makes the determination of what is
  * a bean.
- *
+ * 
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
@@ -118,7 +118,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
-	 *
+	 * 
 	 * @param innerClass The class being wrapped.
 	 * @param beanContext The bean context that created this object.
 	 * @param implClass
@@ -202,7 +202,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Copy constructor.
-	 *
+	 * 
 	 * <p>
 	 * Used for creating Map and Collection class metas that shouldn't be cached.
 	 */
@@ -710,10 +710,10 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the type property name associated with this class and subclasses.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>null</jk>, <js>"_type"</js> should be assumed.
-	 *
+	 * 
 	 * @return
 	 * 	The type property name associated with this bean class, or <jk>null</jk> if there is no explicit type
 	 * 	property name defined or this isn't a bean.
@@ -724,10 +724,10 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the bean dictionary name associated with this class.
-	 *
+	 * 
 	 * <p>
 	 * The lexical name is defined by {@link Bean#typeName() @Bean.typeName()}.
-	 *
+	 * 
 	 * @return
 	 * 	The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this
 	 * 	isn't a bean.
@@ -738,12 +738,12 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the bean registry for this class.
-	 *
+	 * 
 	 * <p>
 	 * This bean registry contains names specified in the {@link Bean#beanDictionary() @Bean.beanDictionary()} annotation 
 	 * defined on the class, regardless of whether the class is an actual bean.
 	 * This allows interfaces to define subclasses with type names.
-	 *
+	 * 
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
 	public BeanRegistry getBeanRegistry() {
@@ -752,7 +752,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the category of this class.
-	 *
+	 * 
 	 * @return The category of this class.
 	 */
 	public ClassCategory getClassCategory() {
@@ -761,7 +761,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a superclass of or the same as the specified class.
-	 *
+	 * 
 	 * @param c The comparison class.
 	 * @return <jk>true</jk> if this class is a superclass of or the same as the specified class.
 	 */
@@ -771,7 +771,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of or the same as the specified class.
-	 *
+	 * 
 	 * @param c The comparison class.
 	 * @return <jk>true</jk> if this class is a subclass of or the same as the specified class.
 	 */
@@ -781,11 +781,11 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class or any child classes has a {@link PojoSwap} associated with it.
-	 *
+	 * 
 	 * <p>
 	 * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no
 	 * transforms are associated with a bean property.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class or any child classes has a {@link PojoSwap} associated with it.
 	 */
 	protected boolean hasChildPojoSwaps() {
@@ -795,7 +795,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the normal class of one of the
 	 * child POJO swaps associated with this class.
-	 *
+	 * 
 	 * @param normalClass The normal class being resolved.
 	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
 	 */
@@ -822,7 +822,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the swap class of one of the child
 	 * POJO swaps associated with this class.
-	 *
+	 * 
 	 * @param swapClass The swap class being resolved.
 	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
 	 */
@@ -848,12 +848,12 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Locates the no-arg constructor for the specified class.
-	 *
+	 * 
 	 * <p>
 	 * Constructor must match the visibility requirements specified by parameter 'v'.
 	 * If class is abstract, always returns <jk>null</jk>.
 	 * Note that this also returns the 1-arg constructor for non-static member classes.
-	 *
+	 * 
 	 * @param c The class from which to locate the no-arg constructor.
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
@@ -874,7 +874,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the {@link Class} object that this class type wraps.
-	 *
+	 * 
 	 * @return The wrapped class object.
 	 */
 	public Class<T> getInnerClass() {
@@ -883,7 +883,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the serialized (swapped) form of this class if there is an {@link PojoSwap} associated with it.
-	 *
+	 * 
 	 * @param session
 	 * 	The bean session.
 	 * 	<br>Required because the swap used may depend on the media type being serialized or parsed.
@@ -898,7 +898,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * For array and {@code Collection} types, returns the class type of the components of the array or
 	 * {@code Collection}.
-	 *
+	 * 
 	 * @return The element class type, or <jk>null</jk> if this class is not an array or Collection.
 	 */
 	public ClassMeta<?> getElementType() {
@@ -907,7 +907,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * For {@code Map} types, returns the class type of the keys of the {@code Map}.
-	 *
+	 * 
 	 * @return The key class type, or <jk>null</jk> if this class is not a Map.
 	 */
 	public ClassMeta<?> getKeyType() {
@@ -916,7 +916,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * For {@code Map} types, returns the class type of the values of the {@code Map}.
-	 *
+	 * 
 	 * @return The value class type, or <jk>null</jk> if this class is not a Map.
 	 */
 	public ClassMeta<?> getValueType() {
@@ -926,7 +926,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns <jk>true</jk> if this class implements {@link Delegate}, meaning it's a representation of some other
 	 * object.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class implements {@link Delegate}.
 	 */
 	public boolean isDelegate() {
@@ -935,7 +935,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Map}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map}.
 	 */
 	public boolean isMap() {
@@ -944,7 +944,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
 	 */
 	public boolean isMapOrBean() {
@@ -953,7 +953,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link BeanMap}.
 	 */
 	public boolean isBeanMap() {
@@ -962,7 +962,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection}.
 	 */
 	public boolean isCollection() {
@@ -971,7 +971,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
 	 */
 	public boolean isCollectionOrArray() {
@@ -980,7 +980,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Class}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is {@link Class}.
 	 */
 	public boolean isClass() {
@@ -989,7 +989,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Method}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is {@link Method}.
 	 */
 	public boolean isMethod() {
@@ -998,7 +998,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is an {@link Enum}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is an {@link Enum}.
 	 */
 	public boolean isEnum() {
@@ -1007,7 +1007,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is an array.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is an array.
 	 */
 	public boolean isArray() {
@@ -1016,7 +1016,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a bean.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
 	public boolean isBean() {
@@ -1025,7 +1025,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Object}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is {@link Object}.
 	 */
 	public boolean isObject() {
@@ -1034,7 +1034,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is not {@link Object}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is not {@link Object}.
 	 */
 	public boolean isNotObject() {
@@ -1043,7 +1043,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Number}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link Number}.
 	 */
 	public boolean isNumber() {
@@ -1052,7 +1052,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
 	 */
 	public boolean isDecimal() {
@@ -1061,7 +1061,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Boolean}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a {@link Boolean}.
 	 */
 	public boolean isBoolean() {
@@ -1070,7 +1070,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link CharSequence}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a subclass of {@link CharSequence}.
 	 */
 	public boolean isCharSequence() {
@@ -1079,7 +1079,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link String}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a {@link String}.
 	 */
 	public boolean isString() {
@@ -1088,7 +1088,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Character}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a {@link Character}.
 	 */
 	public boolean isChar() {
@@ -1097,7 +1097,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a primitive.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a primitive.
 	 */
 	public boolean isPrimitive() {
@@ -1106,7 +1106,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
 	 */
 	public boolean isDate() {
@@ -1115,7 +1115,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link URI} or {@link URL}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a {@link URI} or {@link URL}.
 	 */
 	public boolean isUri() {
@@ -1124,7 +1124,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Reader}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is a {@link Reader}.
 	 */
 	public boolean isReader() {
@@ -1133,7 +1133,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is an {@link InputStream}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is an {@link InputStream}.
 	 */
 	public boolean isInputStream() {
@@ -1142,7 +1142,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Void} or <jk>void</jk>.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is {@link Void} or <jk>void</jk>.
 	 */
 	public boolean isVoid() {
@@ -1151,7 +1151,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this metadata represents an array of argument types.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this metadata represents an array of argument types.
 	 */
 	public boolean isArgs() {
@@ -1160,7 +1160,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the argument types of this meta.
-	 *
+	 * 
 	 * @return The argument types of this meta, or <jk>null</jk> if this isn't an array of argument types.
 	 */
 	public ClassMeta<?>[] getArgs() {
@@ -1169,7 +1169,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the argument metadata at the specified index if this is an args metadata object.
-	 *
+	 * 
 	 * @param index The argument index.
 	 * @return The The argument metadata.  Never <jk>null</jk>.
 	 * @throws BeanRuntimeException If this metadata object is not a list of arguments, or the index is out of range.
@@ -1182,11 +1182,11 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if instance of this object can be <jk>null</jk>.
-	 *
+	 * 
 	 * <p>
 	 * Objects can be <jk>null</jk>, but primitives cannot, except for chars which can be represented by
 	 * <code>(<jk>char</jk>)0</code>.
-	 *
+	 * 
 	 * @return <jk>true</jk> if instance of this class can be null.
 	 */
 	public boolean isNullable() {
@@ -1197,7 +1197,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class or one of it's methods are annotated with {@link Remoteable @Remotable}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is remoteable.
 	 */
 	public boolean isRemoteable() {
@@ -1206,7 +1206,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is abstract.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is abstract.
 	 */
 	public boolean isAbstract() {
@@ -1215,7 +1215,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class is an inner class.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this class is an inner class.
 	 */
 	public boolean isMemberClass() {
@@ -1225,10 +1225,10 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * All methods on this class annotated with {@link Remoteable @Remotable}, or all public methods if class is
 	 * annotated.
-	 *
+	 * 
 	 * <p>
 	 * Keys are method signatures.
-	 *
+	 * 
 	 * @return All remoteable methods on this class.
 	 */
 	public Map<String,Method> getRemoteableMethods() {
@@ -1237,10 +1237,10 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * All public methods on this class including static methods.
-	 *
+	 * 
 	 * <p>
 	 * Keys are method signatures.
-	 *
+	 * 
 	 * @return The public methods on this class.
 	 */
 	public Map<String,Method> getPublicMethods() {
@@ -1249,7 +1249,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the {@link PojoSwap} associated with this class that's the best match for the specified session.
-	 *
+	 * 
 	 * @param session
 	 * 	The current bean session.
 	 * 	<br>If multiple swaps are associated with a class, only the first one with a matching media type will
@@ -1278,7 +1278,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the {@link BeanMeta} associated with this class.
-	 *
+	 * 
 	 * @return
 	 * 	The {@link BeanMeta} associated with this class, or <jk>null</jk> if there is no bean meta associated with
 	 * 	this class.
@@ -1289,7 +1289,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the no-arg constructor for this class.
-	 *
+	 * 
 	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
 	 */
 	public Constructor<? extends T> getConstructor() {
@@ -1298,7 +1298,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the language-specified extended metadata on this class.
-	 *
+	 * 
 	 * @param c The name of the metadata class to create.
 	 * @return Extended metadata on this class.  Never <jk>null</jk>.
 	 */
@@ -1308,7 +1308,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the interface proxy invocation handler for this class.
-	 *
+	 * 
 	 * @return The interface proxy invocation handler, or <jk>null</jk> if it does not exist.
 	 */
 	public InvocationHandler getProxyInvocationHandler() {
@@ -1317,7 +1317,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class has a no-arg constructor or invocation handler.
-	 *
+	 * 
 	 * @return <jk>true</jk> if a new instance of this class can be constructed.
 	 */
 	public boolean canCreateNewInstance() {
@@ -1336,7 +1336,7 @@ public final class ClassMeta<T> implements Type {
 	 * Returns <jk>true</jk> if this class has a no-arg constructor or invocation handler.
 	 * Returns <jk>false</jk> if this is a non-static member class and the outer object does not match the class type of
 	 * the defining class.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
 	 * @return
@@ -1352,7 +1352,7 @@ public final class ClassMeta<T> implements Type {
 	 * Returns <jk>true</jk> if this class can be instantiated as a bean.
 	 * Returns <jk>false</jk> if this is a non-static member class and the outer object does not match the class type of
 	 * the defining class.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
 	 * @return
@@ -1370,7 +1370,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class can call the {@link #newInstanceFromString(Object, String)} method.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer class object for non-static member classes.
 	 * 	Can be <jk>null</jk> for non-member or static classes.
@@ -1389,7 +1389,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if this class can call the {@link #newInstanceFromString(Object, String)} method.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer class object for non-static member classes.
 	 * 	Can be <jk>null</jk> for non-member or static classes.
@@ -1406,7 +1406,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the class type of the parameter of the numeric constructor.
-	 *
+	 * 
 	 * @return The class type of the numeric constructor, or <jk>null</jk> if no such constructor exists.
 	 */
 	@SuppressWarnings("unchecked")
@@ -1416,7 +1416,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the method or field annotated with {@link NameProperty @NameProperty}.
-	 *
+	 * 
 	 * @return
 	 * 	The method or field  annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not
 	 * 	exist.
@@ -1427,7 +1427,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the method or field annotated with {@link ParentProperty @ParentProperty}.
-	 *
+	 * 
 	 * @return
 	 * 	The method or field annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not
 	 * 	exist.
@@ -1438,7 +1438,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.
-	 *
+	 * 
 	 * @return The reason why this class is not a bean, or <jk>null</jk> if it is a bean.
 	 */
 	public synchronized String getNotABeanReason() {
@@ -1447,7 +1447,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns any exception that was throw in the <code>init()</code> method.
-	 *
+	 * 
 	 * @return The cached exception.
 	 */
 	public Throwable getInitException() {
@@ -1456,7 +1456,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the {@link BeanContext} that created this object.
-	 *
+	 * 
 	 * @return The bean context.
 	 */
 	public BeanContext getBeanContext() {
@@ -1465,7 +1465,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the default value for primitives such as <jk>int</jk> or <jk>Integer</jk>.
-	 *
+	 * 
 	 * @return The default value, or <jk>null</jk> if this class type is not a primitive.
 	 */
 	@SuppressWarnings("unchecked")
@@ -1475,7 +1475,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Create a new instance of the main class of this declared type from a <code>String</code> input.
-	 *
+	 * 
 	 * <p>
 	 * In order to use this method, the class must have one of the following methods:
 	 * <ul>
@@ -1483,7 +1483,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	<li><code><jk>public static</jk> T fromString(String in);</code>
 	 * 	<li><code><jk>public</jk> T(String in);</code>
 	 * </ul>
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
 	 * @param arg The input argument value.
@@ -1513,13 +1513,13 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Create a new instance of the main class of this declared type from a <code>Number</code> input.
-	 *
+	 * 
 	 * <p>
 	 * In order to use this method, the class must have one of the following methods:
 	 * <ul>
 	 * 	<li><code><jk>public</jk> T(Number in);</code>
 	 * </ul>
-	 *
+	 * 
 	 * @param session The current bean session.
 	 * @param outer
 	 * 	The outer class object for non-static member classes.
@@ -1548,7 +1548,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Create a new instance of the main class of this declared type.
-	 *
+	 * 
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
 	 * @throws IllegalAccessException
 	 * 	If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is
@@ -1586,7 +1586,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Same as {@link #newInstance()} except for instantiating non-static member classes.
-	 *
+	 * 
 	 * @param outer
 	 * 	The instance of the owning object of the member class instance.
 	 * 	Can be <jk>null</jk> if instantiating a non-member or static class.
@@ -1618,7 +1618,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Checks to see if the specified class type is the same as this one.
-	 *
+	 * 
 	 * @param t The specified class type.
 	 * @return <jk>true</jk> if the specified class type is the same as the class for this type.
 	 */
@@ -1633,7 +1633,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.
 	 * (e.g. <jk>boolean</jk> == <code>Boolean</code>).
-	 *
+	 * 
 	 * @param cm The class meta to compare to.
 	 * @return <jk>true</jk> if the specified class-meta is equivalent to this one.
 	 */
@@ -1650,7 +1650,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Same as {@link #toString()} except use simple class names.
-	 *
+	 * 
 	 * @param simple Print simple class names only (no package).
 	 * @return A new string.
 	 */
@@ -1660,7 +1660,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Appends this object as a readable string to the specified string builder.
-	 *
+	 * 
 	 * @param sb The string builder to append this object to.
 	 * @param simple Print simple class names only (no package).
 	 * @return The same string builder passed in (for method chaining).
@@ -1692,10 +1692,10 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is an instance of this class.
-	 *
+	 * 
 	 * <p>
 	 * This is a simple comparison on the base class itself and not on any generic parameters.
-	 *
+	 * 
 	 * @param o The object to check.
 	 * @return <jk>true</jk> if the specified object is an instance of this class.
 	 */
@@ -1707,7 +1707,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns a readable name for this class (e.g. <js>"java.lang.String"</js>, <js>"boolean[]"</js>).
-	 *
+	 * 
 	 * @return The readable name for this class.
 	 */
 	public String getReadableName() {

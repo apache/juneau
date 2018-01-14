@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Used to invoke methods on {@code Objects} using arguments in serialized form.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	String s = <js>"foobar"</js>;
@@ -36,7 +36,7 @@ public final class PojoIntrospector {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param o The object on which Java methods will be invoked.
 	 * @param p The parser to use to parse the method arguments.
 	 * If <jk>null</jk>, {@link JsonParser#DEFAULT} is used.
@@ -50,7 +50,7 @@ public final class PojoIntrospector {
 
 	/**
 	 * Shortcut for calling <code><jk>new</jk> PojoIntrospector(o, <jk>null</jk>);</code>
-	 *
+	 * 
 	 * @param o The object on which Java methods will be invoked.
 	 */
 	public PojoIntrospector(Object o) {
@@ -59,7 +59,7 @@ public final class PojoIntrospector {
 
 	/**
 	 * Primary method.  Invokes the specified method on this bean.
-	 *
+	 * 
 	 * @param method The method being invoked.
 	 * @param args
 	 * 	The arguments to pass as parameters to the method.
@@ -96,7 +96,7 @@ public final class PojoIntrospector {
 
 	/**
 	 * Convenience method for invoking argument from method signature (@see {@link ClassUtils#getMethodSignature(Method)}.
-	 *
+	 * 
 	 * @param method The method being invoked.
 	 * @param args
 	 * 	The arguments to pass as parameters to the method.

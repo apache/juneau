@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 /**
  * Defines extended language-specific metadata associated with a class.
- *
+ * 
  * <p>
  * Serializers and parsers can implement their own language-specific metadata on a class and retrieve the metadata
  * using the {@link ClassMeta#getExtendedMeta(Class)} method.
@@ -25,7 +25,7 @@ public class ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param cm The metadata of the class we're extending.
 	 * @throws BeanRuntimeException If any error occurred trying to construct the metadata.
 	 */
@@ -35,7 +35,7 @@ public class ClassMetaExtended {
 
 	/**
 	 * Returns the class metadata that was passed into the constructor.
-	 *
+	 * 
 	 * @return The class metadata that was passed into the constructor.
 	 */
 	protected ClassMeta<?> getClassMeta() {
@@ -44,7 +44,7 @@ public class ClassMetaExtended {
 
 	/**
 	 * Convenience method for calling {@link ClassMeta#getInnerClass()} on the metadata passed to the constructor.
-	 *
+	 * 
 	 * @return The class wrapped by this metadata.
 	 */
 	protected Class<?> getInnerClass() {

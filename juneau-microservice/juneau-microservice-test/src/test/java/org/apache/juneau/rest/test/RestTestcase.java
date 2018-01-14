@@ -22,7 +22,7 @@ import org.junit.*;
 
 /**
  * Superclass of REST testcases that start up the REST test microservice before running the tests locally.
- *
+ * 
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RestTestcase {

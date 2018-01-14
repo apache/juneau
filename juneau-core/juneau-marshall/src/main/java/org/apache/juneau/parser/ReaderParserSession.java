@@ -14,7 +14,7 @@ package org.apache.juneau.parser;
 
 /**
  * Subclass of parser session objects for character-based parsers.
- *
+ * 
  * <p>
  * This class is NOT thread safe.  It is typically discarded after one-time use.
  */
@@ -22,7 +22,7 @@ public abstract class ReaderParserSession extends ParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The parser creating this session object.
 	 * 	The parser contains all the configuration settings for this object.
@@ -35,7 +35,7 @@ public abstract class ReaderParserSession extends ParserSession {
 
 	/**
 	 * Constructor for sessions that don't require context.
-	 *
+	 * 
 	 * @param args
 	 * 	Runtime session arguments.
 	 */

@@ -53,7 +53,7 @@ public @interface RdfSchema {
 	 * 
 	 * <p>
 	 * Inherited by child packages.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * 
 	 * Contents of <code>package-info.java</code>...
@@ -75,14 +75,14 @@ public @interface RdfSchema {
 	 * Class in package using defined namespaces...
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
-	 *
+	 * 
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>
 	 * 	<ja>@Rdf</ja>(prefix=<js>"addr"</js>)
 	 * 	<jk>public class</jk> Address {
-	 *
+	 * 
 	 * 		<jc>// Bean property, use "addr" namespace on class.</jc>
 	 * 		<jk>public int</jk> <jf>id</jf>;
-	 *
+	 * 
 	 * 		<jc>// Bean property, override with "mail" namespace.</jc>
 	 * 		<ja>@Rdf</ja>(prefix=<js>"mail"</js>)
 	 * 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;

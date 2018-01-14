@@ -20,7 +20,7 @@ public final class AsciiMap {
 
 	/**
 	 * Adds an entry to this map.
-	 *
+	 * 
 	 * @param c The key.
 	 * @param s The value.
 	 * @return This object (for method chaining).
@@ -33,7 +33,7 @@ public final class AsciiMap {
 
 	/**
 	 * Returns the value for the specified key.
-	 *
+	 * 
 	 * @param c The key.
 	 * @return The value.
 	 */
@@ -43,7 +43,7 @@ public final class AsciiMap {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
-	 *
+	 * 
 	 * @param c The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
@@ -55,7 +55,7 @@ public final class AsciiMap {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
-	 *
+	 * 
 	 * @param c The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
@@ -67,7 +67,7 @@ public final class AsciiMap {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains at least one character in this set.
-	 *
+	 * 
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if the string is not null and contains at least one character in this set.
 	 */

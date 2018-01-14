@@ -19,18 +19,20 @@ import org.apache.juneau.urlencoding.annotation.*;
 
 /**
  * Parses URL-encoded text into POJO models.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Content-Type</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
- *
+ * 
  * <p>
  * Expects parameter values to be in UON notation.
- *
+ * 
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  */
@@ -44,7 +46,7 @@ public class UrlEncodingParser extends UonParser {
 
 	/**
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
@@ -58,22 +60,22 @@ public class UrlEncodingParser extends UonParser {
 	 * 			<li class='ja'>{@link UrlEncoding#expandedParams()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> String[] f1;
 	 * 		<jk>public</jk> List&lt;String&gt; f2;
 	 * 	}
-	 *
+	 * 
 	 * 	UrlEncodingParser p1 = UrlEncodingParser.<jsf>DEFAULT</jsf>;
 	 * 	UrlEncodingParser p2 = UrlEncodingParser.<jsm>create</jsm>().expandedParams().build();
 	 * 	
@@ -81,10 +83,10 @@ public class UrlEncodingParser extends UonParser {
 	 * 	
 	 * 	A a2 = p2.parse(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>); 
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * This option only applies to beans.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
@@ -112,7 +114,7 @@ public class UrlEncodingParser extends UonParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public UrlEncodingParser(PropertyStore ps) {

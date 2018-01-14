@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 /**
  * Defines extended language-specific metadata associated with a bean.
- *
+ * 
  * <p>
  * Serializers and parsers can implement their own language-specific metadata on a bean and retrieve the metadata using
  * the {@link BeanMeta#getExtendedMeta(Class)} method.
@@ -25,7 +25,7 @@ public class BeanMetaExtended {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param bm The metadata of the bean we're extending.
 	 * @throws BeanRuntimeException If any error occurred trying to construct the metadata.
 	 */
@@ -35,7 +35,7 @@ public class BeanMetaExtended {
 
 	/**
 	 * Returns the bean metadata that was passed into the constructor.
-	 *
+	 * 
 	 * @return The bean metadata that was passed into the constructor.
 	 */
 	protected BeanMeta<?> getBeanMeta() {

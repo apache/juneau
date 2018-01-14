@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Bean filter builder initialized from the contents of a {@link Bean @Bean} annotation found on a class.
- *
+ * 
  * <p>
  * <b>*** Internal class - Not intended for external use ***</b>
  * 

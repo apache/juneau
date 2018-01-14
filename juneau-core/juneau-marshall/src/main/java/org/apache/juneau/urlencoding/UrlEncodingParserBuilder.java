@@ -35,7 +35,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UrlEncodingParserBuilder(PropertyStore ps) {
@@ -54,10 +54,10 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
-	 *
+	 * 
 	 * <p>
 	 * This is the parser-side equivalent of the {@link UrlEncodingParser#URLENC_expandedParams} setting.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
@@ -74,10 +74,10 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}

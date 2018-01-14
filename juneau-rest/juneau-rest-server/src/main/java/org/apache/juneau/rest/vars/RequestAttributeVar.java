@@ -20,7 +20,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Request attribute variable resolver.
- *
+ * 
  * <p>
  * The format for this var is <js>"$RA{key1[,key2...]}"</js>.
  * 
@@ -28,13 +28,14 @@ import org.apache.juneau.svl.*;
  * Used to resolve values returned by {@link HttpServletRequest#getAttribute(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  * 
- * <h6 class='figure'>Example:</h6>
+ * <h6 class='section'>Example:</h6>
  * <p class='bcode'>
  * 	String foo = restRequest.resolveVars(<js>"$RA{foo}"</js>); 
  * 	String fooOrBar = restRequest.resolveVars(<js>"$RA{foo,bar}"</js>); 
  * </p>
- *
- * <h5 class='section'>Notes:</h5>
+ * 
+ * <h
+ * 5 class='topic'>Notes</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
@@ -42,7 +43,7 @@ import org.apache.juneau.svl.*;
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
- *
+ * 
  * @see org.apache.juneau.svl
  */
 public class RequestAttributeVar extends MultipartResolvingVar {

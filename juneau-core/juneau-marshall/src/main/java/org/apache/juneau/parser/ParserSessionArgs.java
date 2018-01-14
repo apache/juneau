@@ -33,7 +33,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param properties
 	 * 	Session-level properties.
 	 * 	<br>These override context-level properties.
@@ -62,7 +62,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	
 	/**
 	 * The java method that called this serializer, usually the method in a REST servlet.
-	 *
+	 * 
 	 * @param javaMethod
 	 * 	The java method that called this serializer, usually the method in a REST servlet.
 	 * 	<br>Can be <jk>null</jk>.
@@ -75,7 +75,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 
 	/**
 	 * 	The outer object for instantiating top-level non-static inner classes.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer object for instantiating top-level non-static inner classes.
 	 * @return This object (for method chaining).

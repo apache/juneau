@@ -25,7 +25,7 @@ public class FileUtils {
 
 	/**
 	 * Same as {@link File#mkdirs()} except throws a RuntimeExeption if directory could not be created.
-	 *
+	 * 
 	 * @param f The directory to create.  Must not be <jk>null</jk>.
 	 * @param clean If <jk>true</jk>, deletes the contents of the directory if it already exists.
 	 * @return The same file.
@@ -48,7 +48,7 @@ public class FileUtils {
 
 	/**
 	 * Same as {@link #mkdirs(String, boolean)} but uses String path.
-	 *
+	 * 
 	 * @param path The path of the directory to create.  Must not be <jk>null</jk>
 	 * @param clean If <jk>true</jk>, deletes the contents of the directory if it already exists.
 	 * @return The directory.
@@ -60,7 +60,7 @@ public class FileUtils {
 
 	/**
 	 * Recursively deletes a file or directory.
-	 *
+	 * 
 	 * @param f The file or directory to delete.
 	 * @return <jk>true</jk> if file or directory was successfully deleted.
 	 */
@@ -78,10 +78,10 @@ public class FileUtils {
 
 	/**
 	 * Creates a file if it doesn't already exist using {@link File#createNewFile()}.
-	 *
+	 * 
 	 * <p>
 	 * Throws a {@link RuntimeException} if the file could not be created.
-	 *
+	 * 
 	 * @param f The file to create.
 	 */
 	public static void create(File f) {
@@ -97,10 +97,10 @@ public class FileUtils {
 
 	/**
 	 * Updates the modified timestamp on the specified file.
-	 *
+	 * 
 	 * <p>
 	 * Method ensures that the timestamp changes even if it's been modified within the past millisecond.
-	 *
+	 * 
 	 * @param f The file to modify the modified timestamp on.
 	 */
 	public static void modifyTimestamp(File f) {
@@ -121,14 +121,14 @@ public class FileUtils {
 
 	/**
 	 * Create a temporary file with the specified name.
-	 *
+	 * 
 	 * <p>
 	 * The name is broken into file name and suffix, and the parts are passed to
 	 * {@link File#createTempFile(String, String)}.
-	 *
+	 * 
 	 * <p>
 	 * {@link File#deleteOnExit()} is called on the resulting file before being returned by this method.
-	 *
+	 * 
 	 * @param name The file name
 	 * @return A newly-created temporary file.
 	 * @throws IOException
@@ -142,7 +142,7 @@ public class FileUtils {
 
 	/**
 	 * Strips the extension from a file name.
-	 *
+	 * 
 	 * @param name The file name.
 	 * @return The file name without the extension, or <jk>null</jk> if name was <jk>null</jk>.
 	 */
@@ -157,7 +157,7 @@ public class FileUtils {
 
 	/**
 	 * Returns the extension from a file name.
-	 *
+	 * 
 	 * @param name The file name.
 	 * @return The the extension, or <jk>null</jk> if name was <jk>null</jk>.
 	 */

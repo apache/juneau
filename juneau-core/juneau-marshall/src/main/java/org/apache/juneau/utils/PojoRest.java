@@ -24,10 +24,10 @@ import org.apache.juneau.parser.*;
 
 /**
  * Provides the ability to perform standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.
- *
+ * 
  * <p>
  * Nodes in the POJO model are addressed using URLs.
- *
+ * 
  * <p>
  * A POJO model is defined as a tree model where nodes consist of consisting of the following:
  * <ul class='spaced-list'>
@@ -38,20 +38,20 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		Java beans.
  * </ul>
- *
+ * 
  * <p>
  * Leaves of the tree can be any type of object.
- *
+ * 
  * <p>
  * Use {@link #get(String) get()} to retrieve an element from a JSON tree.
  * <br>Use {@link #put(String,Object) put()} to create (or overwrite) an element in a JSON tree.
  * <br>Use {@link #post(String,Object) post()} to add an element to a list in a JSON tree.
  * <br>Use {@link #delete(String) delete()} to remove an element from a JSON tree.
- *
+ * 
  * <p>
  * Leading slashes in URLs are ignored.
  * So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct an unstructured POJO model</jc>
@@ -74,34 +74,34 @@ import org.apache.juneau.parser.*;
  * 		+ <js>"	'fico score':' &gt; 640' "</js>
  * 		+ <js>"} "</js>
  * 	);
- *
+ * 
  * 	<jc>// Wrap Map inside a PojoRest object</jc>
  * 	PojoRest johnSmith = <jk>new</jk> PojoRest(m);
- *
+ * 
  * 	<jc>// Get a simple value at the top level</jc>
  * 	<jc>// "John Smith"</jc>
  * 	String name = johnSmith.getString(<js>"name"</js>);
- *
+ * 
  * 	<jc>// Change a simple value at the top level</jc>
  * 	johnSmith.put(<js>"name"</js>, <js>"The late John Smith"</js>);
- *
+ * 
  * 	<jc>// Get a simple value at a deep level</jc>
  * 	<jc>// "21 2nd Street"</jc>
  * 	String streetAddress = johnSmith.getString(<js>"address/streetAddress"</js>);
- *
+ * 
  * 	<jc>// Set a simple value at a deep level</jc>
  * 	johnSmith.put(<js>"address/streetAddress"</js>, <js>"101 Cemetery Way"</js>);
- *
+ * 
  * 	<jc>// Get entries in a list</jc>
  * 	<jc>// "212 555-1111"</jc>
  * 	String firstPhoneNumber = johnSmith.getString(<js>"phoneNumbers/0"</js>);
- *
+ * 
  * 	<jc>// Add entries to a list</jc>
  * 	johnSmith.post(<js>"phoneNumbers"</js>, <js>"212 555-3333"</js>);
- *
+ * 
  * 	<jc>// Delete entries from a model</jc>
  * 	johnSmith.delete(<js>"fico score"</js>);
- *
+ * 
  * 	<jc>// Add entirely new structures to the tree</jc>
  * 	ObjectMap medicalInfo = new ObjectMap(<js>""</js>
  * 		+ <js>"{"</js>
@@ -112,12 +112,12 @@ import org.apache.juneau.parser.*;
  * 	);
  * 	johnSmith.put(<js>"additionalInfo/medicalInfo"</js>, medicalInfo);
  * </p>
- *
+ * 
  * <p>
  * In the special case of collections/arrays of maps/beans, a special XPath-like selector notation can be used in lieu
  * of index numbers on GET requests to return a map/bean with a specified attribute value.
  * <br>The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
@@ -141,10 +141,10 @@ public final class PojoRest {
 
 	/**
 	 * Create a new instance of a REST interface over the specified object.
-	 *
+	 * 
 	 * <p>
 	 * Uses {@link BeanContext#DEFAULT} for working with Java beans.
-	 *
+	 * 
 	 * @param o The object to be wrapped.
 	 */
 	public PojoRest(Object o) {
@@ -153,10 +153,10 @@ public final class PojoRest {
 
 	/**
 	 * Create a new instance of a REST interface over the specified object.
-	 *
+	 * 
 	 * <p>
 	 * The parser is used as the bean context.
-	 *
+	 * 
 	 * @param o The object to be wrapped.
 	 * @param parser The parser to use for parsing arguments and converting objects to the correct data type.
 	 */
@@ -170,7 +170,7 @@ public final class PojoRest {
 
 	/**
 	 * Call this method to prevent the root object from being overwritten on <code>put("", xxx);</code> calls.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public PojoRest setRootLocked() {
@@ -180,7 +180,7 @@ public final class PojoRest {
 
 	/**
 	 * The root object that was passed into the constructor of this method.
-	 *
+	 * 
 	 * @return The root object.
 	 */
 	public Object getRootObject() {
@@ -189,7 +189,7 @@ public final class PojoRest {
 
 	/**
 	 * Retrieves the element addressed by the URL.
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element to retrieve.
 	 * 	<br>If <jk>null</jk> or blank, returns the root.
@@ -201,7 +201,7 @@ public final class PojoRest {
 
 	/**
 	 * Retrieves the element addressed by the URL.
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element to retrieve.
 	 * 	<br>If <jk>null</jk> or blank, returns the root.
@@ -215,35 +215,35 @@ public final class PojoRest {
 
 	/**
 	 * Retrieves the element addressed by the URL as the specified object type.
-	 *
+	 * 
 	 * <p>
 	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	PojoRest r = <jk>new</jk> PojoRest(object);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a string.</jc>
 	 * 	String s = r.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a bean.</jc>
 	 * 	MyBean b = r.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a bean array.</jc>
 	 * 	MyBean[] ba = r.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a linked-list of objects.</jc>
 	 * 	List l = r.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a map of object keys/values.</jc>
 	 * 	Map m2 = r.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element to retrieve.
 	 * 	If <jk>null</jk> or blank, returns the root.
 	 * @param type The specified object type.
-	 *
+	 * 
 	 * @param <T> The specified object type.
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
@@ -253,53 +253,53 @@ public final class PojoRest {
 
 	/**
 	 * Retrieves the element addressed by the URL as the specified object type.
-	 *
+	 * 
 	 * <p>
 	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
-	 *
+	 * 
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	PojoMap r = <jk>new</jk> PojoMap(object);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; l1 = r.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a linked-list of beans.</jc>
 	 * 	List&lt;MyBean&gt; l2 = r.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
 	 * 	List&lt;List&lt;String&gt;&gt; l3 = r.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; m1 = r.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m2 = r.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
-	 *
+	 * 
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
-	 *
+	 * 
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element to retrieve.
 	 * 	If <jk>null</jk> or blank, returns the root.
 	 * @param type The specified object type.
 	 * @param args The specified object parameter types.
-	 *
+	 * 
 	 * @param <T> The specified object type.
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
@@ -309,13 +309,13 @@ public final class PojoRest {
 
 	/**
 	 * Same as {@link #get(String, Class)} but returns a default value if the addressed element is null or non-existent.
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element to retrieve.
 	 * 	If <jk>null</jk> or blank, returns the root.
 	 * @param def The default value if addressed item does not exist.
 	 * @param type The specified object type.
-	 *
+	 * 
 	 * @param <T> The specified object type.
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
@@ -328,14 +328,14 @@ public final class PojoRest {
 
 	/**
 	 * Same as {@link #get(String,Type,Type[])} but returns a default value if the addressed element is null or non-existent.
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element to retrieve.
 	 * 	If <jk>null</jk? or blank, returns the root.
 	 * @param def The default value if addressed item does not exist.
 	 * @param type The specified object type.
 	 * @param args The specified object parameter types.
-	 *
+	 * 
 	 * @param <T> The specified object type.
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
@@ -348,10 +348,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link String}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(String.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 */
@@ -361,10 +361,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link String}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(String.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -375,10 +375,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Integer.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
@@ -389,10 +389,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Integer.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -404,10 +404,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link Long}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Long.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
@@ -418,10 +418,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link Long}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Long.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -433,10 +433,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
@@ -447,10 +447,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -462,10 +462,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Map.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
@@ -476,10 +476,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(Map.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -491,10 +491,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link List}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(List.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
@@ -505,10 +505,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link List}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(List.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -520,10 +520,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(ObjectMap.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
@@ -534,10 +534,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectMap}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(ObjectMap.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -549,10 +549,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectList}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(ObjectList.<jk>class</jk>, key)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
@@ -563,10 +563,10 @@ public final class PojoRest {
 
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectList}.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>get(ObjectList.<jk>class</jk>, key, defVal)</code>.
-	 *
+	 * 
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
@@ -578,7 +578,7 @@ public final class PojoRest {
 
 	/**
 	 * Executes the specified method with the specified parameters on the specified object.
-	 *
+	 * 
 	 * @param url The URL of the element to retrieve.
 	 * @param method
 	 * 	The method signature.
@@ -628,7 +628,7 @@ public final class PojoRest {
 	/**
 	 * Returns the list of available methods that can be passed to the {@link #invokeMethod(String, String, String)}
 	 * for the object addressed by the specified URL.
-	 *
+	 * 
 	 * @param url The URL.
 	 * @return The list of methods.
 	 */
@@ -641,7 +641,7 @@ public final class PojoRest {
 
 	/**
 	 * Returns the class type of the object at the specified URL.
-	 *
+	 * 
 	 * @param url The URL.
 	 * @return The class type.
 	 */
@@ -654,10 +654,10 @@ public final class PojoRest {
 
 	/**
 	 * Sets/replaces the element addressed by the URL.
-	 *
+	 * 
 	 * <p>
 	 * This method expands the POJO model as necessary to create the new element.
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element to create.
 	 * 	If <jk>null</jk> or blank, the root itself is replaced with the specified value.
@@ -670,16 +670,16 @@ public final class PojoRest {
 
 	/**
 	 * Adds a value to a list element in a POJO model.
-	 *
+	 * 
 	 * <p>
 	 * The URL is the address of the list being added to.
-	 *
+	 * 
 	 * <p>
 	 * If the list does not already exist, it will be created.
-	 *
+	 * 
 	 * <p>
 	 * This method expands the POJO model as necessary to create the new element.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>You can only post to three types of nodes:
@@ -689,7 +689,7 @@ public final class PojoRest {
 	 * 			<li>arrays
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element being added to.
 	 * 	If <jk>null</jk> or blank, the root itself (assuming it's one of the types specified above) is added to.
@@ -702,10 +702,10 @@ public final class PojoRest {
 
 	/**
 	 * Remove an element from a POJO model.
-	 *
+	 * 
 	 * <p>
 	 * If the element does not exist, no action is taken.
-	 *
+	 * 
 	 * @param url
 	 * 	The URL of the element being deleted.
 	 * 	If <jk>null</jk> or blank, the root itself is deleted.

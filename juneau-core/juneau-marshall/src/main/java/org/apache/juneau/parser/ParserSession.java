@@ -26,7 +26,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -45,7 +45,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -93,7 +93,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Workhorse method.  Subclasses are expected to implement this method.
-	 *
+	 * 
 	 * @param pipe Where to get the input from.
 	 * @param type
 	 * 	The class type of the object to create.
@@ -108,7 +108,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 */
 	public abstract boolean isReaderParser();
@@ -121,7 +121,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
 	 * a stream or reader.
-	 *
+	 * 
 	 * @param input
 	 * 	The input.
 	 * 	<br>For character-based parsers, this can be any of the following types:
@@ -152,7 +152,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.
-	 *
+	 * 
 	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
 	 */
 	public final ObjectMap getLastLocation() {
@@ -166,11 +166,11 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Returns the Java method that invoked this parser.
-	 *
+	 * 
 	 * <p>
 	 * When using the REST API, this is the Java method invoked by the REST call.
 	 * Can be used to access annotations defined on the method or class.
-	 *
+	 * 
 	 * @return The Java method that invoked this parser.
 	*/
 	protected final Method getJavaMethod() {
@@ -179,10 +179,10 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Returns the outer object used for instantiating top-level non-static member classes.
-	 *
+	 * 
 	 * <p>
 	 * When using the REST API, this is the servlet object.
-	 *
+	 * 
 	 * @return The outer object.
 	*/
 	protected final Object getOuter() {
@@ -191,7 +191,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Sets the current bean property being parsed for proper error messages.
-	 *
+	 * 
 	 * @param currentProperty The current property being parsed.
 	 */
 	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
@@ -200,7 +200,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Sets the current class being parsed for proper error messages.
-	 *
+	 * 
 	 * @param currentClass The current class being parsed.
 	 */
 	protected final void setCurrentClass(ClassMeta<?> currentClass) {
@@ -209,7 +209,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Parser#PARSER_trimStrings} setting value for this session.
-	 *
+	 * 
 	 * @return The {@link Parser#PARSER_trimStrings} setting value for this session.
 	 */
 	protected final boolean isTrimStrings() {
@@ -218,7 +218,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Parser#PARSER_strict} setting value for this session.
-	 *
+	 * 
 	 * @return The {@link Parser#PARSER_strict} setting value for this session.
 	 */
 	protected final boolean isStrict() {
@@ -227,7 +227,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Trims the specified object if it's a <code>String</code> and {@link #isTrimStrings()} returns <jk>true</jk>.
-	 *
+	 * 
 	 * @param o The object to trim.
 	 * @return The trimmed string if it's a string.
 	 */
@@ -241,7 +241,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Trims the specified string if {@link ParserSession#isTrimStrings()} returns <jk>true</jk>.
-	 *
+	 * 
 	 * @param s The input string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
@@ -253,7 +253,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Converts the specified <code>ObjectMap</code> into a bean identified by the <js>"_type"</js> property in the map.
-	 *
+	 * 
 	 * @param m The map to convert to a bean.
 	 * @param pMeta The current bean property being parsed.
 	 * @param eType The current expected type being parsed.
@@ -293,7 +293,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Give the specified dictionary name, resolve it to a class.
-	 *
+	 * 
 	 * @param typeName The dictionary name to resolve.
 	 * @param pMeta The bean property we're currently parsing.
 	 * @param eType The expected type we're currently parsing.
@@ -323,7 +323,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Method that gets called when an unknown bean property name is encountered.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @param propertyName The unknown bean property name.
 	 * @param beanMap The bean that doesn't have the expected property.
@@ -348,44 +348,44 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Parses input into the specified object type.
-	 *
+	 * 
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
-	 *
+	 * 
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
-	 *
+	 * 
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
-	 *
+	 * 
 	 * @param <T> The class type of the object to create.
 	 * @param input
 	 * 	The input.
@@ -431,30 +431,30 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
-	 *
+	 * 
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 *
+	 * 
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = p.parse(json, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean array.</jc>
 	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
@@ -473,10 +473,10 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
 	 * object.
-	 *
+	 * 
 	 * <p>
 	 * This is mostly an internal method used by the framework.
-	 *
+	 * 
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
@@ -494,11 +494,11 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Entry point for all parsing calls.
-	 *
+	 * 
 	 * <p>
 	 * Calls the {@link #doParse(ParserPipe, ClassMeta)} implementation class and catches/re-wraps any exceptions
 	 * thrown.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @param type The class type of the object to create.
 	 * @param <T> The class type of the object to create.
@@ -528,10 +528,10 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified map.
-	 *
+	 * 
 	 * <p>
 	 * Reader must contain something that serializes to a map (such as text containing a JSON object).
-	 *
+	 * 
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
@@ -539,7 +539,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 		The various character-based constructors in {@link ObjectMap} (e.g.
 	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
 	 * </ul>
-	 *
+	 * 
 	 * @param <K> The key class type.
 	 * @param <V> The value class type.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
@@ -564,10 +564,10 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Implementation method.
-	 *
+	 * 
 	 * <p>
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @param m The map being loaded.
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
@@ -581,7 +581,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified collection.
-	 *
+	 * 
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
@@ -589,7 +589,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 		The various character-based constructors in {@link ObjectList} (e.g.
 	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
 	 * </ul>
-	 *
+	 * 
 	 * @param <E> The element class type.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @param c The collection being loaded.
@@ -619,10 +619,10 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Implementation method.
-	 *
+	 * 
 	 * <p>
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
@@ -636,18 +636,18 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
 	 * argument.
-	 *
+	 * 
 	 * <p>
 	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
 	 * to the {@code Method.invoke(target, args)} method.
-	 *
+	 * 
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
 	 * </ul>
-	 *
+	 * 
 	 * @param input The input.  Subclasses can support different input types.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 * @return An array of parsed objects.
@@ -674,7 +674,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Converts the specified string to the specified type.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer object if we're converting to an inner object that needs to be created within the context
 	 * 	of an outer object.
@@ -720,7 +720,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Convenience method for calling the {@link ParentProperty @ParentProperty} method on the specified object if it
 	 * exists.
-	 *
+	 * 
 	 * @param cm The class type of the object.
 	 * @param o The object.
 	 * @param parent The parent to set.
@@ -734,7 +734,7 @@ public abstract class ParserSession extends BeanSession {
 
 	/**
 	 * Convenience method for calling the {@link NameProperty @NameProperty} method on the specified object if it exists.
-	 *
+	 * 
 	 * @param cm The class type of the object.
 	 * @param o The object.
 	 * @param name The name to set.

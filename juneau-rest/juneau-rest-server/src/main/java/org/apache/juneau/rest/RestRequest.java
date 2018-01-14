@@ -43,10 +43,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents an HTTP request for a REST resource.
- *
+ * 
  * <p>
  * Equivalent to {@link HttpServletRequest} except with some additional convenience methods.
- *
+ * 
  * <p>
  * For reference, given the URL <js>"http://localhost:9080/contextRoot/servletPath/foo?bar=baz#qux"</js>, the
  * following methods return the following values....
@@ -60,7 +60,7 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>{@code getRequestURL()}</td><td>{@code http://localhost:9080/contextRoot/servletPath/foo}</td></tr>
  * 	<tr><td>{@code getServletPath()}</td><td>{@code /servletPath}</td></tr>
  * </table>
- *
+ * 
  * <p>
  * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
  * class.
@@ -195,7 +195,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns a string of the form <js>"HTTP method-name full-url"</js>
-	 *
+	 * 
 	 * @return A description of the request.
 	 */
 	public String getDescription() {
@@ -205,7 +205,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getAttribute(String)} but returns a default value if not found.
-	 *
+	 * 
 	 * @param name The request attribute name.
 	 * @param def The default value if the attribute doesn't exist.
 	 * @return The request attribute value.
@@ -217,7 +217,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shorthand method for calling {@link #setAttribute(String, Object)} fluently.
-	 *
+	 * 
 	 * @param name The request attribute name.
 	 * @param value The request attribute value.
 	 * @return This object (for method chaining).
@@ -234,10 +234,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Retrieve the properties active for this request.
-	 *
+	 * 
 	 * <p>
 	 * These properties can be modified by the request.
-	 *
+	 * 
 	 * @return The properties active for this request.
 	 */
 	public ObjectMap getProperties() {
@@ -246,7 +246,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getProperties().append(name, value);</code> fluently.
-	 *
+	 * 
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
@@ -263,7 +263,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the headers on this request.
-	 *
+	 * 
 	 * @return The headers on this request.  Never <jk>null</jk>.
 	 */
 	public RequestHeaders getHeaders() {
@@ -285,7 +285,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the media types that are valid for <code>Accept</code> headers on the request.
-	 *
+	 * 
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getSupportedAcceptTypes() {
@@ -294,7 +294,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the media types that are valid for <code>Content-Type</code> headers on the request.
-	 *
+	 * 
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getSupportedContentTypes() {
@@ -365,14 +365,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Equivalent to {@link #getParameterMap()}, but only looks for query parameters in the URL, not form posts.
-	 *
+	 * 
 	 * <p>
 	 * This method can be used to retrieve query parameters without triggering the underlying servlet API to load and
 	 * parse the request body.
-	 *
+	 * 
 	 * <p>
 	 * This object is modifiable.
-	 *
+	 * 
 	 * @return The query parameters as a modifiable map.
 	 */
 	public RequestQuery getQuery() {
@@ -381,7 +381,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getQuery().getString(name)</code>.
-	 *
+	 * 
 	 * @param name The query parameter name.
 	 * @return The query parameter value, or <jk>null<jk> if not found.
 	 */
@@ -396,7 +396,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Retrieves the URL-encoded form data from the request if the body has already been cached locally.
-	 *
+	 * 
 	 * @return The URL-encoded form data from the request.
 	 */
 	public RequestFormData getFormData() {
@@ -423,7 +423,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getFormData().getString(name)</code>.
-	 *
+	 * 
 	 * @param name The form data parameter name.
 	 * @return The form data parameter value, or <jk>null<jk> if not found.
 	 */
@@ -438,7 +438,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Retrieves the URL-encoded form data from the request if the body has already been cached locally.
-	 *
+	 * 
 	 * @return The URL-encoded form data from the request.
 	 */
 	public RequestPathMatch getPathMatch() {
@@ -447,7 +447,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getPathMatch().get(name)</code>.
-	 *
+	 * 
 	 * @param name The path variable name.
 	 * @return The path variable value, or <jk>null<jk> if not found.
 	 */
@@ -461,7 +461,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the body of this HTTP request.
-	 *
+	 * 
 	 * @return The body of this HTTP request.
 	 */
 	public RequestBody getBody() {
@@ -470,11 +470,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP body content as a {@link Reader}.
-	 *
+	 * 
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
 	 * string.
-	 *
+	 * 
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 */
@@ -485,10 +485,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP body content as an {@link InputStream}.
-	 *
+	 * 
 	 * <p>
 	 * Automatically handles GZipped input streams.
-	 *
+	 * 
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
@@ -521,11 +521,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the URI context of the request.
-	 *
+	 * 
 	 * <p>
 	 * The URI context contains all the information about the URI of the request, such as the servlet URI, context
 	 * path, etc...
-	 *
+	 * 
 	 * @return The URI context of the request.
 	 */
 	public UriContext getUriContext() {
@@ -542,7 +542,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns a URI resolver that can be used to convert URIs to absolute or root-relative form.
-	 *
+	 * 
 	 * @param resolution The URI resolution rule.
 	 * @param relativity The relative URI relativity rule.
 	 * @return The URI resolver for this request.
@@ -554,7 +554,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Shortcut for calling {@link #getUriResolver()} using {@link UriResolution#ROOT_RELATIVE} and
 	 * {@link UriRelativity#RESOURCE}
-	 *
+	 * 
 	 * @return The URI resolver for this request.
 	 */
 	public UriResolver getUriResolver() {
@@ -563,12 +563,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the URI for this request.
-	 *
+	 * 
 	 * <p>
 	 * Similar to {@link #getRequestURI()} but returns the value as a {@link URI}.
 	 * It also gives you the capability to override the query parameters (e.g. add new query parameters to the existing
 	 * URI).
-	 *
+	 * 
 	 * @param includeQuery If <jk>true</jk> include the query parameters on the request.
 	 * @param addQueryParams Augment the request URI with the specified query parameters.
 	 * @return A new URI.
@@ -608,10 +608,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	
 	/**
 	 * Returns the localized site name.
-	 *
+	 * 
 	 * <p>
 	 * The site name is intended to be a title that can be applied to the entire site.
-	 *
+	 * 
 	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
@@ -623,10 +623,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		}
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.
-	 *
+	 * 
 	 * @return The localized servlet label.
 	 */
 	public String getSiteName() {
@@ -635,10 +635,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized servlet title.
-	 *
+	 * 
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.
-	 *
+	 * 
 	 * @return The localized servlet label.
 	 */
 	public String getServletTitle() {
@@ -647,10 +647,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized servlet description.
-	 *
+	 * 
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.
-	 *
+	 * 
 	 * @return The localized servlet description.
 	 */
 	public String getServletDescription() {
@@ -659,10 +659,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method summary.
-	 *
+	 * 
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(String, RestRequest)} with this object.
-	 *
+	 * 
 	 * @return The localized method description.
 	 */
 	public String getMethodSummary() {
@@ -671,10 +671,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method description.
-	 *
+	 * 
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(String, RestRequest)} with this object.
-	 *
+	 * 
 	 * @return The localized method description.
 	 */
 	public String getMethodDescription() {
@@ -687,7 +687,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the serializers associated with this request.
-	 *
+	 * 
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializerGroup() {
@@ -696,7 +696,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the parsers associated with this request.
-	 *
+	 * 
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParserGroup() {
@@ -706,7 +706,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the method of this request.
-	 *
+	 * 
 	 * <p>
 	 * If <code>allowHeaderParams</code> init parameter is <jk>true</jk>, then first looks for
 	 * <code>&amp;method=xxx</code> in the URL query string.
@@ -718,10 +718,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP 1.1 method name of the request as an enum.
-	 *
+	 * 
 	 * <p>
 	 * Note that non-RFC2616 method names resolve as {@link HttpMethod#OTHER}.
-	 *
+	 * 
 	 * @return The HTTP method.
 	 */
 	public HttpMethod getHttpMethod() {
@@ -739,14 +739,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns <jk>true</jk> if <code>&amp;plainText=true</code> was specified as a URL parameter.
-	 *
+	 * 
 	 * <p>
 	 * This indicates that the <code>Content-Type</code> of the output should always be set to <js>"text/plain"</js>
 	 * to make it easy to render in a browser.
-	 *
+	 * 
 	 * <p>
 	 * This feature is useful for debugging.
-	 *
+	 * 
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
@@ -755,7 +755,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut method for calling {@link MessageBundle#getString(Locale, String, Object...)} based on the request locale.
-	 *
+	 * 
 	 * @param key The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return The localized message.
@@ -766,7 +766,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the resource bundle for the request locale.
-	 *
+	 * 
 	 * @return The resource bundle.  Never <jk>null</jk>.
 	 */
 	public MessageBundle getResourceBundle() {
@@ -775,11 +775,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the servlet handling the request.
-	 *
+	 * 
 	 * <p>
 	 * Can be used to access servlet-init parameters or annotations during requests, such as in calls to
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}..
-	 *
+	 * 
 	 * @return The servlet handling the request.
 	 */
 	public RestContext getContext() {
@@ -788,17 +788,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the java method handling the request.
-	 *
+	 * 
 	 * <p>
 	 * Can be used to access the method name or method annotations during requests, such as in calls to
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This returns null when evaluating servlet-level guards since the method has not been resolved at that
 	 * 		point of execution.
 	 * </ul>
-	 *
+	 * 
 	 * @return The Java method handling the request, or <code>null</code> if the method has not yet been resolved.
 	 */
 	public Method getJavaMethod() {
@@ -807,7 +807,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the {@link BeanSession} associated with this request.
-	 *
+	 * 
 	 * @return The request bean session.
 	 */
 	public BeanSession getBeanSession() {
@@ -817,10 +817,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the variable resolver session for this request using session objects created by
 	 * {@link RestCallHandler#getSessionObjects(RestRequest)}.
-	 *
+	 * 
 	 * <p>
 	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
+	 * 
 	 * @return The variable resolver for this request.
 	 */
 	public VarResolverSession getVarResolverSession() {
@@ -831,7 +831,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getVarResolverSession().resolve(input)</code>.
-	 *
+	 * 
 	 * @param input The input string to resolve variables in.
 	 * @return The string with variables resolved, or <jk>null</jk> if input is null.
 	 */
@@ -841,7 +841,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling {@link #resolveVars(String[])} on all elements in the array.
-	 *
+	 * 
 	 * @param input The input strings to resolve variables in.
 	 * @return A copy of the array with variables resolved.
 	 */
@@ -852,7 +852,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns an instance of a {@link ReaderResource} that represents the contents of a resource text file from the
 	 * classpath.
-	 *
+	 * 
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars
 	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter @Parameter} variables will be
@@ -875,7 +875,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Same as {@link #getClasspathReaderResource(String, boolean, MediaType)} except uses the resource mime-type map
 	 * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.
-	 *
+	 * 
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars
 	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter @Parameter} variables will be
@@ -890,7 +890,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getClasspathReaderResource(String, boolean)} with <code>resolveVars == <jk>false</jk></code>
-	 *
+	 * 
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
@@ -901,7 +901,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the config file associated with the servlet.
-	 *
+	 * 
 	 * @return
 	 * 	The config file associated with the servlet, or <jk>null</jk> if servlet does not have a config file
 	 * 	associated with it.
@@ -914,7 +914,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized swagger associated with the servlet.
-	 *
+	 * 
 	 * @return
 	 * 	The swagger associated with the servlet.
 	 * 	Never <jk>null</jk>.
@@ -927,7 +927,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the widgets used for resolving <js>"$W{...}"</js> string variables.
-	 *
+	 * 
 	 * @return
 	 * 	The widgets used for resolving <js>"$W{...}"</js> string variables.
 	 * 	Never <jk>null</jk>.
@@ -938,14 +938,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized Swagger from the file system.
-	 *
+	 * 
 	 * <p>
 	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package as this servlet and returns
 	 * it as a parsed {@link Swagger} object.
-	 *
+	 * 
 	 * <p>
 	 * Returned objects are cached for later quick-lookup.
-	 *
+	 * 
 	 * @return The parsed swagger object, or <jk>null</jk> if the swagger file could not be found.
 	 */
 	protected Swagger getSwaggerFromFile() {

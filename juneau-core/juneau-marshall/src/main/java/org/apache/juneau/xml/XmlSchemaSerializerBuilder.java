@@ -32,7 +32,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public XmlSchemaSerializerBuilder(PropertyStore ps) {

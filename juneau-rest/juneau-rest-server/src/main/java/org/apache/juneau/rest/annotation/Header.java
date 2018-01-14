@@ -22,7 +22,7 @@ import org.apache.juneau.httppart.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a HTTP
  * request header converted to a POJO.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
@@ -30,7 +30,7 @@ import org.apache.juneau.httppart.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -59,7 +59,7 @@ public @interface Header {
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
@@ -68,7 +68,7 @@ public @interface Header {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 *
+	 * 
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

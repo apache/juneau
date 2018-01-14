@@ -18,20 +18,21 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>text/uon</code>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>text/uon</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>text/uon</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>text/uon</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * This serializer provides several serialization options.
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
- *
+ * 
  * <p>
  * The following shows a sample object defined in Javascript:
  * <p class='bcode'>
@@ -56,7 +57,7 @@ import org.apache.juneau.urlencoding.*;
  * 		]
  * 	}
  * </p>
- *
+ * 
  * <p>
  * Using the "strict" syntax defined in this document, the equivalent UON notation would be as follows:
  * <p class='bcode'>
@@ -81,16 +82,16 @@ import org.apache.juneau.urlencoding.*;
  * 		)
  * 	)
  * </p>
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
- *
+ * 
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
- *
+ * 
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
  * 		<jk>public</jk> Person(String s);
@@ -99,17 +100,17 @@ import org.apache.juneau.urlencoding.*;
  * 		<jk>public</jk> Address getAddress();
  * 		<jk>public boolean</jk> deceased;
  * 	}
- *
+ * 
  * 	<jk>public class</jk> Address {
  * 		<jk>public</jk> String getStreet();
  * 		<jk>public</jk> String getCity();
  * 		<jk>public</jk> String getState();
  * 		<jk>public int</jk> getZip();
  * 	}
- *
+ * 
  * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>,
  * 		<js>"NY"</js>, 12345, <jk>false</jk>);
- *
+ * 
  * 	<jc>// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
@@ -124,7 +125,7 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypeProperties.b"</js>
@@ -136,12 +137,12 @@ public class UonSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link UonSerializerBuilder#addBeanTypeProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 *
+	 * 
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -150,7 +151,7 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
@@ -163,11 +164,11 @@ public class UonSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
 	 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
@@ -199,7 +200,7 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.paramFormat.s"</js>
@@ -212,7 +213,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormatPlain()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
@@ -276,7 +277,7 @@ public class UonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore ps) {
@@ -291,7 +292,7 @@ public class UonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Encoding(PropertyStore ps) {
@@ -313,7 +314,7 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -323,7 +324,7 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces

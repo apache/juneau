@@ -19,7 +19,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link HtmlStrippedDocSerializer}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -27,7 +27,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.

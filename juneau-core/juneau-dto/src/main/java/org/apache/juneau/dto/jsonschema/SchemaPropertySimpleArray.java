@@ -14,10 +14,10 @@ package org.apache.juneau.dto.jsonschema;
 
 /**
  * Convenience class for representing a property that's an array of simple types.
- *
+ * 
  * <p>
  * An instance of this object is equivalent to calling...
- *
+ * 
  * <p class='bcode'>
  * 	SchemaProperty p = <jk>new</jk> SchemaProperty(name)
  * 		.setType(JsonType.<jsf>ARRAY</jsf>)
@@ -25,7 +25,7 @@ package org.apache.juneau.dto.jsonschema;
  * 			<jk>new</jk> Schema().setType(elementType)
  * 		);
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -45,7 +45,7 @@ public class SchemaPropertySimpleArray extends SchemaProperty {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The name of the schema property.
 	 * @param elementType The JSON type of the elements in the array.
 	 */

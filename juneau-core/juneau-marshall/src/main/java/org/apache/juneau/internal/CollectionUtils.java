@@ -25,7 +25,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Reverses the order of a {@link LinkedHashMap}.
-	 *
+	 * 
 	 * @param in The map to reverse the order on.
 	 * @return A new {@link LinkedHashMap} with keys in reverse order.
 	 */
@@ -46,7 +46,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Add a value to a list if the value is not null.
-	 *
+	 * 
 	 * @param l The list to add to.
 	 * @param o The element to add.
 	 * @return The same list.
@@ -59,10 +59,10 @@ public final class CollectionUtils {
 
 	/**
 	 * Adds the contents of one list to the other in reverse order.
-	 *
+	 * 
 	 * <p>
 	 * i.e. add values from 2nd list from end-to-start order to the end of the 1st list.
-	 *
+	 * 
 	 * @param list The list to append to.
 	 * @param append Contains the values to append to the list.
 	 * @return The same list.
@@ -76,10 +76,10 @@ public final class CollectionUtils {
 
 	/**
 	 * Adds the contents of the array to the list in reverse order.
-	 *
+	 * 
 	 * <p>
 	 * i.e. add values from the array from end-to-start order to the end of the list.
-	 *
+	 * 
 	 * @param list The list to append to.
 	 * @param append Contains the values to append to the list.
 	 * @return The same list.

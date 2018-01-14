@@ -31,7 +31,7 @@ import org.w3c.dom.ls.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlSchemaSerializer}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -40,7 +40,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -69,7 +69,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Returns an XML-Schema validator based on the output returned by {@link #doSerialize(SerializerPipe, Object)};
-	 *
+	 * 
 	 * @param out The target writer.
 	 * @param o The object to serialize.
 	 * @return The new validator.

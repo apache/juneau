@@ -20,8 +20,9 @@ import java.util.concurrent.atomic.*;
 
 /**
  * Specialized output stream for serializing MessagePack streams.
- *
- * <h5 class='section'>Notes:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul>
  * 	<li>This class is not intended for external use.
  * </ul>
@@ -32,7 +33,7 @@ public final class MsgPackOutputStream extends OutputStream {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param os The output stream being wrapped.
 	 */
 	protected MsgPackOutputStream(OutputStream os) {

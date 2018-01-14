@@ -14,34 +14,34 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Trailer</l> HTTP response header.
- *
+ * 
  * <p>
  * The Trailer general field value indicates that the given set of header fields is present in the trailer of a message
  * encoded with chunked transfer coding.
- *
+ * 
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Trailer: Max-Forwards
  * </p>
- *
+ * 
  * <h6 class='topic'>RFC2616 Specification</h6>
- *
+ * 
  * The Trailer general field value indicates that the given set of header fields is present in the trailer of a message
  * encoded with chunked transfer-coding.
- *
+ * 
  * <p class='bcode'>
  * 	Trailer  = "Trailer" ":" 1#field-name
  * </p>
- *
+ * 
  * <p>
  * An HTTP/1.1 message SHOULD include a Trailer header field in a message using chunked transfer-coding with a non-empty
  * trailer.
  * Doing so allows the recipient to know which header fields to expect in the trailer.
- *
+ * 
  * <p>
  * If no Trailer header field is present, the trailer SHOULD NOT include any header fields.
  * See section 3.6.1 for restrictions on the use of trailer fields in a "chunked" transfer-coding.
- *
+ * 
  * <p>
  * Message header fields listed in the Trailer header field MUST NOT include the following header fields:
  * <ul>
@@ -49,7 +49,7 @@ package org.apache.juneau.http;
  * 	<li>Content-Length
  * 	<li>Trailer
  * </ul>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -63,7 +63,7 @@ public final class Trailer extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>Trailer</code> header.
-	 *
+	 * 
 	 * @param value The <code>Trailer</code> header string.
 	 * @return The parsed <code>Trailer</code> header, or <jk>null</jk> if the string was null.
 	 */

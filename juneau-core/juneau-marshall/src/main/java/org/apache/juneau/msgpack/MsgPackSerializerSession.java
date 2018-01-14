@@ -23,7 +23,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackSerializer}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -35,7 +35,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -60,7 +60,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 
 	/**
 	 * Returns the {@link MsgPackSerializer#MSGPACK_addBeanTypeProperties} setting value for this session.
-	 *
+	 * 
 	 * @return The {@link MsgPackSerializer#MSGPACK_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */

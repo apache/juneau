@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 
 /**
  * Identifies a remote proxy interface against a REST interface.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -38,11 +38,11 @@ public @interface Remoteable {
 
 	/**
 	 * The absolute or relative path of the REST service.
-	 *
+	 * 
 	 * <p>
 	 * When a relative path is specified, it's relative to the root-url defined on the <code>RestClient</code> used
 	 * to instantiate the interface.
-	 *
+	 * 
 	 * <p>
 	 * When no path is specified, the path is assumed to be the class name (e.g.
 	 * <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
@@ -51,7 +51,7 @@ public @interface Remoteable {
 
 	/**
 	 * Identifies which methods on the interface should be exposed through the proxy.
-	 *
+	 * 
 	 * <p>
 	 * The options are:
 	 * <ul>
@@ -66,7 +66,7 @@ public @interface Remoteable {
 	/**
 	 * Defines the methodology to use for the path names of the methods when not explicitly defined via
 	 * {@link RemoteMethod#path() @RemoteMethod.path()}.
-	 *
+	 * 
 	 * <p>
 	 * The options are:
 	 * <ul>

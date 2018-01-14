@@ -35,7 +35,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public HtmlSerializerBuilder(PropertyStore ps) {
@@ -54,7 +54,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
@@ -74,7 +74,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>addKeyValueTableHeaders(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
@@ -88,12 +88,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Configuration property:  Look for URLs in {@link String Strings}.
-	 *
+	 * 
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
-	 *
-	 *
+	 * 
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}
@@ -110,7 +110,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Configuration property:  The parameter name to use when using {@link HtmlSerializer#HTML_lookForLabelParameters}.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
@@ -127,10 +127,10 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Configuration property:  Look for link labels in the <js>"label"</js> parameter of the URL.
-	 *
+	 * 
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_lookForLabelParameters}
@@ -147,11 +147,11 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Configuration property:  Anchor text source.
-	 *
+	 * 
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
 	 * in HTML, this setting defines what to set the inner text to.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}

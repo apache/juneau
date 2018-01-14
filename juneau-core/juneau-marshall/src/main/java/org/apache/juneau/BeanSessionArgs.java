@@ -37,7 +37,7 @@ public class BeanSessionArgs extends SessionArgs {
 	
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param properties
 	 * 	Session-level properties.
 	 * 	<br>These override context-level properties.
@@ -61,7 +61,7 @@ public class BeanSessionArgs extends SessionArgs {
 	
 	/**
 	 * The session locale.
-	 *
+	 * 
 	 * @param locale
 	 * 	The session locale.
 	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
@@ -74,7 +74,7 @@ public class BeanSessionArgs extends SessionArgs {
 	
 	/**
 	 * The session timezone.
-	 *
+	 * 
 	 * @param timeZone
 	 * 	The session timezone.
 	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
@@ -87,7 +87,7 @@ public class BeanSessionArgs extends SessionArgs {
 	
 	/**
 	 * The session media type.
-	 *
+	 * 
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
 	 * 	<br>Can be <jk>null</jk>.

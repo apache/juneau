@@ -30,11 +30,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
- *
+ * 
  * <p>
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
- *
+ * 
  * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on
  * using this class.
  */
@@ -46,7 +46,7 @@ public @interface RestResource {
 
 	/**
 	 * Allow body URL parameter.
-	 *
+	 * 
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
@@ -72,13 +72,13 @@ public @interface RestResource {
 
 	/**
 	 * Allowed method parameters.
-	 *
+	 * 
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
 	 * <br>
 	 * For example:  <js>"?method=OPTIONS"</js>
-	 *
+	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -98,7 +98,7 @@ public @interface RestResource {
 
 	/**
 	 * Allow header URL parameters.
-	 *
+	 * 
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
@@ -123,7 +123,7 @@ public @interface RestResource {
 
 	/**
 	 * Class-level bean filters.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut to add bean filters to the bean contexts of the objects returned by the following methods:
 	 * <ul>
@@ -131,7 +131,7 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getSerializers()}
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
@@ -141,7 +141,7 @@ public @interface RestResource {
 
 	/**
 	 * REST call handler.
-	 *
+	 * 
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 * 
@@ -154,10 +154,10 @@ public @interface RestResource {
 
 	/**
 	 * Children.
-	 *
+	 * 
 	 * <p>
 	 * Defines children of this resource.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_children}
@@ -167,7 +167,7 @@ public @interface RestResource {
 
 	/**
 	 * Classpath resource finder. 
-	 *
+	 * 
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
 	 * 
@@ -180,7 +180,7 @@ public @interface RestResource {
 
 	/**
 	 * Client version header.
-	 *
+	 * 
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 * 
@@ -193,7 +193,7 @@ public @interface RestResource {
 	 * {@link IfVar $IF}
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
@@ -203,10 +203,10 @@ public @interface RestResource {
 
 	/**
 	 * Optional location of configuration file for this servlet.
-	 *
+	 * 
 	 * <p>
 	 * The configuration file .
-	 *
+	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -216,7 +216,7 @@ public @interface RestResource {
 	 * {@link IfVar $IF}
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
-	 *
+	 * 
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#configFile(ConfigFile)} method.
 	 */
@@ -247,12 +247,12 @@ public @interface RestResource {
 
 	/**
 	 * Class-level response converters.
-	 *
+	 * 
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
 	 * annotation.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_converters}
@@ -275,7 +275,7 @@ public @interface RestResource {
 	 * {@link IfVar $IF}
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
@@ -288,7 +288,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * Specifies default values for request headers.
-	 *
+	 * 
 	 * <p>
 	 * Values can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -308,10 +308,10 @@ public @interface RestResource {
 
 	/**
 	 * Default response headers.
-	 *
+	 * 
 	 * <p>
 	 * Specifies default values for response headers.
-	 *
+	 * 
 	 * <p>
 	 * Values can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -331,15 +331,15 @@ public @interface RestResource {
 
 	/**
 	 * Optional servlet description.
-	 *
+	 * 
 	 * <p>
 	 * It is used to populate the Swagger description field.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletDescription()} method.
-	 *
+	 * 
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"description = foo"</js> or <js>"MyServlet.description = foo"</js>).
-	 *
+	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -362,10 +362,10 @@ public @interface RestResource {
 	 * {@link UrlVar $U}
 	 * {@link UrlEncodeVar $UE}
 	 * {@link WidgetVar $W}
-	 *
+	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/description</code>.
-	 *
+	 * 
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getDescription(RestRequest)} method.
 	 */
@@ -373,10 +373,10 @@ public @interface RestResource {
 
 	/**
 	 * Compression encoders. 
-	 *
+	 * 
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
@@ -386,7 +386,7 @@ public @interface RestResource {
 
 	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
-	 *
+	 * 
 	 * <p>
 	 * Values can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -404,11 +404,11 @@ public @interface RestResource {
 
 	/**
 	 * Class-level guards.
-	 *
+	 * 
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 * These guards get called immediately before execution of any REST method in this class.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_guards}
@@ -418,13 +418,13 @@ public @interface RestResource {
 
 	/**
 	 * Provides HTML-doc-specific metadata on this method.
-	 *
+	 * 
 	 * <p>
 	 * Used to customize the output from the HTML Doc serializer.
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/addressBook"</js>,
-	 *
+	 * 
 	 * 		<jc>// Links on the HTML rendition page.
 	 * 		// "request:/..." URIs are relative to the request URI.
 	 * 		// "servlet:/..." URIs are relative to the servlet URI.
@@ -465,7 +465,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
@@ -478,7 +478,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * Specifies the logger to use for logging.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
@@ -488,7 +488,7 @@ public @interface RestResource {
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
-	 *
+	 * 
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
@@ -514,7 +514,7 @@ public @interface RestResource {
 	 * Messages. 
 	 * 
 	 * Identifies the location of the resource bundle for this class.
-	 *
+	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -534,7 +534,7 @@ public @interface RestResource {
 
 	/**
 	 * Configuration property:  MIME types. 
-	 *
+	 * 
 	 * <p>
 	 * Defines MIME-type file type mappings.
 	 * 
@@ -557,12 +557,12 @@ public @interface RestResource {
 
 	/**
 	 * Java method parameter resolvers.
-	 *
+	 * 
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
 	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
@@ -575,7 +575,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
@@ -585,7 +585,7 @@ public @interface RestResource {
 
 	/**
 	 * Parsers. 
-	 *
+	 * 
 	 * <p>
 	 * Adds class-level parsers to this resource.
 	 * 
@@ -598,7 +598,7 @@ public @interface RestResource {
 
 	/**
 	 * HTTP part parser. 
-	 *
+	 * 
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
@@ -611,10 +611,10 @@ public @interface RestResource {
 
 	/**
 	 * HTTP part serializer. 
-	 *
+	 * 
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
@@ -624,10 +624,10 @@ public @interface RestResource {
 	
 	/**
 	 * Resource path.   
-	 *
+	 * 
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_path}
@@ -637,7 +637,7 @@ public @interface RestResource {
 
 	/**
 	 * Class-level POJO swaps.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut to add POJO swaps to the bean contexts of the objects returned by the following methods:
 	 * <ul>
@@ -645,7 +645,7 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getSerializers()}
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -655,7 +655,7 @@ public @interface RestResource {
 
 	/**
 	 * Class-level properties.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for specifying class-level properties on this servlet to the objects returned by the following methods:
 	 * <ul>
@@ -665,15 +665,15 @@ public @interface RestResource {
 	 * </ul>
 	 * <p>
 	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
-	 *
+	 * 
 	 * <p>
 	 * Property values will be converted to the appropriate type.
-	 *
+	 * 
 	 * <p>
 	 * In some cases, properties can be overridden at runtime through the
 	 * {@link RestResponse#setProperty(String, Object)} method or through a {@link Properties @Properties} annotated
 	 * method parameter.
-	 *
+	 * 
 	 * <p>
 	 * Values can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -692,7 +692,7 @@ public @interface RestResource {
 
 	/**
 	 * Render response stack traces in responses.
-	 *
+	 * 
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 * 
@@ -705,7 +705,7 @@ public @interface RestResource {
 	 * {@link IfVar $IF}
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
@@ -728,11 +728,11 @@ public @interface RestResource {
 
 	/**
 	 * Response handlers.
-	 *
+	 * 
 	 * <p>
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
@@ -745,7 +745,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
@@ -755,7 +755,7 @@ public @interface RestResource {
 
 	/**
 	 * Serializers. 
-	 *
+	 * 
 	 * <p>
 	 * Adds class-level serializers to this resource.
 	 * 
@@ -768,13 +768,13 @@ public @interface RestResource {
 
 	/**
 	 * Optional site name.
-	 *
+	 * 
 	 * <p>
 	 * The site name is intended to be a title that can be applied to the entire site.
-	 *
+	 * 
 	 * <p>
 	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
-	 *
+	 * 
 	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
@@ -786,7 +786,7 @@ public @interface RestResource {
 	 * 		}
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -817,7 +817,7 @@ public @interface RestResource {
 
 	/**
 	 * Static file response headers. 
-	 *
+	 * 
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 * 
@@ -840,7 +840,7 @@ public @interface RestResource {
 	
 	/**
 	 * Static file mappings. 
-	 *
+	 * 
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
 	 * 
@@ -863,7 +863,7 @@ public @interface RestResource {
 	
 	/**
 	 * Supported accept media types.
-	 *
+	 * 
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 * 
@@ -886,10 +886,10 @@ public @interface RestResource {
 	
 	/**
 	 * Supported content media types.
-	 *
+	 * 
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 *
+	 * 
 	 * <p>
 	 * Values can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -909,15 +909,15 @@ public @interface RestResource {
 	
 	/**
 	 * Provides swagger-specific metadata on this resource.
-	 *
+	 * 
 	 * <p>
 	 * Used to populate the auto-generated OPTIONS swagger documentation.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/addressBook"</js>,
-	 *
+	 * 
 	 * 		<jc>// Swagger info.</jc>
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
@@ -934,15 +934,15 @@ public @interface RestResource {
 
 	/**
 	 * Optional servlet title.
-	 *
+	 * 
 	 * <p>
 	 * It is used to populate the Swagger title field.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
-	 *
+	 * 
 	 * <p>
 	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
-	 *
+	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigFileVar $C} 
@@ -965,10 +965,10 @@ public @interface RestResource {
 	 * {@link UrlVar $U}
 	 * {@link UrlEncodeVar $UE}
 	 * {@link WidgetVar $W}
-	 *
+	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/title</code>.
-	 *
+	 * 
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTitle(RestRequest)} method.
 	 */
@@ -976,7 +976,7 @@ public @interface RestResource {
 
 	/**
 	 * Configuration property:  Use classpath resource caching. 
-	 *
+	 * 
 	 * <p>
 	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related 
 	 * methods) will be cached in memory to speed subsequent lookups.
@@ -1000,7 +1000,7 @@ public @interface RestResource {
 	
 	/**
 	 * Use stack trace hashes.
-	 *
+	 * 
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
@@ -1014,7 +1014,7 @@ public @interface RestResource {
 	 * {@link IfVar $IF}
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}

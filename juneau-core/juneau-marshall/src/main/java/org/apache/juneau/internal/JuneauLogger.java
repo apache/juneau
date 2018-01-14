@@ -46,7 +46,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Get logger for specified class.
-	 *
+	 * 
 	 * @param forClass The class to create a logger for.
 	 * @return A new <l>Logger</l>.
 	 */
@@ -56,7 +56,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Get logger for specified class using the specified resource bundle name.
-	 *
+	 * 
 	 * @param forClass The class to create a logger for.
 	 * @param resourceBundleName
 	 * 	The name of the resource bundle.
@@ -74,7 +74,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Get logger with specified name using the specified resource bundle name.
-	 *
+	 * 
 	 * @param name The name of the logger to use.
 	 * @param resourceBundleName
 	 * 	The name of the resource bundle.
@@ -92,7 +92,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param innerLogger The wrapped logger.
 	 */
 	protected JuneauLogger(java.util.logging.Logger innerLogger) {
@@ -103,7 +103,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#SEVERE} level.
-	 *
+	 * 
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -114,7 +114,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#WARNING} level.
-	 *
+	 * 
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -125,7 +125,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#INFO} level.
-	 *
+	 * 
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -136,7 +136,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#CONFIG} level.
-	 *
+	 * 
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -147,7 +147,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINE} level.
-	 *
+	 * 
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -158,7 +158,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINER} level.
-	 *
+	 * 
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -169,7 +169,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINEST} level.
-	 *
+	 * 
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -180,7 +180,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs an exception as {@link Level#SEVERE} level.
-	 *
+	 * 
 	 * @param t The Throwable object to log.
 	 */
 	public void severe(Throwable t) {
@@ -190,7 +190,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs an exception as {@link Level#WARNING} level.
-	 *
+	 * 
 	 * @param t The Throwable object to log.
 	 */
 	public void warning(Throwable t) {
@@ -200,7 +200,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#SEVERE} level.
-	 *
+	 * 
 	 * @param t The Throwable object associated with the event that needs to be logged.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -212,7 +212,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#WARNING} level.
-	 *
+	 * 
 	 * @param t The Throwable object associated with the event that needs to be logged.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -224,7 +224,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#INFO} level.
-	 *
+	 * 
 	 * @param t The Throwable object associated with the event that needs to be logged.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -247,10 +247,10 @@ public class JuneauLogger extends java.util.logging.Logger {
 	/**
 	 * Similar to {@link #log(Level, String, Object[])}, except arguments are converted to objects
 	 * that are serialized using the {@link JsonSerializer#toStringObject(Object)} method.
-	 *
+	 * 
 	 * <p>
 	 * This allows arbitrary POJOs to be serialized as message parameters.
-	 *
+	 * 
 	 * @param level The level of the given message.
 	 * @param msg The message to log.
 	 * @param args The POJO arguments.

@@ -17,18 +17,18 @@ import java.util.regex.*;
 
 /**
  * Used to find regular expression matches in REST responses made through {@link RestCall}.
- *
+ * 
  * <p>
  * Response patterns are applied to REST calls through the {@link RestCall#responsePattern(ResponsePattern)} method.
- *
+ * 
  * <h5 class='section'>Example:</h5>
- *
+ * 
  * This example shows how to use a response pattern finder to find and capture patterns for <js>"x=number"</js> and
  * <js>"y=string"</js> from a response body.
  * <p class='bcode'>
  * 	<jk>final</jk> List&lt;Number&gt; xList = <jk>new</jk> ArrayList&lt;Number&gt;();
  * 	<jk>final</jk> List&lt;String&gt; yList = <jk>new</jk> ArrayList&lt;String&gt;();
- *
+ * 
  * 	restClient.doGet(<jsf>URL</jsf>)
  * 		.addResponsePattern(
  * 			<jk>new</jk> ResponsePattern(<js>"x=(\\d+)"</js>) {
@@ -56,7 +56,7 @@ import java.util.regex.*;
  * 		)
  * 		.run();
  * </p>
- *
+ * 
  * <h5 class='notes'>Important Notes:</h5>
  * <ol class='notes'>
  * 	<li>
@@ -80,7 +80,7 @@ public abstract class ResponsePattern {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param pattern Regular expression pattern.
 	 */
 	public ResponsePattern(String pattern) {
@@ -104,7 +104,7 @@ public abstract class ResponsePattern {
 
 	/**
 	 * Returns the pattern passed in through the constructor.
-	 *
+	 * 
 	 * @return The pattern passed in through the constructor.
 	 */
 	protected String getPattern() {
@@ -113,10 +113,10 @@ public abstract class ResponsePattern {
 
 	/**
 	 * Instances can override this method to handle when a regular expression pattern matches on the output.
-	 *
+	 * 
 	 * <p>
 	 * This method is called once for every pattern match that occurs in the response text.
-	 *
+	 * 
 	 * @param rc The {@link RestCall} that this pattern finder is being used on.
 	 * @param m The regular expression {@link Matcher}.  Can be used to retrieve group matches in the pattern.
 	 * @throws RestCallException Instances can throw an exception if a failure condition is detected.
@@ -125,7 +125,7 @@ public abstract class ResponsePattern {
 
 	/**
 	 * Instances can override this method to handle when a regular expression pattern doesn't match on the output.
-	 *
+	 * 
 	 * @param rc The {@link RestCall} that this pattern finder is being used on.
 	 * @throws RestCallException Instances can throw an exception if a failure condition is detected.
 	 */

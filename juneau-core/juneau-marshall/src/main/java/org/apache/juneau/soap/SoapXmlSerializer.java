@@ -18,16 +18,17 @@ import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJOs to HTTP responses as XML+SOAP.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>text/xml+soap</code>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>text/xml+soap</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>text/xml+soap</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>text/xml+soap</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  */
 public final class SoapXmlSerializer extends XmlSerializer {
@@ -40,7 +41,7 @@ public final class SoapXmlSerializer extends XmlSerializer {
 
 	/**
 	 * Configuration property:  The <code>SOAPAction</code> HTTP header value to set on responses.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"SoapXmlSerializer.SOAPAction.s"</js>
@@ -63,7 +64,7 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public SoapXmlSerializer(PropertyStore ps) {

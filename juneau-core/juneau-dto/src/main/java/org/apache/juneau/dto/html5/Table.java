@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-table-element">&lt;table&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="table")
@@ -35,7 +35,7 @@ public class Table extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-table-border">border</a> attribute.
-	 *
+	 * 
 	 * @param border
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

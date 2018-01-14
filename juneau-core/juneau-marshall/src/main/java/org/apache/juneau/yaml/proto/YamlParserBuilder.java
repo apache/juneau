@@ -32,7 +32,7 @@ public class YamlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public YamlParserBuilder(PropertyStore ps) {

@@ -25,7 +25,7 @@ public class FormattedRuntimeException extends RuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -35,7 +35,7 @@ public class FormattedRuntimeException extends RuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param causedBy The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.

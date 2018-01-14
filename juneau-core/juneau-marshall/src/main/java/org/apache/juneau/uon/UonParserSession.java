@@ -26,7 +26,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonParser}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -44,7 +44,7 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -66,11 +66,11 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Create a specialized parser session for parsing URL parameters.
-	 *
+	 * 
 	 * <p>
 	 * The main difference is that characters are never decoded, and the {@link UonParser#UON_decoding}
 	 * property is always ignored.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -113,7 +113,7 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Workhorse method.
-	 *
+	 * 
 	 * @param eType The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param r The reader being parsed.
 	 * @param outer The outer object (for constructing nested inner classes).
@@ -547,7 +547,7 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Convenience method for parsing an attribute from the specified parser.
-	 *
+	 * 
 	 * @param r
 	 * @param encoded
 	 * @return The parsed object
@@ -561,7 +561,7 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Parses an attribute name from the specified reader.
-	 *
+	 * 
 	 * @param r
 	 * @param encoded
 	 * @return The parsed attribute name.
@@ -631,7 +631,7 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Parses a string value from the specified reader.
-	 *
+	 * 
 	 * @param r
 	 * @param isUrlParamValue
 	 * @return The parsed string.
@@ -749,7 +749,7 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns a map identifying the current parse location.
-	 *
+	 * 
 	 * @param r The reader being read from.
 	 * @return A map identifying the current parse location.
 	 */
@@ -759,7 +759,7 @@ public class UonParserSession extends ReaderParserSession {
 
 	/**
 	 * Creates a {@link UonReader} from the specified parser pipe.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @param decodeChars Whether the reader should automatically decode URL-encoded characters.
 	 * @return A new {@link UonReader} object.

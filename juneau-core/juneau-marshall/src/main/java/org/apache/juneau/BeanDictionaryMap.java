@@ -19,11 +19,11 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents a map of dictionary type names to bean classes that make up a bean dictionary.
- *
+ * 
  * <p>
  * In general, this approach for defining dictionary names for classes is used when it's not possible to use the
  * {@link Bean#typeName() @Bean.typeName()} annotation.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// A bean dictionary map consisting of classes without @Bean.typeName() annotations</jc>
@@ -67,7 +67,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Add a dictionary name mapping for the specified class.
-	 *
+	 * 
 	 * @param typeName The dictionary name of the class.
 	 * @param c The class represented by the dictionary name.
 	 * @return This object (for method chaining).
@@ -79,7 +79,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Add a dictionary name mapping for the specified map class with the specified key and value classes.
-	 *
+	 * 
 	 * @param typeName The dictionary name of the class.
 	 * @param mapClass The map implementation class.
 	 * @param keyClass The key class.
@@ -95,7 +95,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Add a dictionary name mapping for the specified collection class with the specified entry class.
-	 *
+	 * 
 	 * @param typeName The dictionary name of the class.
 	 * @param collectionClass The collection implementation class.
 	 * @param entryClass The entry class.

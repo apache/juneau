@@ -21,8 +21,9 @@ import org.apache.juneau.parser.*;
 
 /**
  * Specialized input stream for parsing MessagePack streams.
- *
- * <h5 class='section'>Notes:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul>
  * 	<li>This class is not intended for external use.
  * </ul>
@@ -59,7 +60,7 @@ public final class MsgPackInputStream extends InputStream {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @throws Exception
 	 */
@@ -78,7 +79,7 @@ public final class MsgPackInputStream extends InputStream {
 
 	/**
 	 * Reads the data type flag from the stream.
-	 *
+	 * 
 	 * <p>
 	 * This is the byte that indicates what kind of data follows.
 	 */
@@ -383,7 +384,7 @@ public final class MsgPackInputStream extends InputStream {
 
 	/**
 	 * Returns the length value for the field.
-	 *
+	 * 
 	 * <p>
 	 * For ints/floats/bins/strings, this is the number of bytes that the field takes up (minus the data-type flag).
 	 * For arrays, it's the number of array entries.
@@ -493,7 +494,7 @@ public final class MsgPackInputStream extends InputStream {
 
 	/**
 	 * Returns the pipe that was passed into the constructor.
-	 *
+	 * 
 	 * @return The pipe that was passed into the constructor.
 	 */
 	public ParserPipe getPipe() {

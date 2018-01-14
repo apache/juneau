@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Implements the API for accessing the contents of a config file.
- *
+ * 
  * <p>
  * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.ini</a> for usage information.
  */
@@ -57,7 +57,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Retrieves an entry value from this config file.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @return The value, or the default value if the section or value doesn't exist.
@@ -66,7 +66,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Sets an entry value in this config file.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param value The new value.
@@ -85,7 +85,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Identical to {@link #put(String, String, Object, Serializer, boolean, boolean)} except used when the value is a
 	 * simple string to avoid having to catch a {@link SerializeException}.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param value The new value.
@@ -98,7 +98,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Removes an entry from this config file.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
@@ -108,7 +108,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns the current set of keys in the specified section.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @return The list of keys in the specified section, or <jk>null</jk> if section does not exist.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -117,7 +117,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Reloads this config file object from the persisted file contents if the modified timestamp on the file has changed.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException If file could not be read, or file is not associated with this object.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -126,7 +126,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Loads this config file object from the persisted file contents.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException If file could not be read, or file is not associated with this object.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -135,7 +135,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Loads this config file object from the specified reader.
-	 *
+	 * 
 	 * @param r The reader to read from.
 	 * @return This object (for method chaining).
 	 * @throws IOException If file could not be read, or file is not associated with this object.
@@ -145,7 +145,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Adds arbitrary lines to the specified config file section.
-	 *
+	 * 
 	 * <p>
 	 * The lines can be any of the following....
 	 * <ul class='spaced-list'>
@@ -156,10 +156,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li>
 	 * 		<js>" foobar "</js> - Anything else (interpreted as a comment).
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * If the section does not exist, it will automatically be created.
-	 *
+	 * 
 	 * @param section The name of the section to add lines to, or <jk>null</jk> to add to the beginning unnamed section.
 	 * @param lines The lines to add to the section.
 	 * @return This object (for method chaining).
@@ -169,12 +169,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Adds header comments to the specified section.
-	 *
+	 * 
 	 * <p>
 	 * Header comments are defined as lines that start with <jk>"#"</jk> immediately preceding a section header
 	 * <jk>"[section]"</jk>.
 	 * These are handled as part of the section itself instead of being interpreted as comments in the previous section.
-	 *
+	 * 
 	 * <p>
 	 * Header comments can be of the following formats...
 	 * <ul class='spaced-list'>
@@ -183,10 +183,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li>
 	 * 		<js>"comment"</js> - Anything else (will automatically be prefixed with <js>"# "</js>).
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * If the section does not exist, it will automatically be created.
-	 *
+	 * 
 	 * @param section The name of the section to add lines to, or <jk>null</jk> to add to the default section.
 	 * @param headerComments The comment lines to add to the section.
 	 * @return This object (for method chaining).
@@ -196,7 +196,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Removes any header comments from the specified section.
-	 *
+	 * 
 	 * @param section The name of the section to remove header comments from.
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -205,24 +205,24 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns the reusable bean session associated with this config file.
-	 *
+	 * 
 	 * <p>
 	 * Used for performing simple datatype conversions.
-	 *
+	 * 
 	 * @return The reusable bean session associated with this config file.
 	 */
 	protected abstract BeanSession getBeanSession();
 
 	/**
 	 * Converts the specified object to a string.
-	 *
+	 * 
 	 * <p>
 	 * The serialized output is identical to LAX JSON (JSON with unquoted attributes) except for the following
 	 * exceptions:
 	 * <ul>
 	 * 	<li>Top level strings are not quoted.
 	 * </ul>
-	 *
+	 * 
 	 * @param o The object to serialize.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
@@ -235,7 +235,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Converts the specified string to an object of the specified type.
-	 *
+	 * 
 	 * @param s The string to parse.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
@@ -264,7 +264,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns the specified value as a string from the config file.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if the section or value does not exist.
 	 * @return The value, or the default value if the section or value doesn't exist.
@@ -277,7 +277,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Removes an entry with the specified key.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -289,7 +289,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
+	 * 
 	 * <p>
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
@@ -298,48 +298,48 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myListOfStrings"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myListOfBeans"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/my2dListOfStrings"</js>, LinkedList.<jk>class</jk>,
 	 * 		LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map m = cf.getObject(<js>"MySection/myMapOfListsOfBeans"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
-	 *
+	 * 
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value
 	 * types.
-	 *
+	 * 
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param type
 	 * 	The object type to create.
@@ -359,7 +359,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Same as {@link #getObject(String, Type, Type...)} but allows you to specify the parser to use to parse the value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
@@ -384,30 +384,30 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Same as {@link #getObject(String, Type, Type...)} except optimized for a non-parameterized class.
-	 *
+	 * 
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = cf.getObject(<js>"MySection/mySimpleString"</js>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = cf.getObject(<js>"MySection/myBean"</js>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean array.</jc>
 	 * 	MyBean[] b = cf.getObject(<js>"MySection/myBeanArray"</js>, MyBean[].<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myList"</js>, LinkedList.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param <T> The class type of the object being created.
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param type The object type to create.
@@ -422,7 +422,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Same as {@link #getObject(String, Class)} but allows you to specify the parser to use to parse the value.
-	 *
+	 * 
 	 * @param <T> The class type of the object being created.
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser
@@ -442,10 +442,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #getObject(String, Class)}, but with a default value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if section or key does not exist.
 	 * @param type The class to convert the value to.
@@ -459,7 +459,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Same as {@link #getObjectWithDefault(String, Object, Class)} but allows you to specify the parser to use to parse
 	 * the value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
@@ -478,10 +478,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #getObject(String, Type, Type...)}, but with a default value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if section or key does not exist.
 	 * @param type
@@ -503,7 +503,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Same as {@link #getObjectWithDefault(String, Object, Type, Type...)} but allows you to specify the parser to use
 	 * to parse the value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
@@ -530,10 +530,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #getObject(String, Class)}, but used when key is already broken into section/key.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param c The class to convert the value to.
@@ -546,7 +546,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Same as {@link #getObject(String, String, Class)} but allows you to specify the parser to use to parse the value.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param parser
@@ -564,10 +564,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #getObject(String, Type, Type...)}, but used when key is already broken into section/key.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param type
@@ -589,7 +589,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Same as {@link #getObject(String, String, Type, Type...)} but allows you to specify the parser to use to parse
 	 * the value.
-	 *
+	 * 
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param parser
@@ -616,7 +616,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the entry with the specified key.
-	 *
+	 * 
 	 * <p>
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
@@ -625,7 +625,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
@@ -635,7 +635,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the entry with the specified key, splits the value on commas, and returns the values as trimmed strings.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return The value, or an empty list if the section or key does not exist.
 	 */
@@ -645,7 +645,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Same as {@link #getStringArray(String)} but returns a default value if the value cannot be found.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if section or key does not exist.
 	 * @return The value, or an empty list if the section or key does not exist.
@@ -660,7 +660,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Convenience method for getting int config values.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return The value, or <code>0</code> if the section or key does not exist or cannot be parsed as an integer.
 	 */
@@ -670,10 +670,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Convenience method for getting int config values.
-	 *
+	 * 
 	 * <p>
 	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -681,7 +681,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li>
 	 * 		<code><js>"100M"</js> => 104857600</code>
 	 * </ul>
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if config file or value does not exist.
 	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as an integer.
@@ -695,7 +695,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Convenience method for getting long config values.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return The value, or <code>0</code> if the section or key does not exist or cannot be parsed as a long.
 	 */
@@ -705,10 +705,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Convenience method for getting long config values.
-	 *
+	 * 
 	 * <p>
 	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -716,7 +716,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li>
 	 * 		<code><js>"100M"</js> => 104857600</code>
 	 * </ul>
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if config file or value does not exist.
 	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as an integer.
@@ -730,7 +730,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Convenience method for getting boolean config values.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return The value, or <jk>false</jk> if the section or key does not exist or cannot be parsed as a boolean.
 	 */
@@ -740,7 +740,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Convenience method for getting boolean config values.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if config file or value does not exist.
 	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as a boolean.
@@ -753,10 +753,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered
 	 * serializer.
-	 *
+	 * 
 	 * <p>
 	 * Equivalent to calling <code>put(key, value, isEncoded(key))</code>.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value POJO.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
@@ -770,7 +770,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Same as {@link #put(String, Object)} but allows you to specify the serializer to use to serialize the value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value POJO.
 	 * @param serializer
@@ -787,7 +787,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Adds or replaces an entry with the specified key with the specified value.
-	 *
+	 * 
 	 * <p>
 	 * The format of the entry depends on the data type of the value.
 	 * <ul class='spaced-list'>
@@ -802,7 +802,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 		>Arrays and collections of other types are serialized as comma-delimited lists of serialized strings of
 	 * 		each entry.
 	 * </ul>
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value.
 	 * @param encoded
@@ -819,7 +819,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Same as {@link #put(String, Object, boolean)} but allows you to specify the serializer to use to serialize the
 	 * value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value.
 	 * @param serializer
@@ -841,7 +841,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns the specified section as a map of key/value pairs.
-	 *
+	 * 
 	 * @param sectionName The section name to retrieve.
 	 * @return A map of the section, or <jk>null</jk> if the section was not found.
 	 */
@@ -862,7 +862,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Copies the entries in a section to the specified bean by calling the public setters on that bean.
-	 *
+	 * 
 	 * @param sectionName The section name to write from.
 	 * @param bean The bean to set the properties on.
 	 * @param ignoreUnknownProperties
@@ -913,7 +913,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Shortcut for calling <code>getSectionAsBean(sectionName, c, <jk>false</jk>)</code>.
-	 *
+	 * 
 	 * @param sectionName The section name to write from.
 	 * @param c The bean class to create.
 	 * @return A new bean instance.
@@ -925,10 +925,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Converts this config file section to the specified bean instance.
-	 *
+	 * 
 	 * <p>
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
-	 *
+	 * 
 	 * <h6 class='figure'>Example config file</h6>
 	 * <p class='bcode'>
 	 * 	<cs>[MyAddress]</cs>
@@ -938,7 +938,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<ck>state</ck> = <cv>NY</cv>
 	 * 	<ck>zip</ck> = <cv>12345</cv>
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='figure'>Example bean</h6>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> Address {
@@ -947,13 +947,13 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 		public int zip;
 	 * 	}
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='figure'>Example usage</h6>
 	 * <p class='bcode'>
 	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param sectionName The section name to write from.
 	 * @param c The bean class to create.
 	 * @param ignoreUnknownProperties
@@ -986,7 +986,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Wraps a config file section inside a Java interface so that values in the section can be read and
 	 * write using getters and setters.
-	 *
+	 * 
 	 * <h6 class='figure'>Example config file</h6>
 	 * <p class='bcode'>
 	 * 	<cs>[MySection]</cs>
@@ -997,44 +997,44 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
 	 * 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='figure'>Example interface</h6>
 	 * <p class='bcode'>
 	 * 	<jk>public interface</jk> MyConfigInterface {
-	 *
+	 * 
 	 * 		String getString();
 	 * 		<jk>void</jk> setString(String x);
-	 *
+	 * 
 	 * 		<jk>int</jk> getInt();
 	 * 		<jk>void</jk> setInt(<jk>int</jk> x);
-	 *
+	 * 
 	 * 		MyEnum getEnum();
 	 * 		<jk>void</jk> setEnum(MyEnum x);
-	 *
+	 * 
 	 * 		MyBean getBean();
 	 * 		<jk>void</jk> setBean(MyBean x);
-	 *
+	 * 
 	 * 		<jk>int</jk>[][][] getInt3dArray();
 	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
-	 *
+	 * 
 	 * 		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
 	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
 	 * 	}
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='figure'>Example usage</h6>
 	 * <p class='bcode'>
 	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
-	 *
+	 * 
 	 * 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jk>int</jk> myInt = ci.getInt();
-	 *
+	 * 
 	 * 	ci.setBean(<jk>new</jk> MyBean());
-	 *
+	 * 
 	 * 	cf.save();
 	 * </p>
-	 *
+	 * 
 	 * @param sectionName The section name to retrieve as an interface proxy.
 	 * @param c The proxy interface class.
 	 * @return The proxy interface.
@@ -1067,7 +1067,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
@@ -1077,7 +1077,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the section with the specified name.
-	 *
+	 * 
 	 * @param name The section name.
 	 * @return The section, or <jk>null</jk> if section does not exist.
 	 */
@@ -1085,7 +1085,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Gets the section with the specified name and optionally creates it if it's not there.
-	 *
+	 * 
 	 * @param name The section name.
 	 * @param create Create the section if it's not there.
 	 * @return The section, or <jk>null</jk> if section does not exist.
@@ -1096,10 +1096,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Appends a section to this config file if it does not already exist.
-	 *
+	 * 
 	 * <p>
 	 * Returns the existing section if it already exists.
-	 *
+	 * 
 	 * @param name The section name, or <jk>null</jk> for the default section.
 	 * @return The appended or existing section.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -1108,7 +1108,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Creates or overwrites the specified section.
-	 *
+	 * 
 	 * @param name The section name, or <jk>null</jk> for the default section.
 	 * @param contents The contents of the new section.
 	 * @return The appended or existing section.
@@ -1118,7 +1118,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Removes the section with the specified name.
-	 *
+	 * 
 	 * @param name The name of the section to remove, or <jk>null</jk> for the default section.
 	 * @return The removed section, or <jk>null</jk> if named section does not exist.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -1127,7 +1127,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns <jk>true</jk> if the encoding flag is set on the specified entry.
-	 *
+	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return <jk>true</jk> if the encoding flag is set on the specified entry.
 	 */
@@ -1135,7 +1135,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Saves this config file to disk.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to save file to disk, or file is not associated with this object.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -1144,10 +1144,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Saves this config file to the specified writer as an INI file.
-	 *
+	 * 
 	 * <p>
 	 * The writer will automatically be closed.
-	 *
+	 * 
 	 * @param out The writer to send the output to.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to send contents to the writer.
@@ -1158,7 +1158,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Same as {@link #serializeTo(Writer)}, except allows you to explicitly specify a format.
-	 *
+	 * 
 	 * @param out The writer to send the output to.
 	 * @param format The {@link ConfigFileFormat} of the output.
 	 * @return This object (for method chaining).
@@ -1168,7 +1168,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Add a listener to this config file to react to modification events.
-	 *
+	 * 
 	 * @param listener The new listener to add.
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -1177,11 +1177,11 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Merges the contents of the specified config file into this config file.
-	 *
+	 * 
 	 * <p>
 	 * Pretty much identical to just replacing this config file, but causes the
 	 * {@link ConfigFileListener#onChange(ConfigFile, Set)} method to be invoked on differences between the file.
-	 *
+	 * 
 	 * @param cf The config file whose values should be copied into this config file.
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -1190,7 +1190,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns the config file contents as a string.
-	 *
+	 * 
 	 * <p>
 	 * The contents of the string are the same as the contents that would be serialized to disk.
 	 */
@@ -1200,7 +1200,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Returns a wrapped instance of this config file where calls to getters have their values first resolved by the
 	 * specified {@link VarResolver}.
-	 *
+	 * 
 	 * @param vr The {@link VarResolver} for resolving variables in values.
 	 * @return This config file wrapped in an instance of {@link ConfigFileWrapped}.
 	 */
@@ -1209,7 +1209,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Returns a wrapped instance of this config file where calls to getters have their values first resolved by the
 	 * specified {@link VarResolverSession}.
-	 *
+	 * 
 	 * @param vs The {@link VarResolverSession} for resolving variables in values.
 	 * @return This config file wrapped in an instance of {@link ConfigFileWrapped}.
 	 */
@@ -1218,7 +1218,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Returns a wrapped instance of this config file where calls to getters have their values first resolved by a
 	 * default {@link VarResolver}.
-	 *
+	 * 
 	 * The default {@link VarResolver} is registered with the following {@link Var StringVars}:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -1228,14 +1228,14 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li>
 	 * 		<code>$C{key}</code>,<code>$C{key,default}</code> - Values in this configuration file.
 	 * </ul>
-	 *
+	 * 
 	 * @return A new config file that resolves string variables.
 	 */
 	public abstract ConfigFile getResolving();
 
 	/**
 	 * Wraps this config file in a {@link Writable} interface that renders it as plain text.
-	 *
+	 * 
 	 * @return This config file wrapped in a {@link Writable}.
 	 */
 	public abstract Writable toWritable();

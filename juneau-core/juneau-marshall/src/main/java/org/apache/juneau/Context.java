@@ -22,10 +22,10 @@ import org.apache.juneau.serializer.*;
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
  * objects.
- *
+ * 
  * <p>
  * Contexts are created through the {@link ContextBuilder#build()} method (and subclasses of {@link ContextBuilder}).
- *
+ * 
  * <p>
  * Subclasses MUST implement the following constructor:
  * 
@@ -37,7 +37,7 @@ import org.apache.juneau.serializer.*;
  * Besides that restriction, a context object can do anything you desire.
  * <br>However, it MUST be thread-safe and all fields should be declared final to prevent modification.
  * <br>It should NOT be used for storing temporary or state information.
- *
+ * 
  * @see PropertyStore
  */
 public abstract class Context {
@@ -47,10 +47,10 @@ public abstract class Context {
 
 	/**
 	 * Constructor for this class.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses MUST implement the same public constructor.
-	 *
+	 * 
 	 * @param ps The read-only configuration for this context object.
 	 */
 	public Context(PropertyStore ps) {
@@ -394,7 +394,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the property store associated with this context.
-	 *
+	 * 
 	 * @return The property store associated with this context.
 	 */
 	@BeanIgnore
@@ -416,11 +416,11 @@ public abstract class Context {
 
 	/**
 	 * Create a new bean session based on the properties defined on this context.
-	 *
+	 * 
 	 * <p>
 	 * Use this method for creating sessions if you don't need to override any
 	 * properties or locale/timezone currently set on this context.
-	 *
+	 * 
 	 * @return A new session object.
 	 */
 	public Session createSession() {
@@ -430,7 +430,7 @@ public abstract class Context {
 	/**
 	 * Create a new session based on the properties defined on this context combined with the specified
 	 * runtime args.
-	 *
+	 * 
 	 * <p>
 	 * Use this method for creating sessions if you don't need to override any
 	 * properties or locale/timezone currently set on this context.
@@ -450,7 +450,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
-	 *
+	 * 
 	 * @return A new map containing the properties defined on this context.
 	 */
 	public ObjectMap asMap() {

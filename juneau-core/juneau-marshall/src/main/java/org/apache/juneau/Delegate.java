@@ -14,20 +14,20 @@ package org.apache.juneau;
 
 /**
  * An object that represents another object, often wrapping that object.
- *
+ * 
  * <p>
  * <b>*** Internal Interface - Not intended for external use ***</b>
- *
+ * 
  * <p>
  * For example, {@link BeanMap} is a map representation of a bean.
- *
+ * 
  * @param <T> The represented class type.
  */
 public interface Delegate<T> {
 
 	/**
 	 * The {@link ClassMeta} of the class of the represented object.
-	 *
+	 * 
 	 * @return The class type of the represented object.
 	 */
 	public ClassMeta<T> getClassMeta();

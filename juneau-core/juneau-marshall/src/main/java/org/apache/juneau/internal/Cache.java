@@ -16,10 +16,10 @@ import java.util.concurrent.*;
 
 /**
  * Simple in-memory cache of objects.
- *
+ * 
  * <p>
  * Essentially just a wrapper around a ConcurrentHashMap.
- *
+ * 
  * @param <K> The key type.
  * @param <V> The value type.
  */
@@ -30,7 +30,7 @@ public class Cache<K,V> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param disabled If <jk>true</jk> then the cache is disabled.
 	 * @param maxSize The maximum size of the cache.  If this threshold is reached, the cache is flushed.
 	 */
@@ -45,7 +45,7 @@ public class Cache<K,V> {
 
 	/**
 	 * Retrieves the value with the specified key from this cache.
-	 *
+	 * 
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the value is not in the cache, or the cache is disabled.
 	 */
@@ -57,7 +57,7 @@ public class Cache<K,V> {
 
 	/**
 	 * Adds the value with the specified key to this cache.
-	 *
+	 * 
 	 * @param key The key.
 	 * @param value The value.
 	 * @return

@@ -22,13 +22,13 @@ import org.apache.juneau.utils.*;
 
 /**
  * Simple bean that implements a hyperlink for the HTML serializer.
- *
+ * 
  * <p>
  * The name and url properties correspond to the following parts of a hyperlink in an HTML document...
  * <p class='bcode'>
  * 	<xt>&lt;a</xt> <xa>href</xa>=<xs>'href'</xs><xt>&gt;</xt>name<xt>&lt;/a&gt;</xt>
  * </p>
- *
+ * 
  * <p>
  * When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.
  * All other serializers simply convert it to a simple bean.
@@ -42,7 +42,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
 	 * @param href Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
 	 * @param hrefArgs Optional arguments for {@link MessageFormat} style arguments in the href.
@@ -59,10 +59,10 @@ public class LinkString implements Comparable<LinkString> {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
-	 *
+	 * 
 	 * <p>
 	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
-	 *
+	 * 
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
@@ -71,7 +71,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
-	 *
+	 * 
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -82,10 +82,10 @@ public class LinkString implements Comparable<LinkString> {
 
 	/**
 	 * Bean property getter:  <property>href</property>.
-	 *
+	 * 
 	 * <p>
 	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
-	 *
+	 * 
 	 * @return The value of the <property>href</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getHref() {
@@ -94,7 +94,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	/**
 	 * Bean property setter:  <property>href</property>.
-	 *
+	 * 
 	 * @param href The new value for the <property>href</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -105,10 +105,10 @@ public class LinkString implements Comparable<LinkString> {
 
 	/**
 	 * Bean property setter:  <property>href</property>.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #setHref(String)} except allows for {@link MessageFormat} style arguments.
-	 *
+	 * 
 	 * @param href The new href.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return This object (for method chaining).

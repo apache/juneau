@@ -16,7 +16,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * A basic variable resolver that returns the first non-null value.
- *
+ * 
  * <p>
  * The format for this var is <js>"$CR{arg1[,arg2...]}"</js>.
  * 

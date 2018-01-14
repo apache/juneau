@@ -16,9 +16,10 @@ import org.apache.juneau.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.
- *
- * <h5 class='section'>Description:</h5>
- *
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * This class is typically the parent class of all character-based parsers.
  * It has 1 abstract method to implement...
  * <ul>
@@ -29,7 +30,7 @@ public abstract class ReaderParser extends Parser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */

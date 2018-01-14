@@ -17,10 +17,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses a MessagePack stream into a POJO model.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Content-Type</code> types: <code>octal/msgpack</code>
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Content-Type</code> types:  <code><b>octal/msgpack</b></code>
  */
 public class MsgPackParser extends InputStreamParser {
 
@@ -38,7 +39,7 @@ public class MsgPackParser extends InputStreamParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public MsgPackParser(PropertyStore ps) {

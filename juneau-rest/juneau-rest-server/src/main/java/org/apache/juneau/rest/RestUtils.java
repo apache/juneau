@@ -32,7 +32,7 @@ public final class RestUtils {
 
 	/**
 	 * Returns readable text for an HTTP response code.
-	 *
+	 * 
 	 * @param rc The HTTP response code.
 	 * @return Readable text for an HTTP response code, or <jk>null</jk> if it's an invalid code.
 	 */
@@ -81,7 +81,7 @@ public final class RestUtils {
 
 	/**
 	 * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.
-	 *
+	 * 
 	 * @param req The HTTP request
 	 * @return The un-decoded path info.
 	 */
@@ -97,10 +97,10 @@ public final class RestUtils {
 
 	/**
 	 * Efficiently trims the path info part from a request URI.
-	 *
+	 * 
 	 * <p>
 	 * The result is the URI of the servlet itself.
-	 *
+	 * 
 	 * @param requestURI The value returned by {@link HttpServletRequest#getRequestURL()}
 	 * @param contextPath The value returned by {@link HttpServletRequest#getContextPath()}
 	 * @param servletPath The value returned by {@link HttpServletRequest#getServletPath()}

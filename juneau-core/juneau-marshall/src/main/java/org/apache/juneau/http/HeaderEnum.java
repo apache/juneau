@@ -14,13 +14,13 @@ package org.apache.juneau.http;
 
 /**
  * Category of headers that consist of a single enum value.
- *
+ * 
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Accept-Ranges: bytes
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -29,7 +29,7 @@ package org.apache.juneau.http;
  * 		<a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
  * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
- *
+ * 
  * @param <E> The enum type.
  */
 public class HeaderEnum<E extends Enum<E>> {
@@ -39,7 +39,7 @@ public class HeaderEnum<E extends Enum<E>> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param value The raw header value.
 	 * @param enumClass The enum class.
 	 * @param def The default enum value if the value could not be parsed.
@@ -57,7 +57,7 @@ public class HeaderEnum<E extends Enum<E>> {
 
 	/**
 	 * Returns <jk>true</jk> if the specified value is the same using {@link String#equalsIgnoreCase(String)}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
 	public E asEnum() {
@@ -66,10 +66,10 @@ public class HeaderEnum<E extends Enum<E>> {
 
 	/**
 	 * Returns this header as a simple string value.
-	 *
+	 * 
 	 * <p>
 	 * Functionally equivalent to calling {@link #toString()}.
-	 *
+	 * 
 	 * @return This header as a simple string.
 	 */
 	public String asString() {

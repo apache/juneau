@@ -21,7 +21,7 @@ import org.apache.juneau.transforms.*;
 
 /**
  * Represents an <code>atomEntry</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomEntry =
@@ -42,7 +42,7 @@ import org.apache.juneau.transforms.*;
  * 			&amp; extensionElement*)
  * 		}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -68,7 +68,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param id The ID of this entry.
 	 * @param title The title of this entry.
 	 * @param updated The updated timestamp of this entry.
@@ -79,7 +79,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param id The ID of this entry.
 	 * @param title The title of this entry.
 	 * @param updated The updated timestamp of this entry.
@@ -98,7 +98,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Returns the content of this entry.
-	 *
+	 * 
 	 * @return The content of this entry.
 	 */
 	public Content getContent() {
@@ -107,7 +107,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Sets the content of this entry.
-	 *
+	 * 
 	 * @param content The content of this entry.
 	 * @return This object (for method chaining).
 	 */
@@ -119,7 +119,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Returns the publish timestamp of this entry.
-	 *
+	 * 
 	 * @return The publish timestamp of this entry.
 	 */
 	@Swap(CalendarSwap.ISO8601DT.class)
@@ -129,7 +129,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Sets the publish timestamp of this entry.
-	 *
+	 * 
 	 * @param published The publish timestamp of this entry.
 	 * @return This object (for method chaining).
 	 */
@@ -141,7 +141,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Sets the publish timestamp of this entry.
-	 *
+	 * 
 	 * @param published The publish timestamp of this entry in ISO8601 format.
 	 * @return This object (for method chaining).
 	 */
@@ -153,7 +153,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Returns the source of this entry.
-	 *
+	 * 
 	 * @return The source of this entry.
 	 */
 	public Source getSource() {
@@ -162,7 +162,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Sets the source of this entry.
-	 *
+	 * 
 	 * @param source The source of this entry.
 	 * @return This object (for method chaining).
 	 */
@@ -174,7 +174,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Returns the summary of this entry.
-	 *
+	 * 
 	 * @return The summary of this entry.
 	 */
 	public Text getSummary() {
@@ -183,7 +183,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Sets the summary of this entry.
-	 *
+	 * 
 	 * @param summary The summary of this entry.
 	 * @return This object (for method chaining).
 	 */
@@ -195,7 +195,7 @@ public class Entry extends CommonEntry {
 
 	/**
 	 * Sets the summary of this entry.
-	 *
+	 * 
 	 * @param summary The summary of this entry.
 	 * @return This object (for method chaining).
 	 */

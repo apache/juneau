@@ -28,7 +28,7 @@ public class XmlParseException extends ParseException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param location The location of the exception.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.

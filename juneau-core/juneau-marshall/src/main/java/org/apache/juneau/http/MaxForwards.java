@@ -14,30 +14,30 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Max-Forwards</l> HTTP request header.
- *
+ * 
  * <p>
  * Limit the number of times the message can be forwarded through proxies or gateways.
- *
+ * 
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Max-Forwards: 10
  * </p>
- *
+ * 
  * <h6 class='topic'>RFC2616 Specification</h6>
- *
+ * 
  * The Max-Forwards request-header field provides a mechanism with the TRACE (section 9.8) and OPTIONS (section 9.2)
  * methods to limit the number of proxies or gateways that can forward the request to the next inbound server.
  * This can be useful when the client is attempting to trace a request chain which appears to be failing or looping in
  * mid-chain.
- *
+ * 
  * <p class='bcode'>
  * 	Max-Forwards   = "Max-Forwards" ":" 1*DIGIT
  * </p>
- *
+ * 
  * <p>
  * The Max-Forwards value is a decimal integer indicating the remaining number of times this request message may be
  * forwarded.
- *
+ * 
  * <p>
  * Each proxy or gateway recipient of a TRACE or OPTIONS request containing a Max-Forwards header field MUST check and
  * update its value prior to forwarding the request.
@@ -45,11 +45,11 @@ package org.apache.juneau.http;
  * recipient.
  * If the received Max-Forwards value is greater than zero, then the forwarded message MUST contain an updated
  * Max-Forwards field with a value decremented by one (1).
- *
+ * 
  * <p>
  * The Max-Forwards header field MAY be ignored for all other methods defined by this specification and for any
  * extension methods for which it is not explicitly referred to as part of that method definition.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -63,7 +63,7 @@ public final class MaxForwards extends HeaderInteger {
 
 	/**
 	 * Returns a parsed <code>Max-Forwards</code> header.
-	 *
+	 * 
 	 * @param value The <code>Max-Forwards</code> header string.
 	 * @return The parsed <code>Max-Forwards</code> header, or <jk>null</jk> if the string was null.
 	 */

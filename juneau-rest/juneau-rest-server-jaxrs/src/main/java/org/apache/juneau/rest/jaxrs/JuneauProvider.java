@@ -28,8 +28,9 @@ import org.apache.juneau.xml.*;
 
 /**
  * Annotations applicable to subclasses of {@link BaseProvider}.
- *
- * <h5 class='section'>Description:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
  * 
  * Used to associate serializers, parsers, filters, and properties with instances of {@link BaseProvider}.
  */

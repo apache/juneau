@@ -19,7 +19,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsoParser}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -29,7 +29,7 @@ public class JsoParserSession extends InputStreamParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param args
 	 * 	Runtime session arguments.
 	 */

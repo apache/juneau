@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 
 /**
  * Wraps a {@link ResourceBundle} to provide some useful additional functionality.
- *
+ * 
  * <ul class='spaced-list'>
  * 	<li>
  * 		Instead of throwing {@link MissingResourceException}, the {@link #getString(String)} method
@@ -47,10 +47,10 @@ import org.apache.juneau.*;
  * 		the message can be retrieved using <code>getString(<js>"myMessage"</js>)</code>.
  * </ul>
  * 
- *	<h5 class='section'>Notes:</h5>
- *	<ul>
- *		<li>This class is thread-safe.
- *	</ul>
+ * <h5 class='section'>Notes:</h5>
+ * <ul>
+ * 	<li>This class is thread-safe.
+ * </ul>
  */
 public class MessageBundle extends ResourceBundle {
 
@@ -78,7 +78,7 @@ public class MessageBundle extends ResourceBundle {
 	/**
 	 * Sets the locale for this thread so that calls to {@link #getClientString(String, Object...)} return messages in
 	 * that locale.
-	 *
+	 * 
 	 * @param locale The new client locale.
 	 */
 	public static void setClientLocale(Locale locale) {
@@ -144,7 +144,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param forClass The class using this resource bundle.
 	 * @param bundlePath
 	 * 	The path of the resource bundle to wrap.
@@ -197,14 +197,14 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Add another bundle path to this resource bundle.
-	 *
+	 * 
 	 * <p>
 	 * Order of property lookup is first-to-last.
-	 *
+	 * 
 	 * <p>
 	 * This method must be called from the same thread as the call to the constructor.
 	 * This eliminates the need for synchronization.
-	 *
+	 * 
 	 * @param forClass The class using this resource bundle.
 	 * @param bundlePath The bundle path.
 	 * @return This object (for method chaining).
@@ -226,7 +226,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Similar to {@link ResourceBundle#getString(String)} except allows you to pass in {@link MessageFormat} objects.
-	 *
+	 * 
 	 * @param key The resource bundle key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return
@@ -243,7 +243,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Same as {@link #getString(String, Object...)} but allows you to specify the locale.
-	 *
+	 * 
 	 * @param locale The locale of the resource bundle to retrieve message from.
 	 * @param key The resource bundle key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -260,7 +260,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Same as {@link #getString(String, Object...)} but uses the locale specified on the call to {@link #setClientLocale(Locale)}.
-	 *
+	 * 
 	 * @param key The resource bundle key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return
@@ -274,7 +274,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Looks for all the specified keys in the resource bundle and returns the first value that exists.
-	 *
+	 * 
 	 * @param keys The list of possible keys.
 	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
 	 */
@@ -290,7 +290,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Same as {@link #findFirstString(String...)}, but uses the specified locale.
-	 *
+	 * 
 	 * @param locale The locale of the resource bundle to retrieve message from.
 	 * @param keys The list of possible keys.
 	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
@@ -307,7 +307,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Returns all keys in this resource bundle with the specified prefix.
-	 *
+	 * 
 	 * @param prefix The prefix.
 	 * @return The set of all keys in the resource bundle with the prefix.
 	 */
@@ -348,15 +348,15 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Returns this resource bundle as an {@link ObjectMap}.
-	 *
+	 * 
 	 * <p>
 	 * Useful for debugging purposes.
 	 * Note that any class that implements a <code>swap()</code> method will automatically be serialized by
 	 * calling this method and serializing the result.
-	 *
+	 * 
 	 * <p>
 	 * This method always constructs a new {@link ObjectMap} on each call.
-	 *
+	 * 
 	 * @return A new map containing all the keys and values in this bundle.
 	 */
 	public ObjectMap swap() {
@@ -368,7 +368,7 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Returns the resource bundle for the specified locale.
-	 *
+	 * 
 	 * @param locale The client locale.
 	 * @return The resource bundle for the specified locale.  Never <jk>null</jk>.
 	 */

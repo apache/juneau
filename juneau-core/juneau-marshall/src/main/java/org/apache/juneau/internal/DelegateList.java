@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 /**
  * Represents a wrapped {@link Collection} where entries in the list can be removed or reordered without affecting the
  * underlying list.
- *
+ * 
  * @param <T> The class type of the wrapped bean.
  */
 public class DelegateList<T extends Collection<?>> extends ObjectList implements Delegate<T> {
@@ -29,7 +29,7 @@ public class DelegateList<T extends Collection<?>> extends ObjectList implements
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param classMeta The data type represented by this delegate.
 	 */
 	public DelegateList(ClassMeta<T> classMeta) {

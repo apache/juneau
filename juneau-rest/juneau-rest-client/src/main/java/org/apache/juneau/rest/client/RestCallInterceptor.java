@@ -17,7 +17,7 @@ import org.apache.http.*;
 /**
  * Used to intercept http connection responses to allow modification of that response before processing and for
  * listening for call lifecycle events.
- *
+ * 
  * <p>
  * Useful if you want to prevent {@link RestCallException RestCallExceptions} from being thrown on error conditions.
  */
@@ -25,14 +25,14 @@ public abstract class RestCallInterceptor {
 
 	/**
 	 * Called when {@link RestCall} object is created.
-	 *
+	 * 
 	 * @param restCall The restCall object invoking this method.
 	 */
 	public void onInit(RestCall restCall) {}
 
 	/**
 	 * Called immediately after an HTTP response has been received.
-	 *
+	 * 
 	 * @param statusCode The HTTP status code received.
 	 * @param restCall The restCall object invoking this method.
 	 * @param req The HTTP request object.
@@ -42,7 +42,7 @@ public abstract class RestCallInterceptor {
 
 	/**
 	 * Called if retry is going to be attempted.
-	 *
+	 * 
 	 * @param statusCode The HTTP status code received.
 	 * @param restCall The restCall object invoking this method.
 	 * @param req The HTTP request object.
@@ -53,7 +53,7 @@ public abstract class RestCallInterceptor {
 
 	/**
 	 * Called when {@link RestCall#close()} is called.
-	 *
+	 * 
 	 * @param restCall The restCall object invoking this method.
 	 * @throws RestCallException
 	 */

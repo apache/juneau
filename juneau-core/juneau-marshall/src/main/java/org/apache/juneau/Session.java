@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
- *
+ * 
  * <p>
  * Serializers and parsers use session objects to retrieve config properties and to use it as a scratchpad during
  * serialize and parse actions.
@@ -40,7 +40,7 @@ public abstract class Session {
 
 	/**
 	 * Default constructor.
-	 *
+	 * 
 	 * @param args
 	 * 	Runtime arguments.
 	 */
@@ -194,10 +194,10 @@ public abstract class Session {
 	
 	/**
 	 * Adds an arbitrary object to this session's cache.
-	 *
+	 * 
 	 * <p>
 	 * Can be used to store objects for reuse during a session.
-	 *
+	 * 
 	 * @param key The key.  Can be any string.
 	 * @param val The cached object.
 	 */
@@ -209,10 +209,10 @@ public abstract class Session {
 
 	/**
 	 * Adds arbitrary objects to this session's cache.
-	 *
+	 * 
 	 * <p>
 	 * Can be used to store objects for reuse during a session.
-	 *
+	 * 
 	 * @param cacheObjects
 	 * 	The objects to add to this session's cache.
 	 * 	No-op if <jk>null</jk>.
@@ -227,7 +227,7 @@ public abstract class Session {
 
 	/**
 	 * Returns an object stored in the session cache.
-	 *
+	 * 
 	 * @param c The class type of the object.
 	 * @param key The session object key.
 	 * @return The cached object, or <jk>null</jk> if it doesn't exist.
@@ -239,7 +239,7 @@ public abstract class Session {
 
 	/**
 	 * Logs a warning message.
-	 *
+	 * 
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -252,7 +252,7 @@ public abstract class Session {
 
 	/**
 	 * Returns <jk>true</jk> if warnings occurred in this session.
-	 *
+	 * 
 	 * @return <jk>true</jk> if warnings occurred in this session.
 	 */
 	public final boolean hasWarnings() {
@@ -261,7 +261,7 @@ public abstract class Session {
 
 	/**
 	 * Returns the warnings that occurred in this session.
-	 *
+	 * 
 	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
 	 */
 	public final List<String> getWarnings() {
@@ -270,10 +270,10 @@ public abstract class Session {
 
 	/**
 	 * Returns the logger associated with this session.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own logger.
-	 *
+	 * 
 	 * @return The logger associated with this session.
 	 */
 	protected final JuneauLogger getLogger() {
@@ -284,7 +284,7 @@ public abstract class Session {
 
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
-	 *
+	 * 
 	 * @return A new map containing the properties defined on this context.
 	 */
 	public ObjectMap asMap() {

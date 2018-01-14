@@ -14,17 +14,17 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Expect</l> HTTP request header.
- *
+ * 
  * <p>
  * Indicates that particular server behaviors are required by the client.
- *
+ * 
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Expect: 100-continue
  * </p>
- *
+ * 
  * <h6 class='topic'>RFC2616 Specification</h6>
- *
+ * 
  * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
  * <p class='bcode'>
  * 	Expect       =  "Expect" ":" 1#expectation
@@ -33,33 +33,33 @@ package org.apache.juneau.http;
  * 	                         *expect-params ]
  * 	expect-params =  ";" token [ "=" ( token | quoted-string ) ]
  * </p>
- *
+ * 
  * <p>
  * A server that does not understand or is unable to comply with any of the expectation values in the Expect field of a
  * request MUST respond with appropriate error status.
  * The server MUST respond with a 417 (Expectation Failed) status if any of the expectations cannot be met or, if there
  * are other problems with the request, some other 4xx status.
- *
+ * 
  * <p>
  * This header field is defined with extensible syntax to allow for future extensions.
  * If a server receives a request containing an Expect field that includes an expectation-extension that it does not
  * support, it MUST respond with a 417 (Expectation Failed) status.
- *
+ * 
  * <p>
  * Comparison of expectation values is case-insensitive for unquoted tokens (including the 100-continue token), and is
  * case-sensitive for quoted-string expectation-extensions.
- *
+ * 
  * <p>
  * The Expect mechanism is hop-by-hop: that is, an HTTP/1.1 proxy MUST return a 417 (Expectation Failed) status if it
  * receives a request with an expectation that it cannot meet.
  * However, the Expect request-header itself is end-to-end; it MUST be forwarded if the request is forwarded.
- *
+ * 
  * <p>
  * Many older HTTP/1.0 and HTTP/1.1 applications do not understand the Expect header.
- *
+ * 
  * <p>
  * See section 8.2.3 for the use of the 100 (continue) status.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -73,7 +73,7 @@ public final class Expect extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>Expect</code> header.
-	 *
+	 * 
 	 * @param value The <code>Expect</code> header string.
 	 * @return The parsed <code>Expect</code> header, or <jk>null</jk> if the string was null.
 	 */

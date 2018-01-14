@@ -28,7 +28,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm) {
@@ -51,7 +51,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html @Html} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Html getAnnotation() {
@@ -60,7 +60,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#asXml() @Html.asXml()} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation.
 	 */
 	protected boolean isAsXml() {
@@ -69,7 +69,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#asPlainText() @Html.asPlainText()} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation.
 	 */
 	protected boolean isAsPlainText() {
@@ -78,7 +78,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#noTables() @Html.noTables()} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation.
 	 */
 	protected boolean isNoTables() {
@@ -87,7 +87,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#noTableHeaders() @Html.noTableHeaders()} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation.
 	 */
 	public boolean isNoTableHeaders() {
@@ -96,7 +96,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#render() @Html.render()} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation.
 	 */
 	public HtmlRender<?> getRender() {

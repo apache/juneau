@@ -28,11 +28,11 @@ import org.apache.juneau.rest.vars.*;
 
 /**
  * Class that handles the basic lifecycle of an HTTP REST call.
- *
+ * 
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST calls are handled.
  * Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
- *
+ * 
  * <p>
  * RestCallHandlers are associated with servlets/resources in one of the following ways:
  * <ul>
@@ -48,7 +48,7 @@ public class RestCallHandler {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param context The resource context.
 	 */
 	public RestCallHandler(RestContext context) {
@@ -59,10 +59,10 @@ public class RestCallHandler {
 
 	/**
 	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses may choose to override this method to provide a specialized request object.
-	 *
+	 * 
 	 * @param req The request object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
 	 * @return The wrapped request object.
 	 * @throws ServletException If any errors occur trying to interpret the request.
@@ -74,10 +74,10 @@ public class RestCallHandler {
 	/**
 	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
 	 * and the request returned by {@link #createRequest(HttpServletRequest)}.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses may choose to override this method to provide a specialized response object.
-	 *
+	 * 
 	 * @param req The request object returned by {@link #createRequest(HttpServletRequest)}.
 	 * @param res The response object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
 	 * @return The wrapped response object.
@@ -89,10 +89,10 @@ public class RestCallHandler {
 
 	/**
 	 * The main service method.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
-	 *
+	 * 
 	 * @param r1 The incoming HTTP servlet request object.
 	 * @param r2 The incoming HTTP servlet response object.
 	 * @throws ServletException
@@ -202,16 +202,16 @@ public class RestCallHandler {
 	/**
 	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or
 	 * returned by the Java method.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses may override this method if they wish to modify the way the output is rendered or support other output
 	 * formats.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
 	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse, Object)} method returns
 	 * <jk>true</jk>.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @param output The output to serialize in the response.
@@ -228,11 +228,11 @@ public class RestCallHandler {
 
 	/**
 	 * Handle the case where a matching method was not found.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide a 2nd-chance for specifying a response.
 	 * The default implementation will simply throw an exception with an appropriate message.
-	 *
+	 * 
 	 * @param rc The HTTP response code.
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -254,14 +254,14 @@ public class RestCallHandler {
 
 	/**
 	 * Method for handling response errors.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation logs the error and calls
 	 * {@link #renderError(HttpServletRequest,HttpServletResponse,RestException)}.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
-	 *
+	 * 
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 * @param e The exception that occurred.
@@ -275,14 +275,14 @@ public class RestCallHandler {
 
 	/**
 	 * Method for rendering response errors.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation renders a plain text English message, optionally with a stack trace if
 	 * {@link RestResource#renderResponseStackTraces() @RestResource.renderResponseStackTraces()} is enabled.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
-	 *
+	 * 
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 * @param e The exception that occurred.
@@ -321,10 +321,10 @@ public class RestCallHandler {
 
 	/**
 	 * Returns the session objects for the specified request.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation simply returns a single map containing <code>{'req':req}</code>.
-	 *
+	 * 
 	 * @param req The REST request.
 	 * @return The session objects for that request.
 	 */

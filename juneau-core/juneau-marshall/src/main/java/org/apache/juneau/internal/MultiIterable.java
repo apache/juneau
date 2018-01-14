@@ -18,7 +18,7 @@ import java.util.*;
 
 /**
  * Utility class for defining an iterator over one or more iterables.
- *
+ * 
  * @param <E> The element class type.
  */
 public class MultiIterable<E> implements Iterable<E> {
@@ -27,7 +27,7 @@ public class MultiIterable<E> implements Iterable<E> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param iterators The list of iterators to iterate over.
 	 */
 	@SuppressWarnings("unchecked")
@@ -38,7 +38,7 @@ public class MultiIterable<E> implements Iterable<E> {
 
 	/**
 	 * Appends the specified iterator to this list of iterators.
-	 *
+	 * 
 	 * @param iterator The iterator to append.
 	 * @return This object (for method chaining).
 	 */

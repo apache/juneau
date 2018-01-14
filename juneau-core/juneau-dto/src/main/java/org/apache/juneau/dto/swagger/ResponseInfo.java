@@ -18,7 +18,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Describes a single response from an API Operation.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -57,14 +57,14 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. A short description of the response.
-	 *
+	 * 
 	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for
 	 * rich text representation.
-	 *
+	 * 
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -73,14 +73,14 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. A short description of the response.
-	 *
+	 * 
 	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -91,7 +91,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setDescription(String)}.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -101,17 +101,17 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
-	 *
+	 * 
 	 * <p>
 	 * A definition of the response structure.
-	 *
+	 * 
 	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
 	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
 	 * its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
-	 *
+	 * 
 	 * @return The value of the <property>schema</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public SchemaInfo getSchema() {
@@ -120,17 +120,17 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schema</property>.
-	 *
+	 * 
 	 * <p>
 	 * A definition of the response structure.
-	 *
+	 * 
 	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
 	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
 	 * its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
-	 *
+	 * 
 	 * @param schema The new value for the <property>schema</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -141,7 +141,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setSchema(SchemaInfo)}.
-	 *
+	 * 
 	 * @param schema The new value for the <property>schema</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -151,10 +151,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>headers</property>.
-	 *
+	 * 
 	 * <p>
 	 * A list of headers that are sent with the response.
-	 *
+	 * 
 	 * @return The value of the <property>headers</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,HeaderInfo> getHeaders() {
@@ -163,10 +163,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>headers</property>.
-	 *
+	 * 
 	 * <p>
 	 * A list of headers that are sent with the response.
-	 *
+	 * 
 	 * @param headers The new value for the <property>headers</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -177,10 +177,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>headers</property>.
-	 *
+	 * 
 	 * <p>
 	 * A list of headers that are sent with the response.
-	 *
+	 * 
 	 * @param name The header name.
 	 * @param header The header descriptions
 	 * @return This object (for method chaining).
@@ -194,7 +194,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #addHeader(String,HeaderInfo)}.
-	 *
+	 * 
 	 * @param name The header name.
 	 * @param header The header descriptions
 	 * @return This object (for method chaining).
@@ -205,13 +205,13 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
-	 *
+	 * 
 	 * <p>
 	 * An example of the response message.
-	 *
+	 * 
 	 * <p>
 	 * Keys must be MIME-type strings.
-	 *
+	 * 
 	 * @return The value of the <property>examples</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,Object> getExamples() {
@@ -220,13 +220,13 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>examples</property>.
-	 *
+	 * 
 	 * <p>
 	 * An example of the response message.
-	 *
+	 * 
 	 * <p>
 	 * Keys must be MIME-type strings.
-	 *
+	 * 
 	 * @param examples The new value for the <property>examples</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -237,10 +237,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>examples</property>.
-	 *
+	 * 
 	 * <p>
 	 * An example of the response message.
-	 *
+	 * 
 	 * @param mimeType The mimeType of the example.
 	 * @param example The example output.
 	 * @return This object (for method chaining).
@@ -254,7 +254,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #addExample(String,Object)}.
-	 *
+	 * 
 	 * @param mimeType The mimeType of the example.
 	 * @param example The example output.
 	 * @return This object (for method chaining).
@@ -265,7 +265,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setExamples(Map)}.
-	 *
+	 * 
 	 * @param examples The new value for the <property>examples</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */

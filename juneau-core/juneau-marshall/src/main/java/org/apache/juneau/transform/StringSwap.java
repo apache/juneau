@@ -16,8 +16,8 @@ import org.apache.juneau.*;
 
 /**
  * Abstract subclass for POJO swaps that swap objects for strings.
- *
- * <h6 class='topic'>Example</h6>
+ * 
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// A swap that converts byte arrays to BASE64-encoded strings.</jc>
  * 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
@@ -37,7 +37,7 @@ import org.apache.juneau.*;
  * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
  * 	String json = s.serialize(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
- *
+ * 
  * @param <T> The normal form of the class.
  */
 public abstract class StringSwap<T> extends PojoSwap<T,String> {

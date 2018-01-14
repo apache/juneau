@@ -14,7 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 /**
  * Root class for all Swagger beans.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -36,7 +36,7 @@ public class SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if contents should be validated per the Swagger spec.
-	 *
+	 * 
 	 * @return <jk>true</jk> if contents should be validated per the Swagger spec.
 	 */
 	protected boolean isStrict() {
@@ -45,7 +45,7 @@ public class SwaggerElement {
 
 	/**
 	 * Sets strict mode on this bean.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	protected SwaggerElement strict() {

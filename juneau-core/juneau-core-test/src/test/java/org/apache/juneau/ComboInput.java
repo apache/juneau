@@ -91,7 +91,7 @@ public class ComboInput<T> {
 	 * Override this method if you want to do a post-parse verification on the object.
 	 * <p>
 	 * Note that a Function would be preferred here, but it's not available in Java 6.
-	 *
+	 * 
 	 * @param o The object returned by the parser.
 	 */
 	public void verify(T o) {}

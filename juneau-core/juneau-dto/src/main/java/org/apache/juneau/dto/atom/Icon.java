@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomIcon</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomIcon = element atom:icon {
@@ -32,7 +32,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		(atomUri)
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -56,14 +56,14 @@ public class Icon extends Common {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param uri The URI of the icon.
 	 */
 	public Icon(Object uri) {
@@ -80,7 +80,7 @@ public class Icon extends Common {
 
 	/**
 	 * Returns the URI of this icon.
-	 *
+	 * 
 	 * @return The URI of this icon.
 	 */
 	@Xml(format=ELEMENTS)
@@ -90,14 +90,14 @@ public class Icon extends Common {
 
 	/**
 	 * Sets the URI of this icon.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param uri The URI of this icon.
 	 * @return This object (for method chaining).
 	 */

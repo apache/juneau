@@ -114,7 +114,7 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * [GET /*] - On directories, returns a directory listing.  On files, returns information about the file.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @return Either a FileResource or list of FileResources depending on whether it's a
 	 * 	file or directory.
@@ -152,7 +152,7 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * [DELETE /*] - Delete a file on the file system.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @return The message <js>"File deleted"</js> if successful.
 	 * @throws Exception If file could not be read or access was not granted.
@@ -173,7 +173,7 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * [PUT /*] - Add or overwrite a file on the file system.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @return The message <js>"File added"</js> if successful.
 	 * @throws Exception If file could not be read or access was not granted.
@@ -199,7 +199,7 @@ public class DirectoryResource extends Resource {
 	 * 
 	 * <p>
 	 * Applies to files only.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @return A Reader containing the contents of the file.
@@ -228,7 +228,7 @@ public class DirectoryResource extends Resource {
 	 * 
 	 * <p>
 	 * Applies to files only.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @return A Reader containing the contents of the file.
@@ -258,7 +258,7 @@ public class DirectoryResource extends Resource {
 	 * <p>
 	 * Subclasses can override this method to provide customized behavior.
 	 * Method should throw a {@link RestException} if the request should be disallowed.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 */
 	protected void checkAccess(RestRequest req) {

@@ -14,7 +14,7 @@ package org.apache.juneau.internal;
 
 /**
  * Represents a simple object pair.
- *
+ * 
  * @param <F> The first object type.
  * @param <S> The second object type.
  */
@@ -24,7 +24,7 @@ public class Pair<F,S> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param first The first object in the pair.
 	 * @param second The second object in the pair.
 	 */
@@ -35,7 +35,7 @@ public class Pair<F,S> {
 
 	/**
 	 * Returns the first object in the pair.
-	 *
+	 * 
 	 * @return The first object in the pair.
 	 */
 	public F first() {
@@ -44,7 +44,7 @@ public class Pair<F,S> {
 
 	/**
 	 * Returns the second object in the pair.
-	 *
+	 * 
 	 * @return The second object in the pair.
 	 */
 	public S second() {

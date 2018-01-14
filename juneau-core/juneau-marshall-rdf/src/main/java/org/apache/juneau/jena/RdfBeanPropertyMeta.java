@@ -32,7 +32,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param bpm The metadata of the bean property of this additional metadata.
 	 */
 	public RdfBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -54,7 +54,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns the RDF collection format of this property from the {@link Rdf#collectionFormat} annotation on this bean 
 	 * property.
-	 *
+	 * 
 	 * @return The RDF collection format, or {@link RdfCollectionFormat#DEFAULT} if annotation not specified.
 	 */
 	protected RdfCollectionFormat getCollectionFormat() {
@@ -77,7 +77,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * 	<li>Bean interfaces.
 	 * 	<li>Bean interface packages.
 	 * </ol>
-	 *
+	 * 
 	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	public Namespace getNamespace() {
@@ -86,7 +86,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if this bean property is marked with {@link Rdf#beanUri() @Rdf.beanUri()} as <jk>true</jk>.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this bean property annotation is <jk>true</jk>.
 	 */
 	public boolean isBeanUri() {

@@ -28,8 +28,8 @@ import org.apache.juneau.utils.*;
 
 /**
  * Builder for creating instances of {@link ConfigFile ConfigFiles}.
- *
- * <h5 class='topic'>Example</h5>
+ * 
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
  * 	String setting = cf.get(<js>"MySection/mysetting"</js>);
@@ -46,10 +46,10 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Specify the encoder to use for encoded config file entries (e.g. <js>"mySecret*={...}"</js>).
-	 *
+	 * 
 	 * <p>
 	 * The default value for this setting is an instance of {@link XorEncoder}.
-	 *
+	 * 
 	 * @param encoder The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -60,10 +60,10 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Specify the serializer to use for serializing POJOs when using {@link ConfigFile#put(String, Object)}.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this setting is {@link JsonSerializer#DEFAULT_LAX}.
-	 *
+	 * 
 	 * @param serializer The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -74,10 +74,10 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Specify the parser to use for parsing POJOs when using {@link ConfigFile#getObject(String,Class)}.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this setting is {@link JsonParser#DEFAULT}
-	 *
+	 * 
 	 * @param parser The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -88,10 +88,10 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Specify the config file character encoding.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this setting is {@link Charset#defaultCharset()}.
-	 *
+	 * 
 	 * @param charset The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -102,13 +102,13 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Specify the search paths for config files.
-	 *
+	 * 
 	 * <p>
 	 * Can contain relative or absolute paths.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this setting is <code>[<js>"."</js>]</code>.
-	 *
+	 * 
 	 * @param searchPaths The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -121,10 +121,10 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Make {@link ConfigFile ConfigFiles} read-only.
-	 *
+	 * 
 	 * <p>
 	 * The default value of this setting is <jk>false</jk>.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileBuilder readOnly() {
@@ -134,10 +134,10 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Create config files if they cannot be found on the file system.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this setting is <jk>false</jk>.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileBuilder createIfNotExists() {
@@ -147,7 +147,7 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Returns the config file with the specified absolute or relative path.
-	 *
+	 * 
 	 * @param path The absolute or relative path of the config file.
 	 * @return The config file.
 	 * @throws IOException If config file could not be parsed.
@@ -159,7 +159,7 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Create a new empty config file not backed by any file.
-	 *
+	 * 
 	 * @return A new config file.
 	 * @throws IOException
 	 */
@@ -169,10 +169,10 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Create a new config file backed by the specified file.
-	 *
+	 * 
 	 * <p>
 	 * This method is provided primarily for testing purposes.
-	 *
+	 * 
 	 * @param f The file to create a config file from.
 	 * @return A new config file.
 	 * @throws IOException
@@ -183,7 +183,7 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Create a new config file not backed by a file.
-	 *
+	 * 
 	 * @param r The reader containing an INI-formatted file to initialize the config file from.
 	 * @return A new config file.
 	 * @throws IOException
@@ -225,13 +225,13 @@ public class ConfigFileBuilder {
 
 	/**
 	 * Implements command-line features for working with INI configuration files.
-	 *
+	 * 
 	 * <p>
 	 * Invoke as a normal Java program...
 	 * <p class='bcode'>
 	 * 	java org.apache.juneau.ini.ConfigFileBuilder [args]
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * Arguments can be any of the following...
 	 * <ul class='spaced-list'>
@@ -252,7 +252,7 @@ public class ConfigFileBuilder {
 	 * 		<code>setVals -configFile &lt;configFile&gt; -vals [var1=val1 [var2=val2...]] [-verbose]</code>
 	 * 		Sets values in config files.
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the
 	 * file <code>'MyConfig.cfg'</code>.
@@ -260,7 +260,7 @@ public class ConfigFileBuilder {
 	 * 	java org.apache.juneau.ini.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg
 	 * 		-batchfile C:\foo\MyConfig.bat
 	 * </p>
-	 *
+	 * 
 	 * @param args Command-line arguments
 	 */
 	public static void main(String[] args) {

@@ -25,7 +25,7 @@ public final class ReflectionUtils {
 
 	/**
 	 * Similar to {@link Class#getAnnotation(Class)} except also searches annotations on interfaces.
-	 *
+	 * 
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class.
 	 * @param c The annotated class.
@@ -53,11 +53,11 @@ public final class ReflectionUtils {
 
 	/**
 	 * Returns the specified annotation only if it's been declared on the specified class.
-	 *
+	 * 
 	 * <p>
 	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
 	 * up the parent chain.
-	 *
+	 * 
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class.
 	 * @param c The annotated class.
@@ -73,11 +73,11 @@ public final class ReflectionUtils {
 
 	/**
 	 * Returns all instances of the specified annotation on the specified class.
-	 *
+	 * 
 	 * <p>
 	 * Searches all superclasses and superinterfaces.
 	 * Results are ordered child-to-parent.
-	 *
+	 * 
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
 	 * @param c The class being searched.
@@ -91,7 +91,7 @@ public final class ReflectionUtils {
 
 	/**
 	 * Same as {@link #findAnnotations(Class, Class)} but returns the list in parent-to-child order.
-	 *
+	 * 
 	 * @param a The annotation class type.
 	 * @param c The class being searched.
 	 * @return The found matches, or an empty array if annotation was not found.
@@ -105,10 +105,10 @@ public final class ReflectionUtils {
 	/**
 	 * Same as {@link #findAnnotations(Class, Class)} except returns the annotations as a map with the keys being the
 	 * class on which the annotation was found.
-	 *
+	 * 
 	 * <p>
 	 * Results are ordered child-to-parent.
-	 *
+	 * 
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
 	 * @param c The class being searched.
@@ -122,7 +122,7 @@ public final class ReflectionUtils {
 
 	/**
 	 * Same as {@link #findAnnotationsMap(Class, Class)} except returns results in parent-to-child order.
-	 *
+	 * 
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
 	 * @param c The class being searched.
@@ -149,7 +149,7 @@ public final class ReflectionUtils {
 	/**
 	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
 	 * list.
-	 *
+	 * 
 	 * @param a The annotation.
 	 * @param c The class.
 	 * @param l The list of annotations.
@@ -172,7 +172,7 @@ public final class ReflectionUtils {
 	/**
 	 * Similar to {@link Class#getResourceAsStream(String)} except looks up the parent hierarchy for the existence of
 	 * the specified resource.
-	 *
+	 * 
 	 * @param c The class to return the resource on.
 	 * @param name The resource name.
 	 * @return An input stream on the specified resource, or <jk>null</jk> if the resource could not be found.

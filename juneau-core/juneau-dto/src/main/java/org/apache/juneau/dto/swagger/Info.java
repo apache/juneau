@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented
  * in the Swagger-UI for convenience.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
@@ -36,7 +36,7 @@ import org.apache.juneau.annotation.*;
  * 		<js>"version"</js>: <js>"1.0.1"</js>
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -64,10 +64,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>title</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required.  The title of the application.
-	 *
+	 * 
 	 * @return The value of the <property>title</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getTitle() {
@@ -76,10 +76,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>title</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required.  The title of the application.
-	 *
+	 * 
 	 * @param title The new value for the <property>title</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -90,7 +90,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setTitle(String)}.
-	 *
+	 * 
 	 * @param title The new value for the <property>title</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -100,10 +100,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description of the application. GFM syntax can be used for rich text representation.
-	 *
+	 * 
 	 * @return
 	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -113,10 +113,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description of the application. GFM syntax can be used for rich text representation.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -127,7 +127,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setDescription(String)}.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -137,10 +137,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>termsOfService</property>.
-	 *
+	 * 
 	 * <p>
 	 * The Terms of Service for the API.
-	 *
+	 * 
 	 * @return The value of the <property>termsOfService</property> property on this bean, or <jk>null</jk> if it is not
 	 * set.
 	 */
@@ -150,10 +150,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>termsOfService</property>.
-	 *
+	 * 
 	 * <p>
 	 * The Terms of Service for the API.
-	 *
+	 * 
 	 * @param termsOfService The new value for the <property>termsOfService</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -164,7 +164,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setTermsOfService(String)}.
-	 *
+	 * 
 	 * @param termsOfService The new value for the <property>termsOfService</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -174,10 +174,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>contact</property>.
-	 *
+	 * 
 	 * <p>
 	 * The contact information for the exposed API.
-	 *
+	 * 
 	 * @return The value of the <property>contact</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Contact getContact() {
@@ -186,10 +186,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>contact</property>.
-	 *
+	 * 
 	 * <p>
 	 * The contact information for the exposed API.
-	 *
+	 * 
 	 * @param contact The new value for the <property>contact</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -200,7 +200,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setContact(Contact)}.
-	 *
+	 * 
 	 * @param contact The new value for the <property>contact</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -210,10 +210,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>license</property>.
-	 *
+	 * 
 	 * <p>
 	 * The license information for the exposed API.
-	 *
+	 * 
 	 * @return The value of the <property>license</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public License getLicense() {
@@ -222,10 +222,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>license</property>.
-	 *
+	 * 
 	 * <p>
 	 * The license information for the exposed API.
-	 *
+	 * 
 	 * @param license The new value for the <property>license</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -236,7 +236,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setLicense(License)}.
-	 *
+	 * 
 	 * @param license The new value for the <property>license</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -246,10 +246,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>version</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required.  Provides the version of the application API (not to be confused with the specification version).
-	 *
+	 * 
 	 * @return The value of the <property>version</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getVersion() {
@@ -258,10 +258,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>version</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required.  Provides the version of the application API (not to be confused with the specification version).
-	 *
+	 * 
 	 * @param version The new value for the <property>version</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -272,7 +272,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setVersion(String)}.
-	 *
+	 * 
 	 * @param version The new value for the <property>version</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */

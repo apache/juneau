@@ -18,18 +18,19 @@ import org.apache.juneau.transform.*;
 
 /**
  * Serializes POJOs to plain text using just the <code>toString()</code> method on the serialized object.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>text/plain</code>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>text/plain</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>text/plain</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>text/plain</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * Essentially converts POJOs to plain text using the <code>toString()</code> method.
- *
+ * 
  * <p>
  * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;}
  * transform defined on it.
@@ -50,7 +51,7 @@ public class PlainTextSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -60,7 +61,7 @@ public class PlainTextSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces

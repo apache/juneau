@@ -19,10 +19,10 @@ import java.lang.annotation.*;
 
 /**
  * Annotation for specifying various YAML options for the YAML serializers and parsers.
- *
+ * 
  * <p>
  * Can be applied to Java types.
- *
+ * 
  * <p>
  * Can be used for the following:
  * <ul class='spaced-list'>

@@ -109,7 +109,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
 	 * </ul>
-	 *
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
@@ -156,7 +156,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */

@@ -19,15 +19,16 @@ import java.lang.annotation.*;
 
 /**
  * Used to identify a class or bean property as a URI.
- *
+ * 
  * <p>
  * This annotation allows you to identify other classes that return URIs via <code>toString()</code> as URI objects.
- *
  * 
- * <h6 class='topic'>Documentation</h6>
- *	<ul>
- *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIAnnotation">Overview &gt; @URI Annotation</a>
- *	</ul>
+ * 
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIAnnotation">Overview &gt; @URI Annotation</a>
+ * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})

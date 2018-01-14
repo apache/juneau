@@ -21,8 +21,9 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Specialized writer for serializing XML.
- *
- * <h5 class='section'>Notes:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul>
  * 	<li>This class is not intended for external use.
  * </ul>
@@ -34,7 +35,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param out The wrapped writer.
 	 * @param useWhitespace If <jk>true</jk> XML elements will be indented.
 	 * @param maxIndent The maximum indentation level.
@@ -53,7 +54,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes an opening tag to the output:  <code><xt>&lt;ns:name</xt></code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
@@ -73,7 +74,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>oTag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -85,7 +86,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>oTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param name The element name.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
@@ -96,7 +97,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).oTag(ns, name, needsEncoding);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -110,7 +111,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).oTag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -123,7 +124,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).oTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -135,10 +136,10 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Closes a tag.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>append(<js>'>'</js>);</code>
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */
@@ -149,10 +150,10 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Closes an empty tag.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'>'</js>);</code>
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */
@@ -163,7 +164,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes a closed tag to the output:  <code><xt>&lt;ns:name/&gt;</xt></code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
@@ -183,7 +184,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>tag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -195,7 +196,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>tag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param name The element name.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
@@ -206,7 +207,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).tag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -218,7 +219,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).tag(ns, name, needsEncoding);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -232,7 +233,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).tag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -246,7 +247,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes a start tag to the output:  <code><xt>&lt;ns:name&gt;</xt></code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
@@ -259,7 +260,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>sTag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -271,7 +272,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param name The element name.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
@@ -282,7 +283,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).sTag(ns, name, needsEncoding);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -296,7 +297,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).sTag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -309,7 +310,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -322,7 +323,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes an end tag to the output:  <code><xt>&lt;/ns:name&gt;</xt></code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
@@ -342,7 +343,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>eTag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -354,7 +355,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>eTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param name The element name.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
@@ -365,7 +366,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).eTag(ns, name, needsEncoding);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -379,7 +380,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).eTag(ns, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
@@ -392,7 +393,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>i(indent).eTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object (for method chaining).
@@ -404,7 +405,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes an attribute to the output:  <code><xa>ns:name</xa>=<xs>'value'</xs></code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
@@ -418,7 +419,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
@@ -431,7 +432,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>attr(ns, name, value, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
@@ -444,7 +445,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Same as {@link #attr(String, String, Object)}, except pass in a {@link Namespace} object for the namespace.
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
@@ -457,7 +458,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @return This object (for method chaining).
@@ -470,7 +471,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @return This object (for method chaining).
@@ -486,7 +487,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @return This object (for method chaining).
@@ -498,7 +499,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <code>toString()</code>
@@ -511,7 +512,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
-	 *
+	 * 
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <code>toString()</code>
@@ -524,7 +525,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Shortcut for calling <code>text(o, <jk>false</jk>);</code>
-	 *
+	 * 
 	 * @param o The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
@@ -536,7 +537,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Serializes and encodes the specified object as valid XML text.
-	 *
+	 * 
 	 * @param o The object being serialized.
 	 * @param preserveWhitespace
 	 * 	If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
@@ -550,7 +551,7 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Same as {@link #text(Object)} but treats the value as a URL to resolved then serialized.
-	 *
+	 * 
 	 * @param o The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException

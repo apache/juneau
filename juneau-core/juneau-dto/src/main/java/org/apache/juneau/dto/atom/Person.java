@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents an <code>atomPersonConstruct</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomPersonConstruct =
@@ -33,7 +33,7 @@ import org.apache.juneau.annotation.*;
  * 		&amp; element atom:email { atomEmailAddress }?
  * 		&amp; extensionElement*)
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -58,7 +58,7 @@ public class Person extends Common {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param name The name of the person.
 	 */
 	public Person(String name) {
@@ -75,7 +75,7 @@ public class Person extends Common {
 
 	/**
 	 * Returns the name of the person.
-	 *
+	 * 
 	 * @return The name of the person.
 	 */
 	public String getName() {
@@ -84,7 +84,7 @@ public class Person extends Common {
 
 	/**
 	 * Sets the name of the person.
-	 *
+	 * 
 	 * @param name The name of the person.
 	 * @return This object (for method chaining).
 	 */
@@ -96,7 +96,7 @@ public class Person extends Common {
 
 	/**
 	 * Returns the URI of the person.
-	 *
+	 * 
 	 * @return The URI of the person.
 	 */
 	public URI getUri() {
@@ -105,14 +105,14 @@ public class Person extends Common {
 
 	/**
 	 * Sets the URI of the person.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param uri The URI of the person.
 	 * @return This object (for method chaining).
 	 */
@@ -124,7 +124,7 @@ public class Person extends Common {
 
 	/**
 	 * Returns the email address of the person.
-	 *
+	 * 
 	 * @return The email address of the person.
 	 */
 	public String getEmail() {
@@ -133,7 +133,7 @@ public class Person extends Common {
 
 	/**
 	 * Sets the email address of the person.
-	 *
+	 * 
 	 * @param email The email address of the person.
 	 * @return This object (for method chaining).
 	 */

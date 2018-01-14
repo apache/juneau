@@ -16,7 +16,7 @@ import java.io.*;
 
 /**
  * Similar to {@link StringWriter}, but uses a {@link StringBuilder} instead to avoid synchronization overhead.
- *
+ * 
  * <p>
  * Note that this class is NOT thread safe.
  */
@@ -34,7 +34,7 @@ public final class StringBuilderWriter extends Writer {
 
 	/**
 	 * Create a new string writer around an existing string builder.
-	 *
+	 * 
 	 * @param sb The string builder being wrapped.
 	 */
 	public StringBuilderWriter(StringBuilder sb) {
@@ -44,7 +44,7 @@ public final class StringBuilderWriter extends Writer {
 
 	/**
 	 * Create a new string writer using the specified initial string-builder size.
-	 *
+	 * 
 	 * @param initialSize
 	 * 	The number of <tt>char</tt> values that will fit into this buffer before it is automatically expanded.
 	 * @throws IllegalArgumentException If <tt>initialSize</tt> is negative.

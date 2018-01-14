@@ -35,7 +35,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public SoapXmlSerializerBuilder(PropertyStore ps) {
@@ -54,7 +54,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Configuration property:  The <code>SOAPAction</code> HTTP header value to set on responses.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link SoapXmlSerializer#SOAPXML_SOAPAction}

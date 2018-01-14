@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Listener that can be used to listen for change events in config files.
- *
+ * 
  * <p>
  * Use the {@link ConfigFile#addListener(ConfigFileListener)} method to register listeners.
  */
@@ -24,21 +24,21 @@ public class ConfigFileListener {
 
 	/**
 	 * Gets called immediately after a config file has been loaded.
-	 *
+	 * 
 	 * @param cf The config file being loaded.
 	 */
 	public void onLoad(ConfigFile cf) {}
 
 	/**
 	 * Gets called immediately after a config file has been saved.
-	 *
+	 * 
 	 * @param cf The config file being saved.
 	 */
 	public void onSave(ConfigFile cf) {}
 
 	/**
 	 * Signifies that the specified values have changed.
-	 *
+	 * 
 	 * @param cf The config file being modified.
 	 * @param changes The full keys (e.g. <js>"Section/key"</js>) of entries that have changed in the config file.
 	 */

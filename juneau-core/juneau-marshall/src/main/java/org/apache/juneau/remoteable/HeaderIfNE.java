@@ -22,7 +22,7 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Identical to {@link Header @Header} except skips values if they're null/blank.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -39,25 +39,25 @@ public @interface HeaderIfNE {
 
 	/**
 	 * The HTTP header name.
-	 *
+	 * 
 	 * @see Header#name()
 	 */
 	String name() default "";
 
 	/**
 	 * A synonym for {@link #name()}.
-	 *
+	 * 
 	 * @see Header#value()
 	 */
 	String value() default "";
 
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
+	 * 
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
 	 * then on the client which by default is {@link UrlEncodingSerializer}.
-	 *
+	 * 
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */

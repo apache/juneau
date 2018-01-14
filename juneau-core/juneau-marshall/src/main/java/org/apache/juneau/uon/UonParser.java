@@ -18,13 +18,15 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Content-Type</code> types: <code>text/uon</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Content-Type</code> types:  <code><b>text/uon</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * This parser uses a state machine, which makes it very fast and efficient.
  */
 public class UonParser extends ReaderParser {
@@ -37,7 +39,7 @@ public class UonParser extends ReaderParser {
 
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
@@ -50,7 +52,7 @@ public class UonParser extends ReaderParser {
 	 * 			<li class='jm'>{@link UonParserBuilder#decoding()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
@@ -70,7 +72,7 @@ public class UonParser extends ReaderParser {
 	 * 		.set(<jsf>UON_decoding</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 * 
-	 *	<jc>// Produces: ["foo bar", "baz quz"].</jc>
+	 * <jc>// Produces: ["foo bar", "baz quz"].</jc>
 	 * 	String[] foo = p.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
 	 * </p>
 	 */
@@ -97,7 +99,7 @@ public class UonParser extends ReaderParser {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Decoding(PropertyStore ps) {
@@ -115,7 +117,7 @@ public class UonParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -125,7 +127,7 @@ public class UonParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param consumes
@@ -159,7 +161,7 @@ public class UonParser extends ReaderParser {
 
 	/**
 	 * Create a UON parser session for parsing parameter values.
-	 *
+	 * 
 	 * @return A new parser session.
 	 */
 	protected final UonParserSession createParameterSession() {

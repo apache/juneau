@@ -22,7 +22,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -65,7 +65,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Convenience method for serializing an object to a <code>String</code>.
-	 *
+	 * 
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -77,10 +77,10 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Identical to {@link #serialize(Object)} except throws a {@link RuntimeException} instead of a {@link SerializeException}.
-	 *
+	 * 
 	 * <p>
 	 * This is typically good enough for debugging purposes.
-	 *
+	 * 
 	 * @param o The object to serialize.
 	 * @return The serialized object.
 	 */
@@ -94,7 +94,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Wraps the specified object inside a {@link StringObject}.
-	 *
+	 * 
 	 * @param o The object to wrap.
 	 * @return The wrapped object.
 	 */
@@ -104,7 +104,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Convenience method for serializing an object and sending it to STDOUT.
-	 *
+	 * 
 	 * @param o The object to serialize.
 	 * @return This object (for method chaining).
 	 */

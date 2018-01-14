@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-area-element">&lt;area&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="area")
@@ -39,10 +39,10 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Replacement text for use when images are not available.
-	 *
+	 * 
 	 * @param alt The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -54,10 +54,10 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-coords">coords</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Coordinates for the shape to be created in an image map.
-	 *
+	 * 
 	 * @param coords The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -68,10 +68,10 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
-	 *
+	 * 
 	 * @param download
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -84,17 +84,17 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Address of the hyperlink.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param href
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -107,10 +107,10 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Language of the linked resource.
-	 *
+	 * 
 	 * @param hreflang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -121,10 +121,10 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
-	 *
+	 * 
 	 * @param rel The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -135,10 +135,10 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * The kind of shape to be created in an image map.
-	 *
+	 * 
 	 * @param shape The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -149,10 +149,10 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Browsing context for hyperlink navigation.
-	 *
+	 * 
 	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -163,10 +163,10 @@ public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Hint for the type of the referenced resource.
-	 *
+	 * 
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

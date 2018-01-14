@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-data-element">&lt;data&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="data")
@@ -36,10 +36,10 @@ public class Data extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-data-value">value</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Machine-readable value.
-	 *
+	 * 
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

@@ -31,7 +31,7 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param rs The result set to load into this DTO.
 	 * @param pos The start position (zero-indexed).
 	 * @param limit The maximum number of rows to retrieve.
@@ -76,10 +76,10 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 
 	/**
 	 * Reads the specified column from the current row in the result set.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to handle specific data types in special ways.
-	 *
+	 * 
 	 * @param rs The result set to read from.
 	 * @param col The column number (indexed by 1).
 	 * @param dataType The {@link Types type} of the entry.

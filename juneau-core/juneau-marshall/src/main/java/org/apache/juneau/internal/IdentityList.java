@@ -16,19 +16,20 @@ import java.util.*;
 
 /**
  * Combination of a {@link LinkedList} and <code>IdentitySet</code>.
- *
+ * 
  * <ul class='spaced-list'>
  * 	<li>
  * 		Duplicate objects (by identity) will be skipped during insertion.
  * 	<li>
  * 		Order of insertion maintained.
  * </ul>
- *
- * <h5 class='section'>Notes:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul>
  * 	<li>This class is NOT thread safe, and is intended for use on small lists.
  * </ul>
- *
+ * 
  * @param <T> Entry type.
  */
 public class IdentityList<T> extends LinkedList<T> {

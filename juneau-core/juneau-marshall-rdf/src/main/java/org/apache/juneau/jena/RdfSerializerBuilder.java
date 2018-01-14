@@ -95,7 +95,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
 	 * identify root notes, which can introduce a considerable performance degradation.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
@@ -115,7 +115,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>addRootProperty(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}

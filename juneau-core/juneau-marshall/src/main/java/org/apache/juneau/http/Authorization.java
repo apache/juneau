@@ -14,36 +14,36 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Authorization</l> HTTP request header.
- *
+ * 
  * <p>
  * Authentication credentials for HTTP authentication.
- *
+ * 
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
  * </p>
- *
+ * 
  * <h6 class='topic'>RFC2616 Specification</h6>
- *
+ * 
  * A user agent that wishes to authenticate itself with a server--usually, but not necessarily, after receiving a 401
  * response--does so by including an Authorization request-header field with the request.
- *
+ * 
  * <p>
  * The Authorization field value consists of credentials containing the authentication information of the user agent for
  * the realm of the resource being requested.
- *
+ * 
  * <p class='bcode'>
  * 	Authorization  = "Authorization" ":" credentials
  * </p>
- *
+ * 
  * <p>
  * HTTP access authentication is described in "HTTP Authentication: Basic and Digest Access Authentication".
- *
+ * 
  * <p>
  * If a request is authenticated and a realm specified, the same credentials SHOULD be valid for all other requests
  * within this realm (assuming that the authentication scheme itself does not require otherwise, such as credentials
  * that vary according to a challenge value or using synchronized clocks).
- *
+ * 
  * <p>
  * When a shared cache (see section 13.7) receives a request containing an Authorization field, it MUST NOT return the
  * corresponding response as a reply to any other request, unless one of the following specific exceptions holds:
@@ -62,7 +62,7 @@ package org.apache.juneau.http;
  * 	<li>If the response includes the "public" cache-control directive, it MAY be returned in reply to any subsequent
  * 		request.
  * </ol>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -76,7 +76,7 @@ public final class Authorization extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>Authorization</code> header.
-	 *
+	 * 
 	 * @param value The <code>Authorization</code> header string.
 	 * @return The parsed <code>Authorization</code> header, or <jk>null</jk> if the string was null.
 	 */

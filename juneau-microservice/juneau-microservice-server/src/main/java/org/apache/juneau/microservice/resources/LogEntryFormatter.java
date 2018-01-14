@@ -50,7 +50,7 @@ public class LogEntryFormatter extends Formatter {
 
 	/**
 	 * Create a new formatter.
-	 *
+	 * 
 	 * @param format 
 	 * 	The log entry format.  e.g. <js>"[{date} {level}] {msg}%n"</js>
 	 * 	The string can contain any of the following variables:
@@ -182,7 +182,7 @@ public class LogEntryFormatter extends Formatter {
 
 	/**
 	 * Returns the regular expression pattern used for matching log entries.
-	 *
+	 * 
 	 * @return The regular expression pattern used for matching log entries.
 	 */
 	public Pattern getLogEntryPattern() {
@@ -191,7 +191,7 @@ public class LogEntryFormatter extends Formatter {
 
 	/**
 	 * Returns the {@link DateFormat} used for matching dates.
-	 *
+	 * 
 	 * @return The {@link DateFormat} used for matching dates.
 	 */
 	public DateFormat getDateFormat() {
@@ -201,7 +201,7 @@ public class LogEntryFormatter extends Formatter {
 	/**
 	 * Given a matcher that has matched the pattern specified by {@link #getLogEntryPattern()}, returns the field value 
 	 * from the match.
-	 *
+	 * 
 	 * @param fieldName 
 	 * 	The field name.  
 	 * 	Possible values are:

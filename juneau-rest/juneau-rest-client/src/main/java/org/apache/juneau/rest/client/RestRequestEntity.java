@@ -32,7 +32,7 @@ public final class RestRequestEntity extends BasicHttpEntity {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param input The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
 	 * @param serializer The serializer to use to serialize this response.
 	 */

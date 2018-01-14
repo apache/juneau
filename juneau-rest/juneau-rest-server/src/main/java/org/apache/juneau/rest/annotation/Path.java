@@ -22,7 +22,7 @@ import org.apache.juneau.httppart.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a variable
  * in a URL path pattern converted to a POJO.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
@@ -31,7 +31,7 @@ import org.apache.juneau.httppart.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * The <ja>@Path</ja> annotation is optional if the parameters are specified immediately following the
  * <code>RestRequest</code> and <code>RestResponse</code> parameters, and are specified in the same order as the
@@ -44,7 +44,7 @@ import org.apache.juneau.httppart.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * If the order of parameters is not the default order shown above, the attribute names must be specified (since
  * parameter names are lost during compilation).
@@ -57,7 +57,7 @@ import org.apache.juneau.httppart.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * You can also use <code>{#}</code> notation to specify path parameters without specifying names.
  * <p class='bcode'>
@@ -76,7 +76,7 @@ public @interface Path {
 
 	/**
 	 * URL path variable name.
-	 *
+	 * 
 	 * <p>
 	 * Optional if the attributes are specified in the same order as in the URL path pattern.
 	 */
@@ -84,7 +84,7 @@ public @interface Path {
 	
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
@@ -93,7 +93,7 @@ public @interface Path {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 *
+	 * 
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

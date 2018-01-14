@@ -35,7 +35,7 @@ public class UonPartParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UonPartParserBuilder(PropertyStore ps) {

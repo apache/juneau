@@ -31,7 +31,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public RdfClassMeta(ClassMeta<?> cm) {
@@ -50,7 +50,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Rdf @Rdf} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation, or <jk>null</jk> if annotation is not specified.
 	 */
 	protected Rdf getAnnotation() {
@@ -59,7 +59,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Rdf#collectionFormat() @Rdf.collectionFormat()} annotation defined on the class.
-	 *
+	 * 
 	 * @return The value of the annotation, or <jk>null</jk> if annotation is not 
 	 * specified.
 	 */
@@ -80,7 +80,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 	 * 	<li>Interfaces.
 	 * 	<li>Interface packages.
 	 * </ol>
-	 *
+	 * 
 	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	protected Namespace getNamespace() {

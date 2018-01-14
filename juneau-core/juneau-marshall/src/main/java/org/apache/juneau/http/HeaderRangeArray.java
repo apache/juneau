@@ -18,13 +18,13 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.
- *
+ * 
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -41,7 +41,7 @@ public class HeaderRangeArray {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param value The raw header value.
 	 */
 	protected HeaderRangeArray(String value) {
@@ -51,7 +51,7 @@ public class HeaderRangeArray {
 
 	/**
 	 * Given a list of type values, returns the best match for this header.
-	 *
+	 * 
 	 * @param types The types to match against.
 	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.
 	 */
@@ -69,10 +69,10 @@ public class HeaderRangeArray {
 
 	/**
 	 * Returns the list of the types ranges that make up this header.
-	 *
+	 * 
 	 * <p>
 	 * The types ranges in the list are sorted by their q-value in descending order.
-	 *
+	 * 
 	 * @return An unmodifiable list of type ranges.
 	 */
 	public List<StringRange> asSimpleRanges() {

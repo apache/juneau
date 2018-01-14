@@ -44,10 +44,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents a connection to a remote REST resource.
- *
+ * 
  * <p>
  * Instances of this class are created by the various {@code doX()} methods on the {@link RestClient} class.
- *
+ * 
  * <p>
  * This class uses only Java standard APIs.  Requests can be built up using a fluent interface with method chaining,
  * like so...
@@ -56,16 +56,15 @@ import org.apache.juneau.utils.*;
  * 	RestCall c = client.doPost(<jsf>URL</jsf>).setInput(o).setHeader(x,y);
  * 	MyBean b = c.getResponse(MyBean.<jk>class</jk>);
  * </p>
- *
+ * 
  * <p>
  * The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code>
  * methods.
- *
- * <h5 class='section'>Additional information:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Documentation</h5>
  * <ul>
- * 	<li>
- * 		<a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client
- * 		API</a> for more information and code examples.
+ * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a>
  * </ul>
  */
 @SuppressWarnings({ "unchecked" })
@@ -99,7 +98,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Constructs a REST call with the specified method name.
-	 *
+	 * 
 	 * @param client The client that created this request.
 	 * @param request The wrapped Apache HTTP client request object.
 	 * @param uri The URI for this call.
@@ -121,7 +120,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the URI for this call.
-	 *
+	 * 
 	 * <p>
 	 * Can be any of the following types:
 	 * <ul>
@@ -130,10 +129,10 @@ public final class RestCall extends BeanSession {
 	 * 	<li>{@link URIBuilder}
 	 * 	<li>Anything else converted to a string using {@link Object#toString()}.
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * Relative URL strings will be interpreted as relative to the root URL defined on the client.
-	 *
+	 * 
 	 * @param uri
 	 * 	The URI to use for this call.
 	 * 	This overrides the URI passed in from the client.
@@ -152,7 +151,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the URI scheme.
-	 *
+	 * 
 	 * @param scheme The new URI host.
 	 * @return This object (for method chaining).
 	 */
@@ -163,7 +162,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the URI host.
-	 *
+	 * 
 	 * @param host The new URI host.
 	 * @return This object (for method chaining).
 	 */
@@ -174,7 +173,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the URI port.
-	 *
+	 * 
 	 * @param port The new URI port.
 	 * @return This object (for method chaining).
 	 */
@@ -185,7 +184,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a query parameter to the URI query.
-	 *
+	 * 
 	 * @param name
 	 * 	The parameter name.
 	 * 	Can be null/blank/* if the value is a {@link Map}, {@link String}, {@link NameValuePairs}, or bean.
@@ -232,7 +231,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a query parameter to the URI query.
-	 *
+	 * 
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
@@ -244,7 +243,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds query parameters to the URI query.
-	 *
+	 * 
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -255,10 +254,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a query parameter to the URI query if the parameter value is not <jk>null</jk> or an empty string.
-	 *
+	 * 
 	 * <p>
 	 * NE = "not empty"
-	 *
+	 * 
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
@@ -270,10 +269,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds query parameters to the URI for any parameters that aren't null/empty.
-	 *
+	 * 
 	 * <p>
 	 * NE = "not empty"
-	 *
+	 * 
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -284,7 +283,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets a custom URI query.
-	 *
+	 * 
 	 * @param query The new URI query string.
 	 * @return This object (for method chaining).
 	 */
@@ -295,7 +294,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a form data pair to this request to perform a URL-encoded form post.
-	 *
+	 * 
 	 * @param name
 	 * 	The parameter name.
 	 * 	Can be null/blank/* if the value is a {@link Map}, {@link NameValuePairs}, or bean.
@@ -342,7 +341,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a form data pair to this request to perform a URL-encoded form post.
-	 *
+	 * 
 	 * @param name
 	 * 	The parameter name.
 	 * 	Can be null/blank if the value is a {@link Map} or {@link NameValuePairs}.
@@ -358,7 +357,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds form data pairs to this request to perform a URL-encoded form post.
-	 *
+	 * 
 	 * @param nameValuePairs The name-value pairs of the request.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -369,7 +368,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds form data pairs to this request to perform a URL-encoded form post.
-	 *
+	 * 
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If name was null/blank and value wasn't a {@link Map} or {@link NameValuePairs}.
@@ -380,10 +379,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a form data pair to the request if the parameter value is not <jk>null</jk> or an empty string.
-	 *
+	 * 
 	 * <p>
 	 * NE = "not empty"
-	 *
+	 * 
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
@@ -395,10 +394,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds form data parameters to the request for any parameters that aren't null/empty.
-	 *
+	 * 
 	 * <p>
 	 * NE = "not empty"
-	 *
+	 * 
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -409,7 +408,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Replaces a variable of the form <js>"{name}"</js> in the URL path with the specified value.
-	 *
+	 * 
 	 * @param name The path variable name.
 	 * @param value The replacement value.
 	 * @param partSerializer
@@ -444,7 +443,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Replaces a variable of the form <js>"{name}"</js> in the URL path with the specified value.
-	 *
+	 * 
 	 * @param name The path variable name.
 	 * @param value The replacement value.
 	 * @return This object (for method chaining).
@@ -456,7 +455,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the URI user info.
-	 *
+	 * 
 	 * @param userInfo The new URI user info.
 	 * @return This object (for method chaining).
 	 */
@@ -467,7 +466,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the URI user info.
-	 *
+	 * 
 	 * @param username The new URI username.
 	 * @param password The new URI password.
 	 * @return This object (for method chaining).
@@ -479,7 +478,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the input for this REST call.
-	 *
+	 * 
 	 * @param input
 	 * 	The input to be sent to the REST resource (only valid for PUT and POST) requests. <br>
 	 * 	Can be of the following types:
@@ -508,10 +507,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Specifies the serializer to use on this call.
-	 *
+	 * 
 	 * <p>
 	 * Overrides the serializer specified on the {@link RestClient}.
-	 *
+	 * 
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @return This object (for method chaining).
 	 */
@@ -522,10 +521,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Specifies the parser to use on this call.
-	 *
+	 * 
 	 * <p>
 	 * Overrides the parser specified on the {@link RestClient}.
-	 *
+	 * 
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return This object (for method chaining).
 	 */
@@ -541,7 +540,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets a header on the request.
-	 *
+	 * 
 	 * @param name
 	 * 	The header name.
 	 * 	The name can be null/empty if the value is a {@link Map}.
@@ -576,7 +575,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets a header on the request.
-	 *
+	 * 
 	 * @param name
 	 * 	The header name.
 	 * 	The name can be null/empty if the value is a {@link Map}.
@@ -590,7 +589,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets headers on the request.
-	 *
+	 * 
 	 * @param values The header values.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -601,10 +600,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets a header on the request if the value is not null/empty.
-	 *
+	 * 
 	 * <p>
 	 * NE = "not empty"
-	 *
+	 * 
 	 * @param name
 	 * 	The header name.
 	 * 	The name can be null/empty if the value is a {@link Map}.
@@ -618,10 +617,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets headers on the request if the values are not null/empty.
-	 *
+	 * 
 	 * <p>
 	 * NE = "not empty"
-	 *
+	 * 
 	 * @param values The header values.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -632,11 +631,11 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Accept</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This overrides the media type specified on the parser, but is overridden by calling
 	 * <code>header(<js>"Accept"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -647,10 +646,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Accept-Charset</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -661,10 +660,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Accept-Encoding</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -675,10 +674,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Accept-Language</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -689,10 +688,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Authorization</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -703,10 +702,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Cache-Control</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -717,10 +716,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Connection</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -731,10 +730,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Content-Length</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -745,11 +744,11 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Content-Type</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This overrides the media type specified on the serializer, but is overridden by calling
 	 * <code>header(<js>"Content-Type"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -760,10 +759,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Date</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -774,10 +773,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Expect</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -788,10 +787,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Forwarded</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -802,10 +801,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>From</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -816,10 +815,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Host</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -830,10 +829,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>If-Match</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -844,10 +843,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>If-Modified-Since</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -858,10 +857,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>If-None-Match</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -872,10 +871,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>If-Range</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -886,10 +885,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>If-Unmodified-Since</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -900,10 +899,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Max-Forwards</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -914,10 +913,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Origin</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -928,10 +927,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Pragma</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -942,10 +941,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Proxy-Authorization</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -956,10 +955,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Range</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -970,10 +969,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Referer</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -984,10 +983,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>TE</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -998,10 +997,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>User-Agent</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -1012,10 +1011,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Upgrade</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -1026,10 +1025,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Via</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -1040,10 +1039,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the value for the <code>Warning</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -1054,7 +1053,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
-	 *
+	 * 
 	 * @param version The version string (e.g. <js>"1.2.3"</js>)
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -1065,7 +1064,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Make this call retryable if an error response (>=400) is received.
-	 *
+	 * 
 	 * @param retries The number of retries to attempt.
 	 * @param interval The time in milliseconds between attempts.
 	 * @param retryOn
@@ -1091,13 +1090,13 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * For this call, allow automatic redirects when a 302 or 307 occurs when performing a POST.
-	 *
+	 * 
 	 * <p>
 	 * Note that this can be inefficient since the POST body needs to be serialized twice.
 	 * The preferred approach if possible is to use the {@link LaxRedirectStrategy} strategy on the underlying HTTP
 	 * client.
 	 * However, this method is provided if you don't have access to the underlying client.
-	 *
+	 * 
 	 * @param b Redirect flag.
 	 * @return This object (for method chaining).
 	 */
@@ -1108,7 +1107,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Specify the number of redirects to follow before throwing an exception.
-	 *
+	 * 
 	 * @param maxAttempts Allow a redirect to occur this number of times.
 	 * @return This object (for method chaining).
 	 */
@@ -1119,7 +1118,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Add an interceptor for this call only.
-	 *
+	 * 
 	 * @param interceptor The interceptor to add to this call.
 	 * @return This object (for method chaining).
 	 */
@@ -1131,13 +1130,13 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Pipes the request output to the specified writer when {@link #run()} is called.
-	 *
+	 * 
 	 * <p>
 	 * The writer is not closed.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple writers.
-	 *
+	 * 
 	 * @param w The writer to pipe the output to.
 	 * @return This object (for method chaining).
 	 */
@@ -1147,10 +1146,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Pipe output from response to the specified writer when {@link #run()} is called.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple writers.
-	 *
+	 * 
 	 * @param w The writer to write the output to.
 	 * @param close Close the writer when {@link #close()} is called.
 	 * @return This object (for method chaining).
@@ -1162,10 +1161,10 @@ public final class RestCall extends BeanSession {
 	/**
 	 * Pipe output from response to the specified writer when {@link #run()} is called and associate that writer with an
 	 * ID so it can be retrieved through {@link #getWriter(String)}.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple writers.
-	 *
+	 * 
 	 * @param id A string identifier that can be used to retrieve the writer using {@link #getWriter(String)}
 	 * @param w The writer to write the output to.
 	 * @param close Close the writer when {@link #close()} is called.
@@ -1178,7 +1177,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Retrieves a writer associated with an ID via {@link #pipeTo(String, Writer, boolean)}
-	 *
+	 * 
 	 * @param id A string identifier that can be used to retrieve the writer using {@link #getWriter(String)}
 	 * @return The writer, or <jk>null</jk> if no writer is associated with that ID.
 	 */
@@ -1188,7 +1187,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * When output is piped to writers, flush the writers after every line of output.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RestCall byLines() {
@@ -1198,13 +1197,13 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Pipes the request output to the specified output stream when {@link #run()} is called.
-	 *
+	 * 
 	 * <p>
 	 * The output stream is not closed.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple output streams.
-	 *
+	 * 
 	 * @param os The output stream to pipe the output to.
 	 * @return This object (for method chaining).
 	 */
@@ -1214,10 +1213,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Pipe output from response to the specified output stream when {@link #run()} is called.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple output stream.
-	 *
+	 * 
 	 * @param os The output stream to write the output to.
 	 * @param close Close the output stream when {@link #close()} is called.
 	 * @return This object (for method chaining).
@@ -1229,10 +1228,10 @@ public final class RestCall extends BeanSession {
 	/**
 	 * Pipe output from response to the specified output stream when {@link #run()} is called and associate
 	 * that output stream with an ID so it can be retrieved through {@link #getOutputStream(String)}.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple output stream.
-	 *
+	 * 
 	 * @param id A string identifier that can be used to retrieve the output stream using {@link #getOutputStream(String)}
 	 * @param os The output stream to write the output to.
 	 * @param close Close the output stream when {@link #close()} is called.
@@ -1245,7 +1244,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Retrieves an output stream associated with an ID via {@link #pipeTo(String, OutputStream, boolean)}
-	 *
+	 * 
 	 * @param id A string identifier that can be used to retrieve the writer using {@link #getWriter(String)}
 	 * @return The writer, or <jk>null</jk> if no writer is associated with that ID.
 	 */
@@ -1255,7 +1254,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Prevent {@link RestCallException RestCallExceptions} from being thrown when HTTP status 400+ is encountered.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RestCall ignoreErrors() {
@@ -1265,10 +1264,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Stores the response text so that it can later be captured using {@link #getCapturedResponse()}.
-	 *
+	 * 
 	 * <p>
 	 * This method should only be called once.  Multiple calls to this method are ignored.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RestCall captureResponse() {
@@ -1282,14 +1281,14 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Look for the specified regular expression pattern in the response output.
-	 *
+	 * 
 	 * <p>
 	 * Causes a {@link RestCallException} to be thrown if the specified pattern is found in the output.
-	 *
+	 * 
 	 * <p>
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
 	 * methods such as {@link #getResponseAsString()}.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Throw a RestCallException if FAILURE or ERROR is found in the output.</jc>
@@ -1297,7 +1296,7 @@ public final class RestCall extends BeanSession {
 	 * 		.failurePattern(<js>"FAILURE|ERROR"</js>)
 	 * 		.run();
 	 * </p>
-	 *
+	 * 
 	 * @param errorPattern A regular expression to look for in the response output.
 	 * @return This object (for method chaining).
 	 */
@@ -1315,14 +1314,14 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Look for the specified regular expression pattern in the response output.
-	 *
+	 * 
 	 * <p>
 	 * Causes a {@link RestCallException} to be thrown if the specified pattern is not found in the output.
-	 *
+	 * 
 	 * <p>
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
 	 * methods such as {@link #getResponseAsString()}.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Throw a RestCallException if SUCCESS is not found in the output.</jc>
@@ -1330,7 +1329,7 @@ public final class RestCall extends BeanSession {
 	 * 		.successPattern(<js>"SUCCESS"</js>)
 	 * 		.run();
 	 * </p>
-	 *
+	 * 
 	 * @param successPattern A regular expression to look for in the response output.
 	 * @return This object (for method chaining).
 	 */
@@ -1348,14 +1347,14 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a response pattern finder to look for regular expression matches in the response output.
-	 *
+	 * 
 	 * <p>
 	 * This method can be called multiple times to add multiple response pattern finders.
-	 *
+	 * 
 	 * <p>
 	 * {@link ResponsePattern ResponsePatterns} use the {@link #getCapturedResponse()} to read the response text and so
 	 * does not affect the other output methods such as {@link #getResponseAsString()}.
-	 *
+	 * 
 	 * @param responsePattern The response pattern finder.
 	 * @return This object (for method chaining).
 	 */
@@ -1374,10 +1373,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Set configuration settings on this request.
-	 *
+	 * 
 	 * <p>
 	 * Use {@link RequestConfig#custom()} to create configuration parameters for the request.
-	 *
+	 * 
 	 * @param config The new configuration settings for this request.
 	 * @return This object (for method chaining).
 	 */
@@ -1398,11 +1397,11 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Method used to execute an HTTP response where you're only interested in the HTTP response code.
-	 *
+	 * 
 	 * <p>
 	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the output to an
 	 * output stream or writer.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>try</jk> {
@@ -1413,7 +1412,7 @@ public final class RestCall extends BeanSession {
 	 * 		<jc>// Failed!</jc>
 	 * 	}
 	 * </p>
-	 *
+	 * 
 	 * @return The HTTP status code.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
@@ -1440,7 +1439,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Same as {@link #run()} but allows you to run the call asynchronously.
-	 *
+	 * 
 	 * @return The HTTP status code.
 	 * @throws RestCallException If the executor service was not defined.
 	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
@@ -1459,15 +1458,15 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Connects to the REST resource.
-	 *
+	 * 
 	 * <p>
 	 * If this is a <code>PUT</code> or <code>POST</code>, also sends the input to the remote resource.<br>
-	 *
+	 * 
 	 * <p>
 	 * Typically, you would only call this method if you're not interested in retrieving the body of the HTTP response.
 	 * Otherwise, you're better off just calling one of the {@link #getReader()}/{@link #getResponse(Class)}/{@link #pipeTo(Writer)}
 	 * methods directly which automatically call this method already.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If an exception or <code>400+</code> HTTP status code occurred during the connection attempt.
 	 */
@@ -1584,17 +1583,17 @@ public final class RestCall extends BeanSession {
 	/**
 	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP
 	 * response message body as a reader.
-	 *
+	 * 
 	 * <p>
 	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream will be
 	 * wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
-	 *
+	 * 
 	 * <p>
 	 * If present, automatically handles the <code>charset</code> value in the <code>Content-Type</code> response header.
-	 *
+	 * 
 	 * <p>
 	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
-	 *
+	 * 
 	 * @return
 	 * 	The HTTP response message body reader.
 	 * 	<jk>null</jk> if response was successful but didn't contain a body (e.g. HTTP 204).
@@ -1631,15 +1630,15 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Returns the response text as a string if {@link #captureResponse()} was called on this object.
-	 *
+	 * 
 	 * <p>
 	 * Note that while similar to {@link #getResponseAsString()}, this method can be called multiple times to retrieve
 	 * the response text multiple times.
-	 *
+	 * 
 	 * <p>
 	 * Note that this method returns <jk>null</jk> if you have not called one of the methods that cause the response to
 	 * be processed.  (e.g. {@link #run()}, {@link #getResponse()}, {@link #getResponseAsString()}.
-	 *
+	 * 
 	 * @return The captured response, or <jk>null</jk> if {@link #captureResponse()} has not been called.
 	 * @throws IllegalStateException If trying to call this method before the response is consumed.
 	 */
@@ -1653,7 +1652,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Returns the parser specified on the client to use for parsing HTTP response bodies.
-	 *
+	 * 
 	 * @return The parser.
 	 * @throws RestCallException If no parser was defined on the client.
 	 */
@@ -1665,7 +1664,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Returns the serializer specified on the client to use for serializing HTTP request bodies.
-	 *
+	 * 
 	 * @return The serializer.
 	 * @throws RestCallException If no serializer was defined on the client.
 	 */
@@ -1677,7 +1676,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Returns the value of the <code>Content-Length</code> header.
-	 *
+	 * 
 	 * @return The value of the <code>Content-Length</code> header, or <code>-1</code> if header is not present.
 	 * @throws IOException
 	 */
@@ -1695,14 +1694,14 @@ public final class RestCall extends BeanSession {
 	/**
 	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP
 	 * response message body as an input stream.
-	 *
+	 * 
 	 * <p>
 	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream will be
 	 * wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
-	 *
+	 * 
 	 * <p>
 	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
-	 *
+	 * 
 	 * @return
 	 * 	The HTTP response message body input stream. <jk>null</jk> if response was successful but didn't contain
 	 * 	a body (e.g. HTTP 204).
@@ -1802,7 +1801,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
-	 *
+	 * 
 	 * @return The response as a string.
 	 * @throws RestCallException If the executor service was not defined.
 	 * @see
@@ -1822,28 +1821,28 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Same as {@link #getResponse(Type, Type...)} except optimized for a non-parameterized class.
-	 *
+	 * 
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = restClient.doGet(url).getResponse(String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = restClient.doGet(url).getResponse(MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean array.</jc>
 	 * 	MyBean[] ba = restClient.doGet(url).getResponse(MyBean[].<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>
@@ -1854,7 +1853,7 @@ public final class RestCall extends BeanSession {
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * @param <T>
 	 * 	The class type of the object being created.
 	 * 	See {@link #getResponse(Type, Type...)} for details.
@@ -1873,7 +1872,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
-	 *
+	 * 
 	 * @param <T>
 	 * 	The class type of the object being created.
 	 * 	See {@link #getResponse(Type, Type...)} for details.
@@ -1897,37 +1896,37 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Parses HTTP body into the specified object type.
-	 *
+	 * 
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
-	 *
+	 * 
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
-	 *
+	 * 
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>
@@ -1940,7 +1939,7 @@ public final class RestCall extends BeanSession {
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * @param <T> The class type of the object to create.
 	 * @param type
 	 * 	The object type to create.
@@ -1964,7 +1963,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
-	 *
+	 * 
 	 * @param <T>
 	 * 	The class type of the object being created.
 	 * 	See {@link #getResponse(Type, Type...)} for details.
@@ -1996,10 +1995,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Parses the output from the connection into the specified type and then wraps that in a {@link PojoRest}.
-	 *
+	 * 
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
-	 *
+	 * 
 	 * @param innerType The class type of the POJO being wrapped.
 	 * @return The parsed output wrapped in a {@link PojoRest}.
 	 * @throws IOException If a connection error occurred.
@@ -2012,10 +2011,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Converts the output from the connection into an {@link ObjectMap} and then wraps that in a {@link PojoRest}.
-	 *
+	 * 
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
-	 *
+	 * 
 	 * @return The parsed output wrapped in a {@link PojoRest}.
 	 * @throws IOException If a connection error occurred.
 	 * @throws ParseException
@@ -2057,7 +2056,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Returns access to the {@link HttpUriRequest} passed to {@link HttpClient#execute(HttpUriRequest)}.
-	 *
+	 * 
 	 * @return The {@link HttpUriRequest} object.
 	 */
 	public HttpUriRequest getRequest() {
@@ -2066,10 +2065,10 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Returns access to the {@link HttpResponse} returned by {@link HttpClient#execute(HttpUriRequest)}.
-	 *
+	 * 
 	 * <p>
 	 * Returns <jk>null</jk> if {@link #connect()} has not yet been called.
-	 *
+	 * 
 	 * @return The HTTP response object.
 	 * @throws IOException
 	 */
@@ -2080,7 +2079,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Shortcut for calling <code>getRequest().setHeader(header)</code>
-	 *
+	 * 
 	 * @param header The header to set on the request.
 	 * @return This object (for method chaining).
 	 */
@@ -2098,7 +2097,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Cleans up this HTTP call.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Can be thrown by one of the {@link RestCallInterceptor#onClose(RestCall)} calls.
 	 */
@@ -2114,7 +2113,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
-	 *
+	 * 
 	 * @param level The log level to log events at.
 	 * @param log The logger.
 	 * @return This object (for method chaining).
@@ -2126,7 +2125,7 @@ public final class RestCall extends BeanSession {
 
 	/**
 	 * Sets <code>Debug: value</code> header on this request.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */

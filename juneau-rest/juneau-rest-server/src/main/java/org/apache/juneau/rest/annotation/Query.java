@@ -23,13 +23,13 @@ import org.apache.juneau.rest.*;
 /**
  * Identical to {@link FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form
  * posts.
- *
+ * 
  * <p>
  * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
  * URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
  * {@link RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
@@ -38,7 +38,7 @@ import org.apache.juneau.rest.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -64,13 +64,13 @@ public @interface Query {
 
 	/**
 	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
-	 *
+	 * 
 	 * <p>
 	 * Normally, we expect single parameters to be specified in UON notation for representing collections of values
 	 * (e.g. <js>"&amp;key=(1,2,3)"</js>.
 	 * This annotation allows the use of multi-part parameters to represent collections
 	 * (e.g. <js>"&amp;key=1&amp;key=2&amp;key=3"</js>.
-	 *
+	 * 
 	 * <p>
 	 * This setting should only be applied to Java parameters of type array or Collection.
 	 */
@@ -83,7 +83,7 @@ public @interface Query {
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
-	 *
+	 * 
 	 * <p>
 	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
@@ -92,7 +92,7 @@ public @interface Query {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 *
+	 * 
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

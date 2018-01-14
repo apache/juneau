@@ -47,7 +47,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [GET /] - Show contents of config file.
-	 *
+	 * 
 	 * @return The config file.
 	 * @throws Exception
 	 */
@@ -58,7 +58,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [GET /edit] - Show config file edit page.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @return The config file as a reader resource.
 	 * @throws Exception
@@ -81,7 +81,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [GET /{section}] - Show config file section.
-	 *
+	 * 
 	 * @param section The section name.
 	 * @return The config file section.
 	 * @throws Exception
@@ -100,7 +100,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [GET /{section}/{key}] - Show config file entry.
-	 *
+	 * 
 	 * @param section The section name.
 	 * @param key The section key.
 	 * @return The value of the config file entry.
@@ -121,7 +121,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [POST /] - Sets contents of config file from a FORM post.
-	 *
+	 * 
 	 * @param contents The new contents of the config file.
 	 * @return The new config file contents.
 	 * @throws Exception
@@ -140,7 +140,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [PUT /] - Sets contents of config file.
-	 *
+	 * 
 	 * @param contents The new contents of the config file.
 	 * @return The new config file contents.
 	 * @throws Exception
@@ -160,7 +160,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [PUT /{section}] - Add or overwrite a config file section.
-	 *
+	 * 
 	 * @param section The section name.
 	 * @param contents The new contents of the config file section.
 	 * @return The new section.
@@ -182,7 +182,7 @@ public class ConfigResource extends Resource {
 
 	/**
 	 * [PUT /{section}/{key}] - Add or overwrite a config file entry.
-	 *
+	 * 
 	 * @param section The section name.
 	 * @param key The section key.
 	 * @param value The new value.

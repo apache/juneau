@@ -17,22 +17,24 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO metadata to HTTP responses as JSON.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>application/json+schema, text/json+schema</code>
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>application/json+schema, text/json+schema</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>application/json</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>application/json</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  */
 public final class JsonSchemaSerializer extends JsonSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps Initialize with the specified config property store.
 	 */
 	public JsonSchemaSerializer(PropertyStore ps) {

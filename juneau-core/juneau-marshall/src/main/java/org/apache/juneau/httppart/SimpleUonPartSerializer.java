@@ -44,7 +44,7 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */

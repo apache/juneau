@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * License information for the exposed API.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
@@ -30,7 +30,7 @@ import org.apache.juneau.annotation.*;
  * 		<js>"url"</js>: <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -54,10 +54,10 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. The license name used for the API.
-	 *
+	 * 
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
@@ -66,10 +66,10 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. The license name used for the API.
-	 *
+	 * 
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -80,7 +80,7 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setName(String)}.
-	 *
+	 * 
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -90,17 +90,17 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>url</property>.
-	 *
+	 * 
 	 * <p>
 	 * A URL to the license used for the API.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public URI getUrl() {
@@ -109,14 +109,14 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>url</property>.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -127,7 +127,7 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setUrl(Object)}.
-	 *
+	 * 
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */

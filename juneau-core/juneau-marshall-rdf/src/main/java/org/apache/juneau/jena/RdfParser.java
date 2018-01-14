@@ -22,7 +22,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Parses RDF into POJOs.
- *
+ * 
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * 
  * The following direct subclasses are provided for language-specific parsers:
@@ -36,10 +36,12 @@ import org.apache.juneau.xml.*;
  * 	<li>
  * 		{@link RdfParser.N3} - N3.
  * </ul>
- *
- * <h5 class='section'>Additional information:</h5>
  * 
- * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.jena &gt; RDF Overview</a>
+ * </ul>
  */
 public class RdfParser extends ReaderParser implements RdfCommon {
 

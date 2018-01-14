@@ -19,7 +19,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomLink</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomLink =
@@ -34,7 +34,7 @@ import org.apache.juneau.xml.annotation.*;
  * 			undefinedContent
  * 		}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -63,7 +63,7 @@ public class Link extends Common {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param rel The rel of the link.
 	 * @param type The type of the link.
 	 * @param href The URI of the link.
@@ -82,7 +82,7 @@ public class Link extends Common {
 
 	/**
 	 * Returns the href of the target of this link.
-	 *
+	 * 
 	 * @return The href of the target of this link.
 	 */
 	@Xml(format=ATTR)
@@ -92,7 +92,7 @@ public class Link extends Common {
 
 	/**
 	 * Sets the href of the target of this link.
-	 *
+	 * 
 	 * @param href The href of the target of this link.
 	 * @return This object (for method chaining).
 	 */
@@ -104,7 +104,7 @@ public class Link extends Common {
 
 	/**
 	 * Returns the rel of this link.
-	 *
+	 * 
 	 * @return The rel of this link.
 	 */
 	@Xml(format=ATTR)
@@ -114,7 +114,7 @@ public class Link extends Common {
 
 	/**
 	 * Sets the rel of this link.
-	 *
+	 * 
 	 * @param rel The rel of this link.
 	 * @return This object (for method chaining).
 	 */
@@ -126,7 +126,7 @@ public class Link extends Common {
 
 	/**
 	 * Returns the content type of the target of this link.
-	 *
+	 * 
 	 * @return The content type of the target of this link.
 	 */
 	@Xml(format=ATTR)
@@ -136,7 +136,7 @@ public class Link extends Common {
 
 	/**
 	 * Sets the content type of the target of this link.
-	 *
+	 * 
 	 * <p>
 	 * Must be one of the following:
 	 * <ul>
@@ -145,7 +145,7 @@ public class Link extends Common {
 	 * 	<li><js>"xhtml"</js>
 	 * 	<li><jk>null</jk> (defaults to <js>"text"</js>)
 	 * </ul>
-	 *
+	 * 
 	 * @param type The content type of the target of this link.
 	 * @return This object (for method chaining).
 	 */
@@ -157,7 +157,7 @@ public class Link extends Common {
 
 	/**
 	 * Returns the language of the target of this link.
-	 *
+	 * 
 	 * @return The language of the target of this link.
 	 */
 	@Xml(format=ATTR)
@@ -167,7 +167,7 @@ public class Link extends Common {
 
 	/**
 	 * Sets the language of the target of this link.
-	 *
+	 * 
 	 * @param hreflang The language of the target of this link.
 	 * @return This object (for method chaining).
 	 */
@@ -179,7 +179,7 @@ public class Link extends Common {
 
 	/**
 	 * Returns the title of the target of this link.
-	 *
+	 * 
 	 * @return The title of the target of this link.
 	 */
 	@Xml(format=ATTR)
@@ -189,7 +189,7 @@ public class Link extends Common {
 
 	/**
 	 * Sets the title of the target of this link.
-	 *
+	 * 
 	 * @param title The title of the target of this link.
 	 * @return This object (for method chaining).
 	 */
@@ -201,7 +201,7 @@ public class Link extends Common {
 
 	/**
 	 * Returns the length of the contents of the target of this link.
-	 *
+	 * 
 	 * @return The length of the contents of the target of this link.
 	 */
 	@Xml(format=ATTR)
@@ -211,7 +211,7 @@ public class Link extends Common {
 
 	/**
 	 * Sets the length of the contents of the target of this link.
-	 *
+	 * 
 	 * @param length The length of the contents of the target of this link.
 	 * @return This object (for method chaining).
 	 */

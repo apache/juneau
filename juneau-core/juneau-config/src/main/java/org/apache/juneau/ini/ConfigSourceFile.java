@@ -29,7 +29,7 @@ public class ConfigSourceFile extends ConfigSource {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param settings
 	 * 	The settings for this config source.
 	 */

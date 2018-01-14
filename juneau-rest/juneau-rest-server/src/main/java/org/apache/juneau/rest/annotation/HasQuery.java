@@ -22,13 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
  * URL-encoded form posts.
- *
+ * 
  * <p>
  * Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
  * of URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
  * {@link RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
@@ -36,7 +36,7 @@ import org.apache.juneau.rest.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -60,7 +60,7 @@ public @interface HasQuery {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 *
+	 * 
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Contains information about the matched path on the HTTP request.
- *
+ * 
  * <p>
  * Provides access to the matched path variables and path match remainder.
  */
@@ -56,7 +56,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Sets a request query parameter value.
-	 *
+	 * 
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 */
@@ -66,29 +66,29 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Returns the specified path parameter converted to a POJO.
-	 *
+	 * 
 	 * <p>
 	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
 	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
 	 * 	<jk>int</jk> myparam = req.getPathParameter(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into an int array.</jc>
 	 * 	<jk>int</jk>[] myparam = req.getPathParameter(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean myparam = req.getPathParameter(<js>"myparam"</js>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param name The attribute name.
 	 * @param type The class type to convert the attribute value to.
 	 * @param <T> The class type to convert the attribute value to.
@@ -101,29 +101,29 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Returns the specified path parameter converted to a POJO.
-	 *
+	 * 
 	 * <p>
 	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
 	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
-	 *
+	 * 
 	 * <p>
 	 * Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List&lt;List&lt;String&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param name The attribute name.
 	 * @param type
 	 * 	The type of object to create.
@@ -155,7 +155,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Returns the decoded remainder of the URL following any path pattern matches.
-	 *
+	 * 
 	 * <p>
 	 * The behavior of path remainder is shown below given the path pattern "/foo/*":
 	 * <table class='styled'>
@@ -192,7 +192,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 		<td><js>"a/b"</js></td>
 	 * 	</tr>
 	 * </table>
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// REST method</jc>
@@ -200,11 +200,11 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 	<jk>public</jk> String doGetById(RequestPathParams pathParams, <jk>int</jk> bar) {
 	 * 		<jk>return</jk> pathParams.getRemainder();
 	 * 	}
-	 *
+	 * 
 	 * 	<jc>// Prints "path/remainder"</jc>
 	 * 	<jk>new</jk> RestCall(servletPath + <js>"/foo/123/path/remainder"</js>).connect();
 	 * </p>
-	 *
+	 * 
 	 * @return The path remainder string.
 	 */
 	public String getRemainder() {
@@ -213,7 +213,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Same as {@link #getRemainder()} but doesn't decode characters.
-	 *
+	 * 
 	 * @return The un-decoded path remainder.
 	 */
 	public String getRemainderUndecoded() {

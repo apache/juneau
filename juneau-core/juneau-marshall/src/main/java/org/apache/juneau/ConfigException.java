@@ -22,7 +22,7 @@ public class ConfigException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param message The error message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

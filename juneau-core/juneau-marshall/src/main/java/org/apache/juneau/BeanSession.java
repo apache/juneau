@@ -30,7 +30,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Serializer} or {@link Parser}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -46,7 +46,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -76,7 +76,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns the locale defined on this session.
-	 *
+	 * 
 	 * <p>
 	 * The locale is determined in the following order:
 	 * <ol>
@@ -85,7 +85,7 @@ public class BeanSession extends Session {
 	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
 	 * 	<li>Locale returned by {@link Locale#getDefault()}.
 	 * </ol>
-	 *
+	 * 
 	 * @return The session locale.
 	 */
 	public final Locale getLocale() {
@@ -94,7 +94,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns the timezone defined on this session.
-	 *
+	 * 
 	 * <p>
 	 * The timezone is determined in the following order:
 	 * <ol>
@@ -102,7 +102,7 @@ public class BeanSession extends Session {
 	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
 	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
 	 * </ol>
-	 *
+	 * 
 	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
 	 */
 	public final TimeZone getTimeZone() {
@@ -111,7 +111,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns the {@link BeanContext#BEAN_debug} setting value for this session.
-	 *
+	 * 
 	 * @return The {@link BeanContext#BEAN_debug} setting value for this session.
 	 */
 	public final boolean isDebug() {
@@ -120,10 +120,10 @@ public class BeanSession extends Session {
 
 	/**
 	 * Bean property getter:  <property>ignoreUnknownBeanProperties</property>.
-	 *
+	 * 
 	 * <p>
 	 * See {@link BeanContext#BEAN_ignoreUnknownBeanProperties}.
-	 *
+	 * 
 	 * @return The value of the <property>ignoreUnknownBeanProperties</property> property on this bean.
 	 */
 	public final boolean isIgnoreUnknownBeanProperties() {
@@ -132,10 +132,10 @@ public class BeanSession extends Session {
 
 	/**
 	 * Converts the specified value to the specified class type.
-	 *
+	 * 
 	 * <p>
 	 * See {@link #convertToType(Object, ClassMeta)} for the list of valid conversions.
-	 *
+	 * 
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
 	 * @param type The class type to convert the value to.
@@ -152,7 +152,7 @@ public class BeanSession extends Session {
 	/**
 	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
 	 * be instantiated within another class instance.
-	 *
+	 * 
 	 * @param <T> The class type to convert the value to.
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
@@ -168,10 +168,10 @@ public class BeanSession extends Session {
 
 	/**
 	 * Casts the specified value into the specified type.
-	 *
+	 * 
 	 * <p>
 	 * If the value isn't an instance of the specified type, then converts the value if possible.
-	 *
+	 * 
 	 * <p>
 	 * The following conversions are valid:
 	 * <table class='styled'>
@@ -294,7 +294,7 @@ public class BeanSession extends Session {
 	 * 		</td>
 	 * 	</tr>
 	 * </table>
-	 *
+	 * 
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to be converted.
 	 * @param type The target object type.
@@ -307,7 +307,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Same as {@link #convertToType(Object, Class)}, but allows for complex data types consisting of collections or maps.
-	 *
+	 * 
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to be converted.
 	 * @param type The target object type.
@@ -322,7 +322,7 @@ public class BeanSession extends Session {
 	/**
 	 * Same as {@link #convertToType(Object, ClassMeta)}, except used for instantiating inner member classes that must
 	 * be instantiated within another class instance.
-	 *
+	 * 
 	 * @param <T> The class type to convert the value to.
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
@@ -645,15 +645,15 @@ public class BeanSession extends Session {
 
 	/**
 	 * Converts the contents of the specified list into an array.
-	 *
+	 * 
 	 * <p>
 	 * Works on both object and primitive arrays.
-	 *
+	 * 
 	 * <p>
 	 * In the case of multi-dimensional arrays, the incoming list must contain elements of type n-1 dimension.
 	 * i.e. if {@code type} is <code><jk>int</jk>[][]</code> then {@code list} must have entries of type
 	 * <code><jk>int</jk>[]</code>.
-	 *
+	 * 
 	 * @param type The type to convert to.  Must be an array type.
 	 * @param list The contents to populate the array with.
 	 * @return A new object or primitive array.
@@ -685,17 +685,17 @@ public class BeanSession extends Session {
 
 	/**
 	 * Wraps an object inside a {@link BeanMap} object (i.e. a modifiable {@link Map}).
-	 *
+	 * 
 	 * <p>
 	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
 	 * bean.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
 	 * </p>
-	 *
+	 * 
 	 * @param <T> The class of the object being wrapped.
 	 * @param o The object to wrap in a map interface.  Must not be null.
 	 * @return The wrapped object.
@@ -706,7 +706,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Determines whether the specified object matches the requirements on this context of being a bean.
-	 *
+	 * 
 	 * @param o The object being tested.
 	 * @return <jk>true</jk> if the specified object is considered a bean.
 	 */
@@ -718,7 +718,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Determines whether the specified class matches the requirements on this context of being a bean.
-	 *
+	 * 
 	 * @param c The class being tested.
 	 * @return <jk>true</jk> if the specified class is considered a bean.
 	 */
@@ -729,19 +729,19 @@ public class BeanSession extends Session {
 	/**
 	 * Wraps an object inside a {@link BeanMap} object (i.e.: a modifiable {@link Map}) defined as a bean for one of its
 	 * class, a super class, or an implemented interface.
-	 *
+	 * 
 	 * <p>
 	 * If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
 	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
 	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param <T> The class of the object being wrapped.
 	 * @param o The object to wrap in a bean interface.  Must not be null.
 	 * @param c The superclass to narrow the bean properties to.  Must not be null.
@@ -770,17 +770,17 @@ public class BeanSession extends Session {
 	/**
 	 * Creates a new {@link BeanMap} object (i.e. a modifiable {@link Map}) of the given class with uninitialized
 	 * property values.
-	 *
+	 * 
 	 * <p>
 	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
 	 * bean.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
 	 * @return A new instance of the class.
@@ -792,7 +792,7 @@ public class BeanSession extends Session {
 	/**
 	 * Same as {@link #newBeanMap(Class)}, except used for instantiating inner member classes that must be instantiated
 	 * within another class instance.
-	 *
+	 * 
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
 	 * @param outer
@@ -813,13 +813,13 @@ public class BeanSession extends Session {
 	/**
 	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
 	 * be instantiated within another class instance.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a new instance of the specified bean class</jc>
 	 * 	Person p = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param <T> The class type of the bean being created.
 	 * @param c The class type of the bean being created.
 	 * @return A new bean object.
@@ -832,7 +832,7 @@ public class BeanSession extends Session {
 	/**
 	 * Same as {@link #newBean(Class)}, except used for instantiating inner member classes that must be instantiated
 	 * within another class instance.
-	 *
+	 * 
 	 * @param <T> The class type of the bean being created.
 	 * @param c The class type of the bean being created.
 	 * @param outer
@@ -860,7 +860,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns the {@link BeanMeta} class for the specified class.
-	 *
+	 * 
 	 * @param <T> The class type to get the meta-data on.
 	 * @param c The class to get the meta-data on.
 	 * @return
@@ -875,7 +875,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns a {@code ClassMeta} wrapper around a {@link Class} object.
-	 *
+	 * 
 	 * @param <T> The class type being wrapped.
 	 * @param c The class being wrapped.
 	 * @return The class meta object containing information about the class.
@@ -887,18 +887,18 @@ public class BeanSession extends Session {
 	/**
 	 * Used to resolve <code>ClassMetas</code> of type <code>Collection</code> and <code>Map</code> that have
 	 * <code>ClassMeta</code> values that themselves could be collections or maps.
-	 *
+	 * 
 	 * <p>
 	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the
 	 * element type.
-	 *
+	 * 
 	 * <p>
 	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value
 	 * types.
-	 *
+	 * 
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
 	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
@@ -914,7 +914,7 @@ public class BeanSession extends Session {
 	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> -
 	 * 		A map containing string keys and values of lists containing beans.
 	 * </ul>
-	 *
+	 * 
 	 * @param type
 	 * 	The class to resolve.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
@@ -932,10 +932,10 @@ public class BeanSession extends Session {
 
 	/**
 	 * Given an array of {@link Type} objects, returns a {@link ClassMeta} representing those arguments.
-	 *
+	 * 
 	 * <p>
 	 * Constructs a new meta on each call.
-	 *
+	 * 
 	 * @param classes The array of classes to get class metas for.
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
@@ -949,7 +949,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
-	 *
+	 * 
 	 * @param <T> The class of the object being passed in.
 	 * @param o The class to find the class type for.
 	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
@@ -962,7 +962,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns the type property name as defined by {@link BeanContext#BEAN_beanTypePropertyName}.
-	 *
+	 * 
 	 * @param cm
 	 * 	The class meta of the type we're trying to resolve the type name for.
 	 * 	Can be <jk>null</jk>.
@@ -975,7 +975,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns the bean registry defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
-	 *
+	 * 
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
 	public final BeanRegistry getBeanRegistry() {
@@ -984,7 +984,7 @@ public class BeanSession extends Session {
 	
 	/**
 	 * Creates an instance of the specified class.
-	 *
+	 * 
 	 * @param c 
 	 * 	The class to cast to.
 	 * @param c2
@@ -1001,7 +1001,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Creates an instance of the specified class.
-	 *
+	 * 
 	 * @param c 
 	 * 	The class to cast to.
 	 * @param c2
@@ -1050,10 +1050,10 @@ public class BeanSession extends Session {
 	
 	/**
 	 * Creates a reusable {@link StringBuilder} object from an internal pool.
-	 *
+	 * 
 	 * <p>
 	 * String builders are returned to the pool by calling {@link #returnStringBuilder(StringBuilder)}.
-	 *
+	 * 
 	 * @return A new or previously returned string builder.
 	 */
 	public final StringBuilder getStringBuilder() {
@@ -1064,7 +1064,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns a {@link StringBuilder} object back into the internal reuse pool.
-	 *
+	 * 
 	 * @param sb The string builder to return to the pool.  No-op if <jk>null</jk>.
 	 */
 	public final void returnStringBuilder(StringBuilder sb) {
@@ -1076,14 +1076,14 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <code>Object</code>.
-	 *
+	 * 
 	 * <p>
 	 * This <code>ClassMeta</code> is often used to represent "any object type" when an object type is not known.
-	 *
+	 * 
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
-	 *
+	 * 
 	 * @return The {@link ClassMeta} object associated with the <code>Object</code> class.
 	 */
 	public final ClassMeta<Object> object() {
@@ -1092,14 +1092,14 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <code>String</code>.
-	 *
+	 * 
 	 * <p>
 	 * This <code>ClassMeta</code> is often used to represent key types in maps.
-	 *
+	 * 
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
-	 *
+	 * 
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
 	public final ClassMeta<String> string() {
@@ -1108,14 +1108,14 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <code>Class</code>.
-	 *
+	 * 
 	 * <p>
 	 * This <code>ClassMeta</code> is often used to represent key types in maps.
-	 *
+	 * 
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
-	 *
+	 * 
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
 	public final ClassMeta<Class> _class() {
@@ -1124,10 +1124,10 @@ public class BeanSession extends Session {
 
 	/**
 	 * Returns the media type specified for this session.
-	 *
+	 * 
 	 * <p>
 	 * For example, <js>"application/json"</js>.
-	 *
+	 * 
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
 	public final MediaType getMediaType() {

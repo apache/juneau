@@ -16,17 +16,17 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Interface for the resolution of vars that consist of a comma-delimited list.
- *
+ * 
  * <p>
  * (e.g. <js>"$X{foo, bar, baz}"</js>)
- *
+ * 
  * @see org.apache.juneau.svl
  */
 public abstract class MultipartVar extends SimpleVar {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The name of this variable.
 	 */
 	public MultipartVar(String name) {
@@ -35,7 +35,7 @@ public abstract class MultipartVar extends SimpleVar {
 
 	/**
 	 * The interface that needs to be implemented for this interface.
-	 *
+	 * 
 	 * @param session The session object used for a single instance of a string resolution.
 	 * @param args The arguments inside the variable.
 	 * @return The resolved variable.

@@ -28,7 +28,7 @@ public class VarResolverBuilder {
 
 	/**
 	 * Create a new var resolver using the settings in this builder.
-	 *
+	 * 
 	 * @return A new var resolver.
 	 */
 	public VarResolver build() {
@@ -37,7 +37,7 @@ public class VarResolverBuilder {
 
 	/**
 	 * Register new variables with this resolver.
-	 *
+	 * 
 	 * @param vars
 	 * 	The variable resolver classes.
 	 * 	These classes must subclass from {@link Var} and have no-arg constructors.
@@ -54,7 +54,7 @@ public class VarResolverBuilder {
 
 	/**
 	 * Adds the default variables to this builder.
-	 *
+	 * 
 	 * <p>
 	 * The default variables are:
 	 * <ul>
@@ -63,7 +63,7 @@ public class VarResolverBuilder {
 	 * 	<li>{@link SwitchVar}
 	 * 	<li>{@link IfVar}
 	 * </ul>
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public VarResolverBuilder defaultVars() {
@@ -72,11 +72,11 @@ public class VarResolverBuilder {
 
 	/**
 	 * Associates a context object with this resolver.
-	 *
+	 * 
 	 * <p>
 	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
 	 * output.
-	 *
+	 * 
 	 * @param name The name of the context object.
 	 * @param object The context object.
 	 * @return This object (for method chaining).
@@ -88,11 +88,11 @@ public class VarResolverBuilder {
 
 	/**
 	 * Associates multiple context objects with this resolver.
-	 *
+	 * 
 	 * <p>
 	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
 	 * output.
-	 *
+	 * 
 	 * @param map A map of context objects keyed by their name.
 	 * @return This object (for method chaining).
 	 */

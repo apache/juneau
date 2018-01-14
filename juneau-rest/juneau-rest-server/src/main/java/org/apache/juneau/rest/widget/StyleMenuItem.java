@@ -20,10 +20,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in the various default styles.
- *
+ * 
  * <p>
  * The variable it resolves is <js>"$W{StyleMenuItem}"</js>.
- *
+ * 
  * <p>
  * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
  * a drop-down menu item for rendering all other supported content types in plain text:

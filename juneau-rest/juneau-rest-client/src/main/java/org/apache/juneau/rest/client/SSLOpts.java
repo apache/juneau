@@ -40,7 +40,7 @@ public class SSLOpts {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param protocols
 	 * 	A comma-delimited list of supported SSL protocols.
 	 * 	If <jk>null</jk>, uses the value returned by {@link #getDefaultProtocols()}.
@@ -57,16 +57,16 @@ public class SSLOpts {
 	/**
 	 * Returns the default list of SSL protocols to support when the <code>protocols</code> parameter on the constructor
 	 * is <jk>null</jk>.
-	 *
+	 * 
 	 * <p>
 	 * The default value is <jk>"SSL_TLS,TLS,SSL"</js> unless overridden by one of the following system properties:
 	 * <ul>
 	 * 	<li><js>"transport.client.protocol"</js>
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own logic for determining default supported protocols.
-	 *
+	 * 
 	 * @return The comma-delimited list of supported protocols.
 	 */
 	protected String getDefaultProtocols() {
@@ -83,7 +83,7 @@ public class SSLOpts {
 
 	/**
 	 * Bean property getter:  <property>protocols</property>.
-	 *
+	 * 
 	 * @return The value of the <property>protocols</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getProtocols() {
@@ -92,7 +92,7 @@ public class SSLOpts {
 
 	/**
 	 * Bean property setter:  <property>protocols</property>.
-	 *
+	 * 
 	 * @param protocols The new value for the <property>protocols</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -103,7 +103,7 @@ public class SSLOpts {
 
 	/**
 	 * Bean property getter:  <property>certValidate</property>.
-	 *
+	 * 
 	 * @return The value of the <property>certValidate</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public CertValidate getCertValidate() {
@@ -112,7 +112,7 @@ public class SSLOpts {
 
 	/**
 	 * Bean property setter:  <property>certValidate</property>.
-	 *
+	 * 
 	 * @param certValidate The new value for the <property>certValidate</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -123,7 +123,7 @@ public class SSLOpts {
 
 	/**
 	 * Bean property getter:  <property>hostVerify</property>.
-	 *
+	 * 
 	 * @return The value of the <property>hostVerify</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public HostVerify getHostVerify() {
@@ -132,7 +132,7 @@ public class SSLOpts {
 
 	/**
 	 * Bean property setter:  <property>hostVerify</property>.
-	 *
+	 * 
 	 * @param hostVerify The new value for the <property>hostVerify</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -148,7 +148,7 @@ public class SSLOpts {
 
 	/**
 	 * Certificate validation options.
-	 *
+	 * 
 	 * <p>
 	 * Used as enum for {@link SSLOpts#getCertValidate()} property.
 	 */
@@ -167,7 +167,7 @@ public class SSLOpts {
 
 	/**
 	 * Certificate host verification options.
-	 *
+	 * 
 	 * <p>
 	 * Used as enum for {@link SSLOpts#getHostVerify()} property.
 	 */

@@ -28,16 +28,17 @@ import org.apache.juneau.utils.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
- *
- * <h5 class='section'>Description:</h5>
- *
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
  * 	is present on the class, or the class has a {@link BeanFilter} registered with it in the bean context,
  * 	then that information is used to determine the properties on the class.
  * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
- *
+ * 
  * <h6 class='topic'>Bean property ordering</h6>
- *
+ * 
  * The order of the properties are as follows:
  * <ul class='spaced-list'>
  * 	<li>
@@ -51,10 +52,10 @@ import org.apache.juneau.utils.*;
  * 			<li>Non-standard getters/setters with {@link BeanProperty @BeanProperty} annotation defined on them.
  * 		</ul>
  * </ul>
- *
+ * 
  * <p>
  * The order can also be overridden through the use of an {@link BeanFilter}.
- *
+ * 
  * @param <T> The class type that this metadata applies to.
  */
 public class BeanMeta<T> {
@@ -102,7 +103,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param classMeta The target class.
 	 * @param ctx The bean context that created this object.
 	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
@@ -456,7 +457,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the {@link ClassMeta} of this bean.
-	 *
+	 * 
 	 * @return The {@link ClassMeta} of this bean.
 	 */
 	@BeanIgnore
@@ -466,7 +467,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean.typeName()} annotation.
-	 *
+	 * 
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */
 	public final String getDictionaryName() {
@@ -476,7 +477,7 @@ public class BeanMeta<T> {
 	/**
 	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
 	 * dictionary name of the bean.
-	 *
+	 * 
 	 * @return The type name property.
 	 */
 	public final BeanPropertyMeta getTypeProperty() {
@@ -546,7 +547,7 @@ public class BeanMeta<T> {
 
 	/*
 	 * Find all the bean methods on this class.
-	 *
+	 * 
 	 * @param c The transformed class.
 	 * @param stopClass Don't look above this class in the hierarchy.
 	 * @param v The minimum method visibility.
@@ -652,7 +653,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the metadata on all properties associated with this bean.
-	 *
+	 * 
 	 * @return Metadata on all properties associated with this bean.
 	 */
 	public Collection<BeanPropertyMeta> getPropertyMetas() {
@@ -661,7 +662,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the metadata on the specified list of properties.
-	 *
+	 * 
 	 * @param pNames The list of properties to retrieve.  If <jk>null</jk>, returns all properties.
 	 * @return The metadata on the specified list of properties.
 	 */
@@ -676,7 +677,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the language-specified extended metadata on this bean class.
-	 *
+	 * 
 	 * @param metaDataClass The name of the metadata class to create.
 	 * @return Extended metadata on this bean class.  Never <jk>null</jk>.
 	 */
@@ -686,7 +687,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns metadata about the specified property.
-	 *
+	 * 
 	 * @param name The name of the property on this bean.
 	 * @return The metadata about the property, or <jk>null</jk> if no such property exists on this bean.
 	 */
@@ -699,7 +700,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Creates a new instance of this bean.
-	 *
+	 * 
 	 * @param outer The outer object if bean class is a non-static inner member class.
 	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
 	 * @throws IllegalArgumentException Thrown by constructor.
@@ -727,7 +728,7 @@ public class BeanMeta<T> {
 	/**
 	 * Recursively determines the classes represented by parameterized types in the class hierarchy of the specified
 	 * type, and puts the results in the specified map.
-	 *
+	 * 
 	 * <p>
 	 * For example, given the following classes...
 	 * <p class='bcode'>
@@ -742,18 +743,18 @@ public class BeanMeta<T> {
 	 * <p class='bcode'>
 	 * 	{BeanA.class:[Integer.class]}
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * TODO:  This code doesn't currently properly handle the following situation:
 	 * <p class='bcode'>
 	 * 	public static class BeanB&lt;T extends Number&gt; extends BeanA&lt;T&gt;;
 	 * 	public static class BeanC extends BeanB&lt;Integer&gt;;
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.
 	 * If anyone can figure out a better way of doing this, please do so!
-	 *
+	 * 
 	 * @param t The type we're recursing.
 	 * @param m Where the results are loaded.
 	 */

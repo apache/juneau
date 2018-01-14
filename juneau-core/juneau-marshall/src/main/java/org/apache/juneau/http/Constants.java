@@ -14,7 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Constants used by classes in this package.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>

@@ -26,7 +26,7 @@ public class HtmlWriter extends XmlWriter {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
 	 * @param maxIndent The maximum indentation level.
@@ -41,7 +41,7 @@ public class HtmlWriter extends XmlWriter {
 
 	/**
 	 * Append an attribute with a URI value.
-	 *
+	 * 
 	 * @param name The attribute name.
 	 * @param value The attribute value.  Can be any object whose <code>toString()</code> method returns a URI.
 	 * @return This object (for method chaining);

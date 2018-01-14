@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
@@ -30,7 +30,7 @@ import org.apache.juneau.annotation.*;
  * 		<js>"url"</js>: <js>"https://swagger.io"</js>
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -54,10 +54,10 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description of the target documentation. GFM syntax can be used for rich text representation.
-	 *
+	 * 
 	 * @return
 	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -67,10 +67,10 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description of the target documentation. GFM syntax can be used for rich text representation.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -81,7 +81,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setDescription(String)}.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -91,17 +91,17 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>url</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. The URL for the target documentation.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public URI getUrl() {
@@ -110,14 +110,14 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>url</property>.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -128,7 +128,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setUrl(Object)}.
-	 *
+	 * 
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */

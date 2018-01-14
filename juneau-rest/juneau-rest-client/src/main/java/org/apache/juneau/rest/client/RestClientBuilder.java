@@ -95,19 +95,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Creates an instance of an {@link HttpClient} to be used to handle all HTTP communications with the target server.
-	 *
+	 * 
 	 * <p>
 	 * This HTTP client is used when the HTTP client is not specified through one of the constructors or the
 	 * {@link #httpClient(CloseableHttpClient, boolean)} method.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide specially-configured HTTP clients to handle stuff such as
 	 * SSL/TLS certificate handling, authentication, etc.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns an instance of {@link HttpClient} using the client builder returned by
 	 * {@link #createHttpClientBuilder()}.
-	 *
+	 * 
 	 * @return The HTTP client to use.
 	 * @throws Exception
 	 */
@@ -120,17 +120,17 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own client builder.
-	 *
+	 * 
 	 * <p>
 	 * The predefined method returns an {@link HttpClientBuilder} with the following settings:
 	 * <ul>
 	 * 	<li>Lax redirect strategy.
 	 * 	<li>The connection manager returned by {@link #createConnectionManager()}.
 	 * </ul>
-	 *
+	 * 
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 */
 	protected HttpClientBuilder createHttpClientBuilder() {
@@ -141,13 +141,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Creates the {@link HttpClientConnectionManager} returned by {@link #createConnectionManager()}.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own connection manager.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager}.
-	 *
+	 * 
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 */
 	@SuppressWarnings("resource")
@@ -186,7 +186,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Enable SSL support on this client.
-	 *
+	 * 
 	 * @param opts
 	 * 	The SSL configuration options.
 	 * 	See {@link SSLOpts} for details.
@@ -202,10 +202,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Enable LAX SSL support.
-	 *
+	 * 
 	 * <p>
 	 * Certificate chain validation and hostname verification is disabled.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
@@ -216,7 +216,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
-	 *
+	 * 
 	 * @param version The version string (e.g. <js>"1.2.3"</js>)
 	 * @return This object (for method chaining).
 	 */
@@ -226,7 +226,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
-	 *
+	 * 
 	 * @param level The log level to log messages at.
 	 * @param log The logger to log messages to.
 	 * @return This object (for method chaining).
@@ -238,7 +238,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * When called, the {@link #createConnectionManager()} method will return a {@link PoolingHttpClientConnectionManager}
 	 * instead of a {@link BasicHttpClientConnectionManager}.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder pooled() {
@@ -248,7 +248,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Set up this client to use BASIC auth.
-	 *
+	 * 
 	 * @param host The auth scope hostname.
 	 * @param port The auth scope port.
 	 * @param user The username.
@@ -266,7 +266,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the internal {@link HttpClient} to use for handling HTTP communications.
-	 *
+	 * 
 	 * @param httpClient The HTTP client.
 	 * @param keepHttpClientOpen Don't close this client when the {@link RestClient#close()} method is called.
 	 * @return This object (for method chaining).
@@ -284,11 +284,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This overrides the media type specified on the parser, but is overridden by calling
 	 * <code>header(<js>"Accept"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -298,10 +298,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept-Charset</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -311,10 +311,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept-Encoding</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -324,10 +324,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept-Language</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -337,10 +337,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Authorization</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -350,10 +350,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Cache-Control</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -363,10 +363,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Connection</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -376,10 +376,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Content-Length</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -389,11 +389,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Content-Type</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This overrides the media type specified on the serializer, but is overridden by calling
 	 * <code>header(<js>"Content-Type"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -403,10 +403,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Date</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -416,10 +416,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Expect</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -429,10 +429,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Forwarded</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -442,10 +442,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>From</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -455,10 +455,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Host</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -468,10 +468,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Match</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -481,10 +481,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Modified-Since</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -494,10 +494,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>If-None-Match</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -507,10 +507,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Range</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -520,10 +520,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Unmodified-Since</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -533,10 +533,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Max-Forwards</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -546,12 +546,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * When called, <code>No-Trace: true</code> is added to requests.
-	 *
+	 * 
 	 * <p>
 	 * This gives the opportunity for the servlet to not log errors on invalid requests.
 	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
 	 * results of testing.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder noTrace() {
@@ -560,10 +560,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Origin</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -573,10 +573,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Pragma</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -586,10 +586,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Proxy-Authorization</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -599,10 +599,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Range</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -612,10 +612,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Referer</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -625,10 +625,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>TE</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -638,10 +638,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>User-Agent</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -651,10 +651,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Upgrade</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -664,10 +664,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Via</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -677,10 +677,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the value for the <code>Warning</code> request header.
-	 *
+	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
-	 *
+	 * 
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
@@ -698,7 +698,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
-	 *
+	 * 
 	 * <p>
 	 * This executor service is used to create {@link Future} objects on the following methods:
 	 * <ul>
@@ -707,11 +707,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
 	 * 	<li>{@link RestCall#getResponseAsString()}
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
 	 * and a queue size of 10.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorService}
@@ -730,7 +730,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Request headers.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
@@ -746,10 +746,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Keep HttpClient open.
-	 *
+	 * 
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
@@ -769,7 +769,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Adds an interceptor that gets called immediately after a connection is made.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
@@ -787,7 +787,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * The parser to use for parsing POJOs in response bodies.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
@@ -807,7 +807,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Same as {@link #parser(Parser)} except takes in a parser instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
@@ -824,10 +824,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Part serializer.
-	 *
+	 * 
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
@@ -844,10 +844,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Part serializer.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #partSerializer(Class)} but takes in a parser instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
@@ -864,7 +864,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Make HTTP calls retryable if an error response (>=400) is received.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_retries}
@@ -888,12 +888,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Root URI.
-	 *
+	 * 
 	 * <p>
 	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
 	 * will be prefixed with the specified root.
 	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_rootUri}
@@ -911,7 +911,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Request query parameters.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_query}
@@ -927,10 +927,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Serializer.
-	 *
+	 * 
 	 * <p>
 	 * The serializer to use for serializing POJOs in request bodies.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
@@ -947,10 +947,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Serializer.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link #serializer(Class)} but takes in a serializer instance.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
@@ -967,11 +967,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Abridged output.
-	 *
+	 * 
 	 * <p>
 	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
@@ -988,10 +988,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Abridged output.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>abridged(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
@@ -1005,11 +1005,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
@@ -1026,15 +1026,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
-	 *
+	 * 
 	 * <p>
 	 * Specifies that recursions should be checked for during serialization.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
@@ -1051,10 +1051,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
@@ -1068,16 +1068,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore recursion errors.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * Otherwise, an exception is thrown.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
@@ -1094,10 +1094,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore recursion errors.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
@@ -1111,10 +1111,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Initial depth.
-	 *
+	 * 
 	 * <p>
 	 * The initial indentation level at the root.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
@@ -1131,10 +1131,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Serializer listener.
-	 *
+	 * 
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
@@ -1150,12 +1150,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Max serialization depth.
-	 *
+	 * 
 	 * <p>
 	 * Abort serialization if specified depth is reached in the POJO tree.
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
@@ -1172,10 +1172,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Maximum indentation.
-	 *
+	 * 
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
@@ -1192,10 +1192,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Quote character.
-	 *
+	 * 
 	 * <p>
 	 * This is the character used for quoting attributes and values.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
@@ -1215,7 +1215,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
@@ -1229,10 +1229,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
-	 *
+	 * 
 	 * <p>
 	 * Copies and sorts the contents of arrays and collections before serializing them.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
@@ -1252,7 +1252,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
@@ -1266,10 +1266,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
-	 *
+	 * 
 	 * <p>
 	 * Copies and sorts the contents of maps before serializing them.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
@@ -1287,7 +1287,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
@@ -1301,10 +1301,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
@@ -1321,10 +1321,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
@@ -1338,10 +1338,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim empty maps.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
@@ -1358,10 +1358,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim empty maps.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
@@ -1375,10 +1375,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim null bean property values.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
@@ -1395,10 +1395,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim strings.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
@@ -1415,10 +1415,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim strings.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
@@ -1432,10 +1432,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  URI context bean.
-	 *
+	 * 
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
@@ -1450,10 +1450,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  URI relativity.
-	 *
+	 * 
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing URI/URL objects.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
@@ -1470,10 +1470,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  URI resolution.
-	 *
+	 * 
 	 * <p>
 	 * Defines the resolution level for URIs when serializing URI/URL objects.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
@@ -1490,10 +1490,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Use whitespace.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
@@ -1510,7 +1510,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	
 	/**
 	 * Configuration property:  Use whitespace.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 * 
@@ -1526,10 +1526,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Use whitespace.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
@@ -1543,10 +1543,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  File charset.
-	 *
+	 * 
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
@@ -1563,10 +1563,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Input stream charset.
-	 *
+	 * 
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
@@ -1583,10 +1583,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Parser listener.
-	 *
+	 * 
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
@@ -1601,10 +1601,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -1624,7 +1624,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -1638,11 +1638,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
@@ -1659,10 +1659,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
@@ -1676,7 +1676,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * TODO
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
@@ -1691,7 +1691,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * TODO
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}

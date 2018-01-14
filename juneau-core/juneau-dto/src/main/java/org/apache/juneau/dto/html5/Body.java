@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="body")
@@ -36,7 +36,7 @@ public class Body extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a>
 	 * attribute.
-	 *
+	 * 
 	 * @param onafterprint The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -48,7 +48,7 @@ public class Body extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a>
 	 * attribute.
-	 *
+	 * 
 	 * @param onbeforeunload The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -60,7 +60,7 @@ public class Body extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a>
 	 * attribute.
-	 *
+	 * 
 	 * @param onmessage The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -72,7 +72,7 @@ public class Body extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a>
 	 * attribute.
-	 *
+	 * 
 	 * @param ononline The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -84,7 +84,7 @@ public class Body extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a>
 	 * attribute.
-	 *
+	 * 
 	 * @param onpageshow The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -96,7 +96,7 @@ public class Body extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a>
 	 * attribute.
-	 *
+	 * 
 	 * @param onstorage The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

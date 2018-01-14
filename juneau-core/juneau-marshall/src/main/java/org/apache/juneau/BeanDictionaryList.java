@@ -18,7 +18,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents a collection of bean classes that make up a bean dictionary.
- *
+ * 
  * <p>
  * The classes in the list must be one of the following:
  * <ul>
@@ -44,7 +44,7 @@ import org.apache.juneau.annotation.*;
  * 		.beanDictionary(MyBeanDictionaryList.<jk>class</jk>)
  * 		.build();
  * </p>
- *
+ * 
  * <p>
  * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
  */
@@ -53,7 +53,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param c
 	 * 	The list of bean classes to add to this dictionary.
 	 * 	Classes must either specify a {@link Bean#typeName() @Bean.typeName()} value or be another subclass of
@@ -65,7 +65,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 
 	/**
 	 * Append one or more bean classes to this bean dictionary.
-	 *
+	 * 
 	 * @param c
 	 * 	The list of bean classes to add to this dictionary.
 	 * 	Classes must either specify a {@link Bean#typeName() @Bean.typeName()} value or be another subclass of

@@ -32,7 +32,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public ContextBuilder(PropertyStore ps) {
@@ -66,7 +66,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Build the object.
-	 *
+	 * 
 	 * @return The built object.
 	 * Subsequent calls to this method will create new instances.
 	 */
@@ -74,7 +74,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Copies the settings from the specified property store into this builder.
-	 *
+	 * 
 	 * @param copyFrom The factory whose settings are being copied.
 	 * @return This object (for method chaining).
 	 */
@@ -85,7 +85,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Build a new instance of the specified object.
-	 *
+	 * 
 	 * @param c The subclass of {@link Context} to instantiate.
 	 * @return A new object using the settings defined in this builder.
 	 */
@@ -109,7 +109,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Sets a configuration property on this object.
-	 *
+	 * 
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
@@ -140,7 +140,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Sets multiple configuration properties on this object.
-	 *
+	 * 
 	 * @param properties The properties to set on this class.
 	 * @return This object (for method chaining).
 	 * @see PropertyStoreBuilder#set(java.util.Map)
@@ -152,7 +152,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Adds multiple configuration properties on this object.
-	 *
+	 * 
 	 * @param properties The properties to set on this class.
 	 * @return This object (for method chaining).
 	 * @see PropertyStoreBuilder#add(java.util.Map)
@@ -164,7 +164,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Adds a value to a SET or LIST property.
-	 *
+	 * 
 	 * @param name The property name.
 	 * @param value The new value to add to the SET property.
 	 * @return This object (for method chaining).
@@ -177,7 +177,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Adds or overwrites a value to a SET, LIST, or MAP property.
-	 *
+	 * 
 	 * @param name The property name.
 	 * @param key The property value map key.
 	 * @param value The property value map value.
@@ -191,7 +191,7 @@ public abstract class ContextBuilder {
 
 	/**
 	 * Removes a value from a SET, LIST, or MAP property.
-	 *
+	 * 
 	 * @param name The property name.
 	 * @param value The property value in the SET property.
 	 * @return This object (for method chaining).

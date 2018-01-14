@@ -19,15 +19,15 @@ import org.apache.juneau.rest.widget.*;
 
 /**
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
- *
+ * 
  * <p>
  * Used with {@link RestResource#htmldoc() @RestResource.htmldoc()} and {@link RestMethod#htmldoc() @RestMethod.htmldoc()} 
  * to customize the HTML view of serialized POJOs.
- *
+ * 
  * <p>
  * All annotations specified here have no effect on any serializers other than {@link HtmlDocSerializer} and is
  * provided as a shorthand method of for specifying configuration properties.
- *
+ * 
  * <p>
  * For example, the following two methods for defining the HTML document title are considered equivalent:
  * <p class='bcode'>
@@ -36,14 +36,14 @@ import org.apache.juneau.rest.widget.*;
  * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My Resource Page"</js>)
  * 		}
  * 	)
- *
+ * 
  * 	<ja>@RestResource</ja>(
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			title=<js>"My Resource Page"</js>
  * 		)
  * 	)
  * </p>
- *
+ * 
  * <p>
  * The purpose of these annotation is to populate the HTML document view which by default consists of the following
  * structure:
@@ -78,13 +78,13 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML aside section contents.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is HTML.
-	 *
+	 * 
 	 * <p>
 	 * The aside section typically floats on the right side of the page.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -95,7 +95,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -120,13 +120,13 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML footer section contents.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is HTML.
-	 *
+	 * 
 	 * <p>
 	 * The footer section typically floats on the bottom of the page.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -137,7 +137,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -162,10 +162,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Adds arbitrary content to the HTML <xt>&lt;head&gt;</xt> element on the page.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is HTML.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -173,14 +173,14 @@ public @interface HtmlDoc {
 	 * 			head={
 	 * 				<jc>// Add a shortcut link in the browser tab</jc>
 	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>,
-	 *
+	 * 
 	 * 				<jc>// Reload the page every 5 seconds </jc>
 	 * 				<js>"<meta http-equiv='refresh' content='5'>"</js>
 	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -203,14 +203,14 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML header section contents.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is HTML.
-	 *
+	 * 
 	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
 	 * to be whatever you want.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -221,7 +221,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -246,16 +246,16 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML nav section contents.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is HTML.
-	 *
+	 * 
 	 * <p>
 	 * The nav section of the page contains the links.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is HTML.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -266,7 +266,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -293,7 +293,7 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the links in the HTML nav section.
-	 *
+	 * 
 	 * <p>
 	 * The value is an array of strings with two possible values:
 	 * <ul>
@@ -301,10 +301,10 @@ public @interface HtmlDoc {
 	 * 		<br><js>"google: http://google.com"</js>
 	 * 	<li>Arbitrary HTML.
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -316,7 +316,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -348,7 +348,7 @@ public @interface HtmlDoc {
 
 	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
-	 *
+	 * 
 	 * <p>
 	 * This only applies to the rendered data portion of the page.
 	 */
@@ -356,10 +356,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML script section contents.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is Javascript.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -370,7 +370,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -395,10 +395,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML CSS style section contents.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is CSS.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -410,7 +410,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -435,16 +435,16 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the CSS URL in the HTML CSS style section.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is a URL.
-	 *
+	 * 
 	 * <p>
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
-	 *
+	 * 
 	 * <p>
 	 * The format of this value is CSS.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -453,7 +453,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -473,11 +473,11 @@ public @interface HtmlDoc {
 
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
-	 *
+	 * 
 	 * <p>
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
-	 *
+	 * 
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -493,7 +493,7 @@ public @interface HtmlDoc {
 
 	/**
 	 * Configuration property:  HTML Widgets. 
-	 *
+	 * 
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
@@ -508,11 +508,11 @@ public @interface HtmlDoc {
 	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
 	 * 			 in the HTML page.
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
 	 * and aside section of the page:
-	 *
+	 * 
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		widgets={

@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-form-element">&lt;form&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="form")
@@ -40,10 +40,10 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-accept-charset">accept-charset</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Character encodings to use for form submission.
-	 *
+	 * 
 	 * @param acceptcharset The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -54,17 +54,17 @@ public class Form extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-action">action</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * URL to use for form submission.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param action The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -76,10 +76,10 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-autocomplete">autocomplete</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Default setting for auto-fill feature for controls in the form.
-	 *
+	 * 
 	 * @param autocomplete The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -90,10 +90,10 @@ public class Form extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-enctype">enctype</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Form data set encoding type to use for form submission.
-	 *
+	 * 
 	 * @param enctype The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -104,10 +104,10 @@ public class Form extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-method">method</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * HTTP method to use for form submission.
-	 *
+	 * 
 	 * @param method The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -118,10 +118,10 @@ public class Form extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-name">name</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Name of form to use in the document.forms API.
-	 *
+	 * 
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -132,10 +132,10 @@ public class Form extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-novalidate">novalidate</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Bypass form control validation for form submission.
-	 *
+	 * 
 	 * @param novalidate The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -147,10 +147,10 @@ public class Form extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-target">target</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Browsing context for form submission.
-	 *
+	 * 
 	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
- *
+ * 
  * @see org.apache.juneau.svl
  */
 @SuppressWarnings("rawtypes")
@@ -30,7 +30,7 @@ public abstract class MapVar extends DefaultingVar {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The name of this variable.
 	 * @param m The map to pull values from.
 	 */

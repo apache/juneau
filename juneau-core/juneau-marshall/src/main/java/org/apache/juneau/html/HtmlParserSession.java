@@ -28,7 +28,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link HtmlParser}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -44,7 +44,7 @@ public final class HtmlParserSession extends XmlParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -520,7 +520,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * <p>
 	 * Precondition:  Pointing to opening tag.
 	 * Postcondition:  Pointing to next opening tag.
-	 *
+	 * 
 	 * @param r The stream being read from.
 	 * @throws XMLStreamException
 	 */
@@ -573,11 +573,11 @@ public final class HtmlParserSession extends XmlParserSession {
 
 	/**
 	 * Parses CHARACTERS data.
-	 *
+	 * 
 	 * <p>
 	 * Precondition:  Pointing to event immediately following opening tag.
 	 * Postcondition:  Pointing to closing tag.
-	 *
+	 * 
 	 * @param r The stream being read from.
 	 * @return The parsed string.
 	 * @throws XMLStreamException
@@ -664,11 +664,11 @@ public final class HtmlParserSession extends XmlParserSession {
 
 	/**
 	 * Identical to {@link #parseText(XmlReader)} except assumes the current event is the opening tag.
-	 *
+	 * 
 	 * <p>
 	 * Precondition:  Pointing to opening tag.
 	 * Postcondition:  Pointing to closing tag.
-	 *
+	 * 
 	 * @param r The stream being read from.
 	 * @return The parsed string.
 	 * @throws XMLStreamException

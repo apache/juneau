@@ -19,7 +19,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries using the
  * {@link UrlEncodingSerializer class}.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
@@ -35,7 +35,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The parameter name.
 	 * @param value The POJO to serialize to the parameter value.
 	 * @param serializer The serializer to use to convert the value to a string.

@@ -16,7 +16,7 @@ import org.apache.juneau.html.annotation.*;
 
 /**
  * Shortcut label for child resources.  Typically used in router resources.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>new</jk> ResourceLink(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
@@ -26,7 +26,7 @@ public final class ResourceDescription extends NameDescription implements Compar
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The name of the child resource.
 	 * @param description The description of the child resource.
 	 */

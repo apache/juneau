@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomCategory</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomCategory =
@@ -36,7 +36,7 @@ import org.apache.juneau.xml.annotation.*;
  * 			undefinedContent
  * 		}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -61,7 +61,7 @@ public class Category extends Common {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param term The category term.
 	 */
 	public Category(String term) {
@@ -86,7 +86,7 @@ public class Category extends Common {
 
 	/**
 	 * Sets the category term.
-	 *
+	 * 
 	 * @param term The category term.
 	 * @return This object (for method chaining).
 	 */
@@ -98,7 +98,7 @@ public class Category extends Common {
 
 	/**
 	 * Returns the category scheme.
-	 *
+	 * 
 	 * @return The category scheme.
 	 */
 	@Xml(format=ATTR)
@@ -108,14 +108,14 @@ public class Category extends Common {
 
 	/**
 	 * Sets the category scheme.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param scheme The category scheme.
 	 * @return This object (for method chaining).
 	 */
@@ -127,7 +127,7 @@ public class Category extends Common {
 
 	/**
 	 * Returns the category label.
-	 *
+	 * 
 	 * @return The category label.
 	 */
 	@Xml(format=ATTR)
@@ -137,7 +137,7 @@ public class Category extends Common {
 
 	/**
 	 * Sets the category label.
-	 *
+	 * 
 	 * @param label The category label.
 	 * @return This object (for method chaining).
 	 */

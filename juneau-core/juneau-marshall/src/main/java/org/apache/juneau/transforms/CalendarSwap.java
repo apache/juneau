@@ -24,9 +24,9 @@ import org.apache.juneau.utils.*;
 
 /**
  * Transforms {@link Calendar Calendars} to {@link String Strings}.
- *
+ * 
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- *
+ * 
  * The following direct subclasses are provided for convenience to the following formats:
  * <ul>
  * 	<li>{@link ToString} - To {@link String Strings} using the {@code Date.toString()} method.
@@ -58,7 +58,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link String Strings} using the {@code Date.toString()} method.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"Wed Jul 04 15:30:45 EST 2001"</js>
@@ -79,13 +79,13 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to ISO8601 date-time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
 	 * 	<li><js>"2001-07-04T15:30:45Z"</js>
 	 * </ul>
-	 *
+	 * 
 	 * <h6 class='topic'>Example input:</h6>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
@@ -112,12 +112,12 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to ISO8601 date-time-local strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45"</js>
 	 * </ul>
-	 *
+	 * 
 	 * <h6 class='topic'>Example input:</h6>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45"</js>
@@ -143,7 +143,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Same as {@link ISO8601DT}, except always serializes in GMT.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <js>"2001-07-04T15:30:45Z"</js>
 	 */
@@ -162,7 +162,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Same as {@link ISO8601DT} except serializes to millisecond precision.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <js>"2001-07-04T15:30:45.123Z"</js>
 	 */
@@ -176,7 +176,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Same as {@link ISO8601DTZ} except serializes to millisecond precision.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <js>"2001-07-04T15:30:45.123"</js>
 	 */
@@ -190,7 +190,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * ISO8601 date only.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <js>"2001-07-04"</js>
 	 */
@@ -209,7 +209,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to RFC2822 date-time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"Sat, 03 Mar 2001 10:11:12 +0000"</js> <jc>// en_US</jc>
@@ -232,7 +232,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Same as {@link RFC2822DT}, except always serializes in GMT.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"Sat, 03 Mar 2001 10:11:12 GMT"</js> <jc>// en_US</jc>
@@ -255,7 +255,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to RFC2822 date strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"03 Mar 2001"</js> <jc>// en_US</jc>
@@ -278,7 +278,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"2001/03/03 10:11:12"</js>
@@ -299,7 +299,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to simple <js>"yyyy/MM/dd"</js> date strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"2001/03/03"</js>
@@ -320,7 +320,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to simple <js>"HH:mm:ss"</js> time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"10:11:12"</js>
@@ -341,7 +341,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#FULL} date strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"Saturday, March 3, 2001"</js> <jc>// en_US</jc>
@@ -364,7 +364,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#LONG} date strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"March 3, 2001"</js> <jc>// en_US</jc>
@@ -387,7 +387,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#MEDIUM} date strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"Mar 3, 2001"</js> <jc>// en_US</jc>
@@ -410,7 +410,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#SHORT} date strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"3/3/01"</js> <jc>// en_US</jc>
@@ -433,7 +433,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#FULL} time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"10:11:12 AM GMT"</js> <jc>// en_US</jc>
@@ -456,7 +456,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#LONG} time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"10:11:12 AM GMT"</js> <jc>// en_US</jc>
@@ -479,7 +479,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#MEDIUM} time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"10:11:12 AM"</js> <jc>// en_US</jc>
@@ -502,7 +502,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#SHORT} time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"10:11 AM"</js> <jc>// en_US</jc>
@@ -525,7 +525,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#FULL} date-time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"Saturday, March 3, 2001 10:11:12 AM GMT"</js> <jc>// en_US</jc>
@@ -548,7 +548,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#LONG} date-time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"March 3, 2001 10:11:12 AM GMT"</js> <jc>// en_US</jc>
@@ -571,7 +571,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#MEDIUM} date-time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"Mar 3, 2001 10:11:12 AM"</js> <jc>// en_US</jc>
@@ -594,7 +594,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#SHORT} date-time strings.
-	 *
+	 * 
 	 * <h5 class='section'>Example output:</h5>
 	 * <ul>
 	 * 	<li><js>"3/3/01 10:11 AM"</js> <jc>// en_US</jc>

@@ -28,11 +28,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Class that provides documentation and other related information about a REST resource.
- *
+ * 
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST resources are documented.
  * Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
- *
+ * 
  * <p>
  * RestInfoProviders are associated with servlets/resources in one of the following ways:
  * <ul>
@@ -57,7 +57,7 @@ public class RestInfoProvider {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param context The resource context.
 	 */
 	public RestInfoProvider(RestContext context) {
@@ -117,7 +117,7 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized swagger for this REST resource.
-	 *
+	 * 
 	 * @param req The incoming HTTP request.
 	 * @return A new Swagger instance.
 	 * @throws RestException
@@ -161,14 +161,14 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized Swagger from the file system.
-	 *
+	 * 
 	 * <p>
 	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package as this servlet and returns
 	 * it as a parsed {@link Swagger} object.
-	 *
+	 * 
 	 * <p>
 	 * Returned objects are cached for later quick-lookup.
-	 *
+	 * 
 	 * @param locale The locale of the swagger.
 	 * @return The parsed swagger object, or <jk>null</jk> if the swagger file could not be found.
 	 * @throws RestException
@@ -188,10 +188,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized summary of the specified java method on this servlet.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own summary.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the summary from the following locations (whichever matches first):
 	 * <ol>
@@ -201,7 +201,7 @@ public class RestInfoProvider {
 	 * 	<li><ck>[javaMethodName].summary</ck> property in resource bundle identified by
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * </ol>
-	 *
+	 * 
 	 * @param javaMethodName The name of the Java method whose description we're retrieving.
 	 * @param req The current request.
 	 * @return The localized summary of the method, or a blank string if no summary was found.
@@ -215,10 +215,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized summary of the java method invoked on the specified request.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own summary.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the summary from the following locations (whichever matches first):
 	 * <ol>
@@ -228,7 +228,7 @@ public class RestInfoProvider {
 	 * 	<li><ck>[javaMethodName].summary</ck> property in resource bundle identified by
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return The localized summary of the method, or a blank string if no summary was found.
 	 */
@@ -238,10 +238,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized description of the specified java method on this servlet.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own description.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
@@ -251,7 +251,7 @@ public class RestInfoProvider {
 	 * 	<li><ck>[javaMethodName].description</ck> property in resource bundle identified by
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * </ol>
-	 *
+	 * 
 	 * @param javaMethodName The name of the Java method whose description we're retrieving.
 	 * @param req The current request.
 	 * @return The localized description of the method, or a blank string if no description was found.
@@ -265,10 +265,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized description of the invoked java method on the specified request.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own description.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
@@ -278,7 +278,7 @@ public class RestInfoProvider {
 	 * 	<li><ck>[javaMethodName].description</ck> property in resource bundle identified by
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return The localized description of the method, or a blank string if no description was found.
 	 */
@@ -288,10 +288,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized site name of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own site name.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
@@ -302,7 +302,7 @@ public class RestInfoProvider {
 	 * 	<li><ck>siteName</ck> in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
 	 */
@@ -318,10 +318,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized title of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own title.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
@@ -333,7 +333,7 @@ public class RestInfoProvider {
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/title</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
 	 */
@@ -352,10 +352,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized description of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own description.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
@@ -367,7 +367,7 @@ public class RestInfoProvider {
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/description</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
 	 */
@@ -386,10 +386,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized contact information of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own contact information.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the contact information from the following locations (whichever matches first):
 	 * <ol>
@@ -401,7 +401,7 @@ public class RestInfoProvider {
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/contact</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return
 	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
@@ -426,10 +426,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized license information of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own license information.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the license information from the following locations (whichever matches first):
 	 * <ol>
@@ -441,7 +441,7 @@ public class RestInfoProvider {
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/license</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return
 	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
@@ -466,10 +466,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the terms-of-service information of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own terms-of-service information.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the terms-of-service information from the following locations (whichever
 	 * matches first):
@@ -482,7 +482,7 @@ public class RestInfoProvider {
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/termsOfService</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return
 	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
@@ -502,10 +502,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the version information of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own version information.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
@@ -517,7 +517,7 @@ public class RestInfoProvider {
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/version</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return
 	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
@@ -537,10 +537,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the version information of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own version information.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
@@ -552,7 +552,7 @@ public class RestInfoProvider {
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/version</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return
 	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
@@ -577,10 +577,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the version information of this REST resource.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own version information.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
@@ -592,7 +592,7 @@ public class RestInfoProvider {
 	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/version</ck> entry in swagger file.
 	 * </ol>
-	 *
+	 * 
 	 * @param req The current request.
 	 * @return
 	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.

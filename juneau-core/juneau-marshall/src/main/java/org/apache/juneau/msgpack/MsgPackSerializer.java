@@ -17,13 +17,13 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO models to MessagePack.
- *
+ * 
+ * 
  * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>octal/msgpack</code>
- *
+ * 
+ * Handles <code>Accept</code> types:  <code><b>octal/msgpack</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>octal/msgpack</code>
+ * Produces <code>Content-Type</code> types: <code><b>octal/msgpack</b></code>
  */
 public class MsgPackSerializer extends OutputStreamSerializer {
 
@@ -35,7 +35,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"MsgPackSerializer.addBeanTypeProperties.b"</js>
@@ -47,12 +47,12 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * 			<li class='jm'>{@link MsgPackSerializerBuilder#addBeanTypeProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 *
+	 * 
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -77,7 +77,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public MsgPackSerializer(PropertyStore ps) {

@@ -16,32 +16,32 @@ import org.apache.juneau.svl.*;
 
 /**
  * Config file variable resolver.
- *
+ * 
  * <p>
  * The format for this var is <js>"$C{key[,defaultValue]}"</js>.
  * See {@link ConfigFile#getString(String)} for the format of the key.
- *
+ * 
  * <p>
  * This variable resolver requires that a {@link ConfigFile} object be set as a context object on the resolver or a
  * session object on the resolver session.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a config file object.</jc>
  * 	ConfigFile configFile = new ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
- *
+ * 
  * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
  * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<js>class</js>)
  * 		.addContextObject(<jsf>SESSION_config</jsf>, configFile);
- *
+ * 
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));
  * </p>
- *
+ * 
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
- *
+ * 
  * @see org.apache.juneau.ini.ConfigFile
  * @see org.apache.juneau.svl
  */

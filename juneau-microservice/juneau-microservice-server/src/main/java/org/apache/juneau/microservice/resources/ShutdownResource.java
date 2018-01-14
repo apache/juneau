@@ -30,7 +30,7 @@ public class ShutdownResource extends Resource {
 
 	/**
 	 * [GET /] - Shutdown this resource.
-	 *
+	 * 
 	 * @return The string <js>"OK"</js>.
 	 * @throws Exception
 	 */

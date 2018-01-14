@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-video-element">&lt;video&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="video")
@@ -40,10 +40,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay">autoplay</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Hint that the media resource can be started automatically when the page is loaded.
-	 *
+	 * 
 	 * @param autoplay
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -57,10 +57,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls">controls</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Show user agent controls.
-	 *
+	 * 
 	 * @param controls
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -74,10 +74,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-crossorigin">crossorigin</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * How the element handles cross-origin requests.
-	 *
+	 * 
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -89,10 +89,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Vertical dimension.
-	 *
+	 * 
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -105,10 +105,10 @@ public class Video extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Whether to loop the media resource.
-	 *
+	 * 
 	 * @param loop
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -122,10 +122,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Groups media elements together with an implicit MediaController.
-	 *
+	 * 
 	 * @param mediagroup The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -137,10 +137,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Whether to mute the media resource by default.
-	 *
+	 * 
 	 * @param muted
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -154,10 +154,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-video-poster">poster</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Poster frame to show prior to video playback.
-	 *
+	 * 
 	 * @param poster The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -169,10 +169,10 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Hints how much buffering the media resource will likely need.
-	 *
+	 * 
 	 * @param preload The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -183,17 +183,17 @@ public class Video extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Address of the resource.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -206,10 +206,10 @@ public class Video extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Horizontal dimension.
-	 *
+	 * 
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

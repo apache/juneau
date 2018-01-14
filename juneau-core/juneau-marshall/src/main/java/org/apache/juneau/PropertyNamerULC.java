@@ -14,8 +14,8 @@ package org.apache.juneau;
 
 /**
  * Converts property names to underscore-lower-case format.
- *
- * <h5 class='section'>Examples:</h5>
+ * 
+ * <h5 class='section'>Example:</h5>
  * <ul>
  * 	<li><js>"fooBar"</js> -&gt; <js>"foo_bar"</js>
  * 	<li><js>"fooBarURL"</js> -&gt; <js>"foo_bar_url"</js>

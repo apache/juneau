@@ -21,10 +21,10 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Top-level ATOM feed object.
- *
+ * 
  * <p>
  * Represents an <code>atomFeed</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomFeed =
@@ -46,7 +46,7 @@ import org.apache.juneau.xml.annotation.*;
  * 			atomEntry*
  * 		}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -73,7 +73,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param id The feed identifier.
 	 * @param title The feed title.
 	 * @param updated The feed updated timestamp.
@@ -84,7 +84,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param id The feed identifier.
 	 * @param title The feed title.
 	 * @param updated The feed updated timestamp.
@@ -103,7 +103,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Returns generator information on this feed.
-	 *
+	 * 
 	 * @return The generator information on this feed.
 	 */
 	public Generator getGenerator() {
@@ -112,7 +112,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Sets the generator information on this feed.
-	 *
+	 * 
 	 * @param generator The generator information on this feed.
 	 * @return This object (for method chaining).
 	 */
@@ -124,7 +124,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Returns the feed icon.
-	 *
+	 * 
 	 * @return The feed icon.
 	 */
 	public Icon getIcon() {
@@ -133,7 +133,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Sets the feed icon.
-	 *
+	 * 
 	 * @param icon The feed icon.
 	 * @return This object (for method chaining).
 	 */
@@ -145,7 +145,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Returns the feed logo.
-	 *
+	 * 
 	 * @return The feed logo.
 	 */
 	public Logo getLogo() {
@@ -154,7 +154,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Sets the feed logo.
-	 *
+	 * 
 	 * @param logo The feed logo.
 	 * @return This object (for method chaining).
 	 */
@@ -166,7 +166,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Returns the feed subtitle.
-	 *
+	 * 
 	 * @return The feed subtitle.
 	 */
 	@BeanProperty("subtitle")
@@ -176,7 +176,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Sets the feed subtitle.
-	 *
+	 * 
 	 * @param subtitle The feed subtitle.
 	 * @return This object (for method chaining).
 	 */
@@ -188,7 +188,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Sets the feed subtitle.
-	 *
+	 * 
 	 * @param subtitle The feed subtitle.
 	 * @return This object (for method chaining).
 	 */
@@ -199,7 +199,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Returns the entries in the feed.
-	 *
+	 * 
 	 * @return The entries in the feed.
 	 */
 	@Xml(format=COLLAPSED)
@@ -209,7 +209,7 @@ public class Feed extends CommonEntry {
 
 	/**
 	 * Sets the entries in the feed.
-	 *
+	 * 
 	 * @param entries The entries in the feed.
 	 * @return This object (for method chaining).
 	 */

@@ -18,30 +18,30 @@ import java.io.*;
 
 /**
  * Abstract superclass of all Simple Var Language variables.
- *
+ * 
  * <p>
  * Vars are used to convert simple variables of the form <js>"$varName{varKey}"</js> into something else by the
  * {@link VarResolver} class.
- *
+ * 
  * <p>
  * Subclasses must implement one of the following two methods:
  * <ul>
  * 	<li>{@link #resolve(VarResolverSession,String)} - For simple vars.
  * 	<li>{@link #resolveTo(VarResolverSession,Writer,String)} - For streamed vars.
  * </ul>
- *
+ * 
  * <p>
  * Subclasses MUST implement a no-arg constructor so that class names can be passed to the
  * {@link VarResolverBuilder#vars(Class...)} method.
  * They must also be thread safe!
- *
+ * 
  * <p>
  * Two direct abstract subclasses are provided to differentiated between simple and streamed vars:
  * <ul>
  * 	<li>{@link SimpleVar}
  * 	<li>{@link StreamedVar}
  * </ul>
- *
+ * 
  * @see org.apache.juneau.svl
  */
 public abstract class Var {
@@ -51,7 +51,7 @@ public abstract class Var {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The name of this variable.
 	 * @param streamed
 	 * 	Whether this variable is 'streamed', meaning the {@link #resolveTo(VarResolverSession, Writer, String)} method
@@ -74,11 +74,11 @@ public abstract class Var {
 
 	/**
 	 * Return the name of this variable.
-	 *
+	 * 
 	 * <p>
 	 * For example, the system property variable returns <js>"S"</js> since the format of the variable is
 	 * <js>"$S{system.property}"</js>.
-	 *
+	 * 
 	 * @return The name of this variable.
 	 */
 	protected String getName() {
@@ -126,11 +126,11 @@ public abstract class Var {
 
 	/**
 	 * The method called from {@link VarResolver}.
-	 *
+	 * 
 	 * <p>
 	 * Can be overridden to intercept the request and do special handling.
 	 * Default implementation simply calls resolve(String).
-	 *
+	 * 
 	 * @param session The session object used for a single instance of a string resolution.
 	 * @param arg The inside argument of the variable.
 	 * @return The resolved value.
@@ -142,7 +142,7 @@ public abstract class Var {
 
 	/**
 	 * The interface that needs to be implemented for subclasses of {@link SimpleVar}.
-	 *
+	 * 
 	 * @param session The session object used for a single instance of a var resolution.
 	 * @param arg The inside argument of the variable.
 	 * @return The resolved value.
@@ -152,7 +152,7 @@ public abstract class Var {
 
 	/**
 	 * The interface that needs to be implemented for subclasses of {@link StreamedVar}.
-	 *
+	 * 
 	 * @param session The session object used for a single instance of a var resolution.
 	 * @param w The writer to send the resolved value to.
 	 * @param arg The inside argument of the variable.

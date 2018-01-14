@@ -56,13 +56,13 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * <p>
 	 * Loads the contents of the specified file into this config file.
-	 *
+	 * 
 	 * <p>
 	 * If file does not initially exist, this object will start off empty.
-	 *
+	 * 
 	 * @param file
 	 * 	The INI file on disk.
 	 * 	If <jk>null</jk>, create an in-memory config file.
@@ -102,11 +102,11 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code><jk>new</jk> ConfigFileImpl(file, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>,
 	 * <jk>null</jk>, <jk>null</jk>);</code>
-	 *
+	 * 
 	 * @param file The config file.  Does not need to exist.
 	 * @throws IOException
 	 */
@@ -116,11 +116,11 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code><jk>new</jk> ConfigFileImpl(<jk>null</jk>, <jk>false</jk>, <jk>null</jk>,
 	 * <jk>null</jk>, <jk>null</jk>, <jk>null</jk>);</code>
-	 *
+	 * 
 	 * @throws IOException
 	 */
 	public ConfigFileImpl() throws IOException {

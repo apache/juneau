@@ -16,10 +16,10 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Class used to resolve {@link Class} objects to instances.
- *
+ * 
  * <p>
  * Used to convert classes defined via {@link RestResource#children() @RestResource.children()} into child instances.
- *
+ * 
  * <p>
  * Subclasses can be created to provide customized resource resolution.
  * These can be associated with REST resources in one of the following ways:
@@ -39,10 +39,10 @@ public interface RestResourceResolver {
 
 	/**
 	 * Resolves the specified class to a resource object.
-	 *
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own custom resolution.
-	 *
+	 * 
 	 * <p>
 	 * The default implementation simply creates a new class instance using {@link Class#newInstance()}.
 	 * 

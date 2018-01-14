@@ -21,18 +21,18 @@ import org.apache.juneau.utils.*;
 
 /**
  * Converter for enabling of {@link PojoRest} support on response objects returned by a <code>@RestMethod</code> method.
- *
+ * 
  * <p>
  * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path
  * information.
- *
+ * 
  * <p class='bcode'>
  * 	<jc>// Resource method on resource "http://localhost:8080/sample/addressBook"</jc>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, converters=Traversable.<jk>class</jk>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		<jk>return new</jk> AddressBook();
  * 	}
- *
+ * 
  * 	<jc>// Sample usage</jc>
  * 	<jk>public static void</jk> main(String[] args) {
  * 		<jc>// Get the zip code of the 2nd address of the first person in the address book.</jc>
@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  * 		<jk>int</jk> zip = r.getResponse(Integer.<jk>class</jk>);
  * 	}
  * </p>
- *
+ * 
  * <p>
  * See {@link PojoRest} for additional information on addressing elements in a POJO tree using URL notation.
  */

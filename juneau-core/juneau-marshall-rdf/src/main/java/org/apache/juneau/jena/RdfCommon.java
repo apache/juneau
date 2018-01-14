@@ -725,25 +725,25 @@ public interface RdfCommon {
 	 * <p>
 	 * This setting is typically only useful if the beans being parsed into do not have a bean property
 	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	WriterSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev().looseCollections(<jk>true</jk>).build();
 	 * 	ReaderParser p = RdfParser.<jsm>create</jsm>().xml().looseCollections(<jk>true</jk>).build();
-	 *
+	 * 
 	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
-	 *
+	 * 
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(l);
-	 *
+	 * 
 	 * 	<jc>// Parse back into a Java collection</jc>
 	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	MyBean[] b = createArrayOfMyBeans();
-	 *
+	 * 
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(b);
-	 *
+	 * 
 	 * 	<jc>// Parse back into a bean array</jc>
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>

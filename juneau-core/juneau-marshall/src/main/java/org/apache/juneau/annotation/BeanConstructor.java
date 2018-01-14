@@ -21,31 +21,32 @@ import org.apache.juneau.*;
 
 /**
  * Maps constructor arguments to property names on beans with read-only properties.
- *
+ * 
  * <p>
  * This annotation can be used in the case of beans with properties whose values can only be set by passing them in
  * through a constructor on the class.
  * <br>Since method parameter names are lost during compilation, this annotation essentially redefines them so that they
  * are available at runtime.
- *
+ * 
  * <p>
  * This annotation can only be applied to constructors and can only be applied to one constructor per class.
- *
+ * 
  * <p>
  * When present, bean instantiation is delayed until the call to {@link BeanMap#getBean()}.
  * Until then, bean property values are stored in a local cache until <code>getBean()</code> is called.
  * Because of this additional caching step, parsing into read-only beans tends to be slower and use more memory than
  * parsing into beans with writable properties.
- *
+ * 
  * <p>
  * Attempting to call {@link BeanMap#put(String,Object)} on a read-only property after calling {@link BeanMap#getBean()}
  * will result in a {@link BeanRuntimeException} being thrown.
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
- *
- * <h6 class='topic'>Documentation</h6>
- *	<ul>
- *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanConstructorAnnotation">Overview &gt; @BeanConstructor Annotation</a>
- *	</ul>
+ * 
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanConstructorAnnotation">Overview &gt; @BeanConstructor Annotation</a>
+ * </ul>
  */
 @Documented
 @Target(CONSTRUCTOR)
@@ -55,7 +56,7 @@ public @interface BeanConstructor {
 
 	/**
 	 * The names of the properties of the constructor arguments.
-	 *
+	 * 
 	 * <p>
 	 * The number of properties listed must match the number of arguments in the constructor.
 	 */

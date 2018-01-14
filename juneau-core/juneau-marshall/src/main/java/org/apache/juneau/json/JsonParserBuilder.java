@@ -32,7 +32,7 @@ public class JsonParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public JsonParserBuilder(PropertyStore ps) {

@@ -63,7 +63,7 @@ public class ConfigSourceSettings {
 
 	/**
 	 * Returns the paths to search to find config files.
-	 *
+	 * 
 	 * @return The paths to search to find config files.
 	 */
 	public List<String> getSearchPaths() {
@@ -72,7 +72,7 @@ public class ConfigSourceSettings {
 
 	/**
 	 * Returns the charset of the config file.
-	 *
+	 * 
 	 * @return The charset of the config file.
 	 */
 	public Charset getCharset() {
@@ -81,7 +81,7 @@ public class ConfigSourceSettings {
 
 	/**
 	 * Specifies whether the config file should be opened in read-only mode.
-	 *
+	 * 
 	 * @return <jk>true</jk> if the config file should be opened in read-only mode.
 	 */
 	public boolean isReadonly() {
@@ -90,10 +90,10 @@ public class ConfigSourceSettings {
 
 	/**
 	 * Specifies whether config files should be created if they're not found in the search paths.
-	 *
+	 * 
 	 * <p>
 	 * Note that the first writable path will be used for the location of the file.
-	 *
+	 * 
 	 * @return <jk>true</jk> if the config file should be created if not found.
 	 */
 	public boolean isCreateIfNotExists() {

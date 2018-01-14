@@ -20,8 +20,9 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Specialized writer for serializing JSON.
- *
- * <h5 class='section'>Notes:</h5>
+ * 
+ * 
+ * <h5 class='topic'>Notes</h5>
  * <ul>
  * 	<li>This class is not intended for external use.
  * </ul>
@@ -51,7 +52,7 @@ public final class YamlWriter extends SerializerWriter {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param out The writer being wrapped.
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
@@ -64,7 +65,7 @@ public final class YamlWriter extends SerializerWriter {
 
 	/**
 	 * Serializes the specified object as a JSON string value.
-	 *
+	 * 
 	 * @param s The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
@@ -109,7 +110,7 @@ public final class YamlWriter extends SerializerWriter {
 
 	/**
 	 * Serializes the specified object as a JSON attribute name.
-	 *
+	 * 
 	 * @param s The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
@@ -157,7 +158,7 @@ public final class YamlWriter extends SerializerWriter {
 
 	/**
 	 * Appends a URI to the output.
-	 *
+	 * 
 	 * @param uri The URI to append to the output.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -184,7 +185,7 @@ public final class YamlWriter extends SerializerWriter {
 
 	/**
 	 * Performs an indentation only if we're currently past max indentation.
-	 *
+	 * 
 	 * @param depth The current indentation depth.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -227,7 +228,7 @@ public final class YamlWriter extends SerializerWriter {
 
 	/**
 	 * Adds a space only if the current indentation level is below maxIndent.
-	 *
+	 * 
 	 * @param indent
 	 * @return This object (for method chaining).
 	 * @throws IOException

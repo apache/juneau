@@ -26,7 +26,7 @@ public class RemoteableMetadataException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param m The interface method that has an invalid definition.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -37,7 +37,7 @@ public class RemoteableMetadataException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param c The interface class that has an invalid definition.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.

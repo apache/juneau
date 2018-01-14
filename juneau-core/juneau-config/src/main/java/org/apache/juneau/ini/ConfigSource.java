@@ -22,7 +22,7 @@ public abstract class ConfigSource {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param settings
 	 * 	The settings for this config source.
 	 */
@@ -32,7 +32,7 @@ public abstract class ConfigSource {
 
 	/**
 	 * Returns the name of the config file.
-	 *
+	 * 
 	 * @return The name of the config file.
 	 */
 	protected final ConfigSourceSettings getSettings() {
@@ -41,7 +41,7 @@ public abstract class ConfigSource {
 
 	/**
 	 * Returns the contents of the configuration file.
-	 *
+	 * 
 	 * @param name The config file name.
 	 * @return The contents of the configuration file.
 	 * @throws Exception
@@ -50,7 +50,7 @@ public abstract class ConfigSource {
 
 	/**
 	 * Saves the contents of the configuration file if the underlying storage hasn't been modified.
-	 *
+	 * 
 	 * @param name The config file name.
 	 * @param contents The new contents of the configuration file.
 	 * @return <jk>true</jk> if we successfully saved the new configuration file contents, or <jk>false</jk> if the
@@ -61,11 +61,11 @@ public abstract class ConfigSource {
 
 	/**
 	 * Returns whether the underlying configuration contents have changed.
-	 *
+	 * 
 	 * <p>
 	 * For example, if the configuration source is a file, this method would return <jk>true</jk> if the
 	 * file on the filesystem has been modified since the {@link #read(String)} method was called.
-	 *
+	 * 
 	 * @param name The config file name.
 	 * @return <jk>true</jk> if the persisted contents of the config file have changed.
 	 * @throws Exception

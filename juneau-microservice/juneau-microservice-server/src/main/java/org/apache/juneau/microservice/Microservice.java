@@ -47,9 +47,9 @@ import org.apache.juneau.utils.*;
  * <p>
  * Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice 
  * jar file.
- *
+ * 
  * <h6 class='topic'>Microservice Configuration</h6>
- *
+ * 
  * This class defines the following method for accessing configuration for your microservice:
  * <ul class='spaced-list'>
  * 	<li>
@@ -59,9 +59,9 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		{@link #getManifest()} - The manifest file for the main jar file.
  * </ul>
- *
+ * 
  * <h6 class='topic'>Entry point Method</h6>
- *
+ * 
  * Subclasses must implement a static void main method as the entry point for the microservice.
  * Typically, this method will simply consist of the following...
  * <p class='bcode'>
@@ -69,9 +69,9 @@ import org.apache.juneau.utils.*;
  * 		<jk>new</jk> MyMicroservice(args).start();
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Lifecycle Methods</h6>
- *
+ * 
  * Subclasses must implement the following lifecycle methods:
  * <ul class='spaced-list'>
  * 	<li>
@@ -81,9 +81,9 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  * </ul>
- *
+ * 
  * <h6 class='topic'>Lifecycle Listener Methods</h6>
- *
+ * 
  * Subclasses can optionally implement the following event listener methods:
  * <ul class='spaced-list'>
  * 	<li>
@@ -95,9 +95,9 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		{@link #onConfigChange(ConfigFile, Set)} - Gets executed after a config file has been modified.
  * </ul>
- *
+ * 
  * <h6 class='topic'>Other Methods</h6>
- *
+ * 
  * Subclasses can optionally override the following methods to provide customized behavior:
  * <ul class='spaced-list'>
  * 	<li>
@@ -139,7 +139,7 @@ public abstract class Microservice {
 	
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
@@ -172,7 +172,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * If this path does not exist, a {@link FileNotFoundException} will be thrown from the {@link #start()} command.
-	 *
+	 * 
 	 * @param cfPath The absolute or relative path of the config file.
 	 * @param create Create the file if it doesn't exist.
 	 * @return This object (for method chaining).
@@ -196,7 +196,7 @@ public abstract class Microservice {
 	 * <p>
 	 * Note that if you use this method instead of {@link #setConfig(String,boolean)}, the config file will not use
 	 * the variable resolver constructed from {@link #createVarResolver()}.
-	 *
+	 * 
 	 * @param cf The config file for this application, or <jk>null</jk> if no config file is needed.
 	 */
 	public void setConfig(ConfigFile cf) {
@@ -214,7 +214,7 @@ public abstract class Microservice {
 	 * 		is located in the project root.
 	 * 	<li>Using the class loader for this class to find the file at the URL <js>"META-INF/MANIFEST.MF"</js>.
 	 * </ol>
-	 *
+	 * 
 	 * @param mf The manifest file of this microservice.
 	 */
 	public void setManifest(Manifest mf) {
@@ -223,7 +223,7 @@ public abstract class Microservice {
 
 	/**
 	 * Convenience method for specifying the manifest contents directly.
-	 *
+	 * 
 	 * @param contents The lines in the manifest file.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -236,7 +236,7 @@ public abstract class Microservice {
 
 	/**
 	 * Same as {@link #setManifest(Manifest)} except specified through a {@link File} object.
-	 *
+	 * 
 	 * @param f The manifest file of this microservice.
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
@@ -247,7 +247,7 @@ public abstract class Microservice {
 	/**
 	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the  
 	 * specified class is contained within.
-	 *
+	 * 
 	 * @param c The class whose jar file contains the manifest to use for this microservice.
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
@@ -273,7 +273,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jd>/**
@@ -301,7 +301,7 @@ public abstract class Microservice {
 	 * 	<jc>// Example java code</jc>
 	 * 	String myentry = getConfig().getString(<js>"MySection/myEntry"</js>); <jc>// == "[foo]"</js>
 	 * </p>
-	 *
+	 * 
 	 * @return A new {@link VarResolver}.
 	 */
 	protected VarResolverBuilder createVarResolver() {
@@ -323,7 +323,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * See {@link Args} for details on using this method.
-	 *
+	 * 
 	 * @return The command-line arguments passed into the application.
 	 */
 	public Args getArgs() {
@@ -356,50 +356,50 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * This method can be called from the class constructor.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cc># My section</cc>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cs>[MySection]</cs>
-	 *
+	 * 
 	 * 	<cc># An integer</cc>
 	 * 	<ck>anInt</ck> = 1
-	 *
+	 * 
 	 * 	<cc># A boolean</cc>
 	 * 	<ck>aBoolean</ck> = true
-	 *
+	 * 
 	 * 	<cc># An int array</cc>
 	 * 	<ck>anIntArray</ck> = 1,2,3
-	 *
+	 * 
 	 * 	<cc># A POJO that can be converted from a String</cc>
 	 * 	<ck>aURL</ck> = http://foo
-	 *
+	 * 
 	 * 	<cc># A POJO that can be converted from JSON</cc>
 	 * 	<ck>aBean</ck> = {foo:'bar',baz:123}
-	 *
+	 * 
 	 * 	<cc># A system property</cc>
 	 * 	<ck>locale</ck> = $S{java.locale, en_US}
-	 *
+	 * 
 	 * 	<cc># An environment variable</cc>
 	 * 	<ck>path</ck> = $E{PATH, unknown}
-	 *
+	 * 
 	 * 	<cc># A manifest file entry</cc>
 	 * 	<ck>mainClass</ck> = $MF{Main-Class}
-	 *
+	 * 
 	 * 	<cc># Another value in this config file</cc>
 	 * 	<ck>sameAsAnInt</ck> = $C{MySection/anInt}
-	 *
+	 * 
 	 * 	<cc># A command-line argument in the form "myarg=foo"</cc>
 	 * 	<ck>myArg</ck> = $ARG{myarg}
-	 *
+	 * 
 	 * 	<cc># The first command-line argument</cc>
 	 * 	<ck>firstArg</ck> = $ARG{0}
-	 *
+	 * 
 	 * 	<cc># Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.</cc>
 	 * 	<ck>nested</ck> = $S{mySystemProperty,$E{MY_ENV_VAR,$ARG{0}}}
-	 *
+	 * 
 	 * 	<cc># A POJO with embedded variables</cc>
 	 * 	<ck>aBean2</ck> = {foo:'$ARG{0}',baz:$C{MySection/anInt}}
 	 * </p>
@@ -407,7 +407,7 @@ public abstract class Microservice {
 	 * <p class='bcode'>
 	 * 	<jc>// Java code for accessing config entries above.</jc>
 	 * 	ConfigFile cf = getConfig();
-	 *
+	 * 
 	 * 	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>);
 	 * 	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>);
 	 * 	<jk>int</jk>[] anIntArray = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"MySection/anIntArray"</js>);
@@ -420,7 +420,7 @@ public abstract class Microservice {
 	 * 	String myArg = cf.getString(<js>"MySection/myArg"</js>);
 	 * 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>);
 	 * </p>
-	 *
+	 * 
 	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
 	 */
 	public ConfigFile getConfig() {
@@ -435,16 +435,16 @@ public abstract class Microservice {
 	 * simple strings.
 	 * <p>
 	 * This method can be called from the class constructor.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
 	 * 	String mainClass = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
-	 *
+	 * 
 	 * 	<jc>// Get Rest-Resources from manifest file.</jc>
 	 * 	String[] restResources = Microservice.<jsm>getManifest</jsm>().getStringArray(<js>"Rest-Resources"</js>);
 	 * </p>
-	 *
+	 * 
 	 * @return The manifest file from the main jar, or <jk>null</jk> if the manifest file could not be retrieved.
 	 */
 	public ManifestFile getManifest() {
@@ -483,7 +483,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * Overridden methods MUST call this method FIRST so that the {@link #onStart()} method is called.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
@@ -611,7 +611,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * Note that this is typically started after all initialization has occurred so that the console output isn't polluted.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
@@ -675,25 +675,25 @@ public abstract class Microservice {
 	 * 	# See FileHandler Java class for details.
 	 * 	#================================================================================</cc>
 	 * 	<cs>[Logging]</cs>
-	 *
+	 * 
 	 * 	<cc># The directory where to create the log file.
 	 * 	# Default is ".".</cc>
 	 * 	<ck>logDir</ck> = logs
-	 *
+	 * 
 	 * 	<cc># The name of the log file to create for the main logger.
 	 * 	# The logDir and logFile make up the pattern that's passed to the FileHandler
 	 * 	# constructor.
 	 * 	# If value is not specified, then logging to a file will not be set up.</cc>
 	 * 	<ck>logFile</ck> = microservice.%g.log
-	 *
+	 * 
 	 * 	<cc># Whether to append to the existing log file or create a new one.
 	 * 	# Default is false.</cc>
 	 * 	<ck>append</ck> =
-	 *
+	 * 
 	 * 	<cc># The SimpleDateFormat format to use for dates.
 	 * 	# Default is "yyyy.MM.dd hh:mm:ss".</cc>
 	 * 	<ck>dateFormat</ck> =
-	 *
+	 * 
 	 * 	<cc># The log message format.
 	 * 	# The value can contain any of the following variables:
 	 * 	# 	{date} - The date, formatted per dateFormat.
@@ -706,32 +706,32 @@ public abstract class Microservice {
 	 * 	#	{exception} - The localized exception message.
 	 * 	# Default is "[{date} {level}] {msg}%n".</cc>
 	 * 	<ck>format</ck> =
-	 *
+	 * 
 	 * 	<cc># The maximum log file size.
 	 * 	# Suffixes available for numbers.
 	 * 	# See ConfigFile.getInt(String,int) for details.
 	 * 	# Default is 1M.</cc>
 	 * 	<ck>limit</ck> = 10M
-	 *
+	 * 
 	 * 	<cc># Max number of log files.
 	 * 	# Default is 1.</cc>
 	 * 	<ck>count</ck> = 5
-	 *
+	 * 
 	 * 	<cc># Default log levels.
 	 * 	# Keys are logger names.
 	 * 	# Values are serialized Level POJOs.</cc>
 	 * 	<ck>levels</ck> = { org.apache.juneau:'INFO' }
-	 *
+	 * 
 	 * 	<cc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
 	 * 	# Useful for preventing log files from filling up with duplicate stack traces.
 	 * 	# Default is false.</cc>
 	 * 	<ck>useStackTraceHashes</ck> = true
-	 *
+	 * 
 	 * 	<cc># The default level for the console logger.
 	 * 	# Default is WARNING.</cc>
 	 * 	<ck>consoleLevel</ck> = WARNING
 	 * </p>
-	 *
+	 * 
 	 * @throws Exception
 	 */
 	protected void initLogging() throws Exception {
@@ -770,7 +770,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * Default implementation is a no-op.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
@@ -786,7 +786,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * Overridden methods MUST call this method LAST so that the {@link #onStop()} method is called.
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public Microservice stop() {
@@ -829,7 +829,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * Subclasses can override this method to listen for config file changes.
-	 *
+	 * 
 	 * @param cf The config file.
 	 */
 	protected void onConfigSave(ConfigFile cf) {}
@@ -839,7 +839,7 @@ public abstract class Microservice {
 	 * 
 	 * <p>
 	 * Subclasses can override this method to listen for config file changes.
-	 *
+	 * 
 	 * @param cf The config file.
 	 * @param changes The list of keys in the config file being changed.
 	 */

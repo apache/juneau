@@ -22,7 +22,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -31,7 +31,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -53,7 +53,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/*
 	 * Creates a schema representation of the specified class type.
-	 *
+	 * 
 	 * @param eType The class type to get the schema of.
 	 * @param ctx Serialize context used to prevent infinite loops.
 	 * @param attrName The name of the current attribute.

@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 
 /**
  * Utility class for working with Jar manifest files.
- *
+ * 
  * <p>
  * Copies the contents of a {@link Manifest} into an {@link ObjectMap} so that the various convenience methods on that
  * class can be used to retrieve values.
@@ -34,7 +34,7 @@ public class ManifestFile extends ObjectMap {
 
 	/**
 	 * Create an instance of this class from a manifest file on the file system.
-	 *
+	 * 
 	 * @param f The manifest file.
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
@@ -50,7 +50,7 @@ public class ManifestFile extends ObjectMap {
 
 	/**
 	 * Create an instance of this class from a {@link Manifest} object.
-	 *
+	 * 
 	 * @param f The manifest to read from.
 	 */
 	public ManifestFile(Manifest f) {
@@ -59,7 +59,7 @@ public class ManifestFile extends ObjectMap {
 
 	/**
 	 * Finds and loads the manifest file of the jar file that the specified class is contained within.
-	 *
+	 * 
 	 * @param c The class to get the manifest file of.
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */

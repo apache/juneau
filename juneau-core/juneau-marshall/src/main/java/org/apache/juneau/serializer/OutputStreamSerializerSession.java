@@ -16,9 +16,10 @@ import java.io.*;
 
 /**
  * Subclass of {@link SerializerSession} for stream-based serializers.
- *
- * <h5 class='section'>Description:</h5>
- *
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * This class is the parent class of all byte-based serializers.
  * <br>It has 1 abstract method to implement...
  * <ul>
@@ -29,7 +30,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -45,7 +46,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 
 	/**
 	 * Constructor for sessions that don't require context.
-	 *
+	 * 
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
@@ -60,7 +61,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 
 	/**
 	 * Convenience method for serializing an object to a <code><jk>byte</jk></code>.
-	 *
+	 * 
 	 * @param o The object to serialize.
 	 * @return The output serialized to a byte array.
 	 * @throws SerializeException If a problem occurred trying to convert the output.

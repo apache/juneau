@@ -17,22 +17,24 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJOs to HTTP responses as HTML documents.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>text/html</code>
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>text/html</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>text/html</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>text/html</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</code>,
  * <code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
- *
+ * 
  * <p>
  * Configurable properties are typically specified via <ja>@RestResource.properties()</ja> and <ja>@RestMethod.properties()</ja>
  * annotations, although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
@@ -45,7 +47,7 @@ import org.apache.juneau.serializer.*;
  * 	)
  * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
  * </p>
- *
+ * 
  * <p>
  * Note that shortcut annotations are also provided for these particular settings:
  * <p class='bcode'>
@@ -61,7 +63,7 @@ import org.apache.juneau.serializer.*;
  * 		)
  * 	)
  * </p>
- *
+ * 
  * <p>
  * The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the
  * <code>messages</code> annotation.
@@ -78,7 +80,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Aside section contents.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
@@ -86,16 +88,16 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to specify the contents of the aside section on the HTML page.
 	 * The aside section floats on the right of the page for providing content supporting the serialized content of
 	 * the page.
-	 *
+	 * 
 	 * <p>
 	 * By default, the aside section is empty.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -115,7 +117,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Footer section contents.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
@@ -123,14 +125,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to specify the contents of the footer section on the HTML page.
-	 *
+	 * 
 	 * <p>
 	 * By default, the footer section is empty.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -146,7 +148,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Additional head section content.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
@@ -154,11 +156,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds the specified HTML content to the head section of the page.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -168,7 +170,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		}
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
 	 * <p class='bcode'>
@@ -185,7 +187,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Header section contents.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.ls"</js>
@@ -193,12 +195,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to override the contents of the header section on the HTML page.
 	 * The header section normally contains the title and description at the top of the page.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -214,7 +216,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Nav section contents.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
@@ -222,12 +224,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to override the contents of the nav section on the HTML page.
 	 * The nav section normally contains the page links at the top of the page.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -238,7 +240,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
 	 */
@@ -246,7 +248,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Page navigation links.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.navlinks.ls"</js>
@@ -254,14 +256,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
-	 *
+	 * 
 	 * <p>
 	 * This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
-	 *
+	 * 
 	 * <p>
 	 * The value is an array of strings with two possible values:
 	 * <ul>
@@ -269,7 +271,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		<br><js>"google: http://google.com"</js>
 	 * 	<li>Arbitrary HTML.
 	 * </ul>
-	 *
+	 * 
 	 * <p>
 	 * Relative URLs are considered relative to the servlet path.
 	 * For example, if the servlet path is <js>"http://localhost/myContext/myServlet"</js>, and the
@@ -277,7 +279,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
 	 * can also be used in addition to various other protocols specified by {@link UriResolver} such as
 	 * <js>"servlet:/..."</js>.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * The <code>AddressBookResource</code> sample class uses this property...
@@ -290,11 +292,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * 	...to produce this list of links on the HTML page...
 	 * <img class='bordered' src='doc-files/HTML_LINKS.png'>
-	 *
+	 * 
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
 	 * <p class='bcode'>
@@ -318,7 +320,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  No-results message.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.noResultsMessage.s"</js>
@@ -326,11 +328,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  <js>"&lt;p&gt;no results&lt;/p&gt;"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -339,7 +341,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
@@ -347,7 +349,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Prevent word wrap on page.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nowrap.b"</js>
@@ -355,7 +357,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
@@ -364,7 +366,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Javascript code.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
@@ -372,11 +374,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds the specified Javascript code to the HTML page.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -386,7 +388,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		}
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
 	 * <p class='bcode'>
@@ -408,7 +410,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  CSS style code.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.style.ls"</js>
@@ -416,11 +418,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds the specified CSS instructions to the HTML page.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -430,7 +432,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		}
 	 * 	)
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
 	 * <p class='bcode'>
@@ -453,7 +455,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  Stylesheet import URLs.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
@@ -461,11 +463,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds a link to the specified stylesheet URL.
-	 *
+	 * 
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 */
@@ -478,7 +480,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Configuration property:  HTML document template.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.template.c"</js>
@@ -486,15 +488,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Default:</b>  <code>HtmlDocTemplateBasic.<jk>class</jk></code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the template to use for serializing the page.
-	 *
+	 * 
 	 * <p>
 	 * By default, the {@link HtmlDocTemplateBasic} class is used to construct the contents of the HTML page, but
 	 * can be overridden with your own custom implementation class.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -526,7 +528,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public HtmlDocSerializer(PropertyStore ps) {
@@ -535,7 +537,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces

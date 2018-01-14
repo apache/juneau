@@ -21,7 +21,7 @@ import org.apache.juneau.rest.*;
 
 /**
  * Annotation used in conjunction with {@link MethodSwagger#responses() @MethodSwagger.responses()} to identify possible responses by the method.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
@@ -47,16 +47,16 @@ public @interface Response {
 
 	/**
 	 * Optional description.
-	 *
+	 * 
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"myMethod.res.[code].description = foo"</js> or
 	 * <js>"MyServlet.myMethod.res.[code].description = foo"</js>).
-	 *
+	 * 
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
+	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/responses/{code}/description</code>.
 	 */
@@ -64,7 +64,7 @@ public @interface Response {
 
 	/**
 	 * Optional response headers.
-	 *
+	 * 
 	 * <p>
 	 * Response variables can also be defined in the servlet resource bundle.
 	 * (e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or
@@ -74,14 +74,14 @@ public @interface Response {
 
 	/**
 	 * A definition of the response structure.
-	 *
+	 * 
 	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
 	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
 	 * its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
-	 *
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(

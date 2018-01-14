@@ -32,21 +32,22 @@ import org.eclipse.jetty.xml.*;
 
 /**
  * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.
- *
+ * 
  * <h6 class='topic'>Jetty Server Details</h6>
  * 
  * The Jetty server is created by the {@link #createServer()} method and started with the {@link #startServer()} method.
  * These methods can be overridden to provided customized behavior.
- *
+ * 
  * <h6 class='topic'>Defining REST Resources</h6>
  * 
  * Top-level REST resources are defined in the <code>jetty.xml</code> file as normal servlets.
- *
- * <h6 class='topic'>Logging</h6>
+ * 
+ * 
+ * <h5 class='topic'>Logging</h5>
  * 
  * Logging is initialized by the {@link #initLogging()} method.
  * This method can be overridden to provide customized logging behavior.
- *
+ * 
  * <h6 class='topic'>Lifecycle Listener Methods</h6>
  * Subclasses can optionally implement the following event listener methods:
  * <ul class='spaced-list'>
@@ -93,7 +94,7 @@ public class RestMicroservice extends Microservice {
 	 * 
 	 * <p>
 	 * Subclasses must also implement this method!
-	 *
+	 * 
 	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
@@ -103,7 +104,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
@@ -282,7 +283,7 @@ public class RestMicroservice extends Microservice {
 	 * 	# jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).</cc>
 	 * 	<ck>port</ck> = 10000,0,0,0
 	 * </p>
-	 *
+	 * 
 	 * @return The newly-created server.
 	 * @throws Exception
 	 */
@@ -389,7 +390,7 @@ public class RestMicroservice extends Microservice {
 	 * 
 	 * <p>
 	 * Subclasses can override this method to customize server startup.
-	 *
+	 * 
 	 * @return The port that this server started on.
 	 * @throws Exception
 	 */

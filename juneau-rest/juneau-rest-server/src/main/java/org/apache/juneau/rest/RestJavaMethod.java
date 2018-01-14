@@ -780,7 +780,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 	/**
 	 * Workhorse method.
-	 *
+	 * 
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */

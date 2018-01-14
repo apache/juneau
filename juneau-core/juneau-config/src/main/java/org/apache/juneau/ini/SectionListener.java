@@ -18,7 +18,7 @@ import java.util.*;
 
 /**
  * Listener that can be used to listen for change events for a specific section in a config file.
- *
+ * 
  * <p>
  * Use the {@link ConfigFile#addListener(ConfigFileListener)} method to register listeners.
  */
@@ -29,7 +29,7 @@ public class SectionListener extends ConfigFileListener {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param section The name of the section in the config file to listen to.
 	 */
 	public SectionListener(String section) {
@@ -56,7 +56,7 @@ public class SectionListener extends ConfigFileListener {
 
 	/**
 	 * Signifies that the config file entry changed.
-	 *
+	 * 
 	 * @param cf The config file being modified.
 	 */
 	public void onChange(ConfigFile cf) {}

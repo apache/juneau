@@ -36,7 +36,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public HtmlParserBuilder(PropertyStore ps) {

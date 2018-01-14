@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Represents a version string such as <js>"1.2"</js> or <js>"1.2.3"</js>
- *
+ * 
  * <p>
  * Used to compare version numbers.
  */
@@ -26,7 +26,7 @@ public class Version {
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param versionString
 	 * 	A string of the form <js>"#.#..."</js> where there can be any number of parts.
 	 * 	<br>Valid values:
@@ -54,7 +54,7 @@ public class Version {
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is at least this version.
-	 *
+	 * 
 	 * <p>
 	 * Note that the following is true:
 	 * <p class='bcode'>
@@ -62,7 +62,7 @@ public class Version {
 	 * 	b = <jk>new</jk> Version(<js>"1.2"</js>).isAtLeast(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == true </jc>
 	 * 	b = <jk>new</jk> Version(<js>"1.2.0"</js>).isAtLeast(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == false</jc>
 	 * </p>
-	 *
+	 * 
 	 * @param v The version to compare to.
 	 * @param exclusive Match down-to-version but not including.
 	 * @return <jk>true</jk> if the specified version is at least this version.
@@ -83,7 +83,7 @@ public class Version {
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is at most this version.
-	 *
+	 * 
 	 * <p>
 	 * Note that the following is true:
 	 * <p class='bcode'>
@@ -91,7 +91,7 @@ public class Version {
 	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).isAtMost(<jk>new</jk> Version(<js>"1.2"</js>)); <jc>// == true </jc>
 	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).isAtMost(<jk>new</jk> Version(<js>"1.2.0"</js>)); <jc>// == false</jc>
 	 * </p>
-	 *
+	 * 
 	 * @param v The version to compare to.
 	 * @param exclusive Match up-to-version but not including.
 	 * @return <jk>true</jk> if the specified version is at most this version.
@@ -112,7 +112,7 @@ public class Version {
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is equal to this version.
-	 *
+	 * 
 	 * <p>
 	 * Note that the following is true:
 	 * <p class='bcode'>
@@ -120,7 +120,7 @@ public class Version {
 	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).equals(<jk>new</jk> Version(<js>"1.2"</js>)); <jc>// == true </jc>
 	 * 	b = <jk>new</jk> Version(<js>"1.2"</js>).equals(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == true</jc>
 	 * </p>
-	 *
+	 * 
 	 * @param v The version to compare to.
 	 * @return <jk>true</jk> if the specified version is equal to this version.
 	 */

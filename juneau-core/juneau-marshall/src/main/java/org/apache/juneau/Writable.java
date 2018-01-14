@@ -18,7 +18,7 @@ import org.apache.juneau.http.*;
 
 /**
  * Interface that identifies that an object can be serialized directly to a writer.
- *
+ * 
  * <p>
  * Instances must identify the media type of the content by implementing the {@link #getMediaType()} method.
  */
@@ -26,7 +26,7 @@ public interface Writable {
 
 	/**
 	 * Serialize this object to the specified writer.
-	 *
+	 * 
 	 * @param w The writer to write to.
 	 * @throws IOException
 	 */
@@ -34,7 +34,7 @@ public interface Writable {
 
 	/**
 	 * Returns the serialized media type for this resource (e.g. <js>"text/html"</js>)
-	 *
+	 * 
 	 * @return The media type, or <jk>null</jk> if the media type is not known.
 	 */
 	MediaType getMediaType();

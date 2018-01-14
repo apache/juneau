@@ -21,7 +21,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.
- *
+ * 
  * <p>
  * Widgets are associated with resources through the following
  * <ul>
@@ -29,20 +29,20 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link RestContextBuilder#widgets(Class...)}
  * 	<li>{@link RestContextBuilder#widgets(Widget...)}
  * </ul>
- *
+ * 
  * <p>
  * Widgets allow you to add arbitrary HTML, CSS, and Javascript to the page.
- *
+ * 
  * <p>
  * The HTML content returned by the {@link #getHtml(RestRequest)} method is added where the <js>"$W{...}"</js> is
  * referenced in the page.
  * The Javascript and stylesheet content is added to the header of the page.
  * They allow you to control the look and behavior of your widgets.
- *
+ * 
  * <p>
  * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
  * and aside section of the page:
- *
+ * 
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		widgets={
@@ -58,19 +58,19 @@ import org.apache.juneau.utils.*;
  * 		)
  * 	)
  * </p>
- *
+ * 
  * <p>
  * The following shows an example of a widget that renders an image located in the <code>htdocs</code> static files
  * directory in your classpath (see {@link RestResource#staticFiles() @RestResource.staticFiles()}):
  * <p class='bcode'>
  * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
- *
+ * 
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String getHtml(RestRequest req) <jk>throws</jk> Exception {
  * 			UriResolver r = req.getUriResolver();
  * 			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+r.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
  * 		}
- *
+ * 
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
  * 			<jk>return</jk> <js>""</js>
@@ -78,7 +78,7 @@ import org.apache.juneau.utils.*;
  * 				+ <js>"\n 	alert('cool!');"</js>
  * 				+ <js>"\n }"</js>;
  * 		}
- *
+ * 
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
  * 			<jk>return</jk> <js>""</js>
@@ -88,23 +88,23 @@ import org.apache.juneau.utils.*;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <p>
  * Note the {@link #getClasspathResourceAsString(String)} and {@link #getClasspathResourceAsString(String, Locale)} convenience methods
  * provided for quickly loading javascript and css files from the classpath or file system.
  * These are useful if your script or styles are complex and you want them loaded from files.
- *
+ * 
  * <p>
  * <p class='bcode'>
  * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
- *
+ * 
  * 		...
- *
+ * 
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
  * 			<jk>return</jk> getResourceAsString(<js>"MyWidget.js"</js>);
  * 		}
- *
+ * 
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
  * 			<jk>return</jk> getResourceAsString(<js>"MyWidget.css"</js>);
@@ -128,16 +128,16 @@ public abstract class Widget {
 
 	/**
 	 * The widget key.
-	 *
+	 * 
 	 * <p>
 	 * (i.e. The variable name inside the <js>"$W{...}"</js> variable).
-	 *
+	 * 
 	 * <p>
 	 * The returned value must not be <jk>null</jk>.
-	 *
+	 * 
 	 * <p>
 	 * If not overridden, the default value is the class simple name.
-	 *
+	 * 
 	 * @return The widget key.
 	 */
 	public String getName() {
@@ -146,10 +146,10 @@ public abstract class Widget {
 
 	/**
 	 * Resolves the HTML content for this widget.
-	 *
+	 * 
 	 * <p>
 	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
-	 *
+	 * 
 	 * @param req The HTTP request object.
 	 * @return The HTML content of this widget.
 	 * @throws Exception
@@ -160,10 +160,10 @@ public abstract class Widget {
 
 	/**
 	 * Resolves any Javascript that should be added to the <xt>&lt;head&gt;/&lt;script&gt;</xt> element.
-	 *
+	 * 
 	 * <p>
 	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
-	 *
+	 * 
 	 * @param req The HTTP request object.
 	 * @return The Javascript needed by this widget.
 	 * @throws Exception
@@ -174,10 +174,10 @@ public abstract class Widget {
 
 	/**
 	 * Resolves any CSS styles that should be added to the <xt>&lt;head&gt;/&lt;style&gt;</xt> element.
-	 *
+	 * 
 	 * <p>
 	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
-	 *
+	 * 
 	 * @param req The HTTP request object.
 	 * @return The CSS styles needed by this widget.
 	 * @throws Exception
@@ -188,15 +188,15 @@ public abstract class Widget {
 
 	/**
 	 * Retrieves the specified classpath resource and returns the contents as a string.
-	 *
+	 * 
 	 * <p>
 	 * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource on this class, searches
 	 * up the parent hierarchy chain.
-	 *
+	 * 
 	 * <p>
 	 * If the resource cannot be found in the classpath, then an attempt is made to look relative to the JVM working directory.
 	 * <br>Path traversals outside the working directory are not allowed for security reasons.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
@@ -207,7 +207,7 @@ public abstract class Widget {
 
 	/**
 	 * Same as {@link #getClasspathResourceAsString(String)} except also looks for localized-versions of the file.
-	 *
+	 * 
 	 * <p>
 	 * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
 	 * <br>For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
@@ -217,8 +217,8 @@ public abstract class Widget {
 	 * 	<li><js>"MyResource_ja.txt"</js>
 	 * 	<li><js>"MyResource.txt"</js>
 	 * </ol>
-	 *
-	 *
+	 * 
+	 * 
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
@@ -231,10 +231,10 @@ public abstract class Widget {
 	/**
 	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips Javascript comments from
 	 * the file.
-	 *
+	 * 
 	 * <p>
 	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
@@ -249,10 +249,10 @@ public abstract class Widget {
 	/**
 	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips CSS comments from
 	 * the file.
-	 *
+	 * 
 	 * <p>
 	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
@@ -267,10 +267,10 @@ public abstract class Widget {
 	/**
 	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips HTML comments from the
 	 * file.
-	 *
+	 * 
 	 * <p>
 	 * Comment are assumed to be <js>"<!-- -->"</js> code blocks.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException

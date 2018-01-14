@@ -28,7 +28,7 @@ import org.apache.juneau.svl.vars.*;
  * 	<li>
  * 		<code class='snippet'>$ARG{...}</code> - Command line arguments pulled from {@link Microservice#getArgs()}.
  * 		
- *			<h6 class='figure'>Example:</h6>
+ * 		<h6 class='figure'>Example:</h6>
  * 		<p class='bcode'>
  * 	String firstArg = request.getVarResolver().resolve(<js>"$ARG{0}"</js>);  <jc>// First argument.</jc>
  * 	String namedArg = request.getVarResolver().resolve(<js>"$ARG{myarg}"</js>);  <jc>// Named argument (e.g. "myarg=foo"). </jc>

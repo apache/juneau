@@ -21,13 +21,13 @@ import org.apache.juneau.serializer.*;
 
 /**
  * A serializer/object pair used for delayed object serialization.
- *
+ * 
  * <p>
  * Useful in certain conditions such as logging when you don't want to needlessly serialize objects.
- *
+ * 
  * <p>
  * Instances of this method are created by the {@link WriterSerializer#toStringObject(Object)} method.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// The POJO will not be serialized unless DEBUG is enabled.</jc>
@@ -42,7 +42,7 @@ public class StringObject implements CharSequence, Writable {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param s The serializer to use to serialize the object.
 	 * @param o The object to be serialized.
 	 */
@@ -53,7 +53,7 @@ public class StringObject implements CharSequence, Writable {
 
 	/**
 	 * Constructor with default serializer {@link JsonSerializer#DEFAULT_LAX}
-	 *
+	 * 
 	 * @param o The object to be serialized.
 	 */
 	public StringObject(Object o) {

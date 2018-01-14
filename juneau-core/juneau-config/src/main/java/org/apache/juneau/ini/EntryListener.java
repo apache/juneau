@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Listener that can be used to listen for change events for a specific entry in a config file.
- *
+ * 
  * <p>
  * Use the {@link ConfigFile#addListener(ConfigFileListener)} method to register listeners.
  */
@@ -26,7 +26,7 @@ public class EntryListener extends ConfigFileListener {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param fullKey The key in the config file to listen for changes on.
 	 */
 	public EntryListener(String fullKey) {
@@ -41,7 +41,7 @@ public class EntryListener extends ConfigFileListener {
 
 	/**
 	 * Signifies that the config file entry changed.
-	 *
+	 * 
 	 * @param cf The config file being changed.
 	 */
 	public void onChange(ConfigFile cf) {}

@@ -29,7 +29,8 @@ import org.apache.juneau.json.*;
  * The general idea behind a property store is to serve as a reusable configuration of an artifact (e.g. a Serializer)
  * such that the artifact can be cached and reused if the property stores are 'equal'.
  * 
- * <h6 class='topic'>Concept</h6>
+ * 
+ * <h5 class='topic'>Concept</h5>
  * 
  * <p>
  * For example, two serializers of the same type created with the same configuration will always end up being
@@ -45,7 +46,8 @@ import org.apache.juneau.json.*;
  * This has the effect of significantly improving performance, especially if you're creating many Serializers and 
  * Parsers.
  * 
- * <h6 class='topic'>PropertyStoreBuilder</h6>
+ * 
+ * <h5 class='topic'>PropertyStoreBuilder</h5>
  * 
  * <p>
  * The {@link PropertyStoreBuilder} class is used to build up and instantiate immutable <code>PropertyStore</code>

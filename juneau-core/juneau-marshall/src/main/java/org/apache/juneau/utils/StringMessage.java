@@ -22,7 +22,7 @@ import org.apache.juneau.http.*;
 
 /**
  * An encapsulated MessageFormat-style string and arguments.
- *
+ * 
  * <p>
  * Useful for delayed serialization of arguments for logging.
  * Message string will not be constructed until the <code>toString()</code> method is called.
@@ -35,7 +35,7 @@ public class StringMessage implements CharSequence, Writable {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param pattern {@link MessageFormat}-style pattern.
 	 * @param args Message arguments.
 	 */

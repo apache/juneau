@@ -26,14 +26,14 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Abstract class for defining Remoteable services.
- *
+ * 
  * <p>
  * Remoteable services are POJOs whose methods can be invoked remotely through proxy interfaces.
- *
+ * 
  * <p>
  * To implement a remoteable service, developers must simply subclass from this class and implement the
  * {@link #getServiceMap()} method that maps java interfaces to POJO instances.
- *
+ * 
  * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.rest.remoteable</a> for details.
  */
 @SuppressWarnings("serial")
@@ -47,10 +47,10 @@ public abstract class RemoteableServlet extends RestServletDefault {
 
 	/**
 	 * Returns the list of interfaces to their implementation objects.
-	 *
+	 * 
 	 * <p>
 	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.
-	 *
+	 * 
 	 * @return The service map.
 	 * @throws Exception
 	 */
@@ -62,7 +62,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 
 	/**
 	 * [GET /] - Get the list of all remote interfaces.
-	 *
+	 * 
 	 * @param req The HTTP servlet request.
 	 * @return The list of links to the remote interfaces.
 	 * @throws Exception
@@ -80,7 +80,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 
 	/**
 	 * [GET /{javaInterface] - Get the list of all remoteable methods on the specified interface name.
-	 *
+	 * 
 	 * @param javaInterface The Java interface name.
 	 * @return The methods defined on the interface.
 	 * @throws Exception
@@ -92,7 +92,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 
 	/**
 	 * [POST /{javaInterface}/{javaMethod}] - Invoke the specified service method.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @param javaInterface The Java interface name.
 	 * @param javaMethod The Java method name or signature.

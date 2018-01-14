@@ -27,7 +27,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param location The location of the parse exception.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -38,7 +38,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -48,7 +48,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param location The location of the parse exception.
 	 * @param causedBy The inner exception.
 	 */
@@ -58,7 +58,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param causedBy The inner exception.
 	 */
 	public ParseException(Exception causedBy) {
@@ -76,10 +76,10 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Returns the highest-level <code>ParseException</code> in the stack trace.
-	 *
+	 * 
 	 * <p>
 	 * Useful for JUnit testing of error conditions.
-	 *
+	 * 
 	 * @return The root parse exception, or this exception if there isn't one.
 	 */
 	public ParseException getRootCause() {
@@ -91,7 +91,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Sets the inner cause for this exception.
-	 *
+	 * 
 	 * @param cause The inner cause.
 	 * @return This object (for method chaining).
 	 */

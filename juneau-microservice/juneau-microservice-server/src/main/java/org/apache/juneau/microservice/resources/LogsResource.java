@@ -84,7 +84,7 @@ public class LogsResource extends Resource {
 
 	/**
 	 * [GET /*] - Get file details or directory listing.
-	 *
+	 * 
 	 * @param req The HTTP request
 	 * @param res The HTTP response
 	 * @param properties The writable properties for setting the descriptions.
@@ -120,7 +120,7 @@ public class LogsResource extends Resource {
 
 	/**
 	 * [VIEW /*] - Retrieve the contents of a log file.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @param path The log file path.
@@ -190,7 +190,7 @@ public class LogsResource extends Resource {
 
 	/**
 	 * [VIEW /*] - Retrieve the contents of a log file as parsed entries.
-	 *
+	 * 
 	 * @param req The HTTP request.
 	 * @param path The log file path.
 	 * @param start Optional start timestamp.  Don't print lines logged before the specified timestamp.  Example:  "&amp;start=2014-01-23 11:25:47".
@@ -222,7 +222,7 @@ public class LogsResource extends Resource {
 
 	/**
 	 * [DOWNLOAD /*] - Download file.
-	 *
+	 * 
 	 * @param res The HTTP response.
 	 * @param path The log file path.
 	 * @return The contents of the log file.
@@ -249,7 +249,7 @@ public class LogsResource extends Resource {
 
 	/**
 	 * [DELETE /*] - Delete a file.
-	 *
+	 * 
 	 * @param path The log file path.
 	 * @return A redirect object to the root.
 	 * @throws Exception

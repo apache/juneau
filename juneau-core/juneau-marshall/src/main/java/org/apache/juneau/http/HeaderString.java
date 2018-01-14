@@ -16,13 +16,13 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a single string value.
- *
+ * 
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Accept-Ranges: bytes
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -38,7 +38,7 @@ public class HeaderString {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param value The raw header value.
 	 */
 	protected HeaderString(String value) {
@@ -47,7 +47,7 @@ public class HeaderString {
 
 	/**
 	 * Returns <jk>true</jk> if the specified value is the same using {@link String#equalsIgnoreCase(String)}.
-	 *
+	 * 
 	 * @param compare The value to compare against.
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
@@ -57,7 +57,7 @@ public class HeaderString {
 
 	/**
 	 * Returns <jk>true</jk> if the specified value is the same using {@link String#equals(Object)}.
-	 *
+	 * 
 	 * @param compare The value to compare against.
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
@@ -67,10 +67,10 @@ public class HeaderString {
 
 	/**
 	 * Returns this header as a simple string value.
-	 *
+	 * 
 	 * <p>
 	 * Functionally equivalent to calling {@link #toString()}.
-	 *
+	 * 
 	 * @return This header as a simple string.
 	 */
 	public String asString() {

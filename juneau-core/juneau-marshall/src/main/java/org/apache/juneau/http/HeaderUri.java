@@ -18,13 +18,13 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a single URL value.
- *
+ * 
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -40,7 +40,7 @@ public class HeaderUri{
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param value The raw header value.
 	 */
 	protected HeaderUri(String value) {
@@ -49,7 +49,7 @@ public class HeaderUri{
 
 	/**
 	 * Returns this header as a {@link URI}.
-	 *
+	 * 
 	 * @return This header as a {@link URI}.
 	 */
 	public URI asURI() {
@@ -58,10 +58,10 @@ public class HeaderUri{
 
 	/**
 	 * Returns this header as a simple string value.
-	 *
+	 * 
 	 * <p>
 	 * Functionally equivalent to calling {@link #toString()}.
-	 *
+	 * 
 	 * @return This header as a simple string.
 	 */
 	public String asString() {

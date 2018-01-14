@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Specialized {@link PojoSwap} for {@link Surrogate} classes.
- *
+ * 
  * @param <T> The class type that this transform applies to.
  * @param <F> The transformed class type.
  */
@@ -33,7 +33,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param forClass The normal class.
 	 * @param constructor The constructor on the surrogate class that takes the normal class as a parameter.
 	 * @param untransformMethod The static method that converts surrogate objects into normal objects.
@@ -46,11 +46,11 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 
 	/**
 	 * Given the specified surrogate class, return the list of POJO swaps.
-	 *
+	 * 
 	 * <p>
 	 * A transform is returned for each public 1-arg constructor found.
 	 * Returns an empty list if no public 1-arg constructors are found.
-	 *
+	 * 
 	 * @param c The surrogate class.
 	 * @return The list of POJO swaps that apply to this class.
 	 */

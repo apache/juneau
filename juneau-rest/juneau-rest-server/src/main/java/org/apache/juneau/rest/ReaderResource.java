@@ -27,7 +27,7 @@ import org.apache.juneau.svl.*;
 /**
  * Represents the contents of a text file with convenience methods for resolving {@link Parameter @Parameter} variables and adding
  * HTTP response headers.
- *
+ * 
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
  */
@@ -40,7 +40,7 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param mediaType The HTTP media type.
 	 * @param contents
 	 * 	The contents of this resource.
@@ -59,7 +59,7 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param varSession Optional variable resolver for resolving variables in the string.
@@ -114,7 +114,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies the resource media type string.
-		 *
+		 * 
 		 * @param mediaType The resource media type string.
 		 * @return This object (for method chaining).
 		 */
@@ -125,7 +125,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies the resource media type string.
-		 *
+		 * 
 		 * @param mediaType The resource media type string.
 		 * @return This object (for method chaining).
 		 */
@@ -136,10 +136,10 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies the contents for this resource.
-		 *
+		 * 
 		 * <p>
 		 * This method can be called multiple times to add more content.
-		 *
+		 * 
 		 * @param contents
 		 * 	The resource contents.
 		 * 	<br>If multiple contents are specified, the results will be concatenated.
@@ -159,7 +159,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies an HTTP response header value.
-		 *
+		 * 
 		 * @param name The HTTP header name.
 		 * @param value
 		 * 	The HTTP header value.
@@ -173,7 +173,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies HTTP response header values.
-		 *
+		 * 
 		 * @param headers
 		 * 	The HTTP headers.
 		 * 	Values will be converted to <code>Strings</code> using {@link Object#toString()}.
@@ -187,7 +187,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies the variable resolver to use for this resource.
-		 *
+		 * 
 		 * @param varResolver The variable resolver.
 		 * @return This object (for method chaining).
 		 */
@@ -198,7 +198,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Create a new {@link ReaderResource} using values in this builder.
-		 *
+		 * 
 		 * @return A new immutable {@link ReaderResource} object.
 		 * @throws IOException
 		 */
@@ -209,7 +209,7 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Get the HTTP response headers.
-	 *
+	 * 
 	 * @return The HTTP response headers.
 	 */
 	public Map<String,String> getHeaders() {
@@ -246,10 +246,10 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Same as {@link #toString()} but strips comments from the text before returning it.
-	 *
+	 * 
 	 * <p>
 	 * Supports stripping comments from the following media types: HTML, XHTML, XML, JSON, Javascript, CSS.
-	 *
+	 * 
 	 * @return The resource contents stripped of any comments.
 	 */
 	public String toCommentStrippedString() {

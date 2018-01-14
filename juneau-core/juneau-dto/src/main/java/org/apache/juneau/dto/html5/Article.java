@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-article-element">&lt;article&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="article")
@@ -35,7 +35,7 @@ public class Article extends HtmlElementMixed {
 
 	/**
 	 * Adds a header node to this element.
-	 *
+	 * 
 	 * @param children The children inside the header node.
 	 * @return This object (for method chaining).
 	 */
@@ -46,7 +46,7 @@ public class Article extends HtmlElementMixed {
 
 	/**
 	 * Adds a footer node to this element.
-	 *
+	 * 
 	 * @param children The children inside the footer node.
 	 * @return This object (for method chaining).
 	 */
@@ -57,7 +57,7 @@ public class Article extends HtmlElementMixed {
 
 	/**
 	 * Adds a link node to this element.
-	 *
+	 * 
 	 * @param link The link node to add to this article.
 	 * @return This object (for method chaining).
 	 */
@@ -68,7 +68,7 @@ public class Article extends HtmlElementMixed {
 
 	/**
 	 * Adds a section node to this element.
-	 *
+	 * 
 	 * @param section The section node to add to this article.
 	 * @return This object (for method chaining).
 	 */

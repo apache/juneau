@@ -19,13 +19,13 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJOs to HTTP responses as Java Serialized Object {@link ObjectOutputStream ObjectOutputStreams}.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>application/x-java-serialized-object</code>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>application/x-java-serialized-object</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>application/x-java-serialized-object</code>
+ * Produces <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>
  */
 public class JsoSerializer extends OutputStreamSerializer {
 
@@ -43,7 +43,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public JsoSerializer(PropertyStore ps) {

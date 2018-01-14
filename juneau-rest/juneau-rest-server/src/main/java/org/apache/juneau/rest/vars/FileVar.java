@@ -18,19 +18,19 @@ import org.apache.juneau.utils.*;
 
 /**
  * File resource variable resolver
- *
+ * 
  * <p>
  * The format for this var is <js>"$F{path[,defaultValue]}"</js>.
- *
+ * 
  * <p>
  * File variables resolve to the contents of resource files located on the classpath or local JVM directory.
  * They use the {@link RestRequest#getClasspathReaderResource(String)} method to retrieve the contents of the file.
  * That in turn uses the {@link ClasspathResourceFinder} associated with the servlet class to find the file.
- *
+ * 
  * <p>
  * The {@link ClasspathResourceFinder} is similar to {@link Class#getResourceAsStream(String)} except if it doesn't find the
  * resource on this class, it searches up the parent hierarchy chain.
- *
+ * 
  * <p>
  * If the resource cannot be found in the classpath, then an attempt is made to look in the JVM working directory.
  * <br>Path traversals outside the working directory are not allowed for security reasons.
@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  * 	<li><js>"MyResource_ja.txt"</js>
  * 	<li><js>"MyResource.txt"</js>
  * </ol>
- *
+ * 
  * <p>
  * Example:
  * <p class='bcode'>
@@ -54,11 +54,11 @@ import org.apache.juneau.utils.*;
  * 		)
  * 	)
  * </p>
- *
+ * 
  * <p>
  * Files of type HTML, XHTML, XML, JSON, Javascript, and CSS will be stripped of comments.
  * This allows you to place license headers in files without them being serialized to the output.
- *
+ * 
  * @see org.apache.juneau.svl
  */
 public class FileVar extends DefaultingVar {

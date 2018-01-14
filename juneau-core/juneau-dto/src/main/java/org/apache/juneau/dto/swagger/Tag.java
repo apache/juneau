@@ -16,10 +16,10 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Allows adding meta data to a single tag that is used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a>.
- *
+ * 
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * 		<js>"description"</js>: <js>"Pets operations"</js>
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -52,10 +52,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. The name of the tag.
-	 *
+	 * 
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
@@ -64,10 +64,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. The name of the tag.
-	 *
+	 * 
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -78,7 +78,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setName(String)}.
-	 *
+	 * 
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -88,14 +88,14 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description for the tag.
-	 *
+	 * 
 	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
-	 *
+	 * 
 	 * @return
 	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -105,14 +105,14 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description for the tag.
-	 *
+	 * 
 	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -123,7 +123,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setDescription(String)}.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -133,10 +133,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
-	 *
+	 * 
 	 * <p>
 	 * Additional external documentation for this tag.
-	 *
+	 * 
 	 * @return
 	 * 	The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -146,10 +146,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
-	 *
+	 * 
 	 * <p>
 	 * Additional external documentation for this tag.
-	 *
+	 * 
 	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -160,7 +160,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setExternalDocs(ExternalDocumentation)}.
-	 *
+	 * 
 	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */

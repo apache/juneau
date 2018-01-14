@@ -31,7 +31,7 @@ public class SessionArgs {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param properties
 	 * 	Session-level properties.
 	 * 	<br>These override context-level properties.

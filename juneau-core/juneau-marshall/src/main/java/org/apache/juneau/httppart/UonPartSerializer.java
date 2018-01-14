@@ -41,7 +41,7 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */

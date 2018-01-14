@@ -16,7 +16,7 @@ import org.apache.juneau.*;
 
 /**
  * Defines the Java classes that make up the HTML DTO type dictionary.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -26,7 +26,7 @@ import org.apache.juneau.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 public class HtmlBeanDictionary extends BeanDictionaryList {

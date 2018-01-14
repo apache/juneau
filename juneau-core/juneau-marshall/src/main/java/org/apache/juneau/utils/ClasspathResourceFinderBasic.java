@@ -17,7 +17,7 @@ import java.util.*;
 
 /**
  * Utility class for finding resources for a class.
- *
+ * 
  * <p>
  * Same as {@link ClasspathResourceFinderSimple}, but if the resource cannot be found in the classpath, then an attempt 
  * is made to look in the JVM working directory.

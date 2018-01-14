@@ -30,14 +30,14 @@ public @interface Html {
 
 	/**
 	 * Use the specified anchor text when serializing a URI.
-	 *
+	 * 
 	 * <p>
 	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
-	 *
+	 * 
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> FileSpace {
-	 *
+	 * 
 	 * 		<ja>@Html</ja>(anchorText=<js>"drive/{drive}"</js>)
 	 * 		<jk>public</jk> String getDrive() {
 	 * 			...;
@@ -49,7 +49,7 @@ public @interface Html {
 
 	/**
 	 * Treat as plain text.
-	 *
+	 * 
 	 * <p>
 	 * Object is serialized to a String using the <code>toString()</code> method and written directly to output.
 	 * Useful when you want to serialize custom HTML.
@@ -58,7 +58,7 @@ public @interface Html {
 
 	/**
 	 * Treat as XML.
-	 *
+	 * 
 	 * <p>
 	 * Useful when creating beans that model HTML elements.
 	 */
@@ -66,10 +66,10 @@ public @interface Html {
 
 	/**
 	 * Adds a hyperlink to a bean property when rendered as HTML.
-	 *
+	 * 
 	 * <p>
 	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
-	 *
+	 * 
 	 * <p>
 	 * The URLs can be any of the following forms:
 	 * <ul>
@@ -79,11 +79,11 @@ public @interface Html {
 	 * 	<li>Servlet-relative - e.g. <js>"servlet:/myPath"</js>
 	 * 	<li>Path-info-relative - e.g. <js>"myPath"</js>
 	 * </ul>
-	 *
+	 * 
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> FileSpace {
-	 *
+	 * 
 	 * 		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)
 	 * 		<jk>public</jk> String getDrive() {
 	 * 			...;
@@ -95,7 +95,7 @@ public @interface Html {
 
 	/**
 	 * When <jk>true</jk>, don't add headers to tables.
-	 *
+	 * 
 	 * <p>
 	 * Default is <jk>false</jk>.
 	 */
@@ -103,7 +103,7 @@ public @interface Html {
 
 	/**
 	 * When <jk>true</jk>, collections of beans should be rendered as trees instead of tables.
-	 *
+	 * 
 	 * <p>
 	 * Default is <jk>false</jk>.
 	 */
@@ -111,7 +111,7 @@ public @interface Html {
 	
 	/**
 	 * Associates an {@link HtmlRender} with a bean property for custom HTML rendering of the property.
-	 *
+	 * 
 	 * <p>
 	 * This annotation applies to bean properties and classes.
 	 */

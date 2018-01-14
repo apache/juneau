@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
 /**
  * Describes a single type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'>
@@ -42,18 +42,18 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Parses an <code>Accept</code> header value into an array of media ranges.
-	 *
+	 * 
 	 * <p>
 	 * The returned media ranges are sorted such that the most acceptable media is available at ordinal position
 	 * <js>'0'</js>, and the least acceptable at position n-1.
-	 *
+	 * 
 	 * <p>
 	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
 	 * <p class='bcode'>
 	 * 	Accept         = "Accept" ":"
 	 * 	                  #( media-range [ accept-params ] )
-	 *
+	 * 
 	 * 	media-range    = ( "*\/*"
 	 * 	                  | ( type "/" "*" )
 	 * 	                  | ( type "/" subtype )
@@ -61,7 +61,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
 	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
 	 * </p>
-	 *
+	 * 
 	 * @param value
 	 * 	The value to parse.
 	 * 	If <jk>null</jk> or empty, returns a single <code>MediaTypeRange</code> is returned that represents all types.
@@ -144,14 +144,14 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Returns the media type enclosed by this media range.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
 	 * 	<li><js>"text/html"</js>
 	 * 	<li><js>"text/*"</js>
 	 * 	<li><js>"*\/*"</js>
 	 * </ul>
-	 *
+	 * 
 	 * @return The media type of this media range, lowercased, never <jk>null</jk>.
 	 */
 	public MediaType getMediaType() {
@@ -160,14 +160,14 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
-	 *
+	 * 
 	 * <p>
 	 * The quality value is a float between <code>0.0</code> (unacceptable) and <code>1.0</code> (most acceptable).
-	 *
+	 * 
 	 * <p>
 	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
 	 * header, as opposed to <js>"accept-*"</js> header, its value will always be <js>"1"</js>.
-	 *
+	 * 
 	 * @return The 'q' value for this type, never <jk>null</jk>.
 	 */
 	public Float getQValue() {
@@ -176,10 +176,10 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Returns the optional set of custom extensions defined for this type.
-	 *
+	 * 
 	 * <p>
 	 * Values are lowercase and never <jk>null</jk>.
-	 *
+	 * 
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public Map<String,Set<String>> getExtensions() {
@@ -188,10 +188,10 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Provides a string representation of this media range, suitable for use as an <code>Accept</code> header value.
-	 *
+	 * 
 	 * <p>
 	 * The literal text generated will be all lowercase.
-	 *
+	 * 
 	 * @return A media range suitable for use as an Accept header value, never <code>null</code>.
 	 */
 	@Override /* Object */
@@ -222,7 +222,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	/**
 	 * Returns <jk>true</jk> if the specified object is also a <code>MediaType</code>, and has the same qValue, type,
 	 * parameters, and extensions.
-	 *
+	 * 
 	 * @return <jk>true</jk> if object is equivalent.
 	 */
 	@Override /* Object */
@@ -242,7 +242,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Returns a hash based on this instance's <code>media-type</code>.
-	 *
+	 * 
 	 * @return A hash based on this instance's <code>media-type</code>.
 	 */
 	@Override /* Object */
@@ -252,7 +252,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Compares two MediaRanges for equality.
-	 *
+	 * 
 	 * <p>
 	 * The values are first compared according to <code>qValue</code> values.
 	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in
@@ -261,7 +261,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 * promoted over the 'wildcard' subtype.
 	 * <code>MediaRanges</code> with the same types but with extensions are promoted over those same types with no
 	 * extensions.
-	 *
+	 * 
 	 * @param o The range to compare to.  Never <jk>null</jk>.
 	 */
 	@Override /* Comparable */

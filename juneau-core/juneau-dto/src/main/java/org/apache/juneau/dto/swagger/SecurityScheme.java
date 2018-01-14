@@ -21,25 +21,25 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Allows the definition of a security scheme that can be used by the operations.
- *
+ * 
  * <p>
  * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's
  * common flows (implicit, password, application and access code).
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Basic authentication sample</jc>
  * 	{
  * 		<js>"type"</js>: <js>"basic"</js>
  * 	}
- *
+ * 
  * 	<jc>// API key sample</jc>
  * 	{
  * 		<js>"type"</js>: <js>"apiKey"</js>,
  * 		<js>"name"</js>: <js>"api_key"</js>,
  * 		<js>"in"</js>: <js>"header"</js>
  * 	}
- *
+ * 
  * 	<jc>// Implicit OAuth2 sample</jc>
  * 	{
  * 		<js>"type"</js>: <js>"oauth2"</js>,
@@ -51,7 +51,7 @@ import org.apache.juneau.annotation.*;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -89,13 +89,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. The type of the security scheme.
-	 *
+	 * 
 	 * <p>
 	 * Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
-	 *
+	 * 
 	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getType() {
@@ -104,13 +104,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
-	 *
+	 * 
 	 * <p>
 	 * Required. The type of the security scheme.
-	 *
+	 * 
 	 * <p>
 	 * Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
-	 *
+	 * 
 	 * @param type The new value for the <property>type</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -126,7 +126,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setType(String)}.
-	 *
+	 * 
 	 * @param type The new value for the <property>type</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -136,10 +136,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description for security scheme.
-	 *
+	 * 
 	 * @return
 	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -149,10 +149,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 *
+	 * 
 	 * <p>
 	 * A short description for security scheme.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -163,7 +163,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setDescription(String)}.
-	 *
+	 * 
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -173,10 +173,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
-	 *
+	 * 
 	 * <p>
 	 * The name of the header or query parameter to be used.
-	 *
+	 * 
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
@@ -185,10 +185,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
-	 *
+	 * 
 	 * <p>
 	 * The name of the header or query parameter to be used.
-	 *
+	 * 
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -199,7 +199,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setName(String)}.
-	 *
+	 * 
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -209,10 +209,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>in</property>.
-	 *
+	 * 
 	 * <p>
 	 * The location of the API key. Valid values are <js>"query"</js> or <js>"header"</js>.
-	 *
+	 * 
 	 * @return The value of the <property>in</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getIn() {
@@ -221,10 +221,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>in</property>.
-	 *
+	 * 
 	 * <p>
 	 * The location of the API key. Valid values are <js>"query"</js> or <js>"header"</js>.
-	 *
+	 * 
 	 * @param in The new value for the <property>in</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -235,7 +235,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setIn(String)}.
-	 *
+	 * 
 	 * @param in The new value for the <property>in</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -245,13 +245,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>flow</property>.
-	 *
+	 * 
 	 * <p>
 	 * The flow used by the OAuth2 security scheme.
-	 *
+	 * 
 	 * <p>
 	 * Valid values are <js>"implicit"</js>, <js>"password"</js>, <js>"application"</js> or <js>"accessCode"</js>.
-	 *
+	 * 
 	 * @return The value of the <property>flow</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getFlow() {
@@ -260,13 +260,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>flow</property>.
-	 *
+	 * 
 	 * <p>
 	 * The flow used by the OAuth2 security scheme.
-	 *
+	 * 
 	 * <p>
 	 * Valid values are <js>"implicit"</js>, <js>"password"</js>, <js>"application"</js> or <js>"accessCode"</js>.
-	 *
+	 * 
 	 * @param flow The new value for the <property>flow</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -277,7 +277,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setFlow(String)}.
-	 *
+	 * 
 	 * @param flow The new value for the <property>flow</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -287,13 +287,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>authorizationUrl</property>.
-	 *
+	 * 
 	 * <p>
 	 * The authorization URL to be used for this flow.
-	 *
+	 * 
 	 * <p>
 	 * This SHOULD be in the form of a URL.
-	 *
+	 * 
 	 * @return
 	 * 	The value of the <property>authorizationUrl</property> property on this bean, or <jk>null</jk> if it
 	 * 	is not set.
@@ -304,13 +304,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>authorizationUrl</property>.
-	 *
+	 * 
 	 * <p>
 	 * The authorization URL to be used for this flow.
-	 *
+	 * 
 	 * <p>
 	 * This SHOULD be in the form of a URL.
-	 *
+	 * 
 	 * @param authorizationUrl The new value for the <property>authorizationUrl</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -321,7 +321,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setAuthorizationUrl(String)}.
-	 *
+	 * 
 	 * @param authorizationUrl The new value for the <property>authorizationUrl</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -331,13 +331,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>tokenUrl</property>.
-	 *
+	 * 
 	 * <p>
 	 * The token URL to be used for this flow.
-	 *
+	 * 
 	 * <p>
 	 * This SHOULD be in the form of a URL.
-	 *
+	 * 
 	 * @return The value of the <property>tokenUrl</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getTokenUrl() {
@@ -346,13 +346,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>tokenUrl</property>.
-	 *
+	 * 
 	 * <p>
 	 * The token URL to be used for this flow.
-	 *
+	 * 
 	 * <p>
 	 * This SHOULD be in the form of a URL.
-	 *
+	 * 
 	 * @param tokenUrl The new value for the <property>tokenUrl</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -363,7 +363,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #setTokenUrl(String)}.
-	 *
+	 * 
 	 * @param tokenUrl The new value for the <property>tokenUrl</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -373,10 +373,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>scopes</property>.
-	 *
+	 * 
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
-	 *
+	 * 
 	 * @return The value of the <property>scopes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,String> getScopes() {
@@ -385,10 +385,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>scopes</property>.
-	 *
+	 * 
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
-	 *
+	 * 
 	 * @param scopes The new value for the <property>scopes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -399,10 +399,10 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>scopes</property>.
-	 *
+	 * 
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
-	 *
+	 * 
 	 * @param name The name of the scope.
 	 * @param description A short description of the scope.
 	 * @return This object (for method chaining).
@@ -416,7 +416,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Synonym for {@link #addScope(String,String)}.
-	 *
+	 * 
 	 * @param name The name of the scope.
 	 * @param description A short description of the scope.
 	 * @return This object (for method chaining).

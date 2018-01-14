@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Parent class of {@link Entry}, {@link Feed}, and {@link Source}
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -53,7 +53,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param id The ID of this object.
 	 * @param title The title of this object.
 	 * @param updated The updated timestamp of this object.
@@ -64,7 +64,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Normal constructor.
-	 *
+	 * 
 	 * @param id The ID of this object.
 	 * @param title The title of this object.
 	 * @param updated The updated timestamp of this object.
@@ -83,7 +83,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the list of authors for this object.
-	 *
+	 * 
 	 * @return The list of authors for this object.
 	 */
 	@Xml(format=COLLAPSED, childName="author")
@@ -93,7 +93,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the list of authors for this object.
-	 *
+	 * 
 	 * @param authors The list of authors for this object.
 	 * @return This object (for method chaining).
 	 */
@@ -105,7 +105,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the list of categories of this object.
-	 *
+	 * 
 	 * @return The list of categories of this object.
 	 */
 	@Xml(format=COLLAPSED, childName="category")
@@ -115,7 +115,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the list of categories of this object.
-	 *
+	 * 
 	 * @param categories The list of categories of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -127,7 +127,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the list of contributors of this object.
-	 *
+	 * 
 	 * @return The list of contributors of this object.
 	 */
 	@Xml(format=COLLAPSED, childName="contributor")
@@ -137,7 +137,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the list of contributors of this object.
-	 *
+	 * 
 	 * @param contributors The list of contributors of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -149,7 +149,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the ID of this object.
-	 *
+	 * 
 	 * @return The ID of this object.
 	 */
 	public Id getId() {
@@ -158,7 +158,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the ID of this object.
-	 *
+	 * 
 	 * @param id The ID of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -170,7 +170,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the ID of this object.
-	 *
+	 * 
 	 * @param id The ID of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -181,7 +181,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the list of links of this object.
-	 *
+	 * 
 	 * @return The list of links of this object.
 	 */
 	@Xml(format=COLLAPSED)
@@ -191,7 +191,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the list of links of this object.
-	 *
+	 * 
 	 * @param links The list of links of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -203,7 +203,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the rights statement of this object.
-	 *
+	 * 
 	 * @return The rights statement of this object.
 	 */
 	public Text getRights() {
@@ -212,7 +212,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the rights statement of this object.
-	 *
+	 * 
 	 * @param rights The rights statement of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -224,7 +224,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the rights statement of this object.
-	 *
+	 * 
 	 * @param rights The rights statement of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -235,7 +235,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the title of this object.
-	 *
+	 * 
 	 * @return The title of this object.
 	 */
 	public Text getTitle() {
@@ -244,7 +244,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the title of this object.
-	 *
+	 * 
 	 * @param title The title of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -256,7 +256,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the title of this object.
-	 *
+	 * 
 	 * @param title The title of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -267,7 +267,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Returns the update timestamp of this object.
-	 *
+	 * 
 	 * @return The update timestamp of this object.
 	 */
 	@Swap(CalendarSwap.ISO8601DT.class)
@@ -277,7 +277,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the update timestamp of this object.
-	 *
+	 * 
 	 * @param updated The update timestamp of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -289,7 +289,7 @@ public class CommonEntry extends Common {
 
 	/**
 	 * Sets the update timestamp of this object.
-	 *
+	 * 
 	 * @param updated The update timestamp of this object in ISO8601 format.
 	 * @return This object (for method chaining).
 	 */

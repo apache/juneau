@@ -24,7 +24,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param pMeta The bean property metadata.
 	 * @param name The bean property name.
 	 * @param value The bean property value.
@@ -39,7 +39,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	/**
 	 * Returns the bean property metadata.
-	 *
+	 * 
 	 * @return The bean property metadata.
 	 */
 	public final BeanPropertyMeta getMeta() {
@@ -48,7 +48,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	/**
 	 * Returns the bean property metadata.
-	 *
+	 * 
 	 * @return The bean property metadata.
 	 */
 	public final ClassMeta<?> getClassMeta() {
@@ -57,7 +57,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	/**
 	 * Returns the bean property name.
-	 *
+	 * 
 	 * @return The bean property name.
 	 */
 	public final String getName() {
@@ -66,7 +66,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	/**
 	 * Returns the bean property value.
-	 *
+	 * 
 	 * @return The bean property value.
 	 */
 	public final Object getValue() {
@@ -75,7 +75,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	/**
 	 * Returns the exception thrown by calling the property getter.
-	 *
+	 * 
 	 * @return The exception thrown by calling the property getter.
 	 */
 	public final Throwable getThrown() {

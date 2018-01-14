@@ -21,7 +21,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param message The error message.
 	 */
 	public ContextRuntimeException(String message) {
@@ -30,7 +30,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
@@ -40,7 +40,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param cause The initial cause of the exception.
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
@@ -52,7 +52,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param cause The initial cause of the exception.
 	 */
 	public ContextRuntimeException(Throwable cause) {
@@ -62,7 +62,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Sets the inner cause for this exception.
-	 *
+	 * 
 	 * @param cause The inner cause.
 	 * @return This object (for method chaining).
 	 */

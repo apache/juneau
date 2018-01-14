@@ -34,7 +34,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UonSerializerBuilder(PropertyStore ps) {
@@ -53,10 +53,10 @@ public class UonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
-	 *
+	 * 
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
@@ -73,15 +73,15 @@ public class UonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>encoding(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
 	 * </ul>
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public UonSerializerBuilder encoding() {
@@ -90,15 +90,15 @@ public class UonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
-	 *
+	 * 
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
-	 *
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>The default value is {@link ParamFormat#UON}.
@@ -110,15 +110,15 @@ public class UonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>paramFormat(<jsf>PLAINTEXT</jsf>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
-	 *
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public UonSerializerBuilder paramFormatPlain() {

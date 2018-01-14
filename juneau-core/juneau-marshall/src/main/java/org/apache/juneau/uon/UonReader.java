@@ -18,10 +18,10 @@ import org.apache.juneau.parser.*;
 
 /**
  * Same functionality as {@link ParserReader} except automatically decoded <code>%xx</code> escape sequences.
- *
+ * 
  * <p>
  * Escape sequences are assumed to be encoded UTF-8.  Extended Unicode (&gt;\u10000) is supported.
- *
+ * 
  * <p>
  * If decoding is enabled, the following character replacements occur so that boundaries are not lost:
  * <ul>
@@ -40,7 +40,7 @@ public final class UonReader extends ParserReader {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param pipe The parser input.
 	 * @param decodeChars Whether the input is URL-encoded.
 	 * @throws Exception

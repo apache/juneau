@@ -16,14 +16,14 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
- *
+ * 
  * <p>
  * Primarily used for testing purposes for quickly creating populated sets.
  * <p class='bcode'>
  * 	<jc>// Example:</jc>
  * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
  * </p>
- *
+ * 
  * @param <T> The entry type.
  */
 @SuppressWarnings({"serial","unchecked"})
@@ -31,7 +31,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 
 	/**
 	 * Adds an entry to this set.
-	 *
+	 * 
 	 * @param t The entry to add to this set.
 	 * @return This object (for method chaining).
 	 */
@@ -42,7 +42,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 
 	/**
 	 * Adds multiple entries to this set.
-	 *
+	 * 
 	 * @param t The entries to add to this set.
 	 * @return This object (for method chaining).
 	 */

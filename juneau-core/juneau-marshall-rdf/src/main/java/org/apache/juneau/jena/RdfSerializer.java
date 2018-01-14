@@ -23,7 +23,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJOs to RDF.
- *
+ * 
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * 
  * The following direct subclasses are provided for language-specific serializers:
@@ -34,10 +34,12 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link RdfSerializer.Turtle} - TURTLE.
  * 	<li>{@link RdfSerializer.N3} - N3.
  * </ul>
- *
- * <h5 class='section'>Additional information:</h5>
  * 
- * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.jena &gt; RDF Overview</a>
+ * </ul>
  */
 public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
@@ -310,7 +312,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -352,7 +354,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */

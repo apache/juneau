@@ -32,7 +32,7 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public MsgPackSerializerBuilder(PropertyStore ps) {

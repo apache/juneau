@@ -19,18 +19,18 @@ import org.apache.juneau.serializer.*;
 
 /**
  * REST method response converter.
- *
+ * 
  * <p>
  * Implements a filter mechanism for REST method calls that allows response objects to be converted to some other POJO
  * after invocation of the REST method.
- *
+ * 
  * <p>
  * Converters are associated with REST methods through the {@link RestMethod#converters() @RestMethod.converters()} annotation.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> RestServlet {
- *
+ * 
  * 		<jc>// GET request handler</jc>
  * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
  * 		<jk>public</jk> HttpServletRequest doGet(RestRequest req) {
@@ -39,17 +39,17 @@ import org.apache.juneau.serializer.*;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <p>
  * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource.converters()} annotation.
  * Applying converters at the resource level is equivalent to applying converters to each resource method individually.
- *
+ * 
  * <h6 class='topic'>How to implement</h6>
- *
+ * 
  * Implementers should simply implement the {@link #convert(RestRequest, Object, ClassMeta)} and return back a
  * 'converted' object.
  * It's up to the implementer to decide what this means.
- *
+ * 
  * <p>
  * Subclasses must implement one of the following constructors:
  * <ul>
@@ -59,9 +59,9 @@ import org.apache.juneau.serializer.*;
  * 
  * <p>
  * Subclasses can also be defined as inner classes of the resource class.
- *
+ * 
  * <h6 class='topic'>Predefined converters</h6>
- *
+ * 
  * The following converters are available by default.
  * <ul class='spaced-list'>
  * 	<li>
@@ -76,7 +76,7 @@ public interface RestConverter {
 
 	/**
 	 * Performs post-call conversion on the specified response object.
-	 *
+	 * 
 	 * @param req The servlet request.
 	 * @param res The response object set by the REST method through the {@link RestResponse#setOutput(Object)} method.
 	 * @param cm

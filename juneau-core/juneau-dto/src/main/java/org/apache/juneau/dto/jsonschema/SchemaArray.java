@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Represents a list of {@link Schema} objects.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -43,7 +43,7 @@ public class SchemaArray extends LinkedList<Schema> {
 
 	/**
 	 * Constructor with predefined types to add to this list.
-	 *
+	 * 
 	 * @param schemas The list of schemas in this array.
 	 */
 	public SchemaArray(Schema...schemas) {
@@ -52,7 +52,7 @@ public class SchemaArray extends LinkedList<Schema> {
 
 	/**
 	 * Convenience method for adding one or more {@link Schema} objects to this array.
-	 *
+	 * 
 	 * @param schemas The {@link Schema} objects to add to this array.
 	 * @return This object (for method chaining).
 	 */

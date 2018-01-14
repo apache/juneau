@@ -22,17 +22,17 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
- *
+ * 
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
  * 		String myProxyMethod(<ja>@Body</ja> MyPojo pojo);
  * 	}
  * </p>
- *
+ * 
  * <p>
  * The argument can be any of the following types:
  * <ul class='spaced-list'>
@@ -48,26 +48,26 @@ import org.apache.juneau.serializer.*;
  * 	<li>
  * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
  * </ul>
- *
+ * 
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
  * {@link RequestBean @RequestBean}:
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
- *
+ * 
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
  * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
  * 	}
- *
+ * 
  * 	<jk>public interface</jk> MyRequestBean {
  * 		<ja>@Body</ja>
  * 		MyPojo getMyPojo();
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>

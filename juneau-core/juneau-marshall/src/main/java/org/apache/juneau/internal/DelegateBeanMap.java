@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 /**
  * Represents a wrapped {@link BeanMap} where property values can be overridden, removed, or reordered without
  * affecting the underlying bean.
- *
+ * 
  * <p>
  * Provides the {@link #filterKeys(List)} method for specifying the keys to keep in the bean map and in what order
  * they should appear.
- *
+ * 
  * @param <T> The class type of the wrapped bean.
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {
@@ -33,7 +33,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param bean The bean being wrapped.
 	 * @param session The bean session that created this bean map.
 	 */
@@ -45,7 +45,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	/**
 	 * Add a key in the next position.
-	 *
+	 * 
 	 * @param key The key to add.
 	 */
 	public void addKey(String key) {
@@ -73,10 +73,10 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	/**
 	 * Remove all but the specified properties from this bean map.
-	 *
+	 * 
 	 * <p>
 	 * This does not affect the underlying bean.
-	 *
+	 * 
 	 * @param keys The remaining keys in the bean map (in the specified order).
 	 */
 	public void filterKeys(List<String> keys) {

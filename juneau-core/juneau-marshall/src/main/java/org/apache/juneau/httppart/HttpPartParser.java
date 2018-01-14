@@ -17,7 +17,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
- *
+ * 
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
@@ -41,7 +41,7 @@ public interface HttpPartParser {
 	
 	/**
 	 * Converts the specified input to the specified class type.
-	 *
+	 * 
 	 * @param partType The part type being parsed.
 	 * @param in The input being parsed.
 	 * @param type The category of value being parsed.

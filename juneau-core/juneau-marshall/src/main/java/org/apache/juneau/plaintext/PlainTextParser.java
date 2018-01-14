@@ -19,19 +19,20 @@ import org.apache.juneau.transform.*;
 /**
  * Parsers HTTP plain text request bodies into <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">Group 5</a>
  * POJOs.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>text/plain</code>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>text/plain</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>text/plain</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>text/plain</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * Essentially just converts plain text to POJOs via static <code>fromString()</code> or <code>valueOf()</code>, or
  * through constructors that take a single string argument.
- *
+ * 
  * <p>
  * Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform
  * defined on it.
@@ -52,7 +53,7 @@ public class PlainTextParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public PlainTextParser(PropertyStore ps) {
@@ -61,7 +62,7 @@ public class PlainTextParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The media types that this parser consumes.
 	 * 	<p>

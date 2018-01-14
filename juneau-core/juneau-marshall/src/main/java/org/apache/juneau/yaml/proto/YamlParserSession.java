@@ -25,7 +25,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link YamlParser}.
- *
+ * 
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -37,7 +37,7 @@ public final class YamlParserSession extends ReaderParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -50,12 +50,12 @@ public final class YamlParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is whitespace.
-	 *
+	 * 
 	 * <p>
 	 * The definition of whitespace is different for strict vs lax mode.
 	 * Strict mode only interprets 0x20 (space), 0x09 (tab), 0x0A (line feed) and 0x0D (carriage return) as whitespace.
 	 * Lax mode uses {@link Character#isWhitespace(int)} to make the determination.
-	 *
+	 * 
 	 * @param cp The codepoint.
 	 * @return <jk>true</jk> if the specified character is whitespace.
 	 */
@@ -67,7 +67,7 @@ public final class YamlParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is whitespace or '/'.
-	 *
+	 * 
 	 * @param cp The codepoint.
 	 * @return <jk>true</jk> if the specified character is whitespace or '/'.
 	 */

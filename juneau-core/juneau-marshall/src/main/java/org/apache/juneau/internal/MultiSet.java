@@ -18,7 +18,7 @@ import java.util.*;
 
 /**
  * Encapsulates multiple collections so they can be iterated over as if they were all part of the same collection.
- *
+ * 
  * @param <E> The object type of this set.
  */
 public class MultiSet<E> extends AbstractSet<E> {
@@ -28,7 +28,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 
 	/**
 	 * Create a new Set that consists as a coalesced set of the specified collections.
-	 *
+	 * 
 	 * @param c Zero or more collections to add to this set.
 	 */
 	@SuppressWarnings("unchecked")
@@ -39,7 +39,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 
 	/**
 	 * Appends the specified collection to this set of collections.
-	 *
+	 * 
 	 * @param c The collection to append to this set of collections.
 	 * @return This object (for method chaining).
 	 */
@@ -93,7 +93,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 
 	/**
 	 * Enumerates over all entries in all collections.
-	 *
+	 * 
 	 * @return An enumeration wrapper around this set.
 	 */
 	public Enumeration<E> enumerator() {

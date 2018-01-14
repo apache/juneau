@@ -18,11 +18,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * Converter for enabling of {@link PojoQuery} support on response objects returned by a <code>@RestMethod</code> method.
- *
+ * 
  * <p>
  * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}
  * class.
- *
+ * 
  * <p>
  * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps},
  * arrays of beans, etc...):
@@ -53,7 +53,7 @@ import org.apache.juneau.utils.*;
  * 		<br>Only return the specified number of rows.
  * 		<br>Default is {@code 0} (meaning return all rows).
  * </ul>
- *
+ * 
  * <p>
  * See {@link PojoQuery} for additional information on filtering POJO models.
  */

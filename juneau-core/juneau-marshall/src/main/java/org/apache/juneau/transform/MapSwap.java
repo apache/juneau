@@ -16,8 +16,8 @@ import org.apache.juneau.*;
 
 /**
  * Abstract subclass for POJO swaps that swap objects for object maps.
- *
- * <h6 class='topic'>Example</h6>
+ * 
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// A swap that converts beans into generic maps.</jc>
  * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> MapSwap&lt;<jk>byte</jk>[]&gt; {

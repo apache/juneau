@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a simple namespace mapping between a simple name and URI.
- *
+ * 
  * <p>
  * In general, the simple name will be used as the XML prefix mapping unless there are conflicts or prefix re-mappings
  * in the serializer.
@@ -37,7 +37,7 @@ public final class Namespace {
 	 * 
 	 * <p>
 	 * Previously-encountered name/uri pairs return a cached copy.
-	 *
+	 * 
 	 * @param name The namespace name.  See {@link Namespace#getName()}.
 	 * @param uri The namespace URI.  See {@link Namespace#getUri()}.
 	 * @return The namespace object.
@@ -73,14 +73,14 @@ public final class Namespace {
 
 	/**
 	 * Converts the specified object into a {@link Namespace} object.
-	 *
+	 * 
 	 * <p>
 	 * Can be any of following types:
 	 * <ul>
 	 * 	<li>A {@link Namespace} object
 	 * 	<li>A string containing a name/value pair of the form <js>"name:uri"</js>.
 	 * </ul>
-	 *
+	 * 
 	 * @param o The input.
 	 * @return The namespace object, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.
 	 */
@@ -96,7 +96,7 @@ public final class Namespace {
 
 	/**
 	 * Converts the specified object into an array of {@link Namespace} object.
-	 *
+	 * 
 	 * <p>
 	 * Can be any of following types:
 	 * <ul>
@@ -104,7 +104,7 @@ public final class Namespace {
 	 * 	<li>A comma-delimited string with key/value pairs of the form <js>"name:uri"</js>.
 	 * 	<li>A <code>Collection</code> containing any of object that can be passed to {@link #createArray(Object)}.
 	 * </ul>
-	 *
+	 * 
 	 * @param o The input.
 	 * @return The namespace objects, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.
 	 */
@@ -145,7 +145,7 @@ public final class Namespace {
 	
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param name The short name of this schema.
 	 * @param uri The URI of this schema.
 	 */
@@ -157,7 +157,7 @@ public final class Namespace {
 	
 	/**
 	 * Returns the namespace name.
-	 *
+	 * 
 	 * @return The namespace name.
 	 */
 	public String getName() {
@@ -166,7 +166,7 @@ public final class Namespace {
 
 	/**
 	 * Returns the namespace URI.
-	 *
+	 * 
 	 * @return The namespace URI.
 	 */
 	public String getUri() {

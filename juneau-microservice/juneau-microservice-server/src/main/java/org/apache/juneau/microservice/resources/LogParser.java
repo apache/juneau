@@ -35,7 +35,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param formatter The log entry formatter.
 	 * @param f The log file.
 	 * @param start Don't return rows before this date.  If <jk>null</jk>, start from the beginning of the file.
@@ -111,7 +111,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 
 	/**
 	 * Serializes the contents of the parsed log file to the specified writer and then closes the underlying reader.
-	 *
+	 * 
 	 * @param w The writer to write the log file to.
 	 * @throws IOException
 	 */

@@ -16,27 +16,27 @@ import org.apache.juneau.*;
 
 /**
  * Identifies a class as being a surrogate class.
- *
+ * 
  * <p>
  * Surrogate classes are used in place of other classes during serialization.
  * For example, you may want to use a surrogate class to change the names or order of bean properties on a bean.
- *
+ * 
  * <p>
  * This interface has no methods to implement.
  * It's simply used by the framework to identify the class as a surrogate class when specified as a swap.
- *
+ * 
  * <p>
  * The following is an example of a surrogate class change changes a property name:
  * <p class='bcode'>
  * 	<jk>public class</jk> MySurrogate <jk>implements</jk> Surrogate {
  * 		<jk>public</jk> String surrogateField;  <jc>// New bean property</jc>
- *
+ * 
  * 		<jk>public</jk> MySurrogate(NormalClass normalClass) {
  * 			<jk>this</jk>.surrogateField = normalClass.normalField;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <p>
  * Optionally, a public static method can be used to un-transform a class during parsing:
  * <p class='bcode'>
@@ -47,7 +47,7 @@ import org.apache.juneau.*;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <p>
  * Surrogate classes must conform to the following:
  * <ul class='spaced-list'>
@@ -65,7 +65,7 @@ import org.apache.juneau.*;
  * 		transformed class can be instantiated by the parser before being converted into the normal class by the
  * 		un-transform method).
  * </ul>
- *
+ * 
  * <p>
  * Surrogate classes are associated with serializers and parsers using the {@link BeanContextBuilder#pojoSwaps(Class...)}
  * method.
@@ -76,37 +76,37 @@ import org.apache.juneau.*;
  * 		JsonParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(MySurrogate.<jk>class</jk>).build();
  * 		String r;
  * 		Normal n = Normal.<jsm>create</jsm>();
- *
+ * 
  * 		r = s.serialize(n);
  * 		assertEquals(<js>"{f2:'f1'}"</js>, r);
- *
+ * 
  * 		n = p.parse(r, Normal.<jk>class</jk>);
  * 		assertEquals(<js>"f1"</js>, n.f1);
  * 	}
- *
+ * 
  * 	<jc>// The normal class</jc>
  * 	<jk>public class</jk> Normal {
  * 		<jk>public</jk> String f1;
- *
+ * 
  * 		<jk>public static</jk> Normal <jsm>create</jsm>() {
  * 			Normal n = <jk>new</jk> Normal();
  * 			n.f1 = <js>"f1"</js>;
  * 			<jk>return</jk> n;
  * 		}
  * 	}
- *
+ * 
  * 	<jc>// The surrogate class</jc>
  * 	<jk>public class</jk> MySurrogate <jk>implements</jk> Surrogate {
  * 		<jk>public</jk> String f2;
- *
+ * 
  * 		<jc>// Surrogate constructor</jc>
  * 		<jk>public</jk> MySurrogate(Normal n) {
  * 			f2 = n.f1;
  * 		}
- *
+ * 
  * 		<jc>// Constructor used during parsing (only needed if un-transform method specified)</jc>
  * 		<jk>public</jk> MySurrogate() {}
- *
+ * 
  * 		<jc>// Un-transform method (optional)</jc>
  * 		<jk>public static</jk> Normal <jsm>toNormal</jsm>(Surrogate f) {
  * 			Normal n = <jk>new</jk> Normal();
@@ -115,7 +115,7 @@ import org.apache.juneau.*;
  * 		}
  * 	}
  * </p>
- *
+ * 
  * <p>
  * It should be noted that a surrogate class is functionally equivalent to the following {@link PojoSwap}
  * implementation:
@@ -129,6 +129,6 @@ import org.apache.juneau.*;
  * 		}
  * 	}
  * </p>
- *
+ * 
  */
 public interface Surrogate {}

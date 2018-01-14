@@ -17,14 +17,14 @@ import org.apache.juneau.rest.*;
 
 /**
  * Widget that places a powered-by-Juneau message on the page.
- *
+ * 
  * <p>
  * The variable it resolves is <js>"$W{PoweredByJuneau}"</js>.
- *
+ * 
  * <p>
  * It produces a simple Apache Juneau icon floating on the right.
  * Typically it's used in the footer of the page, as shown below in the <code>AddressBookResource</code> from the examples:
- *
+ * 
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		path=<js>"/addressBook"</js>,
@@ -35,7 +35,7 @@ import org.apache.juneau.rest.*;
  * 			footer=<js>"$W{PoweredByJuneau}"</js>
  * 		)
  * </p>
- *
+ * 
  * <p>
  * It renders the following image:
  * <img class='bordered' src='doc-files/PoweredByJuneauWidget.png'>

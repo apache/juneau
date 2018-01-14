@@ -41,7 +41,7 @@ public class SearchArgs {
 
 	/**
 	 * Creates a new builder for {@link SearchArgs}
-	 *
+	 * 
 	 * @return A new builder for {@link SearchArgs}
 	 */
 	public static Builder builder() {
@@ -60,22 +60,22 @@ public class SearchArgs {
 
 		/**
 		 * Adds search terms to this builder.
-		 *
+		 * 
 		 * <p>
 		 * The search terms are a comma-delimited list of key/value pairs of column-names and search tokens.
-		 *
+		 * 
 		 * <p>
 		 * For example:
 		 * <p class='bcode'>
 		 * 	builder.search(<js>"column1=foo*, column2=bar baz"</js>);
 		 * </p>
-		 *
+		 * 
 		 * <p>
 		 * It's up to implementers to decide the syntax and meaning of the search terms.
-		 *
+		 * 
 		 * <p>
 		 * Whitespace is trimmed from column names and search tokens.
-		 *
+		 * 
 		 * @param searchTerms
 		 * 	The search terms string.
 		 * 	Can be <jk>null</jk>.
@@ -96,10 +96,10 @@ public class SearchArgs {
 
 		/**
 		 * Adds a search term to this builder.
-		 *
+		 * 
 		 * <p>
 		 * It's up to implementers to decide the syntax and meaning of the search term.
-		 *
+		 * 
 		 * @param column The column being searched.
 		 * @param searchTerm The search term.
 		 * @return This object (for method chaining).
@@ -111,22 +111,22 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the list of columns to view.
-		 *
+		 * 
 		 * <p>
 		 * The columns argument is a simple comma-delimited list of column names.
-		 *
+		 * 
 		 * <p>
 		 * For example:
 		 * <p class='bcode'>
 		 * 	builder.view(<js>"column1, column2"</js>);
 		 * </p>
-		 *
+		 * 
 		 * <p>
 		 * Whitespace is trimmed from column names.
-		 *
+		 * 
 		 * <p>
 		 * Empty view columns imply view all columns.
-		 *
+		 * 
 		 * @param columns
 		 * 	The columns being viewed.
 		 * 	Can be <jk>null</jk>.
@@ -140,10 +140,10 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the list of columns to view.
-		 *
+		 * 
 		 * <p>
 		 * Empty view columns imply view all columns.
-		 *
+		 * 
 		 * @param columns The columns being viewed.
 		 * @return This object (for method chaining).
 		 */
@@ -154,25 +154,25 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the sort arguments.
-		 *
+		 * 
 		 * <p>
 		 * The sort argument is a simple comma-delimited list of column names.
 		 * <br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
 		 * <br>No suffix implies ascending order.
-		 *
+		 * 
 		 * <p>
 		 * For example:
 		 * <p class='bcode'>
 		 * 	<jc>// Order by column1 ascending, then column2 descending.</jc>
 		 * 	builder.sort(<js>"column1, column2-"</js>);
 		 * </p>
-		 *
+		 * 
 		 * <p>
 		 * Note that the order of the order arguments is important.
-		 *
+		 * 
 		 * <p>
 		 * Whitespace is trimmed from column names.
-		 *
+		 * 
 		 * @param sortArgs
 		 * 	The columns to sort by.
 		 * 	Can be <jk>null</jk>.
@@ -186,14 +186,14 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the sort arguments.
-		 *
+		 * 
 		 * <p>
 		 * Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
 		 * <br>No suffix implies ascending order.
-		 *
+		 * 
 		 * <p>
 		 * Note that the order of the sort is important.
-		 *
+		 * 
 		 * @param sortArgs
 		 * 	The columns to sort by.
 		 * 	Can be <jk>null</jk>.
@@ -213,7 +213,7 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the starting line number.
-		 *
+		 * 
 		 * @param position The zero-indexed position.
 		 * @return This object (for method chaining).
 		 */
@@ -224,7 +224,7 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the number of rows to return.
-		 *
+		 * 
 		 * @param limit
 		 * 	The number of rows to return.
 		 * 	If <code>&lt;=0</code>, all rows should be returned.
@@ -237,10 +237,10 @@ public class SearchArgs {
 
 		/**
 		 * Specifies whether case-insensitive search should be used.
-		 *
+		 * 
 		 * <p>
 		 * The default is <jk>false</jk>.
-		 *
+		 * 
 		 * @param value The ignore-case flag value.
 		 * @return This object (for method chaining).
 		 */
@@ -251,10 +251,10 @@ public class SearchArgs {
 
 		/**
 		 * Construct the {@link SearchArgs} object.
-		 *
+		 * 
 		 * <p>
 		 * This method can be called multiple times to construct new objects.
-		 *
+		 * 
 		 * @return A new {@link SearchArgs} object initialized with values in this builder.
 		 */
 		public SearchArgs build() {
@@ -264,13 +264,13 @@ public class SearchArgs {
 
 	/**
 	 * The query search terms.
-	 *
+	 * 
 	 * <p>
 	 * The search terms are key/value pairs consisting of column-names and search tokens.
-	 *
+	 * 
 	 * <p>
 	 * It's up to implementers to decide the syntax and meaning of the search term.
-	 *
+	 * 
 	 * @return An unmodifiable map of query search terms.
 	 */
 	public Map<String,String> getSearch() {
@@ -279,11 +279,11 @@ public class SearchArgs {
 
 	/**
 	 * The view columns.
-	 *
+	 * 
 	 * <p>
 	 * The view columns are the list of columns that should be displayed.
 	 * An empty list implies all columns should be displayed.
-	 *
+	 * 
 	 * @return An unmodifiable list of columns to view.
 	 */
 	public List<String> getView() {
@@ -292,11 +292,11 @@ public class SearchArgs {
 
 	/**
 	 * The sort columns.
-	 *
+	 * 
 	 * <p>
 	 * The sort columns are key/value pairs consisting of column-names and direction flags
 	 * (<jk>false</jk> = ascending, <jk>true</jk> = descending).
-	 *
+	 * 
 	 * @return An unmodifiable ordered map of sort columns and directions.
 	 */
 	public Map<String,Boolean> getSort() {
@@ -305,7 +305,7 @@ public class SearchArgs {
 
 	/**
 	 * The first-row position.
-	 *
+	 * 
 	 * @return
 	 * 	The zero-indexed row number of the first row to display.
 	 * 	Default is <code>0</code>
@@ -316,7 +316,7 @@ public class SearchArgs {
 
 	/**
 	 * The number of rows to return.
-	 *
+	 * 
 	 * @return
 	 * 	The number of rows to return in the result.
 	 * 	Default is <code>0</code> which means return all rows.
@@ -327,10 +327,10 @@ public class SearchArgs {
 
 	/**
 	 * The ignore-case flag.
-	 *
+	 * 
 	 * <p>
 	 * Used in conjunction with {@link #getSearch()} to specify whether case-insensitive searches should be performed.
-	 *
+	 * 
 	 * @return
 	 * 	The number of rows to return in the result.
 	 * 	Default is <jk>false</jk>.

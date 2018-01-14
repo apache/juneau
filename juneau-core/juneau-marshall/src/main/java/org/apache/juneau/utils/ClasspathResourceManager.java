@@ -60,7 +60,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @return An input stream to the object, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
@@ -71,7 +71,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name for the specified locale and returns it as an input stream.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return An input stream to the object, or <jk>null</jk> if the resource could not be found.
@@ -116,7 +116,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
@@ -127,7 +127,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 *
+	 * 
 	 * @param baseClass 
 	 * 	Overrides the default class to use for retrieving the classpath resource. 
 	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.
@@ -141,7 +141,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 *
+	 * 
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
@@ -153,7 +153,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 *
+	 * 
 	 * @param baseClass 
 	 * 	Overrides the default class to use for retrieving the classpath resource. 
 	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.

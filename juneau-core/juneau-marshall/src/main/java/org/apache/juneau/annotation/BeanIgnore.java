@@ -19,22 +19,23 @@ import java.lang.annotation.*;
 
 /**
  * Ignore classes, fields, and methods from being interpreted as bean or bean components.
- *
+ * 
  * <p>
  * Applied to classes that may look like beans, but you want to be treated as non-beans.
  * For example, if you want to force a bean to be converted to a string using the <code>toString()</code> method, use
  * this annotation on the class.
- *
+ * 
  * <p>
  * Applies to fields that should not be interpreted as bean property fields.
- *
+ * 
  * <p>
  * Applies to getters or setters that should not be interpreted as bean property getters or setters.
  * 
- * <h6 class='topic'>Documentation</h6>
- *	<ul>
- *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanIgnoreAnnotation">Overview &gt; @BeanIgnore Annotation</a>
- *	</ul>
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanIgnoreAnnotation">Overview &gt; @BeanIgnore Annotation</a>
+ * </ul>
  */
 @Documented
 @Target({FIELD,METHOD,TYPE})

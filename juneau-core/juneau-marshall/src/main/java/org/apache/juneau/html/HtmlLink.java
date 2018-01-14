@@ -19,13 +19,13 @@ import java.lang.annotation.*;
 
 /**
  * Used in conjunction with the {@link HtmlSerializer} class to define hyperlinks.
- *
+ * 
  * <p>
  * This annotation is applied to classes.
- *
+ * 
  * <p>
  * Annotation that can be used to specify that a class has a URL associated with it.
- *
+ * 
  * <p>
  * When rendered using the {@link org.apache.juneau.html.HtmlSerializer HtmlSerializer} class, this class will get
  * rendered as a hyperlink like so...

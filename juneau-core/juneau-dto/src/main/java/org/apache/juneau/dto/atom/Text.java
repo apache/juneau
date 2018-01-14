@@ -19,28 +19,28 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomTextConstruct</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomTextConstruct = atomPlainTextConstruct | atomXHTMLTextConstruct
- *
+ * 
  * 	atomPlainTextConstruct =
  * 		atomCommonAttributes,
  * 		attribute type { "text" | "html" }?,
  * 		text
- *
+ * 
  * 	atomXHTMLTextConstruct =
  * 		atomCommonAttributes,
  * 		attribute type { "xhtml" },
  * 		xhtmlDiv
- *
+ * 
  * 	xhtmlDiv = element xhtml:div {
  * 		(attribute * { text }
  * 		| text
  * 		| anyXHTML)*
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -63,7 +63,7 @@ public class Text extends Common {
 
 	/**
 	 * Normal content.
-	 *
+	 * 
 	 * @param type The content type of this content.
 	 */
 	public Text(String type) {
@@ -80,7 +80,7 @@ public class Text extends Common {
 
 	/**
 	 * Returns the content type of this content.
-	 *
+	 * 
 	 * @return The content type of this content.
 	 */
 	@Xml(format=ATTR)
@@ -90,7 +90,7 @@ public class Text extends Common {
 
 	/**
 	 * Sets the content type of this content.
-	 *
+	 * 
 	 * <p>
 	 * Must be one of the following:
 	 * <ul>
@@ -99,7 +99,7 @@ public class Text extends Common {
 	 * 	<li><js>"xhtml"</js>
 	 * 	<li><jk>null</jk> (defaults to <js>"text"</js>)
 	 * </ul>
-	 *
+	 * 
 	 * @param type The content type of this content.
 	 * @return This object (for method chaining).
 	 */
@@ -111,7 +111,7 @@ public class Text extends Common {
 
 	/**
 	 * Returns the content of this content.
-	 *
+	 * 
 	 * @return The content of this content.
 	 */
 	@Xml(format=XMLTEXT)
@@ -121,7 +121,7 @@ public class Text extends Common {
 
 	/**
 	 * Sets the content of this content.
-	 *
+	 * 
 	 * @param text The content of this content.
 	 * @return This object (for method chaining).
 	 */

@@ -26,12 +26,12 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all Juneau parsers.
- *
+ * 
  * <h6 class='topic'>Valid data conversions</h6>
- *
+ * 
  * Parsers can parse any parsable POJO types, as specified in the <a class="doclink"
  * href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a>.
- *
+ * 
  * <p>
  * Some examples of conversions are shown below...
  * </p>
@@ -62,8 +62,8 @@ import org.apache.juneau.utils.*;
  * 	&lt;number&gt;</xt>2<xt>&lt;/number&gt;
  * 	&lt;number&gt;</xt>3<xt>&lt;/number&gt;
  * &lt;/array&gt;</xt></td>
- *			<td class='code'>List&lt;Integer&gt;, <jk>int</jk>[], Float[], Set&lt;Person&gt;</td>
- *		</tr>
+ * 		<td class='code'>List&lt;Integer&gt;, <jk>int</jk>[], Float[], Set&lt;Person&gt;</td>
+ * 	</tr>
  * 	<tr>
  * 		<td>number</td>
  * 		<td>Numbers</td>
@@ -86,11 +86,11 @@ import org.apache.juneau.utils.*;
  * 		<td class='code'>String, StringBuilder</td>
  * 	</tr>
  * </table>
- *
+ * 
  * <p>
  * In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
  * bean context can also be passed in.
- *
+ * 
  * <p>
  * For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String}
  * objects.
@@ -123,7 +123,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  File charset.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.fileCharset.s"</js>
@@ -136,14 +136,14 @@ public abstract class Parser extends BeanContext {
 	 * 			<li class='jm'>{@link ParserBuilder#fileCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
-	 *
+	 * 
 	 * <p>
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 *
+	 * 
 	 * <p>
 	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 * 
@@ -169,7 +169,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Input stream charset.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.inputStreamCharset.s"</js>
@@ -182,11 +182,11 @@ public abstract class Parser extends BeanContext {
 	 * 			<li class='jm'>{@link ParserBuilder#inputStreamCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 *
+	 * 
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 	 * 
@@ -212,7 +212,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Parser listener.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
@@ -224,7 +224,7 @@ public abstract class Parser extends BeanContext {
 	 * 			<li class='jm'>{@link ParserBuilder#listener(Class)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
@@ -275,7 +275,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
@@ -292,10 +292,10 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
-	 *
+	 * 
 	 * <p>
 	 * Strict mode can mean different things for different parsers.
-	 *
+	 * 
 	 * <table class='styled'>
 	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
 	 * 	<tr>
@@ -348,7 +348,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
@@ -361,7 +361,7 @@ public abstract class Parser extends BeanContext {
 	 * 			<li class='jm'>{@link ParserBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
@@ -450,7 +450,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
-	 *
+	 * 
 	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 */
 	public boolean isReaderParser() {
@@ -459,11 +459,11 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Create the session object that will be passed in to the parse method.
-	 *
+	 * 
 	 * <p>
 	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
 	 * subclass of {@link ParserSession}.
-	 *
+	 * 
 	 * @param args
 	 * 	Runtime arguments.
 	 * @return The new session.
@@ -477,44 +477,44 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Parses input into the specified object type.
-	 *
+	 * 
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
-	 *
+	 * 
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
-	 *
+	 * 
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
-	 *
+	 * 
 	 * @param <T> The class type of the object to create.
 	 * @param input
 	 * 	The input.
@@ -557,30 +557,30 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
-	 *
+	 * 
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 *
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 *
+	 * 
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = p.parse(json, String.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a bean array.</jc>
 	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
-	 *
+	 * 
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
 	 * </p>
-	 *
+	 * 
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
@@ -597,10 +597,10 @@ public abstract class Parser extends BeanContext {
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
 	 * object.
-	 *
+	 * 
 	 * <p>
 	 * This is mostly an internal method used by the framework.
-	 *
+	 * 
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
@@ -630,10 +630,10 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified map.
-	 *
+	 * 
 	 * <p>
 	 * Reader must contain something that serializes to a map (such as text containing a JSON object).
-	 *
+	 * 
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
@@ -641,7 +641,7 @@ public abstract class Parser extends BeanContext {
 	 * 		The various character-based constructors in {@link ObjectMap} (e.g.
 	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
 	 * </ul>
-	 *
+	 * 
 	 * @param <K> The key class type.
 	 * @param <V> The value class type.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
@@ -658,7 +658,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified collection.
-	 *
+	 * 
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
@@ -666,7 +666,7 @@ public abstract class Parser extends BeanContext {
 	 * 		The various character-based constructors in {@link ObjectList} (e.g.
 	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
 	 * </ul>
-	 *
+	 * 
 	 * @param <E> The element class type.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @param c The collection being loaded.
@@ -683,18 +683,18 @@ public abstract class Parser extends BeanContext {
 	/**
 	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
 	 * argument.
-	 *
+	 * 
 	 * <p>
 	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
 	 * to the {@code Method.invoke(target, args)} method.
-	 *
+	 * 
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
 	 * </ul>
-	 *
+	 * 
 	 * @param input The input.  Subclasses can support different input types.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 * @return An array of parsed objects.
@@ -714,7 +714,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Returns the media types handled based on the values passed to the <code>consumes</code> constructor parameter.
-	 *
+	 * 
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaType[] getMediaTypes() {
@@ -723,7 +723,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Returns the first media type handled based on the values passed to the <code>consumes</code> constructor parameter.
-	 *
+	 * 
 	 * @return The media type.
 	 */
 	public final MediaType getPrimaryMediaType() {

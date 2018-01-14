@@ -39,7 +39,7 @@ public enum AnchorText {
 
 	/**
 	 * Set to the anchor of the URL.
-	 *
+	 * 
 	 * <p>
 	 * (e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
 	 */

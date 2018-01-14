@@ -28,11 +28,11 @@ public class ParserListener {
 
 	/**
 	 * Gets called when an unknown bean property is detected in a document.
-	 *
+	 * 
 	 * <p>
 	 * This method only gets called if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting is <jk>true</jk>.
 	 * Otherwise, the parser will throw a {@link ParseException}.
-	 *
+	 * 
 	 * @param <T> The class type of the bean.
 	 * @param session The parser session.
 	 * @param pipe
@@ -56,7 +56,7 @@ public class ParserListener {
 
 	/**
 	 * Called when an error occurs during parsing but is ignored.
-	 *
+	 * 
 	 * @param session The parser session.
 	 * @param pipe
 	 * 	The parser input.

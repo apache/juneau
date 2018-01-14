@@ -143,7 +143,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	)
 	public static class HtmlDocLinksResource2 extends HtmlDocLinksResource {
 		/**
-		 *
+		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 

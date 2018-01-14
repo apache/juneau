@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element">&lt;track&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="track")
@@ -40,10 +40,10 @@ public class Track extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default">default</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Enable the track if no other text track is more suitable.
-	 *
+	 * 
 	 * @param _default The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -54,10 +54,10 @@ public class Track extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * The type of text track.
-	 *
+	 * 
 	 * @param kind The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -68,10 +68,10 @@ public class Track extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * User-visible label.
-	 *
+	 * 
 	 * @param label The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -82,17 +82,17 @@ public class Track extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src">src</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Address of the resource.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -106,10 +106,10 @@ public class Track extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang">srclang</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Language of the text track.
-	 *
+	 * 
 	 * @param srclang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

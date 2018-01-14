@@ -24,35 +24,35 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomContent</code> construct in the RFC4287 specification.
- *
+ * 
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomContent = atomInlineTextContent
  * 		| atomInlineXHTMLContent
  * 		| atomInlineOtherContent
  * 		| atomOutOfLineContent
- *
+ * 
  * 	atomInlineTextContent =
  * 		element atom:content {
  * 			atomCommonAttributes,
  * 			attribute type { "text" | "html" }?,
  * 			(text)*
  * 		}
- *
+ * 
  * 	atomInlineXHTMLContent =
  * 		element atom:content {
  * 			atomCommonAttributes,
  * 			attribute type { "xhtml" },
  * 			xhtmlDiv
  * 		}
- *
+ * 
  * 	atomInlineOtherContent =
  * 		element atom:content {
  * 			atomCommonAttributes,
  * 			attribute type { atomMediaType }?,
  * 			(text|anyElement)*
  * 	}
- *
+ * 
  * 	atomOutOfLineContent =
  * 		element atom:content {
  * 			atomCommonAttributes,
@@ -61,7 +61,7 @@ import org.apache.juneau.xml.annotation.*;
  * 			empty
  * 	}
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -84,7 +84,7 @@ public class Content extends Text {
 
 	/**
 	 * Normal content.
-	 *
+	 * 
 	 * @param type The content type of this content.
 	 */
 	public Content(String type) {
@@ -105,7 +105,7 @@ public class Content extends Text {
 
 	/**
 	 * Returns the source URI.
-	 *
+	 * 
 	 * @return the source URI.
 	 */
 	@Xml(format=ATTR)
@@ -115,14 +115,14 @@ public class Content extends Text {
 
 	/**
 	 * Sets the source URI.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param src The source URI.
 	 * @return This object (for method chaining).
 	 */

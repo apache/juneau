@@ -29,7 +29,7 @@ public final class SerializeException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param session The serializer session to extract information from.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -40,7 +40,7 @@ public final class SerializeException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -50,7 +50,7 @@ public final class SerializeException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param session The serializer session to extract information from.
 	 * @param causedBy The inner exception.
 	 */
@@ -60,7 +60,7 @@ public final class SerializeException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param causedBy The inner exception.
 	 */
 	public SerializeException(Exception causedBy) {
@@ -80,7 +80,7 @@ public final class SerializeException extends FormattedException {
 	/**
 	 * Returns the highest-level <code>ParseException</code> in the stack trace.
 	 * Useful for JUnit testing of error conditions.
-	 *
+	 * 
 	 * @return The root parse exception, or this exception if there isn't one.
 	 */
 	public SerializeException getRootCause() {
@@ -92,7 +92,7 @@ public final class SerializeException extends FormattedException {
 
 	/**
 	 * Sets the inner cause for this exception.
-	 *
+	 * 
 	 * @param cause The inner cause.
 	 * @return This object (for method chaining).
 	 */

@@ -18,18 +18,19 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO models to XML.
- *
- * <h5 class='section'>Media types:</h5>
- *
- * Handles <code>Accept</code> types: <code>text/xml</code>
- *
+ * 
+ * 
+ * <h5 class='topic'>Media types</h5>
+ * 
+ * Handles <code>Accept</code> types:  <code><b>text/xml</b></code>
  * <p>
- * Produces <code>Content-Type</code> types: <code>text/xml</code>
- *
- * <h5 class='section'>Description:</h5>
- *
+ * Produces <code>Content-Type</code> types:  <code><b>text/xml</b></code>
+ * 
+ * 
+ * <h5 class='topic'>Description</h5>
+ * 
  * See the {@link JsonSerializer} class for details on how Java models map to JSON.
- *
+ * 
  * <p>
  * For example, the following JSON...
  * <p class='bcode'>
@@ -70,7 +71,7 @@ import org.apache.juneau.serializer.*;
  * 		<xt>&lt;height&gt;</xt>62.4<xt>&lt;/height&gt;</xt>
  * 		<xt>&lt;fico_x0020_score&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
- *
+ * 
  * <p>
  * An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
  * <p class='bcode'>
@@ -91,18 +92,18 @@ import org.apache.juneau.serializer.*;
  * 		<xt>&lt;fico_x0020_score</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
  * </p>
- *
+ * 
  * <p>
  * This serializer provides several serialization options.
  * Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
- *
+ * 
  * <p>
  * If an attribute name contains any non-valid XML element characters, they will be escaped using standard
  * {@code _x####_} notation.
- *
+ * 
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- *
+ * 
  * The following direct subclasses are provided for convenience:
  * <ul>
  * 	<li>{@link Sq} - Default serializer, single quotes.
@@ -119,7 +120,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypeProperties.b"</js>
@@ -131,12 +132,12 @@ public class XmlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#addBeanTypeProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 *
+	 * 
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -145,7 +146,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>
@@ -158,11 +159,11 @@ public class XmlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot()}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
-	 *
+	 * 
 	 * <p>
 	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
 	 */
@@ -170,7 +171,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.autoDetectNamespaces.b"</js>
@@ -182,22 +183,22 @@ public class XmlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#autoDetectNamespaces(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Detect namespace usage before serialization.
-	 *
+	 * 
 	 * <p>
 	 * Used in conjunction with {@link #XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
 	 * root element to only those that will be used in the resulting document.
-	 *
+	 * 
 	 * <p>
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
-	 *
+	 * 
 	 * <p>
 	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
-	 *
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Auto-detection of namespaces can be costly performance-wise.
@@ -209,7 +210,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Default namespace.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.defaultNamespace.s"</js>
@@ -221,7 +222,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the default namespace URI for this document.
@@ -230,7 +231,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.enableNamespaces.b"</js>
@@ -242,7 +243,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#enableNamespaces(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
@@ -251,7 +252,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Default namespaces.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.namespaces.ls"</js>
@@ -263,7 +264,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -272,7 +273,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  XMLSchema namespace.
-	 *
+	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.xsNamespace.s"</js>
@@ -284,7 +285,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#xsNamespace(Namespace)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the namespace for the <code>XMLSchema</code> namespace, used by the schema generated by the
@@ -325,7 +326,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Sq(PropertyStore ps) {
@@ -342,7 +343,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public SqReadable(PropertyStore ps) {
@@ -360,7 +361,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Ns(PropertyStore ps) {
@@ -379,7 +380,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public NsSq(PropertyStore ps) {
@@ -397,7 +398,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public NsSqReadable(PropertyStore ps) {
@@ -436,7 +437,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -446,7 +447,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces

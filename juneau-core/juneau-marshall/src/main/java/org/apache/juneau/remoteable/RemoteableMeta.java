@@ -21,11 +21,11 @@ import java.util.*;
 
 /**
  * Contains the meta-data about a remoteable interface.
- *
+ * 
  * <p>
  * Captures the information in {@link Remoteable @Remoteable} and {@link RemoteMethod @RemoteMethod} annotations for
  * caching and reuse.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -40,7 +40,7 @@ public class RemoteableMeta {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param c The interface class annotated with a {@link Remoteable @Remoteable} annotation (optional).
 	 * @param restUrl The absolute URL of the remote REST interface that implements this proxy interface.
 	 */
@@ -65,7 +65,7 @@ public class RemoteableMeta {
 
 	/**
 	 * Returns the metadata about the specified method on this interface proxy.
-	 *
+	 * 
 	 * @param m The method to look up.
 	 * @return Metadata about the method, or <jk>null</jk> if no metadata was found.
 	 */

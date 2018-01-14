@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-object-element">&lt;object&gt;</a>
  * element.
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * 			<li class='sublink'>
  * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 		</ul>
- *		</li>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="object")
@@ -35,10 +35,10 @@ public class Object2 extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-data">data</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Address of the resource.
-	 *
+	 * 
 	 * @param data The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -49,10 +49,10 @@ public class Object2 extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Associates the control with a form element.
-	 *
+	 * 
 	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -64,10 +64,10 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Vertical dimension.
-	 *
+	 * 
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -80,10 +80,10 @@ public class Object2 extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-name">name</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Name of nested browsing context.
-	 *
+	 * 
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -94,10 +94,10 @@ public class Object2 extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-type">type</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Type of embedded resource.
-	 *
+	 * 
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -109,10 +109,10 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch">typemustmatch</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Whether the type attribute and the Content-Type value need to match for the resource to be used.
-	 *
+	 * 
 	 * @param typemustmatch
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -126,10 +126,10 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a>
 	 * attribute.
-	 *
+	 * 
 	 * <p>
 	 * Name of image map to use.
-	 *
+	 * 
 	 * @param usemap The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -140,10 +140,10 @@ public class Object2 extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
+	 * 
 	 * <p>
 	 * Horizontal dimension.
-	 *
+	 * 
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

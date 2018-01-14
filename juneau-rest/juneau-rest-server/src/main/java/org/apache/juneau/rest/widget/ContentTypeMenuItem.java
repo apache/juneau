@@ -25,10 +25,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.
- *
+ * 
  * <p>
  * The variable it resolves is <js>"$W{ContentTypeMenuItem}"</js>.
- *
+ * 
  * <p>
  * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
  * a drop-down menu item for rendering all other supported content types in plain text:
@@ -52,7 +52,7 @@ import org.apache.juneau.utils.*;
  * 	)
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>
- *
+ * 
  * <p>
  * It renders the following popup-box:
  * <br><img class='bordered' src='doc-files/ContentTypeMenuItem.png'>

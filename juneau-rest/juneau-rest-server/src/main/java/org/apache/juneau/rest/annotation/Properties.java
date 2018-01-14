@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify the
  * request-duration properties object for the current request.
- *
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
@@ -31,7 +31,7 @@ import org.apache.juneau.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * ...or this...
  * <p class='bcode'>
@@ -52,7 +52,7 @@ import org.apache.juneau.*;
  * 		...
  * 	}
  * </p>
- *
+ * 
  * <p>
  * The parameter type can be one of the following:
  * <ul>

@@ -22,11 +22,11 @@ import org.apache.juneau.rest.response.*;
 
 /**
  * Defines the interface for handlers that convert POJOs to appropriate HTTP responses.
- *
+ * 
  * <p>
  * The {@link RestServlet} API uses the concept of registered response handlers for converting objects returned by REST
  * methods or set through {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
- *
+ * 
  * <p>
  * Response handlers can be associated with {@link RestServlet RestServlets} through the following ways:
  * <ul class='spaced-list'>
@@ -36,7 +36,7 @@ import org.apache.juneau.rest.response.*;
  * 		By calling the {@link RestContextBuilder#responseHandlers(Class...)} and augmenting or creating your
  * 		own list of handlers.
  * </ul>
- *
+ * 
  * <p>
  * By default, {@link RestServlet RestServlets} are registered with the following response handlers:
  * <ul class='spaced-list'>
@@ -55,11 +55,11 @@ import org.apache.juneau.rest.response.*;
  * 	<li>
  * 		{@link StreamableHandler} - Handles {@link Streamable} objects.
  * </ul>
- *
+ * 
  * <p>
  * Response handlers can be used to process POJOs that cannot normally be handled through Juneau serializers, or
  * because it's simply easier to define response handlers for special cases.
- *
+ * 
  * <p>
  * The following example shows how to create a response handler to handle special <code>Foo</code> objects outside the
  * normal Juneau architecture.
@@ -69,12 +69,12 @@ import org.apache.juneau.rest.response.*;
  * 		responseHandlers=FooHandler.<jk>class</jk>
  * 	)
  * 	<jk>public class</jk> Example <jk>extends</jk> RestServlet {
- *
+ * 
  * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
  * 		<jk>public</jk> Foo test1() {
  * 			<jk>return new</jk> Foo(<js>"123"</js>);
  * 		}
- *
+ * 
  * 		<jk>public static class</jk> FooHandler <jk>implements</jk> ResponseHandler {
  * 			<ja>@Override</ja>
  * 			<jk>public boolean</jk> handle(RestRequest req, RestResponse res, Object output) <jk>throws</jk> IOException, RestException {
@@ -96,7 +96,7 @@ public interface ResponseHandler {
 	/**
 	 * Process this response if possible.
 	 * This method should return <jk>false</jk> if it wasn't able to process the response.
-	 *
+	 * 
 	 * @param req The HTTP servlet request.
 	 * @param res The HTTP servlet response;
 	 * @param output The POJO returned by the REST method that now needs to be sent to the response.

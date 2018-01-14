@@ -19,7 +19,7 @@ import java.util.zip.*;
 /**
  * Utility class for representing the contents of a zip file as a list of entries whose contents don't resolve until
  * serialization time.
- *
+ * 
  * <p>
  * Generally associated with <code>RestServlets</code> using the <code>responseHandlers</code> annotation so that
  * REST methods can easily create ZIP file responses by simply returning instances of this class.
@@ -34,7 +34,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param fileName The file name of the zip file to create.
 	 */
 	public ZipFileList(String fileName) {
@@ -43,7 +43,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 
 	/**
 	 * Add an entry to this list.
-	 *
+	 * 
 	 * @param e The zip file entry.
 	 * @return This object (for method chaining).
 	 */
@@ -58,7 +58,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 	public static interface ZipFileEntry {
 		/**
 		 * Write this entry to the specified output stream.
-		 *
+		 * 
 		 * @param zos The output stream to write to.
 		 * @throws IOException
 		 */
@@ -78,7 +78,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param root The root file that represents the base path.
 		 * @param file The file to add to the zip file.
 		 */
@@ -89,7 +89,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param file The file to add to the zip file.
 		 */
 		public FileEntry(File file) {
@@ -104,7 +104,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 
 		/**
 		 * Subclasses can override this method to customize which files get added to a zip file.
-		 *
+		 * 
 		 * @param f The file being added to the zip file.
 		 * @return Always returns <jk>true</jk>.
 		 */
@@ -114,7 +114,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 
 		/**
 		 * Adds the specified file to the specified output stream.
-		 *
+		 * 
 		 * @param zos The output stream.
 		 * @param f The file to add.
 		 * @throws IOException

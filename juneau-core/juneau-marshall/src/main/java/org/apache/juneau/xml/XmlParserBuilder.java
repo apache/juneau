@@ -37,7 +37,7 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public XmlParserBuilder(PropertyStore ps) {
@@ -56,10 +56,10 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  XML event allocator.
-	 *
+	 * 
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
@@ -74,11 +74,11 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key is
 	 * the root element name.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
@@ -95,10 +95,10 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>preserveRootElement(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
@@ -112,10 +112,10 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  XML reporter.
-	 *
+	 * 
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
@@ -130,10 +130,10 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  XML resolver.
-	 *
+	 * 
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
@@ -148,10 +148,10 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  Enable validation.
-	 *
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}
@@ -168,10 +168,10 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  Enable validation.
-	 *
+	 * 
 	 * <p>
 	 * Shortcut for calling <code>validating(<jk>true</jk>)</code>.
-	 *
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}

@@ -18,14 +18,14 @@ import org.apache.juneau.*;
 
 /**
  * Convenience class for representing a schema reference such as <js>"{'$ref':'/url/to/ref'}"</js>.
- *
+ * 
  * <p>
  * An instance of this object is equivalent to calling...
- *
+ * 
  * <p class='bcode'>
  * 	Schema s = <jk>new</jk> Schema().setRef(uri);
  * </p>
- *
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='link'>
@@ -45,14 +45,14 @@ public class SchemaRef extends Schema {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 *
+	 * 
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * 
 	 * @param uri The URI of the target reference.  Can be <jk>null</jk>.
 	 */
 	public SchemaRef(Object uri) {

@@ -21,7 +21,7 @@ public interface Setter {
 
 	/**
 	 * Call the setter on the specified object.
-	 *
+	 * 
 	 * @param object The object to call the setter on
 	 * @param value The value to set.
 	 * @throws Exception
