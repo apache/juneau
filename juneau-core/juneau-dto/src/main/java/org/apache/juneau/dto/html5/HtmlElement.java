@@ -137,7 +137,7 @@ public abstract class HtmlElement {
 	 * @return The attribute value, or <jk>null</jk> if the named attribute does not exist.
 	 */
 	public <T> T getAttr(Class<T> type, String key) {
-		return attrs == null ? null : ObjectUtils.convertToType(attrs.get(key), type);
+		return attrs == null ? null : ObjectUtils.toType(attrs.get(key), type);
 	}
 
 	/**

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -21,29 +22,42 @@ import org.apache.juneau.annotation.*;
  * When using arrays, XML element names are not inferred (for singular/plural forms) and the name property should be
  * used to add that information.
  * 
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Xml x = <jsm>xml</jsm>()
+ * 		.name(<js>"foo"</js>)
+ * 		.namespace(<js>"http://foo"</js>)
+ * 
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	String json = x.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"name"</js>: <js>"foo"</js>,
+ * 		<js>"namespace"</js>: <js>"http://foo"</js>
+ * 	}
+ * </p>
+ * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
-@Bean(properties="name,namespace,prefix,attribute,wrapped")
+@Bean(properties="name,namespace,prefix,attribute,wrapped,*")
 public class Xml extends SwaggerElement {
 
-	private String name;
-	private String namespace;
-	private String prefix;
-	private Boolean attribute;
-	private Boolean wrapped;
+	private String 
+		name,
+		namespace,
+		prefix;
+	private Boolean 
+		attribute,
+		wrapped;
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -54,11 +68,11 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
 	 * within the list.
-	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
+	 * <br>When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
 	 * wrapping element and only if wrapped is <jk>true</jk>.
-	 * If wrapped is <jk>false</jk>, it will be ignored.
+	 * <br>If wrapped is <jk>false</jk>, it will be ignored.
 	 * 
-	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
 		return name;
@@ -73,26 +87,31 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
 	 * within the list.
-	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
+	 * <br>When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
 	 * wrapping element and only if wrapped is <jk>true</jk>.
-	 * If wrapped is <jk>false</jk>, it will be ignored.
+	 * <br>If wrapped is <jk>false</jk>, it will be ignored.
 	 * 
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml setName(String name) {
-		this.name = name;
+	public Xml setName(String value) {
+		name = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setName(String)}.
+	 * Same as {@link #setName(String)}.
 	 * 
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml name(String name) {
-		return setName(name);
+	public Xml name(Object value) {
+		return setName(toStringVal(value));
 	}
 
 	/**
@@ -101,7 +120,7 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * The URL of the namespace definition. Value SHOULD be in the form of a URL.
 	 * 
-	 * @return The value of the <property>namespace</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getNamespace() {
 		return namespace;
@@ -113,22 +132,27 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * The URL of the namespace definition. Value SHOULD be in the form of a URL.
 	 * 
-	 * @param namespace The new value for the <property>namespace</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml setNamespace(String namespace) {
-		this.namespace = namespace;
+	public Xml setNamespace(String value) {
+		namespace = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setNamespace(String)}.
+	 * Same as {@link #setNamespace(String)}.
 	 * 
-	 * @param namespace The new value for the <property>namespace</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml namespace(String namespace) {
-		return setNamespace(namespace);
+	public Xml namespace(Object value) {
+		return setNamespace(toStringVal(value));
 	}
 
 	/**
@@ -137,7 +161,7 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * The prefix to be used for the name.
 	 * 
-	 * @return The value of the <property>prefix</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getPrefix() {
 		return prefix;
@@ -149,22 +173,27 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * The prefix to be used for the name.
 	 * 
-	 * @param prefix The new value for the <property>prefix</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml setPrefix(String prefix) {
-		this.prefix = prefix;
+	public Xml setPrefix(String value) {
+		prefix = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setPrefix(String)}.
+	 * Same as {@link #setPrefix(String)}.
 	 * 
-	 * @param prefix The new value for the <property>prefix</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml prefix(String prefix) {
-		return setPrefix(prefix);
+	public Xml prefix(Object value) {
+		return setPrefix(toStringVal(value));
 	}
 
 	/**
@@ -173,10 +202,7 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * Declares whether the property definition translates to an attribute instead of an element.
 	 * 
-	 * <p>
-	 * Default value is <jk>false</jk>.
-	 * 
-	 * @return The value of the <property>attribute</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getAttribute() {
 		return attribute;
@@ -188,25 +214,29 @@ public class Xml extends SwaggerElement {
 	 * <p>
 	 * Declares whether the property definition translates to an attribute instead of an element.
 	 * 
-	 * <p>
-	 * Default value is <jk>false</jk>.
-	 * 
-	 * @param attribute The new value for the <property>attribute</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Default value is <jk>false</jk>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml setAttribute(Boolean attribute) {
-		this.attribute = attribute;
+	public Xml setAttribute(Boolean value) {
+		attribute = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setAttribute(Boolean)}.
+	 * Same as {@link #setAttribute(Boolean)}.
 	 * 
-	 * @param attribute The new value for the <property>attribute</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Default value is <jk>false</jk>.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml attribute(Boolean attribute) {
-		return setAttribute(attribute);
+	public Xml attribute(Object value) {
+		return setAttribute(toBoolean(value));
 	}
 
 	/**
@@ -219,11 +249,10 @@ public class Xml extends SwaggerElement {
 	 * Signifies whether the array is wrapped (for example,
 	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
 	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
-	 * Default value is <jk>false</jk>.
-	 * The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
+	 * <br<The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
 	 * (outside the <code>items</code>).
 	 * 
-	 * @return The value of the <property>wrapped</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getWrapped() {
 		return wrapped;
@@ -239,25 +268,59 @@ public class Xml extends SwaggerElement {
 	 * Signifies whether the array is wrapped (for example,
 	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
 	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
-	 * Default value is <jk>false</jk>.
-	 * The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
+	 * <br<The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
 	 * (outside the <code>items</code>).
 	 * 
-	 * @param wrapped The new value for the <property>wrapped</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml setWrapped(Boolean wrapped) {
-		this.wrapped = wrapped;
+	public Xml setWrapped(Boolean value) {
+		this.wrapped = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setWrapped(Boolean)}.
+	 * Same as {@link #setWrapped(Boolean)}.
 	 * 
-	 * @param wrapped The new value for the <property>wrapped</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Xml wrapped(Boolean wrapped) {
-		return setWrapped(wrapped);
+	public Xml wrapped(Object value) {
+		return setWrapped(toBoolean(value));
+	}
+
+	@Override /* SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		if (property == null)
+			return null;
+		switch (property) {
+			case "name": return toType(getName(), type);
+			case "namespace": return toType(getNamespace(), type);
+			case "prefix": return toType(getPrefix(), type);
+			case "attribute": return toType(getAttribute(), type);
+			case "wrapped": return toType(getWrapped(), type);
+			default: return super.get(property, type);
+		}
+	}
+
+	@Override /* SwaggerElement */
+	public Xml set(String property, Object value) {
+		if (property == null)
+			return this;
+		switch (property) {
+			case "name": return name(value);
+			case "namespace": return namespace(value);
+			case "prefix": return prefix(value);
+			case "attribute": return attribute(value);
+			case "wrapped": return wrapped(value);
+			default: 
+				super.set(property, value);
+				return this;
+		}
 	}
 }

@@ -16,6 +16,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -162,8 +163,23 @@ public final class ObjectUtils {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public static <T> T convertToType(Object value, Class<T> type) {
+	public static <T> T toType(Object value, Class<T> type) {
 		return session.convertToType(value, type);
+	}
+
+
+	/**
+	 * Converts the specified object to the specified type.
+	 * 
+	 * @param <T> The class type to convert the value to.
+	 * @param value The value to convert.
+	 * @param type The class type to convert the value to.
+	 * @param args The type arguments.
+	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
+	 * @return The converted value.
+	 */
+	public static <T> T toType(Object value, Class<T> type, Type...args) {
+		return session.convertToType(value, type, args);
 	}
 
 	/**
@@ -178,7 +194,7 @@ public final class ObjectUtils {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public static <T> T convertToMemberType(Object outer, Object value, Class<T> type) {
+	public static <T> T toMemberType(Object outer, Object value, Class<T> type) {
 		return session.convertToMemberType(outer, value, type);
 	}
 
@@ -242,5 +258,43 @@ public final class ObjectUtils {
 				if (tt != null)
 					return tt;
 		return null;
+	}
+	
+	/**
+	 * Converts an object to a Boolean.
+	 * 
+	 * @param o The object to convert.
+	 * @return The converted object.
+	 */
+	public static Boolean toBoolean(Object o) {
+		return toType(o, Boolean.class);
+	}
+
+	/**
+	 * Converts an object to an Integer.
+	 * 
+	 * @param o The object to convert.
+	 * @return The converted object.
+	 */
+	public static Integer toInteger(Object o) {
+		return toType(o, Integer.class);
+	}
+
+	/**
+	 * Converts an object to a Number.
+	 * 
+	 * @param o The object to convert.
+	 * @return The converted object.
+	 */
+	public static Number toNumber(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Number)
+			return (Number)o;
+		try {
+			return StringUtils.parseNumber(o.toString(), null);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

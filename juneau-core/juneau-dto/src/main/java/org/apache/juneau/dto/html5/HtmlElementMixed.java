@@ -114,7 +114,7 @@ public class HtmlElementMixed extends HtmlElement {
 		return (
 			children == null || children.size() <= index || index < 0
 			? null
-			: ObjectUtils.convertToType(children.get(index), type)
+			: ObjectUtils.toType(children.get(index), type)
 		);
 	}
 

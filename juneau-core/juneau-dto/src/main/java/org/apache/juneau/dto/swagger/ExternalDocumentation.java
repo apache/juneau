@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 import java.net.*;
 import java.net.URI;
@@ -25,6 +25,17 @@ import org.apache.juneau.annotation.*;
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	ExternalDocumentation x = <jsm>externalDocumentation</jsm>(<js>"https://swagger.io"</js>, <js>"Find more info here"</js>);
+ * 
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	String json = x.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
  * 	{
  * 		<js>"description"</js>: <js>"Find more info here"</js>,
  * 		<js>"url"</js>: <js>"https://swagger.io"</js>
@@ -33,20 +44,10 @@ import org.apache.juneau.annotation.*;
  * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
-@Bean(properties="description,url")
+@Bean(properties="description,url,*")
 public class ExternalDocumentation extends SwaggerElement {
 
 	private String description;
@@ -56,10 +57,9 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * Bean property getter:  <property>description</property>.
 	 * 
 	 * <p>
-	 * A short description of the target documentation. GFM syntax can be used for rich text representation.
+	 * A short description of the target documentation. 
 	 * 
-	 * @return
-	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -69,40 +69,39 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * Bean property setter:  <property>description</property>.
 	 * 
 	 * <p>
-	 * A short description of the target documentation. GFM syntax can be used for rich text representation.
+	 * A short description of the target documentation. 
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocumentation setDescription(String description) {
-		this.description = description;
+	public ExternalDocumentation setDescription(String value) {
+		description = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setDescription(String)}.
+	 * Same as {@link #setDescription(String)}.
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocumentation description(String description) {
-		return setDescription(description);
+	public ExternalDocumentation description(Object value) {
+		return setDescription(toStringVal(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>url</property>.
 	 * 
 	 * <p>
-	 * Required. The URL for the target documentation.
+	 * The URL for the target documentation.
 	 * 
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 * 
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
-	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public URI getUrl() {
 		return url;
@@ -112,27 +111,61 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * Bean property setter:  <property>url</property>.
 	 * 
 	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
+	 * The URL for the target documentation.
 	 * 
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
-	 * @param url The new value for the <property>url</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocumentation setUrl(Object url) {
-		this.url = toURI(url);
+	public ExternalDocumentation setUrl(URI value) {
+		url = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setUrl(Object)}.
+	 * Same as {@link #setUrl(URI)}.
 	 * 
-	 * @param url The new value for the <property>url</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String} 
+	 * 			<br>Converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
+	 * 		<li>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocumentation url(Object url) {
-		return setUrl(url);
+	public ExternalDocumentation url(Object value) {
+		return setUrl(toURI(value));
+	}
+
+	@Override /* SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		if (property == null)
+			return null;
+		switch (property) {
+			case "description": return toType(getDescription(), type);
+			case "url": return toType(getUrl(), type);
+			default: return super.get(property, type);
+		}
+	}
+
+	@Override /* SwaggerElement */
+	public ExternalDocumentation set(String property, Object value) {
+		if (property == null)
+			return this;
+		switch (property) {
+			case "description": return description(value);
+			case "url": return url(value);
+			default: 
+				super.set(property, value);
+				return this;
+		}
 	}
 }

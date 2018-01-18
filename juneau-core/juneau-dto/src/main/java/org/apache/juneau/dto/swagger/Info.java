@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -20,6 +21,25 @@ import org.apache.juneau.annotation.*;
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Info x = <jsm>info</jsm>(<js>"Swagger Sample App"</js>, <js>"1.0.1"</js>)
+ * 		.description(<js>"This is a sample server Petstore server."</js>)
+ * 		.termsOfService(<js>"http://swagger.io/terms/"</js>)
+ * 		.contact(
+ * 			<jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>)
+ * 		)
+ * 		.license(
+ * 			<jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
+ * 		);
+ * 
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	String json = x.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
  * 	{
  * 		<js>"title"</js>: <js>"Swagger Sample App"</js>,
  * 		<js>"description"</js>: <js>"This is a sample server Petstore server."</js>,
@@ -39,36 +59,27 @@ import org.apache.juneau.annotation.*;
  * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
-@Bean(properties="title,description,termsOfService,contact,license,version")
+@Bean(properties="title,description,termsOfService,contact,license,version,*")
 public class Info extends SwaggerElement {
 
-	private String title;
-	private String description;
-	private String termsOfService;
+	private String 
+		title,
+		description,
+		termsOfService,
+		version;
 	private Contact contact;
 	private License license;
-	private String version;
 
 	/**
 	 * Bean property getter:  <property>title</property>.
 	 * 
 	 * <p>
-	 * Required.  The title of the application.
+	 * The title of the application.
 	 * 
-	 * @return The value of the <property>title</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getTitle() {
 		return title;
@@ -78,34 +89,38 @@ public class Info extends SwaggerElement {
 	 * Bean property setter:  <property>title</property>.
 	 * 
 	 * <p>
-	 * Required.  The title of the application.
+	 * The title of the application.
 	 * 
-	 * @param title The new value for the <property>title</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Info setTitle(String title) {
-		this.title = title;
+	public Info setTitle(String value) {
+		title = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setTitle(String)}.
+	 * Same as {@link #setTitle(String)}.
 	 * 
-	 * @param title The new value for the <property>title</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info title(String title) {
-		return setTitle(title);
+	public Info title(Object value) {
+		return setTitle(toStringVal(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>description</property>.
 	 * 
 	 * <p>
-	 * A short description of the application. GFM syntax can be used for rich text representation.
+	 * A short description of the application. 
 	 * 
-	 * @return
-	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -115,24 +130,31 @@ public class Info extends SwaggerElement {
 	 * Bean property setter:  <property>description</property>.
 	 * 
 	 * <p>
-	 * A short description of the application. GFM syntax can be used for rich text representation.
+	 * A short description of the application. 
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info setDescription(String description) {
-		this.description = description;
+	public Info setDescription(String value) {
+		description = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setDescription(String)}.
+	 * Same as {@link #setDescription(String)}.
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info description(String description) {
-		return setDescription(description);
+	public Info description(Object value) {
+		return setDescription(toStringVal(value));
 	}
 
 	/**
@@ -141,8 +163,7 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * The Terms of Service for the API.
 	 * 
-	 * @return The value of the <property>termsOfService</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getTermsOfService() {
 		return termsOfService;
@@ -154,22 +175,27 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * The Terms of Service for the API.
 	 * 
-	 * @param termsOfService The new value for the <property>termsOfService</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info setTermsOfService(String termsOfService) {
-		this.termsOfService = termsOfService;
+	public Info setTermsOfService(String value) {
+		termsOfService = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setTermsOfService(String)}.
+	 * Same as {@link #setTermsOfService(String)}.
 	 * 
-	 * @param termsOfService The new value for the <property>termsOfService</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info termsOfService(String termsOfService) {
-		return setTermsOfService(termsOfService);
+	public Info termsOfService(Object value) {
+		return setTermsOfService(toStringVal(value));
 	}
 
 	/**
@@ -178,7 +204,7 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * The contact information for the exposed API.
 	 * 
-	 * @return The value of the <property>contact</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Contact getContact() {
 		return contact;
@@ -190,22 +216,35 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * The contact information for the exposed API.
 	 * 
-	 * @param contact The new value for the <property>contact</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info setContact(Contact contact) {
-		this.contact = contact;
+	public Info setContact(Contact value) {
+		contact = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setContact(Contact)}.
+	 * Same as {@link #setContact(Contact)}.
 	 * 
-	 * @param contact The new value for the <property>contact</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li>{@link Contact}
+	 * 		<li><code>String</code> - JSON object representation of {@link Contact}
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info contact(Contact contact) {
-		return setContact(contact);
+	public Info contact(Object value) {
+		return setContact(toType(value, Contact.class));
 	}
 
 	/**
@@ -214,7 +253,7 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * The license information for the exposed API.
 	 * 
-	 * @return The value of the <property>license</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public License getLicense() {
 		return license;
@@ -226,31 +265,44 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * The license information for the exposed API.
 	 * 
-	 * @param license The new value for the <property>license</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info setLicense(License license) {
-		this.license = license;
+	public Info setLicense(License value) {
+		license = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setLicense(License)}.
+	 * Same as {@link #setLicense(License)}.
 	 * 
-	 * @param license The new value for the <property>license</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li>{@link License}
+	 * 		<li><code>String</code> - JSON object representation of {@link License}
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info license(License license) {
-		return setLicense(license);
+	public Info license(Object value) {
+		return setLicense(toType(value, License.class));
 	}
 
 	/**
 	 * Bean property getter:  <property>version</property>.
 	 * 
 	 * <p>
-	 * Required.  Provides the version of the application API (not to be confused with the specification version).
+	 * Provides the version of the application API (not to be confused with the specification version).
 	 * 
-	 * @return The value of the <property>version</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getVersion() {
 		return version;
@@ -260,23 +312,60 @@ public class Info extends SwaggerElement {
 	 * Bean property setter:  <property>version</property>.
 	 * 
 	 * <p>
-	 * Required.  Provides the version of the application API (not to be confused with the specification version).
+	 * Provides the version of the application API (not to be confused with the specification version).
 	 * 
-	 * @param version The new value for the <property>version</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Info setVersion(String version) {
-		this.version = version;
+	public Info setVersion(String value) {
+		version = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setVersion(String)}.
+	 * Same as {@link #setVersion(String)}.
 	 * 
-	 * @param version The new value for the <property>version</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Info version(String version) {
-		return setVersion(version);
+	public Info version(Object value) {
+		return setVersion(toStringVal(value));
+	}
+
+	@Override /* SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		if (property == null)
+			return null;
+		switch (property) {
+			case "title": return toType(getTitle(), type);
+			case "description": return toType(getDescription(), type);
+			case "termsOfService": return toType(getTermsOfService(), type);
+			case "contact": return toType(getContact(), type);
+			case "license": return toType(getLicense(), type);
+			case "version": return toType(getVersion(), type);
+			default: return super.get(property, type);
+		}
+	}
+
+	@Override /* SwaggerElement */
+	public Info set(String property, Object value) {
+		if (property == null)
+			return this;
+		switch (property) {
+			case "title": return title(value);
+			case "description": return description(value);
+			case "termsOfService": return termsOfService(value);
+			case "contact": return contact(value);
+			case "license": return license(value);
+			case "version": return version(value);
+			default: 
+				super.set(property, value);
+				return this;
+		}
 	}
 }

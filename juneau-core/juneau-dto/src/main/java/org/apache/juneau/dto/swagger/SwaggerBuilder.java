@@ -21,17 +21,7 @@ import org.apache.juneau.*;
  * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
 public class SwaggerBuilder {
@@ -46,9 +36,9 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Contact} element with the specified {@link Contact#name(String)} attribute.
+	 * Creates an {@link Contact} element with the specified {@link Contact#setName(String) name} attribute.
 	 * 
-	 * @param name The {@link Contact#name(String)} attribute.
+	 * @param name The {@link Contact#setName(String) name} attribute.
 	 * @return The new element.
 	 */
 	public static final Contact contact(String name) {
@@ -56,16 +46,16 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Contact} element with the specified {@link Contact#name(String)}, {@link Contact#url(Object)},
-	 * and {@link Contact#email(String)}, attributes.
+	 * Creates an {@link Contact} element with the specified {@link Contact#setName(String) name}, {@link Contact#setUrl(URI) url},
+	 * and {@link Contact#setEmail(String) email} attributes.
 	 * 
-	 * @param name The {@link Contact#name(String)} attribute.
+	 * @param name The {@link Contact#setName(String) name} attribute.
 	 * @param url
-	 * 	The {@link Contact#url(Object)} attribute.
-	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	The {@link Contact#setUrl(URI) url} attribute.
+	 * 	<br>The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * 	<br>Strings must be valid URIs.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
-	 * @param email The {@link Contact#email(String)} attribute.
+	 * @param email The {@link Contact#setEmail(String) email} attribute.
 	 * @return The new element.
 	 */
 	public static final Contact contact(String name, Object url, String email) {
@@ -82,12 +72,12 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)}
+	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#setUrl(URI) url}
 	 * attribute.
 	 * 
 	 * @param url
-	 * 	The {@link ExternalDocumentation#url(Object)} attribute.
-	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	The {@link ExternalDocumentation#setUrl(URI) url} attribute.
+	 * 	<br>The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * 	<br>Strings must be valid URIs.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @return The new element.
@@ -97,15 +87,15 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)}
-	 * and {@link ExternalDocumentation#description(String)} attributes.
+	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#setUrl(URI) url}
+	 * and {@link ExternalDocumentation#setDescription(String) description} attributes.
 	 * 
 	 * @param url
-	 * 	The {@link ExternalDocumentation#url(Object)} attribute.
-	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	The {@link ExternalDocumentation#setUrl(URI) url} attribute.
+	 * 	<br>The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * 	<br>Strings must be valid URIs.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
-	 * @param description The {@link ExternalDocumentation#description(String)} attribute.
+	 * @param description The {@link ExternalDocumentation#setDescription(String) description} attribute.
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url, String description) {
@@ -122,9 +112,9 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#type(String)} attribute.
+	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#setType(String) type} attribute.
 	 * 
-	 * @param type The {@link HeaderInfo#type(String)} attribute.
+	 * @param type The {@link HeaderInfo#setType(String) type} attribute.
 	 * @return The new element.
 	 */
 	public static final HeaderInfo headerInfo(String type) {
@@ -132,9 +122,21 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#type(String)} attribute.
+	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#setType(String) type} attribute.
 	 * 
-	 * @param type The {@link HeaderInfo#type(String)} attribute.
+	 * <p>
+	 * Throws a runtime exception if the type is not valid.
+	 * 
+	 * @param type 
+	 * 	The {@link HeaderInfo#setType(String) type} attribute.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
 	 * @return The new element.
 	 */
 	public static final HeaderInfo headerInfoStrict(String type) {
@@ -151,11 +153,11 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Info} element with the specified {@link Info#title(String)} and {@link Info#version(String)}
+	 * Creates an {@link Info} element with the specified {@link Info#setTitle(String) title} and {@link Info#setVersion(String) version}
 	 * attributes.
 	 * 
-	 * @param title The {@link Info#title(String)} attribute.
-	 * @param version The {@link Info#version(String)} attribute.
+	 * @param title The {@link Info#setTitle(String) title} attribute.
+	 * @param version The {@link Info#setVersion(String) version} attribute.
 	 * @return The new element.
 	 */
 	public static final Info info(String title, String version) {
@@ -172,9 +174,9 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Items} element with the specified {@link Items#type(String)} attribute.
+	 * Creates an {@link Items} element with the specified {@link Items#setType(String) type} attribute.
 	 * 
-	 * @param type The {@link Items#type(String)} attribute.
+	 * @param type The {@link Items#setType(String) type} attribute.
 	 * @return The new element.
 	 */
 	public static final Items items(String type) {
@@ -182,9 +184,21 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Items} element with the specified {@link Items#type(String)} attribute.
+	 * Creates an {@link Items} element with the specified {@link Items#setType(String) type} attribute.
 	 * 
-	 * @param type The {@link Items#type(String)} attribute.
+	 * <p>
+	 * Throws a runtime exception if the type is not valid.
+	 * 
+	 * @param type 
+	 * 	The {@link Items#setType(String) type} attribute.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
 	 * @return The new element.
 	 */
 	public static final Items itemsStrict(String type) {
@@ -201,13 +215,24 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link License} element with the specified {@link License#name(String)} attribute.
+	 * Creates an {@link License} element with the specified {@link License#setName(String) name} attribute.
 	 * 
-	 * @param name The {@link License#name(String)} attribute.
+	 * @param name The {@link License#setName(String) name} attribute.
 	 * @return The new element.
 	 */
 	public static final License license(String name) {
 		return license().name(name);
+	}
+
+	/**
+	 * Creates an {@link License} element with the specified {@link License#setName(String) name} and {@link License#setUrl(URI) url} attributes.
+	 * 
+	 * @param name The {@link License#setName(String) name} attribute.
+	 * @param url The {@link License#setUrl(URI) url} attribute.
+	 * @return The new element.
+	 */
+	public static final License license(String name, URI url) {
+		return license().name(name).url(url);
 	}
 
 	/**
@@ -229,11 +254,11 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#in(String)} and
-	 * {@link ParameterInfo#name(String)} attributes.
+	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#setIn(String) in} and
+	 * {@link ParameterInfo#setName(String) name} attributes.
 	 * 
-	 * @param in The {@link ParameterInfo#in(String)} attribute.
-	 * @param name The {@link ParameterInfo#name(String)} attribute.
+	 * @param in The {@link ParameterInfo#setIn(String) in} attribute.
+	 * @param name The {@link ParameterInfo#setName(String) name} attribute.
 	 * @return The new element.
 	 */
 	public static final ParameterInfo parameterInfo(String in, String name) {
@@ -241,11 +266,23 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#in(String)} and
-	 * {@link ParameterInfo#name(String)} attributes.
+	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#setIn(String) in} and
+	 * {@link ParameterInfo#setName(String) name} attributes.
 	 * 
-	 * @param in The {@link ParameterInfo#in(String)} attribute.
-	 * @param name The {@link ParameterInfo#name(String)} attribute.
+	 * <p>
+	 * Throws a runtime exception if the type is not valid.
+	 * 
+	 * @param in 
+	 * 	The {@link ParameterInfo#setIn(String) in} attribute.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"query"</js>
+	 * 		<li><js>"header"</js>
+	 * 		<li><js>"path"</js>
+	 * 		<li><js>"formData"</js>
+	 * 		<li><js>"body"</js>
+	 * 	</ul>
+	 * @param name The {@link ParameterInfo#setName(String) name} attribute.
 	 * @return The new element.
 	 */
 	public static final ParameterInfo parameterInfoStrict(String in, String name) {
@@ -262,9 +299,9 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link ResponseInfo} element with the specified {@link ResponseInfo#description(String)} attribute.
+	 * Creates an {@link ResponseInfo} element with the specified {@link ResponseInfo#setDescription(String) description} attribute.
 	 * 
-	 * @param description The {@link ResponseInfo#description(String)} attribute.
+	 * @param description The {@link ResponseInfo#setDescription(String) description} attribute.
 	 * @return The new element.
 	 */
 	public static final ResponseInfo responseInfo(String description) {
@@ -290,9 +327,9 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#type(String)} attribute.
+	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#setType(String) type} attribute.
 	 * 
-	 * @param type The {@link SecurityScheme#type(String)} attribute.
+	 * @param type The {@link SecurityScheme#setType(String) type} attribute.
 	 * @return The new element.
 	 */
 	public static final SecurityScheme securityScheme(String type) {
@@ -300,9 +337,19 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#type(String)} attribute.
+	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#setType(String) type} attribute.
 	 * 
-	 * @param type The {@link SecurityScheme#type(String)} attribute.
+	 * <p>
+	 * Throws a runtime exception if the type is not valid.
+	 * 
+	 * @param type 
+	 * 	The {@link SecurityScheme#setType(String) type} attribute.
+	 * 	<br>Valid values:
+	 * 	<ul>	
+	 * 		<li><js>"basic"</js>
+	 * 		<li><js>"apiKey"</js>
+	 * 		<li><js>"oauth2"</js>
+	 * 	</ul>
 	 * @return The new element.
 	 */
 	public static final SecurityScheme securitySchemeStrict(String type) {
@@ -319,9 +366,9 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Swagger} element with the specified {@link Swagger#info(Info)} attribute.
+	 * Creates an {@link Swagger} element with the specified {@link Swagger#setInfo(Info) info} attribute.
 	 * 
-	 * @param info The {@link Swagger#info(Info)} attribute.
+	 * @param info The {@link Swagger#setInfo(Info) info} attribute.
 	 * @return The new element.
 	 */
 	public static final Swagger swagger(Info info) {
@@ -338,9 +385,9 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Tag} element with the specified {@link Tag#name(String)} attribute.
+	 * Creates an {@link Tag} element with the specified {@link Tag#setName(String) name} attribute.
 	 * 
-	 * @param name The {@link Tag#name(String)} attribute.
+	 * @param name The {@link Tag#setName(String) name} attribute.
 	 * @return The new element.
 	 */
 	public static final Tag tag(String name) {

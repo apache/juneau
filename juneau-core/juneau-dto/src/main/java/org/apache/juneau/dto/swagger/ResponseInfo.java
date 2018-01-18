@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -21,6 +22,25 @@ import org.apache.juneau.annotation.*;
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	ResponseInfo x = <jsm>responseInfo</jsm>(<js>"A complex object array response"</js>)
+ * 		.schema(
+ * 			<jsm>schemaInfo</jsm>
+ * 				.type(<js>"array"</js>)
+ * 				.items(
+ * 					<jsm>items<jsm>()
+ * 						.set(<js>"$ref"</js>, <js>"#/definitions/VeryComplexType"</js>)
+ * 				)
+ * 		);
+ * 
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	String json = x.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
  * 	{
  * 		<js>"description"</js>: <js>"A complex object array response"</js>,
  * 		<js>"schema"</js>: {
@@ -34,20 +54,10 @@ import org.apache.juneau.annotation.*;
  * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
-@Bean(properties="description,schema,headers,examples")
+@Bean(properties="description,schema,headers,examples,*")
 public class ResponseInfo extends SwaggerElement {
 
 	private String description;
@@ -59,13 +69,9 @@ public class ResponseInfo extends SwaggerElement {
 	 * Bean property getter:  <property>description</property>.
 	 * 
 	 * <p>
-	 * Required. A short description of the response.
+	 * A short description of the response.
 	 * 
-	 * <p>
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for
-	 * rich text representation.
-	 * 
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -75,28 +81,30 @@ public class ResponseInfo extends SwaggerElement {
 	 * Bean property setter:  <property>description</property>.
 	 * 
 	 * <p>
-	 * Required. A short description of the response.
+	 * A short description of the response.
 	 * 
-	 * <p>
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
-	 * for rich text representation.
-	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo setDescription(String description) {
-		this.description = description;
+	public ResponseInfo setDescription(String value) {
+		description = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setDescription(String)}.
+	 * Same as {@link #setDescription(String)}.
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo description(String description) {
-		return setDescription(description);
+	public ResponseInfo description(Object value) {
+		return setDescription(toStringVal(value));
 	}
 
 	/**
@@ -105,14 +113,15 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * A definition of the response structure.
 	 * 
-	 * <p>
-	 * It can be a primitive, an array or an object.
-	 * If this field does not exist, it means no content is returned as part of the response.
-	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
-	 * its root type value may also be <js>"file"</js>.
-	 * This SHOULD be accompanied by a relevant produces mime-type.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If this field does not exist, it means no content is returned as part of the response.
+	 * 	<li>As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
+	 * 		its root type value may also be <js>"file"</js>.
+	 * 	<li>This SHOULD be accompanied by a relevant produces mime-type.
+	 * </ul>
 	 * 
-	 * @return The value of the <property>schema</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public SchemaInfo getSchema() {
 		return schema;
@@ -124,29 +133,44 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * A definition of the response structure.
 	 * 
-	 * <p>
-	 * It can be a primitive, an array or an object.
-	 * If this field does not exist, it means no content is returned as part of the response.
-	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
-	 * its root type value may also be <js>"file"</js>.
-	 * This SHOULD be accompanied by a relevant produces mime-type.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If this field does not exist, it means no content is returned as part of the response.
+	 * 	<li>As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
+	 * 		its root type value may also be <js>"file"</js>.
+	 * 	<li>This SHOULD be accompanied by a relevant produces mime-type.
+	 * </ul>
 	 * 
-	 * @param schema The new value for the <property>schema</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>It can be a primitive, an array or an object.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo setSchema(SchemaInfo schema) {
-		this.schema = schema;
+	public ResponseInfo setSchema(SchemaInfo value) {
+		schema = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setSchema(SchemaInfo)}.
+	 * Same as {@link #setSchema(SchemaInfo)}.
 	 * 
-	 * @param schema The new value for the <property>schema</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li>{@link SchemaInfo}
+	 * 		<li><code>String</code> - JSON object representation of {@link SchemaInfo}
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo schema(SchemaInfo schema) {
-		return setSchema(schema);
+	public ResponseInfo schema(Object value) {
+		return setSchema(toType(value, SchemaInfo.class));
 	}
 
 	/**
@@ -155,7 +179,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * A list of headers that are sent with the response.
 	 * 
-	 * @return The value of the <property>headers</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,HeaderInfo> getHeaders() {
 		return headers;
@@ -167,40 +191,61 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * A list of headers that are sent with the response.
 	 * 
-	 * @param headers The new value for the <property>headers</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo setHeaders(Map<String,HeaderInfo> headers) {
-		this.headers = headers;
+	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
+		headers = newMap(value);
 		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>headers</property>.
+	 * Adds one or more values to the <property>headers</property> property.
 	 * 
-	 * <p>
-	 * A list of headers that are sent with the response.
-	 * 
-	 * @param name The header name.
-	 * @param header The header descriptions
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo addHeader(String name, HeaderInfo header) {
-		if (headers == null)
-			headers = new TreeMap<>();
-		headers.put(name, header);
+	public ResponseInfo addHeaders(Map<String,HeaderInfo> values) {
+		headers = addToMap(headers, values);
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #addHeader(String,HeaderInfo)}.
+	 * Adds a single value to the <property>headers</property> property.
 	 * 
 	 * @param name The header name.
 	 * @param header The header descriptions
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo header(String name, HeaderInfo header) {
-		return addHeader(name, header);
+		addHeaders(Collections.singletonMap(name, header));
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>headers</property> property.
+	 * 
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
+	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo headers(Object...values) {
+		headers = addToMap(headers, values, String.class, HeaderInfo.class);
+		return this;
 	}
 
 	/**
@@ -209,10 +254,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * An example of the response message.
 	 * 
-	 * <p>
-	 * Keys must be MIME-type strings.
-	 * 
-	 * @return The value of the <property>examples</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,Object> getExamples() {
 		return examples;
@@ -224,52 +266,89 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * An example of the response message.
 	 * 
-	 * <p>
-	 * Keys must be MIME-type strings.
-	 * 
-	 * @param examples The new value for the <property>examples</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Keys must be MIME-type strings.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo setExamples(Map<String,Object> examples) {
-		this.examples = examples;
+	public ResponseInfo setExamples(Map<String,Object> value) {
+		examples = newMap(value);
 		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>examples</property>.
+	 * Adds one or more values to the <property>examples</property> property.
 	 * 
-	 * <p>
-	 * An example of the response message.
-	 * 
-	 * @param mimeType The mimeType of the example.
-	 * @param example The example output.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo addExample(String mimeType, Object example) {
-		if (examples == null)
-			examples = new TreeMap<>();
-		examples.put(mimeType, example);
+	public ResponseInfo addExamples(Map<String,Object> values) {
+		examples = addToMap(examples, values);
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #addExample(String,Object)}.
+	 * Adds a single value to the <property>examples</property> property.
 	 * 
-	 * @param mimeType The mimeType of the example.
-	 * @param example The example output.
+	 * @param mimeType The mime-type string.
+	 * @param example The example.
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo example(String mimeType, Object example) {
-		return addExample(mimeType, example);
+		examples = addToMap(examples, mimeType, example);
+		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setExamples(Map)}.
+	 * Adds one or more values to the <property>examples</property> property.
 	 * 
-	 * @param examples The new value for the <property>examples</property> property on this bean.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Map&lt;String,Object&gt;</code>
+	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ResponseInfo examples(Map<String,Object> examples) {
-		return setExamples(examples);
+	public ResponseInfo examples(Object...values) {
+		examples = addToMap(examples, values, String.class, Object.class);
+		return this;
+	}
+
+	@Override /* SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		if (property == null)
+			return null;
+		switch (property) {
+			case "description": return toType(getDescription(), type);
+			case "schema": return toType(getSchema(), type);
+			case "headers": return toType(getHeaders(), type);
+			case "examples": return toType(getExamples(), type);
+			default: return super.get(property, type);
+		}
+	}
+
+	@Override /* SwaggerElement */
+	public ResponseInfo set(String property, Object value) {
+		if (property == null)
+			return this;
+		switch (property) {
+			case "description": return description(value);
+			case "schema": return schema(value);
+			case "headers": return setHeaders(null).headers(value);
+			case "examples": return setExamples(null).examples(value);
+			default: 
+				super.set(property, value);
+				return this;
+		}
 	}
 }

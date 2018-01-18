@@ -121,12 +121,13 @@ public final class StringUtils {
 	 * 		<li> BigInteger
 	 * 		<li> BigDecimal
 	 * 	</ul>
-	 * 	If <jk>null</jk>, uses the best guess.
-	 * @return The parsed number.
+	 * 	If <jk>null</jk> or <code>Number</code>, uses the best guess.
+	 * @return The parsed number, or <jk>null</jk> if the string was null.
 	 * @throws ParseException
 	 */
 	public static Number parseNumber(String s, Class<? extends Number> type) throws ParseException {
-
+		if (s == null)
+			return null;
 		if (s.isEmpty())
 			s = "0";
 		if (type == null)

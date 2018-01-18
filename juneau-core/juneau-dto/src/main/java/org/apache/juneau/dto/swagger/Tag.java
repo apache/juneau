@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -22,6 +23,19 @@ import org.apache.juneau.annotation.*;
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Tag x = <jsm>tag</jsm>()
+ * 		.name(<js>"pet"</js>)
+ * 		.description(<js>"Pets operations"</js>)
+ * 
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	String json = x.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"pet"</js>,
  * 		<js>"description"</js>: <js>"Pets operations"</js>
@@ -30,33 +44,24 @@ import org.apache.juneau.annotation.*;
  * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
-@Bean(properties="name,description,externalDocs")
+@Bean(properties="name,description,externalDocs,*")
 public class Tag extends SwaggerElement {
 
-	private String name;
-	private String description;
+	private String 
+		name,
+		description;
 	private ExternalDocumentation externalDocs;
 
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 * 
 	 * <p>
-	 * Required. The name of the tag.
+	 * The name of the tag.
 	 * 
-	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
 		return name;
@@ -66,24 +71,29 @@ public class Tag extends SwaggerElement {
 	 * Bean property setter:  <property>name</property>.
 	 * 
 	 * <p>
-	 * Required. The name of the tag.
+	 * The name of the tag.
 	 * 
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Tag setName(String name) {
-		this.name = name;
+	public Tag setName(String value) {
+		name = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setName(String)}.
+	 * Same as {@link #setName(String)}.
 	 * 
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag name(String name) {
-		return setName(name);
+	public Tag name(Object value) {
+		return setName(toStringVal(value));
 	}
 
 	/**
@@ -92,12 +102,7 @@ public class Tag extends SwaggerElement {
 	 * <p>
 	 * A short description for the tag.
 	 * 
-	 * <p>
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
-	 * for rich text representation.
-	 * 
-	 * @return
-	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -109,26 +114,28 @@ public class Tag extends SwaggerElement {
 	 * <p>
 	 * A short description for the tag.
 	 * 
-	 * <p>
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
-	 * for rich text representation.
-	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag setDescription(String description) {
-		this.description = description;
+	public Tag setDescription(String value) {
+		description = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setDescription(String)}.
+	 * Same as {@link #setDescription(String)}.
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag description(String description) {
-		return setDescription(description);
+	public Tag description(Object value) {
+		return setDescription(toStringVal(value));
 	}
 
 	/**
@@ -137,8 +144,7 @@ public class Tag extends SwaggerElement {
 	 * <p>
 	 * Additional external documentation for this tag.
 	 * 
-	 * @return
-	 * 	The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
 		return externalDocs;
@@ -150,21 +156,60 @@ public class Tag extends SwaggerElement {
 	 * <p>
 	 * Additional external documentation for this tag.
 	 * 
-	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag setExternalDocs(ExternalDocumentation externalDocs) {
-		this.externalDocs = externalDocs;
+	public Tag setExternalDocs(ExternalDocumentation value) {
+		externalDocs = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setExternalDocs(ExternalDocumentation)}.
+	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
 	 * 
-	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li>{@link ExternalDocumentation}
+	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag externalDocs(ExternalDocumentation externalDocs) {
-		return setExternalDocs(externalDocs);
+	public Tag externalDocs(Object value) {
+		return setExternalDocs(toType(value, ExternalDocumentation.class));
+	}
+
+	@Override /* SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		if (property == null)
+			return null;
+		switch (property) {
+			case "name": return toType(getName(), type);
+			case "description": return toType(getDescription(), type);
+			case "externalDocs": return toType(getExternalDocs(), type);
+			default: return super.get(property, type);
+		}
+	}
+
+	@Override /* SwaggerElement */
+	public Tag set(String property, Object value) {
+		if (property == null)
+			return this;
+		switch (property) {
+			case "name": return name(value);
+			case "description": return description(value);
+			case "externalDocs": return externalDocs(value);
+			default: 
+				super.set(property, value);
+				return this;
+		}
 	}
 }

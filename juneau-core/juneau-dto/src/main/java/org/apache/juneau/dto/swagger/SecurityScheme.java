@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
@@ -54,31 +55,22 @@ import org.apache.juneau.annotation.*;
  * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
-@Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes")
+@Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,*")
 public class SecurityScheme extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"basic", "apiKey", "oauth2"};
 
-	private String type;
-	private String description;
-	private String name;
-	private String in;
-	private String flow;
-	private String authorizationUrl;
-	private String tokenUrl;
+	private String 
+		type,
+		description,
+		name,
+		in,
+		flow,
+		authorizationUrl,
+		tokenUrl;
 	private Map<String,String> scopes;
 
 	@Override /* SwaggerElement */
@@ -91,12 +83,9 @@ public class SecurityScheme extends SwaggerElement {
 	 * Bean property getter:  <property>type</property>.
 	 * 
 	 * <p>
-	 * Required. The type of the security scheme.
+	 * The type of the security scheme.
 	 * 
-	 * <p>
-	 * Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
-	 * 
-	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getType() {
 		return type;
@@ -106,32 +95,49 @@ public class SecurityScheme extends SwaggerElement {
 	 * Bean property setter:  <property>type</property>.
 	 * 
 	 * <p>
-	 * Required. The type of the security scheme.
+	 * The type of the security scheme.
 	 * 
 	 * <p>
-	 * Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
+	 * Valid values are .
 	 * 
-	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>	
+	 * 		<li><js>"basic"</js>
+	 * 		<li><js>"apiKey"</js>
+	 * 		<li><js>"oauth2"</js>
+	 * 	</ul>
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setType(String type) {
-		if (isStrict() && ! contains(type, VALID_TYPES))
+	public SecurityScheme setType(String value) {
+		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new FormattedRuntimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				type, VALID_TYPES
+				value, VALID_TYPES
 			);
-		this.type = type;
+		type = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setType(String)}.
+	 * Same as {@link #setType(String)}.
 	 * 
-	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Valid values:
+	 * 	<ul>	
+	 * 		<li><js>"basic"</js>
+	 * 		<li><js>"apiKey"</js>
+	 * 		<li><js>"oauth2"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme type(String type) {
-		return setType(type);
+	public SecurityScheme type(Object value) {
+		return setType(toStringVal(value));
 	}
 
 	/**
@@ -140,8 +146,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * A short description for security scheme.
 	 * 
-	 * @return
-	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -153,22 +158,27 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * A short description for security scheme.
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setDescription(String description) {
-		this.description = description;
+	public SecurityScheme setDescription(String value) {
+		description = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setDescription(String)}.
+	 * Same as {@link #setDescription(String)}.
 	 * 
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme description(String description) {
-		return setDescription(description);
+	public SecurityScheme description(Object value) {
+		return setDescription(toStringVal(value));
 	}
 
 	/**
@@ -177,7 +187,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The name of the header or query parameter to be used.
 	 * 
-	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
 		return name;
@@ -189,31 +199,36 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The name of the header or query parameter to be used.
 	 * 
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setName(String name) {
-		this.name = name;
+	public SecurityScheme setName(String value) {
+		name = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setName(String)}.
+	 * Same as {@link #setName(String)}.
 	 * 
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme name(String name) {
-		return setName(name);
+	public SecurityScheme name(Object value) {
+		return setName(toStringVal(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>in</property>.
 	 * 
 	 * <p>
-	 * The location of the API key. Valid values are <js>"query"</js> or <js>"header"</js>.
+	 * The location of the API key.
 	 * 
-	 * @return The value of the <property>in</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getIn() {
 		return in;
@@ -223,24 +238,39 @@ public class SecurityScheme extends SwaggerElement {
 	 * Bean property setter:  <property>in</property>.
 	 * 
 	 * <p>
-	 * The location of the API key. Valid values are <js>"query"</js> or <js>"header"</js>.
+	 * The location of the API key.
 	 * 
-	 * @param in The new value for the <property>in</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>	
+	 * 		<li><js>"query"</js>
+	 * 		<li><js>"header"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setIn(String in) {
-		this.in = in;
+	public SecurityScheme setIn(String value) {
+		in = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setIn(String)}.
+	 * Same as {@link #setIn(String)}.
 	 * 
-	 * @param in The new value for the <property>in</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Valid values:
+	 * 	<ul>	
+	 * 		<li><js>"query"</js>
+	 * 		<li><js>"header"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme in(String in) {
-		return setIn(in);
+	public SecurityScheme in(Object value) {
+		return setIn(toStringVal(value));
 	}
 
 	/**
@@ -249,10 +279,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The flow used by the OAuth2 security scheme.
 	 * 
-	 * <p>
-	 * Valid values are <js>"implicit"</js>, <js>"password"</js>, <js>"application"</js> or <js>"accessCode"</js>.
-	 * 
-	 * @return The value of the <property>flow</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getFlow() {
 		return flow;
@@ -264,25 +291,41 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The flow used by the OAuth2 security scheme.
 	 * 
-	 * <p>
-	 * Valid values are <js>"implicit"</js>, <js>"password"</js>, <js>"application"</js> or <js>"accessCode"</js>.
-	 * 
-	 * @param flow The new value for the <property>flow</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>	
+	 * 		<li><js>"implicit"</js>
+	 * 		<li><js>"password"</js>
+	 * 		<li><js>"application"</js>
+	 * 		<li><js>"accessCode"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setFlow(String flow) {
-		this.flow = flow;
+	public SecurityScheme setFlow(String value) {
+		flow = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setFlow(String)}.
+	 * Same as {@link #setFlow(String)}.
 	 * 
-	 * @param flow The new value for the <property>flow</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Valid values:
+	 * 	<ul>	
+	 * 		<li><js>"implicit"</js>
+	 * 		<li><js>"password"</js>
+	 * 		<li><js>"application"</js>
+	 * 		<li><js>"accessCode"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme flow(String flow) {
-		return setFlow(flow);
+	public SecurityScheme flow(Object value) {
+		return setFlow(toStringVal(value));
 	}
 
 	/**
@@ -291,12 +334,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The authorization URL to be used for this flow.
 	 * 
-	 * <p>
-	 * This SHOULD be in the form of a URL.
-	 * 
-	 * @return
-	 * 	The value of the <property>authorizationUrl</property> property on this bean, or <jk>null</jk> if it
-	 * 	is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getAuthorizationUrl() {
 		return authorizationUrl;
@@ -308,25 +346,29 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The authorization URL to be used for this flow.
 	 * 
-	 * <p>
-	 * This SHOULD be in the form of a URL.
-	 * 
-	 * @param authorizationUrl The new value for the <property>authorizationUrl</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>This SHOULD be in the form of a URL.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setAuthorizationUrl(String authorizationUrl) {
-		this.authorizationUrl = authorizationUrl;
+	public SecurityScheme setAuthorizationUrl(String value) {
+		authorizationUrl = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setAuthorizationUrl(String)}.
+	 * Same as {@link #setAuthorizationUrl(String)}.
 	 * 
-	 * @param authorizationUrl The new value for the <property>authorizationUrl</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>This SHOULD be in the form of a URL.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme authorizationUrl(String authorizationUrl) {
-		return setAuthorizationUrl(authorizationUrl);
+	public SecurityScheme authorizationUrl(Object value) {
+		return setAuthorizationUrl(toStringVal(value));
 	}
 
 	/**
@@ -335,10 +377,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The token URL to be used for this flow.
 	 * 
-	 * <p>
-	 * This SHOULD be in the form of a URL.
-	 * 
-	 * @return The value of the <property>tokenUrl</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getTokenUrl() {
 		return tokenUrl;
@@ -350,25 +389,29 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The token URL to be used for this flow.
 	 * 
-	 * <p>
-	 * This SHOULD be in the form of a URL.
-	 * 
-	 * @param tokenUrl The new value for the <property>tokenUrl</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>This SHOULD be in the form of a URL.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setTokenUrl(String tokenUrl) {
-		this.tokenUrl = tokenUrl;
+	public SecurityScheme setTokenUrl(String value) {
+		tokenUrl = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setTokenUrl(String)}.
+	 * Same as {@link #setTokenUrl(String)}.
 	 * 
-	 * @param tokenUrl The new value for the <property>tokenUrl</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>This SHOULD be in the form of a URL.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme tokenUrl(String tokenUrl) {
-		return setTokenUrl(tokenUrl);
+	public SecurityScheme tokenUrl(Object value) {
+		return setTokenUrl(toStringVal(value));
 	}
 
 	/**
@@ -377,7 +420,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
 	 * 
-	 * @return The value of the <property>scopes</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,String> getScopes() {
 		return scopes;
@@ -389,39 +432,84 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
 	 * 
-	 * @param scopes The new value for the <property>scopes</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme setScopes(Map<String,String> scopes) {
-		this.scopes = scopes;
+	public SecurityScheme setScopes(Map<String,String> value) {
+		scopes = newMap(value);
 		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>scopes</property>.
+	 * Adds one or more values to the <property>scopes</property> property.
 	 * 
-	 * <p>
-	 * The available scopes for the OAuth2 security scheme.
-	 * 
-	 * @param name The name of the scope.
-	 * @param description A short description of the scope.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SecurityScheme addScope(String name, String description) {
-		if (scopes == null)
-			scopes = new TreeMap<>();
-		scopes.put(name, description);
+	public SecurityScheme addScopes(Map<String,String> values) {
+		scopes = addToMap(scopes, values);
+		return this;
+	}
+	
+	/**
+	 * Adds one or more values to the <property>enum</property> property.
+	 * 
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
+	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	scopes(<js>"{name:'value'}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme scopes(Object...values) {
+		scopes = addToMap(scopes, values, String.class, String.class);
 		return this;
 	}
 
-	/**
-	 * Synonym for {@link #addScope(String,String)}.
-	 * 
-	 * @param name The name of the scope.
-	 * @param description A short description of the scope.
-	 * @return This object (for method chaining).
-	 */
-	public SecurityScheme scope(String name, String description) {
-		return addScope(name, description);
+	@Override /* SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		if (property == null)
+			return null;
+		switch (property) {
+			case "type": return toType(getType(), type);
+			case "description": return toType(getDescription(), type);
+			case "name": return toType(getName(), type);
+			case "in": return toType(getIn(), type);
+			case "flow": return toType(getFlow(), type);
+			case "authorizationUrl": return toType(getAuthorizationUrl(), type);
+			case "tokenUrl": return toType(getTokenUrl(), type);
+			case "scopes": return toType(getScopes(), type);
+			default: return super.get(property, type);
+		}
+	}
+
+	@Override /* SwaggerElement */
+	public SecurityScheme set(String property, Object value) {
+		if (property == null)
+			return this;
+		switch (property) {
+			case "type": return type(value);
+			case "description": return description(value);
+			case "name": return name(value);
+			case "in": return in(value);
+			case "flow": return flow(value);
+			case "authorizationUrl": return authorizationUrl(value);
+			case "tokenUrl": return tokenUrl(value);
+			case "scopes": return setScopes(null).scopes(value);
+			default: 
+				super.set(property, value);
+				return this;
+		}
 	}
 }

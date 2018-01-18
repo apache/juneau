@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
@@ -25,6 +26,17 @@ import org.apache.juneau.json.*;
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Items x = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
+ * 
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	String json = x.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
  * 	{
  * 		<js>"type"</js>: <js>"string"</js>,
  * 		<js>"minLength"</js>: 2
@@ -33,43 +45,36 @@ import org.apache.juneau.json.*;
  * 
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
- * 		(org.apache.juneau.dto)</a>
- * 		<ul>
- * 			<li class='sublink'>
- * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 		</ul>
- * 	</li>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
- * 	</li>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
  */
-@Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
-@SuppressWarnings({ "unchecked" })
+@Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,*")
 public class Items extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
 	private static final String[] VALID_COLLECTION_FORMATS = {"csv","ssv","tsv","pipes","multi"};
 
-	private String type;
-	private String format;
+	private String 
+		type,
+		format,
+		collectionFormat,
+		pattern;
+	private Number 
+		maximum,
+		minimum,
+		multipleOf;
+	private Integer 
+		maxLength,
+		minLength,
+		maxItems,
+		minItems;
+	private Boolean 
+		exclusiveMaximum,
+		exclusiveMinimum,
+		uniqueItems;
 	private Items items;
-	private String collectionFormat;
 	private Object _default;
-	private Number maximum;
-	private Boolean exclusiveMaximum;
-	private Number minimum;
-	private Boolean exclusiveMinimum;
-	private Integer maxLength;
-	private Integer minLength;
-	private String pattern;
-	private Integer maxItems;
-	private Integer minItems;
-	private Boolean uniqueItems;
 	private List<Object> _enum;
-	private Number multipleOf;
 
 	@Override /* SwaggerElement */
 	protected Items strict() {
@@ -81,11 +86,9 @@ public class Items extends SwaggerElement {
 	 * Bean property getter:  <property>type</property>.
 	 * 
 	 * <p>
-	 * Required. The internal type of the array.
-	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or
-	 * <js>"array"</js>.
+	 * The internal type of the array.
 	 * 
-	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getType() {
 		return type;
@@ -95,40 +98,63 @@ public class Items extends SwaggerElement {
 	 * Bean property setter:  <property>type</property>.
 	 * 
 	 * <p>
-	 * Required. The internal type of the array.
-	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or
-	 * <js>"array"</js>.
+	 * The internal type of the array.
 	 * 
-	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Items setType(String type) {
-		if (isStrict() && ! contains(type, VALID_TYPES))
+	public Items setType(String value) {
+		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new RuntimeException(
-				"Invalid value passed in to setType(String).  Value='"+type+"', valid values="
+				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
 				+ JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
-		this.type = type;
+		type = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setType(String)}.
+	 * Same as {@link #setType(String)}.
 	 * 
-	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items type(String type) {
-		return setType(type);
+	public Items type(Object value) {
+		return setType(toStringVal(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 * 
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink"
-	 * href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>. 
 	 * 
-	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * </ul>
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getFormat() {
 		return format;
@@ -138,35 +164,43 @@ public class Items extends SwaggerElement {
 	 * Bean property setter:  <property>format</property>.
 	 * 
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink"
-	 * href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>. 
 	 * 
-	 * @param format The new value for the <property>format</property> property on this bean.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setFormat(String format) {
-		this.format = format;
+	public Items setFormat(String value) {
+		format = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setFormat(String)}.
+	 * Same as {@link #setFormat(String)}.
 	 * 
-	 * @param format The new value for the <property>format</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items format(String format) {
-		return setFormat(format);
+	public Items format(Object value) {
+		return setFormat(toStringVal(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>items</property>.
 	 * 
 	 * <p>
-	 * Required if <code>type</code> is <js>"array"</js>.
 	 * Describes the type of items in the array.
 	 * 
-	 * @return The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Items getItems() {
 		return items;
@@ -176,25 +210,39 @@ public class Items extends SwaggerElement {
 	 * Bean property setter:  <property>items</property>.
 	 * 
 	 * <p>
-	 * Required if <code>type</code> is <js>"array"</js>.
 	 * Describes the type of items in the array.
 	 * 
-	 * @param items The new value for the <property>items</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setItems(Items items) {
-		this.items = items;
+	public Items setItems(Items value) {
+		items = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setItems(Items)}.
+	 * Same as {@link #setItems(Items)}.
 	 * 
-	 * @param items The new value for the <property>items</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li>{@link Items}
+	 * 		<li><code>String</code> - JSON object representation of {@link Items}
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items items(Items items) {
-		return setItems(items);
+	public Items items(Object value) {
+		return setItems(toType(value, Items.class));
 	}
 
 	/**
@@ -203,21 +251,7 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * Determines the format of the array if type array is used.
 	 * 
-	 * <p>
-	 * Possible values are:
-	 * <ul>
-	 * 	<li><code>csv</code> - comma separated values <code>foo,bar</code>.
-	 * 	<li><code>ssv</code> - space separated values <code>foo bar</code>.
-	 * 	<li><code>tsv</code> - tab separated values <code>foo\tbar</code>.
-	 * 	<li><code>pipes</code> - pipe separated values <code>foo|bar</code>.
-	 * </ul>
-	 * 
-	 * <p>
-	 * Default value is <code>csv</code>.
-	 * 
-	 * @return
-	 * 	The value of the <property>collectionFormat</property> property on this bean, or <jk>null</jk> if it is
-	 * 	not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getCollectionFormat() {
 		return collectionFormat;
@@ -229,39 +263,46 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * Determines the format of the array if type array is used.
 	 * 
-	 * <p>
-	 * Possible values are:
-	 * <ul>
-	 * 	<li><code>csv</code> - comma separated values <code>foo,bar</code>.
-	 * 	<li><code>ssv</code> - space separated values <code>foo bar</code>.
-	 * 	<li><code>tsv</code> - tab separated values <code>foo\tbar</code>.
-	 * 	<li><code>pipes</code> - pipe separated values <code>foo|bar</code>.
-	 * </ul>
-	 * 
-	 * <p>
-	 * Default value is <code>csv</code>.
-	 * 
-	 * @param collectionFormat The new value for the <property>collectionFormat</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
+	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
+	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
+	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setCollectionFormat(String collectionFormat) {
-		if (isStrict() && ! contains(collectionFormat, VALID_COLLECTION_FORMATS))
+	public Items setCollectionFormat(String value) {
+		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw new FormattedRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				collectionFormat, VALID_COLLECTION_FORMATS
+				value, VALID_COLLECTION_FORMATS
 			);
-		this.collectionFormat = collectionFormat;
+		collectionFormat = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setCollectionFormat(String)}.
+	 * Same as {@link #setCollectionFormat(String)}.
 	 * 
-	 * @param collectionFormat The new value for the <property>collectionFormat</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
+	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
+	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
+	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items collectionFormat(String collectionFormat) {
-		return setCollectionFormat(collectionFormat);
+	public Items collectionFormat(Object value) {
+		return setCollectionFormat(toStringVal(value));
 	}
 
 	/**
@@ -269,12 +310,19 @@ public class Items extends SwaggerElement {
 	 * 
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
-	 * (Note: <js>"default"</js> has no meaning for required items.)
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * 
-	 * @return The value of the <property>default</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li><js>"default"</js> has no meaning for required items.
+	 * 	<li>Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
+	 * </ul>
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getDefault() {
 		return _default;
@@ -285,37 +333,49 @@ public class Items extends SwaggerElement {
 	 * 
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
-	 * (Note: <js>"default"</js> has no meaning for required items.)
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * 
-	 * @param _default The new value for the <property>default</property> property on this bean.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li><js>"default"</js> has no meaning for required items.
+	 * 	<li>Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setDefault(Object _default) {
-		this._default = _default;
+	public Items setDefault(Object value) {
+		_default = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setDefault(Object)}.
+	 * Same as {@link #setDefault(Object)}.
 	 * 
-	 * @param _default The new value for the <property>default</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items _default(Object _default) {
-		return setDefault(_default);
+	public Items _default(Object value) {
+		return setDefault(value);
 	}
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>maximum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMaximum() {
 		return maximum;
@@ -324,38 +384,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maximum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * </ul>
 	 * 
-	 * @param maximum The new value for the <property>maximum</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMaximum(Number maximum) {
-		this.maximum = maximum;
+	public Items setMaximum(Number value) {
+		maximum = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setMaximum(Number)}.
+	 * Same as {@link #setMaximum(Number)}.
 	 * 
-	 * @param maximum The new value for the <property>maximum</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items maximum(Number maximum) {
-		return setMaximum(maximum);
+	public Items maximum(Object value) {
+		return setMaximum(toNumber(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * </ul>
 	 * 
-	 * @return
-	 * 	The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
-	 * 	not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -364,36 +429,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * </ul>
 	 * 
-	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setExclusiveMaximum(Boolean exclusiveMaximum) {
-		this.exclusiveMaximum = exclusiveMaximum;
+	public Items setExclusiveMaximum(Boolean value) {
+		exclusiveMaximum = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setExclusiveMaximum(Boolean)}.
+	 * Same as {@link #setExclusiveMaximum(Boolean)}.
 	 * 
-	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items exclusiveMaximum(Boolean exclusiveMaximum) {
-		return setExclusiveMaximum(exclusiveMaximum);
+	public Items exclusiveMaximum(Object value) {
+		return setExclusiveMaximum(toBoolean(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>minimum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMinimum() {
 		return minimum;
@@ -402,37 +474,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minimum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * </ul>
 	 * 
-	 * @param minimum The new value for the <property>minimum</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMinimum(Number minimum) {
-		this.minimum = minimum;
+	public Items setMinimum(Number value) {
+		minimum = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setMinimum(Number)}.
+	 * Same as {@link #setMinimum(Number)}.
 	 * 
-	 * @param minimum The new value for the <property>minimum</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items minimum(Number minimum) {
-		return setMinimum(minimum);
+	public Items minimum(Object value) {
+		return setMinimum(toNumber(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -441,36 +519,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * </ul>
 	 * 
-	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setExclusiveMinimum(Boolean exclusiveMinimum) {
-		this.exclusiveMinimum = exclusiveMinimum;
+	public Items setExclusiveMinimum(Boolean value) {
+		exclusiveMinimum = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setExclusiveMinimum(Boolean)}.
+	 * Same as {@link #setExclusiveMinimum(Boolean)}.
 	 * 
-	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items exclusiveMinimum(Boolean exclusiveMinimum) {
-		return setExclusiveMinimum(exclusiveMinimum);
+	public Items exclusiveMinimum(Object value) {
+		return setExclusiveMinimum(toBoolean(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>maxLength</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxLength() {
 		return maxLength;
@@ -479,36 +564,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
+	 * </ul>
 	 * 
-	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMaxLength(Integer maxLength) {
-		this.maxLength = maxLength;
+	public Items setMaxLength(Integer value) {
+		maxLength = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setMaxLength(Integer)}.
+	 * Same as {@link #setMaxLength(Integer)}.
 	 * 
-	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items maxLength(Integer maxLength) {
-		return setMaxLength(maxLength);
+	public Items maxLength(Object value) {
+		return setMaxLength(toInteger(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>minLength</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinLength() {
 		return minLength;
@@ -517,36 +609,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minLength</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
+	 * </ul>
 	 * 
-	 * @param minLength The new value for the <property>minLength</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMinLength(Integer minLength) {
-		this.minLength = minLength;
+	public Items setMinLength(Integer value) {
+		minLength = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setMinLength(Integer)}.
+	 * Same as {@link #setMinLength(Integer)}.
 	 * 
-	 * @param minLength The new value for the <property>minLength</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items minLength(Integer minLength) {
-		return setMinLength(minLength);
+	public Items minLength(Object value) {
+		return setMinLength(toInteger(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>pattern</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getPattern() {
 		return pattern;
@@ -555,36 +654,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>pattern</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
+	 * </ul>
 	 * 
-	 * @param pattern The new value for the <property>pattern</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setPattern(String pattern) {
-		this.pattern = pattern;
+	public Items setPattern(String value) {
+		pattern = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setPattern(String)}.
+	 * Same as {@link #setPattern(String)}.
 	 * 
-	 * @param pattern The new value for the <property>pattern</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items pattern(String pattern) {
-		return setPattern(pattern);
+	public Items pattern(Object value) {
+		return setPattern(toStringVal(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>maxItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxItems() {
 		return maxItems;
@@ -593,36 +699,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
+	 * </ul>
 	 * 
-	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMaxItems(Integer maxItems) {
-		this.maxItems = maxItems;
+	public Items setMaxItems(Integer value) {
+		maxItems = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setMaxItems(Integer)}.
+	 * Same as {@link #setMaxItems(Integer)}.
 	 * 
-	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items maxItems(Integer maxItems) {
-		return setMaxItems(maxItems);
+	public Items maxItems(Object value) {
+		return setMaxItems(toInteger(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>minItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinItems() {
 		return minItems;
@@ -631,37 +744,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minItems</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
+	 * </ul>
 	 * 
-	 * @param minItems The new value for the <property>minItems</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMinItems(Integer minItems) {
-		this.minItems = minItems;
+	public Items setMinItems(Integer value) {
+		minItems = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setMinItems(Integer)}.
+	 * Same as {@link #setMinItems(Integer)}.
 	 * 
-	 * @param minItems The new value for the <property>minItems</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items minItems(Integer minItems) {
-		return setMinItems(minItems);
+	public Items minItems(Object value) {
+		return setMinItems(toInteger(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() {
 		return uniqueItems;
@@ -670,36 +789,43 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
+	 * </ul>
 	 * 
-	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setUniqueItems(Boolean uniqueItems) {
-		this.uniqueItems = uniqueItems;
+	public Items setUniqueItems(Boolean value) {
+		uniqueItems = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setUniqueItems(Boolean)}.
+	 * Same as {@link #setUniqueItems(Boolean)}.
 	 * 
-	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items uniqueItems(Boolean uniqueItems) {
-		return setUniqueItems(uniqueItems);
+	public Items uniqueItems(Object value) {
+		return setUniqueItems(toBoolean(value));
 	}
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>enum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Object> getEnum() {
 		return _enum;
@@ -708,65 +834,71 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
+	 * </ul>
 	 * 
-	 * @param _enum The new value for the <property>enum</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setEnum(List<Object> _enum) {
-		this._enum = _enum;
+	public Items setEnum(Collection<Object> value) {
+		_enum = newList(value);
 		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>enum</property>.
+	 * Adds one or more values to the <property>enum</property> property.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
-	 * 
-	 * @param _enum
-	 * 	The new values to add to the <property>enum</property> property on this bean.
-	 * 	These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Items addEnum(Object..._enum) {
-		for (Object o  : _enum) {
-			if (o != null) {
-				if (o instanceof Collection)
-					addEnum((Collection<Object>)o);
-				else {
-					if (this._enum == null)
-						this._enum = new LinkedList<>();
-					this._enum.add(o);
-				}
-			}
-		}
+	public Items addEnum(Collection<Object> values) {
+		_enum = addToList(_enum, values);
 		return this;
 	}
-
+	
 	/**
-	 * Synonym for {@link #addEnum(Object...)}.
+	 * Adds one or more values to the <property>enum</property> property.
 	 * 
-	 * @param _enum
-	 * 	The new values to add to the <property>enum</property> property on this bean.
-	 * 	These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Object</code>
+	 * 		<li><code>Collection&lt;Object&gt;</code>
+	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	_enum(<js>"['foo','bar']"</js>);
+	 * 			</p>
+	 * 		<li><code>String</code> - Individual values
+	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<p class='bcode'>
+	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Items _enum(Object..._enum) {
-		return addEnum(_enum);
+	public Items _enum(Object...values) {
+		_enum = addToList(_enum, values, Object.class);
+		return this;
 	}
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
+	 * </ul>
 	 * 
-	 * @return The value of the <property>multipleOf</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMultipleOf() {
 		return multipleOf;
@@ -775,25 +907,85 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
 	 * 
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
+	 * <h5 class='section'>Additional Info:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
+	 * </ul>
 	 * 
-	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMultipleOf(Number multipleOf) {
-		this.multipleOf = multipleOf;
+	public Items setMultipleOf(Number value) {
+		multipleOf = value;
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setMultipleOf(Number)}.
+	 * Same as {@link #setMultipleOf(Number)}.
 	 * 
-	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items multipleOf(Number multipleOf) {
-		return setMultipleOf(multipleOf);
+	public Items multipleOf(Object value) {
+		return setMultipleOf(toNumber(value));
+	}
+
+	@Override /* SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		if (property == null)
+			return null;
+		switch (property) {
+			case "type": return toType(getType(), type);
+			case "format": return toType(getFormat(), type);
+			case "items": return toType(getItems(), type);
+			case "collectionFormat": return toType(getCollectionFormat(), type);
+			case "default": return toType(getDefault(), type);
+			case "maximum": return toType(getMaximum(), type);
+			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
+			case "minimum": return toType(getMinimum(), type);
+			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
+			case "maxLength": return toType(getMaxLength(), type);
+			case "minLength": return toType(getMinLength(), type);
+			case "pattern": return toType(getPattern(), type);
+			case "maxItems": return toType(getMaxItems(), type);
+			case "minItems": return toType(getMinItems(), type);
+			case "uniqueItems": return toType(getUniqueItems(), type);
+			case "enum": return toType(getEnum(), type);
+			case "multipleOf": return toType(getMultipleOf(), type);
+			default: return super.get(property, type);
+		}
+	}
+
+	@Override /* SwaggerElement */
+	public Items set(String property, Object value) {
+		if (property == null)
+			return this;
+		switch (property) {
+			case "type": return type(value);
+			case "format": return format(value);
+			case "items": return items(value);
+			case "collectionFormat": return collectionFormat(value);
+			case "default": return _default(value);
+			case "maximum": return maximum(value);
+			case "exclusiveMaximum": return exclusiveMaximum(value);
+			case "minimum": return minimum(value);
+			case "exclusiveMinimum": return exclusiveMinimum(value);
+			case "maxLength": return maxLength(value);
+			case "minLength": return minLength(value);
+			case "pattern": return pattern(value);
+			case "maxItems": return maxItems(value);
+			case "minItems": return minItems(value);
+			case "uniqueItems": return uniqueItems(value);
+			case "enum": return setEnum(null)._enum(value);
+			case "multipleOf": return multipleOf(value);
+			default: 
+				super.set(property, value);
+				return this;
+		}
 	}
 }
