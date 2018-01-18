@@ -9177,6 +9177,25 @@
 				</ul>
 		</ul>
 
+		<h6 class='topic'>juneau-marshall</h6>
+		<ul class='spaced-list'>
+			<li>
+				Enhancements to Swagger DTO:
+				<ul>
+					<li>New methods for setting and retrieving properties via name:
+						<ul>
+							<li>{@link org.apache.juneau.dto.swagger.SwaggerElement#get(String,Class)}
+							<li>{@link org.apache.juneau.dto.swagger.SwaggerElement#set(String,Object)}
+						</ul>
+					<li>
+						Support for setting non-standard fields such as <js>"$ref"</js> via getter and setter
+						above.
+					<li>
+						Setter methods that take in beans and collections of beans can now take in 
+						JSON strings.
+				</ul>
+		</ul>
+		
 		<h6 class='topic'>juneau-rest-server</h6>
 		<ul class='spaced-list'>
 			<li>
