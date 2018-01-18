@@ -4032,23 +4032,39 @@
 				.response(405, <jsm>responseInfo</jsm>(<js>"Invalid input"</js>))
 		);
 
+	<jc>// Serialize using JSON serializer.</jc>
 	String swaggerJson = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(swagger);
+	
+	<jc>// Or just use toString().</jc>
+	String swaggerJson = swagger.toString();
+			</p>
+			<p>
+				Methods that take in beans and collections of beans can also take in JSON representations
+				of those objects.
+			</p>
+			<p class='bcode'>
+	<jc>// Pass in a JSON object representation of an Info object.</jc>
+	swagger.info(<js>"{title:'Swagger Petstore',...}"</js>);
+			</p>
+			<p>
+				Properties can also be accessed via the {@link org.apache.juneau.dto.swagger.SwaggerElement#get(String,Class)}
+				and {@link org.apache.juneau.dto.swagger.SwaggerElement#set(String,Object)} methods.
+				<br>These methods can also be used to set and retrieve non-Swagger attributes such as 
+				<js>"$ref"</js> (which is not a part of the Swagger spec, but is part of the JSON Schema spec).
+			</p>
+			<p class='bcode'>
+	<jc>// Set a non-standard attribute.</jc>
+	swagger.set(<js>"$ref"</js>, <js>"http://foo.com"</js>);
+	
+	<jc>// Retrieve a non-standard attribute.</jc>
+	URI ref = swagger.get(<js>"$ref"</js>, URI.<jk>class</jk>);
 			</p>
 			<p>
 				Swagger docs can be parsed back into Swagger beans using the following code:
 			</p>
 			<p class='bcode'>
-		Swagger swagger = JsonParser.<jsf>DEFAULT</jsf>.parse(swaggerJson, Swagger.<jk>class</jk>);
+	Swagger swagger = JsonParser.<jsf>DEFAULT</jsf>.parse(swaggerJson, Swagger.<jk>class</jk>);
 			</p>
-
-			<h6 class='toc'>Additional Information - org.apache.juneau.dto.swagger</h6>
-			<ol class='toc'>
-				<li><p><a class='doclink' href='org/apache/juneau/dto/swagger/package-summary.html#Overview'>Overview</a></p>
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/dto/swagger/package-summary.html#Serialize'>Generating Swagger Docs</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/dto/swagger/package-summary.html#Parse'>Parsing Swagger Docs</a></p>
-				</ol>
-			</ol>
 		</div>
 
 		<!-- ======================================================================================================= -->
