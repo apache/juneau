@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -28,7 +27,6 @@ import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
@@ -372,16 +370,11 @@ public class ParamsResource extends RestServletDefault {
 		return t.toString();
 	}
 
-	@RestMethod(name=GET, path="/otherObjects/Logger")
-	public boolean testOtherLogger(Logger t) {
+	@RestMethod(name=GET, path="/otherObjects/RestLogger")
+	public boolean testOtherLogger(RestLogger t) {
 		return t != null;
 	}
-
-	@RestMethod(name=GET, path="/otherObjects/JuneauLogger")
-	public boolean testOtherJuneauLogger(JuneauLogger t) {
-		return t != null;
-	}
-
+	
 	@RestMethod(name=GET, path="/otherObjects/RestContext")
 	public boolean testOtherRestContext(RestContext t) {
 		return t != null;

@@ -798,14 +798,8 @@ public class ParamsTest extends RestTestcase {
 	}
 
 	@Test
-	public void testOtherLogger() throws Exception {
-		String r = CLIENT.doGet(URL + "/otherObjects/Logger").getResponseAsString();
-		assertEquals("true", r);
-	}
-
-	@Test
-	public void testOtherJuneauLogger() throws Exception {
-		String r = CLIENT.doGet(URL + "/otherObjects/JuneauLogger").getResponseAsString();
+	public void testOtherRestLogger() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/RestLogger").getResponseAsString();
 		assertEquals("true", r);
 	}
 

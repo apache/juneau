@@ -950,7 +950,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	protected Swagger getSwaggerFromFile() {
 		if (fileSwagger == null)
-			fileSwagger = context.getInfoProvider().getSwaggerFromFile(this.getLocale());
+			fileSwagger = context.getInfoProvider().getSwaggerFromFile(this);
 		if (fileSwagger == null)
 			fileSwagger = Swagger.NULL;
 		return fileSwagger == Swagger.NULL ? null : fileSwagger;

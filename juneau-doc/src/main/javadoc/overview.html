@@ -9351,6 +9351,17 @@
 						{@link org.apache.juneau.rest.annotation.RestMethod#supportedContentTypes() supportedContentTypes()}
 						for overriding the supported media types inferred from the serializers and parsers.
 				</ul>
+			<li>
+				<code>RestCallHandler</code> split up into {@link org.apache.juneau.rest.RestCallHandler} and 
+				{@link org.apache.juneau.rest.RestCallHandlerDefault}
+			<li>
+				<code>RestInfoProvider</code> split up into {@link org.apache.juneau.rest.RestInfoProvider} and 
+				{@link org.apache.juneau.rest.RestInfoProviderDefault}
+			<li>
+				<code>RestLogger</code> split up into {@link org.apache.juneau.rest.RestLogger}, 
+				{@link org.apache.juneau.rest.RestLoggerDefault} and {@link org.apache.juneau.rest.RestLoggerNoOp}
+			<li>
+				<code>RestResourceResolverSimple</code> renamed to {@link org.apache.juneau.rest.RestResourceResolverDefault}
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -9401,6 +9412,7 @@
 					<li>{@link org.apache.juneau.BeanContextBuilder}
 					<li>{@link org.apache.juneau.rest.RestContext}
 					<li>{@link org.apache.juneau.rest.RestContextBuilder}
+					<li>Swagger DTOs.
 				</ul>		
 		</ul>
 	</div>

@@ -269,7 +269,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt; | {@link RestCallHandler}</code>
-	 * 	<li><b>Default:</b>  {@link RestCallHandler}
+	 * 	<li><b>Default:</b>  {@link RestCallHandlerDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -290,7 +290,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Our customized call handler.</jc>
-	 * 	<jk>public class</jk> MyRestCallHandler <jk>extends</jk> RestCallHandler {
+	 * 	<jk>public class</jk> MyRestCallHandler <jk>extends</jk> RestCallHandlerDefault {
 	 * 		
 	 * 		<jc>// Must provide this constructor!</jc>
 	 * 		<jk>public</jk> MyRestCallHandler(RestContext context) {
@@ -298,19 +298,19 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 
 	 * 		<ja>@Override</ja>
-	 * 		<jk>protected</jk> RestRequest createRequest(HttpServletRequest req) <jk>throws</jk> ServletException {
+	 * 		<jk>public</jk> RestRequest createRequest(HttpServletRequest req) <jk>throws</jk> ServletException {
 	 * 			<jc>// Low-level handling of requests.</jc>
 	 * 			...
 	 * 		}
 	 * 		
 	 * 		<ja>@Override</ja>
-	 * 		<jk>protected void</jk> handleResponse(RestRequest req, RestResponse res, Object output) <jk>throws</jk> IOException, RestException {
+	 * 		<jk>public void</jk> handleResponse(RestRequest req, RestResponse res, Object output) <jk>throws</jk> IOException, RestException {
 	 * 			<jc>// Low-level handling of responses.</jc>
 	 * 			...
 	 * 		}
 	 * 
 	 * 		<ja>@Override</ja>
-	 * 		<jk>protected void</jk> handleNotFound(int rc, RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 * 		<jk>public void</jk> handleNotFound(int rc, RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 	 * 			<jc>// Low-level handling of various error conditions.</jc>
 	 * 			...
 	 * 		}
@@ -410,7 +410,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
-	 * 		by default is {@link RestResourceResolverSimple} which requires the class have one of the following
+	 * 		by default is {@link RestResourceResolverDefault} which requires the class have one of the following
 	 * 		constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
@@ -1145,7 +1145,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.infoProvider.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link RestInfoProvider}&gt; | {@link RestInfoProvider}</code>
-	 * 	<li><b>Default:</b>  {@link RestInfoProvider}
+	 * 	<li><b>Default:</b>  {@link RestInfoProviderDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -1162,8 +1162,58 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
 	 * 
-	 * <p>
-	 * Subclasses can be used to customize the documentation on a resource.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Our customized info provider.</jc>
+	 * 	<jk>public class</jk> MyRestInfoProvider <jk>extends</jk> RestInfoProviderDefault {
+	 * 		
+	 * 		<jc>// Must provide this constructor!</jc>
+	 * 		<jk>public</jk> MyRestInfoProvider(RestContext context) {
+	 * 			<jk>super</jk>(context);
+	 * 		}
+	 * 
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Swagger getSwaggerFromFile(RestRequest req) <jk>throws</jk> RestException {
+	 * 			<jc>// Provide our own method of retrieving swagger from file system.</jc>
+	 * 		}
+	 * 
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Swagger getSwagger(RestRequest req) <jk>throws</jk> RestException {
+	 * 			Swagger s = super.getSwagger(req);
+	 * 			<jc>// Made inline modifications to generated swagger.</jc>
+	 * 			<jk>return</jk> s;
+	 * 		}
+	 * 
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> String getSiteName(RestRequest req) {
+	 * 			<jc>// Override the site name.</jc>
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(infoProvider=MyRestInfoProvider.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * 
+	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.infoProvider(MyRestInfoProvider.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_infoProvider</jsf>, MyRestInfoProvider.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Registered via builder passed in through init method.</jc>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.infoProvider(MyRestInfoProvider.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
 	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
 	
@@ -1174,7 +1224,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.logger.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestLogger&gt; | RestLogger</code>
-	 * 	<li><b>Default:</b>  {@link RestLogger.Normal}
+	 * 	<li><b>Default:</b>  {@link RestLoggerDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -1195,7 +1245,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_logger}
-	 * 	<li>The {@link RestLogger.Normal} logger can be used to provide basic error logging to the Java logger.
+	 * 	<li>The {@link RestLoggerDefault} logger can be used to provide basic error logging to the Java logger.
 	 * </ul>
 	 */
 	public static final String REST_logger = PREFIX + "logger.o";
@@ -1554,7 +1604,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.resourceResolver.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestResourceResolver&gt; | RestResourceResolver</code>
-	 * 	<li><b>Default:</b>  {@link RestResourceResolverSimple}
+	 * 	<li><b>Default:</b>  {@link RestResourceResolverDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -2067,7 +2117,7 @@ public final class RestContext extends BeanContext {
 			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);	
 			
-			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLogger.NoOp.class, true, ps);
+			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLoggerNoOp.class, true, ps);
 
 			varResolver = builder.varResolverBuilder
 				.vars(
@@ -2325,7 +2375,7 @@ public final class RestContext extends BeanContext {
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverSimple.class : parentContext.resourceResolver, true, this, ps);
+			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverDefault.class : parentContext.resourceResolver, true, this, ps);
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
 				String path = null;
 				Object r = null;
@@ -2365,8 +2415,8 @@ public final class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandler.class, true, this, ps);
-			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProvider.class, true, this, ps);
+			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandlerDefault.class, true, this, ps);
+			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProviderDefault.class, true, this, ps);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -2805,8 +2855,9 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The logger for a resource is defined via one of the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#logger() @RestResource.logger()} annotation.
-	 * 	<li>{@link RestContextBuilder#logger(Class)}/{@link RestContextBuilder#logger(RestLogger)} methods.
+	 * 	<li class='ja'>{@link RestResource#logger() @RestResource.logger()}\
+	 * 	<li class='jm'>{@link RestContextBuilder#logger(Class)}
+	 * 	<li class='jm'>{@link RestContextBuilder#logger(RestLogger)}
 	 * </ul>
 	 * 
 	 * @return The logger to use for this resource.  Never <jk>null</jk>.

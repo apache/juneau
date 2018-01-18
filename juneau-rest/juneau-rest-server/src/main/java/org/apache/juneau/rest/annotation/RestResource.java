@@ -160,7 +160,7 @@ public @interface RestResource {
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
 	 */
-	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
+	Class<? extends RestCallHandler> callHandler() default RestCallHandler.Null.class;
 
 	/**
 	 * Children.
@@ -478,7 +478,7 @@ public @interface RestResource {
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
 	 */
-	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
+	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.Null.class;
 
 	/**
 	 * REST logger.
@@ -491,7 +491,7 @@ public @interface RestResource {
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
 	 * </ul>
 	 */
-	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
+	Class<? extends RestLogger> logger() default RestLogger.Null.class;
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
@@ -731,7 +731,7 @@ public @interface RestResource {
 	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
 	 * </ul>
 	 */
-	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
+	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolver.Null.class;
 
 	/**
 	 * Response handlers.

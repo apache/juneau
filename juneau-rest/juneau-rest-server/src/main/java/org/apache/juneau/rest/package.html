@@ -2699,17 +2699,15 @@
 				{@link org.apache.juneau.rest.RestLogger}
 				<ul>
 					<li class='jm'>
-						{@link org.apache.juneau.rest.RestLogger#getLogger() getLogger()}
-					<li class='jm'>
-						{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
-						<br>Gets called when an error occurs on a request call.
-						<br>Default implementation logs the error.
-					<li class='jm'>
 						{@link org.apache.juneau.rest.RestLogger#log(Level,String,Object[]) log(Level,String,Object[])}
 					<li class='jm'>
 						{@link org.apache.juneau.rest.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
 					<li class='jm'>
 						{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObject(Level,String,Object[])}
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
+						<br>Gets called when an error occurs on a request call.
+						<br>Default implementation logs the error.
 				</ul>
 			</li>
 		</ul>

@@ -12,51 +12,79 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 import java.util.logging.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
  * Logging utility class.
  * 
+ * <p>
+ * Subclasses can override these methods to tailor logging of HTTP requests.
+ * <br>Subclasses MUST implement a no-arg public constructor.
+ * 
  * 
  * <h5 class='topic'>Additional Information</h5>
  * <ul>
- * 	<li class='jf'>{@link RestContext#REST_logger}
+ * 	<li class='jf'>{@link RestContext#REST_callHandler}
  * </ul>
  */
-public interface RestLogger {
+public class RestLoggerDefault implements RestLogger {
+
+	private final JuneauLogger logger = JuneauLogger.getLogger(getClass());
 
 	/**
-	 * Represents no RestLogger.
+	 * Returns the Java logger used for logging.
 	 * 
 	 * <p>
-	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link RestLoggerDefault} if not specified at any level.
+	 * Subclasses can provide their own logger.
+	 * The default implementation returns the logger created using <code>Logger.getLogger(getClass())</code>.
+	 * 
+	 * @return The logger used for logging.
 	 */
-	public interface Null extends RestLogger {}
+	protected Logger getLogger() {
+		return logger;
+	}
 
 	/**
 	 * Log a message to the logger.
+	 * 
+	 * <p>
+	 * Subclasses can override this method if they wish to log messages using a library other than Java Logging
+	 * (e.g. Apache Commons Logging).
 	 * 
 	 * @param level The log level.
 	 * @param cause The cause.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public void log(Level level, Throwable cause, String msg, Object...args);
+	@Override /* RestLogger */
+	public void log(Level level, Throwable cause, String msg, Object...args) {
+		msg = format(msg, args);
+		getLogger().log(level, msg, cause);
+	}
 
 	/**
 	 * Log a message.
+	 * 
+	 * <p>
+	 * Equivalent to calling <code>log(level, <jk>null</jk>, msg, args);</code>
 	 * 
 	 * @param level The log level.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public void log(Level level, String msg, Object...args);
+	@Override /* RestLogger */
+	public void log(Level level, String msg, Object...args) {
+		log(level, null, msg, args);
+	}
 
 	/**
 	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link JsonSerializer#DEFAULT_LAX_READABLE}.
@@ -74,7 +102,12 @@ public interface RestLogger {
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public void logObjects(Level level, String msg, Object...args);
+	@Override /* RestLogger */
+	public void logObjects(Level level, String msg, Object...args) {
+		for (int i = 0; i < args.length; i++)
+			args[i] = JsonSerializer.DEFAULT_LAX_READABLE.toStringObject(args[i]);
+		log(level, null, msg, args);
+	}
 
 	/**
 	 * Callback method for logging errors during HTTP requests.
@@ -113,5 +146,80 @@ public interface RestLogger {
 	 * @param res The servlet response object.
 	 * @param e Exception indicating what error occurred.
 	 */
-	public void onError(HttpServletRequest req, HttpServletResponse res, RestException e);
+	@Override /* RestLogger */
+	public void onError(HttpServletRequest req, HttpServletResponse res, RestException e) {
+		if (shouldLog(req, res, e)) {
+			String qs = req.getQueryString();
+			String msg = "HTTP " + req.getMethod() + " " + e.getStatus() + " " + req.getRequestURI() + (qs == null ? "" : "?" + qs);
+			int c = e.getOccurrence();
+			if (shouldLogStackTrace(req, res, e)) {
+				msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e.getStatus() + '.' + c + "] " + msg;
+				log(Level.WARNING, e, msg);
+			} else {
+				msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e.getStatus() + '.' + c + "] " + msg + ", " + e.getLocalizedMessage();
+				log(Level.WARNING, msg);
+			}
+		}
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified exception should be logged.
+	 * 
+	 * <p>
+	 * Subclasses can override this method to provide their own logic for determining when exceptions are logged.
+	 * 
+	 * <p>
+	 * The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string
+	 * or <code>No-Trace: true</code> is specified in the header.
+	 * 
+	 * @param req The HTTP request.
+	 * @param res The HTTP response.
+	 * @param e The exception.
+	 * @return <jk>true</jk> if exception should be logged.
+	 */
+	protected boolean shouldLog(HttpServletRequest req, HttpServletResponse res, RestException e) {
+		if (isNoTrace(req) && ! isDebug(req))
+			return false;
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if a stack trace should be logged for this exception.
+	 * 
+	 * <p>
+	 * Subclasses can override this method to provide their own logic for determining when stack traces are logged.
+	 * 
+	 * <p>
+	 * The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns
+	 * <code>1</code> and the exception is not one of the following:
+	 * <ul>
+	 * 	<li>{@link HttpServletResponse#SC_UNAUTHORIZED}
+	 * 	<li>{@link HttpServletResponse#SC_FORBIDDEN}
+	 * 	<li>{@link HttpServletResponse#SC_NOT_FOUND}
+	 * </ul>
+	 * 
+	 * @param req The HTTP request.
+	 * @param res The HTTP response.
+	 * @param e The exception.
+	 * @return <jk>true</jk> if stack trace should be logged.
+	 */
+	protected boolean shouldLogStackTrace(HttpServletRequest req, HttpServletResponse res, RestException e) {
+		if (e.getOccurrence() == 1) {
+			switch (e.getStatus()) {
+				case SC_UNAUTHORIZED:
+				case SC_FORBIDDEN:
+				case SC_NOT_FOUND:  return false;
+				default:            return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean isNoTrace(HttpServletRequest req) {
+		return contains(req.getHeader("No-Trace"), "true") || contains(req.getQueryString(), "noTrace=true");
+	}
+
+	private static boolean isDebug(HttpServletRequest req) {
+		return contains(req.getHeader("Debug"), "true");
+	}
 }

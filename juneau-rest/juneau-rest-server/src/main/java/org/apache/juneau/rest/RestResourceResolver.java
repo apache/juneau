@@ -38,6 +38,15 @@ import org.apache.juneau.rest.annotation.*;
 public interface RestResourceResolver {
 
 	/**
+	 * Represents no RestResourceResolver.
+	 * 
+	 * <p>
+	 * Used on annotation to indicate that the value should be inherited from the parent class, and
+	 * ultimately {@link RestResourceResolverDefault} if not specified at any level.
+	 */
+	public interface Null extends RestResourceResolver {}
+	
+	/**
 	 * Resolves the specified class to a resource object.
 	 * 
 	 * <p>

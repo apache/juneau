@@ -19,7 +19,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.logging.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -101,8 +100,7 @@ class RestParamDefaults {
 			RequestQueryObject.class,
 			RequestFormDataObject.class,
 			HttpMethodObject.class,
-			LoggerObject.class,
-			JuneauLoggerObject.class,
+			RestLoggerObject.class,
 			RestContextObject.class,
 			ParserObject.class,
 			LocaleObject.class,
@@ -832,27 +830,15 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class LoggerObject extends RestParam {
+	static final class RestLoggerObject extends RestParam {
 
-		protected LoggerObject() {
-			super(OTHER, null, Logger.class);
+		protected RestLoggerObject() {
+			super(OTHER, null, RestLogger.class);
 		}
 
 		@Override /* RestParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getContext().getLogger().getLogger();
-		}
-	}
-
-	static final class JuneauLoggerObject extends RestParam {
-
-		protected JuneauLoggerObject() {
-			super(OTHER, null, JuneauLogger.class);
-		}
-
-		@Override /* RestParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getContext().getLogger().getLogger();
+		public RestLogger resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getContext().getLogger();
 		}
 	}
 

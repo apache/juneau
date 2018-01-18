@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
  * 
  * The default implementation simply instantiates the class using one of the following constructors:
  * <ul>
- * 	<li><code><jk>public</jk> T(RestContextBuilder)</code>
+ * 	<li><code><jk>public</jk> T(RestContext)</code>
  * 	<li><code><jk>public</jk> T()</code>
  * </ul>
  * 
@@ -39,7 +39,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  * 
  */
-public class RestResourceResolverSimple implements RestResourceResolver {
+public class RestResourceResolverDefault implements RestResourceResolver {
 
 	@Override /* RestResourceResolver */
 	public Object resolve(Object parent, Class<?> c, RestContextBuilder builder) throws Exception {
