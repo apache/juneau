@@ -130,6 +130,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
 		
+		properties = new RestContextProperties();
 		logger(RestLoggerDefault.class);
 		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
 		encoders(IdentityEncoder.INSTANCE);
@@ -138,7 +139,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			ConfigFileBuilder cfb = new ConfigFileBuilder();
 
-			properties = new RestContextProperties();
 			htmlDocBuilder = new HtmlDocBuilder(properties);
 			configFile = cfb.build();
 			varResolverBuilder = new VarResolverBuilder()
@@ -174,7 +174,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			for (Enumeration<String> ep = config.getInitParameterNames(); ep.hasMoreElements();) {
 				String p = ep.nextElement();
 				String initParam = config.getInitParameter(p);
-				properties.put(vr.resolve(p), vr.resolve(initParam));
+				set(vr.resolve(p), vr.resolve(initParam));
 			}
 
 			// Load stuff from parent-to-child order.
@@ -183,9 +183,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				Class<?> c = e.getKey();
 				RestResource r = e.getValue();
 				for (Property p : r.properties())
-					properties.append(vr.resolve(p.name()), vr.resolve(p.value()));
+					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
-					properties.append(p, true);
+					set(p, true);
 				serializers(r.serializers());
 				parsers(r.parsers());
 				encoders(r.encoders());
@@ -375,38 +375,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder configFile(ConfigFile configFile) {
 		this.configFile = configFile;
-		return this;
-	}
-
-	/**
-	 * Sets a property on this resource.
-	 * 
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#properties() @RestResource.properties()} annotation.
-	 * 
-	 * @param key The property name.
-	 * @param value The property value.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder setProperty(String key, Object value) {
-		this.properties.put(key, value);
-		return this;
-	}
-
-	/**
-	 * Sets multiple properties on this resource.
-	 * 
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#properties() @RestResource.properties()} annotation.
-	 * 
-	 * <p>
-	 * Values in the map are added to the existing properties and are overwritten if duplicates are found.
-	 * 
-	 * @param properties The new properties to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder setProperties(Map<String,Object> properties) {
-		this.properties.putAll(properties);
 		return this;
 	}
 
@@ -2292,6 +2260,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
+		this.properties.put(name, value);
 		return this;
 	}
 
@@ -2304,6 +2273,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
+		this.properties.clear();
+		this.properties.putAll(properties);
 		return this;
 	}
 

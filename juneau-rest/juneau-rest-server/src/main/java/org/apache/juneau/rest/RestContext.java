@@ -2973,9 +2973,9 @@ public final class RestContext extends BeanContext {
 	 * Returns the resource bundle used by this resource.
 	 * 
 	 * <p>
-	 * The resource bundle is defined via one of the following:
+	 * The resource bundle is defined via the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#messages() @RestResource.messages()} annotation.
+	 * 	<li class='jf'>{@link RestContext#REST_messages}
 	 * </ul>
 	 * 
 	 * @return The resource bundle for this resource.  Never <jk>null</jk>.
@@ -2988,10 +2988,9 @@ public final class RestContext extends BeanContext {
 	 * Returns the REST information provider used by this resource.
 	 * 
 	 * <p>
-	 * The information provider is defined via one of the following:
+	 * The information provider is defined via the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#infoProvider() @RestResource.infoProvider()} annotation.
-	 * 	<li>{@link RestContextBuilder#infoProvider(Class)}/{@link RestContextBuilder#infoProvider(RestInfoProvider)} methods.
+	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
 	 * 
 	 * @return The information provider for this resource.  Never <jk>null</jk>.
@@ -3004,10 +3003,9 @@ public final class RestContext extends BeanContext {
 	 * Returns the REST call handler used by this resource.
 	 * 
 	 * <p>
-	 * The call handler is defined via one of the following:
+	 * The call handler is defined via the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#callHandler() @RestResource.callHandler()} annotation.
-	 * 	<li>{@link RestContextBuilder#callHandler(Class)}/{@link RestContextBuilder#callHandler(RestCallHandler)} methods.
+	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
 	 * 
 	 * @return The call handler for this resource.  Never <jk>null</jk>.
@@ -3085,10 +3083,11 @@ public final class RestContext extends BeanContext {
 	 * Returns the class-level properties associated with this servlet.
 	 * 
 	 * <p>
-	 * Properties at the class level are defined via one of the following:
+	 * Properties at the class level are defined via the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#properties() @RestResource.properties()} annotation.
-	 * 	<li>{@link RestContextBuilder#setProperty(String, Object)}/{@link RestContextBuilder#setProperties(Map)} methods.
+	 * 	<li class='ja'>{@link RestResource#properties()}
+	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
+	 * 	<li class='jm'>{@link RestContextBuilder#set(Map)}
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
@@ -3107,10 +3106,9 @@ public final class RestContext extends BeanContext {
 	 * Returns the serializers registered with this resource.
 	 * 
 	 * <p>
-	 * Serializers at the class level are defined via one of the following:
+	 * Serializers at the class level are defined via the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#serializers() @RestResource.serializers()} annotation.
-	 * 	<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Object...)} methods.
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * </ul>
 	 * 
 	 * @return The serializers registered with this resource.
@@ -3123,10 +3121,9 @@ public final class RestContext extends BeanContext {
 	 * Returns the parsers registered with this resource.
 	 * 
 	 * <p>
-	 * Parsers at the class level are defined via one of the following:
+	 * Parsers at the class level are defined via the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#parsers() @RestResource.parsers()} annotation.
-	 * 	<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Object...)} methods.
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
 	 * </ul>
 	 * 
 	 * @return The parsers registered with this resource.

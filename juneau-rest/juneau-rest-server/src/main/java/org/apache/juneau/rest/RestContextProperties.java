@@ -24,8 +24,8 @@ import org.apache.juneau.rest.annotation.*;
  * These are properties specified on a REST resource class through the following:
  * <ul>
  * 	<li class='ja'>{@link RestResource#properties()}
- * 	<li class='jm'>{@link RestContextBuilder#setProperty(String, Object)}
- * 	<li class='jm'>{@link RestContextBuilder#setProperties(Map)}
+ * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
+ * 	<li class='jm'>{@link RestContextBuilder#set(Map)}
  * </ul>
  */
 @SuppressWarnings("serial")

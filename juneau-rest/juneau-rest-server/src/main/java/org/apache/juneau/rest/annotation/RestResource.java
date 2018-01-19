@@ -692,8 +692,8 @@ public @interface RestResource {
 	 * {@link SwitchVar $SW}
 	 * 
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#setProperty(String, Object)}/
-	 * {@link RestContextBuilder#setProperties(java.util.Map)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#set(String, Object)}/
+	 * {@link RestContextBuilder#set(java.util.Map)} methods.
 	 */
 	Property[] properties() default {};
 
