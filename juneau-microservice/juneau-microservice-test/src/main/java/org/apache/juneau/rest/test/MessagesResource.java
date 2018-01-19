@@ -40,7 +40,7 @@ public class MessagesResource extends RestServletDefault {
 	// Return contents of resource bundle.
 	//====================================================================================================
 	@RestMethod(name=GET, path="/test")
-	public Object test(@Messages ResourceBundle nls) {
+	public Object test(ResourceBundle nls) {
 		return nls;
 	}
 

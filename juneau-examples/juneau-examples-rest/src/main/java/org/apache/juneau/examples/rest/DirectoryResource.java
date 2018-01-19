@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.utils.*;
@@ -91,7 +90,7 @@ public class DirectoryResource extends Resource {
 
 	/** GET request handler */
 	@RestMethod(name=GET, path="/*", converters={Queryable.class})
-	public Object doGet(RestRequest req, @Properties ObjectMap properties) throws Exception {
+	public Object doGet(RestRequest req, ObjectMap properties) throws Exception {
 
 		String pathInfo = req.getPathInfo();
 		File f = pathInfo == null ? rootDir : new File(rootDir.getAbsolutePath() + pathInfo);

@@ -94,7 +94,7 @@
 		<li><p><a class='doclink' href='#RestResources.Listeners'>Listener Methods</a></p>	
 		<li><p><a class='doclink' href='#RestResources.Stylesheet'>Stylesheet</a></p>	
 		<li><p><a class='doclink' href='#RestResources.Headers'>Default Headers</a></p>
-		<li><p><a class='doclink' href='#RestResources.Errors'>Handling Errors / Logging</a></p>
+		<li><p><a class='doclink' href='#RestResources.Errors'>Handling Errors and Logging</a></p>
 		<li><p><a class='doclink' href='#RestResources.ConfigFile'>Configuration Files</a></p>
 		<li><p><a class='doclink' href='#RestResources.Inheritence'>Annotation Inheritance</a></p>
 		<li><p><a class='doclink' href='#RestResources.HttpStatusCodes'>HTTP Status Codes</a></p>
@@ -728,8 +728,6 @@
 					<li>{@link org.apache.juneau.rest.annotation.Method @Method} - The HTTP method name. 
 					<li>{@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder} - The remainder value after path pattern match.
 					<li>{@link org.apache.juneau.rest.annotation.Body @Body} - The HTTP content parsed as a POJO.
-					<li>{@link org.apache.juneau.rest.annotation.Messages @Messages} - The resource bundle for the servlet localized to the language on the request.
-					<li>{@link org.apache.juneau.rest.annotation.Properties @Properties} - The serializer/parser/servlet properties so they can be read or altered on the request.
 				</ul>
 		</ul>
 		<p class='bcode'>
@@ -750,8 +748,8 @@
 		<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang,
 		<ja>@Header</ja>(<js>"Accept"</js>) String accept,
 		<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack,
-		<ja>@Properties</ja> ObjectMap properties,
-		<ja>@Messages</ja> ResourceBundle nls
+		ObjectMap properties,
+		ResourceBundle nls
 	) {
 		<jc>// Do something with all of those</jc>
 	}
@@ -2117,12 +2115,12 @@
 		}
 		</p>
 		<p>	
-			The resource bundle can also be passed into the method by using the 
-			{@link org.apache.juneau.rest.annotation.Messages @Messages} annotation:
+			The resource bundle can also be passed into the method by simply specifying a parameter
+			of type <code>ResourceBundle</code>:
 		</p>
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public</jk> String printLocalizedGreeting(<ja>@Messages</ja> ResourceBundle messages) {
+	<jk>public</jk> String printLocalizedGreeting(ResourceBundle messages) {
 		<jk>return</jk> messages.getString(<js>"greeting"</js>);
 	}
 		</p>
@@ -2673,26 +2671,12 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="RestResources.Errors"></a>
-	<h3 class='topic' onclick='toggle(this)'>4.20 - Handling Errors / Logging</h3>
+	<h3 class='topic' onclick='toggle(this)'>4.20 - Handling Errors and Logging</h3>
 	<div class='topic'>
 		<p>
-			The following overridable methods are provided for handling errors on requests:
-		</p>
-		<ul class='doctree'>
-			<li class='jac'>
-				{@link org.apache.juneau.rest.RestCallHandler}
-				<ul>
-					<li class='jm'>
-						{@link org.apache.juneau.rest.RestCallHandler#renderError(HttpServletRequest,HttpServletResponse,RestException) renderError(HttpServletRequest,HttpServletResponse,RestException)}
-						<br>Method that produces the error message on the HTTP response.
-					<li class='jm'>
-						{@link org.apache.juneau.rest.RestCallHandler#handleNotFound(int,RestRequest,RestResponse) handleNotFound(int,RestRequest,RestResponse)}
-						<br>Method that gets called when no method/path pattern match the incoming request.
-				</ul>
-			</li>
-		</ul>
-		<p>
-			The following convenience methods are provided for logging:
+			The {@link org.apache.juneau.rest.RestContext#REST_logger} property allows you to configure 
+			logging for your resource.
+			<br>The interface is shown below:
 		</p>
 		<ul class='doctree'>
 			<li class='jac'>
@@ -2703,7 +2687,7 @@
 					<li class='jm'>
 						{@link org.apache.juneau.rest.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
 					<li class='jm'>
-						{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObject(Level,String,Object[])}
+						{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects(Level,String,Object[])}
 					<li class='jm'>
 						{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
 						<br>Gets called when an error occurs on a request call.
@@ -2712,37 +2696,40 @@
 			</li>
 		</ul>
 		<p>
-			The <l>logObjects()</l> method is particularly useful because it allows you to pass in POJOs as arguments
+			The {@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects()} method is particularly useful because it allows you to pass in POJOs as arguments
 			that serialized using {@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE}, but only
 			if the message is actually logged.
 		</p>
 		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
-	logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
+	logger.logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
 		</p>
 		<p>
-			The Juneau framework uses the built-in Java Logging API for logging.
+			By default, the Juneau framework uses the built-in Java Logging API for logging.
+			<br>But you can define your own implementation to use any framework you wish.
 		</p>
 		<p>
-			If your application makes use of Apache Commons Logging or some other logging API, you can override the 
-			{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object[])} method to provide a bridge between 
-			the two frameworks.
+			The {@link org.apache.juneau.rest.RestLogger} instance is accessible via the following:
+		</p>
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.RestContext#getLogger()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger()}
+		</ul>
+		<p>
+			In addition, the logger can be accessed by passing it as a parameter to your REST java method:
 		</p>
 		<p class='bcode'>
-	<ja>@Override</ja> <jc>/* RestServlet */</jc>
-	<jk>protected void</jk> log(Level level, Throwable cause, String msg, Object...args) {
-		Log log = getApacheCommonsLog();
-		<jk>if</jk> (level == Level.<jsf>SEVERE</jsf>)
-			log.error(msg, cause, args);
-		<jk>else if</jk> (level == Level.<jsf>WARNING</jsf>)
-        	log.warn(msg, cause, args);
-		<jk>else if</jk> (level == Level.<jsf>INFO</jsf>)
-        	log.info(msg, cause, args);
-		<jk>else</jk> 
-        	log.debug(msg, cause, args);
-	}
+	<ja>@RestMethod()</ja>
+	<jk>public</jk> Object doSomething(RestLogger logger) {...}
 		</p>
+		<p>
+			If your resource extends from {@link org.apache.juneau.rest.RestServlet}, you can also
+			use and override the following methods:
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...)}
+		</ul>
 	</div>
 
 	<!-- ======================================================================================================== -->

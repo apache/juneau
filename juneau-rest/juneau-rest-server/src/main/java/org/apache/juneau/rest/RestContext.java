@@ -40,7 +40,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
@@ -1242,10 +1241,58 @@ public final class RestContext extends BeanContext {
 	 * Specifies the logger to use for logging.
 	 * 
 	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_logger}
-	 * 	<li>The {@link RestLoggerDefault} logger can be used to provide basic error logging to the Java logger.
+	 * Two implementations are provided by default:
+	 * <ul>
+	 * 	<li class='jc'>{@link RestLoggerDefault} - Default logging.
+	 * 	<li class='jc'>{@link RestLoggerNoOp} - Logging disabled.
+	 * </ul>
+	 * 
+	 * <p>
+	 * Loggers are accessible through the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestContext#getLogger() RestContext.getLogger()}
+	 * 	<li class='jm'>{@link RestRequest#getLogger() RestRequest.getLogger()}
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Our customized logger.</jc>
+	 * 	<jk>public class</jk> MyRestLogger <jk>extends</jk> RestLoggerDefault {
+	 * 		
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public void</jk> log(Level level, Throwable cause, String msg, Object...args) {
+	 * 			<jc>// Handle logging ourselves.</jc>
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(logger=MyRestLogger.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * 
+	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.logger(MyRestLogger.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_logger</jsf>, MyRestLogger.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Registered via builder passed in through init method.</jc>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.logger(MyRestLogger.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Errors">org.apache.juneau.rest &gt; Handling Errors and Logging</a>
 	 * </ul>
 	 */
 	public static final String REST_logger = PREFIX + "logger.o";
@@ -1282,6 +1329,38 @@ public final class RestContext extends BeanContext {
 	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
 	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
 	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(maxInput=<js>"10M"</js>)
+	 * 		public Object myMethod() {...}
+	 * 	}
+	 * 
+	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.maxInput(<js>"10M"</js>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_maxInput</jsf>, <js>"10M"</js>);
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Defined via builder passed in through init method.</jc>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.maxInput(<js>"10M"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
 	public static final String REST_maxInput = PREFIX + "maxInput.s";
 	
@@ -1291,7 +1370,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;MessageBundleLocation&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link MessageBundleLocation}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1313,8 +1392,8 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * This annotation is used to provide localized messages for the following methods:
 	 * <ul>
-	 * 	<li>{@link RestRequest#getMessage(String, Object...)}
-	 * 	<li>{@link RestContext#getMessages()}
+	 * 	<li class='jm'>{@link RestRequest#getMessage(String, Object...)}
+	 * 	<li class='jm'>{@link RestContext#getMessages() RestContext.getMessages()}
 	 * </ul>
 	 * 
 	 * <p>
@@ -1323,12 +1402,38 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
 	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
-	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
+	 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Mappings are cumulative from parent to child.  
+	 * 	<li>Mappings are cumulative from parent to child.
+	 * 		<br>Therefore, you can find and retrieve messages up the parent hierarchy chain.
 	 * </ul>
+	 * 
+	 * <p class='bcode'>
+	 * 	<jk>package</jk> org.apache.foo;
+	 * 	
+	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyMessages.properties</jc>
+	 * 	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * 
+	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyChildMessages.properties</jc>
+	 * 	<ja>@RestResource</ja>(messages=<js>"nls/MyChildMessages"</js>)
+	 * 	<jk>public class</jk> MyChildResource extends MyResource {
+	 * 
+	 * 		public Object testMessages(MessageBundle messages) {
+	 * 		}
+	 * 
+	public String getMessage(String key, Object...args) {
+		return context.getMessages().getString(getLocale(), key, args);
+	}
+
+	public MessageBundle getResourceBundle() {
+		return context.getMessages().getBundle(getLocale());
+	}
+	 * 
+	 * 	}
+	 * </p>
 	 */
 	public static final String REST_messages = PREFIX + "messages.lo";
 	
@@ -2853,11 +2958,9 @@ public final class RestContext extends BeanContext {
 	 * Returns the logger to use for this resource.
 	 * 
 	 * <p>
-	 * The logger for a resource is defined via one of the following:
+	 * The logger for a resource is defined through the following property:
 	 * <ul>
-	 * 	<li class='ja'>{@link RestResource#logger() @RestResource.logger()}\
-	 * 	<li class='jm'>{@link RestContextBuilder#logger(Class)}
-	 * 	<li class='jm'>{@link RestContextBuilder#logger(RestLogger)}
+	 * 	<li class='jf'>{@link RestContext#REST_logger}
 	 * </ul>
 	 * 
 	 * @return The logger to use for this resource.  Never <jk>null</jk>.
@@ -3170,29 +3273,23 @@ public final class RestContext extends BeanContext {
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
 			}
 
-			if (rp[i] == null) {
-				for (Annotation a : pa[i]) {
-					if (a instanceof Header)
-						rp[i] = new RestParamDefaults.HeaderObject((Header)a, t, ps);
-					else if (a instanceof FormData)
-						rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps);
-					else if (a instanceof Query)
-						rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps);
-					else if (a instanceof HasFormData)
-						rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
-					else if (a instanceof HasQuery)
-						rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
-					else if (a instanceof Body)
-						rp[i] = new RestParamDefaults.BodyObject(t);
-					else if (a instanceof org.apache.juneau.rest.annotation.Method)
-						rp[i] = new RestParamDefaults.MethodObject(method, t);
-					else if (a instanceof PathRemainder)
-						rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
-					else if (a instanceof Properties)
-						rp[i] = new RestParamDefaults.PropsObject(method, t);
-					else if (a instanceof Messages)
-						rp[i] = new RestParamDefaults.MessageBundleObject();
-				}
+			for (Annotation a : pa[i]) {
+				if (a instanceof Header)
+					rp[i] = new RestParamDefaults.HeaderObject((Header)a, t, ps);
+				else if (a instanceof FormData)
+					rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps);
+				else if (a instanceof Query)
+					rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps);
+				else if (a instanceof HasFormData)
+					rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
+				else if (a instanceof HasQuery)
+					rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
+				else if (a instanceof Body)
+					rp[i] = new RestParamDefaults.BodyObject(t);
+				else if (a instanceof org.apache.juneau.rest.annotation.Method)
+					rp[i] = new RestParamDefaults.MethodObject(method, t);
+				else if (a instanceof PathRemainder)
+					rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
 			}
 
 			if (rp[i] == null) {

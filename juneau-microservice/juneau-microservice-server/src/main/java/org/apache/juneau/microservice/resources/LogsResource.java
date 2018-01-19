@@ -30,7 +30,6 @@ import org.apache.juneau.ini.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.transforms.*;
 
@@ -99,7 +98,7 @@ public class LogsResource extends Resource {
 			responses={@Response(200),@Response(404)}
 		)
 	)
-	public Object getFileOrDirectory(RestRequest req, RestResponse res, @Properties ObjectMap properties, @PathRemainder String path) throws Exception {
+	public Object getFileOrDirectory(RestRequest req, RestResponse res, ObjectMap properties, @PathRemainder String path) throws Exception {
 
 		File f = getFile(path);
 
@@ -141,7 +140,7 @@ public class LogsResource extends Resource {
 		)
 	)
 	@SuppressWarnings("nls")
-	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, @Properties ObjectMap properties, @Query("highlight") boolean highlight, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
+	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, ObjectMap properties, @Query("highlight") boolean highlight, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
 		File f = getFile(path);
 		if (f.isDirectory())

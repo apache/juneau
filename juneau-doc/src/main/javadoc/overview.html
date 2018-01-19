@@ -6373,8 +6373,8 @@
 					and {@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()}
 					annotations to set serializer transforms.
 				<li>
-					Using the {@link org.apache.juneau.rest.annotation.Properties @Properties} annotation to set 
-					serializers properties programmatically on a request.
+					Simply passing in an {@link org.apache.juneau.ObjectMap} parameter on the Java method.
+					<br>This object map contains the modifiable properties on the request. 
 			</ul>
 			<p>
 				The class is shown below:
@@ -6411,7 +6411,7 @@
 	
 		<jd>/** GET request handler */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
-		<jk>public</jk> HttpServletRequest doGet(RestRequest req, RestResponse res, <ja>@Properties</ja> ObjectMap properties) {
+		<jk>public</jk> HttpServletRequest doGet(RestRequest req, RestResponse res, ObjectMap properties) {
 			<jc>// Set the HtmlDocSerializer title programmatically.</jc>
 			res.setPageTitle(req.getPathInfo());
 			
@@ -9362,6 +9362,11 @@
 				{@link org.apache.juneau.rest.RestLoggerDefault} and {@link org.apache.juneau.rest.RestLoggerNoOp}
 			<li>
 				<code>RestResourceResolverSimple</code> renamed to {@link org.apache.juneau.rest.RestResourceResolverDefault}
+			<li>
+				Eliminated the <code>@Messages</code> and <code>@Properties</code> REST java method parameter
+				annotations.
+				<br>These aren't needed anymore since you can just pass in <code>MessageBundle</code> and
+				<code>ObjectMap</code> as unannotated parameters.
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -13557,7 +13562,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				New {@link org.apache.juneau.rest.annotation.Properties @Properties} REST method parameter annotation that can be used to get the runtime properties map through a parameter instead of through {@link org.apache.juneau.rest.RestResponse}. 
+				New <code><del>@Properties</del></code> REST method parameter annotation that can be used to get the runtime properties map through a parameter instead of through {@link org.apache.juneau.rest.RestResponse}. 
 			</li>
 		</ul>
 	</div>

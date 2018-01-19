@@ -984,6 +984,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return sb.toString();
 	}
 
+	/**
+	 * Shortcut for calling <code>getContext().getLogger()</code>.
+	 * 
+	 * @return The logger associated with the resource context.
+	 */
+	public RestLogger getLogger() {
+		return context.getLogger();
+	}
 
 	//--------------------------------------------------------------------------------
 	// Utility methods

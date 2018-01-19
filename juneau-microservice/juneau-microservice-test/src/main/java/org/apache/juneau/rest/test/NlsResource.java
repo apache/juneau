@@ -115,7 +115,7 @@ public class NlsResource extends RestServletGroupDefault {
 		@RestMethod(
 			name=GET, path="/"
 		)
-		public Object test3a(@Messages MessageBundle mb) {
+		public Object test3a(MessageBundle mb) {
 			return mb;
 		}
 	}

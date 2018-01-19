@@ -110,6 +110,7 @@ class RestParamDefaults {
 			ConfigFileObject.class,
 			UriContextObject.class,
 			UriResolverObject.class,
+			PropsObject.class
 		};
 
 		for (Class<?> c : r) {
@@ -670,10 +671,8 @@ class RestParamDefaults {
 
 	static final class PropsObject extends RestParam {
 
-		protected PropsObject(Method method, Type type) throws ServletException {
-			super(OTHER, null, null);
-			if (type != ObjectMap.class)
-				throw new RestServletException("Use of @Properties annotation on parameter that is not an ObjectMap on method ''{0}''", method);
+		protected PropsObject() {
+			super(OTHER, null, ObjectMap.class);
 		}
 
 		@Override /* RestParam */

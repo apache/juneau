@@ -20,7 +20,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
@@ -100,7 +99,7 @@ public class OnPostCallResource extends RestServlet {
 	// Test2 - Properties overridden programmatically.
 	//====================================================================================================
 	@RestMethod(name=PUT, path="/testPropertiesOverriddenProgramatically")
-	public String testPropertiesOverriddenProgramatically(RestRequest req, @Properties ObjectMap properties) throws Exception {
+	public String testPropertiesOverriddenProgramatically(RestRequest req, ObjectMap properties) throws Exception {
 		properties.put("p3", "pp3");
 		properties.put("p4", "pp4");
 		String accept = req.getHeader("Accept");
