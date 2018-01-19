@@ -17,7 +17,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
@@ -52,7 +51,7 @@ public class DefaultHandler implements ResponseHandler {
 			res.setContentType(mediaType.toString());
 
 			try {
-				ObjectMap p = res.getProperties();
+				RestRequestProperties p = res.getProperties();
 				if (req.isPlainText()) {
 					res.setContentType("text/plain");
 				}

@@ -678,7 +678,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * In some cases, properties can be overridden at runtime through the
-	 * {@link RestResponse#setProperty(String, Object)} method or through an {@link ObjectMap} 
+	 * {@link RestResponse#setProperty(String, Object)} method or through an {@link RestRequestProperties} 
 	 * method parameter.
 	 * 
 	 * <p>

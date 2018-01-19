@@ -51,7 +51,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
 	private final RestConverter[] converters;
-	private final ObjectMap properties;
+	private final RestMethodProperties properties;
 	private final boolean deprecated;
 	private final String description, tags, summary, externalDocs;
 	private final Integer priority;
@@ -125,7 +125,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		HttpPartParser partParser;
 		HttpPartSerializer partSerializer;
 		BeanContext beanContext;
-		ObjectMap properties;
+		RestMethodProperties properties;
 		Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
 		boolean deprecated;
 		long maxInput;
@@ -164,7 +164,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				partParser = context.getPartParser();
 				beanContext = context.getBeanContext();
 				encoders = context.getEncoders();
-				properties = new ObjectMap().setInner(context.getProperties());
+				properties = new RestMethodProperties(context.getProperties());
 				defaultCharset = context.getDefaultCharset();
 				maxInput = context.getMaxInput();
 
@@ -325,7 +325,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				}
 				
 				if (m.properties().length > 0 || m.flags().length > 0) {
-					properties = new ObjectMap().setInner(properties);
+					properties = new RestMethodProperties(properties);
 					for (Property p1 : m.properties())
 						properties.put(p1.name(), p1.value());
 					for (String p1 : m.flags())
@@ -797,7 +797,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
 		req.getPathMatch().setRemainder(remainder);
 
-		ObjectMap requestProperties = new ResolvingObjectMap(req.getVarResolverSession()).setInner(properties);
+		RestRequestProperties requestProperties = new RestRequestProperties(req.getVarResolverSession(), properties);
 
 		req.init(this, requestProperties);
 		res.init(this, requestProperties);

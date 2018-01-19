@@ -74,7 +74,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final String method;
 	private RequestBody body;
 	private Method javaMethod;
-	private ObjectMap properties;
+	private RestRequestProperties properties;
 	private final boolean debug;
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
@@ -150,7 +150,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestJavaMethod rjm, ObjectMap properties) {
+	final void init(RestJavaMethod rjm, RestRequestProperties properties) {
 		this.restJavaMethod = rjm;
 		this.javaMethod = rjm.method;
 		this.properties = properties;
@@ -240,7 +240,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * @return The properties active for this request.
 	 */
-	public ObjectMap getProperties() {
+	public RestRequestProperties getProperties() {
 		return this.properties;
 	}
 

@@ -68,7 +68,7 @@ public class OnPostCallResource extends RestServlet {
 
 	@RestHook(POST_CALL)
 	public void onPostCall(RestRequest req, RestResponse res) {
-		ObjectMap properties = req.getProperties();
+		RestRequestProperties properties = req.getProperties();
 		properties.put("p2", "xp2");
 		properties.put("p4", "xp4");
 		properties.put("p5", "xp5"); // New property
@@ -99,7 +99,7 @@ public class OnPostCallResource extends RestServlet {
 	// Test2 - Properties overridden programmatically.
 	//====================================================================================================
 	@RestMethod(name=PUT, path="/testPropertiesOverriddenProgramatically")
-	public String testPropertiesOverriddenProgramatically(RestRequest req, ObjectMap properties) throws Exception {
+	public String testPropertiesOverriddenProgramatically(RestRequest req, RestRequestProperties properties) throws Exception {
 		properties.put("p3", "pp3");
 		properties.put("p4", "pp4");
 		String accept = req.getHeader("Accept");

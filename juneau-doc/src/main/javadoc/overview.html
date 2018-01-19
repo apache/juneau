@@ -9363,10 +9363,17 @@
 			<li>
 				<code>RestResourceResolverSimple</code> renamed to {@link org.apache.juneau.rest.RestResourceResolverDefault}
 			<li>
+				Introduced the following classes that helps make the code more understandable:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestContextProperties}
+					<li>{@link org.apache.juneau.rest.RestMethodProperties}
+					<li>{@link org.apache.juneau.rest.RestRequestProperties}
+				</ul>
+			<li>
 				Eliminated the <code>@Messages</code> and <code>@Properties</code> REST java method parameter
 				annotations.
 				<br>These aren't needed anymore since you can just pass in <code>MessageBundle</code> and
-				<code>ObjectMap</code> as unannotated parameters.
+				<code>RestRequestProperties</code> as unannotated parameters.
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>

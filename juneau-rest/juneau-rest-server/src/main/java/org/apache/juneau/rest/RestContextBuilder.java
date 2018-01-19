@@ -96,7 +96,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	// Read-only snapshots of these will be made in RestServletContext.
 	//---------------------------------------------------------------------------
 
-	ObjectMap properties;
+	RestContextProperties properties;
 	ConfigFile configFile;
 	VarResolverBuilder varResolverBuilder;
 	String path;
@@ -138,7 +138,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			ConfigFileBuilder cfb = new ConfigFileBuilder();
 
-			properties = new ObjectMap();
+			properties = new RestContextProperties();
 			htmlDocBuilder = new HtmlDocBuilder(properties);
 			configFile = cfb.build();
 			varResolverBuilder = new VarResolverBuilder()
@@ -464,7 +464,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * The configuration properties can be augmented programmatically by adding the following method to your resource:
 	 * <p class='bcode'>
-	 * 	<jk>public</jk> ObjectMap createProperties(ServletConfig servletConfig) <jk>throws</jk> ServletException;
+	 * 	<jk>public</jk> RestContextProperties createProperties(ServletConfig servletConfig) <jk>throws</jk> ServletException;
 	 * </p>
 	 * 
 	 * <p>
@@ -473,7 +473,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @return The configuration properties for this resource.  Never <jk>null</jk>.
 	 */
-	public ObjectMap getProperties() {
+	public RestContextProperties getProperties() {
 		return properties;
 	}
 

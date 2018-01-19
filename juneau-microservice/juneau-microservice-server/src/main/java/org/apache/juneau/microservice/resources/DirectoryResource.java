@@ -24,7 +24,6 @@ import java.util.logging.*;
 
 import javax.servlet.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
@@ -87,7 +86,7 @@ public class DirectoryResource extends Resource {
 
 	@Override /* Servlet */
 	public void init() throws ServletException {
-		ObjectMap p = getProperties();
+		RestContextProperties p = getProperties();
 		rootDir = new File(p.getString("DirectoryResource.rootDir"));
 		allowViews = p.getBoolean("DirectoryResource.allowViews", false);
 		allowDeletes = p.getBoolean("DirectoryResource.allowDeletes", false);

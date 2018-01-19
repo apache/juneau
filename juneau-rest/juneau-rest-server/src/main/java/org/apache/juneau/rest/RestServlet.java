@@ -218,10 +218,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Convenience method for calling <code>getContext().getProperties();</code>
 	 * 
-	 * @return The resource properties as an {@link ObjectMap}.
+	 * @return The resource properties as an {@link RestContextProperties}.
 	 * @see RestContext#getProperties()
 	 */
-	public ObjectMap getProperties() {
+	public RestContextProperties getProperties() {
 		return getContext().getProperties();
 	}
 

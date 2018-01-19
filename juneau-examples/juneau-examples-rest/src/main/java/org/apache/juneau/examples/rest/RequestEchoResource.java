@@ -17,7 +17,6 @@ import static org.apache.juneau.html.HtmlDocSerializer.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -70,7 +69,7 @@ public class RequestEchoResource extends Resource {
 
 	/** GET request handler */
 	@RestMethod(name="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
-	public HttpServletRequest doGet(RestRequest req, RestResponse res, ObjectMap properties) {
+	public HttpServletRequest doGet(RestRequest req, RestResponse res, RestRequestProperties properties) {
 		// Just echo the request back as the response.
 		return req;
 	}

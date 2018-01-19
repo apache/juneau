@@ -2115,7 +2115,7 @@ public final class RestContext extends BeanContext {
 
 	private final Set<String> allowedMethodParams;
 
-	private final ObjectMap properties;
+	private final RestContextProperties properties;
 	private final Map<Class<?>,RestParam> paramResolvers;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
@@ -3097,9 +3097,9 @@ public final class RestContext extends BeanContext {
 	 * 	or set additional initialization parameters in their {@code init()} method.
 	 * </ul>
 	 * 
-	 * @return The resource properties as an {@link ObjectMap}.
+	 * @return The resource properties as a {@link RestContextProperties}.
 	 */
-	public ObjectMap getProperties() {
+	public RestContextProperties getProperties() {
 		return properties;
 	}
 

@@ -12,13 +12,32 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import org.apache.juneau.*;
+import org.apache.juneau.svl.*;
 
 /**
- * TODO
+ * Encapsulates request-level properties.
  * 
+ * <p>
+ * These are properties specified for a single HTTP request that extends the properties defined on {@link RestMethodProperties}
+ * and are accessible and modifiable through the following:
+ * <ul>
+ * 	<li class='jm'>{@link RestRequest#getProperties()}
+ * 	<li class='jm'>{@link RestRequest#prop(String, Object)}
+ * 	<li class='jm'>{@link RestResponse#getProperties()}
+ * 	<li class='jm'>{@link RestResponse#prop(String, Object)}
+ * </ul>
  */
 @SuppressWarnings("serial")
-public class RequestProperties extends ObjectMap {
+public class RestRequestProperties extends ResolvingObjectMap {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param varResolver The request variable resolver session.
+	 * @param inner The inner properties defined on the resource context.
+	 */
+	public RestRequestProperties(VarResolverSession varResolver, RestMethodProperties inner) {
+		super(varResolver);
+		setInner(inner);
+	}
 }

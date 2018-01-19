@@ -110,7 +110,7 @@ class RestParamDefaults {
 			ConfigFileObject.class,
 			UriContextObject.class,
 			UriResolverObject.class,
-			PropsObject.class
+			RequestPropertiesObject.class
 		};
 
 		for (Class<?> c : r) {
@@ -669,14 +669,14 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class PropsObject extends RestParam {
+	static final class RequestPropertiesObject extends RestParam {
 
-		protected PropsObject() {
-			super(OTHER, null, ObjectMap.class);
+		protected RequestPropertiesObject() {
+			super(OTHER, null, RestRequestProperties.class);
 		}
 
 		@Override /* RestParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+		public RestRequestProperties resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getProperties();
 		}
 	}

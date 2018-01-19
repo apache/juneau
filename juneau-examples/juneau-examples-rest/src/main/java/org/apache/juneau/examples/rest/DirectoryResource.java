@@ -23,7 +23,6 @@ import java.net.*;
 import java.util.*;
 import java.util.logging.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -70,7 +69,7 @@ public class DirectoryResource extends Resource {
 
 	@RestHook(INIT)
 	public void init(RestContextBuilder builder) throws Exception {
-		ObjectMap p = builder.getProperties();
+		RestContextProperties p = builder.getProperties();
 		rootDir = new File(p.getString("rootDir"));
 		allowViews = p.getBoolean("allowViews", false);
 		allowDeletes = p.getBoolean("allowDeletes", false);
@@ -90,7 +89,7 @@ public class DirectoryResource extends Resource {
 
 	/** GET request handler */
 	@RestMethod(name=GET, path="/*", converters={Queryable.class})
-	public Object doGet(RestRequest req, ObjectMap properties) throws Exception {
+	public Object doGet(RestRequest req, RestRequestProperties properties) throws Exception {
 
 		String pathInfo = req.getPathInfo();
 		File f = pathInfo == null ? rootDir : new File(rootDir.getAbsolutePath() + pathInfo);
