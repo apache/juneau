@@ -33,21 +33,28 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
@@ -94,12 +101,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(allowBodyParam=<js>"$C{REST/allowBodyParam,false}"</js>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -108,10 +114,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_allowBodyParam</jsf>, <jk>false</jk>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.allowBodyParam(<jk>false</jk>);
@@ -158,12 +162,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(allowMethodParams=<js>"$C{REST/allowMethodParams,HEAD\,OPTIONS\,PUT}"</js>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -172,10 +175,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_allowMethodParams</jsf>, <js>"HEAD,OPTIONS,PUT"</js>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.allowMethodParams(<js>"HEAD"</js>, <js>"OPTIONS"</js>, <js>"PUT"</js>);
@@ -228,12 +229,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(allowMethodParams=<js>"$C{REST/allowHeaderParams,false}"</js>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -242,10 +242,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_allowHeaderParams</jsf>, <jk>false</jk>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.allowHeaderParams(<jk>false</jk>);
@@ -267,7 +265,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt; | {@link RestCallHandler}</code>
+	 * 	<li><b>Data type:</b>  {@link RestCallHandler} | <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link RestCallHandlerDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -315,12 +313,11 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * 
-	 * 	<jc>// Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(callHandler=MyRestCallHandler.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -329,10 +326,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_callHandler</jsf>, MyRestCallHandler.<jk>class</jk>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.callHandler(MyRestCallHandler.<jk>class</jk>);
@@ -342,7 +337,6 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -423,12 +417,11 @@ public final class RestContext extends BeanContext {
 	 * 	<ja>@RestResource</ja>(path=<js>"/child"</js>)
 	 * 	<jk>public class</jk> MyChildResource {...}
 	 * 
-	 * 	<jc>// Registered via annotation.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(children={MyChildResource.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -440,10 +433,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Use a pre-instantiated object instead.</jc>
 	 * 			builder.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.children(MyChildResource.<jk>class</jk>);
@@ -519,19 +510,18 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Our customized classpath resource finder.</jc>
-	 * 	<jk>public class</jk> MyClasspathResourceFinder extends ClasspathResourceFinderBasic {
+	 * 	<jk>public class</jk> MyClasspathResourceFinder <jk>extends</jk> ClasspathResourceFinderBasic {
 	 * 		<ja>@Override</ja> 
 	 * 		<jk>public</jk> InputStream findResource(Class<?> baseClass, String name, Locale locale) <jk>throws</jk> IOException {
 	 * 			<jc>// Do your own resolution.</jc>
 	 * 		}
 	 * 	}
 	 * 
-	 * 	<jc>// Registered via annotation.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(classpathResourceFinder=MyClasspathResourceFinder.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -543,10 +533,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Use a pre-instantiated object instead.</jc>
 	 * 			builder.classpathResourceFinder(<jk>new</jk> MyClasspathResourceFinder());
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.classpathResourceFinder(MyClasspathResourceFinder.<jk>class</jk>);
@@ -567,7 +555,6 @@ public final class RestContext extends BeanContext {
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
 	 * 	<li>Inner classes of the REST resource class are allowed.
-	 * </ul>
 	 * </ul>
 	 */
 	public static final String REST_classpathResourceFinder = PREFIX + "classpathResourceFinder.o";
@@ -601,12 +588,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -615,10 +601,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_clientVersionHeader</jsf>, <js>"Client-Version"</js>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.clientVersionHeader(<js>"Client-Version"</js>);
@@ -684,12 +668,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(path=<js>"/servlet"</js>, contextPath=<js>"$C{REST/contextPathOverride,/foo}"</js>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -698,10 +681,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_contextPath</jsf>, <js>"/foo"</js>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.contextPath(<js>"/foo"</js>);
@@ -758,12 +739,11 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * 
-	 * 	<jc>// Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(converters={MyConverter.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -775,10 +755,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Pass in an instance instead.</jc>
 	 * 			builder.converters(<jk>new</jk> MyConverter());
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.converters(MyConverter.<jk>class</jk>);
@@ -800,7 +778,6 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
@@ -838,17 +815,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 * 		
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestMethod</ja>(defaultCharset=<js>"UTF-16"</js>)
-	 * 		public Object myMethod() {...}
-	 * 	}
-	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -857,14 +828,16 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_defaultCharset</jsf>, <js>"US-ASCII"</js>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.defaultCharset(<js>"US-ASCII"</js>);
 	 * 		}
+	 * 		
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(defaultCharset=<js>"UTF-16"</js>)
+	 * 		public Object myMethod() {...}
 	 * 	}
 	 * </p>
 	 */
@@ -905,17 +878,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header: $C{REST/myHeaderValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
-	 * 		
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestMethod</ja>(defaultRequestHeaders={<js>"Accept: text/xml"</js>})
-	 * 		public Object myMethod() {...}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -926,14 +893,16 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.addTo(<jsf>REST_defaultRequestHeaders</jsf>, <js>"Accept"</js>, <js>"application/json"</js>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.defaultRequestHeader(<js>"Accept"</js>, <js>"application/json"</js>);
 	 * 		}
+	 * 		
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(defaultRequestHeaders={<js>"Accept: text/xml"</js>})
+	 * 		public Object myMethod() {...}
 	 * 	}
 	 * </p>
 	 */
@@ -973,12 +942,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -991,10 +959,8 @@ public final class RestContext extends BeanContext {
 	 * 				.addTo(<jsf>REST_defaultRequestHeaders</jsf>, <js>"Accept"</js>, <js>"application/json"</js>);
 	 * 				.addTo(<jsf>REST_defaultRequestHeaders</jsf>, <js>"My-Header"</js>, <js>"foo"</js>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.defaultResponseHeader(<js>"Content-Type"</js>, <js>"text/plain"</js>);
@@ -1010,7 +976,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.encoders.o"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class &lt;? <jk>extends</jk> {@link Encoder}&gt; | {@link Encoder}&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Encoder} | Class&lt;? <jk>extends</jk> {@link Encoder}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1031,17 +997,11 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Registered via annotation.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 * 
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestMethod</ja>(encoders={MySpecialEncoder.<jk>class</jk>}, inherit={<js>"ENCODERS"</js>})
-	 * 		public Object myMethod() {...}
-	 * 	}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -1050,20 +1010,21 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.addTo(<jsf>REST_encoders</jsf>, GzipEncoder.<jk>class</jk>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.encoders(GzipEncoder.<jk>class</jk>);
 	 * 		}
+	 * 
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(encoders={MySpecialEncoder.<jk>class</jk>}, inherit={<js>"ENCODERS"</js>})
+	 * 		public Object myMethod() {...}
 	 * 	}
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
@@ -1119,17 +1080,11 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * 
-	 * 	<jc>// Registered via annotation.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(guards={BillyGuard.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 * 
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestMethod</ja>(guards={SomeOtherGuard.<jk>class</jk>})
-	 * 		public Object myMethod() {...}
-	 * 	}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -1138,23 +1093,24 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.addTo(<jsf>REST_guards</jsf>, BillyGuard.<jk>class</jk>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.guards(BillyGuard.<jk>class</jk>);
 	 * 		}
+	 * 
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(guards={SomeOtherGuard.<jk>class</jk>})
+	 * 		public Object myMethod() {...}
 	 * 	}
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
 	 * 	<li>Inner classes of the REST resource class are allowed.
@@ -1173,7 +1129,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.infoProvider.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link RestInfoProvider}&gt; | {@link RestInfoProvider}</code>
+	 * 	<li><b>Data type:</b>  <code>{@link RestInfoProvider} | Class&lt;? <jk>extends</jk> {@link RestInfoProvider}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link RestInfoProviderDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1219,12 +1175,11 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * 
-	 * 	<jc>// Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(infoProvider=MyRestInfoProvider.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -1233,10 +1188,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_infoProvider</jsf>, MyRestInfoProvider.<jk>class</jk>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.infoProvider(MyRestInfoProvider.<jk>class</jk>);
@@ -1246,10 +1199,9 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
 	 * 	<li>Inner classes of the REST resource class are allowed.
@@ -1263,7 +1215,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.logger.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestLogger&gt; | RestLogger</code>
+	 * 	<li><b>Data type:</b>  <code>{@link RestLogger} | Class&lt;? <jk>extends</jk> {@link RestLogger}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link RestLoggerDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1306,12 +1258,11 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * 
-	 * 	<jc>// Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(logger=MyRestLogger.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Registered via builder passed in through resource constructor.</jc>
 	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -1320,10 +1271,8 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_logger</jsf>, MyRestLogger.<jk>class</jk>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Registered via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.logger(MyRestLogger.<jk>class</jk>);
@@ -1363,27 +1312,13 @@ public final class RestContext extends BeanContext {
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>String value that gets resolved to a <jk>long</jk>.
-	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
-	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
-	 * </ul>
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
 	 * 	<jk>public class</jk> MyResource {
-	 * 		
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestMethod</ja>(maxInput=<js>"10M"</js>)
-	 * 		public Object myMethod() {...}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through resource constructor.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			
 	 * 			<jc>// Using method on builder.</jc>
@@ -1392,26 +1327,25 @@ public final class RestContext extends BeanContext {
 	 * 			<jc>// Same, but using property.</jc>
 	 * 			builder.set(<jsf>REST_maxInput</jsf>, <js>"10M"</js>);
 	 * 		}
-	 * 	}
 	 * 
-	 * 	<jc>// Defined via builder passed in through init method.</jc>
-	 * 	<jk>public class</jk> MyResource {
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			builder.maxInput(<js>"10M"</js>);
 	 * 		}
+	 * 		
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(maxInput=<js>"10M"</js>)
+	 * 		public Object myMethod() {...}
 	 * 	}
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
 	 * </ul>
 	 */
 	public static final String REST_maxInput = PREFIX + "maxInput.s";
@@ -1449,12 +1383,45 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 * 
 	 * <p>
-	 * Refer to the {@link MessageBundle} class for a description of the message key formats used in the properties file.
+	 * Messages are also available by passing either of the following parameter types into your Java method:
+	 * <ul>
+	 * 	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
+	 * 	<li class='jc'>{@link MessageBundle} - Extended resource bundle with several convenience methods.
+	 * </ul>
+	 * 
+	 * <p>
+	 * Messages passed into Java methods already have their locale set to that of the incoming request.
 	 * 
 	 * <p>
 	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
 	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
 	 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
+	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<jk>package</jk> org.apache.foo;
+	 * 
+	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyMessages.properties</jc>
+	 * 	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * 
+	 * 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/hello/{you}"</js>)
+	 * 		<jk>public</jk> Object helloYou(RestRequest req, MessageBundle messages, <ja>@Path</ja>(<js>"name"</js>) String you)) {
+	 * 			String s;
+	 * 
+	 * 			<jc>// Get it from the RestRequest object.</jc>
+	 * 			s = req.getMessage(<js>"HelloMessage"</js>, you);
+	 * 
+	 * 			<jc>// Or get it from the method parameter.</jc>
+	 * 			s = messages.getString(<js>"HelloMessage"</js>, you);
+	 * 
+	 * 			<jc>// Or get the message in a locale different from the request.</jc>
+	 * 			s = messages.getString(Locale.<jsf>UK</jsf>, <js>"HelloMessage"</js>, you);
+	 * 
+	 * 			<jk>return</jk> s;
+	 * 		}
+	 * 	}
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -1462,30 +1429,10 @@ public final class RestContext extends BeanContext {
 	 * 		<br>Therefore, you can find and retrieve messages up the parent hierarchy chain.
 	 * </ul>
 	 * 
-	 * <p class='bcode'>
-	 * 	<jk>package</jk> org.apache.foo;
-	 * 	
-	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyMessages.properties</jc>
-	 * 	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * 
-	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyChildMessages.properties</jc>
-	 * 	<ja>@RestResource</ja>(messages=<js>"nls/MyChildMessages"</js>)
-	 * 	<jk>public class</jk> MyChildResource extends MyResource {
-	 * 
-	 * 		public Object testMessages(MessageBundle messages) {
-	 * 		}
-	 * 
-	public String getMessage(String key, Object...args) {
-		return context.getMessages().getString(getLocale(), key, args);
-	}
-
-	public MessageBundle getResourceBundle() {
-		return context.getMessages().getBundle(getLocale());
-	}
-	 * 
-	 * 	}
-	 * </p>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Labels">org.apache.juneau.rest &gt; Localized Messages</a>
+	 * </ul>
 	 */
 	public static final String REST_messages = PREFIX + "messages.lo";
 	
@@ -1515,14 +1462,38 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Used for specifying the content type on file resources retrieved through the following methods:
 	 * <ul>
-	 * 	<li>{@link RestContext#resolveStaticFile(String)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String)}
+	 * 	<li class='jm'>{@link RestContext#resolveStaticFile(String) RestContext.resolveStaticFile(String)}
+	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
+	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean)}
+	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String)}
 	 * </ul>
 	 * 
 	 * <p>
 	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(mimeTypes={<js>"text/plain txt text TXT"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.mimeTypes(<js>"text/plain txt text TXT"</js>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.addTo(<jsf>REST_mimeTypes</jsf>, <js>"text/plain txt text TXT"</js>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.mimeTypes(<js>"text/plain txt text TXT"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -1538,12 +1509,13 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.paramResolvers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;RestParam | Class&lt;? <jk>extends</jk> RestParam&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestParam} | Class&lt;? <jk>extends</jk> {@link RestParam}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>  
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#paramResolvers()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContextBuilder#paramResolvers(Class...)}
@@ -1561,6 +1533,7 @@ public final class RestContext extends BeanContext {
 	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
 	 * the following resolver:
 	 * <p class='bcode'>
+	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
 	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
 	 * 
 	 * 		<jc>// Must have no-arg constructor!</jc>
@@ -1575,17 +1548,44 @@ public final class RestContext extends BeanContext {
 	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
 	 * 		}
 	 * 	}
+	 * 
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(paramResolvers=MyRestParam.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.paramResolvers(MyRestParam.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.addTo(<jsf>REST_paramResolver</jsf>, MyRestParam.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.paramResolvers(MyRestParam.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Now pass it into your method.</jc>
+	 * 		<ja>@RestMethod</ja>(...)
+	 * 		<jk>public</jk> Object doMyMethod(MySpecialObject mySpeciaObject) {
+	 * 			<jc>// Do something with it.</jc>
+	 * 		}
+	 * 	}
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
 	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>Refer to {@link RestParam} for the list of predefined parameter resolvers.
 	 * </ul>
 	 */
 	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
@@ -1596,10 +1596,10 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.parsers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class &lt;? <jk>extends</jk> Parser&gt; | Parser&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Parser} | Class&lt;? <jk>extends</jk> {@link Parser}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#parsers()} 
 	 * 			<li class='ja'>{@link RestMethod#parsers()} 
@@ -1616,10 +1616,63 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Adds class-level parsers to this resource.
 	 * 
+	 * <p>
+	 * Parsers are used to convert the body of HTTP requests into POJOs.  
+	 * <br>Any of the Juneau framework parsers can be used in this setting.
+	 * <br>The parser selected is based on the request <code>Content-Type</code> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul>
+	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but use pre-instantiated parsers.</jc>
+	 * 			builder.parsers(JsonParser.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_parsers</jsf>, JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(parsers={HtmlParser.<jk>class</jk>})
+	 * 		<jk>public</jk> Object myMethod(<ja>@Body</ja> MyPojo myPojo) {
+	 * 			<jc>// Do something with your parsed POJO.</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
+	 * 		preconfigured with the following parsers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link JsonParser}
+	 * 			<li class='jc'>{@link XmlParser}
+	 * 			<li class='jc'>{@link HtmlParser}
+	 * 			<li class='jc'>{@link UonParser}
+	 * 			<li class='jc'>{@link UrlEncodingParser}
+	 * 			<li class='jc'>{@link MsgPackParser}
+	 * 			<li class='jc'>{@link PlainTextParser}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
@@ -1635,7 +1688,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.partParser.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class &lt;? <jk>extends</jk> HttpPartParser&gt; | HttpPartParser</code>
+	 * 	<li><b>Data type:</b>  <code>{@link HttpPartParser} | Class&lt;? <jk>extends</jk> {@link HttpPartParser}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link UonPartParser}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1653,6 +1706,40 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
+	 * <p>
+	 * The default value is {@link UonPartParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
+	 * <br>If your parts contain text that can be confused with UON (e.g. <js>"(foo)"</js>), you can switch to 
+	 * {@link SimplePartParser} which treats everything as plain text.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(partParser=SimplePartParser.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.partParser(SimplePartParser.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_partParser</jsf>, SimplePartParser.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.partParser(SimplePartParser.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<ja>@RestMethod</ja>(...)
+	 * 		<jk>public</jk> Object myMethod(<ja>@Header</ja>(<js>"My-Header"</js>) MyParsedHeader h, <ja>@Query</ja>(<js>"myquery"</js>) MyParsedQuery q) {
+	 * 			<jc>// Do something with your parsed parts.</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
@@ -1667,7 +1754,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.partSerializer.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class &lt;? <jk>extends</jk> HttpPartSerializer&gt; | HttpPartSerializer</code>
+	 * 	<li><b>Data type:</b>  <code>{@link HttpPartSerializer} | Class&lt;? <jk>extends</jk> {@link HttpPartSerializer}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link SimpleUonPartSerializer}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1684,6 +1771,45 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 * 
+	 * <p>
+	 * The default value is {@link SimpleUonPartSerializer} which serializes UON notation for beans and maps, and
+	 * plain text for everything else.
+	 * <br>Other options include:
+	 * <ul>
+	 * 	<li class='jc'>{@link SimplePartSerializer} - Always serializes to plain text.
+	 * 	<li class='jc'>{@link UonPartSerializer} - Always serializers to UON.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(partSerializer=SimplePartSerializer.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.partSerializer(SimplePartSerializer.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_partSerializer</jsf>, SimplePartSerializer.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.partSerializer(SimplePartSerializer.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<ja>@RestMethod</ja>(...)
+	 * 		<jk>public</jk> Object myMethod(RestResponse res) {
+	 * 			<jc>// Set a header to a POJO.</jc>
+	 * 			res.setHeader(<js>"My-Header"</js>, <jk>new</jk> MyPojo());
+	 * 		}
+	 * 	}
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -1717,13 +1843,50 @@ public final class RestContext extends BeanContext {
 	 * Identifies the URL subpath relative to the parent resource.
 	 * 
 	 * <p>
+	 * This setting is critical for the routing of HTTP requests from parent to child resources.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(path=<js>"/myResource"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.path(<js>"/myResource"</js>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_path</jsf>, <js>"/myResource"</js>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.path(<js>"/myResource"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
+	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
+	 * 	<li>
+	 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
 	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
-	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
+	 * 	<li>
+	 * 		Typically, this setting is only applicable to resources defined as children through the 
 	 * 		{@link RestResource#children() @RestResource.children()} annotation.
 	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 * 	<li>
+	 * 		Slashes are trimmed from the path ends.
+	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
+	 * 	<li>
+	 * 		This path is available through the following method:
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContext#getPath() RestContext.getPath()}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String REST_path = PREFIX + "path.s";
@@ -1752,10 +1915,41 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(renderResponseStackTraces=<jk>true</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.renderResponseStackTraces();
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_renderResponseStackTraces</jsf>, <jk>true</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.renderResponseStackTraces();
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
+	 * 	<li>
+	 * 		Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
 	 * 		caution when enabling.
+	 * 	<li>
+	 * 		This setting is available through the following method:
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContext#isRenderResponseStackTraces() RestContext.isRenderResponseStackTraces()}
+	 * 		</ul>
+	 * 		That method is used by {@link RestCallHandlerDefault#renderError(HttpServletRequest, HttpServletResponse, RestException)}.
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
@@ -1766,7 +1960,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.resourceResolver.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestResourceResolver&gt; | RestResourceResolver</code>
+	 * 	<li><b>Data type:</b>  <code>{@link RestResourceResolver} | Class&lt;? <jk>extends</jk> {@link RestResourceResolver}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link RestResourceResolverDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1782,20 +1976,64 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The resolver used for resolving child resources.
+	 * The resolver used for resolving instances of child resources.
 	 * 
 	 * <p>
 	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Our custom resource resolver. </jc>
+	 * 	<jk>public class</jk> MyResourceResolver <jk>extends</jk> RestResourceResolverSimple {
+	 * 	
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Object resolve(Class&lt;?&gt; resourceType, RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			Object resource = <jsm>findOurResourceSomehow</jsm>(resourceType);
+	 * 
+	 * 			<jc>// If we can't resolve it, use default resolution.</jc>
+	 * 			<jk>if</jk> (resource == <jk>null</jk>) 
+	 * 				resource = <jk>super</jk>.resolve(resourceType, builder);
+	 * 		
+	 * 			<jk>return</jk> resource;
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(resourceResolver=MyResourceResolver.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.resourceResolver(MyResourceResolver.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_resourceResolver</jsf>, MyResourceResolver.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.resourceResolver(MyResourceResolver.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
 	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Injection">Overview &gt; Using with Spring or other Injection frameworks</a>
 	 * </ul>
 	 */
 	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
@@ -1806,7 +2044,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.responseHandlers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>extends</jk> ResponseHandler&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link ResponseHandler} | Class&lt;? <jk>extends</jk> {@link ResponseHandler}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1816,8 +2054,8 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContextBuilder#responseHandlers(Class...)}
-					<li class='jm'>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
-				</ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Description:</h5>
@@ -1828,20 +2066,66 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * By default, the following response handlers are provided out-of-the-box:
 	 * <ul>
-	 * 	<li>{@link StreamableHandler}
-	 * 	<li>{@link WritableHandler}
-	 * 	<li>{@link ReaderHandler}
-	 * 	<li>{@link InputStreamHandler}
-	 * 	<li>{@link RedirectHandler}
-	 * 	<li>{@link DefaultHandler}
+	 * 	<li class='jc'>{@link StreamableHandler} - {@link Streamable} objects.
+	 * 	<li class='jc'>{@link WritableHandler} - {@link Writable} objects.
+	 * 	<li class='jc'>{@link ReaderHandler} - {@link Reader} objects.
+	 * 	<li class='jc'>{@link InputStreamHandler} - {@link InputStream} objects.
+	 * 	<li class='jc'>{@link RedirectHandler} - {@link Redirect} objects. 
+	 * 	<li class='jc'>{@link ZipFileListResponseHandler} - {@link ZipFileList} objects. 
+	 * 	<li class='jc'>{@link DefaultHandler} - All other POJOs.
 	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Our custom response handler for MySpecialObject objects. </jc>
+	 * 	<jk>public class</jk> MyResponseHandler <jk>implements</jk> ResponseHandler {
+	 * 	
+	 * 		<ja>@Override</ja> 
+	 * 		<jk>public boolean</jk> handle(RestRequest req, RestResponse res, Object output) <jk>throws</jk> IOException, RestException {
+	 * 			<jk>if</jk> (output <jk>instanceof</jk> MySpecialObject) {
+	 * 				<jk>try</jk> (Writer w = res.getNegotiatedWriter()) {
+	 * 					<jc>//Pipe it to the writer ourselves.</jc>
+	 * 				}
+	 * 				<jk>return true</jk>;  <jc>// We handled it.</jc>
+	 * 			}
+	 * 			<jk>return false</jk>; <jc>// We didn't handle it.</jc>
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(responseHandlers=MyResponseHandler.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.responseHandlers(MyResponseHandler.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.addTo(<jsf>REST_responseHandlers</jsf>, MyResponseHandler.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.responseHandlers(MyResponseHandler.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<ja>@RestMethod</ja>(...)
+	 * 		<jk>public</jk> Object myMethod() {
+	 * 			<jc>// Return a special object for our handler.</jc>
+	 * 			<jk>return new</jk> MySpecialObject();
+	 * 		}
+	 * 	}
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 * 	<li>Resource resolvers are always inherited from parent resources.
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
 	 * 	<li>Inner classes of the REST resource class are allowed.
@@ -1855,7 +2139,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.serializers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class &lt;? <jk>extends</jk> Serializer&gt; | Serializer&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Serializer} | Class&lt;? <jk>extends</jk> {@link Serializer}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1875,16 +2159,77 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Adds class-level serializers to this resource.
 	 * 
+	 * <p>
+	 * Serializer are used to convert POJOs to HTTP response bodies.  
+	 * <br>Any of the Juneau framework serializers can be used in this setting.
+	 * <br>The serializer selected is based on the request <code>Accept</code> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul>
+	 * 	<li class='jm'>{@link Serializer#getMediaTypes()}
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 * 		
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+	 * 
+	 * 			<jc>// Same, but use pre-instantiated parsers.</jc>
+	 * 			builder.serializers(JsonSerializer.<jsf>DEFAULT</jsf>, XmlSerializer.<jsf>DEFAULT</jsf>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_serializers</jsf>, JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(serializers={HtmlSerializer.<jk>class</jk>})
+	 * 		<jk>public</jk> MyPojo myMethod() {
+	 * 			<jc>// Return a POJO to be serialized.</jc>
+	 * 			<jk>return new</jk> MyPojo(); 
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
+	 * 		preconfigured with the following serializers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link HtmlDocSerializer}
+	 * 			<li class='jc'>{@link HtmlStrippedDocSerializer}
+	 * 			<li class='jc'>{@link HtmlSchemaDocSerializer}
+	 * 			<li class='jc'>{@link JsonSerializer}
+	 * 			<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.Simple}
+	 * 			<li class='jc'>{@link JsonSchemaSerializer}
+	 * 			<li class='jc'>{@link XmlDocSerializer}
+	 * 			<li class='jc'>{@link XmlSchemaDocSerializer}
+	 * 			<li class='jc'>{@link UonSerializer}
+	 * 			<li class='jc'>{@link UrlEncodingSerializer}
+	 * 			<li class='jc'>{@link MsgPackSerializer}
+	 * 			<li class='jc'>{@link SoapXmlSerializer}
+	 * 			<li class='jc'>{@link PlainTextSerializer}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
 	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Serializers">org.apache.juneau.rest &gt; Serializers</a>
 	 * </ul>
+	 * <p>
 	 */
 	public static final String REST_serializers = PREFIX + "serializers.lo";
 
@@ -1912,6 +2257,44 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFileResponseHeaders={
+	 * 			<js>"Cache-Control: $C{REST/cacheControl,nocache}"</js>,
+	 * 			<js>"My-Header: $C{REST/myHeaderValue}"</js>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder
+	 * 				.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
+	 * 				.staticFileResponseHeaders(<js>"My-Header: foo"</js>);
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder
+	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"Cache-Control"</js>, <js>"nocache"</js>);
+	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"My-Header"</js>, <js>"foo"</js>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_staticFiles} for information about statically-served files.
+	 * </ul>
 	 */
 	public static final String REST_staticFileResponseHeaders = PREFIX + "staticFileResponseHeaders.omo";
 	
@@ -1940,11 +2323,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Used to define paths and locations of statically-served files such as images or HTML documents.
-	 * 
-	 * <p>
-	 * Static files are found by calling {@link #getClasspathResource(String,Locale)} which uses the registered 
-	 * {@link ClasspathResourceFinder} for locating files on the classpath (or other location).
+	 * Used to define paths and locations of statically-served files such as images or HTML documents
+	 * from the classpath or file system.
 	 * 
 	 * <p>
 	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
@@ -1953,29 +2333,38 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/myresource"</js>,
-	 * 		staticFiles={<js>"htdocs:docs"</js>,<js>"styles:styles"</js>}
+	 * 		staticFiles={
+	 * 			<js>"htdocs:docs"</js>,
+	 * 			<js>"styles:styles"</js>
+	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {...}
 	 * </p>
 	 * 
 	 * <p>
-	 * In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find 
-	 * the <l>foobar.html</l> file in the following ordered locations:
-	 * <ol>
-	 * 	<li><l>com.foo.mypackage.docs</l> package.
-	 * 	<li><l>org.apache.juneau.rest.docs</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.rest</l>).
-	 * 	<li><l>[working-dir]/docs</l> directory.
+	 * In the example above, given a GET request to the following URL...
+	 * <p class='bcode'>
+	 *  	/myresource/htdocs/foobar.html
+	 * </p>
+	 * <br>...the servlet will attempt to find the <code>foobar.html</code> file in the following ordered locations:
+	 * <ol class='spaced-list'>
+	 * 	<li><code>com.foo.mypackage.docs</code> package.
+	 * 	<li><code>[working-dir]/docs</code> directory.
 	 * </ol>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_classpathResourceFinder} for configuring how classpath resources are located and retrieved.
+	 * 	<li class='jf'>{@link #REST_mimeTypes} for configuring the media types based on file extension.
+	 * 	<li class='jf'>{@link #REST_staticFileResponseHeaders} for configuring response headers on statically served files.
+	 * 	<li class='jf'>{@link #REST_useClasspathResourceCaching} for configuring static file caching.
+	 * 	<li class='jm'>{@link RestContext#getClasspathResource(String,Locale)} for retrieving static files.
+	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Mappings are cumulative from parent to child.  
 	 * 	<li>Child resources can override mappings made on parent resources.
-	 * 	<li>The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
-	 * 	<li>The resource finder is configured via the {@link #REST_classpathResourceFinder} setting, and can be
-	 * 		overridden to provide customized handling of resource retrieval.
-	 * 	<li>The {@link #REST_useClasspathResourceCaching} setting can be used to cache static files in memory
-	 * 		to improve performance.
 	 * </ul>
 	 */
 	public static final String REST_staticFiles = PREFIX + "staticFiles.lo";
@@ -2004,10 +2393,40 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 * <br>An example where this might be useful if you have serializers registered that handle media types that you
+	 * don't want exposed in the Swagger documentation.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.produces(<jk>false</jk>, <js>"application/json"</js>)
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_produces</jsf>, <js>"application/json"</js>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.produces(<jk>false</jk>, <js>"application/json"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 * 
 	 * <p>
-	 * This affects the values returned by {@link RestRequest#getProduces()} and the supported accept
-	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
+	 * This affects the returned values from the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
+	 * 	<li class='jm'>{@link RestRequest#getProduces()}
+	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects produces field.
+	 * </ul>
 	 */
 	public static final String REST_produces = PREFIX + "produces.ls";
 
@@ -2035,10 +2454,40 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 * <br>An example where this might be useful if you have parsers registered that handle media types that you
+	 * don't want exposed in the Swagger documentation.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.consumes(<jk>false</jk>, <js>"application/json"</js>)
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_consumes</jsf>, <js>"application/json"</js>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.consumes(<jk>false</jk>, <js>"application/json"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 * 
 	 * <p>
-	 * This affects the values returned by {@link RestRequest#getConsumes()} and the supported content
-	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
+	 * This affects the returned values from the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
+	 * 	<li class='jm'>{@link RestRequest#getConsumes()}
+	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects consumes field.
+	 * </ul>
 	 */
 	public static final String REST_consumes = PREFIX + "consumes.ls";
 	
@@ -2065,6 +2514,35 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * When enabled, resources retrieved via {@link RestContext#getClasspathResource(String, Locale)} (and related 
 	 * methods) will be cached in memory to speed subsequent lookups.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(useClasspathResourceCaching=<js>"$C{REST/useClasspathResourceCaching,false}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.useClasspathResourceCaching(<jk>false</jk>)
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_useClasspathResourceCaching</jsf>, <jk>false</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.useClasspathResourceCaching(<jk>false</jk>)
+	 * 		}
+	 * 	}
+	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_staticFiles} for information about static files.
+	 * </ul>
 	 */
 	public static final String REST_useClasspathResourceCaching = PREFIX + "useClasspathResourceCaching.b";
 
@@ -2089,8 +2567,39 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
-	 * made available through the {@link RestException#getOccurrence()} method.
+	 * When enabled, the number of times an exception has occurred will be tracked based on stack trace hashsums.
+	 * 
+	 * <p>
+	 * Affects the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestContext#getStackTraceOccurrence(Throwable) RestContext.getStackTraceOccurrance(Throwable)}
+	 * 	<li class='jm'>{@link RestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestException)}
+	 * 	<li class='jm'>{@link RestException#getOccurrence()} - Returns the number of times this exception occurred.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(useStackTraceHashes=<js>"$C{REST/useStackTraceHashes,false}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.useStackTraceHashes(<jk>false</jk>)
+	 * 
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_useStackTraceHashes</jsf>, <jk>false</jk>);
+	 * 		}
+	 * 
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.useStackTraceHashes(<jk>false</jk>)
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
 	public static final String REST_useStackTraceHashes = PREFIX + "useStackTraceHashes.b";
 	
@@ -2100,7 +2609,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.widgets.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>extends</jk> Widget&gt; | Widget&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Widget} | Class&lt;? <jk>extends</jk> {@link Widget}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -2121,7 +2630,7 @@ public final class RestContext extends BeanContext {
 	 * generate arbitrary replacement text.
 	 * 
 	 * Widgets resolve the following variables:
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
 	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
 	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
@@ -2616,8 +3125,9 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <p>
 	 * Unless overridden via the {@link RestResource#resourceResolver() @RestResource.resourceResolver()} annotation or the {@link RestContextBuilder#resourceResolver(Class)}
-	 * method, this value is always inherited from parent to child.
-	 * This allows a single resource resolver to be passed in to the top-level servlet to handle instantiation of all
+	 * method, this value is always inherited from parent-to-child (i.e. parent-to-child via <ja>@RestResource.children()</ja> annotation, NOT parent-to-child 
+	 * via class inheritance).
+	 * <br>This allows a single resource resolver to be passed in to the top-level servlet to handle instantiation of all
 	 * child resources.
 	 * 
 	 * @return The resource resolver associated with this context.
@@ -3226,10 +3736,10 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * @param e The exception to check.
 	 * @return
-	 * 	The number of times this exception was thrown, or <code>0</code> if <code>stackTraceHashes</code>
+	 * 	The number of times this exception was thrown, or <code>0</code> if {@link #REST_useStackTraceHashes}
 	 * 	setting is not enabled.
 	 */
-	protected int getStackTraceOccurrence(Throwable e) {
+	public int getStackTraceOccurrence(Throwable e) {
 		if (! useStackTraceHashes)
 			return 0;
 		int h = e.hashCode();
@@ -3242,7 +3752,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * @return TODO
 	 */
-	protected boolean isRenderResponseStackTraces() {
+	public boolean isRenderResponseStackTraces() {
 		return renderResponseStackTraces;
 	}
 

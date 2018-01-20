@@ -36,6 +36,9 @@ import org.apache.juneau.utils.*;
 
 /**
  * Default REST method parameter resolvers.
+ * 
+ * Contains the default set of parameter resolvers for REST resource methods (i.e methods annotated with {@link RestResource @RestResource}).
+ * 
  */
 class RestParamDefaults {
 
@@ -110,7 +113,7 @@ class RestParamDefaults {
 			ConfigFileObject.class,
 			UriContextObject.class,
 			UriResolverObject.class,
-			RequestPropertiesObject.class
+			RestRequestPropertiesObject.class
 		};
 
 		for (Class<?> c : r) {
@@ -669,9 +672,9 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class RequestPropertiesObject extends RestParam {
+	static final class RestRequestPropertiesObject extends RestParam {
 
-		protected RequestPropertiesObject() {
+		protected RestRequestPropertiesObject() {
 			super(OTHER, null, RestRequestProperties.class);
 		}
 

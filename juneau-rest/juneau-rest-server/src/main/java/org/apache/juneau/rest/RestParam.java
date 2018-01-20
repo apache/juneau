@@ -12,9 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
 
-import org.apache.juneau.rest.annotation.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.Date;
+import org.apache.juneau.ini.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 
 /**
  * REST java method parameter resolver.
@@ -23,8 +34,81 @@ import org.apache.juneau.rest.annotation.*;
  * Used to resolve instances of classes being passed to Java REST methods.
  * 
  * <p>
- * This class is associated with REST classes via the {@link RestResource#paramResolvers() @RestResource.paramResolvers()} annotation and
- * {@link RestContextBuilder#paramResolvers(Class...)} method.
+ * By default, the following parameter types can be passed into Java methods in any order:
+ * 
+ * <h6 class='topic'>Standard top-level objects</h6>
+ * <ul>
+ * 	<li><b>Standard top-level objects</b>
+ * 	<ul>
+ * 		<li class='jc'>{@link HttpServletRequest}
+ * 		<li class='jc'>{@link RestRequest}
+ * 		<li class='jc'>{@link HttpServletResponse}
+ * 		<li class='jc'>{@link RestResponse}
+ * 	</ul>
+ * 	<li><b>Headers</b>
+ * 	<ul>
+ * 		<li class='jc'>{@link Accept}
+ * 		<li class='jc'>{@link AcceptCharset}
+ * 		<li class='jc'>{@link AcceptEncoding}
+ * 		<li class='jc'>{@link AcceptLanguage}
+ * 		<li class='jc'>{@link Authorization}
+ * 		<li class='jc'>{@link CacheControl}
+ * 		<li class='jc'>{@link Connection}
+ * 		<li class='jc'>{@link ContentLength}
+ * 		<li class='jc'>{@link ContentType}
+ * 		<li class='jc'>{@link Date}
+ * 		<li class='jc'>{@link Expect}
+ * 		<li class='jc'>{@link From}
+ * 		<li class='jc'>{@link Host}
+ * 		<li class='jc'>{@link IfMatch}
+ * 		<li class='jc'>{@link IfModifiedSince}
+ * 		<li class='jc'>{@link IfNoneMatch}
+ * 		<li class='jc'>{@link IfRange}
+ * 		<li class='jc'>{@link IfUnmodifiedSince}
+ * 		<li class='jc'>{@link MaxForwards}
+ * 		<li class='jc'>{@link Pragma}
+ * 		<li class='jc'>{@link ProxyAuthorization}
+ * 		<li class='jc'>{@link Range}
+ * 		<li class='jc'>{@link Referer}
+ * 		<li class='jc'>{@link TE}
+ * 		<li class='jc'>{@link TimeZone}
+ * 		<li class='jc'>{@link UserAgent}
+ * 		<li class='jc'>{@link Upgrade}
+ * 		<li class='jc'>{@link Via}
+ * 		<li class='jc'>{@link Warning}
+ * 	</ul>
+ * 	<li><b>Other objects</b>
+ * 	<ul>
+ * 		<li class='jc'>{@link ConfigFile}
+ * 		<li class='jc'>{@link HttpMethod}
+ * 		<li class='jc'>{@link InputStream}
+ * 		<li class='jc'>{@link Locale}
+ * 		<li class='jc'>{@link MessageBundle}
+ * 		<li class='jc'>{@link OutputStream}
+ * 		<li class='jc'>{@link Parser}
+ * 		<li class='jc'>{@link Reader}
+ * 		<li class='jc'>{@link RequestBody}
+ * 		<li class='jc'>{@link RequestFormData}
+ * 		<li class='jc'>{@link RequestHeaders}
+ * 		<li class='jc'>{@link RequestPathMatch}
+ * 		<li class='jc'>{@link RequestQuery}
+ * 		<li class='jc'>{@link ResourceBundle}
+ * 		<li class='jc'>{@link RestContext}
+ * 		<li class='jc'>{@link RestLogger}
+ * 		<li class='jc'>{@link RestRequestProperties}
+ * 		<li class='jc'>{@link ServletInputStream}
+ * 		<li class='jc'>{@link ServletOutputStream}
+ * 		<li class='jc'>{@link Swagger}
+ * 		<li class='jc'>{@link UriContext}
+ * 		<li class='jc'>{@link UriResolver}
+ * 		<li class='jc'>{@link Writer}
+ *  	</ul>
+ * </ul>
+ * 
+ * <h5 class='topic'>Additional Information</h5>
+ * <ul>
+ * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
+ * </ul>
  */
 public abstract class RestParam {
 

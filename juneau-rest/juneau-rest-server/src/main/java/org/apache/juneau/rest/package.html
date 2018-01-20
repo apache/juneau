@@ -99,7 +99,7 @@
 		<li><p><a class='doclink' href='#RestResources.Inheritence'>Annotation Inheritance</a></p>
 		<li><p><a class='doclink' href='#RestResources.HttpStatusCodes'>HTTP Status Codes</a></p>
 		<li><p><a class='doclink' href='#RestResources.OverloadedHttpMethods'>Overloaded HTTP Methods</a></p>
-		<li><p><a class='doclink' href='#RestResources.BuildInParams'>Built-In Parameters</a></p>
+		<li><p><a class='doclink' href='#RestResources.BuiltInParams'>Built-In Parameters</a></p>
 		<li><p><a class='doclink' href='#RestResources.CustomSerializersParsers'>Defining your own serializers/parsers</a></p>
 		<li><p><a class='doclink' href='#RestResources.ResponseHandlers'>Response Handlers</a></p>
 		<li><p><a class='doclink' href='#RestResources.OtherNotes'>Other Notes</a></p>
@@ -2114,11 +2114,11 @@
 		</p>
 		<p>	
 			The resource bundle can also be passed into the method by simply specifying a parameter
-			of type <code>ResourceBundle</code>:
+			of type {@link java.util.ResourceBundle} or {@link org.apache.juneau.utils.MessageBundle}:
 		</p>
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public</jk> String printLocalizedGreeting(ResourceBundle messages) {
+	<jk>public</jk> String printLocalizedGreeting(MessageBundle messages) {
 		<jk>return</jk> messages.getString(<js>"greeting"</js>);
 	}
 		</p>
@@ -2138,6 +2138,16 @@
 	#--------------------------------------------------------------------------------</cc>
 	<ck>MyRestServlet.greeting</ck> = Hello!
 		</p>
+		<p>
+			Messages are registered through the following:
+		</p>
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#messages()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(String)},
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(Class,String)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(MessageBundleLocation...)} 
+		</ul>
 	</div>
 	
 	<!-- ======================================================================================================== -->
