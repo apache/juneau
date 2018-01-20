@@ -43,12 +43,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		super(String.CASE_INSENSITIVE_ORDER);
 	}
 
-	RequestHeaders setParser(HttpPartParser parser) {
+	RequestHeaders parser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
 
-	RequestHeaders setBeanSession(BeanSession beanSession) {
+	RequestHeaders beanSession(BeanSession beanSession) {
 		this.beanSession = beanSession;
 		return this;
 	}
@@ -337,7 +337,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return A new headers object.
 	 */
 	public RequestHeaders subset(String...headers) {
-		RequestHeaders rh2 = new RequestHeaders().setParser(parser).setBeanSession(beanSession).setQueryParams(queryParams);
+		RequestHeaders rh2 = new RequestHeaders().parser(parser).beanSession(beanSession).setQueryParams(queryParams);
 		for (String h : headers)
 			if (containsKey(h))
 				rh2.put(h, get(h));

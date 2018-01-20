@@ -48,27 +48,27 @@ public class RequestBody {
 		this.req = req;
 	}
 
-	RequestBody setEncoders(EncoderGroup encoders) {
+	RequestBody encoders(EncoderGroup encoders) {
 		this.encoders = encoders;
 		return this;
 	}
 
-	RequestBody setParsers(ParserGroup parsers) {
+	RequestBody parsers(ParserGroup parsers) {
 		this.parsers = parsers;
 		return this;
 	}
 
-	RequestBody setHeaders(RequestHeaders headers) {
+	RequestBody headers(RequestHeaders headers) {
 		this.headers = headers;
 		return this;
 	}
 
-	RequestBody setMaxInput(long maxInput) {
+	RequestBody maxInput(long maxInput) {
 		this.maxInput = maxInput;
 		return this;
 	}
 
-	RequestBody setBeanSession(BeanSession beanSession) {
+	RequestBody beanSession(BeanSession beanSession) {
 		this.beanSession = beanSession;
 		return this;
 	}

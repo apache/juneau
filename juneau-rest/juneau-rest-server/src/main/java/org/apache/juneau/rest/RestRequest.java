@@ -160,19 +160,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.beanSession(beanSession);
 		this.queryParams
 			.addDefault(rjm.defaultQuery)
-			.setParser(rjm.partParser)
-			.setBeanSession(beanSession);
+			.parser(rjm.partParser)
+			.beanSession(beanSession);
 		this.headers
 			.addDefault(rjm.defaultRequestHeaders)
 			.addDefault(context.getDefaultRequestHeaders())
-			.setParser(rjm.partParser)
-			.setBeanSession(beanSession);
+			.parser(rjm.partParser)
+			.beanSession(beanSession);
 		this.body
-			.setEncoders(rjm.encoders)
-			.setParsers(rjm.parsers)
-			.setHeaders(headers)
-			.setBeanSession(beanSession)
-			.setMaxInput(rjm.maxInput);
+			.encoders(rjm.encoders)
+			.parsers(rjm.parsers)
+			.headers(headers)
+			.beanSession(beanSession)
+			.maxInput(rjm.maxInput);
 
 		String stylesheet = getQuery().getString("stylesheet");
 		if (stylesheet != null)

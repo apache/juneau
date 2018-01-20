@@ -37,12 +37,12 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	private HttpPartParser parser;
 	private BeanSession beanSession;
 
-	RequestQuery setParser(HttpPartParser parser) {
+	RequestQuery parser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
 
-	RequestQuery setBeanSession(BeanSession beanSession) {
+	RequestQuery beanSession(BeanSession beanSession) {
 		this.beanSession = beanSession;
 		return this;
 	}
