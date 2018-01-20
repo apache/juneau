@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.ini.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.vars.*;
+import org.apache.juneau.svl.vars.*;
 
 /**
  * Extended annotation for {@link RestResource#swagger() @RestResource.swagger()}.
@@ -50,8 +53,27 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * 
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/contact</code>.
@@ -91,8 +113,27 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * 
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
@@ -133,8 +174,27 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * 
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/license</code>.
@@ -180,8 +240,27 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * 
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
@@ -202,8 +281,27 @@ public @interface ResourceSwagger {
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 * 
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
@@ -225,8 +323,27 @@ public @interface ResourceSwagger {
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 * 
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/version</code>.

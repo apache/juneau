@@ -66,6 +66,28 @@ public class ResponseInfo extends SwaggerElement {
 	private Map<String,Object> examples;
 
 	/**
+	 * Copies any non-null fields from the specified object to this object.
+	 * 
+	 * @param r 
+	 * 	The object to copy fields from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo copyFrom(ResponseInfo r) {
+		if (r != null) {
+			if (r.description != null)
+				description = r.description;
+			if (r.schema != null)
+				schema = r.schema;
+			if (r.headers != null)
+				headers = r.headers;
+			if (r.examples != null)
+				examples = r.examples;
+		}
+		return this;
+	}
+	
+	/**
 	 * Bean property getter:  <property>description</property>.
 	 * 
 	 * <p>

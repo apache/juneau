@@ -12,13 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * Class that provides documentation and other related information about a REST resource.
+ * REST resource information provider.
  * 
+ * <p>
+ * Provides localized Swagger documentation and other related information about a REST resource.
  * 
  * <h5 class='topic'>Additional Information</h5>
  * <ul>
@@ -41,136 +46,277 @@ public interface RestInfoProvider {
 	 * 
 	 * @param req The incoming HTTP request.
 	 * @return 
-	 * 	The contents of the parsed swagger file.
-	 * 	Returns <jk>null</jk> if a swagger file could not be found.
-	 * @throws RestException
+	 * 	The contents of the parsed swagger file, or <jk>null</jk> if a swagger file could not be found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public Swagger getSwaggerFromFile(RestRequest req) throws RestException;
+	public Swagger getSwaggerFromFile(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the localized swagger for this REST resource.
+	 * Returns the localized swagger for the REST resource.
 	 * 
 	 * <p>
 	 * If {@link #getSwaggerFromFile(RestRequest)} returns a non-<jk>null</jk> value, then 
 	 * that swagger is returned by this method.
-	 * <br>Otherwise, a new swagger object is return with information gathered via various means.
+	 * <br>Otherwise, a new swagger object is return with information gathered via the other methods defined on this class.
 	 * 
 	 * @param req The incoming HTTP request.
-	 * @return A new Swagger instance.
-	 * @throws RestException
+	 * @return 
+	 * 	A new {@link Swagger} instance.
+	 * 	<br>Never <jk>null</jk>.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public Swagger getSwagger(RestRequest req) throws RestException;
-
-
-	/**
-	 * Returns the localized summary of the specified java method on this servlet.
-	 * 
-	 * @param javaMethodName The name of the Java method whose description we're retrieving.
-	 * @param req The current request.
-	 * @return The localized summary of the method, or a blank string if no summary was found.
-	 */
-	public String getMethodSummary(String javaMethodName, RestRequest req);
+	public Swagger getSwagger(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the localized summary of the java method invoked on the specified request.
+	 * Returns the localized operation ID of the specified java method.
 	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
-	 * @return The localized summary of the method, or a blank string if no summary was found.
+	 * @return The localized operation ID of the method, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public String getMethodSummary(RestRequest req);
+	public String getMethodOperationId(Method method, RestRequest req) throws Exception;
+
+	/**
+	 * Returns the localized summary of the specified java method.
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return The localized summary of the method, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public String getMethodSummary(Method method, RestRequest req) throws Exception;
 
 	/**
 	 * Returns the localized description of the specified java method on this servlet.
 	 * 
-	 * @param javaMethodName The name of the Java method whose description we're retrieving.
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
-	 * @return The localized description of the method, or a blank string if no description was found.
+	 * @return The localized description of the method, or <jk>null</jk> if none was was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public String getMethodDescription(String javaMethodName, RestRequest req);
+	public String getMethodDescription(Method method, RestRequest req) throws Exception;
 
 	/**
-	 * Returns the localized description of the invoked java method on the specified request.
+	 * Returns the localized tags of the specified java method on this servlet.
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return The localized tags of the method, or <jk>null</jk> if none were found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public List<String> getMethodTags(Method method, RestRequest req) throws Exception;
+	
+	/**
+	 * Returns the localized external documentation of the specified java method on this servlet.
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return The localized external documentation of the method, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public ExternalDocumentation getMethodExternalDocs(Method method, RestRequest req) throws Exception;
+	
+	/**
+	 * Returns the localized parameter info for the specified java method.
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return The localized parameter info of the method, or <jk>null</jk> if none were found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public List<ParameterInfo> getMethodParameters(Method method, RestRequest req) throws Exception;
+
+	/**
+	 * Returns the localized Swagger response information about the specified Java method.
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return The localized response information of the method, or <jk>null</jk> if none were found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public Map<Integer,ResponseInfo> getMethodResponses(Method method, RestRequest req) throws Exception;
+	
+	/**
+	 * Returns the supported <code>Accept</code> types the specified Java method.
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return The supported <code>Accept</code> types of the method, or <jk>null</jk> if none were found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public List<MediaType> getMethodProduces(Method method, RestRequest req) throws Exception;
+	
+	/**
+	 * Returns the supported <code>Content-Type</code> types the specified Java method.
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return The supported <code>Content-Type</code> types of the method, or <jk>null</jk> if none were found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public List<MediaType> getMethodConsumes(Method method, RestRequest req) throws Exception;
+
+	/**
+	 * Returns whether the specified method is deprecated
+	 * 
+	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
+	 * @param req The current request.
+	 * @return <jk>true</jk> if the method is deprecated.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public boolean isDeprecated(Method method, RestRequest req) throws Exception;
+
+	/**
+	 * Returns the localized site name of the REST resource.
 	 * 
 	 * @param req The current request.
-	 * @return The localized description of the method, or a blank string if no description was found.
+	 * @return The localized site name of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public String getMethodDescription(RestRequest req);
+	public String getSiteName(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the localized site name of this REST resource.
+	 * Returns the localized title of the REST resource.
 	 * 
 	 * @param req The current request.
-	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
+	 * @return The localized title of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public String getSiteName(RestRequest req);
+	public String getTitle(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the localized title of this REST resource.
+	 * Returns the localized description of the REST resource.
 	 * 
 	 * @param req The current request.
-	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
+	 * @return The localized description of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public String getTitle(RestRequest req);
+	public String getDescription(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the localized description of this REST resource.
-	 * 
-	 * @param req The current request.
-	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
-	 */
-	public String getDescription(RestRequest req);
-
-	/**
-	 * Returns the localized contact information of this REST resource.
+	 * Returns the localized contact information of the REST resource.
 	 * 
 	 * @param req The current request.
 	 * @return
-	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * 	The localized contact information of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public Contact getContact(RestRequest req) ;
+	public Contact getContact(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the localized license information of this REST resource.
+	 * Returns the localized license information of the REST resource.
 	 * 
 	 * @param req The current request.
 	 * @return
-	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * 	The localized license information of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public License getLicense(RestRequest req);
+	public License getLicense(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the terms-of-service information of this REST resource.
+	 * Returns the terms-of-service iof the REST resource.
 	 * 
 	 * @param req The current request.
 	 * @return
-	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * 	The localized terms-of-service of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public String getTermsOfService(RestRequest req);
+	public String getTermsOfService(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the version information of this REST resource.
+	 * Returns the localized version of the REST resource.
 	 * 
 	 * @param req The current request.
 	 * @return
-	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * 	The localized version of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public String getVersion(RestRequest req);
+	public String getVersion(RestRequest req) throws Exception;
 
 	/**
-	 * Returns the version information of this REST resource.
+	 * Returns the supported <code>Content-Type</code> request headers for the REST resource.
 	 * 
 	 * @param req The current request.
 	 * @return
-	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * 	The supported <code>Content-Type</code> request headers of the REST resource, or <jk>null</jk> if none were found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public List<Tag> getTags(RestRequest req);
-
+	public List<MediaType> getConsumes(RestRequest req) throws Exception;
+	
 	/**
-	 * Returns the external documentation of this REST resource.
+	 * Returns the supported <code>Accept</code> request headers for the REST resource.
 	 * 
 	 * @param req The current request.
 	 * @return
-	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * 	The supported <code>Accept</code> request headers of the REST resource, or <jk>null</jk> if none were found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
-	public ExternalDocumentation getExternalDocs(RestRequest req);
+	public List<MediaType> getProduces(RestRequest req) throws Exception;
+	
+	/**
+	 * Returns the localized tags of the REST resource.
+	 * 
+	 * @param req The current request.
+	 * @return
+	 * 	The localized tags of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public List<Tag> getTags(RestRequest req) throws Exception;
+
+	/**
+	 * Returns the external documentation of the REST resource.
+	 * 
+	 * @param req The current request.
+	 * @return
+	 * 	The localized external documentation of the REST resource, or <jk>null</jk> if none was found.
+	 * @throws Exception 
+	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception 
+	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
+	 */
+	public ExternalDocumentation getExternalDocs(RestRequest req) throws Exception;
 }

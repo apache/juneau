@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import java.lang.reflect.*;
 import java.util.*;
+
+import javax.servlet.http.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
@@ -38,8 +41,8 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"description"</js> - Value returned by {@link RestInfoProvider#getDescription(RestRequest)}
  * 	<li><js>"externalDocs"</js> - Value returned by {@link RestInfoProvider#getExternalDocs(RestRequest)}
  * 	<li><js>"license"</js> - Value returned by {@link RestInfoProvider#getLicense(RestRequest)}
- * 	<li><js>"methodDescription"</js> - Value returned by {@link RestInfoProvider#getMethodDescription(RestRequest)}
- * 	<li><js>"methodSummary"</js> - Value returned by {@link RestInfoProvider#getMethodSummary(RestRequest)}
+ * 	<li><js>"methodDescription"</js> - Value returned by {@link RestInfoProvider#getMethodDescription(Method,RestRequest)}
+ * 	<li><js>"methodSummary"</js> - Value returned by {@link RestInfoProvider#getMethodSummary(Method,RestRequest)}
  * 	<li><js>"siteName"</js> - Value returned by {@link RestInfoProvider#getSiteName(RestRequest)}
  * 	<li><js>"tags"</js> - Value returned by {@link RestInfoProvider#getTags(RestRequest)}
  * 	<li><js>"termsOfService"</js> - Value returned by {@link RestInfoProvider#getTermsOfService(RestRequest)}
@@ -96,49 +99,55 @@ public class RestInfoVar extends MultipartResolvingVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
-		RestInfoProvider rip = req.getInfoProvider();
-		WriterSerializer s = JsonSerializer.DEFAULT_LAX;
-		char c = StringUtils.charAt(key, 0);
-		if (c == 'c') {
-			if ("contact".equals(key)) {
-				Contact x = rip.getContact(req);
-				return x == null ? null : s.toString(x);
+		try {
+			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+			RestInfoProvider rip = req.getInfoProvider();
+			WriterSerializer s = JsonSerializer.DEFAULT_LAX;
+			char c = StringUtils.charAt(key, 0);
+			if (c == 'c') {
+				if ("contact".equals(key)) {
+					Contact x = rip.getContact(req);
+					return x == null ? null : s.toString(x);
+				}
+			} else if (c == 'd') {
+				if ("description".equals(key)) 
+					return rip.getDescription(req);
+			} else if (c == 'e') {
+				if ("externalDocs".equals(key)) {
+					ExternalDocumentation x = rip.getExternalDocs(req);
+					return x == null ? null : s.toString(x);
+				}
+			} else if (c == 'l') {
+				if ("license".equals(key)) {
+					License x = rip.getLicense(req);
+					return x == null ? null : s.toString(x);
+				}
+			} else if (c == 'm') {
+				if ("methodDescription".equals(key)) 
+					return rip.getMethodDescription(req.getJavaMethod(), req);
+				if ("methodSummary".equals(key)) 
+					return rip.getMethodSummary(req.getJavaMethod(), req);
+			} else if (c == 's') {
+				if ("siteName".equals(key)) 
+					return rip.getSiteName(req);
+			} else if (c == 't') {
+				if ("tags".equals(key)) {
+					List<Tag> x = rip.getTags(req);
+					return x == null ? null : s.toString(x);
+				} else if ("termsOfService".equals(key)) {
+					return rip.getTermsOfService(req);
+				} else if ("title".equals(key)) {
+					return rip.getTitle(req);
+				}
+			} else if (c == 'v') {
+				if ("version".equals(key)) 
+					return rip.getVersion(req);
 			}
-		} else if (c == 'd') {
-			if ("description".equals(key)) 
-				return rip.getDescription(req);
-		} else if (c == 'e') {
-			if ("externalDocs".equals(key)) {
-				ExternalDocumentation x = rip.getExternalDocs(req);
-				return x == null ? null : s.toString(x);
-			}
-		} else if (c == 'l') {
-			if ("license".equals(key)) {
-				License x = rip.getLicense(req);
-				return x == null ? null : s.toString(x);
-			}
-		} else if (c == 'm') {
-			if ("methodDescription".equals(key)) 
-				return rip.getMethodDescription(req);
-			if ("methodSummary".equals(key)) 
-				return rip.getMethodSummary(req);
-		} else if (c == 's') {
-			if ("siteName".equals(key)) 
-				return rip.getSiteName(req);
-		} else if (c == 't') {
-			if ("tags".equals(key)) {
-				List<Tag> x = rip.getTags(req);
-				return x == null ? null : s.toString(x);
-			} else if ("termsOfService".equals(key)) {
-				return rip.getTermsOfService(req);
-			} else if ("title".equals(key)) {
-				return rip.getTitle(req);
-			}
-		} else if (c == 'v') {
-			if ("version".equals(key)) 
-				return rip.getVersion(req);
+			return null;
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
 		}
-		return null;
 	}
 }

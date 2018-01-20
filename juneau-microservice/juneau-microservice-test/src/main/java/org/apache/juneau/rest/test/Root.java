@@ -82,7 +82,7 @@ public class Root extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/")
-	public ChildResourceDescriptions doGet(RestRequest req) {
+	public ChildResourceDescriptions doGet(RestRequest req) throws Exception {
 		return new ChildResourceDescriptions(getContext(), req);
 	}
 }

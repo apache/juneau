@@ -33,24 +33,29 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	private HttpPartParser parser;
 	private BeanSession beanSession;
-	private String remainder;
+	private String remainder, pattern;
 
 	RequestPathMatch() {
 		super(String.CASE_INSENSITIVE_ORDER);
 	}
 
-	RequestPathMatch setParser(HttpPartParser parser) {
+	RequestPathMatch parser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
 
-	RequestPathMatch setBeanSession(BeanSession beanSession) {
+	RequestPathMatch beanSession(BeanSession beanSession) {
 		this.beanSession = beanSession;
 		return this;
 	}
 
-	RequestPathMatch setRemainder(String remainder) {
+	RequestPathMatch remainder(String remainder) {
 		this.remainder = remainder;
+		return this;
+	}
+
+	RequestPathMatch pattern(String pattern) {
+		this.pattern = pattern;
 		return this;
 	}
 
@@ -218,5 +223,14 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 */
 	public String getRemainderUndecoded() {
 		return remainder;
+	}
+	
+	/**
+	 * Returns the path pattern that matched this request.
+	 * 
+	 * @return The path pattern that matched this request.
+	 */
+	public String getPattern() {
+		return pattern;
 	}
 }

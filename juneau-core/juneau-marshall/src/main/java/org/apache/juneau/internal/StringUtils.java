@@ -1893,4 +1893,32 @@ public final class StringUtils {
 	public static boolean contains(String value, CharSequence substring) {
 		return value == null ? false : value.contains(substring);
 	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified string appears to be an JSON array.
+	 * 
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified string appears to be a JSON array.
+	 */
+	public static boolean isObjectList(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return (s.startsWith("[") && s.endsWith("]") && BeanContext.DEFAULT != null);
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified string appears to be a JSON object.
+	 * 
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified string appears to be a JSON object.
+	 */
+	public static boolean isObjectMap(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return (s.startsWith("{") && s.endsWith("}") && BeanContext.DEFAULT != null);
+		}
+		return false;
+	}
 }

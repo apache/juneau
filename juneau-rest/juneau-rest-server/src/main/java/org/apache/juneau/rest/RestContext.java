@@ -339,6 +339,17 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 */
 	public static final String REST_callHandler = PREFIX + "callHandler.o";
 
@@ -406,17 +417,6 @@ public final class RestContext extends BeanContext {
 	 * 	</dd>
 	 * </dl>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
-	 * 		by default is {@link RestResourceResolverDefault} which requires the class have one of the following
-	 * 		constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 		</ul>
-	 * </ul>
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Our child resource.</jc>
@@ -449,6 +449,17 @@ public final class RestContext extends BeanContext {
 	 * 			builder.children(MyChildResource.<jk>class</jk>);
 	 * 		}
 	 * 	}
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
+	 * 		by default is {@link RestResourceResolverDefault} which requires the class have one of the following
+	 * 		constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * </ul>
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
@@ -550,6 +561,13 @@ public final class RestContext extends BeanContext {
 	 * 		<br>The {@link ClasspathResourceFinderRecursive} is another option that also recursively searches for resources
 	 * 		up the parent class hierarchy.
 	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 * </ul>
 	 */
 	public static final String REST_classpathResourceFinder = PREFIX + "classpathResourceFinder.o";
@@ -779,6 +797,17 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
 	 * </ul>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 */
 	public static final String REST_converters = PREFIX + "converters.lo";
 
@@ -1000,16 +1029,6 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>When defined as classes, the class must provide one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(PropertyStore)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 		</ul>
-	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
-	 * </ul>
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Registered via annotation.</jc>
@@ -1041,6 +1060,17 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
@@ -1076,19 +1106,8 @@ public final class RestContext extends BeanContext {
 	 * <br>These guards get called immediately before execution of any REST method in this class.
 	 * 
 	 * <p>
-	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
-	 * for other purposes like pre-call validation of a request.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>When defined as classes, the class must provide one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(PropertyStore)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 		</ul>
-	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
-	 * 	<li>If multiple guards are specified, <b>ALL</b> guards must pass.
-	 * </ul>
+	 * If multiple guards are specified, <b>ALL</b> guards must pass.
+	 * <br>Note that this is different than matchers were only ONE matcher needs to pass.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -1129,6 +1148,17 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
@@ -1213,6 +1243,17 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 */
 	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
 	
@@ -1361,6 +1402,17 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 */
 	public static final String REST_maxInput = PREFIX + "maxInput.s";
 	
@@ -1527,7 +1579,13 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 * 	<li>
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
@@ -1729,10 +1787,15 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
 	 * 
-	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
@@ -1772,11 +1835,16 @@ public final class RestContext extends BeanContext {
 	 * 	<li>{@link RedirectHandler}
 	 * 	<li>{@link DefaultHandler}
 	 * </ul>
-
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * 	<li>Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
@@ -1917,19 +1985,19 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.supportedAcceptTypes.ls"</js>
+	 * 	<li><b>Name:</b>  <js>"RestContext.produces.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#supportedAcceptTypes()}
-	 * 			<li class='ja'>{@link RestMethod#supportedAcceptTypes()}
+	 * 			<li class='ja'>{@link RestResource#produces()}
+	 * 			<li class='ja'>{@link RestMethod#produces()}
 	 * 		</ul> 
 	 * 	<li><b>Methods:</b>  
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#supportedAcceptTypes(boolean,String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#produces(boolean,String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#produces(boolean,MediaType...)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -1938,29 +2006,29 @@ public final class RestContext extends BeanContext {
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 * 
 	 * <p>
-	 * This affects the values returned by {@link RestRequest#getSupportedAcceptTypes()} and the supported accept
+	 * This affects the values returned by {@link RestRequest#getProduces()} and the supported accept
 	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
 	 */
-	public static final String REST_supportedAcceptTypes = PREFIX + "supportedAcceptTypes.ls";
+	public static final String REST_produces = PREFIX + "produces.ls";
 
 	/**
 	 * Configuration property:  Supported content media types.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.supportedContentTypes.ls"</js>
+	 * 	<li><b>Name:</b>  <js>"RestContext.consumes.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#supportedContentTypes()}
-	 * 			<li class='ja'>{@link RestMethod#supportedContentTypes()}
+	 * 			<li class='ja'>{@link RestResource#consumes()}
+	 * 			<li class='ja'>{@link RestMethod#consumes()}
 	 * 		</ul> 
 	 * 	<li><b>Methods:</b>  
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#supportedContentTypes(boolean,String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#consumes(boolean,String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#consumes(boolean,MediaType...)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -1969,10 +2037,10 @@ public final class RestContext extends BeanContext {
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 * 
 	 * <p>
-	 * This affects the values returned by {@link RestRequest#getSupportedContentTypes()} and the supported content
+	 * This affects the values returned by {@link RestRequest#getConsumes()} and the supported content
 	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
 	 */
-	public static final String REST_supportedContentTypes = PREFIX + "supportedContentTypes.ls";
+	public static final String REST_consumes = PREFIX + "consumes.ls";
 	
 	/**
 	 * Configuration property:  Use classpath resource caching. 
@@ -2123,8 +2191,8 @@ public final class RestContext extends BeanContext {
 	private final HttpPartParser partParser;
 	private final EncoderGroup encoders;
 	private final List<MediaType>
-		supportedContentTypes,
-		supportedAcceptTypes;
+		consumes,
+		produces;
 	private final Map<String,Object> 
 		defaultRequestHeaders,
 		defaultResponseHeaders,
@@ -2206,12 +2274,12 @@ public final class RestContext extends BeanContext {
 			maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
 			clientVersionHeader = getProperty(REST_clientVersionHeader, String.class, "X-Client-Version");
 
-			converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, ps);
-			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, ps);
-			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], true, ps);
+			converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, this);
+			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, this);
+			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], true, this);
 
 			Map<Class<?>,RestParam> _paramResolvers = new HashMap<>();
-			for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, ps)) 
+			for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, this)) 
 				_paramResolvers.put(rp.forClass(), rp);
 			paramResolvers = Collections.unmodifiableMap(_paramResolvers);
 			
@@ -2222,7 +2290,7 @@ public final class RestContext extends BeanContext {
 			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);	
 			
-			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLoggerNoOp.class, true, ps);
+			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLoggerNoOp.class, true, this);
 
 			varResolver = builder.varResolverBuilder
 				.vars(
@@ -2258,12 +2326,12 @@ public final class RestContext extends BeanContext {
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
 				mimetypesFileTypeMap.addMimeTypes(mimeType);
 			
-			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class);
+			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class, true, this);
 			boolean useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
 			staticResourceManager = new ClasspathResourceManager(resourceClass, rf, useClasspathResourceCaching);
 
-			supportedContentTypes = getListProperty(REST_supportedContentTypes, MediaType.class, serializers.getSupportedMediaTypes());
-			supportedAcceptTypes = getListProperty(REST_supportedAcceptTypes, MediaType.class, parsers.getSupportedMediaTypes());
+			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
+			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 			
 			staticFiles = ArrayUtils.reverse(getArrayProperty(REST_staticFiles, StaticFileMapping.class));
 			Set<String> s = new TreeSet<>();
@@ -2480,7 +2548,7 @@ public final class RestContext extends BeanContext {
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverDefault.class : parentContext.resourceResolver, true, this, ps);
+			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverDefault.class : parentContext.resourceResolver, true, this);
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
 				String path = null;
 				Object r = null;
@@ -2520,8 +2588,8 @@ public final class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandlerDefault.class, true, this, ps);
-			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProviderDefault.class, true, this, ps);
+			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandlerDefault.class, true, this);
+			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProviderDefault.class, true, this);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -3484,13 +3552,20 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <p>
 	 * By default, this is simply the list of accept types supported by the registered parsers, but
-	 * can be overridden via the {@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}/{@link RestContextBuilder#supportedAcceptTypes(boolean,String...)}
-	 * methods.
+	 * can be overridden via the following:
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * 	<li class='ja'>{@link RestResource#produces()}
+	 * 	<li class='jm'>{@link RestContextBuilder#produces(boolean,MediaType...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#produces(boolean,String...)}
+	 * </ul>
 	 * 
-	 * @return The supported <code>Accept</code> header values for this resource.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The supported <code>Accept</code> header values for this resource.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	protected List<MediaType> getSupportedAcceptTypes() {
-		return supportedAcceptTypes;
+	protected List<MediaType> getProduces() {
+		return produces;
 	}
 
 	/**
@@ -3498,13 +3573,20 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <p>
 	 * By default, this is simply the list of content types supported by the registered serializers, but can be
-	 * overridden via the {@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}/{@link RestContextBuilder#supportedContentTypes(boolean,String...)}
-	 * methods.
+	 * overridden via the following:
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * 	<li class='ja'>{@link RestResource#consumes()}
+	 * 	<li class='jm'>{@link RestContextBuilder#consumes(boolean,MediaType...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#consumes(boolean,String...)}
+	 * </ul>
 	 * 
-	 * @return The supported <code>Content-Type</code> header values for this resource.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The supported <code>Content-Type</code> header values for this resource.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	protected List<MediaType> getSupportedContentTypes() {
-		return supportedContentTypes;
+	protected List<MediaType> getConsumes() {
+		return consumes;
 	}
 
 	/**
@@ -3699,6 +3781,16 @@ public final class RestContext extends BeanContext {
 		if (parentContext != null)
 			return parentContext.getContextPath();
 		return null;
+	}
+
+	/**
+	 * TODO
+	 * 
+	 * @param method
+	 * @return TODO
+	 */
+	protected RestParam[] getRestParams(Method method) {
+		return callMethods.get(method.getName()).params;
 	}
 
 	@Override /* BeanContextBuilder */

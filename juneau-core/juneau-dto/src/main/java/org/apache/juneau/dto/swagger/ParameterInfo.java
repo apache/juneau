@@ -130,6 +130,66 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
+	 * Copies any non-null fields from the specified object to this object.
+	 * 
+	 * @param p 
+	 * 	The object to copy fields from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo copyFrom(ParameterInfo p) {
+		if (p != null) {
+			if (p.name != null)
+				name = p.name;
+			if (p.in != null)
+				in = p.in;
+			if (p.description != null)
+				description = p.description;
+			if (p.type != null)
+				type = p.type;
+			if (p.format != null)
+				format = p.format;
+			if (p.pattern != null)
+				pattern = p.pattern;
+			if (p.collectionFormat != null)
+				collectionFormat = p.collectionFormat;
+			if (p.maximum != null)
+				maximum = p.maximum;
+			if (p.minimum != null)
+				minimum = p.minimum;
+			if (p.multipleOf != null)
+				multipleOf = p.multipleOf;
+			if (p.maxLength != null)
+				maxLength = p.maxLength;
+			if (p.minLength != null)
+				minLength = p.minLength;
+			if (p.maxItems != null)
+				maxItems = p.maxItems;
+			if (p.minItems != null)
+				minItems = p.minItems;
+			if (p.required != null)
+				required = p.required;
+			if (p.allowEmptyValue != null)
+				allowEmptyValue = p.allowEmptyValue;
+			if (p.exclusiveMaximum != null)
+				exclusiveMaximum = p.exclusiveMaximum;
+			if (p.exclusiveMinimum != null)
+				exclusiveMinimum = p.exclusiveMinimum;
+			if (p.uniqueItems != null)
+				uniqueItems = p.uniqueItems;
+			if (p.schema != null)
+				schema = p.schema;
+			if (p.items != null)
+				items = p.items;
+			if (p._default != null)
+				_default = p._default;
+			if (p._enum != null)
+				_enum = p._enum;
+		}
+		return this;
+	}
+	
+	/**
 	 * Bean property getter:  <property>name</property>.
 	 * 
 	 * <p>

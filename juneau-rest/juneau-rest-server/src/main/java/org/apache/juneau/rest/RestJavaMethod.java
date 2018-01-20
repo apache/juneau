@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
@@ -27,12 +26,10 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
@@ -46,17 +43,13 @@ import org.apache.juneau.utils.*;
 public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
-	private final RestParam[] params;
+	final RestParam[] params;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
 	private final RestConverter[] converters;
 	private final RestMethodProperties properties;
-	private final boolean deprecated;
-	private final String description, tags, summary, externalDocs;
 	private final Integer priority;
-	private final org.apache.juneau.rest.annotation.Parameter[] parameters;
-	private final Response[] responses;
 	private final RestContext context;
 	final java.lang.reflect.Method method;
 	final SerializerGroup serializers;
@@ -99,21 +92,14 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.defaultFormData = b.defaultFormData;
 		this.defaultCharset = b.defaultCharset;
 		this.maxInput = b.maxInput;
-		this.deprecated = b.deprecated;
-		this.description = b.description;
-		this.tags = b.tags;
-		this.summary = b.summary;
-		this.externalDocs = b.externalDocs;
 		this.priority = b.priority;
-		this.parameters = b.parameters;
-		this.responses = b.responses;
 		this.supportedAcceptTypes = b.supportedAcceptTypes;
 		this.supportedContentTypes = b.supportedContentTypes;
 		this.widgets = Collections.unmodifiableMap(b.widgets);
 	}
 
 	private static final class Builder  {
-		String httpMethod, defaultCharset, description, tags, summary, externalDocs;
+		String httpMethod, defaultCharset;
 		UrlPathPattern pathPattern;
 		RestParam[] params;
 		RestGuard[] guards;
@@ -127,11 +113,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		BeanContext beanContext;
 		RestMethodProperties properties;
 		Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
-		boolean deprecated;
 		long maxInput;
 		Integer priority;
-		org.apache.juneau.rest.annotation.Parameter[] parameters;
-		Response[] responses;
 		Map<String,Widget> widgets;
 		List<MediaType> supportedAcceptTypes, supportedContentTypes;
 
@@ -146,18 +129,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				
 				VarResolver vr = context.getVarResolver();
 
-				if (! m.description().isEmpty())
-					description = m.description();
-				MethodSwagger sm = m.swagger();
-				if (! sm.tags().isEmpty())
-					tags = sm.tags();
-				if (! m.summary().isEmpty())
-					summary = m.summary();
-				if (! sm.externalDocs().isEmpty())
-					externalDocs = sm.externalDocs();
-				deprecated = sm.deprecated();
-				parameters = sm.parameters();
-				responses = sm.responses();
 				serializers = context.getSerializers();
 				parsers = context.getParsers();
 				partSerializer = context.getPartSerializer();
@@ -409,12 +380,12 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					beanContext = bcb.build();
 
 				supportedAcceptTypes = 
-					m.supportedAcceptTypes().length > 0 
-					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.supportedAcceptTypes()))))) 
+					m.produces().length > 0 
+					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.produces()))))) 
 					: serializers.getSupportedMediaTypes();
 				supportedContentTypes =
-					m.supportedContentTypes().length > 0 
-					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.supportedContentTypes()))))) 
+					m.consumes().length > 0 
+					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.consumes()))))) 
 					: parsers.getSupportedMediaTypes();
 					
 				params = context.findParams(method, pathPattern, false);
@@ -451,322 +422,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	}
 
 	/**
-	 * Returns the localized Swagger for this Java method.
-	 */
-	Operation getSwaggerOperation(RestRequest req) throws ParseException {
-		Operation o = operation()
-			.operationId(method.getName())
-			.description(getDescription(req))
-			.tags(getTags(req))
-			.summary(getSummary(req))
-			.externalDocs(getExternalDocs(req))
-			.parameters(getParameters(req))
-			.responses(getResponses(req));
-
-		if (isDeprecated())
-			o.deprecated(true);
-
-		if (! parsers.getSupportedMediaTypes().equals(context.getParsers().getSupportedMediaTypes()))
-			o.consumes(parsers.getSupportedMediaTypes());
-
-		if (! serializers.getSupportedMediaTypes().equals(context.getSerializers().getSupportedMediaTypes()))
-			o.produces(serializers.getSupportedMediaTypes());
-
-		return o;
-	}
-
-	private Operation getSwaggerOperationFromFile(RestRequest req) {
-		Swagger s = req.getSwaggerFromFile();
-		if (s != null && s.getPaths() != null && s.getPaths().get(pathPattern.getPatternString()) != null)
-			return s.getPaths().get(pathPattern.getPatternString()).get(httpMethod);
-		return null;
-	}
-
-	/**
-	 * Returns the localized summary for this Java method.
-	 */
-	String getSummary(RestRequest req) {
-		VarResolverSession vr = req.getVarResolverSession();
-		if (summary != null)
-			return vr.resolve(summary);
-		String summary = context.getMessages().findFirstString(req.getLocale(), method.getName() + ".summary");
-		if (summary != null)
-			return vr.resolve(summary);
-		Operation o = getSwaggerOperationFromFile(req);
-		if (o != null)
-			return o.getSummary();
-		return null;
-	}
-
-	/**
-	 * Returns the localized description for this Java method.
-	 */
-	String getDescription(RestRequest req) {
-		VarResolverSession vr = req.getVarResolverSession();
-		if (description != null)
-			return vr.resolve(description);
-		String description = context.getMessages().findFirstString(req.getLocale(), method.getName() + ".description");
-		if (description != null)
-			return vr.resolve(description);
-		Operation o = getSwaggerOperationFromFile(req);
-		if (o != null)
-			return o.getDescription();
-		return null;
-	}
-
-	/**
-	 * Returns the localized Swagger tags for this Java method.
-	 */
-	private List<String> getTags(RestRequest req) {
-		VarResolverSession vr = req.getVarResolverSession();
-		JsonParser jp = JsonParser.DEFAULT;
-		try {
-			if (tags != null)
-				return jp.parse(vr.resolve(tags), ArrayList.class, String.class);
-			String tags = context.getMessages().findFirstString(req.getLocale(), method.getName() + ".tags");
-			if (tags != null)
-				return jp.parse(vr.resolve(tags), ArrayList.class, String.class);
-			Operation o = getSwaggerOperationFromFile(req);
-			if (o != null)
-				return o.getTags();
-			return null;
-		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
-		}
-	}
-
-	/**
-	 * Returns the localized Swagger external docs for this Java method.
-	 */
-	private ExternalDocumentation getExternalDocs(RestRequest req) {
-		VarResolverSession vr = req.getVarResolverSession();
-		JsonParser jp = JsonParser.DEFAULT;
-		try {
-			if (externalDocs != null)
-				return jp.parse(vr.resolve(externalDocs), ExternalDocumentation.class);
-			String externalDocs = context.getMessages().findFirstString(req.getLocale(), method.getName() + ".externalDocs");
-			if (externalDocs != null)
-				return jp.parse(vr.resolve(externalDocs), ExternalDocumentation.class);
-			Operation o = getSwaggerOperationFromFile(req);
-			if (o != null)
-				return o.getExternalDocs();
-			return null;
-		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
-		}
-	}
-
-	/**
-	 * Returns the Swagger deprecated flag for this Java method.
-	 */
-	private boolean isDeprecated() {
-		return deprecated;
-	}
-
-	/**
-	 * Returns the localized Swagger parameter information for this Java method.
-	 */
-	private List<ParameterInfo> getParameters(RestRequest req) throws ParseException {
-		Operation o = getSwaggerOperationFromFile(req);
-		if (o != null && o.getParameters() != null)
-			return o.getParameters();
-
-		VarResolverSession vr = req.getVarResolverSession();
-		JsonParser jp = JsonParser.DEFAULT;
-		Map<String,ParameterInfo> m = new TreeMap<>();
-
-		// First parse @RestMethod.parameters() annotation.
-		for (org.apache.juneau.rest.annotation.Parameter v : parameters) {
-			String in = vr.resolve(v.in());
-			ParameterInfo p = parameterInfo(in, vr.resolve(v.name()));
-
-			if (! v.description().isEmpty())
-				p.description(vr.resolve(v.description()));
-			if (v.required())
-				p.required(v.required());
-
-			if ("body".equals(in)) {
-				if (! v.schema().isEmpty())
-					p.schema(jp.parse(vr.resolve(v.schema()), SchemaInfo.class));
-			} else {
-				if (v.allowEmptyValue())
-					p.allowEmptyValue(v.allowEmptyValue());
-				if (! v.collectionFormat().isEmpty())
-					p.collectionFormat(vr.resolve(v.collectionFormat()));
-				if (! v._default().isEmpty())
-					p._default(vr.resolve(v._default()));
-				if (! v.format().isEmpty())
-					p.format(vr.resolve(v.format()));
-				if (! v.items().isEmpty())
-					p.items(jp.parse(vr.resolve(v.items()), Items.class));
-				p.type(vr.resolve(v.type()));
-			}
-			m.put(p.getIn() + '.' + p.getName(), p);
-		}
-
-		// Next, look in resource bundle.
-		String prefix = method.getName() + ".req";
-		for (String key : context.getMessages().keySet(prefix)) {
-			if (key.length() > prefix.length()) {
-				String value = vr.resolve(context.getMessages().getString(key));
-				String[] parts = key.substring(prefix.length() + 1).split("\\.");
-				String in = parts[0], name, field;
-				boolean isBody = "body".equals(in);
-				if (parts.length == (isBody ? 2 : 3)) {
-					if ("body".equals(in)) {
-						name = null;
-						field = parts[1];
-					} else {
-						name = parts[1];
-						field = parts[2];
-					}
-					String k2 = in + '.' + name;
-					ParameterInfo p = m.get(k2);
-					if (p == null) {
-						p = parameterInfoStrict(in, name);
-						m.put(k2, p);
-					}
-
-					if (field.equals("description"))
-						p.description(value);
-					else if (field.equals("required"))
-						p.required(Boolean.valueOf(value));
-
-					if ("body".equals(in)) {
-						if (field.equals("schema"))
-							p.schema(jp.parse(value, SchemaInfo.class));
-					} else {
-						if (field.equals("allowEmptyValue"))
-							p.allowEmptyValue(Boolean.valueOf(value));
-						else if (field.equals("collectionFormat"))
-							p.collectionFormat(value);
-						else if (field.equals("default"))
-							p._default(value);
-						else if (field.equals("format"))
-							p.format(value);
-						else if (field.equals("items"))
-							p.items(jp.parse(value, Items.class));
-						else if (field.equals("type"))
-							p.type(value);
-					}
-				} else {
-					System.err.println("Unknown bundle key '"+key+"'");
-				}
-			}
-		}
-
-		// Finally, look for parameters defined on method.
-		for (RestParam mp : this.params) {
-			RestParamType in = mp.getParamType();
-			if (in != RestParamType.OTHER) {
-				String k2 = in.toString() + '.' + (in == RestParamType.BODY ? null : mp.getName());
-				ParameterInfo p = m.get(k2);
-				if (p == null) {
-					p = parameterInfoStrict(in.toString(), mp.getName());
-					m.put(k2, p);
-				}
-			}
-		}
-
-		if (m.isEmpty())
-			return null;
-		return new ArrayList<>(m.values());
-	}
-
-	/**
-	 * Returns the localized Swagger response information about this Java method.
-	 */
-	private Map<Integer,ResponseInfo> getResponses(RestRequest req) throws ParseException {
-		Operation o = getSwaggerOperationFromFile(req);
-		if (o != null && o.getResponses() != null)
-			return o.getResponses();
-
-		VarResolverSession vr = req.getVarResolverSession();
-		JsonParser jp = JsonParser.DEFAULT;
-		Map<Integer,ResponseInfo> m = new TreeMap<>();
-		Map<String,HeaderInfo> m2 = new TreeMap<>();
-
-		// First parse @RestMethod.parameters() annotation.
-		for (Response r : responses) {
-			int httpCode = r.value();
-			String description = r.description().isEmpty() ? RestUtils.getHttpResponseText(r.value()) : vr.resolve(r.description());
-			ResponseInfo r2 = responseInfo(description);
-
-			if (r.headers().length > 0) {
-				for (org.apache.juneau.rest.annotation.Parameter v : r.headers()) {
-					HeaderInfo h = headerInfoStrict(vr.resolve(v.type()));
-					if (! v.collectionFormat().isEmpty())
-						h.collectionFormat(vr.resolve(v.collectionFormat()));
-					if (! v._default().isEmpty())
-						h._default(vr.resolve(v._default()));
-					if (! v.description().isEmpty())
-						h.description(vr.resolve(v.description()));
-					if (! v.format().isEmpty())
-						h.format(vr.resolve(v.format()));
-					if (! v.items().isEmpty())
-						h.items(jp.parse(vr.resolve(v.items()), Items.class));
-					r2.header(v.name(), h);
-					m2.put(httpCode + '.' + v.name(), h);
-				}
-			}
-			m.put(httpCode, r2);
-		}
-
-		// Next, look in resource bundle.
-		String prefix = method.getName() + ".res";
-		for (String key : context.getMessages().keySet(prefix)) {
-			if (key.length() > prefix.length()) {
-				String value = vr.resolve(context.getMessages().getString(key));
-				String[] parts = key.substring(prefix.length() + 1).split("\\.");
-				int httpCode = Integer.parseInt(parts[0]);
-				ResponseInfo r2 = m.get(httpCode);
-				if (r2 == null) {
-					r2 = responseInfo(null);
-					m.put(httpCode, r2);
-				}
-
-				String name = parts.length > 1 ? parts[1] : "";
-
-				if ("header".equals(name) && parts.length > 3) {
-					String headerName = parts[2];
-					String field = parts[3];
-
-					String k2 = httpCode + '.' + headerName;
-					HeaderInfo h = m2.get(k2);
-					if (h == null) {
-						h = headerInfoStrict("string");
-						m2.put(k2, h);
-						r2.header(name, h);
-					}
-					if (field.equals("collectionFormat"))
-						h.collectionFormat(value);
-					else if (field.equals("default"))
-						h._default(value);
-					else if (field.equals("description"))
-						h.description(value);
-					else if (field.equals("format"))
-						h.format(value);
-					else if (field.equals("items"))
-						h.items(jp.parse(value, Items.class));
-					else if (field.equals("type"))
-						h.type(value);
-
-				} else if ("description".equals(name)) {
-					r2.description(value);
-				} else if ("schema".equals(name)) {
-					r2.schema(jp.parse(value, SchemaInfo.class));
-				} else if ("examples".equals(name)) {
-					r2.examples(jp.parse(value, TreeMap.class));
-				} else {
-					System.err.println("Unknown bundle key '"+key+"'");
-				}
-			}
-		}
-
-		return m.isEmpty() ? null : m;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified request object can call this method.
 	 */
 	boolean isRequestAllowed(RestRequest req) {
@@ -795,7 +450,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			remainder = patternVals[pathPattern.getVars().length];
 		for (int i = 0; i < pathPattern.getVars().length; i++)
 			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
-		req.getPathMatch().setRemainder(remainder);
+		req.getPathMatch().pattern(pathPattern.getPatternString()).remainder(remainder);
 
 		RestRequestProperties requestProperties = new RestRequestProperties(req.getVarResolverSession(), properties);
 

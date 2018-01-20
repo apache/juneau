@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -105,7 +107,7 @@ public final class BeanPropertyUtils {
 					}
 				}
 			}
-			return l;
+			return l.isEmpty() ? null : l;
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
@@ -142,28 +144,12 @@ public final class BeanPropertyUtils {
 					}
 				}
 			}
-			return m;
+			return m.isEmpty() ? null : m;
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	private static boolean isObjectList(Object o) {
-		if (o instanceof CharSequence) {
-			String s = o.toString();
-			return (s.startsWith("[") && s.endsWith("]") && BeanContext.DEFAULT != null);
-		}
-		return false;
-	}
-
-	private static boolean isObjectMap(Object o) {
-		if (o instanceof CharSequence) {
-			String s = o.toString();
-			return (s.startsWith("{") && s.endsWith("}") && BeanContext.DEFAULT != null);
-		}
-		return false;
-	}
-
 	/**
 	 * Converts an object to the specified type.
 	 * 

@@ -189,10 +189,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				serializers(r.serializers());
 				parsers(r.parsers());
 				encoders(r.encoders());
-				if (r.supportedAcceptTypes().length > 0)
-					supportedAcceptTypes(false, resolveVars(vr, r.supportedAcceptTypes()));
-				if (r.supportedContentTypes().length > 0)
-					supportedContentTypes(false, resolveVars(vr, r.supportedContentTypes()));
+				if (r.produces().length > 0)
+					produces(false, resolveVars(vr, r.produces()));
+				if (r.consumes().length > 0)
+					consumes(false, resolveVars(vr, r.consumes()));
 				defaultRequestHeaders(resolveVars(vr, r.defaultRequestHeaders()));
 				defaultResponseHeaders(resolveVars(vr, r.defaultResponseHeaders()));
 				responseHandlers(r.responseHandlers());
@@ -1766,7 +1766,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 * 
 	 * @param append
@@ -1774,19 +1774,19 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder supportedAcceptTypes(boolean append, String...values) {
-		return set(append, REST_supportedAcceptTypes, values);
+	public RestContextBuilder produces(boolean append, String...values) {
+		return set(append, REST_produces, values);
 	}
 
 	/**
 	 * Configuration property:  Supported accept media types.
 	 * 
 	 * <p>
-	 * Same as {@link #supportedAcceptTypes(boolean, String...)} except input is {@link MediaType} instances.
+	 * Same as {@link #produces(boolean, String...)} except input is {@link MediaType} instances.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 * 
 	 * @param append
@@ -1794,8 +1794,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder supportedAcceptTypes(boolean append, MediaType...values) {
-		return set(append, REST_supportedAcceptTypes, values);
+	public RestContextBuilder produces(boolean append, MediaType...values) {
+		return set(append, REST_produces, values);
 	}
 
 	/**
@@ -1806,7 +1806,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 * 
 	 * @param append
@@ -1814,19 +1814,19 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder supportedContentTypes(boolean append, String...values) {
-		return set(append, REST_supportedContentTypes, values);
+	public RestContextBuilder consumes(boolean append, String...values) {
+		return set(append, REST_consumes, values);
 	}
 
 	/**
 	 * Configuration property:  Supported content media types.
 	 * 
 	 * <p>
-	 * Same as {@link #supportedContentTypes(boolean, String...)} except input is {@link MediaType} instances.
+	 * Same as {@link #consumes(boolean, String...)} except input is {@link MediaType} instances.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 * 
 	 * @param append
@@ -1834,8 +1834,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder supportedContentTypes(boolean append, MediaType...values) {
-		return set(append, REST_supportedContentTypes, values);
+	public RestContextBuilder consumes(boolean append, MediaType...values) {
+		return set(append, REST_consumes, values);
 	}
 
 	/**

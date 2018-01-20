@@ -754,10 +754,10 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 */
-	String[] supportedAcceptTypes() default {};
+	String[] produces() default {};
 	
 	/**
 	 * Supported content media types.
@@ -777,10 +777,10 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 */
-	String[] supportedContentTypes() default {};
+	String[] consumes() default {};
 
 	/**
 	 * Provides swagger-specific metadata on this method.

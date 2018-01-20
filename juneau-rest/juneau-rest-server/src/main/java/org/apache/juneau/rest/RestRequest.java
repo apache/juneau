@@ -86,7 +86,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private String charset;
 	private RequestHeaders headers;
 	private ConfigFile cf;
-	private Swagger swagger, fileSwagger;
+	private Swagger swagger;
 
 	/**
 	 * Constructor.
@@ -156,8 +156,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.properties = properties;
 		this.beanSession = rjm.beanContext.createSession();
 		this.pathParams
-			.setParser(rjm.partParser)
-			.setBeanSession(beanSession);
+			.parser(rjm.partParser)
+			.beanSession(beanSession);
 		this.queryParams
 			.addDefault(rjm.defaultQuery)
 			.setParser(rjm.partParser)
@@ -288,7 +288,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
-	public List<MediaType> getSupportedAcceptTypes() {
+	public List<MediaType> getProduces() {
 		return restJavaMethod.supportedAcceptTypes;
 	}
 
@@ -297,7 +297,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * @return The set of media types registered in the parser group of this request.
 	 */
-	public List<MediaType> getSupportedContentTypes() {
+	public List<MediaType> getConsumes() {
 		return restJavaMethod.supportedContentTypes;
 	}
 
@@ -630,7 +630,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The localized servlet label.
 	 */
 	public String getSiteName() {
-		return context.getInfoProvider().getSiteName(this);
+		try {
+			return context.getInfoProvider().getSiteName(this);
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
 	/**
@@ -642,7 +648,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The localized servlet label.
 	 */
 	public String getServletTitle() {
-		return context.getInfoProvider().getTitle(this);
+		try {
+			return context.getInfoProvider().getTitle(this);
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
 	/**
@@ -654,31 +666,49 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The localized servlet description.
 	 */
 	public String getServletDescription() {
-		return context.getInfoProvider().getDescription(this);
+		try {
+			return context.getInfoProvider().getDescription(this);
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
 	/**
 	 * Returns the localized method summary.
 	 * 
 	 * <p>
-	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(String, RestRequest)} with this object.
+	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(Method, RestRequest)} with this object.
 	 * 
 	 * @return The localized method description.
 	 */
 	public String getMethodSummary() {
-		return context.getInfoProvider().getMethodSummary(javaMethod.getName(), this);
+		try {
+			return context.getInfoProvider().getMethodSummary(javaMethod, this);
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
 	/**
 	 * Returns the localized method description.
 	 * 
 	 * <p>
-	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(String, RestRequest)} with this object.
+	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(Method, RestRequest)} with this object.
 	 * 
 	 * @return The localized method description.
 	 */
 	public String getMethodDescription() {
-		return context.getInfoProvider().getMethodDescription(javaMethod.getName(), this);
+		try {
+			return context.getInfoProvider().getMethodDescription(javaMethod, this);
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
 	//--------------------------------------------------------------------------------
@@ -690,7 +720,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * @return The serializers associated with this request.
 	 */
-	public SerializerGroup getSerializerGroup() {
+	public SerializerGroup getSerializers() {
 		return restJavaMethod.serializers;
 	}
 
@@ -699,7 +729,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * @return The parsers associated with this request.
 	 */
-	public ParserGroup getParserGroup() {
+	public ParserGroup getParsers() {
 		return restJavaMethod.parsers;
 	}
 
@@ -920,9 +950,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	Never <jk>null</jk>.
 	 */
 	public Swagger getSwagger() {
-		if (swagger == null)
-			swagger = context.getInfoProvider().getSwagger(this);
-		return swagger;
+		try {
+			if (swagger == null)
+				swagger = context.getInfoProvider().getSwagger(this);
+			return swagger;
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
 	/**
@@ -934,26 +970,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Map<String,Widget> getWidgets() {
 		return restJavaMethod.widgets;
-	}
-
-	/**
-	 * Returns the localized Swagger from the file system.
-	 * 
-	 * <p>
-	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package as this servlet and returns
-	 * it as a parsed {@link Swagger} object.
-	 * 
-	 * <p>
-	 * Returned objects are cached for later quick-lookup.
-	 * 
-	 * @return The parsed swagger object, or <jk>null</jk> if the swagger file could not be found.
-	 */
-	protected Swagger getSwaggerFromFile() {
-		if (fileSwagger == null)
-			fileSwagger = context.getInfoProvider().getSwaggerFromFile(this);
-		if (fileSwagger == null)
-			fileSwagger = Swagger.NULL;
-		return fileSwagger == Swagger.NULL ? null : fileSwagger;
 	}
 
 	@Override /* Object */

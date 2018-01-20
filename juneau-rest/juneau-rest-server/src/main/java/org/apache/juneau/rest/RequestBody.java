@@ -374,7 +374,7 @@ public class RequestBody {
 
 			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-				headers.getContentType(), req.getParserGroup().getSupportedMediaTypes()
+				headers.getContentType(), req.getParsers().getSupportedMediaTypes()
 			);
 
 		} catch (IOException e) {

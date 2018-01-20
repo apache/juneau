@@ -9211,8 +9211,8 @@
 							<li><js>"description"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
 							<li><js>"externalDocs"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}
 							<li><js>"license"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}
-							<li><js>"methodDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(RestRequest)}
-							<li><js>"methodSummary"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(RestRequest)}
+							<li><js>"methodDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(Method,RestRequest)}
+							<li><js>"methodSummary"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(Method,RestRequest)}
 							<li><js>"siteName"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest)}
 							<li><js>"tags"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}
 							<li><js>"termsOfService"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}
@@ -9257,8 +9257,8 @@
 					<li>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers REST_responseHandlers}
 					<li>{@link org.apache.juneau.rest.RestContext#REST_defaultRequestHeaders REST_defaultRequestHeaders}
 					<li>{@link org.apache.juneau.rest.RestContext#REST_defaultResponseHeaders REST_defaultResponseHeaders}
-					<li>{@link org.apache.juneau.rest.RestContext#REST_supportedAcceptTypes REST_supportedAcceptTypes}
-					<li>{@link org.apache.juneau.rest.RestContext#REST_supportedContentTypes REST_supportedContentTypes}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_produces REST_produces}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_consumes REST_consumes}
 					<li>{@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
 					<li>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver REST_resourceResolver}
 					<li>{@link org.apache.juneau.rest.RestContext#REST_logger REST_logger}
@@ -9330,8 +9330,8 @@
 				Changes to {@link org.apache.juneau.rest.RestRequest}:
 				<ul>	
 					<li><code>getSupportedMediaTypes()</code> replaced with
-						{@link org.apache.juneau.rest.RestRequest#getSupportedAcceptTypes() getSupportedAcceptTypes()} and
-						{@link org.apache.juneau.rest.RestRequest#getSupportedContentTypes() getSupportedContentTypes()}.
+						{@link org.apache.juneau.rest.RestRequest#getConsumes() getConsumes()} and
+						{@link org.apache.juneau.rest.RestRequest#getProduces() getProduces()}.
 					<li><code>getReaderResource(String,boolean,MediaType)</code> renamed to 
 						{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
 					<li><code>getReaderResource(String,boolean)</code> renamed to 
@@ -9347,8 +9347,8 @@
 			<li>
 				Changes to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
 				<ul>
-					<li>New {@link org.apache.juneau.rest.annotation.RestMethod#supportedAcceptTypes() supportedAcceptTypes()} and
-						{@link org.apache.juneau.rest.annotation.RestMethod#supportedContentTypes() supportedContentTypes()}
+					<li>New {@link org.apache.juneau.rest.annotation.RestMethod#consumes() consumes()} and
+						{@link org.apache.juneau.rest.annotation.RestMethod#produces() produces()}
 						for overriding the supported media types inferred from the serializers and parsers.
 				</ul>
 			<li>
@@ -9374,6 +9374,8 @@
 				annotations.
 				<br>These aren't needed anymore since you can just pass in <code>MessageBundle</code> and
 				<code>RestRequestProperties</code> as unannotated parameters.
+			<li>
+				Revamped the {@link org.apache.juneau.rest.RestInfoProvider} class.
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -11404,8 +11406,8 @@
 							<li><code><del>@RestResource.version()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}
 							<li><code><del>@RestResource.tags()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}
 							<li><code><del>@RestResource.externalDocs()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()} / {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(String,RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()} / {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(String,RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()} / <code><del>RestInfoProvider.getMethodSummary(String,RestRequest)</del></code>
+							<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()} /<code><del>RestInfoProvider.getMethodDescription(String,RestRequest)</del></code>
 							<li><code><del>@RestMethod.externalDocs()</del></code>
 							<li><code><del>@RestMethod.tags()</del></code>
 							<li><code><del>@RestMethod.deprecated()</del></code> 

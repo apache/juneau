@@ -36,9 +36,10 @@ public abstract class RestServletGroupDefault extends RestServletDefault {
 	 * 
 	 * @param req The HTTP request.
 	 * @return The bean containing links to the child resources.
+	 * @throws Exception 
 	 */
 	@RestMethod(name=GET, path="/", description="Child resources")
-	public ChildResourceDescriptions getChildren(RestRequest req) {
+	public ChildResourceDescriptions getChildren(RestRequest req) throws Exception {
 		return new ChildResourceDescriptions(getContext(), req);
 	}
 }
