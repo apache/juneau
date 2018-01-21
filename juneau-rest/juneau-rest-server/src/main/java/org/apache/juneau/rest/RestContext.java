@@ -373,8 +373,8 @@ public final class RestContext extends BeanContext {
 	 * Defines children of this resource.
 	 * 
 	 * <p>
-	 * A REST child resource is simply another servlet or object that is initialized as part of the parent resource and has a
-	 * servlet path directly under the parent servlet path.
+	 * A REST child resource is simply another servlet or object that is initialized as part of the ascendant resource and has a
+	 * servlet path directly under the ascendant resource object path.
 	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
 	 * <code>web.xml</code> file of the web application.
 	 * <br>This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
@@ -382,7 +382,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <p>
 	 * Child resources must specify a value for {@link RestResource#path() @RestResource.path()} that identifies the subpath of the child resource
-	 * relative to the parent path UNLESS you use the {@link RestContextBuilder#child(String, Object)} method to register it.
+	 * relative to the ascendant path UNLESS you use the {@link RestContextBuilder#child(String, Object)} method to register it.
 	 * 
 	 * <p>
 	 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
@@ -391,8 +391,8 @@ public final class RestContext extends BeanContext {
 	 * 	<dt>Servlet initialization:</dt>
 	 * 	<dd>
 	 * 		<p>
-	 * 			A child resource will be initialized immediately after the parent servlet is initialized.
-	 * 			<br>The child resource receives the same servlet config as the parent resource.
+	 * 			A child resource will be initialized immediately after the ascendant servlet/resource is initialized.
+	 * 			<br>The child resource receives the same servlet config as the ascendant servlet/resource.
 	 * 			<br>This allows configuration information such as servlet initialization parameters to filter to child
 	 * 			resources.
 	 * 		</p>
@@ -547,7 +547,7 @@ public final class RestContext extends BeanContext {
 	 * 		The default value is {@link ClasspathResourceFinderBasic} which provides basic support for finding localized
 	 * 		resources on the classpath and JVM working directory.
 	 * 		<br>The {@link ClasspathResourceFinderRecursive} is another option that also recursively searches for resources
-	 * 		up the parent class hierarchy.
+	 * 		up the class-hierarchy.
 	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -1425,8 +1425,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Mappings are cumulative from parent to child.
-	 * 		<br>Therefore, you can find and retrieve messages up the parent hierarchy chain.
+	 * 	<li>Mappings are cumulative from super classes.
+	 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
@@ -1840,10 +1840,10 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Identifies the URL subpath relative to the parent resource.
+	 * Identifies the URL subpath relative to the ascendant resource.
 	 * 
 	 * <p>
-	 * This setting is critical for the routing of HTTP requests from parent to child resources.
+	 * This setting is critical for the routing of HTTP requests from ascendant to child resources.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -2022,7 +2022,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 * 	<li>Unless overridden, resource resolvers are inherited from ascendant resources.
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -2122,7 +2122,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Resource resolvers are always inherited from parent resources.
+	 * 	<li>Response handlers resolvers are always inherited from ascendant resources.
 	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -2363,8 +2363,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Mappings are cumulative from parent to child.  
-	 * 	<li>Child resources can override mappings made on parent resources.
+	 * 	<li>Mappings are cumulative from super classes.  
+	 * 	<li>Child resources can override mappings made on parent class resources.
 	 * </ul>
 	 */
 	public static final String REST_staticFiles = PREFIX + "staticFiles.lo";
@@ -2662,7 +2662,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * 	<li>Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 	 * </ul>
 	 */
 	public static final String REST_widgets = PREFIX + "widgets.lo";
@@ -3123,12 +3123,10 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The resource resolver is used for instantiating child resource classes.
 	 * 
-	 * <p>
-	 * Unless overridden via the {@link RestResource#resourceResolver() @RestResource.resourceResolver()} annotation or the {@link RestContextBuilder#resourceResolver(Class)}
-	 * method, this value is always inherited from parent-to-child (i.e. parent-to-child via <ja>@RestResource.children()</ja> annotation, NOT parent-to-child 
-	 * via class inheritance).
-	 * <br>This allows a single resource resolver to be passed in to the top-level servlet to handle instantiation of all
-	 * child resources.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_resourceResolver}
+	 * </ul>
 	 * 
 	 * @return The resource resolver associated with this context.
 	 */
@@ -3224,11 +3222,13 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The config file is identified via one of the following:
 	 * <ul>
-	 * 	<li>{@link RestResource#config() @RestResource.config()} annotation.
-	 * 	<li>{@link RestContextBuilder#configFile(ConfigFile)} method.
+	 * 	<li class='ja'>{@link RestResource#config()}
+	 * 	<li class='jm'>{@link RestContextBuilder#configFile(ConfigFile)}
 	 * </ul>
 	 * 
-	 * @return The resolving config file associated with this servlet.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The resolving config file associated with this servlet.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public ConfigFile getConfigFile() {
 		return configFile;
@@ -3238,11 +3238,9 @@ public final class RestContext extends BeanContext {
 	 * Resolve a static resource file.
 	 * 
 	 * <p>
-	 * The location of static resources are defined via one of the following:
+	 * The location of static resources are defined via:
 	 * <ul>
-	 * 	<li class='ja'>{@link RestResource#staticFiles() RestResource.staticFiles()}
 	 * 	<li class='jf'>{@link RestContext#REST_staticFiles RestContext.REST_staticFiles}
-	 * 	<li class='jc'>{@link RestContextBuilder#staticFiles(Class,String)}
 	 * </ul>
 	 * 
 	 * @param pathInfo The unencoded path info.
@@ -3510,9 +3508,12 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <p>
 	 * If path is not specified, returns <js>"/"</js>.
+	 * <br>Path always starts with <js>"/"</js>.
 	 * 
-	 * <p>
-	 * Path always starts with <js>"/"</js>.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_path}
+	 * </ul>
 	 * 
 	 * @return The servlet path.
 	 */
@@ -3523,8 +3524,10 @@ public final class RestContext extends BeanContext {
 	/**
 	 * The widgets used for resolving <js>"$W{...}"<js> variables.
 	 * 
-	 * <p>
-	 * Defined by the {@link HtmlDoc#widgets() @HtmlDoc.widgets()} annotation or {@link RestContextBuilder#widgets(Class...)} method.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_widgets}
+	 * </ul>
 	 * 
 	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
 	 */
@@ -3535,13 +3538,14 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the logger to use for this resource.
 	 * 
-	 * <p>
-	 * The logger for a resource is defined through the following property:
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_logger}
+	 * 	<li class='jf'>{@link #REST_logger}
 	 * </ul>
 	 * 
-	 * @return The logger to use for this resource.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The logger to use for this resource.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public RestLogger getLogger() {
 		return logger;
@@ -3550,13 +3554,14 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the resource bundle used by this resource.
 	 * 
-	 * <p>
-	 * The resource bundle is defined via the following:
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_messages}
+	 * 	<li class='jf'>{@link #REST_messages}
 	 * </ul>
 	 * 
-	 * @return The resource bundle for this resource.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The resource bundle for this resource.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public MessageBundle getMessages() {
 		return msgs;
@@ -3565,13 +3570,14 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the REST information provider used by this resource.
 	 * 
-	 * <p>
-	 * The information provider is defined via the following:
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
 	 * 
-	 * @return The information provider for this resource.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The information provider for this resource.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public RestInfoProvider getInfoProvider() {
 		return infoProvider;
@@ -3580,13 +3586,14 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the REST call handler used by this resource.
 	 * 
-	 * <p>
-	 * The call handler is defined via the following:
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
 	 * 
-	 * @return The call handler for this resource.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The call handler for this resource.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	protected RestCallHandler getCallHandler() {
 		return callHandler;
@@ -3608,7 +3615,9 @@ public final class RestContext extends BeanContext {
 	 * This is the instance of the class annotated with the {@link RestResource @RestResource} annotation, usually
 	 * an instance of {@link RestServlet}.
 	 * 
-	 * @return The resource object.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The resource object.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Object getResource() {
 		return resource;
@@ -3619,7 +3628,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * @return
 	 * 	The resource object cast to {@link RestServlet}, or <jk>null</jk> if the resource doesn't subclass from
-	 * 	{@link RestServlet}
+	 * 	{@link RestServlet}.
 	 */
 	public RestServlet getRestServlet() {
 		return resource instanceof RestServlet ? (RestServlet)resource : null;
@@ -3670,8 +3679,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>The returned {@code Map} is mutable.  Therefore, subclasses are free to override
-	 * 	or set additional initialization parameters in their {@code init()} method.
+	 * 	<li>The returned {@code Map} is mutable.  
+	 * 		<br>Therefore, subclasses are free to override or set additional initialization parameters in their {@code init()} method.
 	 * </ul>
 	 * 
 	 * @return The resource properties as a {@link RestContextProperties}.
@@ -3683,8 +3692,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the serializers registered with this resource.
 	 * 
-	 * <p>
-	 * Serializers at the class level are defined via the following:
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * </ul>
@@ -3734,6 +3742,11 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the number of times this exception was thrown based on a hash of its stacktrace.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
+	 * </ul>
+	 * 
 	 * @param e The exception to check.
 	 * @return
 	 * 	The number of times this exception was thrown, or <code>0</code> if {@link #REST_useStackTraceHashes}
@@ -3748,65 +3761,90 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * TODO
+	 * Returns whether it's safe to render stack traces in HTTP responses.
 	 * 
-	 * @return TODO
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
+	 * </ul>
+	 * 
+	 * @return <jk>true</jk> if setting is enabled.
 	 */
 	public boolean isRenderResponseStackTraces() {
 		return renderResponseStackTraces;
 	}
 
 	/**
-	 * TODO
+	 * Returns whether it's safe to pass header values in as GET parameters.
 	 * 
-	 * @return TODO
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
+	 * </ul>
+	 * 
+	 * @return <jk>true</jk> if setting is enabled.
 	 */
-	protected boolean isAllowHeaderParams() {
+	public boolean isAllowHeaderParams() {
 		return allowHeaderParams;
 	}
 
 	/**
-	 * TODO
+	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
 	 * 
-	 * @return TODO
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
+	 * </ul>
+	 * 
+	 * @return <jk>true</jk> if setting is enabled.
 	 */
-	protected boolean isAllowBodyParam() {
+	public boolean isAllowBodyParam() {
 		return allowBodyParam;
 	}
 
 	/**
-	 * TODO
+	 * Returns the default charset to use on requests and responses when not specified on the request.
 	 * 
-	 * @return TODO
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The default charset.
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	protected String getDefaultCharset() {
+	public String getDefaultCharset() {
 		return defaultCharset;
 	}
 
 	/**
-	 * TODO
+	 * Returns the maximum request input size in bytes.
 	 * 
-	 * @return TODO
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
+	 * </ul>
+	 * 
+	 * @return The maximum request input size in bytes.
 	 */
-	protected long getMaxInput() {
+	public long getMaxInput() {
 		return maxInput;
 	}
 
 	/**
 	 * Returns the name of the client version header name used by this resource.
 	 * 
-	 * <p>
-	 * The client version header is the name of the HTTP header on requests that identify a client version.
-	 * 
-	 * <p>
-	 * The client version header is defined via one of the following:
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>{@link RestResource#clientVersionHeader() @RestResource.clientVersion()} annotation.
+	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
 	 * </ul>
 	 * 
-	 * @return The name of the client version header used by this resource.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The name of the client version header used by this resource.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	protected String getClientVersionHeader() {
+	public String getClientVersionHeader() {
 		return clientVersionHeader;
 	}
 
@@ -3814,11 +3852,283 @@ public final class RestContext extends BeanContext {
 	 * Returns <jk>true</jk> if the specified <code>Method</code> GET parameter value can be used to override
 	 * the method name in the HTTP header.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+	 * </ul>
+	 * 
 	 * @param m The method name, upper-cased.
 	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
 	 */
-	protected boolean allowMethodParam(String m) {
+	public boolean allowMethodParam(String m) {
 		return (! isEmpty(m) && (allowedMethodParams.contains(m) || allowedMethodParams.contains("*")));
+	}
+
+	/**
+	 * Returns the HTTP-part parser associated with this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The HTTP-part parser associated with this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public HttpPartParser getPartParser() {
+		return partParser;
+	}
+
+	/**
+	 * Returns the HTTP-part serializer associated with this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The HTTP-part serializer associated with this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public HttpPartSerializer getPartSerializer() {
+		return partSerializer;
+	}
+
+	/**
+	 * Returns the encoders associated with this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The encoders associated with this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public EncoderGroup getEncoders() {
+		return encoders;
+	}
+
+	/**
+	 * Returns the explicit list of supported accept types for this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The supported <code>Accept</code> header values for this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public List<MediaType> getProduces() {
+		return produces;
+	}
+
+	/**
+	 * Returns the explicit list of supported content types for this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The supported <code>Content-Type</code> header values for this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public List<MediaType> getConsumes() {
+		return consumes;
+	}
+
+	/**
+	 * Returns the default request headers for this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The default request headers for this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Map<String,Object> getDefaultRequestHeaders() {
+		return defaultRequestHeaders;
+	}
+
+	/**
+	 * Returns the default response headers for this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The default response headers for this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Map<String,Object> getDefaultResponseHeaders() {
+		return defaultResponseHeaders;
+	}
+
+	/**
+	 * Returns the converters associated with this resource at the class level.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_converters}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The converters associated with this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public RestConverter[] getConverters() {
+		return converters;
+	}
+
+	/**
+	 * Returns the guards associated with this resource at the class level.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_guards}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The guards associated with this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public RestGuard[] getGuards() {
+		return guards;
+	}
+
+	/**
+	 * Returns the response handlers associated with this resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The response handlers associated with this resource.  
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	protected ResponseHandler[] getResponseHandlers() {
+		return responseHandlers;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this resource has any child resources associated with it.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * </ul>
+	 * 
+	 * @return <jk>true</jk> if this resource has any child resources associated with it.
+	 */
+	public boolean hasChildResources() {
+		return ! childResources.isEmpty();
+	}
+
+	/**
+	 * Returns the context of the child resource associated with the specified path.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * </ul>
+	 * 
+	 * @param path The path of the child resource to resolve.
+	 * @return The resolved context, or <jk>null</jk> if it could not be resolved.
+	 */
+	public RestContext getChildResource(String path) {
+		return childResources.get(path);
+	}
+
+	/**
+	 * Returns the context path of the resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_contextPath}
+	 * </ul>
+	 * 
+	 * @return 
+	 * 	The context path of this resource.
+	 * 	<br>If not specified, returns the context path of the ascendant resource.
+	 */
+	public String getContextPath() {
+		if (contextPath != null)
+			return contextPath;
+		if (parentContext != null)
+			return parentContext.getContextPath();
+		return null;
+	}
+
+	/**
+	 * Returns the parameters defined on the specified Java method.
+	 * 
+	 * @param method The Java method to check.
+	 * @return The parameters defined on the Java method.
+	 */
+	public RestParam[] getRestParams(Method method) {
+		return callMethods.get(method.getName()).params;
+	}
+
+	/**
+	 * Returns the media type for the specified file name.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
+	 * </ul>
+	 * 
+	 * @param name The file name.
+	 * @return The MIME-type, or <jk>null</jk> if it could not be determined.
+	 */
+	public String getMediaTypeForName(String name) {
+		return mimetypesFileTypeMap.getContentType(name);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified path refers to a static file.
+	 * 
+	 * <p>
+	 * Static files are files pulled from the classpath and served up directly to the browser.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
+	 * 
+	 * @param p The URL path remainder after the servlet match.
+	 * @return <jk>true</jk> if the specified path refers to a static file.
+	 */
+	public boolean isStaticFile(String p) {
+		return pathStartsWith(p, staticFilesPaths);
+	}
+
+	/**
+	 * Returns the REST Java methods defined in this resource.
+	 * 
+	 * <p>
+	 * These are the methods annotated with the {@link RestMethod @RestMethod} annotation.
+	 * 
+	 * @return 
+	 * 	An unmodifiable map of Java method names to call method objects.
+	 */
+	public Map<String,RestJavaMethod> getCallMethods() {
+		return callMethods;
 	}
 
 	/**
@@ -3826,7 +4136,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * @param method The Java method being called.
 	 * @param pathPattern The parsed URL path pattern.
-	 * @param isPreOrPost Whether this is a <ja>@RestMethodPre</ja> or <ja>@RestMethodPost</ja>.
+	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
@@ -4018,230 +4328,6 @@ public final class RestContext extends BeanContext {
 		}
 	}
 
-
-	/**
-	 * Returns the HTTP-part parser associated with this resource.
-	 * 
-	 * @return The HTTP-part parser associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected HttpPartParser getPartParser() {
-		return partParser;
-	}
-
-	/**
-	 * Returns the HTTP-part serializer associated with this resource.
-	 * 
-	 * @return The HTTP-part serializer associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected HttpPartSerializer getPartSerializer() {
-		return partSerializer;
-	}
-
-	/**
-	 * Returns the encoders associated with this resource.
-	 * 
-	 * <p>
-	 * Encoders are used to provide various types of encoding such as <code>gzip</code> encoding.
-	 * 
-	 * <p>
-	 * Encoders at the class level are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#encoders() @RestResource.encoders()} annotation.
-	 * 	<li>{@link RestContextBuilder#encoders(Class...)}/{@link RestContextBuilder#encoders(org.apache.juneau.encoders.Encoder...)}
-	 * 		methods.
-	 * </ul>
-	 * 
-	 * @return The encoders associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected EncoderGroup getEncoders() {
-		return encoders;
-	}
-
-	/**
-	 * Returns the explicit list of supported accept types for this resource.
-	 * 
-	 * <p>
-	 * By default, this is simply the list of accept types supported by the registered parsers, but
-	 * can be overridden via the following:
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
-	 * 	<li class='ja'>{@link RestResource#produces()}
-	 * 	<li class='jm'>{@link RestContextBuilder#produces(boolean,MediaType...)}
-	 * 	<li class='jm'>{@link RestContextBuilder#produces(boolean,String...)}
-	 * </ul>
-	 * 
-	 * @return 
-	 * 	The supported <code>Accept</code> header values for this resource.  
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	protected List<MediaType> getProduces() {
-		return produces;
-	}
-
-	/**
-	 * Returns the explicit list of supported content types for this resource.
-	 * 
-	 * <p>
-	 * By default, this is simply the list of content types supported by the registered serializers, but can be
-	 * overridden via the following:
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
-	 * 	<li class='ja'>{@link RestResource#consumes()}
-	 * 	<li class='jm'>{@link RestContextBuilder#consumes(boolean,MediaType...)}
-	 * 	<li class='jm'>{@link RestContextBuilder#consumes(boolean,String...)}
-	 * </ul>
-	 * 
-	 * @return 
-	 * 	The supported <code>Content-Type</code> header values for this resource.  
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	protected List<MediaType> getConsumes() {
-		return consumes;
-	}
-
-	/**
-	 * Returns the default request headers for this resource.
-	 * 
-	 * <p>
-	 * These are headers automatically added to requests if not present.
-	 * 
-	 * <p>
-	 * Default request headers are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
-	 * 	<li>{@link RestContextBuilder#defaultRequestHeader(String, Object)}/{@link RestContextBuilder#defaultRequestHeaders(String...)} methods.
-	 * </ul>
-	 * 
-	 * @return The default request headers for this resource.  Never <jk>null</jk>.
-	 */
-	protected Map<String,Object> getDefaultRequestHeaders() {
-		return defaultRequestHeaders;
-	}
-
-	/**
-	 * Returns the default response headers for this resource.
-	 * 
-	 * <p>
-	 * These are headers automatically added to responses if not otherwise specified during the request.
-	 * 
-	 * <p>
-	 * Default response headers are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
-	 * 	<li>{@link RestContextBuilder#defaultResponseHeader(String, Object)}/{@link RestContextBuilder#defaultResponseHeaders(String...)}
-	 * 		methods.
-	 * </ul>
-	 * 
-	 * @return The default response headers for this resource.  Never <jk>null</jk>.
-	 */
-	public Map<String,Object> getDefaultResponseHeaders() {
-		return defaultResponseHeaders;
-	}
-
-	/**
-	 * Returns the converters associated with this resource at the class level.
-	 * 
-	 * <p>
-	 * Converters are used to 'convert' POJOs from one form to another before being passed of to the response handlers.
-	 * 
-	 * <p>
-	 * Converters at the class level are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#converters() @RestResource.converters()} annotation.
-	 * 	<li>{@link RestContextBuilder#converters(Class...)}/{@link RestContextBuilder#converters(RestConverter...)} methods.
-	 * </ul>
-	 * 
-	 * @return The converters associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected RestConverter[] getConverters() {
-		return converters;
-	}
-
-	/**
-	 * Returns the guards associated with this resource at the class level.
-	 * 
-	 * <p>
-	 * Guards are used to restrict access to resources.
-	 * 
-	 * <p>
-	 * Guards at the class level are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#guards() @RestResource.guards()} annotation.
-	 * 	<li>{@link RestContextBuilder#guards(Class...)}/{@link RestContextBuilder#guards(RestGuard...)} methods.
-	 * </ul>
-	 * 
-	 * @return The guards associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected RestGuard[] getGuards() {
-		return guards;
-	}
-
-	/**
-	 * Returns the response handlers associated with this resource.
-	 * 
-	 * <p>
-	 * Response handlers are used to convert POJOs returned by REST Java methods into actual HTTP responses.
-	 * 
-	 * <p>
-	 * Response handlers are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#responseHandlers() @RestResource.responseHandlers()} annotation.
-	 * 	<li>{@link RestContextBuilder#responseHandlers(Class...)}/{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
-	 * 		methods.
-	 * </ul>
-	 * 
-	 * @return The response handlers associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected ResponseHandler[] getResponseHandlers() {
-		return responseHandlers;
-	}
-
-	/**
-	 * Returns the media type for the specified file name.
-	 * 
-	 * <p>
-	 * The list of MIME-type mappings can be augmented through the {@link RestContextBuilder#mimeTypes(String...)} method.
-	 * See that method for a description of predefined MIME-type mappings.
-	 * 
-	 * @param name The file name.
-	 * @return The MIME-type, or <jk>null</jk> if it could not be determined.
-	 */
-	protected String getMediaTypeForName(String name) {
-		return mimetypesFileTypeMap.getContentType(name);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified path refers to a static file.
-	 * 
-	 * <p>
-	 * Static files are files pulled from the classpath and served up directly to the browser.
-	 * 
-	 * <p>
-	 * Static files are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#staticFiles() @RestResource.staticFiles()} annotation.
-	 * 	<li>{@link RestContextBuilder#staticFiles(Class, String)} method.
-	 * </ul>
-	 * 
-	 * @param p The URL path remainder after the servlet match.
-	 * @return <jk>true</jk> if the specified path refers to a static file.
-	 */
-	protected boolean isStaticFile(String p) {
-		return pathStartsWith(p, staticFilesPaths);
-	}
-
-	/**
-	 * Returns the REST Java methods defined in this resource.
-	 * 
-	 * <p>
-	 * These are the methods annotated with the {@link RestMethod @RestMethod} annotation.
-	 * 
-	 * @return A map of Java method names to call method objects.
-	 */
-	protected Map<String,RestJavaMethod> getCallMethods() {
-		return callMethods;
-	}
-
 	/**
 	 * Calls {@link Servlet#destroy()} on any child resources defined on this resource.
 	 */
@@ -4262,52 +4348,16 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this resource has any child resources associated with it.
-	 * 
-	 * @return <jk>true</jk> if this resource has any child resources associated with it.
+	 * Unused.
 	 */
-	protected boolean hasChildResources() {
-		return ! childResources.isEmpty();
-	}
-
-	/**
-	 * Returns the context of the child resource associated with the specified path.
-	 * 
-	 * @param path The path of the child resource to resolve.
-	 * @return The resolved context, or <jk>null</jk> if it could not be resolved.
-	 */
-	protected RestContext getChildResource(String path) {
-		return childResources.get(path);
-	}
-
-	/**
-	 * TODO
-	 * 
-	 * @return TODO
-	 */
-	protected String getContextPath() {
-		if (contextPath != null)
-			return contextPath;
-		if (parentContext != null)
-			return parentContext.getContextPath();
-		return null;
-	}
-
-	/**
-	 * TODO
-	 * 
-	 * @param method
-	 * @return TODO
-	 */
-	protected RestParam[] getRestParams(Method method) {
-		return callMethods.get(method.getName()).params;
-	}
-
 	@Override /* BeanContextBuilder */
 	public BeanSession createSession(BeanSessionArgs args) {
 		throw new NoSuchMethodError();
 	}
 
+	/**
+	 * Unused.
+	 */
 	@Override /* BeanContextBuilder */
 	public BeanSessionArgs createDefaultSessionArgs() {
 		throw new NoSuchMethodError();
