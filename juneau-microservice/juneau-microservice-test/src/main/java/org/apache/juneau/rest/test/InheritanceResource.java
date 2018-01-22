@@ -190,7 +190,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 		@RestMethod(name=GET, path="/test1")
-		public ObjectMap test1(RestRequestProperties properties) {
+		public ObjectMap test1(RequestProperties properties) {
 			return transform(properties);
 		}
 
@@ -198,7 +198,7 @@ public class InheritanceResource extends RestServlet {
 		// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 		@RestMethod(name=GET, path="/test2",
 			properties={@Property(name="p4",value="v4a"), @Property(name="p5", value="v5")})
-		public ObjectMap test2(RestRequestProperties properties, @HasQuery("override") boolean override) {
+		public ObjectMap test2(RequestProperties properties, @HasQuery("override") boolean override) {
 			if (override) {
 				properties.put("p1", "x");
 				properties.put("p2", "x");
@@ -209,7 +209,7 @@ public class InheritanceResource extends RestServlet {
 			return transform(properties);
 		}
 
-		private ObjectMap transform(RestRequestProperties properties) {
+		private ObjectMap transform(RequestProperties properties) {
 			ObjectMap m = new ObjectMap();
 			for (Map.Entry<String,Object> e : properties.entrySet()) {
 				if (e.getKey().startsWith("p"))

@@ -1400,7 +1400,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Render response stack traces in responses.
 	 * 
 	 * <p>
-	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)<code>.
+	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

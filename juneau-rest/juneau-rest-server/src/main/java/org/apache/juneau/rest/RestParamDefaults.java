@@ -675,11 +675,11 @@ class RestParamDefaults {
 	static final class RestRequestPropertiesObject extends RestParam {
 
 		protected RestRequestPropertiesObject() {
-			super(OTHER, null, RestRequestProperties.class);
+			super(OTHER, null, RequestProperties.class);
 		}
 
 		@Override /* RestParam */
-		public RestRequestProperties resolve(RestRequest req, RestResponse res) throws Exception {
+		public RequestProperties resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getProperties();
 		}
 	}

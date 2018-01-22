@@ -1150,6 +1150,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Our customized info provider.</jc>
+	 * 	<jc>// Extend from the default implementation and selectively override values.</jc>
 	 * 	<jk>public class</jk> MyRestInfoProvider <jk>extends</jk> RestInfoProviderDefault {
 	 * 		
 	 * 		<jc>// Must provide this constructor!</jc>
@@ -1164,7 +1165,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * 		<ja>@Override</ja>
 	 * 		<jk>public</jk> Swagger getSwagger(RestRequest req) <jk>throws</jk> RestException {
-	 * 			Swagger s = super.getSwagger(req);
+	 * 			Swagger s = <jk>super</jk>.getSwagger(req);
 	 * 			<jc>// Made inline modifications to generated swagger.</jc>
 	 * 			<jk>return</jk> s;
 	 * 		}

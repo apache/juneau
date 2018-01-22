@@ -51,7 +51,7 @@ public class DefaultHandler implements ResponseHandler {
 			res.setContentType(mediaType.toString());
 
 			try {
-				RestRequestProperties p = res.getProperties();
+				RequestProperties p = res.getProperties();
 				if (req.isPlainText()) {
 					res.setContentType("text/plain");
 				}

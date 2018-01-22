@@ -56,7 +56,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private RestJavaMethod restJavaMethod;
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
-	private RestRequestProperties properties;                // Response properties
+	private RequestProperties properties;                // Response properties
 	private ServletOutputStream os;
 	private PrintWriter w;
 	private HtmlDocBuilder htmlDocBuilder;
@@ -87,7 +87,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestJavaMethod rjm, RestRequestProperties properties) {
+	final void init(RestJavaMethod rjm, RequestProperties properties) {
 		this.restJavaMethod = rjm;
 		this.properties = properties;
 
@@ -201,7 +201,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 
 	 * @return A map of all the property values set.
 	 */
-	public RestRequestProperties getProperties() {
+	public RequestProperties getProperties() {
 		return properties;
 	}
 

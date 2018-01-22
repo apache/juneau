@@ -61,7 +61,7 @@ public class OnPreCallResource extends RestServlet {
 
 	@RestHook(PRE_CALL)
 	public void onPreCall(RestRequest req) {
-		RestRequestProperties properties = req.getProperties();
+		RequestProperties properties = req.getProperties();
 		properties.put("p2", "xp2");
 		properties.put("p4", "xp4");
 		properties.put("p5", "xp5"); // New property
@@ -88,7 +88,7 @@ public class OnPreCallResource extends RestServlet {
 	// Properties overridden programmatically.
 	//====================================================================================================
 	@RestMethod(name=PUT, path="/testPropertiesOverriddenProgrammatically")
-	public String testPropertiesOverriddenProgrammatically(RestRequest req, RestRequestProperties properties) throws Exception {
+	public String testPropertiesOverriddenProgrammatically(RestRequest req, RequestProperties properties) throws Exception {
 		properties.put("p3", "pp3");
 		properties.put("p4", "pp4");
 		return req.getBody().asType(String.class);

@@ -89,7 +89,7 @@ public class DirectoryResource extends Resource {
 
 	/** GET request handler */
 	@RestMethod(name=GET, path="/*", converters={Queryable.class})
-	public Object doGet(RestRequest req, RestRequestProperties properties) throws Exception {
+	public Object doGet(RestRequest req, RequestProperties properties) throws Exception {
 
 		String pathInfo = req.getPathInfo();
 		File f = pathInfo == null ? rootDir : new File(rootDir.getAbsolutePath() + pathInfo);

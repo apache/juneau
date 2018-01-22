@@ -452,7 +452,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
 		req.getPathMatch().pattern(pathPattern.getPatternString()).remainder(remainder);
 
-		RestRequestProperties requestProperties = new RestRequestProperties(req.getVarResolverSession(), properties);
+		RequestProperties requestProperties = new RequestProperties(req.getVarResolverSession(), properties);
 
 		req.init(this, requestProperties);
 		res.init(this, requestProperties);

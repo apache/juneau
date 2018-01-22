@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 @SuppressWarnings("serial")
-public class RestRequestProperties extends ResolvingObjectMap {
+public class RequestProperties extends ResolvingObjectMap {
 
 	/**
 	 * Constructor
@@ -36,7 +36,7 @@ public class RestRequestProperties extends ResolvingObjectMap {
 	 * @param varResolver The request variable resolver session.
 	 * @param inner The inner properties defined on the resource context.
 	 */
-	public RestRequestProperties(VarResolverSession varResolver, RestMethodProperties inner) {
+	public RequestProperties(VarResolverSession varResolver, RestMethodProperties inner) {
 		super(varResolver);
 		setInner(inner);
 	}

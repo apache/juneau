@@ -59,10 +59,10 @@ import org.apache.juneau.rest.widget.*;
  * 				<xv>Page header</xv>
  * 			&lt;/header&gt;
  * 			&lt;nav&gt;
- * 				<xv>Page links</xv>
+ * 				<xv>Navigation links</xv>
  * 			&lt;/nav&gt;
  * 			&lt;aside&gt;
- * 				<xv>Side-bar page links</xv>
+ * 				<xv>Side-bar text</xv>
  * 			&lt;/aside&gt;
  * 			&lt;article&gt;
  * 				<xv>Contents of serialized object</xv>

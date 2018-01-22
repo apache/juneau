@@ -20,8 +20,8 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
  */
+@SuppressWarnings("serial")
 @RestResource(
-	messages="nls/HelloWorldResource",
 	title="Hello World",
 	description="An example of the simplest-possible resource",
 	path="/helloWorld",
@@ -40,7 +40,6 @@ import org.apache.juneau.rest.annotation.*;
 	)
 )
 public class HelloWorldResource extends Resource {
-	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */
 	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")

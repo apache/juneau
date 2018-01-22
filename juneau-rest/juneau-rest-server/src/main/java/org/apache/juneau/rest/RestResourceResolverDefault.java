@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
  * 
  * The default implementation simply instantiates the class using one of the following constructors:
  * <ul>
- * 	<li><code><jk>public</jk> T(RestContext)</code>
+ * 	<li><code><jk>public</jk> T(RestContextBuilder)</code>
  * 	<li><code><jk>public</jk> T()</code>
  * </ul>
  * 
@@ -30,14 +30,6 @@ import org.apache.juneau.internal.*;
  * 
  * <p>
  * Child classes can also be defined as inner-classes of the parent resource class.
- * 
- * <p>
- * Non-<code>RestServlet</code> classes can also add the following method to get access to the {@link RestContextBuilder} 
- * object:
- * <ul>
- * 	<li><code><jk>public void</jk> init(RestContextBuilder);</code>
- * </ul>
- * 
  */
 public class RestResourceResolverDefault implements RestResourceResolver {
 
