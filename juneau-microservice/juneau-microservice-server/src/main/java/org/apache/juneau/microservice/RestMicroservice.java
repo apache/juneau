@@ -162,7 +162,7 @@ public class RestMicroservice extends Microservice {
 		try {
 			t.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		super.stop();
 		return this;
