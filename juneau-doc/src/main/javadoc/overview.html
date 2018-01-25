@@ -1810,8 +1810,7 @@
 			<div class='topic'>
 				<p>
 				<p>
-					Surrogate classes are very similar in concept to one-way <code>PojoSwaps</code> except they represent a 
-					simpler syntax.
+					Surrogate classes are very similar in concept to <code>PojoSwaps</code> except they're simpler to define.
 				</p>
 				<p>
 					For example, let's say we want to be able to serialize the following class, but it's not serializable for 
@@ -1868,6 +1867,11 @@
 					When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate 
 					instead.
 				</p>
+				
+				<h6 class='section'>See Also:</h6>
+				<ul>
+					<li class='jic'>{@link org.apache.juneau.transform.Surrogate}
+				</ul>
 			</div>
 	
 			<!-- ======================================================================================================= -->
@@ -4603,7 +4607,7 @@
 		<h4 class='topic' onclick='toggle(this)'>3.1.1 - Hello World Example</h4>
 		<div class='topic'>
 			<p>
-				A REST resource is simply a Java class annotated with {@link org.apache.juneau.annotation.RestResource}.
+				A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.RestResource}.
 				<br>The most common case is a class that extends {@link org.apache.juneau.rest.RestServlet}, which itself is simply an 
 				extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 			</p>
@@ -12549,6 +12553,12 @@
 						Setter methods that take in beans and collections of beans can now take in 
 						JSON strings.
 				</ul>
+			<li>
+				Syntax changed on unswap method on {@link org.apache.juneau.transform.Surrogate} classes.
+				<br>It's now a regular method instead of a static method.
+			<li>
+				{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
+				{@link org.apache.juneau.transform.Surrogate} classes.
 		</ul>
 		
 		<h6 class='topic'>juneau-rest-server</h6>

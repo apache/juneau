@@ -29,19 +29,19 @@ import org.apache.juneau.serializer.*;
 public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 
 	private Constructor<F> constructor;   // public F(T t);
-	private Method untransformMethod;        // public static T valueOf(F f);
+	private Method unswapMethod;        // public T build();
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param forClass The normal class.
 	 * @param constructor The constructor on the surrogate class that takes the normal class as a parameter.
-	 * @param untransformMethod The static method that converts surrogate objects into normal objects.
+	 * @param unswapMethod The static method that converts surrogate objects into normal objects.
 	 */
-	protected SurrogateSwap(Class<T> forClass, Constructor<F> constructor, Method untransformMethod) {
+	protected SurrogateSwap(Class<T> forClass, Constructor<F> constructor, Method unswapMethod) {
 		super(forClass, constructor.getDeclaringClass());
 		this.constructor = constructor;
-		this.untransformMethod = untransformMethod;
+		this.unswapMethod = unswapMethod;
 	}
 
 	/**
@@ -70,14 +70,8 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 						// Find the unswap method if there is one.
 						Method unswapMethod = null;
 						for (Method m : c.getMethods()) {
-							if (pt[0].equals(m.getReturnType())) {
-								Class<?>[] mpt = m.getParameterTypes();
-								if (mpt.length == 1 && mpt[0].equals(c)) { // Only methods with one parameter and where the return type matches this class.
-									int mod2 = m.getModifiers();
-									if (Modifier.isPublic(mod2) && Modifier.isStatic(mod2))  // Only public static methods.
-										unswapMethod = m;
-								}
-							}
+							if (pt[0].equals(m.getReturnType()) && Modifier.isPublic(m.getModifiers())) 
+							unswapMethod = m;
 						}
 
 						l.add(new SurrogateSwap(pt[0], cc, unswapMethod));
@@ -100,11 +94,11 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
-		if (untransformMethod == null)
-			throw new ParseException("static valueOf({0}) method not implement on surrogate class ''{1}''",
+		if (unswapMethod == null)
+			throw new ParseException("unswap() method not implement on surrogate class ''{1}''",
 				f.getClass().getName(), getNormalClass().getName());
 		try {
-			return (T)untransformMethod.invoke(null, f);
+			return (T)unswapMethod.invoke(f);
 		} catch (Exception e) {
 			throw new ParseException(e);
 		}

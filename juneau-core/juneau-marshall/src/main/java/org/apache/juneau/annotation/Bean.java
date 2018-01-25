@@ -110,6 +110,14 @@ public @interface Bean {
 	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
 	 * related methods.
 	 * 
+	 * <p>
+	 * This value is entirely optional if you simply want to expose all the getters and public fields on 
+	 * a class as bean properties.
+	 * <br>However, it's useful if you want certain getters to be ignored or you want the properties to be
+	 * serialized in a particular order.
+	 * <br>Note that on IBM JREs, the property order is the same as the order in the source code, 
+	 * whereas on Oracle JREs, the order is entirely random.
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>

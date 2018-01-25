@@ -692,8 +692,11 @@ public final class ClassMeta<T> implements Type {
 				return ps;
 			}
 
-			if (isParentClass(SurrogateSwap.class, c))
-				throw new FormattedRuntimeException("TODO - Surrogate classes currently not supported in @Swap annotation", c);
+			if (isParentClass(Surrogate.class, c)) {
+				List<SurrogateSwap<?,?>> l = SurrogateSwap.findPojoSwaps(c);
+				if (! l.isEmpty())
+					return (PojoSwap<T,?>)l.iterator().next();
+			}
 
 			throw new FormattedRuntimeException("Invalid swap class ''{0}'' specified.  Must extend from PojoSwap or Surrogate.", c);
 		}

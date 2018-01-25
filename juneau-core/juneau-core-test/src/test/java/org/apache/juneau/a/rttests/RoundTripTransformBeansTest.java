@@ -323,7 +323,6 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		public int f3;
 	}
 
-
 	//====================================================================================================
 	// Surrogate transforms
 	//====================================================================================================
@@ -334,41 +333,83 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		JsonSerializer s = JsonSerializer.create().ssq().pojoSwaps(D2.class).build();
 		JsonParser p = JsonParser.create().pojoSwaps(D2.class).build();
 		Object r;
-		D1 d1 = D1.create();
+		D1 x = D1.create();
 
-		r = s.serialize(d1);
+		r = s.serialize(x);
 		assertEquals("{f2:'f1'}", r);
 
-		d1 = p.parse(r, D1.class);
-		assertEquals("f1", d1.f1);
+		x = p.parse(r, D1.class);
+		assertEquals("f1", x.f1);
 
-		r = getSerializer().serialize(d1);
+		r = getSerializer().serialize(x);
 		assertTrue(TestUtils.toString(r).contains("f2"));
 
-		d1 = roundTrip(d1, D1.class);
+		x = roundTrip(x, D1.class);
 	}
 
 	public static class D1 {
 		public String f1;
 
 		public static D1 create() {
-			D1 d1 = new D1();
-			d1.f1 = "f1";
-			return d1;
+			D1 x = new D1();
+			x.f1 = "f1";
+			return x;
 		}
 	}
 
 	public static class D2 implements Surrogate {
 		public String f2;
-		public D2(D1 d1) {
-			f2 = d1.f1;
+		public D2(D1 x) {
+			f2 = x.f1;
 		}
-		public D2() {
+		public D2() {}
+		public D1 create() {
+			D1 x = new D1();
+			x.f1 = this.f2;
+			return x;
 		}
-		public static D1 valueOf(D2 d2) {
-			D1 d1 = new D1();
-			d1.f1 = d2.f2;
-			return d1;
+	}
+	
+	@Test
+	public void testSurrogatesThroughAnnotation() throws Exception {
+		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonParser p = JsonParser.DEFAULT;
+		Object r;
+		E1 x = E1.create();
+
+		r = s.serialize(x);
+		assertEquals("{f2:'f1'}", r);
+
+		x = p.parse(r, E1.class);
+		assertEquals("f1", x.f1);
+
+		r = getSerializer().serialize(x);
+		assertTrue(TestUtils.toString(r).contains("f2"));
+
+		x = roundTrip(x, E1.class);
+	}
+
+	@Swap(E2.class)
+	public static class E1 {
+		public String f1;
+
+		public static E1 create() {
+			E1 x = new E1();
+			x.f1 = "f1";
+			return x;
+		}
+	}
+
+	public static class E2 implements Surrogate {
+		public String f2;
+		public E2(E1 x) {
+			f2 = x.f1;
+		}
+		public E2() {}
+		public E1 create() {
+			E1 x = new E1();
+			x.f1 = this.f2;
+			return x;
 		}
 	}
 }
