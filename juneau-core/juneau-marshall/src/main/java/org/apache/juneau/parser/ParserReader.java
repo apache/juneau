@@ -43,6 +43,7 @@ public class ParserReader extends Reader {
 	private int iMark = -1;    // Mark position in buffer
 	private int iEnd = 0;      // The last good character position in the buffer
 	private boolean endReached, holesExist;
+	private final boolean unbuffered;
 
 	/**
 	 * Constructor.
@@ -52,6 +53,7 @@ public class ParserReader extends Reader {
 	 */
 	public ParserReader(ParserPipe pipe) throws IOException {
 		this.pipe = pipe;
+		this.unbuffered = pipe.unbuffered;
 		if (pipe.isString()) {
 			String in = pipe.getInputAsString();
 			this.r = new CharSequenceReader(in);
@@ -284,14 +286,16 @@ public class ParserReader extends Reader {
 	}
 
 	/**
-	 * Close this reader and the underlying reader.
+	 * No-op.
+	 * 
+	 * <p>
+	 * Input readers are closed in the {@link ParserPipe} class.
 	 * 
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	@Override /* Reader */
 	public void close() throws IOException {
-		if (r != null)
-			r.close();
+		// No-op
 	}
 
 	/**
@@ -413,7 +417,7 @@ public class ParserReader extends Reader {
 	 */
 	@Override /* Reader */
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return r.read(cbuf, off, len);
+		return unbuffered ? r.read(cbuf, off, 1) : r.read(cbuf, off, len);
 	}
 
 	/**

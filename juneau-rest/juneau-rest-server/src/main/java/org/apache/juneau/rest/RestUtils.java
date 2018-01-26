@@ -270,7 +270,7 @@ public final class RestUtils {
 		if (qs == null || ((qs instanceof CharSequence) && isEmpty(qs)))
 			return m;
 
-		try (ParserPipe p = new ParserPipe(qs, false, false, null, null)) {
+		try (ParserPipe p = new ParserPipe(qs, false, false, false, false, null, null)) {
 			
 			final int S1=1; // Looking for attrName start.
 			final int S2=2; // Found attrName start, looking for = or & or end.

@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
+import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -321,5 +324,53 @@ public class JsonParserTest {
 		public String toString() {
 			return "f="+f;
 		}
+	}
+	
+	//====================================================================================================
+	// testStreamsAutoClose
+	// Validates PARSER_autoCloseStreams.
+	//====================================================================================================
+	@Test
+	public void testStreamsAutoClose() throws Exception {
+		ReaderParser p = JsonParser.DEFAULT.builder().autoCloseStreams().build();
+		Object x;
+		Reader r;
+		
+		r = reader("{foo:'bar'}{baz:'qux'}");
+		x = p.parse(r, ObjectMap.class);
+		assertObjectEquals("{foo:'bar'}", x);
+		try {
+			x = p.parse(r, ObjectMap.class);
+			fail("Exception expected");
+		} catch (Exception e) {
+			assertTrue(e.getMessage().contains("Reader is closed"));
+		}
+	}
+	
+	//====================================================================================================
+	// testMultipleObjectsInStream
+	// Validates that readers are not closed so that we can read streams of POJOs.
+	//====================================================================================================
+	@Test
+	public void testMultipleObjectsInStream() throws Exception {
+		ReaderParser p = JsonParser.create().unbuffered().build();
+		Object x;
+		Reader r;
+
+		r = reader("{foo:'bar'}{baz:'qux'}");
+		x = p.parse(r, ObjectMap.class);
+		assertObjectEquals("{foo:'bar'}", x);
+		x = p.parse(r, ObjectMap.class);
+		assertObjectEquals("{baz:'qux'}", x);
+
+		r = reader("[123][456]");
+		x = p.parse(r, ObjectList.class);
+		assertObjectEquals("[123]", x);
+		x = p.parse(r, ObjectList.class);
+		assertObjectEquals("[456]", x);
+	}
+	
+	private Reader reader(String in) {
+		return new CloseableStringReader(in);
 	}
 }

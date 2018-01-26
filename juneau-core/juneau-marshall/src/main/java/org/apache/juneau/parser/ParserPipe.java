@@ -52,12 +52,14 @@ import org.apache.juneau.internal.*;
 public final class ParserPipe implements Closeable {
 
 	private final Object input;
-	private final boolean debug, strict;
+	final boolean debug, strict, autoCloseStreams, unbuffered;
 	private final String fileCharset, inputStreamCharset;
 
 	private String inputString;
 	private InputStream inputStream;
 	private Reader reader;
+	private ParserReader parserReader;
+	private boolean doClose;
 
 	/**
 	 * Constructor.
@@ -71,6 +73,12 @@ public final class ParserPipe implements Closeable {
 	 * 	If <jk>true</jk>, sets {@link CodingErrorAction#REPORT} on {@link CharsetDecoder#onMalformedInput(CodingErrorAction)}
 	 * 	and {@link CharsetDecoder#onUnmappableCharacter(CodingErrorAction)}.
 	 * 	Otherwise, sets them to {@link CodingErrorAction#REPLACE}.
+	 * @param autoCloseStreams 
+	 * 	Automatically close {@link InputStream InputStreams} and {@link Reader Readers} when passed in as input.
+	 * @param unbuffered 
+	 * 	If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
+	 * 	multiple times.
+	 * 	<br>Otherwise, we read character data into a reusable buffer.
 	 * @param fileCharset
 	 * 	The charset to expect when reading from {@link File Files}.
 	 * 	Use <js>"default"</js> to specify {@link Charset#defaultCharset()}.
@@ -78,10 +86,12 @@ public final class ParserPipe implements Closeable {
 	 * 	The charset to expect when reading from {@link InputStream InputStreams}.
 	 * 	Use <js>"default"</js> to specify {@link Charset#defaultCharset()}.
 	 */
-	public ParserPipe(Object input, boolean debug, boolean strict, String fileCharset, String inputStreamCharset) {
+	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, String fileCharset, String inputStreamCharset) {
 		this.input = input;
 		this.debug = debug;
 		this.strict = strict;
+		this.autoCloseStreams = autoCloseStreams;
+		this.unbuffered = unbuffered;
 		this.fileCharset = fileCharset;
 		this.inputStreamCharset = inputStreamCharset;
 		if (input instanceof CharSequence)
@@ -97,7 +107,7 @@ public final class ParserPipe implements Closeable {
 	 * @param input The input object.
 	 */
 	public ParserPipe(Object input) {
-		this(input, false, false, null, null);
+		this(input, false, false, false, false, null, null);
 	}
 
 	/**
@@ -120,14 +130,17 @@ public final class ParserPipe implements Closeable {
 				inputStream = new ByteArrayInputStream(b);
 			} else {
 				inputStream = (InputStream)input;
+				doClose = autoCloseStreams;
 			}
 		} else if (input instanceof byte[]) {
 			if (debug)
 				inputString = toHex((byte[])input);
 			inputStream = new ByteArrayInputStream((byte[])input);
+			doClose = false;
 		} else if (input instanceof String) {
 			inputString = (String)input;
 			inputStream = new ByteArrayInputStream(fromHex((String)input));
+			doClose = false;
 		} else if (input instanceof File) {
 			if (debug) {
 				byte[] b = readBytes((File)input);
@@ -135,6 +148,7 @@ public final class ParserPipe implements Closeable {
 				inputStream = new ByteArrayInputStream(b);
 			} else {
 				inputStream = new FileInputStream((File)input);
+				doClose = true;
 			}
 		} else {
 			throw new IOException("Cannot convert object of type "+input.getClass().getName()+" to an InputStream.");
@@ -163,11 +177,14 @@ public final class ParserPipe implements Closeable {
 				reader = new StringReader(inputString);
 			} else {
 				reader = (Reader)input;
+				doClose = autoCloseStreams;
 			}
 		} else if (input instanceof CharSequence) {
 			inputString = input.toString();
 			reader = new ParserReader(this);
+			doClose = false;
 		} else if (input instanceof InputStream || input instanceof byte[]) {
+			doClose = input instanceof InputStream && autoCloseStreams;
 			InputStream is = (
 				input instanceof InputStream
 				? (InputStream)input
@@ -208,6 +225,7 @@ public final class ParserPipe implements Closeable {
 				inputString = read(reader);
 				reader = new StringReader(inputString);
 			}
+			doClose = true;
 		} else {
 			throw new IOException("Cannot convert object of type "+input.getClass().getName()+" to a Reader.");
 		}
@@ -250,10 +268,10 @@ public final class ParserPipe implements Closeable {
 		if (input == null)
 			return null;
 		if (input instanceof ParserReader)
-			reader = (ParserReader)input;
+			parserReader = (ParserReader)input;
 		else
-			reader = new ParserReader(this);
-		return (ParserReader)reader;
+			parserReader = new ParserReader(this);
+		return parserReader;
 	}
 
 	/**
@@ -268,7 +286,8 @@ public final class ParserPipe implements Closeable {
 	@Override /* Closeable */
 	public void close() {
 		try {
-			IOUtils.close(reader, inputStream);
+			if (doClose)
+				IOUtils.close(reader, inputStream);
 		} catch (IOException e) {
 			throw new BeanRuntimeException(e);
 		}

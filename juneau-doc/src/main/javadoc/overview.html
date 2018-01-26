@@ -116,6 +116,7 @@
 				<li><p><a class='doclink' href='#juneau-marshall.BeanSubTypes'>Bean Subtypes</a></p>
 			</ol>
 			<li><p><a class='doclink' href='#juneau-marshall.VirtualBeans'>Virtual Beans</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.ReadingContinuousStreams'>Reading Continuous Streams</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JacksonComparison'>Comparison with Jackson</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.BestPractices'>Best Practices</a></p>
@@ -3033,8 +3034,59 @@
 		</div>
 
 		<!-- ======================================================================================================= -->
+		<a id="juneau-marshall.ReadingContinuousStreams"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.1.10 - Reading Continuous Streams</h4>
+		<div class='topic'>
+			<p>
+				The following parsers can be configured to read continous streams of objects from the same input stream:
+			</p>
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.json.JsonParser}
+				<li class='jc'>{@link org.apache.juneau.uon.UonParser}
+				<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}
+			</ul>
+			<p>
+				The {@link org.apache.juneau.json.JsonParser} and {@link org.apache.juneau.uon.UonParser}
+				classes can read continous streams by using the {@link org.apache.juneau.parser.Parser#PARSER_unbuffered}
+				setting.
+				<br>This prevents the parsers from using an internal buffer that would read past the end of the currently
+				parsed POJO.
+			</p>
+			<h6 class='figure'>Examples:</h6>
+			<p class='bcode'>
+	ReaderParser p = JsonParser.<jsm>create</jsm>().unbuffered().build();
+	Object x;
+	Reader r;
+
+	r = new StringReader(<js>"{foo:'bar'}{baz:'qux'}"</js>);
+	x = p.parse(r, ObjectMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
+	x = p.parse(r, ObjectMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
+
+	r = reader(<js>"[123][456]"</js>);
+	x = p.parse(r, <jk>int</jk>[].<jk>class</jk>);  <jc>// [123]</jc>
+	x = p.parse(r, <jk>int</jk>[].<jk>class</jk>);  <jc>// [456]</jc>
+			</p>
+			<p>
+				Note that this isn't perfect in all cases since you can't combine two JSON numbers into a single
+				reader (e.g. <code>"123" + "456" = "123456"</code>).
+			</p>
+			<p>
+				For obvious reasons, do not use the following properties when reading continuous streams:
+			</p>
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.json.JsonParser#JSON_validateEnd}
+				<li class='jf'>{@link org.apache.juneau.uon.UonParser#UON_validateEnd}
+				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams}
+			</ul>
+			<p>
+				The {@link org.apache.juneau.msgpack.MsgPackParser} class doesn't use any internal buffering to begin with, so it can be used with
+				continuous streams without any special properties.
+			</p>
+		</div>
+		
+		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JacksonComparison"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.1.10 - Comparison with Jackson</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.1.11 - Comparison with Jackson</h4>
 		<div class='topic'>
 			<p>
 				Juneau was developed independently from Jackson, but shares many of the same features and capabilities.
@@ -3147,7 +3199,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.PojoCategories"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.1.11 - POJO Categories</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.1.12 - POJO Categories</h4>
 		<div class='topic'>
 			<p>
 				The following chart shows POJOs categorized into groups and whether they can be serialized or parsed:
@@ -3413,7 +3465,7 @@
 	
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.BestPractices"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.1.12 - Best Practices</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.1.13 - Best Practices</h4>
 		<div class='topic'>
 			<ol class='spaced-list'>
 				<li>
@@ -3442,7 +3494,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.AdditionalInfo"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.1.13 - Additional Information</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.1.14 - Additional Information</h4>
 		<div class='topic'>
 			<p>
 				Extensive javadocs exist for individual language support.
@@ -12329,7 +12381,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
-		<li><p><a class='doclink' href='#7.0.2'>7.0.2 (TBD)</a></p>
+		<li><p><a class='doclink' href='#7.1.0'>7.1.0 (TBD)</a></p>
 		<li><p><a class='doclink' href='#7.0.1'>7.0.1 (Dec 24, 2017)</a></p>
 		<li><p><a class='doclink' href='#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.4.0'>6.4.0 (Oct 5, 2017)</a></p>
@@ -12402,8 +12454,8 @@
 	</ul>
 
 	<!-- =========================================================================================================== -->
-	<a id="7.0.2"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.0.2 (TBD)</h3>
+	<a id="7.1.0"></a>
+	<h3 class='topic' onclick='toggle(this)'>7.1.0 (TBD)</h3>
 	<div class='topic'>
 		<p>
 		</p>
@@ -12534,6 +12586,15 @@
 					<li>{@link org.apache.juneau.parser.ParserSession#getListener() getListener()}
 					<li>{@link org.apache.juneau.parser.ParserSession#getListener(Class) getListener(Class)}
 				</ul>
+			<li>
+				New {@link org.apache.juneau.parser.Parser#PARSER_unbuffered} setting allows you to disable internal
+				buffering on the JSON and UON parsers so that they can be used to read continous streams of objects.
+			<li>
+				New {@link org.apache.juneau.json.JsonParser#JSON_validateEnd} and {@link org.apache.juneau.uon.UonParser#UON_validateEnd} 
+				settings allow you to control whether we validate that there is no garbage at the end of the parsed input.
+			<li>
+				New {@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
+				readers passed into parsers to be automatically closed after parsing.
 		</ul>
 
 		<h6 class='topic'>juneau-marshall</h6>

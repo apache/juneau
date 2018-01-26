@@ -15,10 +15,11 @@ package org.apache.juneau.msgpack;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @SuppressWarnings({"javadoc"})
-public class MsgPackSerialzierTest {
+public class MsgPackSerializerTest {
 
 	//====================================================================================================
 	// testBasic
@@ -210,6 +211,6 @@ public class MsgPackSerialzierTest {
 
 	private void test(Object input, String expected) throws Exception {
 		byte[] b = MsgPackSerializer.DEFAULT.serialize(input);
-		assertEquals(expected, TestUtils.toReadableBytes2(b));
+		assertEquals(expected, StringUtils.toSpacedHex(b));
 	}
 }

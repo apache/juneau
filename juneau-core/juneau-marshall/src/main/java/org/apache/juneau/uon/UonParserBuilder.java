@@ -90,6 +90,56 @@ public class UonParserBuilder extends ParserBuilder {
 		return decoding(true);
 	}
 
+	/**
+	 * Configuration property:  Validate end.
+	 * 
+	 * <p>
+	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in 
+	 * the stream consists of only whitespace.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public UonParserBuilder validateEnd(boolean value) {
+		return set(UON_validateEnd, value);
+	}
+	
+	/**
+	 * Configuration property:  Validate end.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public UonParserBuilder validateEnd() {
+		return set(UON_validateEnd, true);
+	}
+
+	@Override /* ParserBuilder */
+	public UonParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public UonParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
@@ -129,6 +179,18 @@ public class UonParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public UonParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

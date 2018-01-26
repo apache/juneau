@@ -50,6 +50,18 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
+	public MsgPackParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public MsgPackParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public MsgPackParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
@@ -88,6 +100,18 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public MsgPackParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public MsgPackParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public MsgPackParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

@@ -78,6 +78,47 @@ public class UonParser extends ReaderParser {
 	 */
 	public static final String UON_decoding = PREFIX + "decoding.b";
 
+	/**
+	 * Configuration property:  Validate end.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"UonParser.validateEnd.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link UonParserBuilder#validateEnd(boolean)}
+	 * 			<li class='jm'>{@link UonParserBuilder#validateEnd()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in 
+	 * the stream consists of only comments or whitespace.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = UonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.validateEnd()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = UonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>UON_validateEnd</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
+	 * 	String in = <js>"(foo=bar)(baz=qux)"</js>;
+	 * 	MyBean myBean = p.parse(in, MyBean.<jk>class</jk>);
+	 * </p>
+	 */
+	public static final String UON_validateEnd = PREFIX + "validateEnd.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -113,7 +154,7 @@ public class UonParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final boolean
-		decodeChars;
+		decodeChars, validateEnd;
 
 	/**
 	 * Constructor.
@@ -136,6 +177,7 @@ public class UonParser extends ReaderParser {
 	public UonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 		this.decodeChars = getProperty(UON_decoding, boolean.class, false);
+		this.validateEnd = getProperty(UON_validateEnd, boolean.class, false);
 	}
 
 	@Override /* Context */

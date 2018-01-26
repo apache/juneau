@@ -10,10 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.urlencoding;
+package org.apache.juneau.uon;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.*;
 import java.net.URI;
@@ -21,7 +22,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -277,10 +277,10 @@ public class Common_UonTest {
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("[0]root:org.apache.juneau.urlencoding.Common_UonTest$R1"));
-			assertTrue(msg.contains("->[1]r2:org.apache.juneau.urlencoding.Common_UonTest$R2"));
-			assertTrue(msg.contains("->[2]r3:org.apache.juneau.urlencoding.Common_UonTest$R3"));
-			assertTrue(msg.contains("->[3]r1:org.apache.juneau.urlencoding.Common_UonTest$R1"));
+			assertTrue(msg.contains("[0]root:org.apache.juneau.uon.Common_UonTest$R1"));
+			assertTrue(msg.contains("->[1]r2:org.apache.juneau.uon.Common_UonTest$R2"));
+			assertTrue(msg.contains("->[2]r3:org.apache.juneau.uon.Common_UonTest$R3"));
+			assertTrue(msg.contains("->[3]r1:org.apache.juneau.uon.Common_UonTest$R1"));
 		}
 
 		s.ignoreRecursions();

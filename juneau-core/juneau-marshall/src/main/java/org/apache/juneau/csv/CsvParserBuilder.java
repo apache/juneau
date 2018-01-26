@@ -49,6 +49,18 @@ public class CsvParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
+	public CsvParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public CsvParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public CsvParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
@@ -87,6 +99,18 @@ public class CsvParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public CsvParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public CsvParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public CsvParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

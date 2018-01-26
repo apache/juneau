@@ -50,6 +50,18 @@ public class JsoParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
+	public JsoParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public JsoParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public JsoParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
@@ -88,6 +100,18 @@ public class JsoParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public JsoParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public JsoParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public JsoParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

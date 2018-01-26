@@ -184,6 +184,18 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public XmlParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public XmlParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public XmlParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
@@ -222,6 +234,18 @@ public class XmlParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public XmlParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public XmlParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public XmlParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

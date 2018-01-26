@@ -338,6 +338,18 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public RdfParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public RdfParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public RdfParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
@@ -376,6 +388,18 @@ public class RdfParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public RdfParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public RdfParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public RdfParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

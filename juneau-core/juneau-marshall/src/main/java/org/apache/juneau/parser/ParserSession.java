@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
  */
 public abstract class ParserSession extends BeanSession {
 
-	private final boolean trimStrings, strict;
+	private final boolean trimStrings, strict, autoCloseStreams, unbuffered;
 	private final String inputStreamCharset, fileCharset;
 	private final Method javaMethod;
 	private final Object outer;
@@ -56,6 +56,8 @@ public abstract class ParserSession extends BeanSession {
 		super(ctx, args);
 		trimStrings = getProperty(PARSER_trimStrings, boolean.class, ctx.trimStrings);
 		strict = getProperty(PARSER_strict, boolean.class, ctx.strict);
+		autoCloseStreams = getProperty(PARSER_autoCloseStreams, boolean.class, ctx.autoCloseStreams);
+		unbuffered = getProperty(PARSER_unbuffered, boolean.class, ctx.unbuffered);
 		inputStreamCharset = getProperty(PARSER_inputStreamCharset, String.class, ctx.inputStreamCharset);
 		fileCharset = getProperty(PARSER_fileCharset, String.class, ctx.fileCharset);
 		javaMethod = args.javaMethod;
@@ -147,7 +149,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
 	public final ParserPipe createPipe(Object input) {
-		return new ParserPipe(input, isDebug(), strict, fileCharset, inputStreamCharset);
+		return new ParserPipe(input, isDebug(), strict, autoCloseStreams, unbuffered, fileCharset, inputStreamCharset);
 	}
 
 	/**

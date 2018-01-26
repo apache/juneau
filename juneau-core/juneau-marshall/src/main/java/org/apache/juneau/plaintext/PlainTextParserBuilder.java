@@ -50,6 +50,18 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
+	public PlainTextParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public PlainTextParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public PlainTextParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
@@ -88,6 +100,18 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public PlainTextParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public PlainTextParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public PlainTextParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

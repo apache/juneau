@@ -1542,6 +1542,43 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Auto-close streams.
+	 * 
+	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * after parsing is complete.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder autoCloseStreams(boolean value) {
+		return set(PARSER_autoCloseStreams, value);
+	}
+
+	/**
+	 * Configuration property:  Auto-close streams.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder autoCloseStreams() {
+		return set(PARSER_autoCloseStreams, true);
+	}
+
+	/**
 	 * Configuration property:  File charset.
 	 * 
 	 * <p>
@@ -1672,6 +1709,42 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder trimStringsP() {
 		return set(PARSER_trimStrings, true);
+	}
+
+	/**
+	 * Configuration property:  Unbuffered.
+	 * 
+	 * If <jk>true</jk>, don't use internal buffering during parsing.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder unbuffered(boolean value) {
+		return set(PARSER_unbuffered, value);
+	}
+
+	/**
+	 * Configuration property:  Unbuffered.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder unbuffered() {
+		return set(PARSER_unbuffered, true);
 	}
 
 	/**

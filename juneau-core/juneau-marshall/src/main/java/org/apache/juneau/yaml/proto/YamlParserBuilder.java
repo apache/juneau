@@ -50,6 +50,18 @@ public class YamlParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
+	public YamlParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public YamlParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public YamlParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
@@ -88,6 +100,18 @@ public class YamlParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public YamlParserBuilder trimStrings() {
 		super.trimStrings();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public YamlParserBuilder unbuffered(boolean value) {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public YamlParserBuilder unbuffered() {
+		super.unbuffered();
 		return this;
 	}
 

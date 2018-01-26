@@ -18,11 +18,15 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Parent class for all Juneau parsers.
@@ -120,6 +124,49 @@ public abstract class Parser extends BeanContext {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private static final String PREFIX = "Parser.";
+
+	/**
+	 * Configuration property:  Auto-close streams.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams(boolean)}
+	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * after parsing is complete.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.autoCloseStreams()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>PARSER_autoCloseStreams</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
+	 * 	MyBean myBean = p.parse(r, MyBean.<jk>class</jk>);
+	 * 	
+	 * 	<jsm>assertTrue</jsm>(r.isClosed());
+	 * </p>
+	 */
+	public static final String PARSER_autoCloseStreams = PREFIX + "autoCloseStreams.b";
 
 	/**
 	 * Configuration property:  File charset.
@@ -388,6 +435,70 @@ public abstract class Parser extends BeanContext {
 	 * </p>
 	 */
 	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
+	
+	/**
+	 * Configuration property:  Unbuffered.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#unbuffered(boolean)}
+	 * 			<li class='jm'>{@link ParserBuilder#unbuffered()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, don't use internal buffering during parsing.
+	 * 
+	 * <p>
+	 * This is useful in cases when you want to parse the same input stream or reader multiple times
+	 * because it may contain multiple independent POJOs to parse.
+	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.unbuffered()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>PARSER_unbuffered</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Read input with multiple POJOs</jc>
+	 * 	Reader json = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
+	 * 	MyBean myBean1 = p.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean myBean2 = p.parse(json, MyBean.<jk>class</jk>);
+	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>	
+	 * 		This only allows for multi-input streams for the following parsers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link JsonParser}
+	 * 			<li class='jc'>{@link UonParser}
+	 * 		<ul>
+	 * 		It has no effect on the following parsers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link MsgPackParser} - It already doesn't use buffering.
+	 * 			<li class='jc'>{@link XmlParser}, {@link HtmlParser} - These use StAX which doesn't allow for more than one root element anyway.
+	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
+	 * 		</ul>
+	 * 
+	 * If <jk>true</jk>, don't use internal buffering during parsing.
+	 */
+	public static final String PARSER_unbuffered = PREFIX + "unbuffered.b";
 
 	static Parser DEFAULT = new Parser(PropertyStore.create().build()) {
 		@Override
@@ -400,7 +511,7 @@ public abstract class Parser extends BeanContext {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean trimStrings, strict;
+	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
 	final String inputStreamCharset, fileCharset;
 	final Class<? extends ParserListener> listener;
 
@@ -413,6 +524,8 @@ public abstract class Parser extends BeanContext {
 
 		trimStrings = getProperty(PARSER_trimStrings, boolean.class, false);
 		strict = getProperty(PARSER_strict, boolean.class, false);
+		autoCloseStreams = getProperty(PARSER_autoCloseStreams, boolean.class, false);
+		unbuffered = getProperty(PARSER_unbuffered, boolean.class, false);
 		inputStreamCharset = getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
 		fileCharset = getProperty(PARSER_fileCharset, String.class, "DEFAULT");
 		listener = getClassProperty(PARSER_listener, ParserListener.class, null);

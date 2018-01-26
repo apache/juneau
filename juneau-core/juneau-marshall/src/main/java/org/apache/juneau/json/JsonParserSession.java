@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.json.JsonParser.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -34,6 +35,8 @@ import org.apache.juneau.transform.*;
 public final class JsonParserSession extends ReaderParserSession {
 
 	private static final AsciiSet decChars = new AsciiSet("0123456789");
+	
+	private final boolean validateEnd; 
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -46,6 +49,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 */
 	protected JsonParserSession(JsonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
+		validateEnd = getProperty(JSON_validateEnd, boolean.class, ctx.validateEnd);
 	}
 
 	/**
@@ -290,6 +294,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		int S5=5; // Looking for , or }
 		int S6=6; // Found , looking for attr start.
 
+		skipCommentsAndSpace(r);
 		int state = S0;
 		String currAttr = null;
 		int c = 0;
@@ -298,6 +303,8 @@ public final class JsonParserSession extends ReaderParserSession {
 			if (state == S0) {
 				if (c == '{')
 					state = S1;
+				else
+					break;
 			} else if (state == S1) {
 				if (c == '}') {
 					return m;
@@ -738,6 +745,8 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
 	private void validateEnd(ParserReader r) throws Exception {
+		if (! validateEnd)
+			return;
 		skipCommentsAndSpace(r);
 		int c = r.read();
 		if (c != -1 && c != ';')  // var x = {...}; expressions can end with a semicolon.

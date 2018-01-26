@@ -103,6 +103,54 @@ import org.apache.juneau.parser.*;
 public class JsonParser extends ReaderParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "JsonParser.";
+
+	/**
+	 * Configuration property:  Validate end.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"JsonParser.validateEnd.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link JsonParserBuilder#validateEnd(boolean)}
+	 * 			<li class='jm'>{@link JsonParserBuilder#validateEnd()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in 
+	 * the stream consists of only comments or whitespace.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.validateEnd()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>JSON_validateEnd</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
+	 * 	String in = <js>"{foo:'bar'}{baz:'qux'}"</js>;
+	 * 	MyBean myBean = p.parse(in, MyBean.<jk>class</jk>);
+	 * </p>
+	 */
+	public static final String JSON_validateEnd = PREFIX + "validateEnd.b";
+	
+	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -126,7 +174,7 @@ public class JsonParser extends ReaderParser {
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Strict(PropertyStore ps) {
-			super(ps.builder().set(PARSER_strict, true).build());
+			super(ps.builder().set(PARSER_strict, true).set(JSON_validateEnd, true).build());
 		}
 	}
 
@@ -134,6 +182,8 @@ public class JsonParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	final boolean validateEnd;
 
 	/**
 	 * Constructor.
@@ -152,6 +202,7 @@ public class JsonParser extends ReaderParser {
 	 */
 	public JsonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
+		validateEnd = getProperty(JSON_validateEnd, boolean.class, false);
 	}
 
 	@Override /* Context */

@@ -426,13 +426,6 @@ public class TestUtils {
 		return sb.toString();
 	}
 
-	public static String toReadableBytes2(byte[] b) {
-		StringBuilder sb = new StringBuilder();
-		for (byte b2 : b)
-			sb.append(String.format("%02X ", b2));
-		return sb.toString().trim();
-	}
-
 	/**
 	 * Tries to turn the serialized output to a String.
 	 * If it's a byte[], convert it to a UTF-8 encoded String.
