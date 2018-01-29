@@ -475,10 +475,14 @@ public abstract class Parser extends BeanContext {
 	 * 		.set(<jsf>PARSER_unbuffered</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 * 
+	 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
+	 * 	<jc>// It's more efficient because we don't need to recalc the session settings again. </jc>
+	 * 	ReaderParserSession s = p.createSession();
+	 * 	
 	 * 	<jc>// Read input with multiple POJOs</jc>
 	 * 	Reader json = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
-	 * 	MyBean myBean1 = p.parse(json, MyBean.<jk>class</jk>);
-	 * 	MyBean myBean2 = p.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean myBean1 = s.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean myBean2 = s.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>

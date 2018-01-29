@@ -109,7 +109,8 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 					bm = new BeanMetaFiltered(bm, pNames);
 				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();
-					properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), p.getProperties()));
+					if (p.canRead())
+						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), p.getProperties()));
 				}
 				out.put("properties", properties);
 			}

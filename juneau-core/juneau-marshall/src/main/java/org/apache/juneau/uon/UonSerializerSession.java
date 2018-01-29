@@ -221,25 +221,27 @@ public class UonSerializerSession extends WriterSerializerSession {
 
 		for (BeanPropertyValue p : m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
+			if (pMeta.canRead()) {
+				ClassMeta<?> cMeta = p.getClassMeta();
 
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				onBeanGetterException(pMeta, t);
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					onBeanGetterException(pMeta, t);
 
-			if (canIgnoreValue(cMeta, key, value))
-				continue;
+				if (canIgnoreValue(cMeta, key, value))
+					continue;
 
-			if (addComma)
-				out.append(',');
+				if (addComma)
+					out.append(',');
 
-			out.cr(indent).appendObject(key, false).append('=');
+				out.cr(indent).appendObject(key, false).append('=');
 
-			serializeAnything(out, value, cMeta, key, pMeta);
+				serializeAnything(out, value, cMeta, key, pMeta);
 
-			addComma = true;
+				addComma = true;
+			}
 		}
 
 		if (m.size() > 0)

@@ -286,7 +286,14 @@ public class XmlParserSession extends ReaderParserSession {
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
-		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
+		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		ClassMeta<?> sType = null;
+		if (builder != null)
+			sType = builder.getBuilderClassMeta(this);
+		else if (swap != null)
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
 		setCurrentClass(sType);
 
 		String wrapperAttr = (isRoot && preserveRootElement) ? r.getName().getLocalPart() : null;
@@ -352,19 +359,20 @@ public class XmlParserSession extends ReaderParserSession {
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.getInnerClass());
-		} else if (sType.canCreateNewBean(outer)) {
+		} else if (builder != null || sType.canCreateNewBean(outer)) {
 			if (sType.getExtendedMeta(XmlClassMeta.class).getFormat() == COLLAPSED) {
 				String fieldName = r.getLocalName();
-				BeanMap<?> m = newBeanMap(outer, sType.getInnerClass());
+				BeanMap<?> m = builder != null ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
 				BeanPropertyMeta bpm = m.getMeta().getExtendedMeta(XmlBeanMeta.class).getPropertyMeta(fieldName);
 				ClassMeta<?> cm = m.getMeta().getClassMeta();
 				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
 				setName(cm, value, currAttr);
 				bpm.set(m, currAttr, value);
-				o = m.getBean();
+				o = builder != null ? builder.build(this, m.getBean(), eType) : m.getBean();
 			} else {
-				BeanMap m = newBeanMap(outer, sType.getInnerClass());
-				o = parseIntoBean(r, m).getBean();
+				BeanMap m = builder != null ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
+				m = parseIntoBean(r, m);
+				o = builder != null ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
 		} else if (sType.isArray() || sType.isArgs()) {
 			ArrayList l = (ArrayList)parseIntoCollection(r, new ArrayList(), sType, pMeta);

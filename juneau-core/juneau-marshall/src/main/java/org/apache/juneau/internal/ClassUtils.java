@@ -584,20 +584,39 @@ public final class ClassUtils {
 	 * 	Can be subtypes of the actual constructor argument types.
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> Constructor<T> findPublicConstructor(Class<T> c, boolean fuzzyArgs, Class<?>...argTypes) {
+		return findConstructor(c, Visibility.PUBLIC, fuzzyArgs, argTypes);
+	}
+	
+	/**
+	 * Finds a constructor with the specified parameters without throwing an exception.
+	 * 
+	 * @param c The class to search for a constructor.
+	 * @param vis The minimum visibility.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy-arg matching.
+	 * 	Find a constructor that best matches the specified args.
+	 * @param argTypes
+	 * 	The argument types in the constructor.
+	 * 	Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Constructor<T> findConstructor(Class<T> c, Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
 		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
-		if (cce != null && argsMatch(cce.paramTypes, argTypes)) 
+		if (cce != null && argsMatch(cce.paramTypes, argTypes) && cce.isVisible(vis)) 
 			return (Constructor<T>)cce.constructor;
 	
 		if (fuzzyArgs) {
 			int bestCount = -1;
 			Constructor<?> bestMatch = null;
-			for (Constructor<?> n : c.getConstructors()) {
-				int m = fuzzyArgsMatch(n.getParameterTypes(), argTypes);
-				if (m > bestCount) {
-					bestCount = m;
-					bestMatch = n;
+			for (Constructor<?> n : c.getDeclaredConstructors()) {
+				if (vis.isVisible(n)) {
+					int m = fuzzyArgsMatch(n.getParameterTypes(), argTypes);
+					if (m > bestCount) {
+						bestCount = m;
+						bestMatch = n;
+					}
 				}
 			}
 			if (bestCount >= 0) 
@@ -606,7 +625,7 @@ public final class ClassUtils {
 		} 
 		
 		for (Constructor<?> n : c.getConstructors()) {
-			if (argsMatch(n.getParameterTypes(), argTypes)) {
+			if (argsMatch(n.getParameterTypes(), argTypes) && vis.isVisible(n)) {
 				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
 				return (Constructor<T>)n;
 			}
@@ -615,6 +634,8 @@ public final class ClassUtils {
 		return null;
 	}
 	
+	
+	
 	private static final class ConstructorCacheEntry {
 		final Constructor<?> constructor;
 		final Class<?>[] paramTypes;
@@ -622,6 +643,10 @@ public final class ClassUtils {
 		ConstructorCacheEntry(Class<?> forClass, Constructor<?> constructor) {
 			this.constructor = constructor;
 			this.paramTypes = constructor.getParameterTypes();
+		}
+		
+		boolean isVisible(Visibility vis) {
+			return vis.isVisible(constructor);
 		}
 	}
 	

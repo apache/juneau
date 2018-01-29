@@ -349,9 +349,11 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 					boolean hasChildElements = false;
 
 					for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
-						XmlFormat pMetaFormat = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
-						if (pMetaFormat != XmlFormat.ATTR)
-							hasChildElements = true;
+						if (pMeta.canRead()) {
+							XmlFormat pMetaFormat = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+							if (pMetaFormat != XmlFormat.ATTR)
+								hasChildElements = true;
+						}
 					}
 
 					XmlBeanMeta xbm2 = bm.getExtendedMeta(XmlBeanMeta.class);
@@ -369,17 +371,20 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 						boolean hasCollapsed = false;
 
 						for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
-							XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-							if (xmlMeta.getXmlFormat() != ATTR) {
-								if (xmlMeta.getNamespace() != null) {
-									ClassMeta<?> ct2 = pMeta.getClassMeta();
-									Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
-									// Child element is in another namespace.
-									schemas.queueElement(cNs, pMeta.getName(), ct2);
-									hasOtherNsElement = true;
+							if (pMeta.canRead()) {
+								XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+								if (xmlMeta.getXmlFormat() != ATTR) {
+									if (xmlMeta.getNamespace() != null) {
+										ClassMeta<?> ct2 = pMeta.getClassMeta();
+										Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
+										// Child element is in another namespace.
+										schemas.queueElement(cNs, pMeta.getName(), ct2);
+										hasOtherNsElement = true;
+									}
+									if (xmlMeta.getXmlFormat() == COLLAPSED)
+										hasCollapsed = true;
 								}
-								if (xmlMeta.getXmlFormat() == COLLAPSED)
-									hasCollapsed = true;
+								
 							}
 						}
 
@@ -396,30 +401,31 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 						} else {
 							w.sTag(i+1, "all").nl(i+1);
 							for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
-								XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-								if (xmlMeta.getXmlFormat() != ATTR) {
-									boolean isCollapsed = xmlMeta.getXmlFormat() == COLLAPSED;
-									ClassMeta<?> ct2 = pMeta.getClassMeta();
-									String childName = pMeta.getName();
-									if (isCollapsed) {
-										if (xmlMeta.getChildName() != null)
-											childName = xmlMeta.getChildName();
-										ct2 = pMeta.getClassMeta().getElementType();
-									}
-									Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
-									if (xmlMeta.getNamespace() == null) {
-										w.oTag(i+2, "element")
-											.attr("name", XmlUtils.encodeElementName(childName), false)
-											.attr("type", getXmlType(cNs, ct2))
-											.attr("minOccurs", 0);
+								if (pMeta.canRead()) {
+									XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+									if (xmlMeta.getXmlFormat() != ATTR) {
+										boolean isCollapsed = xmlMeta.getXmlFormat() == COLLAPSED;
+										ClassMeta<?> ct2 = pMeta.getClassMeta();
+										String childName = pMeta.getName();
+										if (isCollapsed) {
+											if (xmlMeta.getChildName() != null)
+												childName = xmlMeta.getChildName();
+											ct2 = pMeta.getClassMeta().getElementType();
+										}
+										Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
+										if (xmlMeta.getNamespace() == null) {
+											w.oTag(i+2, "element")
+												.attr("name", XmlUtils.encodeElementName(childName), false)
+												.attr("type", getXmlType(cNs, ct2))
+												.attr("minOccurs", 0);
 
-										w.ceTag().nl(i+2);
-									} else {
-										// Child element is in another namespace.
-										schemas.queueElement(cNs, pMeta.getName(), ct2);
-										hasOtherNsElement = true;
+											w.ceTag().nl(i+2);
+										} else {
+											// Child element is in another namespace.
+											schemas.queueElement(cNs, pMeta.getName(), ct2);
+											hasOtherNsElement = true;
+										}
 									}
-
 								}
 							}
 							w.eTag(i+1, "all").nl(i+1);
@@ -428,26 +434,28 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 					}
 
 					for (BeanPropertyMeta pMeta : bm.getExtendedMeta(XmlBeanMeta.class).getAttrProperties().values()) {
-						Namespace pNs = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
-						if (pNs == null)
-							pNs = defaultNs;
+						if (pMeta.canRead()) {
+							Namespace pNs = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
+							if (pNs == null)
+								pNs = defaultNs;
 
-						// If the bean attribute has a different namespace than the bean, then it needs to
-						// be added as a top-level entry in the appropriate schema file.
-						if (pNs != targetNs) {
-							schemas.queueAttribute(pNs, pMeta.getName(), pMeta.getClassMeta());
-							w.oTag(i+1, "attribute")
-								//.attr("name", pMeta.getName(), true)
-								.attr("ref", pNs.getName() + ':' + pMeta.getName())
-								.ceTag().nl(i+1);
-						}
+							// If the bean attribute has a different namespace than the bean, then it needs to
+							// be added as a top-level entry in the appropriate schema file.
+							if (pNs != targetNs) {
+								schemas.queueAttribute(pNs, pMeta.getName(), pMeta.getClassMeta());
+								w.oTag(i+1, "attribute")
+									//.attr("name", pMeta.getName(), true)
+									.attr("ref", pNs.getName() + ':' + pMeta.getName())
+									.ceTag().nl(i+1);
+							}
 
-						// Otherwise, it's just a plain attribute of this bean.
-						else {
-							w.oTag(i+1, "attribute")
-								.attr("name", pMeta.getName(), true)
-								.attr("type", getXmlAttrType(pMeta.getClassMeta()))
-								.ceTag().nl(i+1);
+							// Otherwise, it's just a plain attribute of this bean.
+							else {
+								w.oTag(i+1, "attribute")
+									.attr("name", pMeta.getName(), true)
+									.attr("type", getXmlAttrType(pMeta.getClassMeta()))
+									.ceTag().nl(i+1);
+							}
 						}
 					}
 

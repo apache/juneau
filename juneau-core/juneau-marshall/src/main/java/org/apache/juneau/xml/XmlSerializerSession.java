@@ -210,9 +210,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 				if (innerType.isBean()) {
 					for (BeanPropertyMeta bpm : innerType.getBeanMeta().getPropertyMetas()) {
-						ns = bpm.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
-						if (ns != null && ns.uri != null)
-							addNamespace(ns);
+						if (bpm.canRead()) {
+							ns = bpm.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
+							if (ns != null && ns.uri != null)
+								addNamespace(ns);
+						}
 					}
 
 				} else if (innerType.isMap()) {
@@ -562,40 +564,42 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			String n = p.getName();
 			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
 				BeanPropertyMeta pMeta = p.getMeta();
-				ClassMeta<?> cMeta = p.getClassMeta();
+				if (pMeta.canRead()) {
+					ClassMeta<?> cMeta = p.getClassMeta();
 
-				String key = p.getName();
-				Object value = p.getValue();
-				Throwable t = p.getThrown();
-				if (t != null)
-					onBeanGetterException(pMeta, t);
+					String key = p.getName();
+					Object value = p.getValue();
+					Throwable t = p.getThrown();
+					if (t != null)
+						onBeanGetterException(pMeta, t);
 
-				if (canIgnoreValue(cMeta, key, value))
-					continue;
+					if (canIgnoreValue(cMeta, key, value))
+						continue;
 
-				Namespace ns = (enableNamespaces && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() != elementNs ? pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() : null);
+					Namespace ns = (enableNamespaces && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() != elementNs ? pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() : null);
 
-				if (pMeta.isUri()  ) {
-					out.attrUri(ns, key, value);
-				} else if (n.equals(attrsProperty)) {
-					if (value instanceof BeanMap) {
-						BeanMap<?> bm2 = (BeanMap)value;
-						for (BeanPropertyValue p2 : bm2.getValues(true)) {
-							String key2 = p2.getName();
-							Object value2 = p2.getValue();
-							Throwable t2 = p2.getThrown();
-							if (t2 != null)
-								onBeanGetterException(pMeta, t);
-							out.attr(ns, key2, value2);
+					if (pMeta.isUri()  ) {
+						out.attrUri(ns, key, value);
+					} else if (n.equals(attrsProperty)) {
+						if (value instanceof BeanMap) {
+							BeanMap<?> bm2 = (BeanMap)value;
+							for (BeanPropertyValue p2 : bm2.getValues(true)) {
+								String key2 = p2.getName();
+								Object value2 = p2.getValue();
+								Throwable t2 = p2.getThrown();
+								if (t2 != null)
+									onBeanGetterException(pMeta, t);
+								out.attr(ns, key2, value2);
+							}
+						} else /* Map */ {
+							Map m2 = (Map)value;
+							for (Map.Entry e : (Set<Map.Entry>)(m2.entrySet())) {
+								out.attr(ns, toString(e.getKey()), e.getValue());
+							}
 						}
-					} else /* Map */ {
-						Map m2 = (Map)value;
-						for (Map.Entry e : (Set<Map.Entry>)(m2.entrySet())) {
-							out.attr(ns, toString(e.getKey()), e.getValue());
-						}
+					} else {
+						out.attr(ns, key, value);
 					}
-				} else {
-					out.attr(ns, key, value);
 				}
 			}
 		}
@@ -607,39 +611,41 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		for (BeanPropertyValue p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
+			if (pMeta.canRead()) {
+				ClassMeta<?> cMeta = p.getClassMeta();
 
-			String n = p.getName();
-			if (n.equals(contentProperty)) {
-				content = p.getValue();
-				contentType = p.getClassMeta();
-				hasContent = true;
-				cf = xbm.getContentFormat();
-				if (cf.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT))
-					isMixed = true;
-				if (cf.isOneOf(MIXED_PWS, TEXT_PWS))
-					preserveWhitespace = true;
-				if (contentType.isCollection() && ((Collection)content).isEmpty())
-					hasContent = false;
-				else if (contentType.isArray() && Array.getLength(content) == 0)
-					hasContent = false;
-			} else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*") ) {
-				String key = p.getName();
-				Object value = p.getValue();
-				Throwable t = p.getThrown();
-				if (t != null)
-					onBeanGetterException(pMeta, t);
+				String n = p.getName();
+				if (n.equals(contentProperty)) {
+					content = p.getValue();
+					contentType = p.getClassMeta();
+					hasContent = true;
+					cf = xbm.getContentFormat();
+					if (cf.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT))
+						isMixed = true;
+					if (cf.isOneOf(MIXED_PWS, TEXT_PWS))
+						preserveWhitespace = true;
+					if (contentType.isCollection() && ((Collection)content).isEmpty())
+						hasContent = false;
+					else if (contentType.isArray() && Array.getLength(content) == 0)
+						hasContent = false;
+				} else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*") ) {
+					String key = p.getName();
+					Object value = p.getValue();
+					Throwable t = p.getThrown();
+					if (t != null)
+						onBeanGetterException(pMeta, t);
 
-				if (canIgnoreValue(cMeta, key, value))
-					continue;
+					if (canIgnoreValue(cMeta, key, value))
+						continue;
 
-				if (! hasChildren) {
-					hasChildren = true;
-					out.appendIf(! isCollapsed, '>').nlIf(! isMixed, indent);
+					if (! hasChildren) {
+						hasChildren = true;
+						out.appendIf(! isCollapsed, '>').nlIf(! isMixed, indent);
+					}
+
+					XmlBeanPropertyMeta xbpm = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+					serializeAnything(out, value, cMeta, key, xbpm.getNamespace(), false, xbpm.getXmlFormat(), isMixed, false, pMeta);
 				}
-
-				XmlBeanPropertyMeta xbpm = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-				serializeAnything(out, value, cMeta, key, xbpm.getNamespace(), false, xbpm.getXmlFormat(), isMixed, false, pMeta);
 			}
 		}
 		if (! hasContent)

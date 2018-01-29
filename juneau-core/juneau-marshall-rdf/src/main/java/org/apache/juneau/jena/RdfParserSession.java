@@ -231,7 +231,14 @@ public class RdfParserSession extends ReaderParserSession {
 		if (eType == null)
 			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
-		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
+		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		ClassMeta<?> sType = null;
+		if (builder != null)
+			sType = builder.getBuilderClassMeta(this);
+		else if (swap != null)
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
 		setCurrentClass(sType);
 
 		if (! sType.canCreateNewInstance(outer)) {
@@ -319,6 +326,12 @@ public class RdfParserSession extends ReaderParserSession {
 			}
 			if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, (Collection)o);
+		} else if (builder != null) {
+			Resource r = n.asResource();
+			if (! urisVisited.add(r))
+				return null;
+			BeanMap<?> bm = toBeanMap(builder.create(this, eType));
+			o = builder.build(this, parseIntoBeanMap(r, bm).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			Resource r = n.asResource();
 			if (! urisVisited.add(r))

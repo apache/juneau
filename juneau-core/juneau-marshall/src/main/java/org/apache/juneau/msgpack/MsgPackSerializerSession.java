@@ -195,15 +195,17 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 
 		for (BeanPropertyValue p : values) {
 			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				onBeanGetterException(pMeta, t);
-			else {
-				serializeAnything(out, key, null, null, null);
-				serializeAnything(out, value, cMeta, key, pMeta);
+			if (pMeta.canRead()) {
+				ClassMeta<?> cMeta = p.getClassMeta();
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					onBeanGetterException(pMeta, t);
+				else {
+					serializeAnything(out, key, null, null, null);
+					serializeAnything(out, value, cMeta, key, pMeta);
+				}
 			}
 		}
 	}

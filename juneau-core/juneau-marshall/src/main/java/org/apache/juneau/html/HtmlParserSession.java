@@ -83,8 +83,15 @@ public final class HtmlParserSession extends XmlParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap(this);
-		ClassMeta<?> sType = transform == null ? eType : transform.getSwapClassMeta(this);
+		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		ClassMeta<?> sType = null;
+		if (builder != null)
+			sType = builder.getBuilderClassMeta(this);
+		else if (swap != null)
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
 		setCurrentClass(sType);
 
 		int event = r.getEventType();
@@ -208,6 +215,9 @@ public final class HtmlParserSession extends XmlParserSession {
 				} else if (sType.isMap()) {
 					o = parseIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer)
 						: new ObjectMap(this)), sType.getKeyType(), sType.getValueType(), pMeta);
+				} else if (builder != null) {
+					BeanMap m = toBeanMap(builder.create(this, eType));
+					o = builder.build(this, parseIntoBean(r, m).getBean(), eType);
 				} else if (sType.canCreateNewBean(outer)) {
 					BeanMap m = newBeanMap(outer, sType.getInnerClass());
 					o = parseIntoBean(r, m).getBean();
@@ -256,8 +266,8 @@ public final class HtmlParserSession extends XmlParserSession {
 		if (! isValid)
 			throw new XmlParseException(r.getLocation(), "Unexpected tag ''{0}'' for type ''{1}''", tag, eType);
 
-		if (transform != null && o != null)
-			o = transform.unswap(this, o, eType);
+		if (swap != null && o != null)
+			o = swap.unswap(this, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);

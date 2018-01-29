@@ -60,18 +60,22 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 					BeanMeta<?> bm = entryType.getBeanMeta();
 					int i = 0;
 					for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
-						if (i++ > 0)
-							w.append(',');
-						append(w, pm.getName());
+						if (pm.canRead()) {
+							if (i++ > 0)
+								w.append(',');
+							append(w, pm.getName());
+						}
 					}
 					w.append('\n');
 					for (Object o2 : l) {
 						i = 0;
 						BeanMap<?> bean = toBeanMap(o2);
 						for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
-							if (i++ > 0)
-								w.append(',');
-							append(w, pm.get(bean, pm.getName()));
+							if (pm.canRead()) {
+								if (i++ > 0)
+									w.append(',');
+								append(w, pm.get(bean, pm.getName()));
+							}
 						}
 						w.append('\n');
 					}

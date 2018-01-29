@@ -97,6 +97,7 @@ public final class ClassMeta<T> implements Type {
 		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
 	private final PojoSwap<T,?>[] pojoSwaps;                // The object POJO swaps associated with this bean (if it has any).
 	private final BeanFilter beanFilter;                    // The bean filter associated with this bean (if it has one).
+	private final BuilderSwap<T,?> builderSwap;             // The builder swap associated with this bean (if it has one).
 	private final MetadataMap extMeta;                      // Extended metadata
 	private final BeanContext beanContext;                  // The bean context that created this object.
 	private final ClassMeta<?>
@@ -169,6 +170,7 @@ public final class ClassMeta<T> implements Type {
 			this.remoteableMethods = builder.remoteableMethods;
 			this.beanFilter = beanFilter;
 			this.pojoSwaps = builder.pojoSwaps.isEmpty() ? null : builder.pojoSwaps.toArray(new PojoSwap[builder.pojoSwaps.size()]);
+			this.builderSwap = builder.builderSwap;
 			this.extMeta = new MetadataMap();
 			this.keyType = builder.keyType;
 			this.valueType = builder.valueType;
@@ -240,6 +242,7 @@ public final class ClassMeta<T> implements Type {
 		this.dictionaryName = mainType.dictionaryName;
 		this.notABeanReason = mainType.notABeanReason;
 		this.pojoSwaps = mainType.pojoSwaps;
+		this.builderSwap = mainType.builderSwap;
 		this.beanFilter = mainType.beanFilter;
 		this.extMeta = mainType.extMeta;
 		this.initException = mainType.initException;
@@ -286,6 +289,7 @@ public final class ClassMeta<T> implements Type {
 		this.dictionaryName = null;
 		this.notABeanReason = null;
 		this.pojoSwaps = null;
+		this.builderSwap = null;
 		this.beanFilter = null;
 		this.extMeta = new MetadataMap();
 		this.initException = null;
@@ -324,8 +328,7 @@ public final class ClassMeta<T> implements Type {
 		ClassMeta<?>
 			keyType = null,
 			valueType = null,
-			elementType = null,
-			serializedClassMeta = null;
+			elementType = null;
 		String
 			typePropertyName = null,
 			notABeanReason = null,
@@ -333,6 +336,7 @@ public final class ClassMeta<T> implements Type {
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
 		List<PojoSwap> pojoSwaps = new ArrayList<>();
+		BuilderSwap builderSwap;
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
 		PojoSwap<?,?>[] childPojoSwaps;
@@ -583,6 +587,9 @@ public final class ClassMeta<T> implements Type {
 
 			if (pojoSwaps != null)
 				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
+			
+			if (beanContext != null)
+				this.builderSwap = BuilderSwap.findSwapFromPojoClass(c, beanContext.beanConstructorVisibility, beanContext.beanMethodVisibility);
 
 			findPojoSwaps(this.pojoSwaps);
 
@@ -644,10 +651,6 @@ public final class ClassMeta<T> implements Type {
 
 			if (beanMeta != null)
 				dictionaryName = beanMeta.getDictionaryName();
-
-			serializedClassMeta = (this.pojoSwaps.isEmpty() ? ClassMeta.this : findClassMeta(this.pojoSwaps.get(0).getSwapClass()));
-			if (serializedClassMeta == null)
-				serializedClassMeta = ClassMeta.this;
 
 			if (beanMeta != null && beanContext != null && beanContext.useInterfaceProxies && innerClass.isInterface())
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
@@ -1277,6 +1280,16 @@ public final class ClassMeta<T> implements Type {
 				return pojoSwaps[matchIndex];
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns the builder swap associated with this class.
+	 * 
+	 * @param session The current bean session.
+	 * @return The builder swap associated with this class, or <jk>null</jk> if it doesn't exist.
+	 */
+	public BuilderSwap<T,?> getBuilderSwap(BeanSession session) {
+		return builderSwap;
 	}
 
 	/**

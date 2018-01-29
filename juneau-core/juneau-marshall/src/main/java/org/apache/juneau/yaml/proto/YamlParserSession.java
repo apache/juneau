@@ -113,7 +113,14 @@ public final class YamlParserSession extends ReaderParserSession {
 		if (eType == null)
 			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
-		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
+		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		ClassMeta<?> sType = null;
+		if (builder != null)
+			sType = builder.getBuilderClassMeta(this);
+		else if (swap != null)
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
 		setCurrentClass(sType);
 
 		Object o = null;
@@ -171,6 +178,9 @@ public final class YamlParserSession extends ReaderParserSession {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(this));
 				o = parseIntoCollection2(r, l, sType, pMeta);
 			}
+		} else if (builder != null) {
+			BeanMap m = toBeanMap(builder.create(this, eType));
+			o = builder.build(this, parseIntoBeanMap2(r, m).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = newBeanMap(outer, sType.getInnerClass());
 			o = parseIntoBeanMap2(r, m).getBean();

@@ -131,7 +131,15 @@ public class UonParserSession extends ReaderParserSession {
 		if (eType == null)
 			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
-		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
+		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		ClassMeta<?> sType = null;
+		if (builder != null)
+			sType = builder.getBuilderClassMeta(this);
+		else if (swap != null)
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
+		setCurrentClass(sType);
 
 		Object o = null;
 
@@ -210,6 +218,10 @@ public class UonParserSession extends ReaderParserSession {
 				);
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			}
+		} else if (builder != null) {
+			BeanMap m = toBeanMap(builder.create(this, eType));
+			m = parseIntoBeanMap(r, m);
+			o = m == null ? null : builder.build(this, m.getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(r, m);

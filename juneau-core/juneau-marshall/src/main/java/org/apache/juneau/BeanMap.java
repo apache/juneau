@@ -447,23 +447,25 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			if (v != null)
 				l.add(v);
 		for (BeanPropertyMeta bpm : properties) {
-			try {
-				if (bpm.isDyna()) {
-					for (String pName : bpm.getDynaMap(bean).keySet()) {
-						Object val = bpm.get(this, pName);
+			if (bpm.canRead()) {
+				try {
+					if (bpm.isDyna()) {
+						for (String pName : bpm.getDynaMap(bean).keySet()) {
+							Object val = bpm.get(this, pName);
+							if (val != null || ! ignoreNulls)
+								l.add(new BeanPropertyValue(bpm, pName, val, null));
+						}
+					} else {
+						Object val = bpm.get(this, null);
 						if (val != null || ! ignoreNulls)
-							l.add(new BeanPropertyValue(bpm, pName, val, null));
+							l.add(new BeanPropertyValue(bpm, bpm.getName(), val, null));
 					}
-				} else {
-					Object val = bpm.get(this, null);
-					if (val != null || ! ignoreNulls)
-						l.add(new BeanPropertyValue(bpm, bpm.getName(), val, null));
+				} catch (Error e) {
+					// Errors should always be uncaught.
+					throw e;
+				} catch (Throwable t) {
+					l.add(new BeanPropertyValue(bpm, bpm.getName(), null, t));
 				}
-			} catch (Error e) {
-				// Errors should always be uncaught.
-				throw e;
-			} catch (Throwable t) {
-				l.add(new BeanPropertyValue(bpm, bpm.getName(), null, t));
 			}
 		}
 		if (meta.sortProperties && meta.dynaProperty != null)

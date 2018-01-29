@@ -600,30 +600,32 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					for (Object k : th) {
 						BeanMapEntry p = m2.getProperty(toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
-						Object value = p.getValue();
+						if (pMeta.canRead()) {
+							Object value = p.getValue();
 
-						String link = null, anchorText = null;
-						if (! pMeta.getClassMeta().isCollectionOrArray()) {
-							link = m2.resolveVars(getLink(pMeta));
-							anchorText = m2.resolveVars(getAnchorText(pMeta));
+							String link = null, anchorText = null;
+							if (! pMeta.getClassMeta().isCollectionOrArray()) {
+								link = m2.resolveVars(getLink(pMeta));
+								anchorText = m2.resolveVars(getAnchorText(pMeta));
+							}
+
+							if (anchorText != null)
+								value = anchorText;
+
+							String style = getStyle(this, pMeta, value);
+							out.oTag(i+2, "td");
+							if (style != null)
+								out.attr("style", style);
+							out.cTag();
+							if (link != null)
+								out.oTag("a").attrUri("href", link).cTag();
+							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
+							if (cr == CR_NORMAL)
+								out.i(i+2);
+							if (link != null)
+								out.eTag("a");
+							out.eTag("td").nl(i+2);
 						}
-
-						if (anchorText != null)
-							value = anchorText;
-
-						String style = getStyle(this, pMeta, value);
-						out.oTag(i+2, "td");
-						if (style != null)
-							out.attr("style", style);
-						out.cTag();
-						if (link != null)
-							out.oTag("a").attrUri("href", link).cTag();
-						ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
-						if (cr == CR_NORMAL)
-							out.i(i+2);
-						if (link != null)
-							out.eTag("a");
-						out.eTag("td").nl(i+2);
 					}
 				}
 				out.ie(i+1).eTag("tr").nl(i+1);

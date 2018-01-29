@@ -129,7 +129,7 @@ public class BeanMeta<T> {
 		this.extMeta = b.extMeta;
 		this.beanRegistry = b.beanRegistry;
 		this.typePropertyName = b.typePropertyName;
-		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
+		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
 		this.sortProperties = b.sortProperties;
 	}
 
@@ -443,7 +443,7 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
 			BeanProperty bp = f.getAnnotation(BeanProperty.class);
 			String name = bpName(bp);
-			if (! name.isEmpty()) {
+			if (name != null && ! name.isEmpty()) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
 				return null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties.
@@ -522,9 +522,9 @@ public class BeanMeta<T> {
 			else if (b.field != null)
 				pt = b.field.getType();
 
-			// Doesn't match if no getter/field defined.
+			// Matches if only a setter is defined.
 			if (pt == null)
-				return false;
+				return true;
 
 			// Doesn't match if not same type or super type as getter/field.
 			if (! isParentClass(type, pt))
@@ -585,17 +585,31 @@ public class BeanMeta<T> {
 					} else if (n.startsWith("is") && (rt.equals(Boolean.TYPE) || rt.equals(Boolean.class))) {
 						isGetter = true;
 						n = n.substring(2);
-					} else if (! bpName.isEmpty()) {
+					} else if (bpName != null) {
 						isGetter = true;
-						n = bpName;
+						if (bpName.isEmpty()) {
+							if (n.startsWith("get"))
+								n = n.substring(3);
+							else if (n.startsWith("is"))
+								n = n.substring(2);
+							bpName = n;
+						} else {
+							n = bpName;
+						}
 					}
 				} else if (pt.length == 1) {
 					if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
 						isSetter = true;
 						n = n.substring(3);
-					} else if (! bpName.isEmpty()) {
+					} else if (bpName != null) {
 						isSetter = true;
-						n = bpName;
+						if (bpName.isEmpty()) {
+							if (n.startsWith("set"))
+								n = n.substring(3);
+							bpName = n;
+						} else {
+							n = bpName;
+						}
 					}
 				} else if (pt.length == 2) {
 					if ("*".equals(bpName)) {
@@ -605,7 +619,7 @@ public class BeanMeta<T> {
 				}
 				n = pn.getPropertyName(n);
 				if (isGetter || isSetter) {
-					if (! bpName.isEmpty()) {
+					if (bpName != null && ! bpName.isEmpty()) {
 						n = bpName;
 						if (! fixedBeanProps.isEmpty())
 							if (! fixedBeanProps.contains(n))
@@ -789,7 +803,7 @@ public class BeanMeta<T> {
 
 	static final String bpName(BeanProperty bp) {
 		if (bp == null)
-			return "";
+			return null;
 		if (! bp.name().isEmpty())
 			return bp.name();
 		return bp.value();

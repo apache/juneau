@@ -222,43 +222,45 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		for (BeanPropertyValue p : m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
-			ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
+			if (pMeta.canRead()) {
+				ClassMeta<?> cMeta = p.getClassMeta();
+				ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
 
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				onBeanGetterException(pMeta, t);
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					onBeanGetterException(pMeta, t);
 
-			if (canIgnoreValue(sMeta, key, value))
-				continue;
+				if (canIgnoreValue(sMeta, key, value))
+					continue;
 
-			if (value != null && shouldUseExpandedParams(pMeta)) {
-				// Transformed object array bean properties may be transformed resulting in ArrayLists,
-				// so we need to check type if we think it's an array.
-				Iterator i = (sMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
-				while (i.hasNext()) {
+				if (value != null && shouldUseExpandedParams(pMeta)) {
+					// Transformed object array bean properties may be transformed resulting in ArrayLists,
+					// so we need to check type if we think it's an array.
+					Iterator i = (sMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
+					while (i.hasNext()) {
+						if (addAmp)
+							out.cr(indent).append('&');
+
+						out.appendObject(key, true).append('=');
+
+						super.serializeAnything(out, i.next(), cMeta.getElementType(), key, pMeta);
+
+						addAmp = true;
+					}
+				} else {
 					if (addAmp)
 						out.cr(indent).append('&');
 
 					out.appendObject(key, true).append('=');
 
-					super.serializeAnything(out, i.next(), cMeta.getElementType(), key, pMeta);
+					super.serializeAnything(out, value, cMeta, key, pMeta);
 
 					addAmp = true;
 				}
-			} else {
-				if (addAmp)
-					out.cr(indent).append('&');
-
-				out.appendObject(key, true).append('=');
-
-				super.serializeAnything(out, value, cMeta, key, pMeta);
-
-				addAmp = true;
+				
 			}
-
 		}
 		return out;
 	}

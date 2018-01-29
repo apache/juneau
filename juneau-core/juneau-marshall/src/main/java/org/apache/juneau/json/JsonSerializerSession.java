@@ -189,24 +189,26 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		boolean addComma = false;
 		for (BeanPropertyValue p : m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				onBeanGetterException(pMeta, t);
+			if (pMeta.canRead()) {
+				ClassMeta<?> cMeta = p.getClassMeta();
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					onBeanGetterException(pMeta, t);
 
-			if (canIgnoreValue(cMeta, key, value))
-				continue;
+				if (canIgnoreValue(cMeta, key, value))
+					continue;
 
-			if (addComma)
-				out.append(',').smi(i);
+				if (addComma)
+					out.append(',').smi(i);
 
-			out.cr(i).attr(key).append(':').s(i);
+				out.cr(i).attr(key).append(':').s(i);
 
-			serializeAnything(out, value, cMeta, key, pMeta);
+				serializeAnything(out, value, cMeta, key, pMeta);
 
-			addComma = true;
+				addComma = true;
+			}
 		}
 		out.cre(i-1).append('}');
 		return out;

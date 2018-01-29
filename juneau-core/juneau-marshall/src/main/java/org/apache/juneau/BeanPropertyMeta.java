@@ -68,7 +68,8 @@ public final class BeanPropertyMeta {
 
 	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
 	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
-
+	private final boolean canRead, canWrite;
+	
 	/**
 	 * Creates a builder for {@link #BeanPropertyMeta} objects.
 	 * 
@@ -97,6 +98,7 @@ public final class BeanPropertyMeta {
 		Object overrideValue;
 		BeanPropertyMeta delegateFor;
 		MetadataMap extMeta = new MetadataMap();
+		boolean canRead, canWrite;
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
@@ -148,16 +150,29 @@ public final class BeanPropertyMeta {
 			this.delegateFor = delegateFor;
 			return this;
 		}
+		
+		Builder canRead() {
+			this.canRead = true;
+			return this;
+		}
+
+		Builder canWrite() {
+			this.canWrite = true;
+			return this;
+		}
 
 		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
 
 			List<Class<?>> bdClasses = new ArrayList<>();
 
-			if (field == null && getter == null)
+			if (field == null && getter == null && setter == null)
 				return false;
 
 			if (field == null && setter == null && f.beansRequireSettersForGetters && ! isConstructorArg)
 				return false;
+			
+			canRead |= (field != null || getter != null);
+			canWrite |= (field != null || setter != null);
 
 			if (field != null) {
 				BeanProperty p = field.getAnnotation(BeanProperty.class);
@@ -340,6 +355,8 @@ public final class BeanPropertyMeta {
 		this.delegateFor = b.delegateFor;
 		this.extMeta = b.extMeta;
 		this.isDyna = b.isDyna;
+		this.canRead = b.canRead;
+		this.canWrite = b.canWrite;
 	}
 
 	/**
@@ -1094,5 +1111,23 @@ public final class BeanPropertyMeta {
 	@Override /* Object */
 	public String toString() {
 		return name + ": " + this.rawTypeMeta.getInnerClass().getName() + ", field=["+field+"], getter=["+getter+"], setter=["+setter+"]";
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this property can be read.
+	 * 
+	 * @return <jk>true</jk> if this property can be read.
+	 */
+	public boolean canRead() {
+		return canRead;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this property can be written.
+	 * 
+	 * @return <jk>true</jk> if this property can be written.
+	 */
+	public boolean canWrite() {
+		return canWrite;
 	}
 }

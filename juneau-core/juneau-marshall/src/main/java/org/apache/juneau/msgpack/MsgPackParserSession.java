@@ -58,7 +58,14 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 		if (eType == null)
 			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
-		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
+		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		ClassMeta<?> sType = null;
+		if (builder != null)
+			sType = builder.getBuilderClassMeta(this);
+		else if (swap != null)
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
 		setCurrentClass(sType);
 
 		Object o = null;
@@ -110,9 +117,9 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				} else {
 					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
-			} else if (sType.canCreateNewBean(outer)) {
+			} else if (builder != null || sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
-					BeanMap m = newBeanMap(outer, sType.getInnerClass());
+					BeanMap m = builder == null ? newBeanMap(outer, sType.getInnerClass()) : toBeanMap(builder.create(this, eType));
 					for (int i = 0; i < length; i++) {
 						String pName = parseAnything(string(), is, m.getBean(false), null);
 						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
@@ -128,7 +135,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 							bpm.set(m, pName, value);
 						}
 					}
-					o = m.getBean();
+					o = builder == null ? m.getBean() : builder.build(this, m.getBean(), eType);
 				} else {
 					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}

@@ -105,6 +105,7 @@
 				<li><p><a class='doclink' href='#juneau-marshall.BeanIgnoreAnnotation'>@BeanIgnore Annotation</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.NamePropertyAnnotation'>@NameProperty Annotation</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.ParentPropertyAnnotation'>@ParentProperty Annotation</a></p>
+				<li><p><a class='doclink' href='#juneau-marshall.PojoBuilders'>POJO Builders</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.URIs'>URIs</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.BeanFilters'>BeanFilters</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.InterfaceFilters'>Interface filters</a></p>
@@ -2347,8 +2348,117 @@
 			</div>
 
 			<!-- =================================================================================================== -->
+			<a id="juneau-marshall.PojoBuilders"></a>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.14 - POJO Builders</h4>
+			<div class='topic'>
+				<p>
+					Juneau parsers can use builders to instantiate POJOs.
+					<br>This is useful in cases where you want to create beans with read-only properties.
+					<br>Note that while it's possible to do this using the {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor}
+					annotation, using builders can often be cleaner.
+				</p>
+				<p>
+					A typical builder usage is shown below:
+				</p>
+				<p class='bcode'>
+	MyBean b = MyBean.<jsm>create</jsm>().foo(<js>"foo"</js>).bar(123).build();
+				</p>								
+				<p>
+					The code for such a builder is shown below:
+				</p>
+				<p class='bcode'>
+	<jk>public class</jk> MyBean {
+	
+		<jc>// Read-only properties.</jc>
+		<jk>public final</jk> String <jf>foo</jf>;
+		<jk>public final int</jk> <jf>bar</jf>;
+		
+		<jc>// Private constructor.</jc>
+		<jk>private</jk> MyBean(MyBeanBuilder b) {
+			<jk>this</jk>.<jf>foo</jf> = b.foo;
+			<jk>this</jk>.<jf>bar</jf> = b.bar;
+		}
+
+		<jc>// Static method that creates a builder.</jc>
+		<jk>public static</jk> MyBeanBuilder <jsm>create</jsm>() {
+			<jk>return new</jk> MyBeanBuilder();
+		}
+
+		<jc>// Builder class.</jc>
+		<jk>public static class</jk> MyBeanBuilder {
+			<jk>private</jk> String <jf>foo</jf>;
+			<jk>private int</jk> <jf>bar</jf>;
+			
+			<jc>// Method that creates the bean.</jc>
+			<jk>public</jk> MyBean build() {
+				<jk>return new</jk> MyBean(<jk>this</jk>);
+			}
+			
+			<jc>// Bean property setters.</jc>
+			
+			<ja>@BeanProperty</ja>
+			<jk>public</jk> MyBeanBuilder foo(String foo) {
+				<jk>this</jk>.<jf>foo</jf> = foo;
+				<jk>return this</jk>;
+			}
+			
+			<ja>@BeanProperty</ja>
+			<jk>public</jk> MyBeanBuilder bar(<jk>int</jk> bar) {
+				<jk>this</jk>.<jf>bar</jf> = bar;
+				<jk>return this</jk>;
+			}
+		}
+	}
+				</p>
+				<p>
+					Builders MUST be beans with one or more writable properties.
+					<br>The bean properties themselves do not need to be readable (e.g. setters without getters).
+				</p>
+				<p>
+					Builders require two parts:
+				</p>
+				<ol>
+					<li>A way to detect and instantiate a builder using reflection.
+					<li>A way to instantiate a POJO from a builder.
+				</ol>
+				<p>
+					The first can be accomplished through any of the following:
+				</p>
+				<ul class='spaced-list'>
+					<li>A static <code>create()</code> method on the POJO class that returns a builder instance.
+						<p class='bcode'>
+	<jk>public static</jk> MyBuilder <jsm>create</jsm>() {...}
+						</p>
+					<li>A public constructor on the POJO class that takes in a single parameter that implements the {@link org.apache.juneau.transform.Builder} interface.
+						<br>The builder class must have a public no-arg constructor.
+						<p class='bcode'>
+	<jk>public</jk> MyPojo(MyBuilder b) {...}
+						</p>
+					<li>A {@link org.apache.juneau.annotation.Builder @Builder} annotation on the POJO class.
+						<br>The builder class must have a public no-arg constructor.
+						<p class='bcode'>
+	<ja>@Builder</ja>(MyBuilder.<jk>class</jk>)
+	<jk>public class</jk> MyPojo {...}
+						</p>
+				</ul>
+				<p>
+					The second can be accomplished through any of the following:
+				</p>
+				<ul class='spaced-list'>
+					<li>The existence of a <code>build()</code> method on the builder class.
+						<p class='bcode'>
+	<jk>public</jk> MyPojo build() {...}
+						</p>
+					<li>The existence of a public constructor on the POJO class that takes in the builder instance.
+						<p class='bcode'>
+	<jk>public</jk> MyPojo(MyBuilder b) {...}
+						</p>
+				</ul>
+			</div>
+			
+			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.URIs"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.14 - URIs</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.15 - URIs</h4>
 			<div class='topic'>
 				<p>
 					Juneau serializers have sophisticated support for transforming relative URIs to absolute form.
@@ -2477,7 +2587,7 @@
 
 			<!-- ======================================================================================================= -->
 			<a id="juneau-marshall.BeanFilters"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.15 - BeanFilter Class</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.16 - BeanFilter Class</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.transform.BeanFilter} class is the programmatic equivalent to the
@@ -2566,7 +2676,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.InterfaceFilters"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.16 - Interface Filters</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.17 - Interface Filters</h4>
 			<div class='topic'>
 				<p>
 					Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
@@ -2670,7 +2780,7 @@
 			
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.StopClasses"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.17 - Stop Classes</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.18 - Stop Classes</h4>
 			<div class='topic'>
 				<p>
 					Whereas interface filters limit properties defined on child classes, stop filters 
@@ -2712,7 +2822,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.BypassSerialization"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.18 - Bypass Serialization using Readers and InputStreams</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.19 - Bypass Serialization using Readers and InputStreams</h4>
 			<div class='topic'>
 				<p>
 					Juneau serializers treat instances of <code>Readers</code> and <code>InputStreams</code> special by 
@@ -3054,7 +3164,8 @@
 			</p>
 			<h6 class='figure'>Examples:</h6>
 			<p class='bcode'>
-	ReaderParser p = JsonParser.<jsm>create</jsm>().unbuffered().build();
+	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
+	ReaderParserSession p = JsonParser.<jsm>create</jsm>().unbuffered().build().createSession();
 	Object x;
 	Reader r;
 
@@ -12595,9 +12706,17 @@
 			<li>
 				New {@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
 				readers passed into parsers to be automatically closed after parsing.
+			<li>
+				Syntax changed on unswap method on {@link org.apache.juneau.transform.Surrogate} classes.
+				<br>It's now a regular method instead of a static method.
+			<li>
+				{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
+				{@link org.apache.juneau.transform.Surrogate} classes.
+			<li>
+				New support for <a class='doclink' href='#juneau-marshall.PojoBuilders'>POJO Builders</a>.	
 		</ul>
 
-		<h6 class='topic'>juneau-marshall</h6>
+		<h6 class='topic'>juneau-dto</h6>
 		<ul class='spaced-list'>
 			<li>
 				Enhancements to Swagger DTO:
@@ -12614,12 +12733,6 @@
 						Setter methods that take in beans and collections of beans can now take in 
 						JSON strings.
 				</ul>
-			<li>
-				Syntax changed on unswap method on {@link org.apache.juneau.transform.Surrogate} classes.
-				<br>It's now a regular method instead of a static method.
-			<li>
-				{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
-				{@link org.apache.juneau.transform.Surrogate} classes.
 		</ul>
 		
 		<h6 class='topic'>juneau-rest-server</h6>
@@ -17738,4 +17851,3 @@
 
 </div>
 </body>								
-	

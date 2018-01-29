@@ -13,9 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -48,14 +46,7 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 
 		A3 t3 = new A3();
 		t3.init();
-		try {
-			ClassMeta<?> cm = BeanContext.DEFAULT.getClassMeta(A3.class);
-			assertEquals("No properties detected on bean class", cm.getNotABeanReason());
-			roundTrip(t3, A3.class);
-			fail("Exception expected");
-		} catch (ParseException e) {
-		} catch (SerializeException e) {
-		} catch (InvalidDataConversionException e) {}
+		roundTrip(t3, A3.class);
 	}
 
 
