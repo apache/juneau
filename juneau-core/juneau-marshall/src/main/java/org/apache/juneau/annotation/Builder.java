@@ -23,7 +23,6 @@ import java.lang.annotation.*;
  * 
  * <h6 class='figure'>Example:</h6>
  * <p class='bcode'>
- * 	
  * 	<jc>// POJO class.</jc>
  * 	<ja>@Builder</ja>(MyBeanBuilder.<jk>class</jk>)
  * 	<jk>public class</jk> MyBean {

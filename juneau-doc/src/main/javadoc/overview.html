@@ -2411,8 +2411,9 @@
 	}
 				</p>
 				<p>
-					Builders MUST be beans with one or more writable properties.
-					<br>The bean properties themselves do not need to be readable (e.g. setters without getters).
+					The POJO class can be any type including beans.
+					<br>Builders MUST be beans with one or more writable properties.
+					<br>The bean properties themselves do not need to be readable (i.e. getters are optional).
 				</p>
 				<p>
 					Builders require two parts:
@@ -2453,6 +2454,11 @@
 						<p class='bcode'>
 	<jk>public</jk> MyPojo(MyBuilder b) {...}
 						</p>
+				</ul>
+				<h6 class='section'>See Also:</h6>
+				<ul>
+					<li class='ja'>{@link org.apache.juneau.annotation.Builder}
+					<li class='jic'>{@link org.apache.juneau.transform.Builder}
 				</ul>
 			</div>
 			
