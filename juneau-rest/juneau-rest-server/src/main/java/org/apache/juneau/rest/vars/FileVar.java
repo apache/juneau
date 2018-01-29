@@ -59,7 +59,11 @@ import org.apache.juneau.utils.*;
  * Files of type HTML, XHTML, XML, JSON, Javascript, and CSS will be stripped of comments.
  * This allows you to place license headers in files without them being serialized to the output.
  * 
- * @see org.apache.juneau.svl
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
+ * </ul>
  */
 public class FileVar extends DefaultingVar {
 

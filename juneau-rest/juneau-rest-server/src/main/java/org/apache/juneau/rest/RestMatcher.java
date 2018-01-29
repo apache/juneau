@@ -62,6 +62,12 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li>The following args: <code>Object resource, Method javaMethod</code>.
  * 		<br>This gives access to the servlet/resource and Java method it's applied to.
  * </ul>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethodMatchers">Overview &gt; @RestMethod.matchers()</a>
+ * </ul>
  */
 public abstract class RestMatcher {
 

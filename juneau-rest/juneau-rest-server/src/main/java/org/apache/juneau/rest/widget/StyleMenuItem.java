@@ -47,6 +47,12 @@ import org.apache.juneau.utils.*;
  * 	)
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; Widgets</a>
+ * </ul>
  */
 public class StyleMenuItem extends MenuItemWidget {
 

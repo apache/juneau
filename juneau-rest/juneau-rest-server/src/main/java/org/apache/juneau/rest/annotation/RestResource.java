@@ -35,8 +35,11 @@ import org.apache.juneau.utils.*;
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
  * 
- * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on
- * using this class.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestResource">Overview &gt; @RestResource</a>
+ * </ul>
  */
 @Documented
 @Target(TYPE)

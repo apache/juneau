@@ -29,8 +29,12 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
- * <p>
- * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on using this class.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod">Overview &gt; @RestMethod</a>
+ * </ul>
  */
 @Documented
 @Target(METHOD)

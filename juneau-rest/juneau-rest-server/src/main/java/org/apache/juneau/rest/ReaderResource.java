@@ -30,6 +30,12 @@ import org.apache.juneau.svl.*;
  * 
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ReaderResource">Overview &gt; ReaderResource</a>
+ * </ul>
  */
 public class ReaderResource implements Writable {
 

@@ -33,6 +33,12 @@ import org.apache.juneau.xml.*;
  * <h5 class='topic'>Description</h5>
  * 
  * Used to associate serializers, parsers, filters, and properties with instances of {@link BaseProvider}.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server-jaxrs">Overview &gt; juneau-rest-server-jaxrs</a>
+ * </ul>
  */
 @Documented
 @Target(TYPE)

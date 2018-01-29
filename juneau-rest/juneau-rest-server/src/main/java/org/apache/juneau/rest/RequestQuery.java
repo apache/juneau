@@ -29,6 +29,12 @@ import org.apache.juneau.xml.*;
 
 /**
  * Represents the query parameters in an HTTP request.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestQuery">Overview &gt; RequestQuery</a>
+ * </ul>
  */
 @SuppressWarnings("unchecked")
 public final class RequestQuery extends LinkedHashMap<String,String[]> {

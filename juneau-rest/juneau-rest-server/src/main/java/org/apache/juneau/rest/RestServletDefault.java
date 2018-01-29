@@ -146,6 +146,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
  * 
+ * 
  * <h6 class='topic'>Other Notes</h6>
  * <ul class='spaced-list'>
  * 	<li>
@@ -156,6 +157,12 @@ import org.apache.juneau.xml.*;
  * 		{@link RestResource#staticFiles() @RestResource.staticFiles()} to <code>{<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}</code>.
  * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL
  * 		<code>/servletPath/htdocs</code>.
+ * </ul>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServletDefault">Overview &gt; RestServletDefault</a>
  * </ul>
  */
 @RestResource(

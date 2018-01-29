@@ -23,6 +23,7 @@ import org.apache.juneau.httppart.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a variable
  * in a URL path pattern converted to a POJO.
  * 
+ * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
@@ -67,6 +68,12 @@ import org.apache.juneau.httppart.*;
  * 		...
  * 	}
  * </p>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; Method Parameters</a>
+ * </ul>
  */
 @Documented
 @Target(PARAMETER)

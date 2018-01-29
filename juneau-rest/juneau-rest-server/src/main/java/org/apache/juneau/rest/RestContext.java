@@ -59,8 +59,11 @@ import org.apache.juneau.xml.*;
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
  * 
- * <p>
- * See {@link PropertyStore} for more information about context properties.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestContext">Overview &gt; RestContext</a>
+ * </ul>
  */
 public final class RestContext extends BeanContext {
 	
@@ -454,7 +457,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Children">org.apache.juneau.rest &gt; Children</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Children">Overview &gt; Children</a>
 	 * </ul>
 	 */
 	public static final String REST_children = PREFIX + "children.lo";
@@ -773,7 +776,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
@@ -1035,7 +1038,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Encoders">org.apache.juneau.rest &gt; Encoders</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Encoders">Overview &gt; Encoders</a>
 	 * </ul>
 	 */
 	public static final String REST_encoders = PREFIX + "encoders.lo";
@@ -1118,7 +1121,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Guards">org.apache.juneau.rest &gt; Guards</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Guards">Overview &gt; Guards</a>
 	 * </ul>
 	 */
 	public static final String REST_guards = PREFIX + "guards.lo";
@@ -1283,7 +1286,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Errors">org.apache.juneau.rest &gt; Handling Errors and Logging</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; Logging and Error Handling</a>
 	 * </ul>
 	 */
 	public static final String REST_logger = PREFIX + "logger.o";
@@ -1432,7 +1435,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Labels">org.apache.juneau.rest &gt; Localized Messages</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Messages">Overview &gt; Messages</a>
 	 * </ul>
 	 */
 	public static final String REST_messages = PREFIX + "messages.lo";
@@ -1678,7 +1681,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Parsers">org.apache.juneau.rest &gt; Parsers</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Parsers">Overview &gt; Parsers</a>
 	 * </ul>
 	 */
 	public static final String REST_parsers = PREFIX + "parsers.lo";
@@ -2034,7 +2037,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Injection">Overview &gt; Using with Spring or other Injection frameworks</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; Resource Resolvers</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Injection">Overview &gt; Using with Spring and Injection frameworks</a>
 	 * </ul>
 	 */
 	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
@@ -2228,7 +2232,7 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Serializers">org.apache.juneau.rest &gt; Serializers</a>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Serializers">Overview &gt; Serializers</a>
 	 * </ul>
 	 * <p>
 	 */

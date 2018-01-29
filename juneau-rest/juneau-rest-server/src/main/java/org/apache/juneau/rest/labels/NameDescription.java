@@ -19,6 +19,12 @@ import org.apache.juneau.annotation.*;
  * 
  * <p>
  * Primarily used for constructing tables with name/description columns on REST OPTIONS requests.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; Predefined Label Beans</a>
+ * </ul>
  */
 @Bean(properties="name,description")
 public class NameDescription {

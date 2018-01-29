@@ -30,6 +30,12 @@ import org.apache.juneau.parser.*;
 
 /**
  * Contains the body of the HTTP request.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; RequestBody</a>
+ * </ul>
  */
 @SuppressWarnings("unchecked")
 public class RequestBody {

@@ -18,6 +18,12 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a>
+ * </ul>
  */
 public @interface MethodSwagger {
 

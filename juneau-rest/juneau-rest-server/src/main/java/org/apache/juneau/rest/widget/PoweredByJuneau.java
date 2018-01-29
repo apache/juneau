@@ -39,6 +39,12 @@ import org.apache.juneau.rest.*;
  * <p>
  * It renders the following image:
  * <img class='bordered' src='doc-files/PoweredByJuneauWidget.png'>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; Widgets</a>
+ * </ul>
  */
 public class PoweredByJuneau extends Widget {
 

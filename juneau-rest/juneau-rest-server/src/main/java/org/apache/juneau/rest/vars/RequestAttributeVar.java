@@ -34,8 +34,7 @@ import org.apache.juneau.svl.*;
  * 	String fooOrBar = restRequest.resolveVars(<js>"$RA{foo,bar}"</js>); 
  * </p>
  * 
- * <h
- * 5 class='topic'>Notes</h5>
+ * <h5 class='topic'>Notes</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
@@ -44,7 +43,11 @@ import org.apache.juneau.svl.*;
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  * 
- * @see org.apache.juneau.svl
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
+ * </ul>
  */
 public class RequestAttributeVar extends MultipartResolvingVar {
 

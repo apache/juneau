@@ -27,8 +27,11 @@ import java.lang.annotation.*;
  * Property values types that are not <code>Strings</code> will automatically be converted to the correct type
  * (e.g. <code>Boolean</code>, etc...).
  * 
- * <p>
- * See {@link RestResource#properties} for more information.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; Properties</a>
+ * </ul>
  */
 @Documented
 @Target(ANNOTATION_TYPE)

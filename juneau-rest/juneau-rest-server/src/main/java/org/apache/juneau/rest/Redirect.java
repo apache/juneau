@@ -69,6 +69,12 @@ import org.apache.juneau.urlencoding.*;
  * <p>
  * This class is handled by {@link org.apache.juneau.rest.response.RedirectHandler}, a built-in default response
  * handler created in {@link RestContextBuilder}.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
+ * </ul>
  */
 public final class Redirect {
 

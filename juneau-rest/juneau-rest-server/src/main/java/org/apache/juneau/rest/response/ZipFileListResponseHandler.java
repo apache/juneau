@@ -35,6 +35,12 @@ import org.apache.juneau.utils.ZipFileList.*;
  * 		<code>Content-Disposition=attachment;filename=X</code> - Sets X to the file name passed in through the
  * 		constructor {@link ZipFileList#ZipFileList(String)}.
  * </ul>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
+ * </ul>
  */
 public class ZipFileListResponseHandler implements ResponseHandler {
 

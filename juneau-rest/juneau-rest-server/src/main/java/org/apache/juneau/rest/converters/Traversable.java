@@ -49,9 +49,9 @@ import org.apache.juneau.utils.*;
  * </ul>
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
  * </ul>
  */
 public final class Traversable implements RestConverter {

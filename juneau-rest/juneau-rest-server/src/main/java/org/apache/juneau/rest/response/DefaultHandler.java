@@ -34,6 +34,12 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The <code>Content-Type</code> header is set to the mime-type defined on the selected serializer based on the
  * <code>produces</code> value passed in through the constructor.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
+ * </ul>
  */
 public class DefaultHandler implements ResponseHandler {
 

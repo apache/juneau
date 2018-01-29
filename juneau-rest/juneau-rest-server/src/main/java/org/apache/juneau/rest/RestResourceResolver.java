@@ -34,6 +34,12 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li>RestResourceResolver()
  * 	<li>RestResourceResolver(RestContext)
  * </ul>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; Resource Resolvers</a>
+ * </ul>
  */
 public interface RestResourceResolver {
 

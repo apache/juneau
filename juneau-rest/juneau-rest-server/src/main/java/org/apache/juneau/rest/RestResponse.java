@@ -46,9 +46,11 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  * 
- * <p>
- * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
- * class.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestResponse">Overview &gt; RestResponse</a>
+ * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {
 

@@ -25,6 +25,12 @@ import org.apache.juneau.rest.*;
  * <p>
  * Uses the {@link Writable#writeTo(Writer)} method to send the contents to the
  * {@link RestResponse#getNegotiatedWriter()} writer.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
+ * </ul>
  */
 public final class StreamableHandler implements ResponseHandler {
 

@@ -53,6 +53,12 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The HTML content returned by the {@link #getHtml(RestRequest)} method is added where the <js>"$W{...}"</js> is
  * referenced in the page.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; Widgets</a>
+ * </ul>
  */
 public abstract class MenuItemWidget extends Widget {
 

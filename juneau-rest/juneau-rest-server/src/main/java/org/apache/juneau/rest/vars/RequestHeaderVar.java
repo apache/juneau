@@ -41,7 +41,11 @@ import org.apache.juneau.svl.*;
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  * 
- * @see org.apache.juneau.svl
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
+ * </ul>
  */
 public class RequestHeaderVar extends MultipartResolvingVar {
 

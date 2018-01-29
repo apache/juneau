@@ -31,7 +31,11 @@ import org.apache.juneau.svl.*;
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  * 
- * @see org.apache.juneau.svl
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
+ * </ul>
  */
 public class UrlEncodeVar extends SimpleVar {
 

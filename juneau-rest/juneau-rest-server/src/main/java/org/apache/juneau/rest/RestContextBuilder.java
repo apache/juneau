@@ -24,7 +24,6 @@ import java.nio.charset.*;
 import java.util.*;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
@@ -62,24 +61,29 @@ import org.apache.juneau.utils.*;
  * through calls on this object.
  * 
  * <p>
- * To interact with this object, simply implement the following init method in your resource class:
+ * To interact with this object, simply pass it in as a constructor argument or in an INIT hook.
  * <p class='bcode'>
- * 	<jk>public synchronized void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
- * 		builder
- * 			.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
- * 			.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
- * 		<jk>super</jk>.init(builder); <jc>// Make sure this is the last line! (or just leave it out entirely)</jc>
+ * 	<jc>// Option #1 - Pass in through constructor.</jc>
+ * 	<jk>public</jk> MyResource(RestContextBuilder builder) {
+ * 			builder
+ * 				.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
+ * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+ * 	}
+ * 
+ * 	<jc>// Option #2 - Use an INIT hook.</jc>
+ * 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+ * 	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+ * 			builder
+ * 				.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
+ * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
  * 	}
  * </p>
  * 
- * <p>
- * Note that this method is identical to {@link HttpServlet#init(ServletConfig)} except you get access to
- * this object instead.  Also, this method can throw any exception, not just a {@link ServletException}.
  * 
- * <p>
- * The parent <code>init(RestServletConfig)</code> method will construct a read-only {@link RestContext} object
- * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)</code> before
- * you modify this config object, you won't see the changes!
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestContext">Overview &gt; RestContext</a>
+ * </ul>
  */
 public class RestContextBuilder extends BeanContextBuilder implements ServletConfig {
 

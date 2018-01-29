@@ -20,8 +20,11 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Specialized matcher for matching client versions.
  * 
- * <p>
- * See {@link RestResource#clientVersionHeader} and {@link RestMethod#clientVersion} for more info.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ClientVersioning">Overview &gt; Client Versioning</a>
+ * </ul>
  */
 public class ClientVersionMatcher extends RestMatcher {
 

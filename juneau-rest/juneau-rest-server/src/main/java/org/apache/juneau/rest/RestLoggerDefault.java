@@ -31,9 +31,9 @@ import org.apache.juneau.json.*;
  * <br>Subclasses MUST implement a no-arg public constructor.
  * 
  * 
- * <h5 class='topic'>Additional Information</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li class='jf'>{@link RestContext#REST_callHandler}
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; Logging and Error Handling</a>
  * </ul>
  */
 public class RestLoggerDefault implements RestLogger {

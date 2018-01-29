@@ -21,6 +21,12 @@ import org.apache.juneau.html.annotation.*;
  * <p class='bcode'>
  * 	<jk>new</jk> ResourceLink(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; Predefined Label Beans</a>
+ * </ul>
  */
 public final class ResourceDescription extends NameDescription implements Comparable<ResourceDescription> {
 

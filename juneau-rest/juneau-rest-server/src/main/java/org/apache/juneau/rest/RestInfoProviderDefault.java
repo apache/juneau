@@ -34,9 +34,16 @@ import org.apache.juneau.svl.*;
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST resources are documented.
  * 
+ * 
  * <h5 class='topic'>Additional Information</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
+ * </ul>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a>
  * </ul>
  */
 public class RestInfoProviderDefault implements RestInfoProvider {

@@ -33,6 +33,12 @@ import org.apache.juneau.rest.response.*;
  * <p>
  * This class is handled special by the {@link StreamableHandler} class.
  * This allows these objects to be returned as responses by REST methods.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StreamResource">Overview &gt; StreamResource</a>
+ * </ul>
  */
 public class StreamResource implements Streamable {
 

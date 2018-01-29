@@ -25,6 +25,12 @@ import org.apache.juneau.parser.*;
 
 /**
  * Represents the parsed form data parameters in an HTTP request.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestFormData">Overview &gt; RequestFormData</a>
+ * </ul>
  */
 @SuppressWarnings("unchecked")
 public class RequestFormData extends LinkedHashMap<String,String[]> {

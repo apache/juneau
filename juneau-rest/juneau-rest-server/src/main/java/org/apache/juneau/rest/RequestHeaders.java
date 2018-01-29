@@ -31,6 +31,12 @@ import org.apache.juneau.parser.*;
  * 
  * <p>
  * Entries are stored in a case-insensitive map.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Header">Overview &gt; @Header</a>
+ * </ul>
  */
 public class RequestHeaders extends TreeMap<String,String[]> {
 	private static final long serialVersionUID = 1L;

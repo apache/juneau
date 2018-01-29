@@ -61,9 +61,11 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>{@code getServletPath()}</td><td>{@code /servletPath}</td></tr>
  * </table>
  * 
- * <p>
- * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
- * class.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestRequest">Overview &gt; RestRequest</a>
+ * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
 public final class RestRequest extends HttpServletRequestWrapper {

@@ -29,6 +29,12 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * These properties are only valid at the class level, not the method level.
  * <br>Setting them on {@link RestMethod#properties() @RestMethod.properties()} has no effect.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RemoteableProxies">Overview &gt; Remoteable Proxies</a>
+ * </ul>
  */
 public final class RemoteableServiceProperties {
 

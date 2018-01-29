@@ -29,6 +29,12 @@ package org.apache.juneau.rest;
  * 		}
  * 	}
  * </p>
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Children">Overview &gt; Children</a>
+ * </ul>
  */
 public class RestChild {
 

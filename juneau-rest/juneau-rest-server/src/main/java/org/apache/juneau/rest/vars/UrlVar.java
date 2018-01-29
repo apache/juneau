@@ -37,7 +37,11 @@ import org.apache.juneau.svl.*;
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver(UriResolution, UriRelativity)} with resolution
  * {@link UriResolution#ROOT_RELATIVE} and relativity {@link UriRelativity#RESOURCE}.
  * 
- * @see org.apache.juneau.svl
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
+ * </ul>
  */
 public class UrlVar extends SimpleVar {
 

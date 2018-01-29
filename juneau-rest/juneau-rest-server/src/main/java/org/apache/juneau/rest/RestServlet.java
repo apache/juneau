@@ -29,9 +29,11 @@ import org.apache.juneau.utils.*;
 /**
  * Servlet implementation of a REST resource.
  * 
- * <p>
- * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
- * class.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServlet">Overview &gt; RestServlet</a>
+ * </ul>
  */
 public abstract class RestServlet extends HttpServlet {
 

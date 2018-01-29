@@ -28,8 +28,7 @@ import org.apache.juneau.rest.annotation.*;
 	htmldoc=@HtmlDoc(
 		navlinks={
 			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+			"options: servlet:/?method=OPTIONS"
 		},
 		aside={
 			"<div style='max-width:400px' class='text'>",

@@ -26,6 +26,12 @@ import org.apache.juneau.rest.labels.*;
  * 
  * <p>
  * Child resources are specified using the {@link RestResource#children() @RestResource.children()} annotation.
+ * 
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RouterPages">Overview &gt; Router Pages</a>
+ * </ul>
  */
 @RestResource()
 public abstract class RestServletGroupDefault extends RestServletDefault {

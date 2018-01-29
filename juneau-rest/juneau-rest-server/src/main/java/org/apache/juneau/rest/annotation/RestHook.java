@@ -70,8 +70,11 @@ import java.lang.annotation.*;
  * 		</ul>
  * </ul>
  * 
- * <p>
- * See the {@link HookEvent} class for information about individual event types.
+ * 
+ * <h5 class='section'>Documentation:</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.LifecycleHooks">Overview &gt; Lifecycle Hooks</a>
+ * </ul>
  */
 @Documented
 @Target(METHOD)
