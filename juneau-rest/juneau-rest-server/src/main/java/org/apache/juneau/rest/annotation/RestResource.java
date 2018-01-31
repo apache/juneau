@@ -345,7 +345,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * It is used to populate the Swagger description field.
-	 * This value can be retrieved programmatically through the {@link RestRequest#getServletDescription()} method.
+	 * This value can be retrieved programmatically through the {@link RestRequest#getResourceDescription()} method.
 	 * 
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
@@ -792,7 +792,7 @@ public @interface RestResource {
 	 * 	htmldoc=<ja>@HtmlDoc</ja>(
 	 * 		header={
 	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
-	 * 			<js>"&lt;h2&gt;$R{servletTitle}&lt;/h2&gt;"</js>
+	 * 			<js>"&lt;h2&gt;$R{resourceTitle}&lt;/h2&gt;"</js>
 	 * 		}
 	 * 	)
 	 * </p>
@@ -947,7 +947,7 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * It is used to populate the Swagger title field.
-	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
+	 * This value can be retrieved programmatically through the {@link RestRequest#getResourceTitle()} method.
 	 * 
 	 * <p>
 	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.

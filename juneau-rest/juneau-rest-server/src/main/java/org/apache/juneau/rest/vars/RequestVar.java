@@ -34,10 +34,10 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"pathInfo"</js> - Value returned by {@link RestRequest#getPathInfo()}
  * 	<li><js>"requestParentURI"</js> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}
  * 	<li><js>"requestURI"</js> - Value returned by {@link RestRequest#getRequestURI()}
- * 	<li><js>"servletDescription"</js> - Value returned by {@link RestRequest#getServletDescription()}
+ * 	<li><js>"resourceDescription"</js> - Value returned by {@link RestRequest#getResourceDescription()}
+ * 	<li><js>"resourceTitle"</js> - See {@link RestRequest#getResourceTitle()}
  * 	<li><js>"servletParentURI"</js> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}
  * 	<li><js>"servletPath"</js> - See {@link RestRequest#getServletPath()}
- * 	<li><js>"servletTitle"</js> - See {@link RestRequest#getServletTitle()}
  * 	<li><js>"servletURI"</js> - See {@link UriContext#getRootRelativeServletPath()}
  * 	<li><js>"siteName"</js> - See {@link RestRequest#getSiteName()}
  * </ul>
@@ -45,8 +45,8 @@ import org.apache.juneau.svl.*;
  * <p>
  * <h6 class='section'>Example:</h6>
  * <p class='bcode'>
- * 	String servletTitle = restRequest.resolveVars(<js>"$R{servletTitle}"</js>); 
- * 	String servletTitleOrDescription = restRequest.resolveVars(<js>"$R{servletTitle,servletDescription}"</js>); 
+ * 	String resourceTitle = restRequest.resolveVars(<js>"$R{resourceTitle}"</js>); 
+ * 	String resourceTitleOrDescription = restRequest.resolveVars(<js>"$R{resourceTitle,resourceDescription}"</js>); 
  * </p>
  * 
  * 
@@ -115,19 +115,19 @@ public class RequestVar extends MultipartResolvingVar {
 				return req.getUriContext().getRootRelativePathInfoParent();
 			if ("requestURI".equals(key))
 				return req.getRequestURI();
+			if ("resourceDescription".equals(key))
+				return req.getResourceDescription();
+			if ("resourceTitle".equals(key))
+				return req.getResourceTitle();
 		} else if (c == 's') {
 			if ("servletClass".equals(key))
 				return req.getContext().getResource().getClass().getName();
 			if ("servletClassSimple".equals(key))
 				return req.getContext().getResource().getClass().getSimpleName();
-			if ("servletDescription".equals(key))
-				return req.getServletDescription();
 			if ("servletParentURI".equals(key))
 				return req.getUriContext().getRootRelativeServletPathParent();
 			if ("servletPath".equals(key))
 				return req.getServletPath();
-			if ("servletTitle".equals(key))
-				return req.getServletTitle();
 			if ("servletURI".equals(key))
 				return req.getUriContext().getRootRelativeServletPath();
 			if ("siteName".equals(key))

@@ -4965,14 +4965,134 @@
 			<a id="juneau-rest-server.Children"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.3.1 - RestServlet</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RestServlet} class is the entry point for your REST resources.
+					<br>It extends directly from <l>HttpServlet</l> and is deployed like any other servlet.
+				</p>
+				<p>
+					When the servlet <l>init()</l> method is called, it triggers the code to find and process the <l>@RestResource</l>
+					annotations on that class and all child classes.
+					<br>These get constructed into a {@link org.apache.juneau.rest.RestContext} object that holds all the configuration
+					information about your resource in a read-only object.
+				</p>
+				<p>
+					Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
+					extend from one of the preconfigured default servlets such as {@link org.apache.juneau.rest.RestServletDefault}.
+					<br>The <l>RestServlet</l> class by itself is not configured with any serializers and parsers, and therefore
+					not very useful on it's own.
+					<br>However, the class does provide a couple of convenience methods to be aware of:
+				</p>
+				<ul class='doctree'>
+					<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...) log(Level,String,Object...)}
+						<li class='jf'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)}
+						<li class='jf'>{@link org.apache.juneau.rest.RestServlet#getContext() getContext()}
+					</ul>
+				</ul>
+				<p>
+					Since this is a servlet, you also have the ability to intercept calls to the <l>init</l> and <l>service</l> methods
+					in your subclass.
 			</div>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.Children"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.3.2 - RestServletDefault</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RestServletDefault} class is a subclass of {@link org.apache.juneau.rest.RestServlet}
+					preconfigured with the following:
+				</p>
+				<ul class='spaced-list'>
+					<li>A default set of serializers and parsers (pretty much all of them except for the RDF ones).
+					<li>Some basic HTML boilerplate for the HTML representation of your POJOs.
+					<li>Support for auto-generated Swagger documentation through OPTIONS page requests.
+					<li>Configuration of default CSS stylesheets.
+				</ul>
+				<p>
+					The entirety of the class is shown below.
+					<br>You should notice that very little code is being used and everything is configurable through
+					annotations:
+				</p>
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		serializers={
+			HtmlDocSerializer.<jk>class</jk>,
+			HtmlStrippedDocSerializer.<jk>class</jk>,
+			HtmlSchemaDocSerializer.<jk>class</jk>,
+			JsonSerializer.<jk>class</jk>,
+			JsonSerializer.Simple.<jk>class</jk>,
+			JsonSchemaSerializer.<jk>class</jk>,
+			XmlDocSerializer.<jk>class</jk>,
+			XmlSchemaDocSerializer.<jk>class</jk>,
+			UonSerializer.<jk>class</jk>,
+			UrlEncodingSerializer.<jk>class</jk>,
+			MsgPackSerializer.<jk>class</jk>,
+			SoapXmlSerializer.<jk>class</jk>,
+			PlainTextSerializer.<jk>class</jk>
+		},
+		parsers={
+			JsonParser.<jk>class</jk>,
+			XmlParser.<jk>class</jk>,
+			HtmlParser.<jk>class</jk>,
+			UonParser.<jk>class</jk>,
+			UrlEncodingParser.<jk>class</jk>,
+			MsgPackParser<jk>.class</jk>,
+			PlainTextParser.<jk>class</jk>
+		},
+		properties={
+			<jc>// URI-resolution is disabled by default.  Need to enable it.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_uriResolution</jsf>, value=<js>"ROOT_RELATIVE"</js>)
+		},
+		allowedMethodParams=<js>"OPTIONS"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
+				<js>"&lt;a href='http://juneau.apache.org'&gt;&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;"</js>
+			},
+			stylesheet=<js>"servlet:/styles/light.css"</js>,
+			head={
+				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
+			}
+		),
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"</jc>
+		staticFiles={<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}
+	)
+	<jk>public abstract class</jk> RestServletDefault <jk>extends</jk> RestServlet {
+	
+		<jd>/**
+		 * [OPTIONS /*] - Show resource options.
+		 * 
+		 * @param req The HTTP request.
+		 * @return A bean containing the contents for the OPTIONS page.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				navlinks={
+					<js>"back: servlet:/"</js>,
+					<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
+				},
+				aside=<js>"NONE"</js>
+			),
+			summary=<js>"Swagger documentation",</js>
+			description=<js>"Auto-generated swagger documentation for this resource"</js>
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jk>return</jk> req.getSwagger();
+		}
+	}
+				</p>
+				<p>
+					Your top-level resource will simply extend from this class, as shown in the Hello World example
+					from a couple sections back.
+				</p>
+				<p>
+					There's a lot going on in this class.
+					<br>But not to worry, the details will be described later.
+				</p>
 			</div>
 
 			<!-- ======================================================================================================== -->
@@ -5486,7 +5606,35 @@
 			<a id="juneau-rest-server.RestRequest"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.6.2 - RestRequest</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RestRequest} object is an extension of the <l>HttpServletRequest</l> class
+					with various built-in convenience methods for use in building REST interfaces.
+					<br>It can be accessed by passing it as a parameter on your REST Java method:
+				</p>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RestRequest req) {...}			
+				</p>
+				<p>
+					There are many useful methods on this object, but the main ones are shown below:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'>{@link org.apache.juneau.rest.RestRequest} 
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders() getHeaders()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getQuery() getQuery()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getFormData() getFormData()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getBody() getBody()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getPathMatch() getPathMatch()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger() getLogger()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider() getInfoProvider()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfigFile() getConfigFile()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession() getVarResolverSession()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessageBundle() getMessageBundle()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
+					</ul>
+				</ul>
 			</div>
 			
 			<!-- ======================================================================================================== -->
@@ -5520,6 +5668,13 @@
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.RequestFormData"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.6.7 - RequestFormData</h4>
+			<div class='topic'>
+				TODO
+			</div>
+
+			<!-- ======================================================================================================== -->
+			<a id="juneau-rest-server.RequestPathMatch"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.X - RequestPathMatch</h4>
 			<div class='topic'>
 				TODO
 			</div>
@@ -6806,8 +6961,8 @@
 							<li><l>$R{pathInfo}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
 							<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}.
 							<li><l>$R{requestURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
-							<li><l>$R{servletDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
-							<li><l>$R{servletTitle}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletTitle()}.
+							<li><l>$R{resourceDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getResourceDescription()}.
+							<li><l>$R{resourceTitle}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getResourceTitle()}.
 							<li><l>$R{servletParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}.
 							<li><l>$R{servletPath}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletPath()}.
 							<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}.
@@ -7212,20 +7367,20 @@
 			</p>
 		 	<ul class='doctree'>
 		 		<li class='jm'>
-		 			{@link org.apache.juneau.rest.RestRequest#getServletTitle()}
+		 			{@link org.apache.juneau.rest.RestRequest#getResourceTitle()}
 		 		<li class='jm'>
-		 			{@link org.apache.juneau.rest.RestRequest#getServletDescription()}
+		 			{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
 		 	</ul>
 			<p>
-		 		They are also made available as the request string variables <js>"$R{servletTitle}"</js> and 
-		 		<js>"$R{servletDescription}"</js>.
+		 		They are also made available as the request string variables <js>"$R{resourceTitle}"</js> and 
+		 		<js>"$R{resourceDescription}"</js>.
 		 		These variable facilitate the localized label and descriptions on the HTML pages when using 
 		 		{@link org.apache.juneau.rest.RestServletDefault}:
 			</p>
 			<p class='bcode'>
 	<ja>@RestResource</ja>(
-		pageTitle=<js>"The title for this page is $R{servletTitle}"</js>,
-		pageText=<js>"The description for this page is $R{servletDescription}"</js>
+		pageTitle=<js>"The title for this page is $R{resourceTitle}"</js>,
+		pageText=<js>"The description for this page is $R{resourceDescription}"</js>
 	)
 	<jk>public abstract class</jk> RestServletDefault <jk>extends</jk> RestServlet {
 		 	</p>
@@ -9360,8 +9515,8 @@
 			</p>
 			<p>
 				The <l>title</l> and <l>description</l> keys identify the localized values
-				return by the {@link org.apache.juneau.rest.RestRequest#getServletTitle()} and 
-				{@link org.apache.juneau.rest.RestRequest#getServletDescription()} methods.
+				return by the {@link org.apache.juneau.rest.RestRequest#getResourceTitle()} and 
+				{@link org.apache.juneau.rest.RestRequest#getResourceDescription()} methods.
 			</p>
 			<p>
 				The <l>children</l> annotation defines the child resources of this router resource.
@@ -9880,8 +10035,8 @@
 		<xt>&lt;/script&gt;</xt> 
 	<xt>&lt;/head&gt;</xt> 
 	<xt>&lt;body&gt;</xt> 
-		<xt>&lt;h1&gt;</xt>$R{servletTitle}<xt>&lt;/h1&gt;</xt> 
-		<xt>&lt;h2&gt;</xt>$R{servletDescription}<xt>&lt;/h2&gt;</xt> 
+		<xt>&lt;h1&gt;</xt>$R{resourceTitle}<xt>&lt;/h1&gt;</xt> 
+		<xt>&lt;h2&gt;</xt>$R{resourceDescription}<xt>&lt;/h2&gt;</xt> 
 		<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt> 
 			<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>target</xa>=<xs>'buff'</xs><xt>&gt;</xt> 
 				<xt>&lt;table&gt;</xt> 
@@ -9928,9 +10083,9 @@
 			</p>
 			<p>
 				The <l>$R</l> variables are request string variables.  
-				In this case, <l>$R{servletTitle}</l> and <l>$R{servletDescription}</l> resolve to the values returned by 
-				{@link org.apache.juneau.rest.RestRequest#getServletTitle()} and 
-				{@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
+				In this case, <l>$R{resourceTitle}</l> and <l>$R{resourceDescription}</l> resolve to the values returned by 
+				{@link org.apache.juneau.rest.RestRequest#getResourceTitle()} and 
+				{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}.
 			</p>
 			<p>
 				Pointing a browser to the resource shows the following:
@@ -11469,8 +11624,8 @@
 		<xt>&lt;/style&gt;</xt>
 	<xt>&lt;/head&gt;</xt>
 	<xt>&lt;body&gt;</xt>
-		<xt>&lt;h1&gt;</xt>$R{servletTitle}<xt>&lt;/h1&gt;</xt>
-		<xt>&lt;h2&gt;</xt>$R{servletDescription}<xt>&lt;/h2&gt;</xt>
+		<xt>&lt;h1&gt;</xt>$R{resourceTitle}<xt>&lt;/h1&gt;</xt>
+		<xt>&lt;h2&gt;</xt>$R{resourceDescription}<xt>&lt;/h2&gt;</xt>
 		<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt>
 			<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}/upload'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>target</xa>=<xs>'buff'</xs> <xa>enctype</xa>=<xs>"multipart/form-data"</xs><xt>&gt;</xt>
 				<xt>&lt;input</xt> <xa>name</xa>=<xs>"contents"</xs> <xa>type</xa>=<xs>"file"</xs><xt>&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>"submit"</xs><xt>&gt;</xt>Submit<xt>&lt;/button&gt;</xt>
@@ -12407,7 +12562,7 @@
 		<xt>&lt;/style&gt;</xt> 
 	<xt>&lt;/head&gt;</xt> 
 	<xt>&lt;body&gt;</xt> 
-		<xt>&lt;h1&gt;</xt>$R{servletTitle}<xt>&lt;/h1&gt;</xt> 
+		<xt>&lt;h1&gt;</xt>$R{resourceTitle}<xt>&lt;/h1&gt;</xt> 
 		<xt>&lt;h2&gt;</xt>Edit config file<xt>&lt;/h2&gt;</xt> 
 		<xt>&lt;p</xt> <xa>class</xa>=<xs>'links'</xs><xt>&gt;</xt><xt>&lt;a</xt> <xa>href</xa>=<xs>'$R{requestParentURI}'</xs><xt>&gt;</xt>up<xt>&lt;/a&gt;</xt> - <xt>&lt;a</xt> <xa>href=<xs>'$R{servletURI}?method</xa>=OPTIONS'</xs><xt>&gt;</xt>options<xt>&lt;/a&gt;</xt><xt>&lt;/p&gt;</xt> 
 		<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>enctype</xa>=<xs>'application/x-www-form-urlencoded'</xs><xt>&gt;</xt> 
@@ -12897,10 +13052,10 @@
 							<li><js>"pathInfo"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}
 							<li><js>"requestParentURI"</js> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}
 							<li><js>"requestURI"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}
-							<li><js>"servletDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}
+							<li><js>"resourceDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
+							<li><js>"resourceTitle"</js> - See {@link org.apache.juneau.rest.RestRequest#getResourceTitle()}
 							<li><js>"servletParentURI"</js> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}
 							<li><js>"servletPath"</js> - See {@link org.apache.juneau.rest.RestRequest#getServletPath()}
-							<li><js>"servletTitle"</js> - See {@link org.apache.juneau.rest.RestRequest#getServletTitle()}
 							<li><js>"servletURI"</js> - See {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}
 							<li><js>"siteName"</js> - See {@link org.apache.juneau.rest.RestRequest#getSiteName()}
 						</ul>
@@ -13942,8 +14097,8 @@
 				<p class='bcode'>
 	htmldoc=<ja>@HtmlDoc</ja>(
 		header={
-			<js>"&lt;h1&gt;$R{servletTitle}&lt;/h1&gt;"</js>,
-			<js>"&lt;h2&gt;$R{methodSummary,servletDescription}&lt;/h2&gt;"</js>,
+			<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+			<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
 			<js>"&lt;a href='http://juneau.apache.org'&gt;&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;"</js>
 		}
 	)
@@ -15662,7 +15817,7 @@
 				overriding the new <code><del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del></code> method.
 			<li>New {@link org.apache.juneau.rest.RestRequest} methods: 
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestRequest#resolveVars(String)}
+					<li><code><del>RestRequest.resolveVars(String)</del></code>
 					<li><code>RestRequest.getVarResource(String)</code>
 					<li><code><del>RestRequest.getConfig()</del></code>
 				</ul>
@@ -15821,8 +15976,8 @@
 							<li><code><del>RestRequest.getPathRemainderUndecoded()</del></code>
 							<li><code><del>RestRequest.getTrimmedRequestURI()</del></code>
 							<li><code><del>RestRequest.getTrimmedRequestURL()</del></code>
-							<li>{@link org.apache.juneau.rest.RestRequest#getServletTitle()}
-							<li>{@link org.apache.juneau.rest.RestRequest#getServletDescription()}
+							<li><code><del>RestRequest.getServletTitle()</del></code>
+							<li><code><del>RestRequest.getServletDescription()</del></code>
 							<li>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
 						</ul>
 					<li>Behavior changes to {@link org.apache.juneau.rest.RestRequest#getPathInfo()} to follow Servlet specs.
@@ -15836,8 +15991,8 @@
 				<ul>
 					<li><code>$R{contextPath}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getContextPath()}
 					<li><code>$R{methodDescription}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
-					<li><code>$R{servletTitle}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getServletTitle()}
-					<li><code>$R{servletDescription}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getServletDescription()}
+					<li><code>$R{resourceTitle}</code> - Returns value from <code><del>RestRequest.getServletTitle()</del></code>
+					<li><code>$R{resourceDescription}</code> - Returns value from <code><del>RestRequest.getServletDescription()</del></code>
 					<li><code>$R{trimmedRequestURI}</code> - Returns value from <code><del>RestRequest.getTrimmedRequestURI()</del></code>
 					<li><code>$E{var}</code> - Environment variables.
 				</ul>
@@ -15845,8 +16000,8 @@
 			<li>{@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code> now provide default HTML titles
 				and descriptions:
 				<p class='bcode'>
-	<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{servletTitle}"</js>),
-	<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{servletDescription}"</js>)
+	<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{resourceTitle}"</js>),
+	<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{resourceDescription}"</js>)
 				</p>
 			<li>Options pages on {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code> now provide default descriptions and back links:
 				and descriptions:

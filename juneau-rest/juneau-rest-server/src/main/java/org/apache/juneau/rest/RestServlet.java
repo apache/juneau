@@ -23,9 +23,6 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
-
 /**
  * Servlet implementation of a REST resource.
  * 
@@ -121,21 +118,6 @@ public abstract class RestServlet extends HttpServlet {
 		return context;
 	}
 
-	/**
-	 * Convenience method if you want to perform initialization on your resource after all configuration settings
-	 * have been made.
-	 * 
-	 * <p>
-	 * This allows you to get access to the {@link RestContext} object during initialization.
-	 * 
-	 * <p>
-	 * The default implementation does nothing.
-	 * 
-	 * @param context The servlet context containing all the set-in-stone configurations for this resource.
-	 * @throws Exception Any exception can be thrown to signal an initialization failure.
-	 */
-	public synchronized void init(RestContext context) throws Exception {}
-
 
 	//--------------------------------------------------------------------------------
 	// Other methods
@@ -168,6 +150,18 @@ public abstract class RestServlet extends HttpServlet {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		}
 	}
+	
+	@Override /* GenericServlet */
+	public void log(String msg) {
+		if (context != null)
+			context.getLogger().log(INFO, msg);
+	}
+
+	@Override /* GenericServlet */
+	public void log(String msg, Throwable cause) {
+		if (context != null)
+			context.getLogger().log(INFO, cause, msg);
+	}
 
 	/**
 	 * Convenience method for calling <code>getContext().getLogger().log(level, msg, args);</code>
@@ -176,9 +170,21 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected void log(Level level, String msg, Object...args) {
+	public void log(Level level, String msg, Object...args) {
 		if (context != null)
 			context.getLogger().log(level, msg, args);
+	}
+
+	/**
+	 * Convenience method for calling <code>getContext().getLogger().logObjects(level, msg, args);</code>
+	 * 
+	 * @param level The log level.
+	 * @param msg The message to log.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public void logObjects(Level level, String msg, Object...args) {
+		if (context != null)
+			context.getLogger().logObjects(level, msg, args);
 	}
 
 	/**
@@ -189,7 +195,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected void log(Level level, Throwable cause, String msg, Object...args) {
+	public void log(Level level, Throwable cause, String msg, Object...args) {
 		if (context != null)
 			context.getLogger().log(level, cause, msg, args);
 		else {
@@ -208,16 +214,6 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Convenience method for calling <code>getContext().getMessages();</code>
-	 * 
-	 * @return The resource bundle for this resource.  Never <jk>null</jk>.
-	 * @see RestContext#getProperties()
-	 */
-	public MessageBundle getMessages() {
-		return context.getMessages();
-	}
-
-	/**
 	 * Convenience method for calling <code>getContext().getProperties();</code>
 	 * 
 	 * @return The resource properties as an {@link RestContextProperties}.
@@ -225,15 +221,5 @@ public abstract class RestServlet extends HttpServlet {
 	 */
 	public RestContextProperties getProperties() {
 		return getContext().getProperties();
-	}
-
-	/**
-	 * Convenience method for calling <code>getContext().getBeanContext();</code>
-	 * 
-	 * @return The bean context used for parsing path variables and header values.
-	 * @see RestContext#getBeanContext()
-	 */
-	public BeanContext getBeanContext() {
-		return getContext().getBeanContext();
 	}
 }

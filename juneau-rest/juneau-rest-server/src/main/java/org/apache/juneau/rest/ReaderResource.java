@@ -20,12 +20,11 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Represents the contents of a text file with convenience methods for resolving {@link Parameter @Parameter} variables and adding
+ * Represents the contents of a text file with convenience methods for resolving SVL variables and adding
  * HTTP response headers.
  * 
  * <p>

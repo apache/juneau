@@ -76,6 +76,39 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	}
 
 	/**
+	 * Returns the specified path parameter converted to a String.
+	 * 
+	 * @param name The path variable name.
+	 * @return The parameter value.
+	 * @throws ParseException
+	 */
+	public String getString(String name) throws ParseException {
+		return parse(parser, name, beanSession.string());
+	}
+
+	/**
+	 * Returns the specified path parameter converted to an integer.
+	 * 
+	 * @param name The path variable name.
+	 * @return The parameter value.
+	 * @throws ParseException
+	 */
+	public int getInt(String name) throws ParseException {
+		return parse(parser, name, beanSession.getClassMeta(int.class));
+	}
+
+	/**
+	 * Returns the specified path parameter converted to a boolean.
+	 * 
+	 * @param name The path variable name.
+	 * @return The parameter value.
+	 * @throws ParseException
+	 */
+	public boolean getBoolean(String name) throws ParseException {
+		return parse(parser, name, beanSession.getClassMeta(boolean.class));
+	}
+
+	/**
 	 * Returns the specified path parameter converted to a POJO.
 	 * 
 	 * <p>
@@ -107,7 +140,23 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Class<T> type) throws ParseException {
-		return parse(name, beanSession.getClassMeta(type));
+		return get(parser, name, type);
+	}
+
+	/**
+	 * Same as {@link #get(String, Class)} but allows you to override the part parser.
+	 * 
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The attribute name.
+	 * @param type The class type to convert the attribute value to.
+	 * @param <T> The class type to convert the attribute value to.
+	 * @return The attribute value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
+		return parse(parser, name, beanSession.getClassMeta(type));
 	}
 
 	/**
@@ -150,11 +199,38 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
-		return (T)parse(name, beanSession.getClassMeta(type, args));
+		return get(parser, name, type, args);
 	}
 
+	/**
+	 * Same as {@link #get(String, Type, Type...)} but allows you to override the part parser.
+	 * 
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The attribute name.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @param <T> The class type to convert the attribute value to.
+	 * @return The attribute value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
+		return (T)parse(parser, name, beanSession.getClassMeta(type, args));
+	}
+	
+	
 	/* Workhorse method */
-	<T> T parse(String name, ClassMeta<T> cm) throws ParseException {
+	<T> T parse(HttpPartParser parser, String name, ClassMeta<T> cm) throws ParseException {
+		if (parser == null)
+			parser = this.parser;
 		Object attr = get(name);
 		T t = null;
 		if (attr != null)

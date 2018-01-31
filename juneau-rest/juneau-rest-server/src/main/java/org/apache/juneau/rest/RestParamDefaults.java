@@ -702,7 +702,7 @@ class RestParamDefaults {
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getResourceBundle();
+			return req.getMessageBundle();
 		}
 	}
 
@@ -714,7 +714,7 @@ class RestParamDefaults {
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getResourceBundle();
+			return req.getMessageBundle();
 		}
 	}
 

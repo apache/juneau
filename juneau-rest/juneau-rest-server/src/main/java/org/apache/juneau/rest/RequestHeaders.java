@@ -85,6 +85,21 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		}
 		return this;
 	}
+	
+	/**
+	 * Adds a default header value on this request.
+	 * 
+	 * @param name 
+	 * 	The header name.  
+	 * @param value
+	 * 	The header value.  
+	 * 	<br>Converted to a String using <code>toString()</code>.
+	 * 	<br>Ignored if value is <jk>null</jk> or blank.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders addDefault(String name, Object value) {
+		return addDefault(Collections.singletonMap(name, value));
+	}
 
 	/**
 	 * Adds a set of header values to this object.
