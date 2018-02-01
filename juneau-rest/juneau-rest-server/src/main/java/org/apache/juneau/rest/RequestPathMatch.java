@@ -109,29 +109,30 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	}
 
 	/**
-	 * Returns the specified path parameter converted to a POJO.
-	 * 
-	 * <p>
-	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
-	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
+	 * Returns the specified path parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> myparam = req.getPathParameter(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
+	 * 	<jk>int</jk> myparam = path.get(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into an int array.</jc>
-	 * 	<jk>int</jk>[] myparam = req.getPathParameter(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
+	 * 	<jk>int</jk>[] myparam = path.get(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean myparam = req.getPathParameter(<js>"myparam"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean myparam = path.get(<js>"myparam"</js>, MyBean.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
+	 * 	List myparam = path.get(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
+	 * 	Map myparam = path.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 * 
 	 * @param name The attribute name.
 	 * @param type The class type to convert the attribute value to.
@@ -148,7 +149,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The attribute name.
 	 * @param type The class type to convert the attribute value to.
 	 * @param <T> The class type to convert the attribute value to.
@@ -160,11 +161,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	}
 
 	/**
-	 * Returns the specified path parameter converted to a POJO.
+	 * Returns the specified query parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 * 
 	 * <p>
-	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
-	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
+	 * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.
 	 * 
 	 * <p>
 	 * Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
@@ -184,15 +184,24 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 * 
 	 * @param name The attribute name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
@@ -207,16 +216,14 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The attribute name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
@@ -284,12 +291,9 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * <p class='bcode'>
 	 * 	<jc>// REST method</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/foo/{bar}/*"</js>)
-	 * 	<jk>public</jk> String doGetById(RequestPathParams pathParams, <jk>int</jk> bar) {
-	 * 		<jk>return</jk> pathParams.getRemainder();
+	 * 	<jk>public</jk> String doGetById(RequestPathMatch path, <jk>int</jk> bar) {
+	 * 		<jk>return</jk> path.getRemainder();
 	 * 	}
-	 * 
-	 * 	<jc>// Prints "path/remainder"</jc>
-	 * 	<jk>new</jk> RestCall(servletPath + <js>"/foo/123/path/remainder"</js>).connect();
 	 * </p>
 	 * 
 	 * @return The path remainder string.

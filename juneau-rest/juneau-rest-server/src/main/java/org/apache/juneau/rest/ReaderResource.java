@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.svl.*;
 
@@ -29,6 +28,14 @@ import org.apache.juneau.svl.*;
  * 
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
+ * <br>This allows these objects to be returned as responses by REST methods.
+ * 
+ * <p>
+ * <l>ReaderResources</l> are meant to be thread-safe and reusable objects.
+ * <br>The contents of the request passed into the constructor are immediately converted to read-only strings.
+ * 
+ * <p>
+ * Instances of this class can be built using {@link ReaderResourceBuilder}.
  * 
  * 
  * <h5 class='section'>Documentation:</h5>
@@ -41,25 +48,15 @@ public class ReaderResource implements Writable {
 	private final MediaType mediaType;
 	private final String[] contents;
 	private final VarResolverSession varSession;
-	private final Map<String,String> headers;
-
+	private final Map<String,Object> headers;
+	
 	/**
-	 * Constructor.
+	 * Creates a new instance of a {@link ReaderResourceBuilder}
 	 * 
-	 * @param mediaType The HTTP media type.
-	 * @param contents
-	 * 	The contents of this resource.
-	 * 	<br>If multiple contents are specified, the results will be concatenated.
-	 * 	<br>Contents can be any of the following:
-	 * 	<ul>
-	 * 		<li><code>CharSequence</code>
-	 * 		<li><code>Reader</code>
-	 * 		<li><code>File</code>
-	 * 	</ul>
-	 * @throws IOException
+	 * @return A new instance of a {@link ReaderResourceBuilder}
 	 */
-	protected ReaderResource(MediaType mediaType, Object...contents) throws IOException {
-		this(mediaType, null, null, contents);
+	public static ReaderResourceBuilder create() {
+		return new ReaderResourceBuilder();
 	}
 
 	/**
@@ -80,15 +77,11 @@ public class ReaderResource implements Writable {
 	 * 	</ul>
 	 * @throws IOException
 	 */
-	public ReaderResource(MediaType mediaType, Map<String,String> headers, VarResolverSession varSession, Object...contents) throws IOException {
+	public ReaderResource(MediaType mediaType, Map<String,Object> headers, VarResolverSession varSession, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 		this.varSession = varSession;
 
-		Map<String,String> m = new LinkedHashMap<>();
-		if (headers != null)
-			for (Map.Entry<String,String> e : headers.entrySet())
-				m.put(e.getKey(), StringUtils.toString(e.getValue()));
-		this.headers = Collections.unmodifiableMap(m);
+		this.headers = headers == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(new LinkedHashMap<>(headers));
 
 		this.contents = new String[contents.length];
 		for (int i = 0; i < contents.length; i++) {
@@ -109,115 +102,14 @@ public class ReaderResource implements Writable {
 	}
 
 	/**
-	 * Builder class for constructing {@link ReaderResource} objects.
-	 */
-	public static final class Builder {
-		ArrayList<Object> contents = new ArrayList<>();
-		MediaType mediaType;
-		VarResolverSession varResolver;
-		Map<String,String> headers = new LinkedHashMap<>();
-
-		/**
-		 * Specifies the resource media type string.
-		 * 
-		 * @param mediaType The resource media type string.
-		 * @return This object (for method chaining).
-		 */
-		public Builder mediaType(String mediaType) {
-			this.mediaType = MediaType.forString(mediaType);
-			return this;
-		}
-
-		/**
-		 * Specifies the resource media type string.
-		 * 
-		 * @param mediaType The resource media type string.
-		 * @return This object (for method chaining).
-		 */
-		public Builder mediaType(MediaType mediaType) {
-			this.mediaType = mediaType;
-			return this;
-		}
-
-		/**
-		 * Specifies the contents for this resource.
-		 * 
-		 * <p>
-		 * This method can be called multiple times to add more content.
-		 * 
-		 * @param contents
-		 * 	The resource contents.
-		 * 	<br>If multiple contents are specified, the results will be concatenated.
-		 * 	<br>Contents can be any of the following:
-		 * 	<ul>
-		 * 		<li><code>InputStream</code>
-		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
-		 * 		<li><code>File</code>
-		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-		 * 	</ul>
-		 * @return This object (for method chaining).
-		 */
-		public Builder contents(Object...contents) {
-			this.contents.addAll(Arrays.asList(contents));
-			return this;
-		}
-
-		/**
-		 * Specifies an HTTP response header value.
-		 * 
-		 * @param name The HTTP header name.
-		 * @param value
-		 * 	The HTTP header value.
-		 * 	Will be converted to a <code>String</code> using {@link Object#toString()}.
-		 * @return This object (for method chaining).
-		 */
-		public Builder header(String name, Object value) {
-			this.headers.put(name, StringUtils.toString(value));
-			return this;
-		}
-
-		/**
-		 * Specifies HTTP response header values.
-		 * 
-		 * @param headers
-		 * 	The HTTP headers.
-		 * 	Values will be converted to <code>Strings</code> using {@link Object#toString()}.
-		 * @return This object (for method chaining).
-		 */
-		public Builder headers(Map<String,Object> headers) {
-			for (Map.Entry<String,Object> e : headers.entrySet())
-				header(e.getKey(), e.getValue());
-			return this;
-		}
-
-		/**
-		 * Specifies the variable resolver to use for this resource.
-		 * 
-		 * @param varResolver The variable resolver.
-		 * @return This object (for method chaining).
-		 */
-		public Builder varResolver(VarResolverSession varResolver) {
-			this.varResolver = varResolver;
-			return this;
-		}
-
-		/**
-		 * Create a new {@link ReaderResource} using values in this builder.
-		 * 
-		 * @return A new immutable {@link ReaderResource} object.
-		 * @throws IOException
-		 */
-		public ReaderResource build() throws IOException {
-			return new ReaderResource(mediaType, headers, varResolver, contents.toArray());
-		}
-	}
-
-	/**
 	 * Get the HTTP response headers.
 	 * 
-	 * @return The HTTP response headers.
+	 * @return 
+	 * 	The HTTP response headers.  
+	 * 	<br>An unmodifiable map.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Map<String,String> getHeaders() {
+	public Map<String,Object> getHeaders() {
 		return headers;
 	}
 

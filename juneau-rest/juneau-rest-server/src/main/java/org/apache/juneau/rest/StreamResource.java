@@ -19,20 +19,21 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.response.*;
 
 /**
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.
  * 
  * <p>
- * The purpose of this class is to maintain an in-memory reusable byte array of a streamed resource for the fastest
- * possible streaming.
- * Therefore, this object is designed to be reused and thread-safe.
+ * This class is handled special by the {@link StreamableHandler} class.
+ * <br>This allows these objects to be returned as responses by REST methods.
  * 
  * <p>
- * This class is handled special by the {@link StreamableHandler} class.
- * This allows these objects to be returned as responses by REST methods.
+ * <l>StreamResources</l> are meant to be thread-safe and reusable objects.
+ * <br>The contents of the request passed into the constructor are immediately converted to read-only byte arrays.
+ * 
+ * <p>
+ * Instances of this class can be built using {@link StreamResourceBuilder}.
  * 
  * 
  * <h5 class='section'>Documentation:</h5>
@@ -44,29 +45,17 @@ public class StreamResource implements Streamable {
 
 	private final MediaType mediaType;
 	private final byte[][] contents;
-	private final Map<String,String> headers;
+	private final Map<String,Object> headers;
 
 	/**
-	 * Constructor.
+	 * Creates a new instance of a {@link StreamResourceBuilder}
 	 * 
-	 * @param mediaType The resource media type.
-	 * @param contents
-	 * 	The resource contents.
-	 * 	<br>If multiple contents are specified, the results will be concatenated.
-	 * 	<br>Contents can be any of the following:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li><code>InputStream</code>
-	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
-	 * 		<li><code>File</code>
-	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-	 * 	</ul>
-	 * @throws IOException
+	 * @return A new instance of a {@link StreamResourceBuilder}
 	 */
-	public StreamResource(MediaType mediaType, Object...contents) throws IOException {
-		this(mediaType, null, contents);
+	public static StreamResourceBuilder create() {
+		return new StreamResourceBuilder();
 	}
-
+	
 	/**
 	 * Constructor.
 	 * 
@@ -88,11 +77,7 @@ public class StreamResource implements Streamable {
 	public StreamResource(MediaType mediaType, Map<String,Object> headers, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 
-		Map<String,String> m = new LinkedHashMap<>();
-		if (headers != null)
-			for (Map.Entry<String,Object> e : headers.entrySet())
-				m.put(e.getKey(), StringUtils.toString(e.getValue()));
-		this.headers = Collections.unmodifiableMap(m);
+		this.headers = headers == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(new LinkedHashMap<>(headers));
 
 		this.contents = new byte[contents.length][];
 		for (int i = 0; i < contents.length; i++) {
@@ -115,100 +100,14 @@ public class StreamResource implements Streamable {
 	}
 
 	/**
-	 * Builder class for constructing {@link StreamResource} objects.
-	 */
-	public static final class Builder {
-		ArrayList<Object> contents = new ArrayList<>();
-		MediaType mediaType;
-		Map<String,String> headers = new LinkedHashMap<>();
-
-		/**
-		 * Specifies the resource media type string.
-		 * 
-		 * @param mediaType The resource media type string.
-		 * @return This object (for method chaining).
-		 */
-		public Builder mediaType(String mediaType) {
-			this.mediaType = MediaType.forString(mediaType);
-			return this;
-		}
-
-		/**
-		 * Specifies the resource media type string.
-		 * 
-		 * @param mediaType The resource media type string.
-		 * @return This object (for method chaining).
-		 */
-		public Builder mediaType(MediaType mediaType) {
-			this.mediaType = mediaType;
-			return this;
-		}
-
-		/**
-		 * Specifies the contents for this resource.
-		 * 
-		 * <p>
-		 * This method can be called multiple times to add more content.
-		 * 
-		 * @param contents
-		 * 	The resource contents.
-		 * 	<br>If multiple contents are specified, the results will be concatenated.
-		 * 	<br>Contents can be any of the following:
-		 * 	<ul>
-		 * 		<li><code><jk>byte</jk>[]</code>
-		 * 		<li><code>InputStream</code>
-		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
-		 * 		<li><code>File</code>
-		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-		 * 	</ul>
-		 * @return This object (for method chaining).
-		 */
-		public Builder contents(Object...contents) {
-			this.contents.addAll(Arrays.asList(contents));
-			return this;
-		}
-
-		/**
-		 * Specifies an HTTP response header value.
-		 * 
-		 * @param name The HTTP header name.
-		 * @param value The HTTP header value.  Will be converted to a <code>String</code> using {@link Object#toString()}.
-		 * @return This object (for method chaining).
-		 */
-		public Builder header(String name, Object value) {
-			this.headers.put(name, StringUtils.toString(value));
-			return this;
-		}
-
-		/**
-		 * Specifies HTTP response header values.
-		 * 
-		 * @param headers The HTTP headers.  Values will be converted to <code>Strings</code> using {@link Object#toString()}.
-		 * @return This object (for method chaining).
-		 */
-		public Builder headers(Map<String,Object> headers) {
-			for (Map.Entry<String,Object> e : headers.entrySet())
-				header(e.getKey(), e.getValue());
-			return this;
-		}
-
-		/**
-		 * Create a new {@link StreamResource} using values in this builder.
-		 * 
-		 * @return A new immutable {@link StreamResource} object.
-		 * @throws IOException
-		 */
-		public StreamResource build() throws IOException {
-			return new StreamResource(mediaType, headers, contents.toArray());
-		}
-	}
-
-	/**
 	 * Get the HTTP response headers.
 	 * 
-	 * @return The HTTP response headers.  An unmodifiable map.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The HTTP response headers.  
+	 * 	<br>An unmodifiable map.  
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Map<String,String> getHeaders() {
+	public Map<String,Object> getHeaders() {
 		return headers;
 	}
 

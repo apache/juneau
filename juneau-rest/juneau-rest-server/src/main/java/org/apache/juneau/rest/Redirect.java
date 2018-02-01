@@ -17,63 +17,13 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.net.*;
 import java.text.*;
 
-import org.apache.juneau.urlencoding.*;
-
 /**
  * REST methods can return this object as a shortcut for performing <code>HTTP 302</code> redirects.
- * 
- * <p>
- * The following example shows the difference between handling redirects via the {@link RestRequest}/{@link RestResponse},
- * and the simplified approach of using this class.
- * <p class='bcode'>
- * 	<jc>// Redirect to "/contextPath/servletPath/foobar"</jc>
- * 
- * 	<jc>// Using RestRequest and RestResponse</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1"</js>)
- * 	<jk>public void</jk> example1(RestRequest req, RestResponse res) <jk>throws</jk> IOException {
- * 		res.sendRedirect(req.getServletURI() + <js>"/foobar"</js>);
- * 	}
- * 
- * 	<jc>// Using Redirect</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2"</js>)
- * 	<jk>public</jk> Redirect example2() {
- * 		<jk>return new</jk> Redirect(<js>"foobar"</js>);
- * 	}
- * </p>
- * 
- * <p>
- * The constructor can use a {@link MessageFormat}-style pattern with multiple arguments:
- * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3"</js>)
- * 	<jk>public</jk> Redirect example3() {
- * 		<jk>return new</jk> Redirect(<js>"foo/{0}/bar/{1}"</js>, id1, id2);
- * 	}
- * </p>
- * 
- * <p>
- * The arguments are serialized to strings using the servlet's {@link UrlEncodingSerializer}, so any filters defined on
- * the serializer or REST method/class will be used when present.
- * The arguments will also be automatically URL-encoded.
- * 
- * <p>
- * Redirecting to the servlet root can be accomplished by simply using the no-arg constructor.
- * <p class='bcode'>
- * 	<jc>// Simply redirect to the servlet root.
- * 	// Equivalent to res.sendRedirect(req.getServletURI()).</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example4"</js>)
- * 	<jk>public</jk> Redirect exmaple4() {
- * 		<jk>return new</jk> Redirect();
- * 	}
- * </p>
- * 
- * <p>
- * This class is handled by {@link org.apache.juneau.rest.response.RedirectHandler}, a built-in default response
- * handler created in {@link RestContextBuilder}.
  * 
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; Redirect</a>
  * </ul>
  */
 public final class Redirect {

@@ -17,15 +17,33 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * Represents the parsed form data parameters in an HTTP request.
+ * Represents the parsed form-data parameters in an HTTP request.
  * 
+ * <p>
+ * Similar in functionality to the {@link HttpServletRequest#getParameter(String)} except only looks in the body of the request, not parameters from
+ * the URL query string.
+ * <br>This can be useful in cases where you're using GET parameters on FORM POSTs, and you don't want the body of the request to be read.
+ * 
+ * <p>
+ * Use of this object is incompatible with using any other methods that access the body of the request (since this object will
+ * consume the body).
+ * <br>Some examples:
+ * <ul>
+ * 	<li class='jm'>{@link RestRequest#getBody()}
+ * 	<li class='jm'>{@link RestRequest#getReader()}
+ * 	<li class='jm'>{@link RestRequest#getInputStream()}
+ * 	<li class='ja'>{@link Header}
+ * </ul>
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
@@ -53,9 +71,11 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * Adds default entries to these form-data parameters.
 	 * 
 	 * <p>
-	 * This includes the default form-data parameters defined on the servlet and method levels.
+	 * This includes the default form-data parameters defined on the resource and method levels.
 	 * 
-	 * @param defaultEntries The default entries.  Can be <jk>null</jk>.
+	 * @param defaultEntries 
+	 * 	The default entries.  
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RequestFormData addDefault(Map<String,Object> defaultEntries) {
@@ -72,7 +92,25 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Sets a request form data parameter value.
+	 * Adds a default entries to these form-data parameters.
+	 * 
+	 * <p>
+	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
+	 * 
+	 * @param name 
+	 * 	The form-data parameter name.  
+	 * @param value
+	 * 	The form-data parameter value.  
+	 * 	<br>Converted to a String using <code>toString()</code>.
+	 * 	<br>Ignored if value is <jk>null</jk> or blank.
+	 * @return This object (for method chaining).
+	 */
+	public RequestFormData addDefault(String name, Object value) {
+		return addDefault(Collections.singletonMap(name, value));
+	}
+
+	/**
+	 * Sets a request form-data parameter value.
 	 * 
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -82,17 +120,15 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Returns a form data parameter value.
+	 * Returns a form-data parameter value.
 	 * 
 	 * <p>
 	 * Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by the
-	 * 		underlying servlet API.
 	 * 	<li>This method returns the raw unparsed value, and differs from calling
-	 * 		<code>getFormDataParameter(name, String.<jk>class</js>)</code> which will convert the value from UON
+	 * 		<code>get(name, String.<jk>class</js>)</code> which will convert the value from UON
 	 * 		notation:
 	 * 		<ul>
 	 * 			<li><js>"null"</js> =&gt; <jk>null</jk>
@@ -102,7 +138,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 * @param name The form data parameter name.
+	 * @param name The form-data parameter name.
 	 * @return The parameter value, or <jk>null</jk> if parameter does not exist.
 	 */
 	public String getString(String name) {
@@ -122,7 +158,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	/**
 	 * Same as {@link #getString(String)} except returns a default value if <jk>null</jk> or empty.
 	 * 
-	 * @param name The form data parameter name.
+	 * @param name The form-data parameter name.
 	 * @param def The default value.
 	 * @return The parameter value, or the default value if parameter does not exist or is <jk>null</jk> or empty.
 	 */
@@ -134,7 +170,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	/**
 	 * Same as {@link #getString(String)} but converts the value to an integer.
 	 * 
-	 * @param name The form data parameter name.
+	 * @param name The form-data parameter name.
 	 * @return The parameter value, or <code>0</code> if parameter does not exist or is <jk>null</jk> or empty.
 	 */
 	public int getInt(String name) {
@@ -144,7 +180,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	/**
 	 * Same as {@link #getString(String,String)} but converts the value to an integer.
 	 * 
-	 * @param name The form data parameter name.
+	 * @param name The form-data parameter name.
 	 * @param def The default value.
 	 * @return The parameter value, or the default value if parameter does not exist or is <jk>null</jk> or empty.
 	 */
@@ -156,7 +192,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	/**
 	 * Same as {@link #getString(String)} but converts the value to a boolean.
 	 * 
-	 * @param name The form data parameter name.
+	 * @param name The form-data parameter name.
 	 * @return The parameter value, or <jk>false</jk> if parameter does not exist or is <jk>null</jk> or empty.
 	 */
 	public boolean getBoolean(String name) {
@@ -166,7 +202,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	/**
 	 * Same as {@link #getString(String,String)} but converts the value to a boolean.
 	 * 
-	 * @param name The form data parameter name.
+	 * @param name The form-data parameter name.
 	 * @param def The default value.
 	 * @return The parameter value, or the default value if parameter does not exist or is <jk>null</jk> or empty.
 	 */
@@ -176,31 +212,29 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified form data parameter value converted to a POJO using the {@link HttpPartParser}
-	 * registered with this servlet.
+	 * Returns the specified form-data parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> myparam = req.getFormDataParameter(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
+	 * 	<jk>int</jk> myparam = formData.get(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into an int array.</jc>
-	 * 	<jk>int</jk>[] myparam = req.getFormDataParameter(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
+	 * 	<jk>int</jk>[] myparam = formData.get(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean myparam = req.getFormDataParameter(<js>"myparam"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean myparam = formData.get(<js>"myparam"</js>, MyBean.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
+	 * 	List myparam = formData.get(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map myparam = req.getFormDataParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
+	 * 	Map myparam = formData.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by the
-	 * 		underlying servlet API.
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 * 
 	 * @param name The parameter name.
@@ -218,7 +252,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The parameter name.
 	 * @param type The class type to convert the parameter value to.
 	 * @param <T> The class type to convert the parameter value to.
@@ -248,7 +282,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The parameter name.
 	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
 	 * @param type The class type to convert the parameter value to.
@@ -262,7 +296,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 
 	/**
 	 * Same as {@link #get(String, Class)} except for use on multi-part parameters
-	 * (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
 	 * 
 	 * <p>
 	 * This method must only be called when parsing into classes of type Collection or array.
@@ -284,7 +318,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The parameter name.
 	 * @param type The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
@@ -295,40 +329,44 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified form data parameter value converted to a POJO using the {@link HttpPartParser}
-	 * registered with this servlet.
+	 * Returns the specified form-data parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by the
-	 * 		underlying servlet API.
-	 * 	<li>Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
-	 * </ul>
+	 * <p>
+	 * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; myparam = formData.get(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; myparam = formData.get(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; myparam = formData.getr(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 * 
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = formData.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 * 
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
@@ -342,16 +380,14 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
@@ -362,7 +398,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 
 	/**
 	 * Same as {@link #get(String, Type, Type...)} except for use on multi-part parameters
-	 * (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
 	 * 
 	 * <p>
 	 * This method must only be called when parsing into classes of type Collection or array.
@@ -370,12 +406,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
@@ -389,16 +423,14 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
@@ -464,10 +496,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Converts the form data parameters to a readable string.
+	 * Converts the form-data parameters to a readable string.
 	 * 
-	 * @param sorted Sort the form data parameters by name.
-	 * @return A JSON string containing the contents of the form data parameters.
+	 * @param sorted Sort the form-data parameters by name.
+	 * @return A JSON string containing the contents of the form-data parameters.
 	 */
 	public String toString(boolean sorted) {
 		Map<String,Object> m = (sorted ? new TreeMap<String,Object>() : new LinkedHashMap<String,Object>());

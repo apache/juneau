@@ -24,6 +24,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -41,8 +42,7 @@ import org.apache.juneau.serializer.*;
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
- * 		res.setPageTitle(<js>"My title"</js>)
- * 			.setOutput(<js>"Simple string response"</js>);
+ * 		res.setOutput(<js>"Simple string response"</js>);
  * 	}
  * </p>
  * 
@@ -118,9 +118,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Gets the serializer group for the response.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Serializers">Overview &gt; Serializers</a>
+	 * </ul>
+	 * 
 	 * @return The serializer group for the response.
 	 */
-	public SerializerGroup getSerializerGroup() {
+	public SerializerGroup getSerializers() {
 		return restJavaMethod.serializers;
 	}
 
@@ -148,20 +153,33 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Sets the HTTP output on the response.
 	 * 
 	 * <p>
+	 * The object type can be anything allowed by the registered response handlers.
+	 * 
+	 * <p>
 	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
 	 * 
-	 * <p>
-	 * Can be of any of the following types:
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(..., path=<js>"/example2/{personId}"</js>)
+	 * 	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
+	 * 		Person p = getPersonById(personId);
+	 * 		res.setOutput(p);
+	 * 	}
+	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li> {@link InputStream}
-	 * 	<li> {@link Reader}
-	 * 	<li> Any serializable type defined in <a class="doclink"
-	 * 		href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a>
+	 * 	<li>Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
+	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <code>null</code>).
+	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
+	 * 		<br>This distinction affects the {@link #hasOutput()} method behavior.
 	 * </ul>
 	 * 
-	 * <p>
-	 * If it's an {@link InputStream} or {@link Reader}, you must also specify the <code>Content-Type</code> using the
-	 * {@link #setContentType(String)} method.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
+	 * </ul>
 	 * 
 	 * @param output The output to serialize to the connection.
 	 * @return This object (for method chaining).
@@ -175,6 +193,37 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Returns a programmatic interface for setting properties for the HTML doc view.
 	 * 
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod.htmldoc()} annotation.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Declarative approach.</jc>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			header={
+	 * 				<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
+	 * 			},
+	 * 			aside={
+	 * 				<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * 	<jk>public</jk> Object doGet(RestResponse res) {
+	 * 		
+	 * 		<jc>// Equivalent programmatic approach.</jc>
+	 * 		res.getHtmlDocBuilder()
+	 * 			.header(<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>)
+	 * 			.aside(<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>);
+	 * 	}
+	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='ja'>{@link RestMethod#htmldoc()}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; @HtmlDoc</a>
+	 * </ul>
+	 * 
 	 * @return A new programmatic interface for setting properties for the HTML doc view.
 	 */
 	public HtmlDocBuilder getHtmlDocBuilder() {
@@ -184,24 +233,45 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Add a serializer property to send to the serializers to override a default value.
+	 * Retrieve the properties active for this request.
 	 * 
 	 * <p>
-	 * Can be any value specified on any of the serializers or parsers.
+	 * This contains all resource and method level properties from the following:
+	 * <ul>
+	 * 	<li class='ja'>{@link RestResource#properties()}
+	 * 	<li class='ja'>{@link RestMethod#properties()}
+	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
+	 * </ul>
 	 * 
-	 * @param key The setting name.
-	 * @param value The setting value.
-	 * @return This object (for method chaining).
-	 */
-	public RestResponse setProperty(String key, Object value) {
-		properties.put(key, value);
-		return this;
-	}
-
-	/**
-	 * Returns the properties set via {@link #setProperty(String, Object)}.
+	 * <p>
+	 * The returned object is modifiable and allows you to override session-level properties before
+	 * they get passed to the serializers.
+	 * <br>However, properties are open-ended, and can be used for any purpose.
 	 * 
-	 * @return A map of all the property values set.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=<jsf>SERIALIZER_sortMaps</jsf>, value=<js>"false"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public</jk> Map doGet(RestResponse res, <ja>@Query</ja>(<js>"sortMaps"</js>) Boolean sortMaps) {
+	 * 		
+	 * 		<jc>// Override value if specified through query parameter.</jc>
+	 * 		<jk>if</jk> (sortMaps != <jk>null</jk>)
+	 * 			res.getProperties().put(<jsf>SERIALIZER_sortMaps</jsf>, sortMaps);
+	 * 
+	 * 		<jk>return</jk> <jsm>getMyMap</jsm>();
+	 * 	}
+	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link #prop(String, Object)}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; Properties</a>
+	 * </ul>
+	 * 
+	 * @return The properties active for this request.
 	 */
 	public RequestProperties getProperties() {
 		return properties;
@@ -251,7 +321,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Returns <jk>true</jk> if this response has any output associated with it.
 	 * 
-	 * @return <jk>true</jk> if {@code setInput()} has been called.
+	 * @return <jk>true</jk> if {@link #setOutput(Object)} has been called, even if the value passed was <jk>null</jk>.
 	 */
 	public boolean hasOutput() {
 		return output != null || isNullOutput;
@@ -371,6 +441,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <p>
 	 * Sets the header <js>"x-content-type-options=nosniff"</js> so that output is rendered immediately on IE and Chrome
 	 * without any buffering for content-type sniffing.
+	 * 
+	 * <p>
+	 * This can be useful if you want to render a streaming 'console' on a web page.
 	 * 
 	 * @param contentType The value to set as the <code>Content-Type</code> on the response.
 	 * @return The raw writer.

@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -42,8 +43,8 @@ public final class StreamableHandler implements ResponseHandler {
 				MediaType mediaType = r.getMediaType();
 				if (mediaType != null)
 					res.setContentType(mediaType.toString());
-				for (Map.Entry<String,String> h : r.getHeaders().entrySet())
-					res.setHeader(h.getKey(), h.getValue());
+				for (Map.Entry<String,Object> h : r.getHeaders().entrySet())
+					res.setHeader(h.getKey(), StringUtils.toString(h.getValue()));
 			}
 			try (OutputStream os = res.getOutputStream()) {
 				((Streamable)output).streamTo(os);

@@ -271,7 +271,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; Properties</a
+	 * 	<li class='jm'>{@link #prop(String, Object)}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; Properties</a>
 	 * </ul>
 	 * 
 	 * @return The properties active for this request.
@@ -332,7 +333,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestHeaders">Overview &gt; RequestHeaders</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestHeaders">Overview &gt; RequestHeaders</a>
 	 * </ul>
 	 * 
 	 * @return 
@@ -471,7 +472,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestQuery">Overview &gt; RequestQuery</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestQuery">Overview &gt; RequestQuery</a>
 	 * </ul>
 	 * 
 	 * @return 
@@ -531,7 +532,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestFormData">Overview &gt; RequestFormData</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestFormData">Overview &gt; RequestFormData</a>
 	 * </ul>
 	 * 
 	 * @return 
@@ -609,7 +610,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; RequestPathMatch</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; RequestPathMatch</a>
 	 * </ul>
 	 * 
 	 * @return 
@@ -659,7 +660,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; RequestBody</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; RequestBody</a>
 	 * </ul>
 	 * 
 	 * @return 
@@ -836,7 +837,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodSummary()}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a>
 	 * </ul>
 	 * 
 	 * @return 
@@ -871,7 +872,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
 	 * 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider()}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a>
 	 * </ul>
 	 * 
 	 * @return
@@ -1002,6 +1003,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the serializers associated with this request.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Serializers">Overview &gt; Serializers</a>
+	 * </ul>
+	 * 
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializers() {
@@ -1010,6 +1016,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the parsers associated with this request.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Parsers">Overview &gt; Parsers</a>
+	 * </ul>
 	 * 
 	 * @return The parsers associated with this request.
 	 */
@@ -1182,7 +1193,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
 	 * </ul>
 	 * 
 	 * @return The variable resolver for this request.
@@ -1228,7 +1239,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String s = context.getClasspathResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		ReaderResource.Builder b = new ReaderResource.Builder().mediaType(mediaType).contents(s);
+		ReaderResourceBuilder b = new ReaderResourceBuilder().mediaType(mediaType).contents(s);
 		if (resolveVars)
 			b.varResolver(getVarResolverSession());
 		return b.build();
@@ -1296,7 +1307,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ConfigurationFiles">Overview &gt; Configuration Files</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ConfigurationFiles">Overview &gt; Configuration Files</a>
 	 * </ul>
 	 * 
 	 * @return
@@ -1374,7 +1385,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jac'>{@link org.apache.juneau.rest.RestLogger}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#logObjects(Level, String, Object...)}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; Logging and Error Handling</a
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; Logging and Error Handling</a>
 	 * </ul>
 	 * 
 	 * @return 

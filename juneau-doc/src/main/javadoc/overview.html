@@ -169,11 +169,12 @@
 				<li><p><a class='doclink' href='#juneau-rest-server.RequestHeaders'><i>RequestHeaders</i></a></p>
 				<li><p><a class='doclink' href='#juneau-rest-server.RequestQuery'><i>RequestQuery</i></a></p>
 				<li><p><a class='doclink' href='#juneau-rest-server.RequestFormData'><i>RequestFormData</i></a></p>
+				<li><p><a class='doclink' href='#juneau-rest-server.RestMethodPath'><i>@RestMethod.path()</i></a></p>
+				<li><p><a class='doclink' href='#juneau-rest-server.RequestPathMatch'><i>RequestPathMatch</i></a></p>
 				<li><p><a class='doclink' href='#juneau-rest-server.MethodReturnTypes'><i>Method Return Types</i></a></p>
 				<li><p><a class='doclink' href='#juneau-rest-server.ReaderResource'><i>ReaderResource</i></a></p>
 				<li><p><a class='doclink' href='#juneau-rest-server.StreamResource'><i>StreamResource</i></a></p>
-				<li><p><a class='doclink' href='#juneau-rest-server.RestMethodPath'><i>@RestMethod.path()</i></a></p>
-				<li><p><a class='doclink' href='#juneau-rest-server.RequestPathMatch'><i>RequestPathMatch</i></a></p>
+				<li><p><a class='doclink' href='#juneau-rest-server.Redirect'><i>Redirect</i></a></p>
 				<li><p><a class='doclink' href='#juneau-rest-server.RestMethodMatchers'><i>@RestMethod.matchers()</i></a></p>
 			</ol>
 			<li><p><a class='doclink' href='#juneau-rest-server.Body'><i>@Body</i></a></p>
@@ -200,7 +201,7 @@
 			<ol>
 				<li><p><a class='doclink' href='#juneau-rest-server.InfoProviders'><i>Info Providers</i></a></p>
 			</ol>
-			<li><p><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation'><i> @HtmlDoc</i></a></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation'><i>@HtmlDoc</i></a></p>
 			<ol>
 				<li><p><a class='doclink' href='#juneau-rest-server.Widgets'><i>Widgets</i></a></p>
 				<li><p><a class='doclink' href='#juneau-rest-server.UiCustomization'><i>UI Customization</i></a></p>
@@ -4914,28 +4915,6 @@
 				support RDF. 
 			</p>
 			<p>
-				The {@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} classes 
-				described later also extend from their servlet equivalents:
-			</p> 
-			<ul class='doctree'>
-				<li class='jic'>
-					{@link javax.servlet.http.HttpServletRequest javax.servlet.http.HttpServletRequest}
-					<ul>
-						<li class='jc'>
-							{@link org.apache.juneau.rest.RestRequest} 
-							- Augmented with specialized REST methods.
-					</ul>
-				</li> 
-				<li class='jic'>
-					{@link javax.servlet.http.HttpServletResponse javax.servlet.http.HttpServletResponse}
-					<ul>
-						<li class='jc'>
-							{@link org.apache.juneau.rest.RestResponse} 
-							- Augmented with specialized REST methods.
-					</ul>
-				</li> 
-			</ul>
-			<p>
 				Everything is configured through the following classes which you will see a lot:
 			</p>
 			<ul>
@@ -4983,7 +4962,7 @@
 					<br>However, the class does provide a couple of convenience methods to be aware of:
 				</p>
 				<ul class='doctree'>
-					<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+					<li class='jac'><code>{@link org.apache.juneau.rest.RestServlet} <jk>extends</jk> HttpServlet</code>
 					<ul>
 						<li class='jf'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...) log(Level,String,Object...)}
 						<li class='jf'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)}
@@ -5304,7 +5283,11 @@
 		<a id="juneau-rest-server.RestResource"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.4 - @RestResource</h4>
 		<div class='topic'>
-			TODO
+			<p>
+				The {@link org.apache.juneau.rest.annotation.RestResource @RestResource} annotation is the primary way of defining
+				and configuring REST resource classes.
+				<br>The functionality of the class itself is covered in detail in the topics below.
+			</p>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.AnnotationInheritance"></a>
@@ -5447,7 +5430,53 @@
 		<a id="juneau-rest-server.RestContext"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.5 - RestContext</h4>
 		<div class='topic'>
-			TODO
+			<p>
+				The {@link org.apache.juneau.rest.RestContext} object is the workhorse class for all of the configuration
+				of a single REST resource class.
+				<br>It's by-far the most important class in the REST API.
+			</p>
+			<p>
+				Every class annotated with <l>@RestResource</l> ends up with an instance of this object.
+				<br>The object itself is read-only and unchangeable.
+				<br>It is populated through the following:
+			</p>
+			<ul>
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource} - Settings copied from the annotation during servlet initialization.
+				<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder} - Builder used during servlet initialization.
+			</ul>
+			<p>
+				The annotation should be self-explanatory at this point.
+				<br>The builder allows you to perform all of the same configuration as the annotation programmatically.
+			</p>
+			<p>
+				The {@link org.apache.juneau.rest.RestContextBuilder} class extends {@link org.apache.juneau.BeanContextBuilder}
+				allowing you to programmatically set any properties defined on that builder class.
+				<br>It also implements {@link javax.servlet.ServletConfig}
+			</p>
+			<p>
+				To access this object, simply pass it in as a constructor argument or in an INIT hook:
+			</p>
+			<p class='bcode'>
+	<jc>// Option #1 - Pass in through constructor.</jc>
+	<jk>public</jk> MyResource(RestContextBuilder builder) {
+			builder
+				.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
+				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+	}
+
+	<jc>// Option #2 - Use an INIT hook.</jc>
+	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+			builder
+				.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
+				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+	}
+			</p>
+			<p>
+				Warning:  This class is huge.
+				<br>Through it, you can configure bean/serializer/parser settings, define config files, children, 
+					resource finders, info providers, etc...
+			</p>
 		</div>
 		
 		<!-- ======================================================================================================== -->
@@ -5619,7 +5648,7 @@
 					There are many useful methods on this object, but the main ones are shown below:
 				</p>
 				<ul class='doctree'>
-					<li class='jc'>{@link org.apache.juneau.rest.RestRequest} 
+					<li class='jc'><code>{@link org.apache.juneau.rest.RestRequest} <jk>extends</jk> HttpServletRequest</code>
 					<ul>
 						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders() getHeaders()}
 						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getQuery() getQuery()}
@@ -5632,6 +5661,7 @@
 						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfigFile() getConfigFile()}
 						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession() getVarResolverSession()}
 						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessageBundle() getMessageBundle()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties() getProperties()}
 						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
 					</ul>
 				</ul>
@@ -5641,162 +5671,202 @@
 			<a id="juneau-rest-server.RestResponse"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.6.3 - RestResponse</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RestResponse} object is an extension of the <l>HttpServletResponse</l> class
+					with various built-in convenience methods for use in building REST interfaces.
+					<br>It can be accessed by passing it as a parameter on your REST Java method:
+				</p>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RestResponse req) {...}			
+				</p>
+				<p>
+					The important methods on this class are shown below:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'><code>{@link org.apache.juneau.rest.RestResponse} <jk>extends</jk> HttpServletResponse</code>
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RestResponse#setOutput(Object) setOutput(Object)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getProperties() getProperties()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getHtmlDocBuilder() getHtmlDocBuilder()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getDirectWriter(String) getDirectWriter(String)}
+					</ul>
+				</ul>
 			</div>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.RequestBody"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.6.4 - RequestBody</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RequestBody} object is the API for accessing the body of an HTTP request.
+					<br>It can be accessed by passing it as a parameter on your REST Java method:
+				</p>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestBody body) {...}			
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> doPost(RequestBody body) {
+		<jc>// Convert body to a linked list of Person objects.</jc>
+		List&lt;Person&gt; l = body.asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+		...
+	}
+				</p>
+				<p>
+					The important methods on this class are:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'>{@link org.apache.juneau.rest.RequestBody} 
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getReader() getReader()}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getInputStream() getInputStream()}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Class) asType(Class)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Type,Type...) asType(Type,Type...)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asString() asString()}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asHex() asHex()}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asSpacedHex() asSpacedHex()}
+					</ul>
+				</ul>
 			</div>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.RequestHeaders"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.6.5 - RequestHeaders</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RequestHeaders} object is the API for accessing the headers of an HTTP request.
+					<br>It can be accessed by passing it as a parameter on your REST Java method:
+				</p>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestHeaders headers) {...}			
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestHeaders headers) {
+
+		<jc>// Add a default value.</jc>
+		headers.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+	
+		<jc>// Get a header value as a POJO.</jc>
+		UUID etag = headers.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	
+		<jc>// Get a standard header.</jc>
+		CacheControl = headers.getCacheControl();
+	 }			
+				</p>
+				<p>
+					The important methods on this class are:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'><code>{@link org.apache.juneau.rest.RequestHeaders} <jk>extends</jk> TreeMap&lt;String,String[]&gt;</code>
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Class) get(String,Class)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Type,Type...) get(String,Type,Type)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getString(String,String) getString(String,String)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getInt(String,int) getInt(String,int)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getBoolean(String,boolean) getBoolean(String,boolean)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#addDefault(String,Object) addDefault(String,Object)}
+					</ul>
+				</ul>
 			</div>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.RequestQuery"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.6.6 - RequestQuery</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RequestQuery} object is the API for accessing the GET query parameters of an HTTP request.
+					<br>It can be accessed by passing it as a parameter on your REST Java method:
+				</p>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestQuery query) {...}			
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestQuery query) {
+
+		<jc>// Get query parameters converted to various types.</jc>
+		<jk>int</jk> p1 = query.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String p2 = query.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID p3 = query.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	 }			
+				</p>
+				<p>
+					An important distinction between the behavior of this object and <l>HttpServletRequest.getParameter(String)</l> is
+					that the former will NOT load the body of the request on FORM POSTS and will only look at parameters
+					found in the query string.
+					<br>This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to 
+					inadvertantly read the body of the request to get a query parameter.
+				</p>
+				<p>
+					The important methods on this class are:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'><code>{@link org.apache.juneau.rest.RequestQuery} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</code>
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Class) get(String,Class)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Type,Type...) get(String,Type,Type)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getString(String,String) getString(String,String)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getInt(String,int) getInt(String,int)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getBoolean(String,boolean) getBoolean(String,boolean)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#addDefault(String,Object) addDefault(String,Object)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getSearchArgs() getSearchArgs()}
+					</ul>
+				</ul>
 			</div>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.RequestFormData"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.6.7 - RequestFormData</h4>
 			<div class='topic'>
-				TODO
-			</div>
-
-			<!-- ======================================================================================================== -->
-			<a id="juneau-rest-server.RequestPathMatch"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.6.X - RequestPathMatch</h4>
-			<div class='topic'>
-				TODO
-			</div>
-
-			<!-- ======================================================================================================== -->
-			<a id="juneau-rest-server.MethodReturnTypes"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.6.8 - Method Return Types</h4>
-			<div class='topic'>
 				<p>
-					The return type can be any serializable POJO as defined in <a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a>.
-					<br>It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
-					setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+					The {@link org.apache.juneau.rest.RequestFormData} object is the API for accessing the HTTP request body as form data.
+					<br>It can be accessed by passing it as a parameter on your REST Java method:
+				</p>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestFormData query) {...}			
 				</p>
 				<h6 class='figure'>Example:</h6>
 				<p class='bcode'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public</jk> String doGet() {
-		<jk>return</jk> <js>"Hello World!"</js>;
-	}
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestFormData formData) {
+
+		<jc>// Get query parameters converted to various types.</jc>
+		<jk>int</jk> p1 = formData.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String p2 = formData.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID p3 = formData.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	 }			
 				</p>
 				<p>
-					Out-of-the-box, besides POJOs, the following return types are handled as special cases:
+					Note that this object does NOT take GET parameters into account and only returns values found in the body of the request.
 				</p>
-				<ul class='spaced-list'>
-					<li class='jc'>{@link java.io.InputStream}
-						<br>The contents are simply piped to the output stream returned by 
-						{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
-						<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
-						the <l>Content-Type</l> header if you use this object type.
-					<li class='jc'>{@link java.io.Reader}
-						<br>The contents are simply piped to the output stream returned by 
-						{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
-						<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
-						the <l>Content-Type</l> header if you use this object type.
-					<li class='jc'>{@link org.apache.juneau.rest.Redirect}
-						<br>Represents an HTTP redirect response.
-					<li class='jc'>{@link org.apache.juneau.Streamable}
-						<br>Interface that identifies that an object can be serialized directly to an output stream.
-					<li class='jc'>{@link org.apache.juneau.Writable}
-						<br>Interface that identifies that an object can be serialized directly to a writer.
-					<li class='jc'>{@link org.apache.juneau.utils.ZipFileList}
-						<br>Special interface for sending zip files as responses.
-				</ul>
 				<p>
-					This is controlled through the following extensible API:
+					The important methods on this class are:
 				</p>
 				<ul class='doctree'>
-					<li class='jic'>{@link org.apache.juneau.rest.ResponseHandler}
+					<li class='jc'><code>{@link org.apache.juneau.rest.RequestFormData} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</code>
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.rest.response.DefaultHandler}
-						<li class='jc'>{@link org.apache.juneau.rest.response.InputStreamHandler}
-						<li class='jc'>{@link org.apache.juneau.rest.response.ReaderHandler}
-						<li class='jc'>{@link org.apache.juneau.rest.response.RedirectHandler}
-						<li class='jc'>{@link org.apache.juneau.rest.response.StreamableHandler}
-						<li class='jc'>{@link org.apache.juneau.rest.response.WritableHandler}
-						<li class='jc'>{@link org.apache.juneau.rest.response.ZipFileListResponseHandler}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Class) get(String,Class)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Type,Type...) get(String,Type,Type)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getString(String,String) getString(String,String)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getInt(String,int) getInt(String,int)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getBoolean(String,boolean) getBoolean(String,boolean)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#addDefault(String,Object) addDefault(String,Object)}
 					</ul>
 				</ul>
-				<p>
-					REST Java methods can generate output in any of the following ways:
-				</p>
-				<ul class='spaced-list'>
-					<li>
-						By returning a serializable POJO, or any of the following:
-						<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link org.apache.juneau.Streamable}, 
-						{@link org.apache.juneau.Writable} 
-					<li>
-						By calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} with any of the types above.
-					<li>
-						By accessing the {@link java.io.Writer} directly by calling 
-						{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output yourself.
-				</ul>
-				<h6 class='figure'>Example:</h6>
-				<p class='bcode'>
-	<jc>// Equivalent method 1</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
-	<jk>public</jk> Person doGet1(<ja>@Path</ja> UUID personId) {
-		Person p = getPersonById(personId);
-		<jk>return</jk> p;
-	}
-
-	<jc>// Equivalent method 2</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
-	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
-		Person p = getPersonById(personId);
-		res.setOutput(p);
-	}
-
-	<jc>// (Sorta) Equivalent method 3</jc>
-	<jc>// (Ignores any converters or method-level properties)</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
-	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja> UUID personId) {
-		Person p = getPersonById(personId);
-		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);
-		WriterSerializer s = res.getSerializerGroup().getWriterSerializer(accept);
-		res.setContentType(s.getResponseContentType());
-		s.serialize(p, res.getNegotiatedWriter());
-	}
-				</p>
-				<h6 class='section'>See Also:</h6>
-				<ul>
-					<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers} - For configuring custom response handlers.
-				</ul>
-			</div>
-		
-			<!-- ======================================================================================================== -->
-			<a id="juneau-rest-server.ReaderResource"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.6.9 - ReaderResource</h4>
-			<div class='topic'>
-				TODO
-			</div>
-		
-			<!-- ======================================================================================================== -->
-			<a id="juneau-rest-server.ReaderResource"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.6.10 - StreamResource</h4>
-			<div class='topic'>
-				TODO
 			</div>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.RestMethodPath"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.6.11 - @RestMethod.path()</h4>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.8 - @RestMethod.path()</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.rest.annotation.RestMethod#path() @RestMethod.path()} annotation allows 
@@ -5906,15 +5976,287 @@
 			</div>	
 	
 			<!-- ======================================================================================================== -->
-			<a id="juneau-rest-server.RequestFormData"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.6.12 - RequestPathMatch</h4>
+			<a id="juneau-rest-server.RequestPathMatch"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.9 - RequestPathMatch</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The {@link org.apache.juneau.rest.RequestPathMatch} object is the API for accessing the matched variables
+					and remainder on the URL path.
+				</p>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestPathMatch path) {...}			
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
+	<jk>public void</jk> doGet(RequestPathMatch path) {
+		<jc>// Example URL:  /123/qux/true/quux</jc>
+	 	
+		<jk>int</jk> foo = pm.getInt(<js>"foo"</js>);  <jc>// =123</jc>
+		String bar = pm.getString(<js>"bar"</js>);  <jc>// =qux</jc>
+		<jk>boolean</jk> baz = pm.getBoolean(<js>"baz"</js>);  <jc>// =true</jc>
+		String remainder = pm.getRemainder();  <jc>// =quux</jc>
+	}
+				</p>
+				<p>
+					The important methods on this class are:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'><code>{@link org.apache.juneau.rest.RequestPathMatch} <jk>extends</jk> TreeMap&lt;String,String&gt;</code>
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Class) get(String,Class)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Type,Type...) get(String,Type,Type)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getString(String) getString(String)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getInt(String) getInt(String)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getBoolean(String) getBoolean(String)}
+						<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getRemainder() getRemainder()}
+					</ul>
+				</ul>
 			</div>
 
 			<!-- ======================================================================================================== -->
+			<a id="juneau-rest-server.MethodReturnTypes"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.10 - Method Return Types</h4>
+			<div class='topic'>
+				<p>
+					The return type can be any serializable POJO as defined in <a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a>.
+					<br>It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
+					setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public</jk> String doGet() {
+		<jk>return</jk> <js>"Hello World!"</js>;
+	}
+				</p>
+				<p>
+					Out-of-the-box, besides POJOs, the following return types are handled as special cases:
+				</p>
+				<ul class='spaced-list'>
+					<li class='jc'>{@link java.io.InputStream}
+						<br>The contents are simply piped to the output stream returned by 
+						{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
+						<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+						the <l>Content-Type</l> header if you use this object type.
+					<li class='jc'>{@link java.io.Reader}
+						<br>The contents are simply piped to the output stream returned by 
+						{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
+						<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+						the <l>Content-Type</l> header if you use this object type.
+					<li class='jc'>{@link org.apache.juneau.rest.Redirect}
+						<br>Represents an HTTP redirect response.
+					<li class='jc'>{@link org.apache.juneau.Streamable}
+						<br>Interface that identifies that an object can be serialized directly to an output stream.
+					<li class='jc'>{@link org.apache.juneau.Writable}
+						<br>Interface that identifies that an object can be serialized directly to a writer.
+					<li class='jc'>{@link org.apache.juneau.utils.ZipFileList}
+						<br>Special interface for sending zip files as responses.
+				</ul>
+				<p>
+					This is controlled through the following extensible API:
+				</p>
+				<ul class='doctree'>
+					<li class='jic'>{@link org.apache.juneau.rest.ResponseHandler}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.rest.response.DefaultHandler}
+						<li class='jc'>{@link org.apache.juneau.rest.response.InputStreamHandler}
+						<li class='jc'>{@link org.apache.juneau.rest.response.ReaderHandler}
+						<li class='jc'>{@link org.apache.juneau.rest.response.RedirectHandler}
+						<li class='jc'>{@link org.apache.juneau.rest.response.StreamableHandler}
+						<li class='jc'>{@link org.apache.juneau.rest.response.WritableHandler}
+						<li class='jc'>{@link org.apache.juneau.rest.response.ZipFileListResponseHandler}
+					</ul>
+				</ul>
+				<p>
+					REST Java methods can generate output in any of the following ways:
+				</p>
+				<ul class='spaced-list'>
+					<li>
+						By returning a serializable POJO, or any of the following:
+						<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link org.apache.juneau.Streamable}, 
+						{@link org.apache.juneau.Writable} 
+					<li>
+						By calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} with any of the types above.
+					<li>
+						By accessing the {@link java.io.Writer} directly by calling 
+						{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output yourself.
+				</ul>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<jc>// Equivalent method 1</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
+	<jk>public</jk> Person doGet1(<ja>@Path</ja> UUID personId) {
+		Person p = getPersonById(personId);
+		<jk>return</jk> p;
+	}
+
+	<jc>// Equivalent method 2</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
+	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
+		Person p = getPersonById(personId);
+		res.setOutput(p);
+	}
+
+	<jc>// (Sorta) Equivalent method 3</jc>
+	<jc>// (Ignores any converters or method-level properties)</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
+	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja> UUID personId) {
+		Person p = getPersonById(personId);
+		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);
+		WriterSerializer s = res.getSerializerGroup().getWriterSerializer(accept);
+		res.setContentType(s.getResponseContentType());
+		s.serialize(p, res.getNegotiatedWriter());
+	}
+				</p>
+				<h6 class='section'>See Also:</h6>
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers} - For configuring custom response handlers.
+				</ul>
+			</div>
+		
+			<!-- ======================================================================================================== -->
+			<a id="juneau-rest-server.ReaderResource"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.11 - ReaderResource</h4>
+			<div class='topic'>
+				<p>
+					The {@link org.apache.juneau.rest.ReaderResource} class is a convenience object for defining thread-safe
+					reusable character-based responses.
+					<br>In essence, it's a container for character data with optional response headers and support for
+					resolving SVL variables.
+				</p>
+				<p>
+					The {@link org.apache.juneau.rest.ReaderResource} class implements the {@link org.apache.juneau.Writable}
+					interface which is handled by the {@link org.apache.juneau.rest.response.WritableHandler} class.
+					<br>This allows these objects to be returned as responses by REST methods.
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object sayHello(RestRequest req) {
+	
+		<jc>// Return a reader resource loaded from a file with support for request-time SVL variables.</jc>
+		<jk>return</jk> ReaderResource.<jsm>create</jsm>()
+			.contents(<jk>new</jk> File(<js>"helloWorld.txt"</js>))
+			.varResolver(req.getVarResolver()) 
+			.header(<js>"Cache-Control"</js>, <js>"no-cache"</js>)
+			.mediaType(<jsf>TEXT_PLAIN</jsf>)
+			.build();
+	}
+				</p>
+				<p>
+					The important methods on this class are:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'>{@link org.apache.juneau.rest.ReaderResourceBuilder}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#contents(Object...) contents(Object...)}
+						<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#header(String,Object) header(String,Object)}
+						<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+						<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#varResolver(VarResolverSession) varResolver(VarResolverSession)}
+					</ul>
+				</ul>
+			</div>
+		
+			<!-- ======================================================================================================== -->
+			<a id="juneau-rest-server.StreamResource"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.12 - StreamResource</h4>
+			<div class='topic'>
+				<p>
+					The {@link org.apache.juneau.rest.StreamResource} class is the binary equivalent to the {@link org.apache.juneau.rest.ReaderResource} object.
+					<br>In essence, it's a container for binary data with optional response headers.
+				</p>
+				<p>
+					The {@link org.apache.juneau.rest.StreamResource} class implements the {@link org.apache.juneau.Streamable}
+					interface which is handled by the {@link org.apache.juneau.rest.response.StreamableHandler} class.
+					<br>This allows these objects to be returned as responses by REST methods.
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object showPicture(RestRequest req) {
+	
+		<jc>// Return a stream resource loaded from a file.</jc>
+		<jk>return</jk> StreamResource.<jsm>create</jsm>()
+			.contents(<jk>new</jk> File(<js>"mypicture.png"</js>))
+			.header(<js>"Cache-Control"</js>, <js>"no-cache"</js>)
+			.mediaType(<jsf>IMAGE_PNG</jsf>)
+			.build();
+	}
+				</p>
+				<p>
+					The important methods on this class are:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'>{@link org.apache.juneau.rest.StreamResourceBuilder}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.StreamResourceBuilder#contents(Object...) contents(Object...)}
+						<li class='jm'>{@link org.apache.juneau.rest.StreamResourceBuilder#header(String,Object) header(String,Object)}
+						<li class='jm'>{@link org.apache.juneau.rest.StreamResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+					</ul>
+				</ul>
+			</div>
+
+			<!-- ======================================================================================================== -->
+			<a id="juneau-rest-server.Redirect"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.13 - Redirect</h4>
+			<div class='topic'>
+				<p>
+					The {@link org.apache.juneau.rest.Redirect} object is a convenience shortcut for performing <code>HTTP 302</code> redirects.
+				</p>
+				<p>
+					<l>Redirect</l> objects are handled by the {@link org.apache.juneau.rest.response.RedirectHandler} class.
+					<br>This allows these objects to be returned as responses by REST methods.
+				</p>
+				<p>
+					The following example shows the difference between handling redirects via <l>RestResponse</l> and the simplified approach of using this class.
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<jc>// Redirect to "/contextPath/servletPath/foobar"</jc>
+
+	<jc>// Using RestRequest/RestResponse</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> redirectExample1(RestRequest req, RestResponse res) <jk>throws</jk> IOException {
+		res.sendRedirect(req.getServletURI() + <js>"/foobar"</js>);
+	}
+	
+	<jc>// Using Redirect</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Redirect redirectExample2() {
+		<jk>return new</jk> Redirect(<js>"foobar"</js>);
+	}
+				</p>
+				<p>
+					The constructor can use a <l>MessageFormat</l>-style pattern with multiple arguments.
+				</p>
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Redirect redirectExample3() {
+		<jk>return new</jk> Redirect(<js>"foo/{0}/bar/{1}"</js>, id1, id2);
+	}
+				</p>
+				<p>
+					The arguments are automatically URL-encoded.
+				</p>
+				<p>
+					Redirecting to the servlet root can be accomplished by simply using the no-arg constructor.
+				<h6 class='figure'>Example:</h6>
+				<p class='bcode'>
+	<jc>// Simply redirect to the servlet root.
+	// Equivalent to res.sendRedirect(req.getServletURI()).</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Redirect redirectExample4() {
+		<jk>return new</jk> Redirect();
+	}
+				</p>
+			</div>
+			
+			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.RestMethodMatchers"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.6.13 - @RestMethod.matchers()</h4>
+			<h4 class='topic' onclick='toggle(this)'>3.1.6.14 - @RestMethod.matchers()</h4>
 			<div class='topic'>
 				<p>
 					{@link org.apache.juneau.rest.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
@@ -17828,7 +18170,7 @@
 		<h6 class='topic'>REST server updates</h6>
 		<ul class='spaced-list'>
  			<li>
-				Support for overriding bean context and serializer properties in a REST method call through new {@link org.apache.juneau.rest.RestResponse#setProperty(String,Object)} method.<br>
+				Support for overriding bean context and serializer properties in a REST method call through new <code><del>RestResponse.setProperty(String,Object)</del></code> method.<br>
 				For example, allows you to control whitespace options on a per-request basis.
 			</li>
 			<li>

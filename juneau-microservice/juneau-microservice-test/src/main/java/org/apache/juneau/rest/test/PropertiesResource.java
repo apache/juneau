@@ -53,9 +53,9 @@ public class PropertiesResource extends RestServletDefault {
 		serializers=PropertySerializer1.class
 	)
 	public void testPropertiesDefinedOnMethod(RestResponse res) {
-		res.setProperty("A2", "c");
-		res.setProperty("B2", "c");
-		res.setProperty("C", "c");
+		res.prop("A2", "c");
+		res.prop("B2", "c");
+		res.prop("C", "c");
 		res.setOutput(null);
 	}
 

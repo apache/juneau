@@ -35,7 +35,7 @@ import org.apache.juneau.parser.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Header">Overview &gt; @Header</a>
+ * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestHeaders">Overview &gt; RequestHeaders</a>
  * </ul>
  */
 public class RequestHeaders extends TreeMap<String,String[]> {
@@ -68,9 +68,11 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Adds default entries to these headers.
 	 * 
 	 * <p>
-	 * This includes the default headers defined on the servlet and method levels.
+	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
 	 * 
-	 * @param defaultEntries The default entries.  Can be <jk>null</jk>.
+	 * @param defaultEntries 
+	 * 	The default entries.  
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RequestHeaders addDefault(Map<String,Object> defaultEntries) {
@@ -88,6 +90,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	
 	/**
 	 * Adds a default header value on this request.
+	 * 
+	 * <p>
+	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
 	 * 
 	 * @param name 
 	 * 	The header name.  
@@ -121,11 +126,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified header value, or <jk>null</jk> if the header doesn't exist.
+	 * Returns the specified header value as a string.
 	 * 
-	 * <p>
-	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the
-	 * URL query string.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
 	 * 
 	 * @param name The header name.
 	 * @return The header value, or <jk>null</jk> if it doesn't exist.
@@ -142,11 +148,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified header value, or a default value if the header doesn't exist.
+	 * Returns the specified header value as a string.
 	 * 
-	 * <p>
-	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the
-	 * URL query string.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
 	 * 
 	 * @param name The HTTP header name.
 	 * @param def The default value to return if the header value isn't found.
@@ -204,6 +211,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/**
 	 * Sets a request header value.
 	 * 
+	 * <p>
+	 * This overwrites any previous value.
+	 * 
 	 * @param name The header name.
 	 * @param value The header value.
 	 */
@@ -212,11 +222,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified header value converted to a POJO.
-	 * 
-	 * <p>
-	 * The type can be any POJO type convertible from a <code>String</code>
-	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertible From Strings</a>).
+	 * Returns the specified header value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
@@ -226,6 +232,16 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	<jc>// Parse a UUID.</jc>
 	 * 	UUID myheader = req.getHeader(<js>"My-Header"</js>, UUID.<jk>class</jk>);
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 * 
 	 * @param name The HTTP header name.
 	 * @param type The class type to convert the header value to.
@@ -242,7 +258,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string header.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The HTTP header name.
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
@@ -272,7 +288,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string header.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name The HTTP header name.
 	 * @param def The default value if the header was not specified or is <jk>null</jk>.
 	 * @param type The class type to convert the header value to.
@@ -290,11 +306,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified header value converted to a POJO.
+	 * Returns the specified header value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 * 
 	 * <p>
-	 * The type can be any POJO type convertible from a <code>String</code>
-	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertible From Strings</a>).
+	 * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
@@ -302,15 +317,25 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	List&lt;String&gt; myheader = req.getHeader(<js>"My-Header"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 * </p>
 	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 	<li>If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 * 
 	 * @param name The HTTP header name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
@@ -325,17 +350,15 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 
 	 * @param parser
 	 * 	The parser to use for parsing the string header.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
 	 * @param name 
 	 * 	The HTTP header name.
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
@@ -352,7 +375,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns a copy of this object, but only with the specified header names copied.
+	 * Returns a copy of this object but only with the specified header names copied.
 	 * 
 	 * @param headers The headers to include in the copy.
 	 * @return A new headers object.
@@ -366,7 +389,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #subset(String...)}, but allows you to specify header names as a comma-delimited list.
+	 * Same as {@link #subset(String...)} but allows you to specify header names as a comma-delimited list.
 	 * 
 	 * @param headers The headers to include in the copy.
 	 * @return A new headers object.

@@ -46,7 +46,7 @@ public class DefaultHandler implements ResponseHandler {
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
-		SerializerGroup g = res.getSerializerGroup();
+		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 		if (sm != null) {

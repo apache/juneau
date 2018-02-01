@@ -89,11 +89,10 @@ public class RequestBody {
 	}
 
 	/**
-	 * Reads the input from the HTTP request as JSON, XML, or HTML and converts the input to a POJO.
+	 * Reads the input from the HTTP request parsed into a POJO.
 	 * 
 	 * <p>
-	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &body=xxx} in the URL
-	 * query string.
+	 * The parser used is determined by the matching <code>Content-Type</code> header on the request.
 	 * 
 	 * <p>
 	 * If type is <jk>null</jk> or <code>Object.<jk>class</jk></code>, then the actual type will be determined
@@ -160,6 +159,11 @@ public class RequestBody {
 	 * 	Map body = req.getBody().asType(TreeMap.<jk>class</jk>);
 	 * </p>
 	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * </ul>
+	 * 
 	 * @param type The class type to instantiate.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
@@ -173,7 +177,10 @@ public class RequestBody {
 	}
 
 	/**
-	 * Reads the input from the HTTP request as JSON, XML, or HTML and converts the input to a POJO.
+	 * Reads the input from the HTTP request parsed into a POJO.
+	 * 
+	 * <p>
+	 * This is similar to {@link #asType(Class)} but allows for complex collections of POJOs to be created.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
@@ -190,14 +197,19 @@ public class RequestBody {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; body = req.getBody().asType(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * </ul>
+	 * 
 	 * @param type
 	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
@@ -209,9 +221,10 @@ public class RequestBody {
 	/**
 	 * Returns the HTTP body content as a plain string.
 	 * 
-	 * <p>
-	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
-	 * string.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * </ul>
 	 * 
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -225,6 +238,11 @@ public class RequestBody {
 	/**
 	 * Returns the HTTP body content as a simple hexadecimal character string.
 	 * 
+	 * <h6 class='section'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	0123456789ABCDEF
+	 * </p>
+	 * 
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -236,6 +254,11 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
+	 * 
+	 * <h6 class='section'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	01 23 45 67 89 AB CD EF
+	 * </p>
 	 * 
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -249,12 +272,11 @@ public class RequestBody {
 	/**
 	 * Returns the HTTP body content as a {@link Reader}.
 	 * 
-	 * <p>
-	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
-	 * string.
-	 * 
-	 * <p>
-	 * Automatically handles GZipped input streams.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * 	<li>Automatically handles GZipped input streams.
+	 * </ul>
 	 * 
 	 * @return The body contents as a reader.
 	 * @throws IOException
@@ -282,9 +304,6 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as an {@link InputStream}.
-	 * 
-	 * <p>
-	 * Automatically handles GZipped input streams.
 	 * 
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
