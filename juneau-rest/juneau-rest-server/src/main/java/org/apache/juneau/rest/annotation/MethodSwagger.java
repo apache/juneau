@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.ini.*;
-import org.apache.juneau.rest.vars.*;
-import org.apache.juneau.svl.vars.*;
+import org.apache.juneau.rest.*;
 
 /**
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.
@@ -33,11 +31,6 @@ public @interface MethodSwagger {
 	 * <p>
 	 * Used to populate the Swagger deprecated field.
 	 * 
-	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].deprecated</code> entry in
-	 * the servlet resource bundle.
-	 * (e.g. <js>"MyClass.myMethod.deprecated = true"</js> or <js>"myMethod.deprecated = foo,bar"</js>).
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
@@ -47,31 +40,16 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
+	 * </ul>
 	 * 
-	 * <p>
-	 * Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProviderDefault#isDeprecated(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.isDeprecated(Method,RestRequest)}
+	 * </ul>
 	 */
 	boolean deprecated() default false;
 
@@ -90,12 +68,6 @@ public @interface MethodSwagger {
 	 * 	}
 	 * </p>
 	 * 
-	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].externalDocs</code> entry in
-	 * the servlet resource bundle.
-	 * (e.g. <js>"MyClass.myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js> or
-	 * <js>"myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js>).
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
@@ -105,31 +77,19 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
+	 * </ul>
 	 * 
-	 * <p>
-	 * Corresponds to the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodExternalDocs(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodExternalDocs(Method,RestRequest)}
+	 * </ul>
 	 */
 	String externalDocs() default "";
 
@@ -156,46 +116,19 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 * 
-	 * <p>
-	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in
-	 * this case the strings are internationalized.
-	 * <p class='bcode'>
-	 * 	<jk>MyClass.myMethod.description</jk> = <js>This is my method.</js>
-	 * 	<jk>MyClass.myMethod.req.path.a.description</jk> = <js>The 'a' attribute</js>
-	 * 	<jk>MyClass.myMethod.req.query.b.description</jk> = <js>The 'b' parameter</js>
-	 * 	<jk>MyClass.myMethod.req.body.description</jk> = <js>The HTTP content</js>
-	 * 	<jk>MyClass.myMethod.req.header.d.description</jk> = <js>The 'D' header</js>
-	 * </p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/parameters</code>.
+	 * </ul>
 	 * 
-	 * <p>
-	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support
-	 * English), and use resource bundles if you need to support localization.
-	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
-	 * 
-	 * <p>
-	 * Corresponds to the swagger field <code>/paths/{path}/{method}/parameters</code>.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodParameters(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodParameters(Method,RestRequest)}
+	 * </ul>
 	 */
 	Parameter[] parameters() default {};
 
@@ -225,41 +158,19 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 * 
-	 * <p>
-	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in
-	 * this case the strings are internationalized.
-	 * <p class='bcode'>
-	 * 	<jk>MyClass.myMethod.res.200.description</jk> = <js>OK</js>
-	 * 	<jk>MyClass.myMethod.res.302.description</jk> = <js>Thing wasn't found here</js>
-	 * 	<jk>MyClass.myMethod.res.302.header.Location.description</jk> = <js>The place to find the thing</js>
-	 * </p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/responses</code>.
+	 * </ul>
 	 * 
-	 * <p>
-	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support
-	 * English), and use resource bundles if you need to support localization.
-	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodResponses(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodResponses(Method,RestRequest)}
+	 * </ul>
 	 */
 	Response[] responses() default {};
 
@@ -271,12 +182,7 @@ public @interface MethodSwagger {
 	 * 
 	 * <p>
 	 * A comma-delimited list of tags for API documentation control.
-	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 * 
-	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].tags</code> entry in the
-	 * servlet resource bundle.
-	 * (e.g. <js>"MyClass.myMethod.tags = foo,bar"</js> or <js>"myMethod.tags = foo,bar"</js>).
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -287,31 +193,19 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
+	 * </ul>
 	 * 
-	 * <p>
-	 * Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodTags(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodTags(Method,RestRequest)}
+	 * </ul>
 	 */
 	String tags() default "";
 }

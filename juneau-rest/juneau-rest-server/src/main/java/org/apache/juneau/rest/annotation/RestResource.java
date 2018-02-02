@@ -23,9 +23,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -59,15 +57,12 @@ public @interface RestResource {
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -88,15 +83,12 @@ public @interface RestResource {
 	 *  ?method=OPTIONS
 	 * </p>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -117,15 +109,12 @@ public @interface RestResource {
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -197,15 +186,12 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -220,18 +206,17 @@ public @interface RestResource {
 	 * <p>
 	 * The configuration file .
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#configFile(ConfigFile)} method.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestContextBuilder#configFile(ConfigFile)}
+	 * </ul>
 	 */
 	String config() default "";
 
@@ -241,15 +226,12 @@ public @interface RestResource {
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -277,15 +259,12 @@ public @interface RestResource {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -300,15 +279,12 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -323,15 +299,12 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -345,40 +318,21 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * It is used to populate the Swagger description field.
-	 * This value can be retrieved programmatically through the {@link RestRequest#getResourceDescription()} method.
+	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceDescription()} method.
 	 * 
-	 * <p>
-	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
-	 * (e.g. <js>"description = foo"</js> or <js>"MyServlet.description = foo"</js>).
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Corresponds to the swagger field <code>/info/description</code>.
+	 * </ul>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
-	 * 
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/description</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getDescription(RestRequest)} method.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
+	 * </ul>
 	 */
 	String description() default "";
 
@@ -398,18 +352,14 @@ public @interface RestResource {
 	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
-	 * 
-	 * <p>
-	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Setting a flag is equivalent to setting the same property to <js>"true"</js>.
+	 * </ul>
 	 */
 	String[] flags() default {};
 
@@ -503,15 +453,12 @@ public @interface RestResource {
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -525,15 +472,12 @@ public @interface RestResource {
 	 * 
 	 * Identifies the location of the resource bundle for this class.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -548,15 +492,12 @@ public @interface RestResource {
 	 * <p>
 	 * Defines MIME-type file type mappings.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -571,7 +512,7 @@ public @interface RestResource {
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
-	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
+	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -673,6 +614,7 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getSerializers()}
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
+	 * 
 	 * <p>
 	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
 	 * 
@@ -684,19 +626,18 @@ public @interface RestResource {
 	 * {@link RestResponse#prop(String, Object)} method or through an {@link RequestProperties} 
 	 * method parameter.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#set(String, Object)}/
-	 * {@link RestContextBuilder#set(java.util.Map)} methods.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestContextBuilder#set(String,Object)}
+	 * 	<li class='jm'>{@link RestContextBuilder#set(java.util.Map)}
+	 * </ul>
 	 */
 	Property[] properties() default {};
 
@@ -706,15 +647,12 @@ public @interface RestResource {
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -797,31 +735,17 @@ public @interface RestResource {
 	 * 	)
 	 * </p>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getSiteName(RestRequest)} method.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProvider#getSiteName(RestRequest)}
+	 * </ul>
 	 */
 	String siteName() default "";
 
@@ -831,15 +755,12 @@ public @interface RestResource {
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -854,15 +775,12 @@ public @interface RestResource {
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -877,15 +795,12 @@ public @interface RestResource {
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -900,15 +815,12 @@ public @interface RestResource {
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 * 
-	 * <p>
-	 * Values can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -939,6 +851,11 @@ public @interface RestResource {
 	 * 		)
 	 * 	)
 	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
+	 * </ul>
 	 */
 	ResourceSwagger swagger() default @ResourceSwagger;
 
@@ -947,40 +864,22 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * It is used to populate the Swagger title field.
-	 * This value can be retrieved programmatically through the {@link RestRequest#getResourceTitle()} method.
+	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceTitle()} method.
 	 * 
-	 * <p>
-	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
-	 * (e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Corresponds to the swagger field <code>/info/title</code>.
+	 * </ul>
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link FileVar $F} 
-	 * {@link ServletInitParamVar $I},
-	 * {@link IfVar $IF}
-	 * {@link LocalizationVar $L}
-	 * {@link RequestAttributeVar $RA} 
-	 * {@link RequestFormDataVar $RF} 
-	 * {@link RequestHeaderVar $RH} 
-	 * {@link RequestPathVar $RP} 
-	 * {@link RequestQueryVar $RQ} 
-	 * {@link RequestVar $R} 
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SerializedRequestAttrVar $SA}
-	 * {@link SwitchVar $SW}
-	 * {@link UrlVar $U}
-	 * {@link UrlEncodeVar $UE}
-	 * {@link WidgetVar $W}
 	 * 
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/title</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTitle(RestRequest)} method.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProvider#getTitle(RestRequest)}
+	 * </ul>
 	 */
 	String title() default "";
 
@@ -991,15 +890,12 @@ public @interface RestResource {
 	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related 
 	 * methods) will be cached in memory to speed subsequent lookups.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1015,15 +911,12 @@ public @interface RestResource {
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
 	 * 
-	 * <p>
-	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
-	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
-	 * {@link EnvVariablesVar $E} 
-	 * {@link IfVar $IF}
-	 * {@link SystemPropertiesVar $S}
-	 * {@link SwitchVar $SW}
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

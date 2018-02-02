@@ -129,14 +129,13 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * it as a parsed {@link Swagger} object.
 	 * 
 	 * <p>
-	 * Returned objects are cached for later quick-lookup.
+	 * Returned objects are cached per-locale for later quick-lookup.
 	 * 
 	 * @param req The incoming HTTP request.
 	 * @return The parsed swagger object, or <jk>null</jk> if none could be found.
 	 * @throws Exception 
 	 * 	If swagger file was not valid JSON.
 	 */
-	@Override /* RestInfoProvider */
 	public Swagger getSwaggerFromFile(RestRequest req) throws Exception {
 		Locale locale = req.getLocale();
 		Swagger s = swaggers.get(locale);
@@ -222,7 +221,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * @return The localized operation ID of the method, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public String getMethodOperationId(Method method, RestRequest req) throws Exception {
 		return method.getName();
 	}
@@ -389,7 +387,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * @return The localized tags of the method, or <jk>null</jk> if none were found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public List<String> getMethodTags(Method method, RestRequest req) throws Exception {
 		JsonParser p = JsonParser.DEFAULT;
 		VarResolverSession vr = req.getVarResolverSession();
@@ -455,7 +452,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * @return The localized external documentation of the method, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public ExternalDocumentation getMethodExternalDocs(Method method, RestRequest req) throws Exception {
 		JsonParser p = JsonParser.DEFAULT;
 		VarResolverSession vr = req.getVarResolverSession();
@@ -527,7 +523,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * @return The localized parameter info of the method, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public List<ParameterInfo> getMethodParameters(Method method, RestRequest req) throws Exception {
 		
 		Operation o = getSwaggerOperationFromFile(method, req);
@@ -666,7 +661,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * @throws Exception 
 	 */
 	@SuppressWarnings("unchecked")
-	@Override /* RestInfoProvider */
 	public Map<Integer,ResponseInfo> getMethodResponses(Method method, RestRequest req) throws Exception {
 		
 		Operation o = getSwaggerOperationFromFile(method, req);
@@ -751,7 +745,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	or the list of media types match those of the parent resource class.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public List<MediaType> getMethodProduces(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		String[] s = method.getAnnotation(RestMethod.class).produces();
@@ -787,7 +780,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	or the list of media types match those of the parent resource class.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public List<MediaType> getMethodConsumes(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		String[] s = method.getAnnotation(RestMethod.class).consumes();
@@ -820,7 +812,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * @return <jk>true</jk> if the method is deprecated.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public boolean isDeprecated(Method method, RestRequest req) throws Exception {
 		return method.getAnnotation(RestMethod.class).swagger().deprecated();
 	}
@@ -1036,7 +1027,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The localized contact information of this REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public Contact getContact(RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
@@ -1102,7 +1092,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The localized license information of this REST resource, or <jk>null</jk> if none was found found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public License getLicense(RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
@@ -1168,7 +1157,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The localized terms-of-service of this REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public String getTermsOfService(RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		if (termsOfService != null)
@@ -1229,7 +1217,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The localized version of this REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public String getVersion(RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		if (version != null)
@@ -1286,7 +1273,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The supported <code>Content-Type</code> request headers of the REST resource, or <jk>null</jk> if none were found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public List<MediaType> getConsumes(RestRequest req) throws Exception {
 		List<MediaType> l = req.getContext().getConsumes();
 		return l.isEmpty() ? null : l;
@@ -1300,7 +1286,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The supported <code>Accept</code> request headers of the REST resource, or <jk>null</jk> if none were found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public List<MediaType> getProduces(RestRequest req) throws Exception {
 		List<MediaType> l = req.getContext().getProduces();
 		return l.isEmpty() ? null : l;
@@ -1357,7 +1342,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The localized tags of this REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public List<Tag> getTags(RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
@@ -1424,7 +1408,6 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 	The localized external documentation of this REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception 
 	 */
-	@Override /* RestInfoProvider */
 	public ExternalDocumentation getExternalDocs(RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;

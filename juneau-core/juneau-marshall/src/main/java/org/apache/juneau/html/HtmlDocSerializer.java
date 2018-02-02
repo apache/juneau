@@ -53,9 +53,9 @@ import org.apache.juneau.serializer.*;
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
+ * 		title=<js>"$L{title}"</js>,
+ * 		description=<js>"$L{description}"</js>,
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			title=<js>"$L{title}"</js>,
- * 			description=<js>"$L{description}"</js>,
  * 			navlinks={
  * 				<js>"options: ?method=OPTIONS"</js>,
  * 				<js>"doc: doc"</js>

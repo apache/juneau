@@ -50,7 +50,6 @@ import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -3185,48 +3184,11 @@ public final class RestContext extends BeanContext {
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Path</ja> String name) <jk>throws</jk> Exception {
 	 * </p>
 	 * 
-	 * <p>
-	 * Variables are broken into two categories that describe when they're available for use:
-	 * <ul>
-	 * 	<li><b>Initialization-time variables</b> - Can be used at any time.
-	 * 	<li><b>Request-time variables</b> - Can only be used during HTTP requests.
-	 * </ul>
-	 * 
-	 * <p>
-	 * The following is the default list of supported variables.
-	 * <ul>
-	 * 	<li><b>Initialization-time variables</b>
-	 * 	<ul>
-	 * 		<li><code>$C{key[,defaultValue]}</code> - Config file entry. See {@link ConfigFileVar}.
-	 * 		<li><code>$CO{arg1[,arg2...]}</code> - Coalesce variable. See {@link CoalesceVar}.
-	 * 		<li><code>$CR{arg1[,arg2...]}</code> - Coalesce-and-recurse variable. See {@link CoalesceAndRecurseVar}.
-	 * 		<li><code>$E{envVar[,defaultValue]}</code> - Environment variable. See {@link EnvVariablesVar}.
-	 * 		<li><code>$IF{booleanArg,thenValue[,elseValue]}</code> - If/else variable. See {@link IfVar}.
-	 * 		<li><code>$F{path[,defaultValue]}</code> - File resource. See {@link FileVar}.
-	 * 		<li><code>$S{systemProperty[,defaultValue]}</code> - System property. See {@link SystemPropertiesVar}.
-	 * 		<li><code>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</code> - Switch variable. See {@link SwitchVar}.
-	 * 	</ul>
-	 * 	<li><b>Request-time variables</b>
-	 * 	<ul>
-	 * 		<li><code>$I{name[,defaultValue]}</code> - Servlet init parameter. See {@link ServletInitParamVar}.
-	 * 		<li><code>$L{key[,args...]}</code> - Localized message. See {@link LocalizationVar}.
-	 * 		<li><code>$RA{key1[,key2...]}</code> - Request attribute variable. See {@link RequestAttributeVar}.
-	 * 		<li><code>$RF{key1[,key2...]}</code> - Request form-data variable. See {@link RequestFormDataVar}.
-	 * 		<li><code>$RH{key1[,key2...]}</code> - Request header variable. See {@link RequestHeaderVar}.
-	 * 		<li><code>$RP{key1[,key2...]}</code> - Request path variable. See {@link RequestPathVar}.
-	 * 		<li><code>$RQ{key1[,key2...]}</code> - Request query parameter variable. See {@link RequestQueryVar}.
-	 * 		<li><code>$R{key1[,key2...]}</code> - Request object variable. See {@link RequestVar}.
-	 * 		<li><code>$SA{contentType,key[,defaultValue]}</code> - Serialized request attribute. See {@link SerializedRequestAttrVar}.
-	 * 		<li><code>$U{uri}</code> - URI resolver. See {@link UrlVar}.
-	 * 		<li><code>$UE{uriPart}</code> - URL-Encoder. See {@link UrlEncodeVar}.
-	 * 		<li><code>$W{widgetName}</code> - HTML widget variable. See {@link WidgetVar}.
-	 * 	</ul>
-	 * </ul>
-	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} - For adding custom vars.
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">Overview &gt; Default REST SVL Variables</a>
 	 * </ul>
 	 * 
 	 * @return The var resolver in use by this resource.

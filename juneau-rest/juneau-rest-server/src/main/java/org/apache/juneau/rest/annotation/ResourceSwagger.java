@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.ini.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.svl.vars.*;
 
@@ -83,9 +82,6 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/contact</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getContact(RestRequest)} method.
 	 */
 	String contact() default "";
 
@@ -143,10 +139,6 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)}
-	 * method.
 	 */
 	String externalDocs() default "";
 
@@ -204,9 +196,6 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/license</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getLicense(RestRequest)} method.
 	 */
 	String license() default "";
 
@@ -270,9 +259,6 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTags(RestRequest)} method.
 	 */
 	String tags() default "";
 	
@@ -311,10 +297,6 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)}
-	 * method.
 	 */
 	String termsOfService() default "";
 
@@ -353,9 +335,6 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/version</code>.
-	 * 
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getVersion(RestRequest)} method.
 	 */
 	String version() default "";
 }

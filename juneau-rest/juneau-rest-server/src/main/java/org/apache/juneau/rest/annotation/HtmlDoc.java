@@ -29,17 +29,22 @@ import org.apache.juneau.rest.widget.*;
  * provided as a shorthand method of for specifying configuration properties.
  * 
  * <p>
- * For example, the following two methods for defining the HTML document title are considered equivalent:
+ * For example, the following two methods for defining the HTML nav links are considered equivalent:
  * <p class='bcode'>
+ * 	<jc>// Defined via properties.</jc>
  * 	<ja>@RestResource</ja>(
  * 		properties={
- * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My Resource Page"</js>)
+ * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
  * 		}
  * 	)
  * 
+ * 	<jc>// Defined via annotation.</jc>
  * 	<ja>@RestResource</ja>(
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			title=<js>"My Resource Page"</js>
+ * 			navlinks={
+ * 				<js>"options: ?method=OPTIONS"</js>,
+ * 				<js>"doc: doc"</js>
+ * 			}
  * 		)
  * 	)
  * </p>
@@ -102,17 +107,15 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#aside(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -120,6 +123,12 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_aside}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#aside(Object...)}
 	 * </ul>
 	 */
 	String[] aside() default {};
@@ -144,17 +153,15 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#footer(Object[])} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -162,6 +169,12 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_footer}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#footer(Object...)}
 	 * </ul>
 	 */
 	String[] footer() default {};
@@ -178,31 +191,35 @@ public @interface HtmlDoc {
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			head={
 	 * 				<jc>// Add a shortcut link in the browser tab</jc>
-	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>,
+	 * 				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>,
 	 * 
 	 * 				<jc>// Reload the page every 5 seconds </jc>
-	 * 				<js>"<meta http-equiv='refresh' content='5'>"</js>
+	 * 				<js>"&lt;meta http-equiv='refresh' content='5'&gt;"</js>
 	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
 	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#head(Object[])} method.
-	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_head}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#head(Object...)}
 	 * </ul>
 	 */
 	String[] head() default {};
@@ -228,17 +245,15 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no header.
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#header(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -246,6 +261,12 @@ public @interface HtmlDoc {
 	 * 		parent class if not overridden.
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_header}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#header(Object...)}
 	 * </ul>
 	 */
 	String[] header() default {};
@@ -273,19 +294,17 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		When a value is specified, the {@link #navlinks()} value will be ignored.
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#nav(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -293,6 +312,12 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nav}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#nav(Object...)}
 	 * </ul>
 	 */
 	String[] nav() default {};
@@ -323,17 +348,15 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
 	 * 		This field can also use URIs of any support type in {@link UriResolver}.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#navlinks(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -344,11 +367,30 @@ public @interface HtmlDoc {
 	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
 	 * 		to place a link inside the list of parent links.
 	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_navlinks}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#navlinks(Object...)}
+	 * </ul>
 	 */
 	String[] navlinks() default {};
 
 	/**
 	 * Specifies the text to display when serializing an empty array or collection.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_noResultsMessage}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#noResultsMessage(Object)}
+	 * </ul>
 	 */
 	String noResultsMessage() default "no results";
 
@@ -357,6 +399,12 @@ public @interface HtmlDoc {
 	 * 
 	 * <p>
 	 * This only applies to the rendered data portion of the page.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nowrap}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#nowrap(boolean)}
+	 * </ul>
 	 */
 	boolean nowrap() default false;
 
@@ -377,17 +425,15 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#script(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -395,6 +441,12 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_script}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#script(Object[])}
 	 * </ul>
 	 */
 	String[] script() default {};
@@ -417,17 +469,15 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#style(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -435,6 +485,12 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_style}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#style(Object[])}
 	 * </ul>
 	 */
 	String[] style() default {};
@@ -460,19 +516,22 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols
-	 * 		defined by {@link UriResolver}.
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#stylesheet(Object[])} method.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_stylesheet}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#stylesheet(Object[])}
 	 * </ul>
 	 */
 	String[] stylesheet() default {};
@@ -484,15 +543,20 @@ public @interface HtmlDoc {
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 * 
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#template(Class)} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_template}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#template(Class)}
+	 * 	<li class='jm'>{@link HtmlDocBuilder#template(HtmlDocTemplate)}
 	 * </ul>
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.class;
@@ -537,19 +601,18 @@ public @interface HtmlDoc {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_widgets}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li class='ja'>{@link HtmlDoc#widgets()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#widgets(boolean,Widget...)}
-	 * 		</ul>
-	 * 	<li>Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
-	 * 	<li>Values are appended to the existing list.
+	 * 	<li>
+	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * 	<li>
+	 * 		Values are appended to the existing list.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_widgets}
+	 * 	<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#widgets(boolean,Widget...)}
 	 * </ul>
 	 */
 	Class<? extends Widget>[] widgets() default {};

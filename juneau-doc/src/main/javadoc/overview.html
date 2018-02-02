@@ -199,7 +199,8 @@
 			<li><p><a class='doclink' href='#juneau-rest-server.ClientVersioning'><i>Client Versioning</i></a></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.OptionsPages'><i>OPTIONS pages</i></a></p>
 			<ol>
-				<li><p><a class='doclink' href='#juneau-rest-server.InfoProviders'><i>Info Providers</i></a></p>
+				<li><p><a class='doclink' href='#juneau-rest-server.RestInfoProvider'><i>RestInfoProvider</i></a></p>
+				<li><p><a class='doclink' href='#juneau-rest-server.RestInfoProviderDefault'><i>RestInfoProviderDefault</i></a></p>
 			</ol>
 			<li><p><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation'><i>@HtmlDoc</i></a></p>
 			<ol>
@@ -7253,66 +7254,68 @@
 					<br>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession()} method returns initialization and request-time variables.
 			</ul>
 			<p>
-				The following is the default list of supported variables:
+				The following is the default list of supported variables.
 			</p>
-			<ul>
+			<a id="DefaultRestSvlVariables"></a>
+			<h6 class='topic'>Default REST SVL variables</h6>
+			<ul class='spaced-list'>
 				<li><b>Initialization-time variables:</b>
 				<ul>
-					<li><l>$C{key[,defaultValue]}</l> - Config file entry. See {@link org.apache.juneau.ini.ConfigFileVar}.
-					<li><l>$E{envVar[,defaultValue]}</l> - Environment variable. See {@link org.apache.juneau.svl.vars.EnvVariablesVar}.
-					<li><l>$S{systemProperty[,defaultValue]}</l> - System property. See {@link org.apache.juneau.svl.vars.SystemPropertiesVar}.
+					<li><l>$C{key[,defaultValue]}</l> - {@link org.apache.juneau.ini.ConfigFileVar}
+					<li><l>$E{envVar[,defaultValue]}</l> - {@link org.apache.juneau.svl.vars.EnvVariablesVar}
+					<li><l>$S{systemProperty[,defaultValue]}</l> - {@link org.apache.juneau.svl.vars.SystemPropertiesVar}
 				</ul>
 				<li><b>Initialization-time construct variables:</b>
 				<ul>
-					<li><l>$CO{arg1[,arg2...]}</l> - Coalesce variable. See {@link org.apache.juneau.svl.vars.CoalesceVar}.
-					<li><l>$CR{arg1[,arg2...]}</l> - Coalesce-and-recurse variable. See {@link org.apache.juneau.svl.vars.CoalesceAndRecurseVar}.
-					<li><l>$IF{booleanArg,thenValue[,elseValue]}</l> - If/else variable. See {@link org.apache.juneau.svl.vars.IfVar}.
-					<li><l>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</l> - Switch variable. See {@link org.apache.juneau.svl.vars.SwitchVar}.
+					<li><l>$CO{arg1[,arg2...]}</l> - {@link org.apache.juneau.svl.vars.CoalesceVar}
+					<li><l>$CR{arg1[,arg2...]}</l> - {@link org.apache.juneau.svl.vars.CoalesceAndRecurseVar}
+					<li><l>$IF{booleanArg,thenValue[,elseValue]}</l> - {@link org.apache.juneau.svl.vars.IfVar}
+					<li><l>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</l> - {@link org.apache.juneau.svl.vars.SwitchVar}
 				</ul>
 				<li><b>Request-time variables:</b>
 				<ul>
-					<li><l>$F{path[,defaultValue]}</l> - File resource. See {@link org.apache.juneau.rest.vars.FileVar}.
-					<li><l>$I{name[,defaultValue]}</l> - Servlet init parameter. See {@link org.apache.juneau.rest.vars.ServletInitParamVar}.
-					<li><l>$L{key[,args...]}</l> - Localized message. See {@link org.apache.juneau.rest.vars.LocalizationVar}.
-					<li><l>$RA{key1[,key2...]}</l> - Request attribute variable. See {@link org.apache.juneau.rest.vars.RequestAttributeVar}.
-					<li><l>$RF{key1[,key2...]}</l> - Request form-data variable. See {@link org.apache.juneau.rest.vars.RequestFormDataVar}.
-					<li><l>$RH{key1[,key2...]}</l> - Request header variable. See {@link org.apache.juneau.rest.vars.RequestHeaderVar}.
-					<li><l>$RI{key}</l> - Rest info provider variable. See {@link org.apache.juneau.rest.vars.RequestHeaderVar}.
+					<li><l>$F{path[,defaultValue]}</l> - {@link org.apache.juneau.rest.vars.FileVar}
+					<li><l>$I{name[,defaultValue]}</l> - {@link org.apache.juneau.rest.vars.ServletInitParamVar}
+					<li><l>$L{key[,args...]}</l> - {@link org.apache.juneau.rest.vars.LocalizationVar}
+					<li><l>$RA{key1[,key2...]}</l> - {@link org.apache.juneau.rest.vars.RequestAttributeVar}
+					<li><l>$RF{key1[,key2...]}</l> - {@link org.apache.juneau.rest.vars.RequestFormDataVar}
+					<li><l>$RH{key1[,key2...]}</l> - {@link org.apache.juneau.rest.vars.RequestHeaderVar}
+					<li><l>$RI{key}</l> - {@link org.apache.juneau.rest.vars.RequestHeaderVar}
 						<br>Possible keys:
 						<ul>
-							<li><l>$RI{contact}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getContact(RestRequest)}.
-							<li><l>$RI{description}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}.
-							<li><l>$RI{externalDocs}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}.
-							<li><l>$RI{license}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}.
-							<li><l>$RI{methodDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(Method,RestRequest)}.
-							<li><l>$RI{methodSummary}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(Method,RestRequest)}.
-							<li><l>$RI{siteName}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest)}.
-							<li><l>$RI{tags}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}.
-							<li><l>$RI{termsOfService}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}.
-							<li><l>$RI{title}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}.
-							<li><l>$RI{version}</l> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}.
+							<li><l>$RI{contact}</l> - {@link org.apache.juneau.dto.swagger.Info#getContact()}
+							<li><l>$RI{description}</l> - {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
+							<li><l>$RI{externalDocs}</l> - {@link org.apache.juneau.dto.swagger.Swagger#getExternalDocs()}
+							<li><l>$RI{license}</l> - {@link org.apache.juneau.dto.swagger.Info#getLicense()}
+							<li><l>$RI{methodDescription}</l> - {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(Method,RestRequest)}
+							<li><l>$RI{methodSummary}</l> - {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(Method,RestRequest)}
+							<li><l>$RI{siteName}</l> - {@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest)}
+							<li><l>$RI{tags}</l> - {@link org.apache.juneau.dto.swagger.Swagger#getTags()}
+							<li><l>$RI{termsOfService}</l> - {@link org.apache.juneau.dto.swagger.Info#getTermsOfService()}
+							<li><l>$RI{title}</l> - {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}
+							<li><l>$RI{version}</l> - {@link org.apache.juneau.dto.swagger.Info#getVersion()}
 						</ul>
-					<li><l>$RP{key1[,key2...]}</l> - Request path variable. See {@link org.apache.juneau.rest.vars.RequestPathVar}.
-					<li><l>$RQ{key1[,key2...]}</l> - Request query parameter variable. See {@link org.apache.juneau.rest.vars.RequestQueryVar}.
-					<li><l>$R{key1[,key2...]}</l> - Request object variable. See {@link org.apache.juneau.rest.vars.RequestVar}.
+					<li><l>$RP{key1[,key2...]}</l> - {@link org.apache.juneau.rest.vars.RequestPathVar}
+					<li><l>$RQ{key1[,key2...]}</l> - {@link org.apache.juneau.rest.vars.RequestQueryVar}
+					<li><l>$R{key1[,key2...]}</l> - {@link org.apache.juneau.rest.vars.RequestVar}
 						<br>Possible keys:
 						<ul>
-							<li><l>$R{method}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}.
-							<li><l>$R{methodSummary}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}.
-							<li><l>$R{methodDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}.
-							<li><l>$R{pathInfo}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
-							<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}.
-							<li><l>$R{requestURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
-							<li><l>$R{resourceDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getResourceDescription()}.
-							<li><l>$R{resourceTitle}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getResourceTitle()}.
-							<li><l>$R{servletParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}.
-							<li><l>$R{servletPath}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletPath()}.
-							<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}.
+							<li><l>$R{method}</l> - {@link org.apache.juneau.rest.RestRequest#getMethod()}
+							<li><l>$R{methodSummary}</l> - {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}
+							<li><l>$R{methodDescription}</l> - {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
+							<li><l>$R{pathInfo}</l> - {@link org.apache.juneau.rest.RestRequest#getPathInfo()}
+							<li><l>$R{requestParentURI}</l> - {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}
+							<li><l>$R{requestURI}</l> - {@link org.apache.juneau.rest.RestRequest#getRequestURI()}
+							<li><l>$R{resourceDescription}</l> - {@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
+							<li><l>$R{resourceTitle}</l> - {@link org.apache.juneau.rest.RestRequest#getResourceTitle()}
+							<li><l>$R{servletParentURI}</l> - {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}
+							<li><l>$R{servletPath}</l> - {@link org.apache.juneau.rest.RestRequest#getServletPath()}
+							<li><l>$R{servletURI}</l> - {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}
 						</ul>
-					<li><l>$SA{contentType,key[,defaultValue]}</l> - Serialized request attribute. See {@link org.apache.juneau.rest.vars.SerializedRequestAttrVar}.
-					<li><l>$U{uri}</l> - URI resolver. See {@link org.apache.juneau.rest.vars.UrlVar}.
-					<li><l>$UE{uriPart}</l> - URL-Encoder. See {@link org.apache.juneau.rest.vars.UrlEncodeVar}.
-					<li><l>$W{widgetName}</l> - HTML widget variable. See {@link org.apache.juneau.rest.vars.WidgetVar}.
+					<li><l>$SA{contentType,key[,defaultValue]}</l> - {@link org.apache.juneau.rest.vars.SerializedRequestAttrVar}
+					<li><l>$U{uri}</l> - {@link org.apache.juneau.rest.vars.UrlVar}
+					<li><l>$UE{uriPart}</l> - {@link org.apache.juneau.rest.vars.UrlEncodeVar}
+					<li><l>$W{widgetName}</l> - {@link org.apache.juneau.rest.vars.WidgetVar}
 				</ul>
 			</ul>
 		</div>
@@ -7592,7 +7595,7 @@
 				
 			</p>
 			<h6 class='figure'>OPTIONS page for HelloWorld sample resource</h6>
-		 	<img class='bordered' src='doc-files/HelloWorldResourceOptions.png'>
+		 	<img class='bordered' src='doc-files/HelloWorldOptions.png' style='width:800px;'>
 			<p>
 		 		The {@link org.apache.juneau.rest.RestServletDefault} class implements the page by creating a method 
 		 		mapped to the <l>OPTIONS</l> HTTP method that simply returns a Swagger bean:
@@ -7616,276 +7619,12 @@
 	}
 		 	</p>
 			<p>
-				This page is constructed through reflection on the servlet class and it's methods, combined with 
-				information provided in the following locations:
+				This page is constructed using the Info Provider API described next.
 			</p>
-			<ul>
-				<li>Annotations (i.e. {@link org.apache.juneau.rest.annotation.RestResource @RestResource} and 
-					{@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}).
-				<li>Resource bundle properties.
-				<li>Swagger JSON files.
-			</ul>
-			<p>
-				Swagger JSON files are specified with the same name as the servlet 
-				(e.g. <code>MyResource.java</code> -&gt; <code>MyResource.json</code>).
-				Localized versions of Swagger JSON files can be specified by appending the locale to the file name 
-				(e.g. <code>MyResource_ja_JP.json</code>).
-				The existence of Swagger JSON files will override any auto-generation of the OPTIONS pages.
-				This allows you to fully control the contents of the OPTIONS page with your own Swagger spec.
-			</p>
-			<p>
-				The framework takes the information above and populates a {@link org.apache.juneau.dto.swagger.Swagger} bean.
-				This bean is then serialized just like any other POJO to produce the page shown above.
-			</p>
-			<p>
-		 		{@link org.apache.juneau.rest.RestServletDefault} provides a default OPTIONS page by implementing 
-		 		a {@link org.apache.juneau.rest.RestServletDefault#getOptions(RestRequest)} method that returns a POJO 
-		 		consisting of beans describing the class.
-		 		It uses the {@link org.apache.juneau.rest.RestRequest#getSwagger()} method that returns a localized swagger 
-		 		bean.
-		 	</p>
-		 	
-		 	<h6 class='topic'>Title and Description</h6>
-		 	<p>
-		 		The title and description can be defined in the following ways.
-		 	</p>
-		 	<ul>
-		 		<li>Annotations:  {@link org.apache.juneau.rest.annotation.RestResource#title() @RestResource.title()}, 
-		 			{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()}
-		 		<li>By overriding methods on the servlet class:  
-		 			{@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}, 
-		 			{@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)} 
-		 		<li>By defining properties in the resource bundle.
-		 		<li>By specifying them in a Swagger JSON file.
-		 	</ul>
-			<p>
-		 		If you don't care about internationalization, then the easiest way is to use annotations on the servlet.
-		 	</p>
-			<p class='bcode'>
-	<ja>@RestResource</ja>(
-		path=<js>"/example"</js>,
-		title=<js>"Example Resource"</js>,
-		description=<js>"This shows how to use labels and descriptions."</js>
-	)
-	<jk>public class</jk> ExampleResource <jk>extends</jk> RestServletDefault {
-			</p>	 	
-			<p>
-				The second approach which supports internationalization is to use the 
-				{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages()} annotation to 
-				point to a resource bundle, and then use predefined properties that identify the label and description.
-			</p>
-			<p class='bcode'>
-	<ja>@RestResource</ja>(
-		messages=<js>"nls/Messages"</js>
-	)
-	<jk>public class</jk> ExampleResource <jk>extends</jk> RestServletDefault {
-			</p>	 	
-			<p>
-				The title and description are specified as special properties in the resource bundle:
-			</p>
-			<p class='bcode'>
-	<cc>#--------------------------------------------------------------------------------
-	# Contents of Messages.properties
-	#--------------------------------------------------------------------------------</cc>
-	<ck>title</ck> = <cv>Example Resource</cv>
-	<ck>description</ck> = <cv>This shows how to use labels and descriptions.</cv>
-			</p>	 	
-			<p>
-				Message keys can optionally be prefixed by the short class name if the resource bundle is shared by 
-				multiple servlets:
-			</p>
-			<p class='bcode'>
-	<cc>#--------------------------------------------------------------------------------
-	# Contents of Messages.properties
-	#--------------------------------------------------------------------------------</cc>
-	<ck>ExampleResource.title</ck> = <cv>Example Resource</cv>
-	<ck>ExampleResource.description</ck> = <cv>This shows how to use labels and descriptions.</cv>
-			</p>	 	
-		 	<p>
-		 		When both annotations and properties are used, annotations take precedence.
-		 	</p>
-		 	<p>
-		 		The localized label and description are also available through the following methods:
-			</p>
-		 	<ul class='doctree'>
-		 		<li class='jm'>
-		 			{@link org.apache.juneau.rest.RestRequest#getResourceTitle()}
-		 		<li class='jm'>
-		 			{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
-		 	</ul>
-			<p>
-		 		They are also made available as the request string variables <js>"$R{resourceTitle}"</js> and 
-		 		<js>"$R{resourceDescription}"</js>.
-		 		These variable facilitate the localized label and descriptions on the HTML pages when using 
-		 		{@link org.apache.juneau.rest.RestServletDefault}:
-			</p>
-			<p class='bcode'>
-	<ja>@RestResource</ja>(
-		pageTitle=<js>"The title for this page is $R{resourceTitle}"</js>,
-		pageText=<js>"The description for this page is $R{resourceDescription}"</js>
-	)
-	<jk>public abstract class</jk> RestServletDefault <jk>extends</jk> RestServlet {
-		 	</p>
-		 	<p>
-		 		The title and description annotations support string variables.
-		 		So in theory, you could also provide localized messages using <js>"$L"</js> variables pointing to your own 
-		 		resource bundle properties:
-		 	</p>
-			<p class='bcode'>
-	<ja>@RestResource</ja>(
-		path=<js>"/example"</js>,
-		messages=<js>"nls/Messages"</js>
-		title=<js>"$L{my.resource.label}"</js>,
-		description=<js>"$L{my.resource.description}"</js>
-	)
-	<jk>public class</jk> ExampleResource <jk>extends</jk> RestServletDefault {
-			</p>
-			<p>
-				Another option is to override the {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)} 
-				and {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)} methods.
-			</p>	
-			 	
-		 	<h6 class='topic'>Method Description, Input, and Responses</h6>
-		 	<p>
-		 		The <l>methods</l> field in the OPTIONS page is mostly populated through reflection.
-		 		However, the description, input, and responses field can be specified through either annotations or 
-		 		resource properties. 
-		 	</p>
-		 	<p>
-		 		For example, the <l>AddressBookResource</l> has a <l>getPerson()</l> method
-		 			that gets rendered in the OPTIONS page like so...
-		 	</p>
-			<img class='bordered' src='doc-files/Options2.png'>
-			<p>
-				This method is described through the 
-				{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}, 
-				{@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod.swagger()},
-				and {@link org.apache.juneau.rest.annotation.MethodSwagger @MethodSwagger} annotations.
-			</p>
-			<p class='bcode'>
-	<ja>@RestMethod</ja>(
-		name=<jsf>GET</jsf>, 
-		path=<js>"/people/{id}/*"</js>, 
-		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>}, 
-		description=<js>"Get a person by id in the address book"</js>,
-		parameters={
-			<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"id"</js>, description=<js>"Person UUID"</js>)
-		},
-		responses={
-			<ja>@Response</ja>(value=200, description="Person bean"),
-			<ja>@Response</ja>(value=404, description=<js>"Person with specified id not found"</js>)
-		}
-	)
-	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) throws Exception {
-		<jk>return</jk> findPerson(id);
-	}
-			</p> 	
-			<p>
-				These labels can also be localized by instead specifying them in the servlet properties file:		
-			</p>		
-			<p class='bcode'>
-	<ja>@RestMethod</ja>(
-		name=<jsf>GET</jsf>, 
-		path=<js>"/people/{id}/*"</js>, 
-		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>}
-		<jc>// Don't specify annotations for labels...they'll be detected in resource bundle.</jc> 
-	)
-	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) throws Exception {
-		<jk>return</jk> findPerson(id);
-	}
-			</p> 	
-			<p class='bcode'>
-	<cc>#--------------------------------------------------------------------------------
-	# Contents of AddressBookResource.properties
-	#--------------------------------------------------------------------------------</cc>
-	<ck>getPerson.summary</ck> = <cv>Get a person by id in the address book</cv>
-	<ck>getPerson.req.path.id.description</ck> = <cv>Person UUID</cv>
-	<ck>getPerson.res.200.description</ck> = <cv>Person found</cv>
-	<ck>getPerson.res.404.description</ck> = <cv>Person with specified id not found</cv>
-			</p>		
-			<p>
-				The following table shows the predefined resource bundle message property names:
-			</p>
-			<table class='styled'>
-				<tr>
-					<th>Property</th>
-					<th>Description</th>
-					<th>Equivalent Annotation</th>
-					<th>Equivalent Method</th>
-				</tr>
-				<tr>
-					<td><ck>label</ck></td>
-					<td>Servlet label</td>
-					<td>{@link org.apache.juneau.rest.annotation.RestResource#title() @RestResource.title()}</td>
-					<td>{@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}</td>
-				</tr>
-				<tr>
-					<td><ck>description</ck></td>
-					<td>Servlet description</td>
-					<td>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()}</td>
-					<td>{@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}</td>
-				</tr>
-				<tr>
-					<td><ck>[javaMethodName].summary</ck></td>
-					<td>Java method summary</td>
-					<td>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()}</td>
-				</tr>
-				<tr>
-					<td><ck>[javaMethodName].description</ck></td>
-					<td>Java method description</td>
-					<td>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}</td>
-				</tr>
-				<tr>
-					<td><ck>[javaMethodName].req.body.description</ck></td>
-					<td>
-						A description of the HTTP request body.
-					</td>
-					<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}</td>
-				</tr>
-				<tr>
-					<td><ck>[javaMethodName].req.[category].[name].description</ck></td>
-					<td>
-						A request input variable.
-						<br>Categories: <l>path, query, formData, header</l>
-					</td>
-					<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}</td>
-				</tr>
-				<tr>
-					<td><ck>[javaMethodName].res.[code].description</ck></td>
-					<td>
-						A possible HTTP response code and description.
-					</td>
-					<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}</td>
-				</tr>
-				<tr>
-					<td><ck>[javaMethodName].res.[code].body.description</ck></td>
-					<td>
-						A description of response content for the specified HTTP response.
-					</td>
-					<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}</td>
-				</tr>
-				<tr>
-					<td><ck>[javaMethodName].res.[code].header.[name].description</ck></td>
-					<td>
-						A response header.
-					</td>
-					<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}</td>
-				</tr>
-			</table>
-			
-			<h6 class='topic'>Additional Information</h6>
-			<ul class='doctree'>
-				<li class='ja'>
-					{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}
-				<li class='ja'>
-					{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}
-				<li class='ja'>
-					{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}
-			</ul>
 
 			<!-- ======================================================================================================== -->
-			<a id="juneau-rest-server.InfoProviders"></a>
-			<h4 class='topic' onclick='toggle(this)'>3.1.23.1 - Info Providers</h4>
+			<a id="juneau-rest-server.RestInfoProvider"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.23.1 - RestInfoProvider</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.rest.RestInfoProvider} class is used to find the title
@@ -7893,16 +7632,126 @@
 					<br>It can be overridden to provide your own custom Swagger documentation.
 				</p>
 				<p>
-					Info providers are registered through the following:
+					The methods on this interface are:
+				</p>
+				<ul class='doctree'>
+					<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getSwagger(RestRequest) getSwagger(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest) getSiteName(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest) getTitle(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest) getDescription(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+					</ul>
+				</ul>
+				<p>
+					The info provider in turn supplies the information returned by the following methods:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSiteName() getSiteName()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceTitle() getResourceTitle()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceDescription() getResourceDescription()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodSummary() getMethodSummary()}
+						<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription() getMethodDescription()}
+					</ul>
+				</ul>
+				<p>
+					Info providers are registered through the following property:
 				</p>
 				<ul>
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#infoProvider()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#infoProvider(Class)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#infoProvider(Class)}
 					<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
 				</ul>
-				<h5 class='section'>Example:</h5>
-				<p class='bcode'>
+				<p>
+					While you can implement this interface from scratch, you may want to instead consider extending
+					from the <l>RestInfoProviderDefault</l> class described next.
+				</p>
+			</div>
+			
+			<!-- ======================================================================================================== -->
+			<a id="juneau-rest- defined on the resource/method"></a>
+			<h4 class='topic' onclick='toggle(this)'>3.1.23.2 - RestInfoProviderDefault</h4>
+			<div class='topic'>
+				<p>
+					The {@link org.apache.juneau.rest.RestInfoProviderDefault} class is the default implementation of the
+					{@link org.apache.juneau.rest.RestInfoProvider} interface.
+				</p>
+				<p>
+					It finds and collects information gathered from the following locations:
+				</p>
+				<ul>
+					<li>Localized JSON Swagger files in the classpath.
+					<li>Reflection.
+					<li> annotations.
+					<li>Info provided in properties files.
+				</ul>
+				<p>
+					The class itself is designed to be extended if you wish to rely mostly on the default behavior, but tweak
+					certain aspects.
+				</p>
+				<p>
+					In addition to the methods defined on the <l>RestInfoProvider</l> interface, it also includes the following methods:
+				</p>
+				<ul class='doctree'>
+					<li class='jc'><code>{@link org.apache.juneau.rest.RestInfoProviderDefault} <jk>implements</jk> {@link org.apache.juneau.rest.RestInfoProvider}</code>
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getVersion(RestRequest) getVersion(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getContact(RestRequest) getContact(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getConsumes(RestRequest) getConsumes(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getProduces(RestRequest) getProduces(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getLicense(RestRequest) getLicense(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getTags(RestRequest) getTags(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getTermsOfService(RestRequest) getTermsOfService(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getExternalDocs(RestRequest) getExternalDocs(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodOperationId(Method,RestRequest) getMethodOperationId(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodConsumes(Method,RestRequest) getMethodConsumes(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodProduces(Method,RestRequest) getMethodProduces(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodParameters(Method,RestRequest) getMethodParameters(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodResponses(Method,RestRequest) getMethodResponses(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getMethodTags(Method,RestRequest) getMethodTags(Method,RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.RestInfoProviderDefault#getSwaggerFromFile(RestRequest) getSwaggerFromFile(RestRequest)}
+					</ul>
+				</ul>
+				<p>
+					The default provider provides several options for defining Swagger documentation on your resource:
+				</p>
+				<ul class='spaced-list'>
+					<li>
+						Provide nothing.
+						<br>You'll still get an auto-generated Swagger doc with information gather solely through reflection, including methods, parameters, consumes/produces, etc...
+					<li>
+						Specify localized JSON Swagger files on your classpath.
+						<br><h6 class='figure'>Example:</h6>
+						<p class='bcode'>
+	MyResource_ja_JP.json
+						</p>
+					<li>
+						Use {@link org.apache.juneau.rest.annotation.ResourceSwagger @ResourceSwagger} and {@link org.apache.juneau.rest.annotation.MethodSwagger @MethodSwagger}
+						annotations on your resource classes and methods.
+						<br><h6 class='figure'>Example:</h6>
+						<p class='bcode'>
+	<ja>@RestMethod</ja>(
+		swagger=<ja>@MethodSwagger</ja>(tags=<js>"foo,bar,baz"</js>)
+	)
+	<jk>public</jk> Object myMethod() {...}
+						</p>
+					<li> 
+						Use properties files identified by the {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation.
+						<br><h6 class='figure'>Example:</h6>
+						<p class='bcode'>
+	<ck>MyResource.myMethod.tags</ck> = <cv>foo,bar,baz</cv>
+						</p>
+					<li>
+						Use any combination of the above.
+					<li>
+						Extend the <l>RestInfoProviderDefault</l> and provide customized behavior.	
+						<br><h6 class='figure'>Example:</h6>
+						<p class='bcode'>
 	<jc>// Our customized info provider.</jc>
 	<jc>// Extend from the default implementation and selectively override values.</jc>
 	<jk>public class</jk> MyRestInfoProvider <jk>extends</jk> RestInfoProviderDefault {
@@ -7913,34 +7762,19 @@
 		}
 
 		<ja>@Override</ja>
-		<jk>public</jk> Swagger getSwaggerFromFile(RestRequest req) <jk>throws</jk> RestException {
-			<jc>// Provide our own method of retrieving swagger from file system.</jc>
-		}
-
-		<ja>@Override</ja>
 		<jk>public</jk> Swagger getSwagger(RestRequest req) <jk>throws</jk> RestException {
 			Swagger s = <jk>super</jk>.getSwagger(req);
 			<jc>// Made inline modifications to generated swagger.</jc>
 			<jk>return</jk> s;
-		}
-
-		<ja>@Override</ja>
-		<jk>public</jk> String getSiteName(RestRequest req) {
-			<jc>// Override the site name.</jc>
 		}
 	}
 
 	<jc>// Registered via annotation</jc>
 	<ja>@RestResource</ja>(infoProvider=MyRestInfoProvider.<jk>class</jk>)
 	<jk>public class</jk> MyResource {...}
-				</p>
-
-				<h5 class='section'>See Also:</h5>
-				<ul>
-					<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
+						</p>
 				</ul>
-			</div>
-
+			</div>			
 		</div>
 		
 		<!-- ======================================================================================================== -->
@@ -8006,9 +7840,12 @@
 		&lt;/body&gt;
 	&lt;/html&gt;</xt>
 			</p>
-
 			<p>
-				The <l>HelloWorldResource</l> class was an example of this annotation in use:
+				The outline above is controlled by the {@link org.apache.juneau.html.HtmlDocTemplate} interface
+				which can be overridden via the {@link org.apache.juneau.rest.annotation.HtmlDoc#template @HtmlDoc.template()} annotation.
+			</p>
+			<p>
+				The <l>HelloWorldResource</l> class was an example of the <l>@HtmlDoc</l> annotation in use:
 			</p>
 			<p class='bcode'>
 	<jd>/** 
@@ -8060,6 +7897,7 @@
 			<h6 class='section'>See Also:</h6>
 			<ul>
 				<li class='ja'>{@link org.apache.juneau.rest.annotation.HtmlDoc}
+				<li class='jc'>{@link org.apache.juneau.rest.HtmlDocBuilder}
 			</ul>
 
 			<!-- ======================================================================================================== -->
@@ -13370,17 +13208,17 @@
 					<li><js>"$RI{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RestInfoVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getInfoProvider()}.
 						<br>The possible values are:
 						<ul>
-							<li><js>"contact"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getContact(RestRequest)}
+							<li><js>"contact"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Info#getContact()}
 							<li><js>"description"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
-							<li><js>"externalDocs"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}
-							<li><js>"license"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}
+							<li><js>"externalDocs"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Swagger#getExternalDocs()}
+							<li><js>"license"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Info#getLicense()}
 							<li><js>"methodDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(Method,RestRequest)}
 							<li><js>"methodSummary"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(Method,RestRequest)}
 							<li><js>"siteName"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest)}
-							<li><js>"tags"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}
-							<li><js>"termsOfService"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}
+							<li><js>"tags"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Swagger#getTags()}
+							<li><js>"termsOfService"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Info#getTermsOfService()}
 							<li><js>"title"</js> - See {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}
-							<li><js>"version"</js> - See {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}
+							<li><js>"version"</js> - See {@link org.apache.juneau.dto.swagger.Info#getVersion()}
 						</ul>					
 					<li><js>"$RP{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestPathVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getPath(String)}.
 					<li><js>"$RQ{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestQueryVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getQuery(String)}
@@ -13539,6 +13377,12 @@
 				<code>RestRequestProperties</code> as unannotated parameters.
 			<li>
 				Revamped the {@link org.apache.juneau.rest.RestInfoProvider} class.
+			<li>
+				New builder classes:
+				<ul>
+					<li>{@link org.apache.juneau.rest.ReaderResourceBuilder}
+					<li>{@link org.apache.juneau.rest.StreamResourceBuilder}
+				</ul>
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -15073,7 +14917,7 @@
 				</p>
 			<li><code><del>RestResource.stylesheet()</del></code> can now take in a comma-delimited list of stylesheet paths.
 			<li>{@link org.apache.juneau.rest.StreamResource} can now contain multiple sources from a variety of source types (e.g. <code><jk>byte</jk>[]</code> arrays, <code>InputStreams</code>, <code>Files</code>, etc...)
-				and is now immutable.  It also includes a new {@link org.apache.juneau.rest.StreamResource.Builder} class.
+				and is now immutable.  It also includes a new {@link org.apache.juneau.rest.StreamResourceBuilder} class.
 			<li>Simplified remoteable proxies using the <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> annotation on REST methods.
 				Used to expose interface proxies without the need for {@link org.apache.juneau.rest.remoteable.RemoteableServlet}.
 			<p class='bcode'>
@@ -15563,12 +15407,12 @@
 						<ul>
 							<li>{@link org.apache.juneau.rest.annotation.RestResource#title() @RestResource.title()} / {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}
 							<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()} / {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
-							<li><code><del>@RestResource.termsOfService()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}
-							<li><code><del>@RestResource.contact()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getContact(RestRequest)}
-							<li><code><del>@RestResource.license()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}
-							<li><code><del>@RestResource.version()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}
-							<li><code><del>@RestResource.tags()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}
-							<li><code><del>@RestResource.externalDocs()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}
+							<li><code><del>@RestResource.termsOfService()</del></code> / <code><del>RestInfoProvider.getTermsOfService(RestRequest)</del></code>
+							<li><code><del>@RestResource.contact()</del></code> / <code><del>RestInfoProvider.getContact(RestRequest)</del></code>
+							<li><code><del>@RestResource.license()</del></code> / <code><del>RestInfoProvider.getLicense(RestRequest)</del></code>
+							<li><code><del>@RestResource.version()</del></code> / <code><del>RestInfoProvider.getVersion(RestRequest)</del></code>
+							<li><code><del>@RestResource.tags()</del></code> / <code><del>RestInfoProvider.getTags(RestRequest)</del></code>
+							<li><code><del>@RestResource.externalDocs()</del></code> / <code><del>RestInfoProvidergetExternalDocs(RestRequest)</del></code>
 							<li>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()} / <code><del>RestInfoProvider.getMethodSummary(String,RestRequest)</del></code>
 							<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()} /<code><del>RestInfoProvider.getMethodDescription(String,RestRequest)</del></code>
 							<li><code><del>@RestMethod.externalDocs()</del></code>

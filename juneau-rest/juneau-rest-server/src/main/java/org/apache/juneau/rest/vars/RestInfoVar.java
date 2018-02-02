@@ -37,17 +37,17 @@ import org.apache.juneau.svl.*;
  * <p>
  * The possible values are:
  * <ul>
- * 	<li><js>"contact"</js> - Value returned by {@link RestInfoProvider#getContact(RestRequest)}
+ * 	<li><js>"contact"</js> - Value returned by {@link Info#getContact()}
  * 	<li><js>"description"</js> - Value returned by {@link RestInfoProvider#getDescription(RestRequest)}
- * 	<li><js>"externalDocs"</js> - Value returned by {@link RestInfoProvider#getExternalDocs(RestRequest)}
- * 	<li><js>"license"</js> - Value returned by {@link RestInfoProvider#getLicense(RestRequest)}
+ * 	<li><js>"externalDocs"</js> - Value returned by {@link Swagger#getExternalDocs()}
+ * 	<li><js>"license"</js> - Value returned by {@link Info#getLicense()}
  * 	<li><js>"methodDescription"</js> - Value returned by {@link RestInfoProvider#getMethodDescription(Method,RestRequest)}
  * 	<li><js>"methodSummary"</js> - Value returned by {@link RestInfoProvider#getMethodSummary(Method,RestRequest)}
  * 	<li><js>"siteName"</js> - Value returned by {@link RestInfoProvider#getSiteName(RestRequest)}
- * 	<li><js>"tags"</js> - Value returned by {@link RestInfoProvider#getTags(RestRequest)}
- * 	<li><js>"termsOfService"</js> - Value returned by {@link RestInfoProvider#getTermsOfService(RestRequest)}
+ * 	<li><js>"tags"</js> - Value returned by {@link Swagger#getTags()}
+ * 	<li><js>"termsOfService"</js> - Value returned by {@link Info#getTermsOfService()}
  * 	<li><js>"title"</js> - See {@link RestInfoProvider#getTitle(RestRequest)}
- * 	<li><js>"version"</js> - See {@link RestInfoProvider#getVersion(RestRequest)}
+ * 	<li><js>"version"</js> - See {@link Info#getVersion()}
  * </ul>
  * 
  * <p>
@@ -105,12 +105,13 @@ public class RestInfoVar extends MultipartResolvingVar {
 	public String resolve(VarResolverSession session, String key) {
 		try {
 			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+			Swagger swagger = req.getSwagger();
 			RestInfoProvider rip = req.getInfoProvider();
 			WriterSerializer s = JsonSerializer.DEFAULT_LAX;
 			char c = StringUtils.charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key)) {
-					Contact x = rip.getContact(req);
+					Contact x = swagger.getInfo().getContact();
 					return x == null ? null : s.toString(x);
 				}
 			} else if (c == 'd') {
@@ -118,12 +119,12 @@ public class RestInfoVar extends MultipartResolvingVar {
 					return rip.getDescription(req);
 			} else if (c == 'e') {
 				if ("externalDocs".equals(key)) {
-					ExternalDocumentation x = rip.getExternalDocs(req);
+					ExternalDocumentation x = swagger.getExternalDocs();
 					return x == null ? null : s.toString(x);
 				}
 			} else if (c == 'l') {
 				if ("license".equals(key)) {
-					License x = rip.getLicense(req);
+					License x = swagger.getInfo().getLicense();
 					return x == null ? null : s.toString(x);
 				}
 			} else if (c == 'm') {
@@ -136,16 +137,16 @@ public class RestInfoVar extends MultipartResolvingVar {
 					return rip.getSiteName(req);
 			} else if (c == 't') {
 				if ("tags".equals(key)) {
-					List<Tag> x = rip.getTags(req);
+					List<Tag> x = swagger.getTags();
 					return x == null ? null : s.toString(x);
 				} else if ("termsOfService".equals(key)) {
-					return rip.getTermsOfService(req);
+					return swagger.getInfo().getTermsOfService();
 				} else if ("title".equals(key)) {
-					return rip.getTitle(req);
+					return swagger.getInfo().getTitle();
 				}
 			} else if (c == 'v') {
 				if ("version".equals(key)) 
-					return rip.getVersion(req);
+					return swagger.getInfo().getVersion();
 			}
 			return null;
 		} catch (RestException e) {
