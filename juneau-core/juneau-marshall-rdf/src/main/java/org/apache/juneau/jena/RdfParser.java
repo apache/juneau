@@ -38,9 +38,9 @@ import org.apache.juneau.xml.*;
  * </ul>
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.jena &gt; RDF Overview</a>
+ * 	<li class='link'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.jena &gt; RDF Overview</a>
  * </ul>
  */
 public class RdfParser extends ReaderParser implements RdfCommon {

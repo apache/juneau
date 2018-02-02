@@ -25,7 +25,7 @@ import org.apache.juneau.html.annotation.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; Predefined Label Beans</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; Predefined Label Beans</a>
  * </ul>
  */
 public final class ResourceDescription extends NameDescription implements Comparable<ResourceDescription> {

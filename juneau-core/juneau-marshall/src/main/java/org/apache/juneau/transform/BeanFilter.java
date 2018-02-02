@@ -29,9 +29,9 @@ import org.apache.juneau.internal.*;
  * annotation.
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
  * </ul>
  */
 public final class BeanFilter {

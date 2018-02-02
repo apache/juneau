@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
  * Specialized writer for serializing UON-encoded text.
  * 
  * 
- * <h5 class='topic'>Notes</h5>
+ * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>This class is not intended for external use.
  * </ul>

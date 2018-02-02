@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
  * Specialized input stream for parsing MessagePack streams.
  * 
  * 
- * <h5 class='topic'>Notes</h5>
+ * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>This class is not intended for external use.
  * </ul>

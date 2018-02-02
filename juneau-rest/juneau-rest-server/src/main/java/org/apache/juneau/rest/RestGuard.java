@@ -70,7 +70,7 @@ import org.apache.juneau.rest.annotation.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Guards">Overview &gt; Guards</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Guards">Overview &gt; Guards</a>
  * </ul>
  */
 public abstract class RestGuard {

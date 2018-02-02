@@ -66,7 +66,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestRequest">Overview &gt; RestRequest</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestRequest">Overview &gt; RestRequest</a>
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })

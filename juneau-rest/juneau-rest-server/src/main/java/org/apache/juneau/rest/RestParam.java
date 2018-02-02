@@ -106,7 +106,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  * 
  * 
- * <h5 class='topic'>Additional Information</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
  * </ul>
@@ -114,7 +114,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; Java Method Parameters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; Java Method Parameters</a>
  * </ul>
  */
 public abstract class RestParam {

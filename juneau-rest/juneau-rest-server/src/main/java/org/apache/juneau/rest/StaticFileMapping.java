@@ -51,7 +51,7 @@ import org.apache.juneau.utils.*;
  * </ol>
  * 
  * 
- * <h5 class='topic'>Notes</h5>
+ * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		Mappings are cumulative from parent to child.  Child resources can override mappings made on parent resources.
@@ -62,7 +62,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StaticFiles">Overview &gt; Static Files</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StaticFiles">Overview &gt; Static Files</a>
  * </ul>
  */
 public class StaticFileMapping {

@@ -75,7 +75,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  * 
  * 
- * <h5 class='topic'>See Also</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
  * </ul>
@@ -83,7 +83,7 @@ import org.apache.juneau.serializer.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
  * </ul>
  */
 public interface RestConverter {

@@ -24,35 +24,33 @@ import org.apache.juneau.rest.response.*;
  * Defines the interface for handlers that convert POJOs to appropriate HTTP responses.
  * 
  * <p>
- * The {@link RestServlet} API uses the concept of registered response handlers for converting objects returned by REST
+ * The REST Server API uses the concept of registered response handlers for converting objects returned by REST
  * methods or set through {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
  * 
  * <p>
- * Response handlers can be associated with {@link RestServlet RestServlets} through the following ways:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Through the {@link RestResource#responseHandlers @RestResource.responseHandlers} annotation.
- * 	<li>
- * 		By calling the {@link RestContextBuilder#responseHandlers(Class...)} and augmenting or creating your
- * 		own list of handlers.
+ * Response handlers can be associated with REST resources via the following:
+ * <ul>
+ * 	<li class='ja'>{@link RestResource#responseHandlers}
+ * 	<li class='jm'>{@link RestContextBuilder#responseHandlers(Class...)}
+ * 	<li class='jm'>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
  * </ul>
  * 
  * <p>
- * By default, {@link RestServlet RestServlets} are registered with the following response handlers:
+ * By default, REST resources are registered with the following response handlers:
  * <ul class='spaced-list'>
- * 	<li>
+ * 	<li class='jc'>
  * 		{@link DefaultHandler} - Serializes POJOs using the Juneau serializer API.
- * 	<li>
+ * 	<li class='jc'>
  * 		{@link ReaderHandler} - Pipes the output of {@link Reader Readers} to the response writer
  * 		({@link RestResponse#getWriter()}).
- * 	<li>
+ * 	<li class='jc'>
  * 		{@link InputStreamHandler} - Pipes the output of {@link InputStream InputStreams} to the response output
  * 		stream ({@link RestResponse#getOutputStream()}).
- * 	<li>
+ * 	<li class='jc'>
  * 		{@link RedirectHandler} - Handles {@link Redirect} objects.
- * 	<li>
+ * 	<li class='jc'>
  * 		{@link WritableHandler} - Handles {@link Writable} objects.
- * 	<li>
+ * 	<li class='jc'>
  * 		{@link StreamableHandler} - Handles {@link Streamable} objects.
  * </ul>
  * 
@@ -94,7 +92,7 @@ import org.apache.juneau.rest.response.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>
  * </ul>
  */
 public interface ResponseHandler {

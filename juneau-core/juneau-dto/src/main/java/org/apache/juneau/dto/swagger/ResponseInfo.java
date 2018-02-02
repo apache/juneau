@@ -136,11 +136,14 @@ public class ResponseInfo extends SwaggerElement {
 	 * A definition of the response structure.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If this field does not exist, it means no content is returned as part of the response.
-	 * 	<li>As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If this field does not exist, it means no content is returned as part of the response.
+	 * 	<li>
+	 * 		As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
 	 * 		its root type value may also be <js>"file"</js>.
-	 * 	<li>This SHOULD be accompanied by a relevant produces mime-type.
+	 * 	<li>
+	 * 		This SHOULD be accompanied by a relevant produces mime-type.
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -156,11 +159,14 @@ public class ResponseInfo extends SwaggerElement {
 	 * A definition of the response structure.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If this field does not exist, it means no content is returned as part of the response.
-	 * 	<li>As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If this field does not exist, it means no content is returned as part of the response.
+	 * 	<li>
+	 * 		As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
 	 * 		its root type value may also be <js>"file"</js>.
-	 * 	<li>This SHOULD be accompanied by a relevant produces mime-type.
+	 * 	<li>
+	 * 		This SHOULD be accompanied by a relevant produces mime-type.
 	 * </ul>
 	 * 
 	 * @param value 

@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
  * </p>
  * 
  * 
- * <h5 class='topic'>See Also</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link PojoRest} - Additional information on addressing elements in a POJO tree using URL notation.
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
@@ -51,7 +51,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
  * </ul>
  */
 public final class Traversable implements RestConverter {

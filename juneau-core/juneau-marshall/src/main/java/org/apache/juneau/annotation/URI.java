@@ -24,10 +24,9 @@ import java.lang.annotation.*;
  * This annotation allows you to identify other classes that return URIs via <code>toString()</code> as URI objects.
  * 
  * 
- * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIAnnotation">Overview &gt; @URI Annotation</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIAnnotation">Overview &gt; @URI Annotation</a>
  * </ul>
  */
 @Documented

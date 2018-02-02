@@ -43,9 +43,9 @@ import org.apache.juneau.*;
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanConstructorAnnotation">Overview &gt; @BeanConstructor Annotation</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanConstructorAnnotation">Overview &gt; @BeanConstructor Annotation</a>
  * </ul>
  */
 @Documented

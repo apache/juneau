@@ -93,10 +93,10 @@ import org.apache.juneau.serializer.*;
  * The normal object representation of an object.
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; PojoSwaps</a>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; PojoSwaps</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
  * </ul>
  * 
  * @param <T> The normal form of the class.
@@ -176,7 +176,7 @@ public abstract class PojoSwap<T,S> {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
 	 * </ul>
 	 * 
 	 * @return Additional context information, or <jk>null</jk> if not specified.
@@ -206,7 +206,7 @@ public abstract class PojoSwap<T,S> {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
 	 * </ul>
 	 * 
 	 * @param template The template string on this swap.

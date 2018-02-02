@@ -18,7 +18,7 @@ import org.apache.http.impl.client.*;
  * Redirect strategy that allows for redirects on any request type, not just <code>GET</code> or <code>HEAD</code>.
  * 
  * 
- * <h5 class='topic'>Notes</h5>
+ * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>
  * 		This class is similar to <code>org.apache.http.impl.client.LaxRedirectStrategy</code>

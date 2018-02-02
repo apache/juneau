@@ -336,7 +336,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 * 

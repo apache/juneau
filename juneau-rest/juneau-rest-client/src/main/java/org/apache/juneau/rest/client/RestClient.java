@@ -56,9 +56,9 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a>.
+ * 	<li class='link'><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a>.
  * </ul>
  */
 @SuppressWarnings("rawtypes")

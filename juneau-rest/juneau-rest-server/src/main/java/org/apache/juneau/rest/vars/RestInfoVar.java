@@ -58,7 +58,7 @@ import org.apache.juneau.svl.*;
  * </p>
  * 
  * 
- * <h5 class='topic'>Notes</h5>
+ * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
@@ -70,7 +70,7 @@ import org.apache.juneau.svl.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
  * </ul>
  */
 public class RestInfoVar extends MultipartResolvingVar {

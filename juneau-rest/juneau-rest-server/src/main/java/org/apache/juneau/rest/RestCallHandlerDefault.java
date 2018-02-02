@@ -34,7 +34,7 @@ import org.apache.juneau.rest.vars.*;
  * <br>Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
  * 
  * 
- * <h5 class='topic'>Additional Information</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_callHandler}
  * </ul>

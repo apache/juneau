@@ -30,7 +30,7 @@ import org.apache.juneau.parser.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; RequestPathMatch</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; RequestPathMatch</a>
  * </ul>
  */
 @SuppressWarnings("unchecked")

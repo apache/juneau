@@ -97,9 +97,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * 	<li class='link'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -111,7 +111,7 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>format</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
 	 * </ul>
@@ -749,7 +749,7 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>

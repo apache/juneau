@@ -576,14 +576,19 @@ public class Operation extends SwaggerElement {
 	 * A list of parameters that are applicable for this operation.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
 	 * 		the new definition will override it, but can never remove it.
-	 * 	<li>The list MUST NOT include duplicated parameters.
-	 * 	<li>A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
-	 * 	<li>The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
+	 * 	<li>
+	 * 		The list MUST NOT include duplicated parameters.
+	 * 	<li>
+	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
+	 * 	<li>
+	 * 		The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
 	 * 		to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
-	 * 	<li>There can be one <js>"body"</js> parameter at most.
+	 * 	<li>
+	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -599,14 +604,19 @@ public class Operation extends SwaggerElement {
 	 * A list of parameters that are applicable for this operation.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
 	 * 		the new definition will override it, but can never remove it.
-	 * 	<li>The list MUST NOT include duplicated parameters.
-	 * 	<li>A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
-	 * 	<li>The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
+	 * 	<li>
+	 * 		The list MUST NOT include duplicated parameters.
+	 * 	<li>
+	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
+	 * 	<li>
+	 * 		The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
 	 * 		to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
-	 * 	<li>There can be one <js>"body"</js> parameter at most.
+	 * 	<li>
+	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
 	 * 
 	 * @param value 
@@ -626,14 +636,19 @@ public class Operation extends SwaggerElement {
 	 * A list of parameters that are applicable for this operation.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
 	 * 		the new definition will override it, but can never remove it.
-	 * 	<li>The list MUST NOT include duplicated parameters.
-	 * 	<li>A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
-	 * 	<li>The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
+	 * 	<li>
+	 * 		The list MUST NOT include duplicated parameters.
+	 * 	<li>
+	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
+	 * 	<li>
+	 * 		The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
 	 * 		to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
-	 * 	<li>There can be one <js>"body"</js> parameter at most.
+	 * 	<li>
+	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
 	 * 
 	 * @param value 

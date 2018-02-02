@@ -149,9 +149,9 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * The extending format for the previously mentioned <code>type</code>. 
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * 	<li class='link'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -166,9 +166,9 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * The extending format for the previously mentioned <code>type</code>. 
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * 	<li class='link'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -312,14 +312,16 @@ public class Items extends SwaggerElement {
 	 * Declares the value of the item that the server will use if none is provided.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li><js>"default"</js> has no meaning for required items.
-	 * 	<li>Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"default"</js> has no meaning for required items.
+	 * 	<li>
+	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -335,14 +337,16 @@ public class Items extends SwaggerElement {
 	 * Declares the value of the item that the server will use if none is provided.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li><js>"default"</js> has no meaning for required items.
-	 * 	<li>Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"default"</js> has no meaning for required items.
+	 * 	<li>
+	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -370,9 +374,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -384,9 +388,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maximum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -415,9 +419,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -429,9 +433,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -460,9 +464,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -474,9 +478,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minimum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -505,9 +509,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -519,9 +523,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -550,9 +554,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -564,9 +568,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -595,9 +599,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -609,9 +613,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minLength</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -640,9 +644,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -654,9 +658,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>pattern</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -685,9 +689,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -699,9 +703,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -730,9 +734,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -744,9 +748,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minItems</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -775,9 +779,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -789,9 +793,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -820,9 +824,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -834,9 +838,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -893,9 +897,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
 	 * </ul>
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -907,9 +911,9 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
 	 * 
-	 * <h5 class='section'>Additional Info:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
+	 * 	<li class='link'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
 	 * </ul>
 	 * 
 	 * @param value 

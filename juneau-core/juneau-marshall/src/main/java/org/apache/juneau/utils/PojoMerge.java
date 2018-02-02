@@ -63,12 +63,15 @@ import java.lang.reflect.*;
  * </p>
  * 
  * 
- * <h5 class='topic'>Notes</h5>
- * <ul>
- * 	<li>Null POJOs are ignored.
- * 	<li>Non-getter methods are either invoked on the first POJO or all POJOs depending on the <code>callAllNonGetters</code> flag
+ * <h5 class='section'>Notes:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Null POJOs are ignored.
+ * 	<li>
+ * 		Non-getter methods are either invoked on the first POJO or all POJOs depending on the <code>callAllNonGetters</code> flag
  * 		passed into the constructor.
- * 	<li>For purposes of this interface, a getter is any method with zero arguments and a non-<code>void</code> return type.
+ * 	<li>
+ * 		For purposes of this interface, a getter is any method with zero arguments and a non-<code>void</code> return type.
  * </ul>
  */
 public class PojoMerge {

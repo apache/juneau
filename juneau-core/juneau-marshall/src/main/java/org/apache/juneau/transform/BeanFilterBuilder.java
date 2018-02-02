@@ -50,9 +50,9 @@ import org.apache.juneau.annotation.*;
  * </p>		
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- *.	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
+ *.	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
  *.</ul>
  * 
  * @param <T> The bean type that this filter applies to. 

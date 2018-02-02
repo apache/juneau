@@ -29,7 +29,7 @@ import javax.servlet.http.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServlet">Overview &gt; RestServlet</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServlet">Overview &gt; RestServlet</a>
  * </ul>
  */
 public abstract class RestServlet extends HttpServlet {

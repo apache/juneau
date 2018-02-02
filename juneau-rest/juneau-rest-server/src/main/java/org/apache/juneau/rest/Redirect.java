@@ -23,7 +23,7 @@ import java.text.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; Redirect</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; Redirect</a>
  * </ul>
  */
 public final class Redirect {

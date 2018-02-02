@@ -36,7 +36,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestResource">Overview &gt; @RestResource</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestResource">Overview &gt; @RestResource</a>
  * </ul>
  */
 @Documented

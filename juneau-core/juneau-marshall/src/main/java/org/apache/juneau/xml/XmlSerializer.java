@@ -169,7 +169,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_addNamespaceUrisToRoot = PREFIX + "addNamespaceUrisToRoot.b";
@@ -213,7 +213,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_autoDetectNamespaces = PREFIX + "autoDetectNamespaces.b";
@@ -239,7 +239,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_defaultNamespace = PREFIX + "defaultNamespace.s";
@@ -265,7 +265,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_enableNamespaces = PREFIX + "enableNamespaces.b";
@@ -291,7 +291,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_namespaces = PREFIX + "namespaces.ls";
@@ -318,7 +318,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Documentation:</h5>
 	 * <ul>
-	 * 	<li><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_xsNamespace = PREFIX + "xsNamespace.s";

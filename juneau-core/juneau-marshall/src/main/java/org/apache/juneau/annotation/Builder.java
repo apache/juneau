@@ -52,9 +52,9 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; POJO Builders</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; POJO Builders</a>
  * </ul>
  */
 @Documented

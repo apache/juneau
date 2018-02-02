@@ -32,9 +32,9 @@ import java.lang.annotation.*;
  * Applies to getters or setters that should not be interpreted as bean property getters or setters.
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanIgnoreAnnotation">Overview &gt; @BeanIgnore Annotation</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanIgnoreAnnotation">Overview &gt; @BeanIgnore Annotation</a>
  * </ul>
  */
 @Documented

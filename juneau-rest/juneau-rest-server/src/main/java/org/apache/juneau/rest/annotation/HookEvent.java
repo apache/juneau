@@ -34,7 +34,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.LifecycleHooks">Overview &gt; Lifecycle Hooks</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.LifecycleHooks">Overview &gt; Lifecycle Hooks</a>
  * </ul>
  */
 public enum HookEvent {

@@ -49,7 +49,7 @@ import org.apache.juneau.serializer.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestResponse">Overview &gt; RestResponse</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestResponse">Overview &gt; RestResponse</a>
  * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {

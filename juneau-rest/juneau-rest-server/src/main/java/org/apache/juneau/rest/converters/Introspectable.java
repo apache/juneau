@@ -43,7 +43,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  * 
  * 
- * <h5 class='topic'>See Also</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link PojoIntrospector} - Additional information on introspection of POJO methods.
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
@@ -52,7 +52,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
  * </ul>
  */
 public final class Introspectable implements RestConverter {

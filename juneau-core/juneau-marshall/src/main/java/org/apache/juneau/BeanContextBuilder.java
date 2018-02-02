@@ -54,9 +54,9 @@ import org.apache.juneau.transform.*;
  * </p>
  * 
  * 
- * <h5 class='topic'>Documentation</h5>
+ * <h5 class='section'>Documentation:</h5>
  * <ul>
- * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.ConfigurableProperties">Overview &gt; Configurable Properties</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.ConfigurableProperties">Overview &gt; Configurable Properties</a>
  * </ul>
  */
 public class BeanContextBuilder extends ContextBuilder {
