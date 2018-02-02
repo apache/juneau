@@ -25,9 +25,9 @@ import org.apache.juneau.svl.*;
  * Used to resolve values returned by {@link RestRequest#getQuery(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  * 
- * <h6 class='section'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<jc>// URI = "...?foo=X&bar=Y"</jc>
+ * 	<jc>// URI = "...?foo=X&amp;bar=Y"</jc>
  * 	String foo = restRequest.resolveVars(<js>"$RQ{foo}"</js>); 
  * 	String fooOrBar = restRequest.resolveVars(<js>"$RQ{foo,bar}"</js>); 
  * </p>

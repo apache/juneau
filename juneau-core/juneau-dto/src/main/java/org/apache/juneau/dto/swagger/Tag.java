@@ -42,7 +42,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
@@ -175,7 +175,7 @@ public class Tag extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link ExternalDocumentation}
 	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * 			</p>

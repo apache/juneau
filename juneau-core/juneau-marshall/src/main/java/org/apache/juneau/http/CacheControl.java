@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Cache-Control: no-cache
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Cache-Control general-header field is used to specify directives that MUST be obeyed by all caching mechanisms
  * along the request/response chain.
@@ -87,7 +87,7 @@ package org.apache.juneau.http;
  * 	<li>Extensions to the caching system.
  * </ul>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

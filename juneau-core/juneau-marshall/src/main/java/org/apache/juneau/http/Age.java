@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * The age the object has been in a proxy cache in seconds.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Age: 12
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Age response-header field conveys the sender's estimate of the amount of time since the response (or its
  * revalidation) was generated at the origin server.
@@ -49,7 +49,7 @@ package org.apache.juneau.http;
  * <p>
  * Caches SHOULD use an arithmetic type of at least 31 bits of range.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

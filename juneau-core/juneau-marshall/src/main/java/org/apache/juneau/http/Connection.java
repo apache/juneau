@@ -18,13 +18,13 @@ package org.apache.juneau.http;
  * <p>
  * Control options for the current connection and list of hop-by-hop request fields.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Connection: keep-alive
  * 	Connection: Upgrade
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Connection general-header field allows the sender to specify options that are desired for that particular
  * connection and MUST NOT be communicated by proxies over further connections.
@@ -68,7 +68,7 @@ package org.apache.juneau.http;
  * This protects against mistaken forwarding of such header fields by pre-HTTP/1.1 proxies.
  * See section 19.6.2.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

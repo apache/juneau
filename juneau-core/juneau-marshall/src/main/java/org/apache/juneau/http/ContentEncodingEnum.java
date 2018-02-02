@@ -15,7 +15,7 @@ package org.apache.juneau.http;
 /**
  * Represents the possible values for a <code>Content-Encoding</code> header.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

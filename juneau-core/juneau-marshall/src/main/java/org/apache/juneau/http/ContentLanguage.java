@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * The natural language or languages of the intended audience for the enclosed content.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Content-Language: da
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Content-Language entity-header field describes the natural language(s) of the intended audience for the
  * enclosed entity.
@@ -64,7 +64,7 @@ package org.apache.juneau.http;
  * <p>
  * Content-Language MAY be applied to any media type -- it is not limited to textual documents.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

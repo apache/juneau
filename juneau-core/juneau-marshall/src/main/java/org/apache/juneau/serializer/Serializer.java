@@ -127,7 +127,7 @@ public abstract class Serializer extends BeanContext {
 	 * 
 	 * <p>
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * <br>For example, when serializing a {@code Map<String,Object>} field where the bean class cannot be determined from
+	 * <br>For example, when serializing a <code>Map&lt;String,Object&gt;</code> field where the bean class cannot be determined from
 	 * the type of the values.
 	 * 
 	 * <p>
@@ -155,7 +155,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
 	 * 
-	 * 	Map&ltString,Object&gt; m = new HashMap&lt;&gt;();
+	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
 	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 * 
 	 * 	<jc>// Will not contain '_type' attribute even though type name is on bean and we're serializing</jc>
@@ -840,7 +840,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		- Relative URIs should be considered relative to the request URI.
 	 * </ul>
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
 	 * 	WriterSerializer s = JsonSerializer
@@ -894,7 +894,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		- Don't do any URL resolution.
 	 * </ul>
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
 	 * 	WriterSerializer s = JsonSerializer

@@ -45,7 +45,7 @@ import org.apache.juneau.rest.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Important note concerning FORM posts</h6>
+ * <h5 class='topic'>Important note concerning FORM posts</h5>
  * 
  * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody()} method
  * for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet

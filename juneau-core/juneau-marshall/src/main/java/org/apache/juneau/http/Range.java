@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Request only part of an entity. Bytes are numbered from 0.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Range: bytes=500-999
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * Since all HTTP entities are represented in HTTP messages as sequences of bytes, the concept of a byte range is
  * meaningful for any HTTP entity.
@@ -133,7 +133,7 @@ package org.apache.juneau.http;
  * entire entity in reply, it SHOULD only return the requested range to its client.
  * It SHOULD store the entire received response in its cache if that is consistent with its cache allocation policies.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

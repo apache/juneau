@@ -20,13 +20,13 @@ package org.apache.juneau.http;
  * The port number may be omitted if the port is the standard port for the service requested.
  * Mandatory since HTTP/1.1.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Host: en.wikipedia.org:8080
  * 	Host: en.wikipedia.org
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Host request-header field specifies the Internet host and port number of the resource being requested, as
  * obtained from the original URI given by the user or referring resource (generally an HTTP URL, as described in
@@ -60,7 +60,7 @@ package org.apache.juneau.http;
  * <p>
  * See sections 5.2 and 19.6.1.1 for other requirements relating to Host.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

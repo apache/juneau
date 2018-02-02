@@ -120,7 +120,7 @@
 		for a complete definition of supported POJOs.
 	</p>
 	
-	<h6 class='topic'>Prerequisites</h6>
+	<h5 class='topic'>Prerequisites</h5>
 	<p>
 		The Juneau URL-encoding serialization and parsing support does not require any external prerequisites.  
 		It only requires Java 1.6 or above.
@@ -222,7 +222,7 @@
 			Top-level beans and maps can serialized as key/value pairs as shown below:
 		</p>
 		
-		<h6 class='figure'>Example:  A bean with 2 string properties, 'foo' and 'baz', serialized to a query string</h6>
+		<h5 class='figure'>Example:  A bean with 2 string properties, 'foo' and 'baz', serialized to a query string</h5>
 		<p class='bcode'>	
 	http://localhost/sample?<ua>foo</ua>=<us>bar</us>&amp;<ua>baz</ua>=<us>bing</us>
 		</p>
@@ -232,12 +232,12 @@
 			of <js>"&amp;"</js>.
 		</p>
 		
-		<h6 class='figure'>Example:  A bean serialized as a query parameter value.</h6>
+		<h5 class='figure'>Example:  A bean serialized as a query parameter value.</h5>
 		<p class='bcode'>	
 	http://localhost/sample?<ua>a1</ua>=(<ua>foo</ua>=<us>bar</us>,<ua>baz</ua>=<us>bing</us>)
 		</p>
 		
-		<h6 class='figure'>General methodology:</h6>
+		<h5 class='figure'>General methodology:</h5>
 		<table class='styled' style='border-collapse: collapse;'>
 			<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
 			<tr>
@@ -305,7 +305,7 @@
 			<li>On bean properties through the <code><ja>@BeanProperty</ja></code> annotations.
 		</ul>
 		
-		<h6 class='figure'>Example:  A serialized Calendar object using <code>CalendarSwap.RFC2822DTZ</code> transform.</h6>
+		<h5 class='figure'>Example:  A serialized Calendar object using <code>CalendarSwap.RFC2822DTZ</code> transform.</h5>
 		<p class='bcode'>	
 	http://localhost/sample?<ua>a1=<us>'Sun,+03+Mar+1901+09:05:06+GMT'</us>
 		</p>
@@ -363,7 +363,7 @@
 			Use the readable serializer for debugging purposes.
 	</ul>
 
-	<h6 class='topic'>Notes about examples</h6>
+	<h5 class='topic'>Notes about examples</h5>
 	<p>
 		The examples shown in this document will use default strict settings.
 		<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the 
@@ -510,14 +510,14 @@
 			It converts bean property names to lowercase-dashed format.
 		</p>
 		
-		<h6 class='figure'>Example:</h6>
+		<h5 class='figure'>Example:</h5>
 		<p class='bcode'>	
 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDLC.<jk>class</jk>)
 	<jk>public class</jk> Person {
 		...
 		</p>
 		
-		<h6 class='figure'>Results</h6>
+		<h5 class='figure'>Results</h5>
 		<p class='bcode'>
 	(<ua>id</ua>=<un>1</us>,<ua>name</ua>=<us>'John+Smith'</us>,<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,
 	<ua>address-book-uri</ua>=<us>http://sample/addressBook</us>,<ua>birth-date</ua>=<us>1946-08-12T00:00:00Z</us>)

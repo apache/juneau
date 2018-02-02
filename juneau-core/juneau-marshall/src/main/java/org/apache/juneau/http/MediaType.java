@@ -26,7 +26,7 @@ import org.apache.juneau.json.*;
  * Describes a single media type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
@@ -262,7 +262,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 	<ul>
 	 * 		<li><code>10,000</code> for an exact match (e.g. <js>"text"</js>==<js>"text"</js>).
 	 * 		<li><code>5,000</code> for a meta match (e.g. <js>"*"</js>==<js>"text"</js>).
-	 * 	<ul>
+	 * 	</ul>
 	 * 	<li>Add the following for subtype (assuming type match is &lt;0):
 	 * 	<ul>
 	 * 		<li><code>7,500</code> for an exact match (e.g. <js>"json+foo"</js>==<js>"json+foo"</js> or <js>"json+foo"</js>==<js>"foo+json"</js>)

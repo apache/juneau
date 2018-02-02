@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * The last modified date for the requested object (in "HTTP-date" format as defined by RFC 7231).
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Last-Modified entity-header field indicates the date and time at which the origin server believes the variant was
  * last modified.
@@ -61,7 +61,7 @@ package org.apache.juneau.http;
  * <p>
  * HTTP/1.1 servers SHOULD send Last-Modified whenever feasible.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

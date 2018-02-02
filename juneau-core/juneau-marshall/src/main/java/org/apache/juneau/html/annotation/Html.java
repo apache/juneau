@@ -34,7 +34,7 @@ public @interface Html {
 	 * <p>
 	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> FileSpace {
 	 * 
@@ -80,7 +80,7 @@ public @interface Html {
 	 * 	<li>Path-info-relative - e.g. <js>"myPath"</js>
 	 * </ul>
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> FileSpace {
 	 * 

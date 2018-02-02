@@ -55,7 +55,7 @@ public enum HookEvent {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
@@ -172,7 +172,7 @@ public enum HookEvent {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
@@ -222,7 +222,7 @@ public enum HookEvent {
 	 * <p>
 	 * The list of valid parameter types are the same as {@link #PRE_CALL}.
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
@@ -280,7 +280,7 @@ public enum HookEvent {
 	 * 	<li><js>"ExecTime"</js> - Execution time of the request.
 	 * </ul>
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
@@ -335,13 +335,13 @@ public enum HookEvent {
 	 * An example of this is the <code>PetStoreResource</code> class that uses an init method to perform initialization
 	 * of an internal data structure.
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 * 
 	 * 		<jc>// Our database.</jc>
-	 * 		<jk>private</jk> Map<Integer,Pet> <jf>petDB</jf>;
+	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
 	 * 
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> onInit(RestContextBuilder builder) <jk>throws</jk> Exception {
@@ -448,13 +448,13 @@ public enum HookEvent {
 	 * The only valid parameter type for this method is {@link RestContext}, although typically no arguments will
 	 * be specified.
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 * 
 	 * 		<jc>// Our database.</jc>
-	 * 		<jk>private</jk> Map<Integer,Pet> <jf>petDB</jf>;
+	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
 	 * 
 	 * 		<ja>@RestHook</ja>(<jsf>DESTROY</jsf>)
 	 * 		<jk>public void</jk> onDestroy() {

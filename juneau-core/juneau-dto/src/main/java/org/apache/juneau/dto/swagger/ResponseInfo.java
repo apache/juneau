@@ -52,7 +52,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
@@ -189,7 +189,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link SchemaInfo}
 	 * 		<li><code>String</code> - JSON object representation of {@link SchemaInfo}
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * 			</p>
@@ -263,7 +263,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
 	 * 			</p>
@@ -339,7 +339,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><code>Map&lt;String,Object&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
 	 * 			</p>

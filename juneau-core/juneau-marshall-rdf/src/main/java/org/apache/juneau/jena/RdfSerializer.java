@@ -24,7 +24,7 @@ import org.apache.juneau.xml.*;
 /**
  * Serializes POJOs to RDF.
  * 
- * <h6 class='topic'>Behavior-specific subclasses</h6>
+ * <h5 class='topic'>Behavior-specific subclasses</h5>
  * 
  * The following direct subclasses are provided for language-specific serializers:
  * <ul>

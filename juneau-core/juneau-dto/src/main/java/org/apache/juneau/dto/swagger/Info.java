@@ -57,7 +57,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
@@ -235,7 +235,7 @@ public class Info extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link Contact}
 	 * 		<li><code>String</code> - JSON object representation of {@link Contact}
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
 	 * 			</p>
@@ -284,7 +284,7 @@ public class Info extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link License}
 	 * 		<li><code>String</code> - JSON object representation of {@link License}
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
 	 * 			</p>

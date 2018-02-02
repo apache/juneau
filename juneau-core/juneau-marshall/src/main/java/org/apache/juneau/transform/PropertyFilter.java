@@ -36,7 +36,7 @@ package org.apache.juneau.transform;
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
  * 			AddressBook a = (Address)bean;
- * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) && <js>"redacted"</js>.equals(value))
+ * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
  * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
  * 			<jk>return</jk> value;
  * 		}
@@ -123,7 +123,7 @@ public class PropertyFilter {
 	 * 
 	 * 		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
 	 * 			AddressBook a = (Address)bean;
-	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) && <js>"redacted"</js>.equals(value))
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
 	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
 	 * 			<jk>return</jk> value;
 	 * 		}

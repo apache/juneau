@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Authentication credentials for HTTP authentication.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * A user agent that wishes to authenticate itself with a server--usually, but not necessarily, after receiving a 401
  * response--does so by including an Authorization request-header field with the request.
@@ -63,7 +63,7 @@ package org.apache.juneau.http;
  * 		request.
  * </ol>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

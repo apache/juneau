@@ -53,7 +53,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
@@ -464,7 +464,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	scopes(<js>"{name:'value'}"</js>);
 	 * 			</p>

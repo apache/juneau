@@ -48,7 +48,7 @@ import org.apache.juneau.utils.*;
  * Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice 
  * jar file.
  * 
- * <h6 class='topic'>Microservice Configuration</h6>
+ * <h5 class='topic'>Microservice Configuration</h5>
  * 
  * This class defines the following method for accessing configuration for your microservice:
  * <ul class='spaced-list'>
@@ -60,7 +60,7 @@ import org.apache.juneau.utils.*;
  * 		{@link #getManifest()} - The manifest file for the main jar file.
  * </ul>
  * 
- * <h6 class='topic'>Entry point Method</h6>
+ * <h5 class='topic'>Entry point Method</h5>
  * 
  * Subclasses must implement a static void main method as the entry point for the microservice.
  * Typically, this method will simply consist of the following...
@@ -70,7 +70,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Lifecycle Methods</h6>
+ * <h5 class='topic'>Lifecycle Methods</h5>
  * 
  * Subclasses must implement the following lifecycle methods:
  * <ul class='spaced-list'>
@@ -82,7 +82,7 @@ import org.apache.juneau.utils.*;
  * 		{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  * </ul>
  * 
- * <h6 class='topic'>Lifecycle Listener Methods</h6>
+ * <h5 class='topic'>Lifecycle Listener Methods</h5>
  * 
  * Subclasses can optionally implement the following event listener methods:
  * <ul class='spaced-list'>
@@ -96,7 +96,7 @@ import org.apache.juneau.utils.*;
  * 		{@link #onConfigChange(ConfigFile, Set)} - Gets executed after a config file has been modified.
  * </ul>
  * 
- * <h6 class='topic'>Other Methods</h6>
+ * <h5 class='topic'>Other Methods</h5>
  * 
  * Subclasses can optionally override the following methods to provide customized behavior:
  * <ul class='spaced-list'>

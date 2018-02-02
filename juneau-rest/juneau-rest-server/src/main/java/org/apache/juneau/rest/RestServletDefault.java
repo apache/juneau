@@ -146,7 +146,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
  * 
- * <h6 class='section'>Notes:</h6>
+ * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		Provides a default HTML stylesheet by setting {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()}

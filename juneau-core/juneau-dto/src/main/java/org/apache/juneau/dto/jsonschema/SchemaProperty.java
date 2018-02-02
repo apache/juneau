@@ -15,7 +15,7 @@ package org.apache.juneau.dto.jsonschema;
 /**
  * Represents a JSON property in the JSON-Schema core specification.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

@@ -20,7 +20,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Represents the metadata about an annotated argument of a method on a remote proxy interface.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>

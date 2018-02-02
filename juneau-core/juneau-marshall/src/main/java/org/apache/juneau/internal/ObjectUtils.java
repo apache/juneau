@@ -73,42 +73,42 @@ import org.apache.juneau.transform.*;
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code ObjectList})
+ * 			<code>Collection</code> (e.g. <code>List</code>, <code>LinkedList</code>, <code>HashSet</code>, <code>ObjectList</code>)
  * 		</td>
  * 		<td>
- * 			{@code Collection<Object>}
- * 			<br>{@code Object[]}
+ * 			<code>Collection&lt;Object&gt;</code>
+ * 			<br><code>Object[]</code>
  * 		</td>
  * 		<td>
- * 			If {@code Collection} is not constructible, a {@code ObjectList} is created.
+ * 			If <code>Collection</code> is not constructible, a <code>ObjectList</code> is created.
  * 		</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			{@code X[]} (array of any type X)
+ * 			<code>X[]</code> (array of any type X)
  * 		</td>
  * 		<td>
- * 			{@code List<X>}
+ * 			<code>List&lt;X&gt;</code>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			{@code X[][]} (multi-dimensional arrays)
+ * 			<code>X[][]</code> (multi-dimensional arrays)
  * 		</td>
  * 		<td>
- * 			{@code List<List<X>>}
- * 			<br>{@code List<X[]>}
- * 			<br>{@code List[]<X>}
+ * 			<code>List&lt;List&lt;X&gt;&gt;</code>
+ * 			<br><code>List&lt;X[]&gt;</code>
+ * 			<br><code> List[]&lt;X&gt;</code>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			{@code Enum}
+ * 			<code>Enum</code>
  * 		</td>
  * 		<td>
- * 			{@code String}
+ * 			<code>String</code>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
@@ -117,13 +117,13 @@ import org.apache.juneau.transform.*;
  * 			Bean
  * 		</td>
  * 		<td>
- * 			{@code Map}
+ * 			<code>Map</code>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			{@code String}
+ * 			<code>String</code>
  * 		</td>
  * 		<td>
  * 			Anything

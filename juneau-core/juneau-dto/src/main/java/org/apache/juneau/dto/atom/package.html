@@ -131,7 +131,7 @@
 			To serialize this to ATOM, use the {@link org.apache.juneau.xml.XmlSerializer} class:
 		</p>
 		
-		<h6 class='figure'>Example with no namespaces</h6>
+		<h5 class='figure'>Example with no namespaces</h5>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
@@ -140,7 +140,7 @@
 	String atomXml = s.serialize(feed);
 		</p>
 		
-		<h6 class='figure'>Results</h6>
+		<h5 class='figure'>Results</h5>
 		<p class='bcode'>
 	<xt>&lt;feed&gt;</xt>
 		<xt>&lt;id&gt;</xt>
@@ -188,7 +188,7 @@
 			The following is the same, except with XML namespaces enabled:
 		</p>
 	
-		<h6 class='figure'>Example with namespaces</h6>
+		<h5 class='figure'>Example with namespaces</h5>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output with namespaces.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
@@ -197,7 +197,7 @@
 	String atomXml = s.serialize(feed);
 		</p>
 		
-		<h6 class='figure'>Results</h6>
+		<h5 class='figure'>Results</h5>
 		<p class='bcode'>
 	<xt>&lt;atom:feed</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
@@ -249,7 +249,7 @@
 			The following is the same, except with XML namespaces enabled and the ATOM namespace as the default namespace:
 		</p>
 
-		<h6 class='figure'>Example with namespaces with ATOM as the default namespace</h6>
+		<h5 class='figure'>Example with namespaces with ATOM as the default namespace</h5>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output with namespaces.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().defaultNamespaceUri(<js>"atom"</js>).build();
@@ -258,7 +258,7 @@
 	String atomXml = s.serialize(feed);
 		</p>
 		
-		<h6 class='figure'>Results</h6>
+		<h5 class='figure'>Results</h5>
 		<p class='bcode'>
 	<xt>&lt;feed</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2005/Atom/'</xs> 
@@ -314,7 +314,7 @@
 				The {@link org.apache.juneau.json.JsonSerializer} class can also be used to produce ATOM in JSON format.
 			</p>
 
-			<h6 class='figure'>ATOM/JSON example</h6>
+			<h5 class='figure'>ATOM/JSON example</h5>
 			<p class='bcode'>
 	<jc>// Get JSON serializer with readable output.</jc>
 	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
@@ -323,7 +323,7 @@
 	String atomJson = s.serialize(feed);
 			</p>
 		
-			<h6 class='figure'>Results</h6>
+			<h5 class='figure'>Results</h5>
 			<p class='bcode'>
 	{
 		id: {
@@ -413,7 +413,7 @@
 				in various RDF formats.
 			</p>
 
-			<h6 class='figure'>ATOM/RDF/XML example</h6>
+			<h5 class='figure'>ATOM/RDF/XML example</h5>
 			<p class='bcode'>
 	<jc>// Get RDF/XML serializer with readable output.</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
@@ -427,7 +427,7 @@
 	String atomRdfXml = s.serialize(feed);
 			</p>
 			
-			<h6 class='figure'>Results</h6>
+			<h5 class='figure'>Results</h5>
 			<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>'http://www.w3.org/1999/02/22-rdf-syntax-ns#'</xs>
@@ -536,7 +536,7 @@
 				The following is the output produced by the <code>AtomFeedResource</code> in the <code>org.apache.juneau.sample.war</code> project:
 			</p>
 			
-			<h6 class='figure'>Example ATOM/HTML results</h6>
+			<h5 class='figure'>Example ATOM/HTML results</h5>
 			<img class='bordered' src='doc-files/Example_HTML.png'>	
 		</div>
 	</div>

@@ -206,7 +206,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * Configuration property:  RDF language.
 	 * 
 	 * <p>
-	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
+	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -223,7 +223,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * Configuration property:  RDF language.
 	 * 
 	 * <p>
-	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
+	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -274,7 +274,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
+	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -310,7 +310,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
+	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -324,7 +324,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
+	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

@@ -164,7 +164,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_links</jsf>,
-	 * 				value=<js>"['<link rel=\"icon\" href=\"htdocs/mypageicon.ico\">']"</js>)
+	 * 				value=<js>"['&lt;link rel=\"icon\" href=\"htdocs/mypageicon.ico\"&gt;']"</js>)
 	 * 		}
 	 * 	)
 	 * </p>
@@ -175,7 +175,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			head={
-	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>
+	 * 				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
 	 * 			}
 	 * 		)
 	 * 	)

@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Gives the date/time after which the response is considered stale (in "HTTP-date" format as defined by RFC 7231).
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Expires: Thu, 01 Dec 1994 16:00:00 GMT
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Expires entity-header field gives the date/time after which the response is considered stale.
  * A stale cache entry may not normally be returned by a cache (either a proxy cache or a user agent cache) unless it is
@@ -71,7 +71,7 @@ package org.apache.juneau.http;
  * would by default be non-cacheable indicates that the response is cacheable, unless indicated otherwise by a
  * Cache-Control header field (section 14.9).
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

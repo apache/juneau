@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Ask the client to upgrade to another protocol.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Upgrade general-header allows the client to specify what additional communication protocols it supports and
  * would like to use if the server finds it appropriate to switch protocols.
@@ -73,7 +73,7 @@ package org.apache.juneau.http;
  * Any token can be used as a protocol name; however, it will only be useful if both the client and server associate
  * the name with the same protocol.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

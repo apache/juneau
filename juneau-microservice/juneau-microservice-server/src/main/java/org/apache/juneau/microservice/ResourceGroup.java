@@ -29,7 +29,7 @@ import org.apache.juneau.svl.vars.*;
  * 		<jk>$ARG{...}</jk> - Command line arguments.
  * 		<br>Resolves values from {@link Microservice#getArgs()}.
  * 		
- * 		<h6>Example:</h6>
+ * 		<h5>Example:</h5>
  * 		<p class='bcode'>
  * 	String firstArg = request.getVarResolver().resolve(<js>"$ARG{0}"</js>);  <jc>// First argument.</jc>
  * 	String namedArg = request.getVarResolver().resolve(<js>"$ARG{myarg}"</js>);  <jc>// Named argument (e.g. "myarg=foo"). </jc>
@@ -37,7 +37,7 @@ import org.apache.juneau.svl.vars.*;
  * 	<li>
  * 		<jk>$MF{...}</jk> - Manifest file entries.
  * 		
- * 		<h6>Example:</h6>
+ * 		<h5>Example:</h5>
  * 		<p class='bcode'>
  * 	String mainClass = request.getVarResolver().resolve(<js>"$MF{Main-Class}"</js>);  <jc>// Main class. </jc>
  * 		</p>

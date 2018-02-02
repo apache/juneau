@@ -122,7 +122,7 @@ public class RestClient extends BeanContext {
 	public static final String RESTCLIENT_executorService = PREFIX + "executorService.o";
 
 	/**
-	 * Configuration property:  Shut down executor service on close.</b>  
+	 * Configuration property:  Shut down executor service on close.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
@@ -168,7 +168,7 @@ public class RestClient extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor | RestCallInterceptor</code>&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor&gt; | RestCallInterceptor&gt;</code>
 	 * 	<li><b>Default:</b>  empty list.
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>

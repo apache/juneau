@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * The type of encoding used on the data.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Content-Encoding: gzip
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Content-Encoding entity-header field is used as a modifier to the media-type.
  * When present, its value indicates what additional content codings have been applied to the entity-body, and thus
@@ -60,7 +60,7 @@ package org.apache.juneau.http;
  * were applied.
  * Additional information about the encoding parameters MAY be provided.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

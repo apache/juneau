@@ -39,7 +39,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * This is a one-way transform, since {@code Readers} cannot be reconstituted.
  * 
- * <h6 class='topic'>Behavior-specific subclasses</h6>
+ * <h5 class='topic'>Behavior-specific subclasses</h5>
  * 
  * The following direct subclasses are provided for convenience:
  * <ul>

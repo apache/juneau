@@ -918,7 +918,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
 	 * 
-	 * <h6 class='figure'>Example config file</h6>
+	 * <h5 class='figure'>Example config file</h5>
 	 * <p class='bcode'>
 	 * 	<cs>[MyAddress]</cs>
 	 * 	<ck>name</ck> = <cv>John Smith</cv>
@@ -928,7 +928,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<ck>zip</ck> = <cv>12345</cv>
 	 * </p>
 	 * 
-	 * <h6 class='figure'>Example bean</h6>
+	 * <h5 class='figure'>Example bean</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> Address {
 	 * 		public String name, street, city;
@@ -937,7 +937,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h6 class='figure'>Example usage</h6>
+	 * <h5 class='figure'>Example usage</h5>
 	 * <p class='bcode'>
 	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
@@ -976,7 +976,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * Wraps a config file section inside a Java interface so that values in the section can be read and
 	 * write using getters and setters.
 	 * 
-	 * <h6 class='figure'>Example config file</h6>
+	 * <h5 class='figure'>Example config file</h5>
 	 * <p class='bcode'>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>string</ck> = <cv>foo</cv>
@@ -987,7 +987,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
 	 * </p>
 	 * 
-	 * <h6 class='figure'>Example interface</h6>
+	 * <h5 class='figure'>Example interface</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public interface</jk> MyConfigInterface {
 	 * 
@@ -1011,7 +1011,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h6 class='figure'>Example usage</h6>
+	 * <h5 class='figure'>Example usage</h5>
 	 * <p class='bcode'>
 	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	 * 

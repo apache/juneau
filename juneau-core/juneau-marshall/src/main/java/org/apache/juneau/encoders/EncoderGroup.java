@@ -28,7 +28,7 @@ import org.apache.juneau.http.*;
  * The {@link #getEncoderMatch(String)} and {@link #getEncoder(String)} methods are then used to find appropriate
  * encoders for specific <code>Accept-Encoding</code> and <code>Content-Encoding</code> header values.
  * 
- * <h6 class='topic'>Match ordering</h6>
+ * <h5 class='topic'>Match ordering</h5>
  * 
  * Encoders are matched against <code>Accept-Encoding</code> strings in the order they exist in this group.
  * 

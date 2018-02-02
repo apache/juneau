@@ -18,7 +18,7 @@ package org.apache.juneau.http;
  * <p>
  * Informs the client of proxies through which the response was sent.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
  * </p>
@@ -27,13 +27,13 @@ package org.apache.juneau.http;
  * Informs the client of proxies through which the response was sent.
  * 
  * <p>
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
  * </p>
  * 
  * <p>
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Via general-header field MUST be used by gateways and proxies to indicate the intermediate protocols and
  * recipients between the user agent and the server on requests, and between the origin server and the client on
@@ -109,7 +109,7 @@ package org.apache.juneau.http;
  * hosts have already been replaced by pseudonyms.
  * Applications MUST NOT combine entries which have different received-protocol values.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

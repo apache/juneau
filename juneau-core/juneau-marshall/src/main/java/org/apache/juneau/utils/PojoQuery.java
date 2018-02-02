@@ -90,7 +90,7 @@ import org.apache.juneau.internal.*;
  * If the objects being searched are not strings, then the patterns are matched against whatever is return by the
  * {@code Object#toString()} method.
  * 
- * <h6 class='topic'>Example string query patterns:</h6>
+ * <h5 class='topic'>Example string query patterns:</h5>
  * <ul>
  * 	<li><tt>foo</tt> - The string 'foo'
  * 	<li><tt>foo bar</tt> - The string 'foo' or the string 'bar'
@@ -114,7 +114,7 @@ import org.apache.juneau.internal.*;
  * 
  * Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.
  * 
- * <h6 class='topic'>Example numeric query patterns:</h6>
+ * <h5 class='topic'>Example numeric query patterns:</h5>
  * <ul>
  * 	<li><tt>123</tt> - The single number 123
  * 	<li><tt>1 2 3</tt>	- 1, 2, or 3
@@ -151,7 +151,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>yyyy</tt>
  * </ul>
  * 
- * <h6 class='topic'>Example date query patterns:</h6>
+ * <h5 class='topic'>Example date query patterns:</h5>
  * <ul>
  * 	<li><tt>2001</tt> - A specific year.
  * 	<li><tt>2001.01.01.10.50</tt> - A specific time.
@@ -172,7 +172,7 @@ import org.apache.juneau.internal.*;
  * The view capability allows you to return only the specified subset of columns in the specified order.
  * <br>The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
  * 
- * <h6 class='topic'>Example view parameters:</h6>
+ * <h5 class='topic'>Example view parameters:</h5>
  * <ul>
  * 	<li><tt>column1</tt> - Return only column 'column1'.
  * 	<li><tt>column2, column1</tt> - Return only columns 'column2' and 'column1' in that order.
@@ -184,7 +184,7 @@ import org.apache.juneau.internal.*;
  * <br>The sort parameter is a list of strings with an optional <js>'+'</js> or <js>'-'</js> suffix representing
  * ascending and descending order accordingly.
  * 
- * <h6 class='topic'>Example sort parameters:</h6>
+ * <h5 class='topic'>Example sort parameters:</h5>
  * <ul>
  * 	<li><tt>column1</tt> - Sort rows by column 'column1' ascending.
  * 	<li><tt>column1+</tt> - Sort rows by column 'column1' ascending.

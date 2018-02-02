@@ -61,7 +61,7 @@ import org.apache.juneau.serializer.*;
  * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
  * {@link BeanMap#put(String,Object)}.
  * 
- * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
+ * <h5 class='topic'>Swap Class Type {@code <S>}</h5>
  * 
  * <p>
  * The swapped object representation of an object must be an object type that the serializers can natively convert to
@@ -84,7 +84,7 @@ import org.apache.juneau.serializer.*;
  * 		An array of anything on this list.
  * </ul>
  * 
- * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
+ * <h5 class='topic'>Normal Class Type {@code <T>}</h5>
  * 
  * <p>
  * The normal object representation of an object.
@@ -148,7 +148,7 @@ public abstract class PojoSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap.mediaTypes()} annotation.
 	 * 
-	 * <h6 class='topic'>Documentation</h6>
+	 * <h5 class='topic'>Documentation</h5>
 	 * <ul>
 	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
 	 * </ul>
@@ -184,7 +184,7 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * Sets the media types that this swap is associated with.
 	 * 
-	 * <h6 class='topic'>Documentation</h6>
+	 * <h5 class='topic'>Documentation</h5>
 	 * <ul>
 	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
 	 * </ul>

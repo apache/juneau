@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
@@ -249,7 +249,7 @@ public class Xml extends SwaggerElement {
 	 * Signifies whether the array is wrapped (for example,
 	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
 	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
-	 * <br<The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
+	 * <br>The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
 	 * (outside the <code>items</code>).
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -268,7 +268,7 @@ public class Xml extends SwaggerElement {
 	 * Signifies whether the array is wrapped (for example,
 	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
 	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
-	 * <br<The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
+	 * <br>The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
 	 * (outside the <code>items</code>).
 	 * 
 	 * @param value

@@ -242,7 +242,7 @@ public class RequestBody {
 	/**
 	 * Returns the HTTP body content as a simple hexadecimal character string.
 	 * 
-	 * <h6 class='section'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	0123456789ABCDEF
 	 * </p>
@@ -259,7 +259,7 @@ public class RequestBody {
 	/**
 	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
 	 * 
-	 * <h6 class='section'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	01 23 45 67 89 AB CD EF
 	 * </p>

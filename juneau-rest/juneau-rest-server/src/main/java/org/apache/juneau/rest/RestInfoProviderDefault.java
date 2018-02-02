@@ -229,7 +229,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(summary=<js>"Summary of my method"</js>)
@@ -246,7 +246,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>[javaMethodName].summary</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#summary() @RestMethod.summary()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.summary</ck> = <cv>Summary of my method.</cv>
@@ -285,7 +285,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(description=<js>"Description of my method"</js>)
@@ -302,7 +302,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>[javaMethodName].description</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#description() @RestMethod.description()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.description</ck> = <cv>Description of my method.</cv>
@@ -341,7 +341,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link MethodSwagger#tags() @MethodSwagger.tags()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(
@@ -363,7 +363,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value can be a comma-delimited list or JSON array.
 	 * 		<br>Value can contain any SVL variables defined on the {@link MethodSwagger#tags() @MethodSwagger.tags()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Comma-delimited list</cc>
 	 * 	<ck>MyClass.myMethod.tags</ck> = <cv>foo, bar, baz</cv>
@@ -409,7 +409,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link MethodSwagger#externalDocs() @MethodSwagger.externalDocs()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(
@@ -431,7 +431,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value is a JSON representation of a {@link ExternalDocumentation} object.
 	 * 		<br>Value can contain any SVL variables defined on the {@link MethodSwagger#externalDocs() @MethodSwagger.externalDocs()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.externalDocs</ck> = <cv>{description:"Find more info here",url:"https://swagger.io"}</js>
@@ -471,7 +471,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * <ol class='spaced-list'>
 	 * 	<li>Operation information from swagger file.
 	 * 	<li>{@link MethodSwagger#parameters() @MethodSwagger.parameters()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(
@@ -501,7 +501,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value is a JSON representation of a <code>{@link ParameterInfo}[]</code> object.
 	 * 		<br>Value can contain any SVL variables defined on the {@link MethodSwagger#parameters() @MethodSwagger.parameters()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.parameters</ck> = <cv>[{name:"a",in:"path",description:"The ''a'' attribute"}]</cv>
@@ -596,7 +596,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * <ol class='spaced-list'>
 	 * 	<li>Operation information from swagger file.
 	 * 	<li>{@link MethodSwagger#responses() @MethodSwagger.responses()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(
@@ -638,7 +638,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value is a JSON representation of a <code>Map&lt;Integer,{@link ResponseInfo}&gt;</code> object.
 	 * 		<br>Value can contain any SVL variables defined on the {@link MethodSwagger#responses() @MethodSwagger.responses()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.responses</ck> = <cv>{302:{description:'Thing wasn''t found here',headers={Location:{description:"The place to find the thing"}}}</cv>
@@ -720,7 +720,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestMethod#produces() @RestMethod.supportedAcceptTypes()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(supportedAcceptTypes={<js>"text/json"</js>})
@@ -755,7 +755,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestMethod#consumes() @RestMethod.supportedContentTypes()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(supportedContentTypes={<js>"text/json"</js>})
@@ -790,7 +790,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following location:
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link MethodSwagger#deprecated() @MethodSwagger.deprecated()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
@@ -820,7 +820,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestResource#siteName() @RestResource.siteName()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(siteName=<js>"My Site"</js>)
@@ -837,7 +837,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>siteName</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#siteName() @RestResource.siteName()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.siteName</ck> = <cv>My Site</cv>
@@ -872,7 +872,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestResource#title() @RestResource.siteName()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(title=<js>"My Resource"</js>)
@@ -889,7 +889,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>title</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#title() @RestResource.title()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.title</ck> = <cv>My Resource</cv>
@@ -928,7 +928,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(description=<js>"My Resource"</js>)
@@ -945,7 +945,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>description</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#description() @RestResource.description()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.description</ck> = <cv>My Resource</cv>
@@ -984,7 +984,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link ResourceSwagger#contact() @ResourceSwagger.contact()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(
@@ -1005,7 +1005,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>contact</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link ResourceSwagger#contact() @ResourceSwagger.contact()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.contact</ck> = <cv>{name:"John Smith",email:"john.smith@foo.bar"}</cv>
@@ -1049,7 +1049,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link ResourceSwagger#license() @ResourceSwagger.license()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(
@@ -1070,7 +1070,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>license</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link ResourceSwagger#license() @ResourceSwagger.license()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.license</ck> = <cv>{name:"Apache 2.0",url:"http://www.apache.org/licenses/LICENSE-2.0.html"}</cv>
@@ -1114,7 +1114,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link ResourceSwagger#termsOfService() @ResourceSwagger.termsOfService()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(
@@ -1135,7 +1135,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>termsOfService</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link ResourceSwagger#termsOfService() @ResourceSwagger.termsOfService()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.termsOfService</ck> = <cv>You''re on your own</cv>
@@ -1174,7 +1174,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(
@@ -1195,7 +1195,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>version</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link ResourceSwagger#version() @ResourceSwagger.version()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.version</ck> = <cv>2.0</cv>
@@ -1230,7 +1230,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(
@@ -1251,7 +1251,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 			<li><ck>version</ck>
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link ResourceSwagger#version() @ResourceSwagger.version()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.version</ck> = <cv>2.0</cv>
@@ -1295,7 +1295,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link ResourceSwagger#tags() @ResourceSwagger.tags()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(
@@ -1317,7 +1317,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value is either a comma-delimited list or a JSON array.
 	 * 		<br>Value can contain any SVL variables defined on the {@link ResourceSwagger#tags() @ResourceSwagger.tags()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Comma-delimited list</cc>
 	 * 	<ck>MyClass.tags</ck> = <cv>foo,bar,baz</cv>
@@ -1364,7 +1364,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link ResourceSwagger#externalDocs() @ResourceSwagger.externalDocs()} annotation on this class, and then any parent classes.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(
@@ -1386,7 +1386,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value is a JSON objec representation of a {@link ExternalDocumentation} object.
 	 * 		<br>Value can contain any SVL variables defined on the {@link ResourceSwagger#externalDocs() @ResourceSwagger.externalDocs()} annotation.
-	 * 		<h6 class='figure'>Examples:</h6>
+	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.externalDocs</ck> = <cv>{url:"http://juneau.apache.org"}</cv>

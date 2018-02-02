@@ -15,7 +15,7 @@ package org.apache.juneau.http;
 /**
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'>
  * 		<a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
@@ -24,28 +24,28 @@ package org.apache.juneau.http;
  */
 public final class HttpMethodName {
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2'>OPTIONS</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2" class="doclink">OPTIONS</a> */
 	public static final String OPTIONS = "OPTIONS";
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3'>GET</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" class="doclink">GET</a> */
 	public static final String GET = "GET";
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4'>HEAD</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4" class="doclink">HEAD</a> */
 	public static final String HEAD = "HEAD";
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5'>POST</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5" class="doclink">POST</a> */
 	public static final String POST = "POST";
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6'>PUT</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6" class="doclink">PUT</a> */
 	public static final String PUT = "PUT";
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7'>DELETE</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7" class="doclink">DELETE</a> */
 	public static final String DELETE = "DELETE";
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8'>TRACE</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8" class="doclink">TRACE</a> */
 	public static final String TRACE = "TRACE";
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9'>CONNECT</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9" class="doclink">CONNECT</a> */
 	public static final String CONNECT = "CONNECT";
 
 	/** Special case for a REST method that implements a proxy interface. */

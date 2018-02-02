@@ -136,7 +136,7 @@
 		namespaces and fine-tuning the format of the XML produced.
 	</p>
 	
-	<h6 class='topic'>Prerequisites</h6>
+	<h5 class='topic'>Prerequisites</h5>
 	<p>
 		The Juneau XML serialization and parsing support does not require any external prerequisites.  
 		It only requires Java 1.6 or above.
@@ -161,10 +161,10 @@
 			in the various supported XML formats:
 		</p>
 		
-		<h6 class='figure'>Normal XML</h6>
+		<h5 class='figure'>Normal XML</h5>
 		<img class='bordered' src="doc-files/Example_XML.png">
 		
-		<h6 class='figure'>Simplified XML</h6>
+		<h5 class='figure'>Simplified XML</h5>
 		<img class='bordered' src="doc-files/Example_XMLSimple.png">
 
 		<p>
@@ -172,7 +172,7 @@
 			XML Schema, with support for multiple namespaces.
 		</p>
 		
-		<h6 class='figure'>XML Schema</h6>
+		<h5 class='figure'>XML Schema</h5>
 		<img class='bordered' src="doc-files/Example_XMLSchema.png">
 	</div>
 </div>
@@ -226,7 +226,7 @@
 		Refer to the package-level Javadocs for more information about those formats.
 	</p>
 	
-	<h6 class='topic'>Notes about examples</h6>
+	<h5 class='topic'>Notes about examples</h5>
 	<p>
 		The examples shown in this document will use single-quote, readable settings.
 		<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
@@ -314,7 +314,7 @@
 			They mirror how the data structures are represented in JSON.
 		</p>
 		
-		<h6 class='topic'>Simple types</h6>
+		<h5 class='topic'>Simple types</h5>
 		<p>
 			The representation of loose (not a direct bean property value) simple types are shown below:
 		</p>
@@ -351,7 +351,7 @@
 			</tr>
 		</table>
 		
-		<h6 class='topic'>Maps</h6>
+		<h5 class='topic'>Maps</h5>
 		<p>
 			Loose maps and beans use the element <xt>&lt;object&gt;</xt> for encapsulation.
 		</p>
@@ -426,7 +426,7 @@
 			</tr>
 		</table>
 		
-		<h6 class='topic'>Arrays</h6>
+		<h5 class='topic'>Arrays</h5>
 		<p>
 			Loose collections and arrays use the element <xt>&lt;array&gt;</xt> for encapsulation.
 		</p>
@@ -606,7 +606,7 @@
 			</tr>
 		</table>
 
-		<h6 class='topic'>Beans</h6>
+		<h5 class='topic'>Beans</h5>
 		<table class='styled' style='width:auto'>
 			<tr>
 				<th>Data type</th>
@@ -661,7 +661,7 @@
 			</tr>
 		</table>
 		
-		<h6 class='topic'>Beans with Map properties</h6>
+		<h5 class='topic'>Beans with Map properties</h5>
 		<table class='styled' style='width:auto'>
 			<tr>
 				<th>Data type</th>
@@ -739,7 +739,7 @@
 					cannot automatically be inferred through reflection.
 			</ol>
 			
-			<h6 class='figure'>Example</h6>
+			<h5 class='figure'>Example</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Data type</th>
@@ -784,7 +784,7 @@
 				'b' is of type <code>Object</code> and therefore the bean class cannot be inferred.
 			</p>
 			
-			<h6 class='figure'>Example</h6>
+			<h5 class='figure'>Example</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Java</th>
@@ -846,7 +846,7 @@
 				Pay special attention to when <xa>_type</xa> attributes are and are not used.
 			</p>
 			
-			<h6 class='figure'>Examples</h6>
+			<h5 class='figure'>Examples</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Java</th>
@@ -1217,7 +1217,7 @@
 				specify the name of XML child elements for bean properties of type collection or array.
 			</p>
 			
-			<h6 class='figure'>Example</h6>
+			<h5 class='figure'>Example</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Data type</th>
@@ -1314,7 +1314,7 @@
 				<br>Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
 			</p>
 			
-			<h6 class='figure'>Example</h6>
+			<h5 class='figure'>Example</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Data type</th>
@@ -1349,7 +1349,7 @@
 				force all bean properties to be serialized as XML attributes instead of child elements.
 			</p>
 			
-			<h6 class='figure'>Example</h6>
+			<h5 class='figure'>Example</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Data type</th>
@@ -1388,7 +1388,7 @@
 				class.
 			</p>
 			
-			<h6 class='figure'>Example</h6>
+			<h5 class='figure'>Example</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Data type</th>
@@ -1432,7 +1432,7 @@
 				properties, but there must not be an overlap in bean property names and map keys. 
 			</p>
 			
-			<h6 class='figure'>Example</h6>
+			<h5 class='figure'>Example</h5>
 			<table class='styled' style='width:auto'>
 				<tr>
 					<th>Data type</th>
@@ -2262,7 +2262,7 @@
 			It converts bean property names to lowercase-dashed format.
 		</p>
 		
-		<h6 class='figure'>Example</h6>
+		<h5 class='figure'>Example</h5>
 		<p class='bcode'>	
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
 	<ja>@Bean</ja>(typeName=<js>"person"</js>,propertyNamer=PropertyNamerDLC.<jk>class</jk>)
@@ -2270,7 +2270,7 @@
 		...
 		</p>
 		
-		<h6 class='figure'>Results</h6>
+		<h5 class='figure'>Results</h5>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
@@ -2466,7 +2466,7 @@
 	String xmlSchema = ss.serialize(p);
 		</p>
 		
-		<h6 class='figure'>XML results</h6>
+		<h5 class='figure'>XML results</h5>
 		<p class='bcode'>
 	<xt>&lt;person</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
@@ -2489,7 +2489,7 @@
 	<xt>&lt;/person&gt;</xt>				
 		</p>
 		
-		<h6 class='figure'>XML-Schema results</h6>
+		<h5 class='figure'>XML-Schema results</h5>
 		<p class='bcode'>
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
@@ -2554,7 +2554,7 @@
 	}
 		</p>
 		
-		<h6 class='figure'>XML results</h6>
+		<h5 class='figure'>XML results</h5>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
@@ -2583,7 +2583,7 @@
 			The schema consists of 4 documents separated by a <js>'\u0000'</js> character.
 		</p>
 		
-		<h6 class='figure'>XML-Schema results</h6>
+		<h5 class='figure'>XML-Schema results</h5>
 		<p class='bcode'>
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 

@@ -1169,7 +1169,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This returns <jk>null</jk? when evaluating servlet-level guards since the method has not been resolved at that
+	 * 		This returns <jk>null</jk> when evaluating servlet-level guards since the method has not been resolved at that
 	 * 		point of execution.
 	 * </ul>
 	 * 

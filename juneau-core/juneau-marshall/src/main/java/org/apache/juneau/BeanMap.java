@@ -34,7 +34,7 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * Use the {@link BeanContext} class to create instances of this class.
  * 
- * <h6 class='topic'>Bean property order</h6>
+ * <h5 class='topic'>Bean property order</h5>
  * 
  * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()}
  * methods are as follows:
@@ -50,7 +50,7 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * <br>The order can also be overridden through the use of a {@link BeanFilter}.
  * 
- * <h6 class='topic'>POJO swaps</h6>
+ * <h5 class='topic'>POJO swaps</h5>
  * 
  * If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties
  * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the

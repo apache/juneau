@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Represents valid HTTP 1.1 method names per the RFC 2616 spec.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
@@ -28,28 +28,28 @@ import java.util.*;
  */
 public enum HttpMethod {
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2'>OPTIONS</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2" class="doclink">OPTIONS</a> */
 	OPTIONS,
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3'>GET</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" class="doclink">GET</a> */
 	GET,
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4'>HEAD</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4" class="doclink">HEAD</a> */
 	HEAD,
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5'>POST</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5" class="doclink">POST</a> */
 	POST,
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6'>PUT</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6" class="doclink">PUT</a> */
 	PUT,
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7'>DELETE</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7" class="doclink">DELETE</a> */
 	DELETE,
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8'>TRACE</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8" class="doclink">TRACE</a> */
 	TRACE,
 
-	/** <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9'>CONNECT</a> */
+	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9" class="doclink">CONNECT</a> */
 	CONNECT,
 
 	/** A non-standard value. */

@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Implementation-specific fields that may have various effects anywhere along the request-response chain.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Pragma: no-cache
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Pragma general-header field is used to include implementation- specific directives that might apply to any
  * recipient along the request/response chain.
@@ -58,7 +58,7 @@ package org.apache.juneau.http;
  * Note: because the meaning of "Pragma: no-cache as a response header field is not actually specified, it does not
  * provide a reliable replacement for "Cache-Control: no-cache" in a response.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

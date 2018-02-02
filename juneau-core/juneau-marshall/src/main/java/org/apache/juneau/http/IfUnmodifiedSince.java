@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Only send the response if the entity has not been modified since a specific time.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The If-Unmodified-Since request-header field is used with a method to make it conditional.
  * If the requested resource has not been modified since the time specified in this field, the server SHOULD perform the
@@ -54,7 +54,7 @@ package org.apache.juneau.http;
  * The result of a request having both an If-Unmodified-Since header field and either an If-None-Match or an
  * If-Modified-Since header fields is undefined by this specification.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

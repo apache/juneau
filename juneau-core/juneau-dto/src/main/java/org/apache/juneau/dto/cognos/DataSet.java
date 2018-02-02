@@ -55,7 +55,6 @@ import org.apache.juneau.xml.annotation.*;
  * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of
  * <code>LinkedList&lt;Person&gt;</code>.
  * The code for generating the XML is as follows...
- * </p>
  * <p class='bcode'>
  * 	Column[] items = {
  * 		<jk>new</jk> Column(<js>"name"</js>, <js>"xs:String"</js>, 255),

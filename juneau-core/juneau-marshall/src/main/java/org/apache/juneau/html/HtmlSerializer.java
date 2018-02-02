@@ -52,7 +52,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  * 
- * <h6 class='topic'>Behavior-specific subclasses</h6>
+ * <h5 class='topic'>Behavior-specific subclasses</h5>
  * 
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>

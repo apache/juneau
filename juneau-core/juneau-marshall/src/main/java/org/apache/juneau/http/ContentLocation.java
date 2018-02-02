@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * An alternate location for the returned data.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Content-Location: /index.htm
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Content-Location entity-header field MAY be used to supply the resource location for the entity enclosed in the
  * message when that entity is accessible from a location separate from the requested resource's URI.
@@ -58,7 +58,7 @@ package org.apache.juneau.http;
  * The meaning of the Content-Location header in PUT or POST requests is undefined; servers are free to ignore it in
  * those cases.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

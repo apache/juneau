@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Authorization credentials for connecting to a proxy.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Proxy-Authorization request-header field allows the client to identify itself (or its user) to a proxy which
  * requires authentication.
@@ -43,7 +43,7 @@ package org.apache.juneau.http;
  * A proxy MAY relay the credentials from the client request to the next proxy if that is the mechanism by which the
  * proxies cooperatively authenticate a given request.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * The length of the response body in octets (8-bit bytes).
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Content-Length: 348
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Content-Length entity-header field indicates the size of the entity-body, in decimal number of OCTETs, sent to
  * the recipient or, in the case of the HEAD method, the size of the entity-body that would have been sent had the
@@ -52,7 +52,7 @@ package org.apache.juneau.http;
  * In HTTP, it SHOULD be sent whenever the message's length can be determined prior to being transferred, unless this is
  * prohibited by the rules in section 4.4.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

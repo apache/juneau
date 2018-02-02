@@ -55,7 +55,7 @@ import org.apache.juneau.transform.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.ConfigurableProperties">Overview &gt; Configurable Properties</a>
+ * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.ConfigurableProperties">Overview &gt; Configurable Properties</a>
  * </ul>
  */
 public class BeanContextBuilder extends ContextBuilder {
@@ -1300,7 +1300,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * 
-	 * <h5 class 'section'>Notes:</h5>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Most {@link Bean @Bean} annotations will be ignored if you enable this setting.
 	 * </ul>

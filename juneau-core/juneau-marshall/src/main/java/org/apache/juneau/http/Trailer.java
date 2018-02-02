@@ -19,12 +19,12 @@ package org.apache.juneau.http;
  * The Trailer general field value indicates that the given set of header fields is present in the trailer of a message
  * encoded with chunked transfer coding.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Trailer: Max-Forwards
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Trailer general field value indicates that the given set of header fields is present in the trailer of a message
  * encoded with chunked transfer-coding.
@@ -50,7 +50,7 @@ package org.apache.juneau.http;
  * 	<li>Trailer
  * </ul>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

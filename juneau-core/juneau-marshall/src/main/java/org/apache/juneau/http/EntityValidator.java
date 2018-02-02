@@ -16,13 +16,13 @@ package org.apache.juneau.http;
  * Represents a validator value.
  * 
  * <p>
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	ETag: "123456789"    – A strong ETag validator
  * 	ETag: W/"123456789"  – A weak ETag validator
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

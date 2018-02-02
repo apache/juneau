@@ -50,7 +50,7 @@ import org.apache.juneau.serializer.*;
  * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource.converters()} annotation.
  * <br>Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  * 
- * <h6 class='topic'>How to implement</h6>
+ * <h5 class='topic'>How to implement</h5>
  * 
  * Implementers should simply implement the {@link #convert(RestRequest, Object)} and return back a 'converted' object.
  * <br>It's up to the implementer to decide what this means.

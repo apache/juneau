@@ -33,7 +33,7 @@ import org.apache.juneau.http.*;
  * 		Clones existing groups and all serializers within the group in a single method call.
  * </ul>
  * 
- * <h6 class='topic'>Match ordering</h6>
+ * <h5 class='topic'>Match ordering</h5>
  * 
  * Serializers are matched against <code>Accept</code> strings in the order they exist in this group.
  * 

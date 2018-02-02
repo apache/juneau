@@ -43,7 +43,7 @@ public class UrlEncodingParser extends UonParser {
 	private static final String PREFIX = "UrlEncodingParser.";
 
 	/**
-	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs
+	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>

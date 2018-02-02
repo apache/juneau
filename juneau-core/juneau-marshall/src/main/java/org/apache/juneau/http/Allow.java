@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Valid methods for a specified resource. To be used for a 405 Method not allowed.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Allow: GET, HEAD
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Allow entity-header field lists the set of methods supported by the resource identified by the Request-URI.
  * The purpose of this field is strictly to inform the recipient of valid methods associated with the resource.
@@ -59,7 +59,7 @@ package org.apache.juneau.http;
  * user agent might
  * have other means of communicating with the origin server.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

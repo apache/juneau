@@ -22,12 +22,12 @@ import org.apache.juneau.internal.*;
  * <p>
  * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	If-Range: "737060cd8c284d8af7ad3082f209582d"
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * If a client has a partial copy of an entity in its cache, and wishes to have an up-to-date copy of the entire entity
  * in its cache, it could use the Range request-header with a conditional GET (using either or both of
@@ -56,7 +56,7 @@ import org.apache.juneau.internal.*;
  * provide the specified sub-range of the entity using a 206 (Partial content) response.
  * If the entity tag does not match, then the server SHOULD return the entire entity using a 200 (OK) response.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

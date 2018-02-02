@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Used in redirection, or when a new resource has been created.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Location response-header field is used to redirect the recipient to a location other than the Request-URI for
  * completion of the request or identification of a new resource.
@@ -47,7 +47,7 @@ package org.apache.juneau.http;
  * It is therefore possible for a response to contain header fields for both Location and Content-Location.
  * Also see section 13.10 for cache requirements of some methods.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

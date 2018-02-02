@@ -248,7 +248,7 @@
 			<code>$C{key}</code>, <code>$C{key,default}</code> - Values in this configuration file.
 	</ul>
 	
-	<h6 class='topic'>Examples:</h6>
+	<h5 class='topic'>Examples:</h5>
 	<p class='bcode'>
 	<cc>#--------------------------</cc>
 	<cc># Examples </cc>
@@ -336,7 +336,7 @@
 			{@link org.apache.juneau.ini.EntryListener} - An individual entry is modified.
 	</ul>
 	
-	<h6 class="topic">Example:</h6>
+	<h5 class="topic">Example:</h5>
 	<p class='bcode'>
 	<jc>// Get our config file using the default config manager</jc>
 	ConfigFile f = ConfigFile.<jsm>create</jsm>().build(<js>"C:/temp/MyConfig.cfg"</js>);
@@ -588,7 +588,7 @@
 		 * <ja>@return</ja> The config file.  
 		 * <ja>@throws</ja> Exception 
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jfs>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>)
 		<jk>public</jk> ConfigFile getConfigContents() <jk>throws</jk> Exception {
 			<jk>return</jk> getConfig();
 		}

@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * Indicates that particular server behaviors are required by the client.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Expect: 100-continue
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
  * <p class='bcode'>
@@ -60,7 +60,7 @@ package org.apache.juneau.http;
  * <p>
  * See section 8.2.3 for the use of the 100 (continue) status.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

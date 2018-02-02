@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Identical to {@link Header @Header} except skips values if they're null/blank.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>

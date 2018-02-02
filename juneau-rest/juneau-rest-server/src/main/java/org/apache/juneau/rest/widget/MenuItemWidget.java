@@ -33,8 +33,9 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Subclasses should implement the following two methods:
  * <ul>
- * 	<li>{@link #getLabel(RestRequest)} - The menu item label.
- * 	<li>{@link #getContent(RestRequest)} - The menu item content.
+ * 	<li class='jm'>{@link #getLabel(RestRequest)} - The menu item label.
+ * 	<li class='jm'>{@link #getContent(RestRequest)} - The menu item content.
+ * </ul>
  * 
  * <p>
  * For example, to render a link that brings up a simple dialog in a div tag:

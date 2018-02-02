@@ -50,9 +50,6 @@ public class CsvParser extends ReaderParser {
 	 * Instantiates a new clean-slate {@link CsvParserBuilder} object.
 	 * 
 	 * <p>
-	 * This is equivalent to simply calling <code>CsvParser.create()
-	 * 
-	 * <p>
 	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
 	 * the settings of the object called on.
 	 * 

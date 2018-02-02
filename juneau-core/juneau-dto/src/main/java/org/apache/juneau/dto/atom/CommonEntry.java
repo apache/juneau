@@ -22,9 +22,9 @@ import org.apache.juneau.transforms.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Parent class of {@link Entry}, {@link Feed}, and {@link Source}
+ * Parent class of {@link Entry}, {@link Feed}, and {@link Source}.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

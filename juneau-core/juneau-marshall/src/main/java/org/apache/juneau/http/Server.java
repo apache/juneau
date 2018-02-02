@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * A name for the server.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Server: Apache/2.4.1 (Unix)
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Server response-header field contains information about the software used by the origin server to handle the
  * request.
@@ -50,7 +50,7 @@ package org.apache.juneau.http;
  * to attacks against software that is known to contain security holes.
  * Server implementors are encouraged to make this field a configurable option.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

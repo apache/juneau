@@ -20,12 +20,12 @@ package org.apache.juneau.http;
  * This is mainly for methods like PUT to only update a resource if it has not been modified since the user last
  * updated it.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The If-Match request-header field is used with a method to make it conditional.
  * A client that has one or more entities previously obtained from the resource can verify that one of those entities
@@ -82,7 +82,7 @@ package org.apache.juneau.http;
  * The result of a request having both an If-Match header field and either an If-None-Match or an If-Modified-Since
  * header fields is undefined by this specification.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

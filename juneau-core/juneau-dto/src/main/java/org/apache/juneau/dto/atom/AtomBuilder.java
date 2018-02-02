@@ -37,7 +37,7 @@ import org.apache.juneau.*;
  * 		);
  * </p>
  * 
- * <h6 class='section'>See Also:</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

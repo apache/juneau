@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * An example of a type range is a value in an <code>Accept-Encoding</code> header.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

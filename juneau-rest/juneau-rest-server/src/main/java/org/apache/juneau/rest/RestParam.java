@@ -36,7 +36,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * By default, the following parameter types can be passed into Java methods in any order:
  * 
- * <h6 class='topic'>Standard top-level objects</h6>
+ * <h5 class='topic'>Standard top-level objects</h5>
  * <ul>
  * 	<li><b>Standard top-level objects</b>
  * 	<ul>

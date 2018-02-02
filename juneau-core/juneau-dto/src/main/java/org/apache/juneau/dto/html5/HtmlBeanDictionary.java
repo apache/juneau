@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Defines the Java classes that make up the HTML DTO type dictionary.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * The email address of the user making the request.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	From: user@example.com
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The From request-header field, if given, SHOULD contain an Internet e-mail address for the human user who controls
  * the requesting user agent.
@@ -58,7 +58,7 @@ package org.apache.juneau.http;
  * It is strongly recommended that the user be able to disable, enable, and modify the value of this field at any time
  * prior to a request.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

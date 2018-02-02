@@ -19,7 +19,7 @@ import org.apache.juneau.xml.annotation.*;
  * A subclass of HTML elements that contain <a href="https://www.w3.org/TR/html51/syntax.html#raw-text">raw text</a>
  * only.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

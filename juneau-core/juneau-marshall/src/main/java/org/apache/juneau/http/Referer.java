@@ -20,12 +20,12 @@ package org.apache.juneau.http;
  * (The word “referrer” has been misspelled in the RFC as well as in most implementations to the point that it has
  * become standard usage and is considered correct terminology)
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Referer: http://en.wikipedia.org/wiki/Main_Page
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Referer[sic] request-header field allows the client to specify, for the server's benefit, the address (URI) of
  * the resource from which the Request-URI was obtained (the "referrer", although the header field is misspelled.)
@@ -49,7 +49,7 @@ package org.apache.juneau.http;
  * If the field value is a relative URI, it SHOULD be interpreted relative to the Request-URI.
  * The URI MUST NOT include a fragment. See section 15.1.3 for security considerations.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

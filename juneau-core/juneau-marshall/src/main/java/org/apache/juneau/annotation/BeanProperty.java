@@ -48,7 +48,7 @@ public @interface BeanProperty {
 	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
 	 * identified as a property.
 	 * 
-	 * <h6 class='topic'>Dynamic beans</h6>
+	 * <h5 class='topic'>Dynamic beans</h5>
 	 * <p>
 	 * The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 	 * properties not otherwise defined.

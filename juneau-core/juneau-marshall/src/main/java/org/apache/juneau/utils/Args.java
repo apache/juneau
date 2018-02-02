@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The format of an optional argument is <js>"-argName [zero or more tokens]"</js>.
  * 
- * <h6 class='topic'>Command-line examples</h6>
+ * <h5 class='topic'>Command-line examples</h5>
  * <ul>
  * 	<li><code>java com.sample.MyClass mainArg1</code>
  * 	<li><code>java com.sample.MyClass mainArg1 mainArg2</code>

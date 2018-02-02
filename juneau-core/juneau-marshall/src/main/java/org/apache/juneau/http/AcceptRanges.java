@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * What partial content range types this server supports via byte serving.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Accept-Ranges: bytes
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Accept-Ranges response-header field allows the server to indicate its acceptance of range requests for a
  * resource:
@@ -54,7 +54,7 @@ package org.apache.juneau.http;
  * <p>
  * ...to advise the client not to attempt a range request.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

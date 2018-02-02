@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Represents an <code>atomContent</code> construct in the RFC4287 specification.
  * 
- * <h6 class='figure'>Schema</h6>
+ * <h5 class='figure'>Schema</h5>
  * <p class='bcode'>
  * 	atomContent = atomInlineTextContent
  * 		| atomInlineXHTMLContent
@@ -62,7 +62,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

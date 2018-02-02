@@ -107,7 +107,7 @@ import org.apache.juneau.urlencoding.*;
  * 	<ja>@Path</ja>(<js>"foo"</js>)
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
@@ -138,7 +138,7 @@ public @interface Path {
 	 * 		If the data type is <code>NameValuePairs</code>, <code>Map</code>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be treated as name/value pairs.
 	 * 
-	 * 		<h6 class='figure'>Example:</h6>
+	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
@@ -161,7 +161,7 @@ public @interface Path {
 	 * 	<li>
 	 * 		If used on a request bean method, uses the bean property name.
 	 * 
-	 * 		<h6 class='figure'>Example:</h6>
+	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jk>public interface</jk> MyRequestBean {
 	 * 

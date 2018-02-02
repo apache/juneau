@@ -34,7 +34,7 @@ public interface HttpPartParser {
 	/**
 	 * Represent "no" part parser.
 	 * 
-	 * <li>
+	 * <p>
 	 * Used to represent the absence of a part parser in annotations.
 	 */
 	public static interface Null extends HttpPartParser {}

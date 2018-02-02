@@ -100,7 +100,7 @@ import org.apache.juneau.serializer.*;
  * If an attribute name contains any non-valid XML element characters, they will be escaped using standard
  * {@code _x####_} notation.
  * 
- * <h6 class='topic'>Behavior-specific subclasses</h6>
+ * <h5 class='topic'>Behavior-specific subclasses</h5>
  * 
  * The following direct subclasses are provided for convenience:
  * <ul>

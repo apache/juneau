@@ -23,7 +23,7 @@ import org.apache.juneau.xml.*;
 /**
  * Parses RDF into POJOs.
  * 
- * <h6 class='topic'>Behavior-specific subclasses</h6>
+ * <h5 class='topic'>Behavior-specific subclasses</h5>
  * 
  * The following direct subclasses are provided for language-specific parsers:
  * <ul class='spaced-list'>

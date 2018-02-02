@@ -28,7 +28,7 @@ import org.apache.juneau.transform.*;
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

@@ -21,8 +21,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Transforms an SQL {@link ResultSet ResultSet} into a list of maps.
- * <
- * p>
+ * <p>
  * Loads the entire result set into an in-memory data structure, and then closes the result set object.
  */
 public final class ResultSetList extends LinkedList<Map<String,Object>> {

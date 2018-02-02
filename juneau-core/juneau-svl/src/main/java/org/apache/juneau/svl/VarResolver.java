@@ -53,7 +53,7 @@ import org.apache.juneau.svl.vars.*;
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"java.home is set to $S{java.home}"</js>));
  * </p>
  * 
- * <h6 class='topic'>Context objects</h6>
+ * <h5 class='topic'>Context objects</h5>
  * 
  * Var resolvers can have zero or more context objects associated with them.
  * 
@@ -65,7 +65,7 @@ import org.apache.juneau.svl.vars.*;
  * Context objects can be retrieved by {@link Var} classes through the
  * {@link VarResolverSession#getSessionObject(Class, String)} method.
  * 
- * <h6 class='topic'>Session objects</h6>
+ * <h5 class='topic'>Session objects</h5>
  * 
  * Session objects are considered more ephemeral than context objects.
  * While a context object is unlikely to ever change, a session object may change on every use of the var resolver.

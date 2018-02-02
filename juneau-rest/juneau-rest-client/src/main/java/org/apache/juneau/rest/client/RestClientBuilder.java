@@ -1750,7 +1750,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * TODO
+	 * Configuration property:  Parameter format.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1765,7 +1765,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * TODO
+	 * Configuration property:  Parameter format.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

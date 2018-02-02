@@ -25,7 +25,7 @@ import org.apache.juneau.utils.*;
 /**
  * Transforms {@link Date Dates} to {@link String Strings}.
  * 
- * <h6 class='topic'>Behavior-specific subclasses</h6>
+ * <h5 class='topic'>Behavior-specific subclasses</h5>
  * 
  * The following direct subclasses are provided for convenience to the following formats:
  * <ul>
@@ -86,7 +86,7 @@ public class DateSwap extends StringSwap<Date> {
 	 * 	<li><js>"2001-07-04T15:30:45Z"</js>
 	 * </ul>
 	 * 
-	 * <h6 class='topic'>Example input:</h6>
+	 * <h5 class='topic'>Example input:</h5>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
 	 * 	<li><js>"2001-07-04T15:30:45Z"</js>
@@ -118,7 +118,7 @@ public class DateSwap extends StringSwap<Date> {
 	 * 	<li><js>"2001-07-04T15:30:45"</js>
 	 * </ul>
 	 * 
-	 * <h6 class='topic'>Example input:</h6>
+	 * <h5 class='topic'>Example input:</h5>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45"</js>
 	 * 	<li><js>"2001-07-04T15:30:45.1"</js>

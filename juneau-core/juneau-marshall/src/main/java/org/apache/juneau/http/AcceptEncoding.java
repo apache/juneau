@@ -22,12 +22,12 @@ import org.apache.juneau.internal.*;
  * <p>
  * List of acceptable encodings.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Accept-Encoding: gzip, deflate
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Accept-Encoding request-header field is similar to Accept, but restricts the content-codings (section 3.5) that
  * are acceptable in the response.
@@ -85,7 +85,7 @@ import org.apache.juneau.internal.*;
  * Note: Most HTTP/1.0 applications do not recognize or obey qvalues associated with content-codings.
  * This means that qvalues will not work and are not permitted with x-gzip or x-compress.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

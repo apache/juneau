@@ -332,7 +332,7 @@ public final class PojoRest {
 	 * 
 	 * @param url
 	 * 	The URL of the element to retrieve.
-	 * 	If <jk>null</jk? or blank, returns the root.
+	 * 	If <jk>null</jk> or blank, returns the root.
 	 * @param def The default value if addressed item does not exist.
 	 * @param type The specified object type.
 	 * @param args The specified object parameter types.

@@ -51,7 +51,7 @@ public interface HttpPartSerializer {
 	/**
 	 * Represent "no" part part serializer.
 	 * 
-	 * <li>
+	 * <p>
 	 * Used to represent the absence of a part serializer in annotations.
 	 */
 	public static interface Null extends HttpPartSerializer {}

@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Represents an <code>atomPersonConstruct</code> construct in the RFC4287 specification.
  * 
- * <h6 class='figure'>Schema</h6>
+ * <h5 class='figure'>Schema</h5>
  * <p class='bcode'>
  * 	atomPersonConstruct =
  * 		atomCommonAttributes,
@@ -34,7 +34,7 @@ import org.apache.juneau.annotation.*;
  * 		&amp; extensionElement*)
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects

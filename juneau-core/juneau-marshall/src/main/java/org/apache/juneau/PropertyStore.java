@@ -66,7 +66,7 @@ import org.apache.juneau.json.*;
  * Property stores are immutable, comparable, and their hashcodes are calculated exactly one time.
  * That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
  * 
- * <h6 class='topic'>Property naming convention</h6>
+ * <h5 class='topic'>Property naming convention</h5>
  * 
  * <p>
  * Property names must have the following format...
@@ -110,14 +110,14 @@ import org.apache.juneau.json.*;
  * For example, <js>"BeanContext.pojoSwaps.lc"</js> refers to a property on the <code>BeanContext</code> class
  * called <code>pojoSwaps</code> that has a data type of <code>List&lt;Class&gt;</code>.
  * 
- * <h6 class='topic'>Property value normalization</h6>
+ * <h5 class='topic'>Property value normalization</h5>
  * 
  * <p>
  * Property values get 'normalized' when they get set.  
  * For example, calling <code>propertyStore.set(<js>"BeanContext.debug.b"</js>, <js>"true"</js>)</code> will cause the property
  * value to be converted to a boolean. 
  * 
- * <h6 class='topic'>Set types</h6>
+ * <h5 class='topic'>Set types</h5>
  * 
  * <p>
  * The <js>"sX"</js> property types are sorted sets.
@@ -125,7 +125,7 @@ import org.apache.juneau.json.*;
  * <br>Internally, a <code>TreeSet</code> is used so that the order in which you add elements does not affect the 
  * resulting order of the property.
  * 
- * <h6 class='topic'>List types</h6>
+ * <h5 class='topic'>List types</h5>
  * 
  * <p>
  * The <js>"lX"</js> property types are ordered lists.
@@ -163,12 +163,12 @@ import org.apache.juneau.json.*;
  * 		.build();
  * </p>
  * 
- * <h6 class='topic'>Map types</h6>
+ * <h5 class='topic'>Map types</h5>
  * 
  * <p>
  * The <js>"smX"</js> and <js>"omX"</js> are sorted and order maps respectively.
  * 
- * <h6 class='topic'>Command properties</h6>
+ * <h5 class='topic'>Command properties</h5>
  * 
  * <p>
  * Set and list properties have the additional convenience 'command' names for adding and removing entries:
@@ -183,12 +183,12 @@ import org.apache.juneau.json.*;
  * 	<js>"{class}.{name}.{type}/add.{key}"</js>  <jc>// Add a map entry (or delete if the value is null).</jc>
  * </p>
  * 
- * <h6 class='topic'>Setting properties</h6>
+ * <h5 class='topic'>Setting properties</h5>
  * 
  * <p>
  * TODO
  * 
- * <h6 class='topic'>Retrieving properties</h6>
+ * <h5 class='topic'>Retrieving properties</h5>
  * 
  * <p>
  * TODO

@@ -82,8 +82,11 @@ h5 {
 	font-size: 1.1em;
 }
 
+/* h6 shouldn't be used */
 h6 {
-	font-size: 1.0em;
+	background-color: yellow;
+	color: red;
+	font-weight: bold;
 }
 
 ul {
@@ -678,7 +681,7 @@ h1.hidden {
 	font-weight: bold;
 }
 
-h5.section, h6.section {
+h5.section {
 	color: #4e4e4e;
 	margin: 10px 0 5px 0;
 }

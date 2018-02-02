@@ -22,12 +22,12 @@ import org.apache.juneau.internal.*;
  * <p>
  * The MIME type of this content.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Content-Type: text/html; charset=utf-8
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Content-Type entity-header field indicates the media type of the entity-body sent to the recipient or, in the
  * case of the HEAD method, the media type that would have been sent had the request been a GET.
@@ -42,7 +42,7 @@ import org.apache.juneau.internal.*;
  * 	Content-Type: text/html; charset=ISO-8859-4
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

@@ -523,7 +523,7 @@ public final class RestContext extends BeanContext {
 	 * 	<jc>// Our customized classpath resource finder.</jc>
 	 * 	<jk>public class</jk> MyClasspathResourceFinder <jk>extends</jk> ClasspathResourceFinderBasic {
 	 * 		<ja>@Override</ja> 
-	 * 		<jk>public</jk> InputStream findResource(Class<?> baseClass, String name, Locale locale) <jk>throws</jk> IOException {
+	 * 		<jk>public</jk> InputStream findResource(Class&lt;?&gt; baseClass, String name, Locale locale) <jk>throws</jk> IOException {
 	 * 			<jc>// Do your own resolution.</jc>
 	 * 		}
 	 * 	}
@@ -3198,7 +3198,7 @@ public final class RestContext extends BeanContext {
 	 * They can be nested arbitrarily deep.
 	 * They can also return values that themselves contain other variables.
 	 * 
-	 * <h6 class='figure'>Example:</h6>
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,

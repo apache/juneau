@@ -119,7 +119,7 @@ import org.apache.juneau.http.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview > juneau-dto > Swagger</a>
  * </ul>
@@ -199,12 +199,12 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><code>Collection&lt;String&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	tags(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	tags(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
@@ -337,7 +337,7 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link ExternalDocumentation}
 	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * 			</p>
@@ -465,12 +465,12 @@ public class Operation extends SwaggerElement {
 	 * 		<li><code>Collection&lt;{@link MediaType}|String&gt;</code>
 	 * 		<li><code>{@link MediaType}[]</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link MediaType}&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	consumes(<js>"['text/json']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	consumes(<js>"text/json"</js>);
 	 * 			</p>
@@ -551,12 +551,12 @@ public class Operation extends SwaggerElement {
 	 * 		<li><code>Collection&lt;{@link MediaType}|String&gt;</code>
 	 * 		<li><code>{@link MediaType}[]</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link MediaType}&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	produces(<js>"['text/json']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	produces(<js>"text/json"</js>);
 	 * 			</p>
@@ -671,12 +671,12 @@ public class Operation extends SwaggerElement {
 	 * 		<li>{@link ParameterInfo}
 	 * 		<li><code>Collection&lt;{@link ParameterInfo}|String&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link ParameterInfo}&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	parameters(<js>"[{path:'path',id:'id'}]"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - JSON object representation of {@link ParameterInfo}
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	parameters(<js>"{path:'path',id:'id'}"</js>);
 	 * 			</p>
@@ -753,7 +753,7 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><code>Map&lt;Integer,{@link ResponseInfo}|String&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;Integer,{@link ResponseInfo}&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	responses(<js>"{'404':{description:'description',...}}"</js>);
 	 * 			</p>
@@ -828,12 +828,12 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><code>Collection&lt;String&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h6 class='figure'>Example:</h6>
+	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
 	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
 	 * 			</p>
@@ -973,7 +973,7 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><code>Map&lt;String,List&lt;String&gt;&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of a <code>Map&lt;String,List&lt;String&gt;&gt;</code>
-	 * 		<h6 class='figure'>Example:</h6>
+	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode'>
 	 * 	securities(<js>"{key:['val1','val2']}"</js>);
 	 * 		</p>

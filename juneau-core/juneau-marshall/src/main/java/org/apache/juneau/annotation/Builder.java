@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 /**
  * Identifies a class as a builder for a POJO class.
  * 
- * <h6 class='figure'>Example:</h6>
+ * <h5 class='figure'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// POJO class.</jc>
  * 	<ja>@Builder</ja>(MyBeanBuilder.<jk>class</jk>)

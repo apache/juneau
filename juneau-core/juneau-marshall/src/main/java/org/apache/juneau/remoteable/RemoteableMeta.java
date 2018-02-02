@@ -26,7 +26,7 @@ import java.util.*;
  * Captures the information in {@link Remoteable @Remoteable} and {@link RemoteMethod @RemoteMethod} annotations for
  * caching and reuse.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>

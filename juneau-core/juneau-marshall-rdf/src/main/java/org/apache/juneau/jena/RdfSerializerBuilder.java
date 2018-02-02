@@ -167,7 +167,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Possible values:
-	 * 	<ul'>
+	 * 	<ul>
 	 * 		<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
 	 * 		<li><js>"SEQ"</js> - RDF Sequence container.
 	 * 		<li><js>"BAG"</js> - RDF Bag container.

@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * The user agent string of the user agent.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The User-Agent request-header field contains information about the user agent originating the request.
  * This is for statistical purposes, the tracing of protocol violations, and automated recognition of user agents for
@@ -43,7 +43,7 @@ package org.apache.juneau.http;
  * 	User-Agent: CERN-LineMode/2.15 libwww/2.17b3
  * </p>
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

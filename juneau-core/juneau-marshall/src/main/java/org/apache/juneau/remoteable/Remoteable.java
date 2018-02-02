@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 /**
  * Identifies a remote proxy interface against a REST interface.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>
  * 		<a class='doclink' href='../../../../overview-summary.html#juneau-rest-server.Remoteable'>Remoteable Proxies</a>

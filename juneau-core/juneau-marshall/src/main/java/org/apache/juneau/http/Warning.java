@@ -18,12 +18,12 @@ package org.apache.juneau.http;
  * <p>
  * A general warning about possible problems with the entity body.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Warning: 199 Miscellaneous warning
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Warning general-header field is used to carry additional information about the status or transformation of a
  * message which might not be reflected in the message.
@@ -117,7 +117,7 @@ package org.apache.juneau.http;
  * (This prevents bad consequences of naive caching of Warning header fields.)
  * If all of the warning-values are deleted for this reason, the Warning header MUST be deleted as well.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

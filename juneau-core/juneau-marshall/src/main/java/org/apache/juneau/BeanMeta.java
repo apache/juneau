@@ -36,7 +36,7 @@ import org.apache.juneau.utils.*;
  * 	then that information is used to determine the properties on the class.
  * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
  * 
- * <h6 class='topic'>Bean property ordering</h6>
+ * <h5 class='topic'>Bean property ordering</h5>
  * 
  * The order of the properties are as follows:
  * <ul class='spaced-list'>

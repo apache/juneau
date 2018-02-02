@@ -32,7 +32,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * If multiple guards are specified, ALL guards must pass in order for the request to proceed.
  * 
- * <h6 class='topic'>How to implement</h6>
+ * <h5 class='topic'>How to implement</h5>
  * 
  * Typically, guards will be used for permissions checking on the user making the request, but it can also be used for
  * other purposes like pre-call validation of a request.
@@ -44,7 +44,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Guards must implement a no-args constructor.
  * 
- * <h6 class='topic'>Example usage:</h6>
+ * <h5 class='topic'>Example usage:</h5>
  * <p class='bcode'>
  * 	<jk>public</jk> MyResource <jk>extends</jk> RestServlet {
  * 
@@ -54,7 +54,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	}
  * </p>
  * 
- * <h6 class='topic'>Example implementation:</h6>
+ * <h5 class='topic'>Example implementation:</h5>
  * <p class='bcode'>
  * 	<jc>// Define a guard that only lets Billy make a request</jc>
  * 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {

@@ -19,12 +19,12 @@ package org.apache.juneau.http;
  * The form of encoding used to safely transfer the entity to the user.
  * Currently defined methods are: chunked, compress, deflate, gzip, identity.
  * 
- * <h6 class='figure'>Example</h6>
+ * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Transfer-Encoding: chunked
  * </p>
  * 
- * <h6 class='topic'>RFC2616 Specification</h6>
+ * <h5 class='topic'>RFC2616 Specification</h5>
  * 
  * The Transfer-Encoding general-header field indicates what (if any) type of transformation has been applied to the
  * message body in order to safely transfer it between the sender and the recipient.
@@ -50,7 +50,7 @@ package org.apache.juneau.http;
  * <p>
  * Many older HTTP/1.0 applications do not understand the Transfer-Encoding header.
  * 
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'>
  * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>

@@ -33,12 +33,12 @@ import org.eclipse.jetty.xml.*;
 /**
  * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.
  * 
- * <h6 class='topic'>Jetty Server Details</h6>
+ * <h5 class='topic'>Jetty Server Details</h5>
  * 
  * The Jetty server is created by the {@link #createServer()} method and started with the {@link #startServer()} method.
  * These methods can be overridden to provided customized behavior.
  * 
- * <h6 class='topic'>Defining REST Resources</h6>
+ * <h5 class='topic'>Defining REST Resources</h5>
  * 
  * Top-level REST resources are defined in the <code>jetty.xml</code> file as normal servlets.
  * 
@@ -47,7 +47,7 @@ import org.eclipse.jetty.xml.*;
  * Logging is initialized by the {@link #initLogging()} method.
  * This method can be overridden to provide customized logging behavior.
  * 
- * <h6 class='topic'>Lifecycle Listener Methods</h6>
+ * <h5 class='topic'>Lifecycle Listener Methods</h5>
  * Subclasses can optionally implement the following event listener methods:
  * <ul class='spaced-list'>
  * 	<li>

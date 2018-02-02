@@ -31,7 +31,7 @@ import org.apache.juneau.xml.*;
 /**
  * Parent class for all Juneau parsers.
  * 
- * <h6 class='topic'>Valid data conversions</h6>
+ * <h5 class='topic'>Valid data conversions</h5>
  * 
  * Parsers can parse any parsable POJO types, as specified in the <a class="doclink"
  * href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a>.
@@ -492,7 +492,7 @@ public abstract class Parser extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jc'>{@link JsonParser}
 	 * 			<li class='jc'>{@link UonParser}
-	 * 		<ul>
+	 * 		</ul>
 	 * 		It has no effect on the following parsers:
 	 * 		<ul>
 	 * 			<li class='jc'>{@link MsgPackParser} - It already doesn't use buffering.
