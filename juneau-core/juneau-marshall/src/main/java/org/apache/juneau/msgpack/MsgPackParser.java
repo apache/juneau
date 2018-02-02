@@ -18,7 +18,6 @@ import org.apache.juneau.parser.*;
 /**
  * Parses a MessagePack stream into a POJO model.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Content-Type</code> types:  <code><b>octal/msgpack</b></code>

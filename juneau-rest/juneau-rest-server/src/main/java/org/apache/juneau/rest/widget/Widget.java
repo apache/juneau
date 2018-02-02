@@ -122,8 +122,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Widgets can be defined as inner classes of REST resource classes.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; Widgets</a>
  * </ul>
@@ -223,7 +222,6 @@ public abstract class Widget {
 	 * 	<li><js>"MyResource_ja.txt"</js>
 	 * 	<li><js>"MyResource.txt"</js>
 	 * </ol>
-	 * 
 	 * 
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.

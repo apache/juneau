@@ -49,8 +49,7 @@ import org.apache.juneau.annotation.*;
  * 		.build();
  * </p>		
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  *.	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
  *.</ul>

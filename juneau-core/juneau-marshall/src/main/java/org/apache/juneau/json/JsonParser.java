@@ -18,11 +18,9 @@ import org.apache.juneau.parser.*;
 /**
  * Parses any valid JSON text into a POJO model.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Content-Type</code> types:  <code><b>application/json, text/json</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

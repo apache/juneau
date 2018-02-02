@@ -46,8 +46,7 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestResponse">Overview &gt; RestResponse</a>
  * </ul>
@@ -168,8 +167,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
 	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <code>null</code>).
 	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
 	 * 		<br>This distinction affects the {@link #hasOutput()} method behavior.

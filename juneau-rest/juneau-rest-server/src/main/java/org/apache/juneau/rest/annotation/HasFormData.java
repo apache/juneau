@@ -74,7 +74,6 @@ import org.apache.juneau.rest.*;
  * 	</tr>
  * </table>
  * 
- * 
  * <h6 class='topic'>Important note concerning FORM posts</h6>
  * 
  * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody()} method
@@ -85,8 +84,7 @@ import org.apache.juneau.rest.*;
  * The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
  * without triggering the servlet to drain the body content.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.FormData">Overview &gt; @FormData</a>
  * </ul>

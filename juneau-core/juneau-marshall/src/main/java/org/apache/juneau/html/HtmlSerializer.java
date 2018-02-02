@@ -22,13 +22,11 @@ import org.apache.juneau.xml.*;
 /**
  * Serializes POJO models to HTML.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>text/html</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/html</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

@@ -20,13 +20,11 @@ import org.apache.juneau.serializer.*;
 /**
  * Serializes POJO models to JSON.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>application/json, text/json</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>application/json</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

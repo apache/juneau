@@ -486,7 +486,6 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The type of the parameter.
 	 * 
-	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
@@ -760,7 +759,6 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * 
 	 * 
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.

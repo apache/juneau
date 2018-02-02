@@ -33,7 +33,6 @@ import org.apache.juneau.rest.vars.*;
  * Subclasses can override these methods to tailor how HTTP REST calls are handled.
  * <br>Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
  * 
- * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_callHandler}

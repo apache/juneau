@@ -48,8 +48,9 @@ import org.apache.juneau.*;
  * </ul>
  * 
  * <h5 class='section'>Notes:</h5>
- * <ul>
- * 	<li>This class is thread-safe.
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		This class is thread-safe.
  * </ul>
  */
 public class MessageBundle extends ResourceBundle {
@@ -109,7 +110,6 @@ public class MessageBundle extends ResourceBundle {
 	 * 
 	 * <p>
 	 * A shortcut for calling <code>new MessageBundle(forClass, bundlePath)</code>.
-	 * 
 	 * 
 	 * @param forClass The class 
 	 * @param bundlePath The location of the resource bundle.

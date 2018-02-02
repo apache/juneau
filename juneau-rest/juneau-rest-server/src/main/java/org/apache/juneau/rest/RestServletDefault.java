@@ -146,8 +146,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
  * 
- * 
- * <h6 class='topic'>Other Notes</h6>
+ * <h6 class='section'>Notes:</h6>
  * <ul class='spaced-list'>
  * 	<li>
  * 		Provides a default HTML stylesheet by setting {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()}
@@ -159,8 +158,7 @@ import org.apache.juneau.xml.*;
  * 		<code>/servletPath/htdocs</code>.
  * </ul>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServletDefault">Overview &gt; RestServletDefault</a>
  * </ul>

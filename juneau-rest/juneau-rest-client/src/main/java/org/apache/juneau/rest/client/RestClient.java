@@ -40,7 +40,6 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Utility class for interfacing with remote REST interfaces.
  * 
- * 
  * <h5 class='topic'>Features</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -55,8 +54,7 @@ import org.apache.juneau.urlencoding.*;
  * 		API for interacting with remoteable services.
  * </ul>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a>.
  * </ul>
@@ -427,7 +425,6 @@ public class RestClient extends BeanContext {
 
 	/**
 	 * Instantiates a new {@link RestClientBuilder} object using the specified serializer and parser.
-	 * 
 	 * 
 	 * <p>
 	 * Shortcut for calling <code>RestClient.<jsm>create</jsm>().serializer(s).parser(p);</code>
@@ -930,7 +927,7 @@ public class RestClient extends BeanContext {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.

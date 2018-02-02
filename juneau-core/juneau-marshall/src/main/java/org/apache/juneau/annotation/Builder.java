@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 /**
  * Identifies a class as a builder for a POJO class.
  * 
- * 
  * <h6 class='figure'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// POJO class.</jc>
@@ -52,7 +51,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; POJO Builders</a>
  * </ul>

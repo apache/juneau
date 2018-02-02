@@ -20,11 +20,9 @@ import org.apache.juneau.urlencoding.annotation.*;
 /**
  * Parses URL-encoded text into POJO models.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Content-Type</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 
@@ -88,8 +86,9 @@ public class UrlEncodingParser extends UonParser {
 	 * This option only applies to beans.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
 	 * </ul>

@@ -66,11 +66,6 @@ import org.apache.juneau.utils.*;
  * <ul>
  * 	<li class='jc'>{@link PojoQuery} - Additional information on filtering POJO models.
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
- * </ul>
- * 
- * 
- * <h5 class='section'>Documentation:</h5>
- * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
  * </ul>
  */

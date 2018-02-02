@@ -31,7 +31,6 @@ import org.apache.juneau.svl.*;
  * 	String fooOrBar = restRequest.resolveVars(<js>"$RH{Foo,Bar}"</js>); 
  * </p>
  * 
- * 
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -41,8 +40,7 @@ import org.apache.juneau.svl.*;
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
  * </ul>

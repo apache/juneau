@@ -22,10 +22,10 @@ import org.apache.juneau.parser.*;
 /**
  * Specialized input stream for parsing MessagePack streams.
  * 
- * 
  * <h5 class='section'>Notes:</h5>
- * <ul>
- * 	<li>This class is not intended for external use.
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		This class is not intended for external use.
  * </ul>
  */
 public final class MsgPackInputStream extends InputStream {

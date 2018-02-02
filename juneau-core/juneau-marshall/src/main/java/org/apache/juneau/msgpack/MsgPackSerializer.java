@@ -18,7 +18,6 @@ import org.apache.juneau.serializer.*;
 /**
  * Serializes POJO models to MessagePack.
  * 
- * 
  * <h5 class='section'>Media types:</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>octal/msgpack</b></code>

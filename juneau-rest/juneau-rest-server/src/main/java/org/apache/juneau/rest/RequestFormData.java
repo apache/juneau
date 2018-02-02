@@ -45,7 +45,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='ja'>{@link Header}
  * </ul>
  * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestFormData">Overview &gt; RequestFormData</a>
  * </ul>
@@ -126,8 +126,9 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This method returns the raw unparsed value, and differs from calling
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This method returns the raw unparsed value, and differs from calling
 	 * 		<code>get(name, String.<jk>class</js>)</code> which will convert the value from UON
 	 * 		notation:
 	 * 		<ul>
@@ -350,9 +351,11 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
-	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li>
+	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>

@@ -63,8 +63,7 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>{@code getServletPath()}</td><td>{@code /servletPath}</td></tr>
  * </table>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestRequest">Overview &gt; RestRequest</a>
  * </ul>
@@ -324,11 +323,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This object is modifiable.
-	 * 	<li>Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
-	 * 	<li>The {@link RequestHeaders} object can also be passed as a parameter on the method.
-	 * 	<li>The {@link Header @Header} annotation can be used to access individual header values.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This object is modifiable.
+	 * 	<li>
+	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 	<li>
+	 * 		The {@link RequestHeaders} object can also be passed as a parameter on the method.
+	 * 	<li>
+	 * 		The {@link Header @Header} annotation can be used to access individual header values.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -462,12 +465,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This object is modifiable.
-	 * 	<li>This method can be used to retrieve query parameters without triggering the underlying servlet API to load and parse the request body.
-	 * 	<li>Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
-	 * 	<li>The {@link RequestQuery} object can also be passed as a parameter on the method.
-	 * 	<li>The {@link Query @Query} annotation can be used to access individual query parameter values.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This object is modifiable.
+	 * 	<li>
+	 * 		This method can be used to retrieve query parameters without triggering the underlying servlet API to load and parse the request body.
+	 * 	<li>
+	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 	<li>
+	 * 		The {@link RequestQuery} object can also be passed as a parameter on the method.
+	 * 	<li>
+	 * 		The {@link Query @Query} annotation can be used to access individual query parameter values.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -523,11 +531,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This object is modifiable.
-	 * 	<li>Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
-	 * 	<li>The {@link RequestFormData} object can also be passed as a parameter on the method.
-	 * 	<li>The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This object is modifiable.
+	 * 	<li>
+	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 	<li>
+	 * 		The {@link RequestFormData} object can also be passed as a parameter on the method.
+	 * 	<li>
+	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -601,11 +613,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This object is modifiable.
-	 * 	<li>Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
-	 * 	<li>The {@link RequestPathMatch} object can also be passed as a parameter on the method.
-	 * 	<li>The {@link Path @Path} and {@link PathRemainder @PathRemainder} annotations can be used to access individual values.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This object is modifiable.
+	 * 	<li>
+	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 	<li>
+	 * 		The {@link RequestPathMatch} object can also be passed as a parameter on the method.
+	 * 	<li>
+	 * 		The {@link Path @Path} and {@link PathRemainder @PathRemainder} annotations can be used to access individual values.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -653,9 +669,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The {@link RequestBody} object can also be passed as a parameter on the method.
-	 * 	<li>The {@link Body @Body} annotation can be used to access the body as well.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The {@link RequestBody} object can also be passed as a parameter on the method.
+	 * 	<li>
+	 * 		The {@link Body @Body} annotation can be used to access the body as well.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -824,8 +842,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The {@link RestInfoProvider} object can also be passed as a parameter on the method.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The {@link RestInfoProvider} object can also be passed as a parameter on the method.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -863,8 +882,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The {@link Swagger} object can also be passed as a parameter on the method.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The {@link Swagger} object can also be passed as a parameter on the method.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -1095,8 +1115,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The {@link MessageBundle} object can also be passed as a parameter on the method.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The {@link MessageBundle} object can also be passed as a parameter on the method.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -1146,8 +1167,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This returns <jk>null</jk? when evaluating servlet-level guards since the method has not been resolved at that
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This returns <jk>null</jk? when evaluating servlet-level guards since the method has not been resolved at that
 	 * 		point of execution.
 	 * </ul>
 	 * 
@@ -1186,8 +1208,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The {@link VarResolverSession} object can also be passed as a parameter on the method.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The {@link VarResolverSession} object can also be passed as a parameter on the method.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -1301,8 +1324,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The {@link ConfigFile} object can also be passed as a parameter on the method.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The {@link ConfigFile} object can also be passed as a parameter on the method.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -1375,8 +1399,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The {@link RestLogger} object can also be passed as a parameter on the method.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The {@link RestLogger} object can also be passed as a parameter on the method.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>

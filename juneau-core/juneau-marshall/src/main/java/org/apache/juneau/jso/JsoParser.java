@@ -20,7 +20,6 @@ import org.apache.juneau.parser.*;
 /**
  * Parses POJOs from HTTP responses as Java {@link ObjectInputStream ObjectInputStreams}.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Consumes <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>

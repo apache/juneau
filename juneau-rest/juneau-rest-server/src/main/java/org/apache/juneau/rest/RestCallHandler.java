@@ -22,7 +22,6 @@ import javax.servlet.http.*;
 /**
  * Class that handles the basic lifecycle of an HTTP REST call.
  * 
- * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_callHandler}

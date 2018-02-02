@@ -33,8 +33,7 @@ import org.apache.juneau.utils.*;
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestResource">Overview &gt; @RestResource</a>
  * </ul>
@@ -874,7 +873,6 @@ public @interface RestResource {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <code>/info/title</code>.
 	 * </ul>
-	 * 
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

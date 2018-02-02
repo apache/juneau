@@ -27,8 +27,7 @@ import org.apache.juneau.parser.*;
  * <p>
  * Provides access to the matched path variables and path match remainder.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; RequestPathMatch</a>
  * </ul>
@@ -185,9 +184,11 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
-	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li>
+	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>

@@ -21,8 +21,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for constructing {@link ReaderResource} objects.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ReaderResource">Overview &gt; ReaderResource</a>
  * </ul>

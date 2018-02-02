@@ -50,7 +50,6 @@ import org.apache.juneau.utils.*;
  * 	<li><l>[working-dir]/docs</l> directory.
  * </ol>
  * 
- * 
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -59,8 +58,7 @@ import org.apache.juneau.utils.*;
  * 		The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
  * </ul>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StaticFiles">Overview &gt; Static Files</a>
  * </ul>

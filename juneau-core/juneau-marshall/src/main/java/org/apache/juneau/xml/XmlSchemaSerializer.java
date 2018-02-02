@@ -24,7 +24,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/xml</b></code>
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.

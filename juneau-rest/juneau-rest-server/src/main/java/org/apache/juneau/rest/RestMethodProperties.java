@@ -26,8 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='ja'>{@link HtmlDoc}
  * </ul>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; Properties</a>
  * </ul>

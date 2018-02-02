@@ -17,7 +17,6 @@ import java.io.*;
 /**
  * Subclass of {@link SerializerSession} for stream-based serializers.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * This class is the parent class of all byte-based serializers.

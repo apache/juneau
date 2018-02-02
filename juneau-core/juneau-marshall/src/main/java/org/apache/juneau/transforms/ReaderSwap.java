@@ -28,7 +28,6 @@ import org.apache.juneau.xml.*;
 /**
  * Transforms the contents of a {@link Reader} into an {@code Object}.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * The {@code Reader} must contain JSON, Juneau-generated XML (output from {@link XmlSerializer}), or Juneau-generated

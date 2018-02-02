@@ -31,8 +31,7 @@ import org.apache.juneau.utils.*;
  * Identifies servlet and REST call lifecycle events which cause {@link RestHook @RestHook}-annotated Java methods
  * to be called.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.LifecycleHooks">Overview &gt; Lifecycle Hooks</a>
  * </ul>
@@ -71,16 +70,22 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple START_CALL methods can be defined on a class.
+	 * 	<li>
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple START_CALL methods can be defined on a class.
 	 * 		<br>START_CALL methods on parent classes are invoked before START_CALL methods on child classes.
 	 * 		<br>The order of START_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>The method can throw any exception.
+	 * 	<li>
+	 * 		The method can throw any exception.
 	 * 		<br>{@link RestException RestExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
-	 * 	<li>Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
 	 * </ul>
@@ -182,19 +187,26 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple PRE_CALL methods can be defined on a class.
+	 * 	<li>
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple PRE_CALL methods can be defined on a class.
 	 * 		<br>PRE_CALL methods on parent classes are invoked before PRE_CALL methods on child classes.
 	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>The method can throw any exception.
+	 * 	<li>	
+	 * 		The method can throw any exception.
 	 * 		<br>{@link RestException RestExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
-	 * 	<li>Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
-	 * 	<li>It's advisable not to mess around with the HTTP body itself since you may end up consuming the body
+	 * 	<li>
+	 * 		It's advisable not to mess around with the HTTP body itself since you may end up consuming the body
 	 * 		before the actual REST method has a chance to use it.
 	 * </ul>
 	 */
@@ -225,14 +237,20 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple POST_CALL methods can be defined on a class.
+	 * 	<li>
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple POST_CALL methods can be defined on a class.
 	 * 		<br>POST_CALL methods on parent classes are invoked before POST_CALL methods on child classes.
 	 * 		<br>The order of POST_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>The method can throw any exception, although at this point it is too late to set an HTTP error status code.
-	 * 	<li>Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 	<li>
+	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
 	 * </ul>
@@ -282,14 +300,20 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple END_CALL methods can be defined on a class.
+	 * 	<li>
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple END_CALL methods can be defined on a class.
 	 * 		<br>END_CALL methods on parent classes are invoked before END_CALL methods on child classes.
 	 * 		<br>The order of END_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>The method can throw any exception, although at this point it is too late to set an HTTP error status code.
-	 * 	<li>Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 	<li>
+	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
 	 * </ul>
@@ -329,14 +353,20 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple INIT methods can be defined on a class.
+	 * 	<li>
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple INIT methods can be defined on a class.
 	 * 		<br>INIT methods on parent classes are invoked before INIT methods on child classes.
 	 * 		<br>The order of INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>The method can throw any exception causing initialization of the servlet to fail.
-	 * 	<li>Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 	<li>
+	 * 		The method can throw any exception causing initialization of the servlet to fail.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
 	 * </ul>
@@ -356,14 +386,20 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple POST_INIT methods can be defined on a class.
+	 * 	<li>	
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple POST_INIT methods can be defined on a class.
 	 * 		<br>POST_INIT methods on parent classes are invoked before POST_INIT methods on child classes.
 	 * 		<br>The order of POST_INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>The method can throw any exception causing initialization of the servlet to fail.
-	 * 	<li>Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 	<li>
+	 * 		The method can throw any exception causing initialization of the servlet to fail.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
 	 * </ul>
@@ -386,13 +422,18 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple POST_INIT_CHILD_FIRST methods can be defined on a class.
+	 * 	<li>
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple POST_INIT_CHILD_FIRST methods can be defined on a class.
 	 * 		<br>POST_INIT_CHILD_FIRST methods on parent classes are invoked before POST_INIT_CHILD_FIRST methods on child classes.
 	 * 		<br>The order of POST_INIT_CHILD_FIRST method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>The method can throw any exception causing initialization of the servlet to fail.
+	 * 	<li>
+	 * 		The method can throw any exception causing initialization of the servlet to fail.
 	 * </ul>
 	 */
 	POST_INIT_CHILD_FIRST,
@@ -424,15 +465,21 @@ public enum HookEvent {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
-	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
-	 * 	<li>Static methods can be used.
-	 * 	<li>Multiple DESTROY methods can be defined on a class.
+	 * 	<li>	
+	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>
+	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>
+	 * 		Static methods can be used.
+	 * 	<li>
+	 * 		Multiple DESTROY methods can be defined on a class.
 	 * 		<br>DESTROY methods on child classes are invoked before DESTROY methods on parent classes.
 	 * 		<br>The order of DESTROY method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>In general, destroy methods should not throw any exceptions, although if any are thrown, the stack trace will be
+	 * 	<li>
+	 * 		In general, destroy methods should not throw any exceptions, although if any are thrown, the stack trace will be
 	 * 		printed to <code>System.err</code>.
-	 * 	<li>Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
 	 * </ul>

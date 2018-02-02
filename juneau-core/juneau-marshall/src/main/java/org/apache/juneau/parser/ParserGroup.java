@@ -21,7 +21,6 @@ import org.apache.juneau.http.*;
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * Provides the following features:

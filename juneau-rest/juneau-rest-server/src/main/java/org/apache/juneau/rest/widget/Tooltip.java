@@ -59,8 +59,7 @@ import org.apache.juneau.dto.html5.*;
  * }
  * </p>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; Widgets</a>
  * </ul>

@@ -58,8 +58,7 @@ import org.apache.juneau.xml.*;
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestContext">Overview &gt; RestContext</a>
  * </ul>
@@ -127,8 +126,10 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><js>'body'</js> parameter name is case-insensitive.
-	 * 	<li>Useful for debugging PUT and POST methods using only a browser.
+	 * 	<li>
+	 * 		<js>'body'</js> parameter name is case-insensitive.
+	 * 	<li>
+	 * 		Useful for debugging PUT and POST methods using only a browser.
 	 * </ul>
 	 */
 	public static final String REST_allowBodyParam = PREFIX + "allowBodyParam.b";
@@ -188,9 +189,12 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-	 * 	<li><js>'method'</js> parameter name is case-insensitive.
-	 * 	<li>Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
+	 * 	<li>
+	 * 		<js>'method'</js> parameter name is case-insensitive.
+	 * 	<li>
+	 * 		Use <js>"*"</js> to represent all methods.
 	 * </ul>
 	 * 
 	 * <p>
@@ -255,8 +259,10 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Header names are case-insensitive.
-	 * 	<li>Useful for debugging REST interface using only a browser.
+	 * 	<li>
+	 * 		Header names are case-insensitive.
+	 * 	<li>
+	 * 		Useful for debugging REST interface using only a browser.
 	 * </ul>
 	 */
 	public static final String REST_allowHeaderParams = PREFIX + "allowHeaderParams.b";
@@ -339,12 +345,14 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_callHandler = PREFIX + "callHandler.o";
@@ -445,7 +453,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
+	 * 	<li>
+	 * 		When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
 	 * 		by default is {@link RestResourceResolverDefault} which requires the class have one of the following
 	 * 		constructors:
 	 * 		<ul>
@@ -454,7 +463,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Children">Overview &gt; Children</a>
 	 * </ul>
@@ -551,12 +560,14 @@ public final class RestContext extends BeanContext {
 	 * 		<br>The {@link ClasspathResourceFinderRecursive} is another option that also recursively searches for resources
 	 * 		up the class-hierarchy.
 	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_classpathResourceFinder = PREFIX + "classpathResourceFinder.o";
@@ -773,19 +784,21 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_converters = PREFIX + "converters.lo";
@@ -872,9 +885,12 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Strings are in the format <js>"Header-Name: header-value"</js>.
-	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
-	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * 	<li>	
+	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>
+	 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>
+	 * 		The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
 	 * 		specified so that a particular default {@link Serializer} is picked.
 	 * </ul>
 	 * 
@@ -936,10 +952,13 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Strings are in the format <js>"Header-Name: header-value"</js>.
-	 * 	<li>This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
+	 * 	<li>
+	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>
+	 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
 	 * 		the Java methods.
-	 * 	<li>The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 * 	<li>	
+	 * 		The header value will not be set if the header value has already been specified (hence the 'default' in the name).
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>
@@ -1027,15 +1046,17 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Encoders">Overview &gt; Encoders</a>
 	 * </ul>
@@ -1110,15 +1131,17 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Guards">Overview &gt; Guards</a>
 	 * </ul>
@@ -1202,12 +1225,14 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
@@ -1283,7 +1308,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; Logging and Error Handling</a>
 	 * </ul>
@@ -1345,10 +1370,13 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>String value that gets resolved to a <jk>long</jk>.
-	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
+	 * 	<li>
+	 * 		String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>
+	 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
 	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
+	 * 	<li>
+	 * 		A value of <js>"-1"</js> can be used to represent no limit.
 	 * </ul>
 	 */
 	public static final String REST_maxInput = PREFIX + "maxInput.s";
@@ -1428,11 +1456,12 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Mappings are cumulative from super classes.
+	 * 	<li
+	 * 		>Mappings are cumulative from super classes.
 	 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Messages">Overview &gt; Messages</a>
 	 * </ul>
@@ -1500,7 +1529,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Values are .mime.types formatted entry string.
+	 * 	<li>
+	 * 		Values are .mime.types formatted entry string.
 	 * 		<br>Example: <js>"image/svg+xml svg"</js>
 	 * </ul>
 	 */
@@ -1582,13 +1612,16 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
-	 * 	<li>Refer to {@link RestParam} for the list of predefined parameter resolvers.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Refer to {@link RestParam} for the list of predefined parameter resolvers.
 	 * </ul>
 	 */
 	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
@@ -1663,9 +1696,12 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * 	<li>Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
+	 * 	<li>
+	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>
+	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>
+	 * 		Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
 	 * 		preconfigured with the following parsers:
 	 * 		<ul>
 	 * 			<li class='jc'>{@link JsonParser}
@@ -1678,7 +1714,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Parsers">Overview &gt; Parsers</a>
 	 * </ul>
@@ -1745,8 +1781,10 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>
+	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>
+	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
 	 */
 	public static final String REST_partParser = PREFIX + "partParser.o";
@@ -1816,8 +1854,10 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>
+	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>
+	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
 	 */
 	public static final String REST_partSerializer = PREFIX + "partSerializer.o";
@@ -2025,16 +2065,19 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Unless overridden, resource resolvers are inherited from ascendant resources.
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		Unless overridden, resource resolvers are inherited from ascendant resources.
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; Resource Resolvers</a>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Injection">Overview &gt; Using with Spring and Injection frameworks</a>
@@ -2126,13 +2169,16 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Response handlers resolvers are always inherited from ascendant resources.
-	 * 	<li>When defined as a class, the implementation must have one of the following constructors:
+	 * 	<li>
+	 * 		Response handlers resolvers are always inherited from ascendant resources.
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 * 	<li>Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
 	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
@@ -2208,9 +2254,12 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * 	<li>Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
+	 * 	<li>
+	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>
+	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>
+	 * 		Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
 	 * 		preconfigured with the following serializers:
 	 * 		<ul>
 	 * 			<li class='jc'>{@link HtmlDocSerializer}
@@ -2229,7 +2278,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Serializers">Overview &gt; Serializers</a>
 	 * </ul>
@@ -2367,8 +2416,10 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Mappings are cumulative from super classes.  
-	 * 	<li>Child resources can override mappings made on parent class resources.
+	 * 	<li>
+	 * 		Mappings are cumulative from super classes.  
+	 * 	<li>
+	 * 		Child resources can override mappings made on parent class resources.
 	 * </ul>
 	 */
 	public static final String REST_staticFiles = PREFIX + "staticFiles.lo";
@@ -2666,7 +2717,8 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Widgets are inherited from super classes, but can be overridden by reusing the widget name.
+	 * 	<li>
+	 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 	 * </ul>
 	 */
 	public static final String REST_widgets = PREFIX + "widgets.lo";
@@ -3659,8 +3711,9 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>The returned {@code Map} is mutable.  
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The returned {@code Map} is mutable.  
 	 * 		<br>Therefore, subclasses are free to override or set additional initialization parameters in their {@code init()} method.
 	 * </ul>
 	 * 

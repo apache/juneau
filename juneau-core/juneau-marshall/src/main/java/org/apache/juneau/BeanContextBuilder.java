@@ -53,8 +53,7 @@ import org.apache.juneau.transform.*;
  * 		.build();  <jc>// Create a JsonSerializer</jc>
  * </p>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.ConfigurableProperties">Overview &gt; Configurable Properties</a>
  * </ul>

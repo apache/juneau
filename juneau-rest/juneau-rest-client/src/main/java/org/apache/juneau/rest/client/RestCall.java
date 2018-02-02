@@ -61,8 +61,7 @@ import org.apache.juneau.utils.*;
  * The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code>
  * methods.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a>
  * </ul>
@@ -1844,7 +1843,7 @@ public final class RestCall extends BeanSession {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul>
@@ -1928,7 +1927,7 @@ public final class RestCall extends BeanSession {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Use the {@link #getResponse(Class)} method instead if you don't need a parameterized map/collection.
 	 * 	<li>

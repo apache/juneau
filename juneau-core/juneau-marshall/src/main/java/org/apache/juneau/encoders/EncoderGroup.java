@@ -20,7 +20,6 @@ import org.apache.juneau.http.*;
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * Maintains a set of encoders and the codings that they can handle.

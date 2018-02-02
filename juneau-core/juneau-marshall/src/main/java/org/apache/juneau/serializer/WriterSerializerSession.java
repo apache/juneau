@@ -17,7 +17,6 @@ import java.io.*;
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * This class is typically the parent class of all character-based serializers.

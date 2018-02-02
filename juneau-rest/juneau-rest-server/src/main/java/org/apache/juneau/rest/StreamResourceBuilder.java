@@ -20,8 +20,7 @@ import org.apache.juneau.http.*;
 /**
  * Builder class for constructing {@link StreamResource} objects.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StreamResource">Overview &gt; StreamResource</a>
  * </ul>

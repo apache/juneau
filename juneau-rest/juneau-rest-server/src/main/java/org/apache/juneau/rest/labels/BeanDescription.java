@@ -25,8 +25,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Useful for rendering simple information about a bean during REST OPTIONS requests.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; Predefined Label Beans</a>
  * </ul>

@@ -37,7 +37,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to ISO8601 date-time-local strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"2001-07-04T15:30:45"</js>
 		 * </ul>
@@ -57,7 +57,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to ISO8601 date-time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
 		 * 	<li><js>"2001-07-04T15:30:45Z"</js>
@@ -79,7 +79,7 @@ public class CalendarUtils {
 		/**
 		 * Same as {@link CalendarUtils.Format#ISO8601_DT}, except always serializes in GMT.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <js>"2001-07-04T15:30:45Z"</js>
 		 */
 		ISO8601_DTZ,
@@ -87,7 +87,7 @@ public class CalendarUtils {
 		/**
 		 * Same as {@link CalendarUtils.Format#ISO8601_DT} except serializes to millisecond precision.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <js>"2001-07-04T15:30:45.123Z"</js>
 		 */
 		ISO8601_DTP,
@@ -95,7 +95,7 @@ public class CalendarUtils {
 		/**
 		 * Same as {@link CalendarUtils.Format#ISO8601_DTZ} except serializes to millisecond precision.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <js>"2001-07-04T15:30:45.123"</js>
 		 */
 		ISO8601_DTPZ,
@@ -103,7 +103,7 @@ public class CalendarUtils {
 		/**
 		 * ISO8601 date only.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <js>"2001-07-04"</js>
 		 */
 		ISO8601_D,
@@ -111,7 +111,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link String Strings} using the {@code Date.toString()} method.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"Wed Jul 04 15:30:45 EST 2001"</js>
 		 * </ul>
@@ -121,7 +121,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to RFC2822 date-time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"Sat, 03 Mar 2001 10:11:12 +0000"</js> <jc>// en_US</jc>
 		 * 	<li><js>"土, 03 3 2001 10:11:12 +0000"</js> <jc>// ja_JP</jc>
@@ -133,7 +133,7 @@ public class CalendarUtils {
 		/**
 		 * Same as {@link CalendarUtils.Format#RFC2822_DT}, except always serializes in GMT.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"Sat, 03 Mar 2001 10:11:12 GMT"</js> <jc>// en_US</jc>
 		 * 	<li><js>"土, 03 3 2001 10:11:12 GMT"</js> <jc>// ja_JP</jc>
@@ -145,7 +145,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to RFC2822 date strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"03 Mar 2001"</js> <jc>// en_US</jc>
 		 * 	<li><js>"03 3 2001"</js> <jc>// ja_JP</jc>
@@ -157,7 +157,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"2001/03/03 10:11:12"</js>
 		 * </ul>
@@ -167,7 +167,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to simple <js>"yyyy/MM/dd"</js> date strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"2001/03/03"</js>
 		 * </ul>
@@ -177,7 +177,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to simple <js>"HH:mm:ss"</js> time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"10:11:12"</js>
 		 * </ul>
@@ -187,7 +187,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#FULL} date strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"Saturday, March 3, 2001"</js> <jc>// en_US</jc>
 		 * 	<li><js>"2001年3月3日"</js> <jc>// ja_JP</jc>
@@ -199,7 +199,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#LONG} date strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"March 3, 2001"</js> <jc>// en_US</jc>
 		 * 	<li><js>"2001/03/03"</js> <jc>// ja_JP</jc>
@@ -211,7 +211,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#MEDIUM} date strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"Mar 3, 2001"</js> <jc>// en_US</jc>
 		 * 	<li><js>"2001/03/03"</js> <jc>// ja_JP</jc>
@@ -223,7 +223,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#SHORT} date strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"3/3/01"</js> <jc>// en_US</jc>
 		 * 	<li><js>"01/03/03"</js> <jc>// ja_JP</jc>
@@ -235,7 +235,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#FULL} time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"10:11:12 AM GMT"</js> <jc>// en_US</jc>
 		 * 	<li><js>"10時11分12秒 GMT"</js> <jc>// ja_JP</jc>
@@ -247,7 +247,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#LONG} time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"10:11:12 AM GMT"</js> <jc>// en_US</jc>
 		 * 	<li><js>"10:11:12 GMT"</js> <jc>// ja_JP</jc>
@@ -259,7 +259,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#MEDIUM} time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"10:11:12 AM"</js> <jc>// en_US</jc>
 		 * 	<li><js>"10:11:12"</js> <jc>// ja_JP</jc>
@@ -271,7 +271,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#SHORT} time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"10:11 AM"</js> <jc>// en_US</jc>
 		 * 	<li><js>"10:11 AM"</js> <jc>// ja_JP</jc>
@@ -283,7 +283,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#FULL} date-time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"Saturday, March 3, 2001 10:11:12 AM GMT"</js> <jc>// en_US</jc>
 		 * 	<li><js>"2001年3月3日 10時11分12秒 GMT"</js> <jc>// ja_JP</jc>
@@ -295,7 +295,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#LONG} date-time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"March 3, 2001 10:11:12 AM GMT"</js> <jc>// en_US</jc>
 		 * 	<li><js>"2001/03/03 10:11:12 GMT"</js> <jc>// ja_JP</jc>
@@ -307,7 +307,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#MEDIUM} date-time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"Mar 3, 2001 10:11:12 AM"</js> <jc>// en_US</jc>
 		 * 	<li><js>"2001/03/03 10:11:12"</js> <jc>// ja_JP</jc>
@@ -319,7 +319,7 @@ public class CalendarUtils {
 		/**
 		 * Transform to {@link DateFormat#SHORT} date-time strings.
 		 * 
-		 * <h5 class='section'>Example output:</h5>
+		 * <h5 class='section'>Example Output:</h5>
 		 * <ul>
 		 * 	<li><js>"3/3/01 10:11 AM"</js> <jc>// en_US</jc>
 		 * 	<li><js>"01/03/03 10:11"</js> <jc>// ja_JP</jc>

@@ -486,7 +486,7 @@ public abstract class Parser extends BeanContext {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>	
 	 * 		This only allows for multi-input streams for the following parsers:
 	 * 		<ul>
@@ -499,6 +499,7 @@ public abstract class Parser extends BeanContext {
 	 * 			<li class='jc'>{@link XmlParser}, {@link HtmlParser} - These use StAX which doesn't allow for more than one root element anyway.
 	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
 	 * 		</ul>
+	 * </ul>
 	 * 
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
 	 */
@@ -628,8 +629,9 @@ public abstract class Parser extends BeanContext {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 * 
 	 * @param <T> The class type of the object to create.

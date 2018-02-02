@@ -18,13 +18,11 @@ import org.apache.juneau.serializer.*;
 /**
  * Serializes POJOs to HTTP responses as HTML documents.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>text/html</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/html</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

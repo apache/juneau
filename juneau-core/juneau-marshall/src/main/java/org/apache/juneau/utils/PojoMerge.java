@@ -62,7 +62,6 @@ import java.lang.reflect.*;
  * 	<jsm>assertEquals</jsm>(<jk>null</jk>, m.getX());
  * </p>
  * 
- * 
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>

@@ -25,7 +25,6 @@ import org.apache.juneau.parser.*;
  * 
  * Handles <code>Content-Type</code> types:  <code><b>text/xml</b></code>
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * See the {@link XmlSerializer} class for a description of Juneau-generated XML.
@@ -125,8 +124,9 @@ public class XmlParser extends ReaderParser {
 	 * Associates an {@link XMLReporter} with this parser.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Reporters are not copied to new parsers during a clone.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 */
 	public static final String XML_reporter = PREFIX + "reporter.c";

@@ -50,7 +50,6 @@ import org.apache.juneau.serializer.*;
  * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource.converters()} annotation.
  * <br>Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  * 
- * 
  * <h6 class='topic'>How to implement</h6>
  * 
  * Implementers should simply implement the {@link #convert(RestRequest, Object)} and return back a 'converted' object.
@@ -66,7 +65,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Subclasses can also be defined as inner classes of the resource class.
  * 
- * 
  * <h5 class='topic'>Predefined converters</h5>
  * <ul>
  * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
@@ -74,15 +72,9 @@ import org.apache.juneau.serializer.*;
  * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
  * </ul>
  * 
- * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
- * </ul>
- * 
- * 
- * <h5 class='section'>Documentation:</h5>
- * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Converters">Overview &gt; Converters</a>
  * </ul>
  */

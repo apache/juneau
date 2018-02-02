@@ -17,7 +17,6 @@ import java.io.*;
 /**
  * Used for enabling decompression on requests and compression on responses, such as support for GZIP compression.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * Used to wrap input and output streams within compression/decompression streams.

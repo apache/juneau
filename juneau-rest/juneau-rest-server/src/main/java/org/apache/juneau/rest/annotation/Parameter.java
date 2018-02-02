@@ -21,7 +21,6 @@ import java.lang.annotation.*;
  * Annotation used in conjunction with {@link MethodSwagger#parameters() @MethodSwagger.parameters()} to identify 
  * content and header descriptions on specific method requests.
  * 
- * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
@@ -37,8 +36,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a>
  * </ul>

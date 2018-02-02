@@ -22,10 +22,10 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Specialized writer for serializing XML.
  * 
- * 
  * <h5 class='section'>Notes:</h5>
- * <ul>
- * 	<li>This class is not intended for external use.
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		This class is not intended for external use.
  * </ul>
  */
 public class XmlWriter extends SerializerWriter {

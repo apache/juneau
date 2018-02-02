@@ -15,8 +15,7 @@ package org.apache.juneau.rest;
 /**
  * Represents the possible parameter types as defined by the Swagger 2.0 specification.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS pages</a>
  * </ul>

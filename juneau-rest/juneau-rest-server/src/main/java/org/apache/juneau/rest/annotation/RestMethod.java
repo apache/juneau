@@ -27,8 +27,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod">Overview &gt; @RestMethod</a>
  * </ul>
@@ -82,11 +81,16 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
-	 * 	<li>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
-	 * 	<li>Values are comma-delimited lists of bean property names.
-	 * 	<li>Properties apply to specified class and all subclasses.
-	 * 	<li>Semicolons can be used as an additional separator for multiple values:
+	 * 	<li>
+	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
+	 * 	<li>
+	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Semicolons can be used as an additional separator for multiple values:
 	 * 		<p class='bcode'>
 	 * 	<jc>// Equivalent</jc>
 	 * 	bpi={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
@@ -133,11 +137,16 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
-	 * 	<li>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
-	 * 	<li>Values are comma-delimited lists of bean property names.
-	 * 	<li>Properties apply to specified class and all subclasses.
-	 * 	<li>Semicolons can be used as an additional separator for multiple values:
+	 * 	<li>
+	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
+	 * 	<li>
+	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Semicolons can be used as an additional separator for multiple values:
 	 * 		<p class='bcode'>
 	 * 	<jc>// Equivalent</jc>
 	 * 	bpx={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
@@ -266,8 +275,10 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li>Key and value is trimmed of whitespace.
+	 * 	<li>
+	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li>
+	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -292,8 +303,10 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li>Key and value is trimmed of whitespace.
+	 * 	<li>
+	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li>
+	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -370,7 +383,8 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
+	 * 	<li>
+	 * 		Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>

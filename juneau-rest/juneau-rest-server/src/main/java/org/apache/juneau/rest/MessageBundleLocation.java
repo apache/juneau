@@ -18,8 +18,7 @@ package org.apache.juneau.rest;
  * <p>
  * Identifies a message bundle by a base class and bundle path.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Messages">Overview &gt; Messages</a>
  * </ul>

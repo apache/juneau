@@ -31,8 +31,7 @@ import org.apache.juneau.parser.*;
 /**
  * Contains the body of the HTTP request.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; RequestBody</a>
  * </ul>
@@ -160,8 +159,9 @@ public class RequestBody {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
 	 * 
 	 * @param type The class type to instantiate.
@@ -198,10 +198,13 @@ public class RequestBody {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
-	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
-	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li>
+	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
 	 * 
 	 * @param type
@@ -222,8 +225,9 @@ public class RequestBody {
 	 * Returns the HTTP body content as a plain string.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
 	 * 
 	 * @return The incoming input from the connection as a plain string.
@@ -273,9 +277,11 @@ public class RequestBody {
 	 * Returns the HTTP body content as a {@link Reader}.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
-	 * 	<li>Automatically handles GZipped input streams.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * 	<li>
+	 * 		Automatically handles GZipped input streams.
 	 * </ul>
 	 * 
 	 * @return The body contents as a reader.

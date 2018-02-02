@@ -64,8 +64,7 @@ import org.apache.juneau.rest.converters.*;
  * <br>(e.g. <js>"?s=column1=Foo*&amp;v=column1,column2&amp;o=column1,column2-&amp;p=100&amp;l=100"</js>).
  * <br>The {@link Queryable} class knows how to perform these filters against collections of POJOs.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; Widgets</a>
  * </ul>

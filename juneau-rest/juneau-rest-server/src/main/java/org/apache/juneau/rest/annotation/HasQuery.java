@@ -47,8 +47,7 @@ import org.apache.juneau.rest.*;
  * 	}
  * </p>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Query">Overview &gt; @Query</a>
  * </ul>

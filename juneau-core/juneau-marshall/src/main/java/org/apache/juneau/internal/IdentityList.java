@@ -24,10 +24,10 @@ import java.util.*;
  * 		Order of insertion maintained.
  * </ul>
  * 
- * 
  * <h5 class='section'>Notes:</h5>
- * <ul>
- * 	<li>This class is NOT thread safe, and is intended for use on small lists.
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		This class is NOT thread safe, and is intended for use on small lists.
  * </ul>
  * 
  * @param <T> Entry type.

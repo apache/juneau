@@ -20,13 +20,11 @@ import org.apache.juneau.transform.*;
  * Parsers HTTP plain text request bodies into <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">Group 5</a>
  * POJOs.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>text/plain</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/plain</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

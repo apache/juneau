@@ -21,10 +21,10 @@ import org.apache.juneau.serializer.*;
 /**
  * Specialized writer for serializing JSON.
  * 
- * 
  * <h5 class='section'>Notes:</h5>
- * <ul>
- * 	<li>This class is not intended for external use.
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		This class is not intended for external use.
  * </ul>
  */
 public final class YamlWriter extends SerializerWriter {

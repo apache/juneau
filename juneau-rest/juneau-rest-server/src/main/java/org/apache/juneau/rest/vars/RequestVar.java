@@ -42,13 +42,11 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"siteName"</js> - See {@link RestRequest#getSiteName()}
  * </ul>
  * 
- * <p>
- * <h6 class='section'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	String resourceTitle = restRequest.resolveVars(<js>"$R{resourceTitle}"</js>); 
  * 	String resourceTitleOrDescription = restRequest.resolveVars(<js>"$R{resourceTitle,resourceDescription}"</js>); 
  * </p>
- * 
  * 
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
@@ -59,8 +57,7 @@ import org.apache.juneau.svl.*;
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; SVL Variables</a>
  * </ul>

@@ -19,13 +19,11 @@ import org.apache.juneau.xml.*;
 /**
  * Serializes POJOs to HTTP responses as XML+SOAP.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>text/xml+soap</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/xml+soap</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

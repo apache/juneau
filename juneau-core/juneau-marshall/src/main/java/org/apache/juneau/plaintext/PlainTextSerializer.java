@@ -19,13 +19,11 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJOs to plain text using just the <code>toString()</code> method on the serialized object.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>text/plain</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/plain</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

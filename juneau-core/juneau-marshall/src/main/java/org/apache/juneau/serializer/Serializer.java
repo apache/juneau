@@ -22,7 +22,6 @@ import org.apache.juneau.parser.*;
 /**
  * Parent class for all Juneau serializers.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * Base serializer class that serves as the parent class for all serializers.
@@ -203,8 +202,9 @@ public abstract class Serializer extends BeanContext {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>
@@ -799,7 +799,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; URIs</a>
 	 * </ul>
@@ -851,7 +851,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.build();
 	 * </p>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; URIs</a>
 	 * </ul>
@@ -905,7 +905,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.build();
 	 * </p>
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; URIs</a>
 	 * </ul>

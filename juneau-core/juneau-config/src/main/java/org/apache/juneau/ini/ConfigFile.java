@@ -337,7 +337,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
+	 * 	<li>
+	 * 		Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.

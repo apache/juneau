@@ -68,7 +68,6 @@ import org.apache.juneau.internal.*;
  * 		Position/limit - Only return a subset of rows.
  * </ul>
  * 
- * 
  * <h5 class='topic'>Search</h5>
  * 
  * The search capabilities allow you to filter based on query patterns against strings, dates, and numbers.
@@ -84,7 +83,6 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		<tt>{myDate:'2001'}</tt> - Return only rows where the <tt>myDate</tt> column have dates in the year 2001.
  * </ul>
- * 
  * 
  * <h5 class='topic'>String Patterns</h5>
  * 
@@ -112,7 +110,6 @@ import org.apache.juneau.internal.*;
  * 		Prepend <tt>-</tt> to tokens that must not match.  (e.g. <tt>+foo* -*bar</tt>)
  * </ul>
  * 
- * 
  * <h5 class='topic'>Numeric Patterns</h5>
  * 
  * Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.
@@ -136,7 +133,6 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		Negative numbers are supported.
  * </ul>
- * 
  * 
  * <h5 class='topic'>Date Patterns</h5>
  * 
@@ -166,10 +162,10 @@ import org.apache.juneau.internal.*;
  * </ul>
  * 
  * <h5 class='section'>Notes:</h5>
- * <ul>
- * 	<li>Whitespace is ignored in search patterns.
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Whitespace is ignored in search patterns.
  * </ul>
- * 
  * 
  * <h5 class='topic'>View</h5>
  * 
@@ -181,7 +177,6 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>column1</tt> - Return only column 'column1'.
  * 	<li><tt>column2, column1</tt> - Return only columns 'column2' and 'column1' in that order.
  * </ul>
- * 
  * 
  * <h5 class='topic'>Sort</h5>
  * 
@@ -196,7 +191,6 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>column1-</tt> - Sort rows by column 'column1' descending.
  * 	<li><tt>column1, column2-</tt> - Sort rows by column 'column1' ascending, then 'column2' descending.
  * </ul>
- * 
  * 
  * <h5 class='topic'>Paging</h5>
  * 

@@ -26,7 +26,6 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Java bean wrapper class.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows properties on the wrapped

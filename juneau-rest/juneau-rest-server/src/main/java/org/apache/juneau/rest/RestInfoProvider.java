@@ -23,15 +23,9 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Provides localized Swagger documentation and other related information about a REST resource.
  * 
- * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
- * </ul>
- * 
- * 
- * <h5 class='section'>Documentation:</h5>
- * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; OPTIONS Pages</a>
  * </ul>
  */

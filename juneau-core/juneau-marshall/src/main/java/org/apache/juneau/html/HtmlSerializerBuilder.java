@@ -93,7 +93,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>), then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 * 
-	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}

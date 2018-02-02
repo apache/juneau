@@ -27,8 +27,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * This annotation can be applied to classes and interfaces.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanAnnotation">Overview &gt; @Bean Annotation</a>
  * </ul>

@@ -18,13 +18,11 @@ import org.apache.juneau.serializer.*;
 /**
  * Serializes POJO metadata to HTTP responses as JSON.
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>application/json+schema, text/json+schema</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>application/json</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

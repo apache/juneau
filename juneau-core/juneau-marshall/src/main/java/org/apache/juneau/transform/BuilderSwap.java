@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Specialized transform for builder classes.
  * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; POJO Builders</a>
  * </ul>

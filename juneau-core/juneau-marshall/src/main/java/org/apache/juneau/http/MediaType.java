@@ -76,7 +76,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * can be compared for equality using '=='.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Spaces are replaced with <js>'+'</js> characters.
 	 * 		This gets around the issue where passing media type strings with <js>'+'</js> as HTTP GET parameters

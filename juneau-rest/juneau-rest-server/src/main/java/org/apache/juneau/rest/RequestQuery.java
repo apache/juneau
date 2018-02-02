@@ -35,7 +35,7 @@ import org.apache.juneau.xml.*;
  * URL-Encoded FORM posts.
  * <br>This can be useful in cases where you're using GET parameters on FORM POSTs, and you don't want the body of the request to be read.
  * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestQuery">Overview &gt; RequestQuery</a>
  * </ul>
@@ -317,9 +317,11 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li><code>Collections</code> must be followed by zero or one parameter representing the value type.
-	 * 	<li><code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 	<li>
+	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -513,8 +515,9 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Whitespace is trimmed in the parameters.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Whitespace is trimmed in the parameters.
 	 * </ul>
 	 * 
 	 * @return

@@ -1031,8 +1031,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Specifies that recursions should be checked for during serialization.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -1074,8 +1075,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Otherwise, an exception is thrown.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>

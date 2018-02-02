@@ -17,9 +17,8 @@ import org.apache.http.impl.client.*;
 /**
  * Redirect strategy that allows for redirects on any request type, not just <code>GET</code> or <code>HEAD</code>.
  * 
- * 
  * <h5 class='section'>Notes:</h5>
- * <ul>
+ * <ul class='spaced-list'>
  * 	<li>
  * 		This class is similar to <code>org.apache.http.impl.client.LaxRedirectStrategy</code>
  * 		in Apache HttpClient 4.2, but also allows for redirects on <code>PUTs</code> and <code>DELETEs</code>.

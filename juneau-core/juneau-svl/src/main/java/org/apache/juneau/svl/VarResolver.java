@@ -84,7 +84,6 @@ import org.apache.juneau.svl.vars.*;
  * Session objects are specified through either the {@link #createSession(Map)} method or the
  * {@link VarResolverSession#sessionObject(String, Object)} methods.
  * 
- * 
  * <h5 class='topic'>Cloning</h5>
  * 
  * Var resolvers can be cloned by using the {@link #builder()} method.

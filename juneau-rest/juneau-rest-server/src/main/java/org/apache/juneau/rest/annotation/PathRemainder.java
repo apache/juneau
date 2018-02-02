@@ -21,7 +21,6 @@ import java.lang.annotation.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the URL
  * parameter remainder after a path pattern match.
  * 
- * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
@@ -40,8 +39,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; Method Parameters</a>
  * </ul>

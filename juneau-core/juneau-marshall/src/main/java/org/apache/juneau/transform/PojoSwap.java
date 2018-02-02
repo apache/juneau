@@ -26,7 +26,6 @@ import org.apache.juneau.serializer.*;
  * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during
  * parsing.
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * <p>
@@ -62,7 +61,6 @@ import org.apache.juneau.serializer.*;
  * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
  * {@link BeanMap#put(String,Object)}.
  * 
- * 
  * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
  * 
  * <p>
@@ -86,14 +84,12 @@ import org.apache.juneau.serializer.*;
  * 		An array of anything on this list.
  * </ul>
  * 
- * 
  * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
  * 
  * <p>
  * The normal object representation of an object.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; PojoSwaps</a>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
@@ -174,7 +170,7 @@ public abstract class PojoSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap.template()} annotation.
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
 	 * </ul>
@@ -204,7 +200,7 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * Sets the template string on this swap.
 	 * 
-	 * <h5 class='section'>Documentation:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
 	 * </ul>

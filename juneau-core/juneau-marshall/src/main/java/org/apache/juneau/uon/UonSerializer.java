@@ -19,13 +19,11 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
  * 
- * 
  * <h5 class='topic'>Media types</h5>
  * 
  * Handles <code>Accept</code> types:  <code><b>text/uon</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/uon</b></code>
- * 
  * 
  * <h5 class='topic'>Description</h5>
  * 

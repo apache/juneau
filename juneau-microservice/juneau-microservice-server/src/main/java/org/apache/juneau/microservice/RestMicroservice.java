@@ -42,7 +42,6 @@ import org.eclipse.jetty.xml.*;
  * 
  * Top-level REST resources are defined in the <code>jetty.xml</code> file as normal servlets.
  * 
- * 
  * <h5 class='topic'>Logging</h5>
  * 
  * Logging is initialized by the {@link #initLogging()} method.

@@ -25,8 +25,7 @@ import org.apache.juneau.*;
  * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanPropertyAnnotation">Overview &gt; @BeanProperty Annotation</a>
  * </ul>

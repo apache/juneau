@@ -20,8 +20,7 @@ import java.text.*;
 /**
  * REST methods can return this object as a shortcut for performing <code>HTTP 302</code> redirects.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; Redirect</a>
  * </ul>

@@ -26,8 +26,7 @@ import javax.servlet.http.*;
 /**
  * Servlet implementation of a REST resource.
  * 
- * 
- * <h5 class='section'>Documentation:</h5>
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServlet">Overview &gt; RestServlet</a>
  * </ul>

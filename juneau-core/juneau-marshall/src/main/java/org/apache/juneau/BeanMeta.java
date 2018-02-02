@@ -29,7 +29,6 @@ import org.apache.juneau.utils.*;
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
  * 
- * 
  * <h5 class='topic'>Description</h5>
  * 
  * Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation

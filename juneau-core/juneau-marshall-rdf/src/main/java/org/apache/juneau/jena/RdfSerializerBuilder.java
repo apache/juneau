@@ -153,8 +153,9 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
 	 * 		lost.
 	 * </ul>
 	 * 
