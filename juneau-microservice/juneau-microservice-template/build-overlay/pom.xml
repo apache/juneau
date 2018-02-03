@@ -32,7 +32,7 @@
 	<description>My microservice.</description>
 	
 	<properties>
-		<juneau.version>7.0.2-SNAPSHOT</juneau.version>
+		<juneau.version>7.1.0-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
