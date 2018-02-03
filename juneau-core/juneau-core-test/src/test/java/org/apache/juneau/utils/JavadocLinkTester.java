@@ -26,9 +26,10 @@ import org.apache.juneau.internal.*;
  */
 public class JavadocLinkTester {
 
-	static Pattern p = Pattern.compile("(href|src)\\=['\\\"]([^'\\\"]+)['\\\"]");
-	static Pattern p2 = Pattern.compile("(name|id)\\=['\\\"]([^'\\\"]+)['\\\"]");
-	static int errors, files, directories, links;
+	private static Map<String,Set<String>> ANCHORS = new LinkedHashMap<>();
+	private static Pattern p = Pattern.compile("(href|src)\\=['\\\"]([^'\\\"]+)['\\\"]");
+	private static Pattern p2 = Pattern.compile("(name|id)\\=['\\\"]([^'\\\"]+)['\\\"]");
+	private static int errors, files, directories, links;
 	
 	public static void main(String[] args) {
 		try {
@@ -44,16 +45,11 @@ public class JavadocLinkTester {
 				System.err.println(errors + " errors");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	static Map<String,Set<String>> ANCHORS = new LinkedHashMap<>();
-	
-	static Map<String,List<String>> ERRORS = new TreeMap<>();
-	
-	static void process(File f) throws Exception {
+	private static void process(File f) throws Exception {
 		if (f.isDirectory()) {
 			for (File fc : f.listFiles()) {
 				if (fc.isFile() && fc.getName().endsWith(".html")) {
