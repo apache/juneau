@@ -114,6 +114,7 @@ public class StreamResource implements Streamable {
 	public void streamTo(OutputStream os) throws IOException {
 		for (byte[] b : contents)
 			os.write(b);
+		os.flush();
 	}
 
 	@Override /* Streamable */

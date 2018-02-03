@@ -58,8 +58,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private RequestProperties properties;                // Response properties
-	private ServletOutputStream os;
-	private PrintWriter w;
+	private ServletOutputStream sos;
+	private FinishableServletOutputStream os;
+	private FinishablePrintWriter w;
 	private HtmlDocBuilder htmlDocBuilder;
 
 	/**
@@ -347,7 +348,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return A negotiated output stream.
 	 * @throws IOException
 	 */
-	public ServletOutputStream getNegotiatedOutputStream() throws IOException {
+	public FinishableServletOutputStream getNegotiatedOutputStream() throws IOException {
 		if (os == null) {
 			Encoder encoder = null;
 			EncoderGroup encoders = restJavaMethod.encoders;
@@ -372,46 +373,18 @@ public final class RestResponse extends HttpServletResponseWrapper {
 						setHeader("content-encoding", encoding);
 				}
 			}
-			os = getOutputStream();
-			if (encoder != null) {
-				@SuppressWarnings("resource")
-				final OutputStream os2 = encoder.getOutputStream(os);
-				os = new ServletOutputStream(){
-					@Override /* OutputStream */
-					public final void write(byte[] b, int off, int len) throws IOException {
-						os2.write(b, off, len);
-					}
-					@Override /* OutputStream */
-					public final void write(int b) throws IOException {
-						os2.write(b);
-					}
-					@Override /* OutputStream */
-					public final void flush() throws IOException {
-						os2.flush();
-					}
-					@Override /* OutputStream */
-					public final void close() throws IOException {
-						os2.close();
-					}
-					@Override /* ServletOutputStream */
-					public boolean isReady() {
-						return true;
-					}
-					@Override /* ServletOutputStream */
-					public void setWriteListener(WriteListener arg0) {
-						throw new NoSuchMethodError();
-					}
-				};
-			}
+			@SuppressWarnings("resource")
+			ServletOutputStream sos = getOutputStream();
+			os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos)); 
 		}
 		return os;
 	}
 
 	@Override /* ServletResponse */
 	public ServletOutputStream getOutputStream() throws IOException {
-		if (os == null)
-			os = super.getOutputStream();
-		return os;
+		if (sos == null)
+			sos = super.getOutputStream();
+		return sos;
 	}
 
 	/**
@@ -420,7 +393,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return <jk>true</jk> if {@link #getOutputStream()} has been called.
 	 */
 	public boolean getOutputStreamCalled() {
-		return os != null;
+		return sos != null;
 	}
 
 	/**
@@ -463,11 +436,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The negotiated writer.
 	 * @throws IOException
 	 */
-	public PrintWriter getNegotiatedWriter() throws IOException {
+	public FinishablePrintWriter getNegotiatedWriter() throws IOException {
 		return getWriter(false);
 	}
 
-	private PrintWriter getWriter(boolean raw) throws IOException {
+	@SuppressWarnings("resource")
+	private FinishablePrintWriter getWriter(boolean raw) throws IOException {
 		if (w != null)
 			return w;
 
@@ -477,7 +451,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 		try {
 			OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());
-			w = new PrintWriter(new OutputStreamWriter(out, getCharacterEncoding()));
+			w = new FinishablePrintWriter(out, getCharacterEncoding());
 			return w;
 		} catch (UnsupportedEncodingException e) {
 			String ce = getCharacterEncoding();

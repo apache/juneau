@@ -22,13 +22,7 @@ public class GzipEncoder extends Encoder {
 
 	@Override /* Encoder */
 	public OutputStream getOutputStream(OutputStream os) throws IOException {
-		return new GZIPOutputStream(os) {
-			@Override /* OutputStream */
-			public final void close() throws IOException {
-				finish();
-				super.close();
-			}
-		};
+		return new FinishableGZIPOutputStream(os);
 	}
 
 	@Override /* Encoder */
@@ -42,5 +36,11 @@ public class GzipEncoder extends Encoder {
 	@Override /* Encoder */
 	public String[] getCodings() {
 		return new String[]{"gzip"};
+	}
+	
+	private static class FinishableGZIPOutputStream extends GZIPOutputStream implements Finishable {
+		FinishableGZIPOutputStream(OutputStream out) throws IOException {
+			super(out);
+		}
 	}
 }

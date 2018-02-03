@@ -69,20 +69,23 @@ public class DefaultHandler implements ResponseHandler {
 
 				if (! session.isWriterSerializer()) {
 					if (req.isPlainText()) {
-						Writer w = res.getNegotiatedWriter();
+						FinishablePrintWriter w = res.getNegotiatedWriter();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						session.serialize(output, baos);
 						w.write(StringUtils.toSpacedHex(baos.toByteArray()));
-						w.close();  // Leave open if exception occurs.
+						w.flush();
+						w.finish();
 					} else {
-						OutputStream os = res.getNegotiatedOutputStream();
+						FinishableServletOutputStream os = res.getNegotiatedOutputStream();
 						session.serialize(output, os);
-						os.close();  // Leave open if exception occurs.
+						os.flush();
+						os.finish();
 					}
 				} else {
-					Writer w = res.getNegotiatedWriter();
+					FinishablePrintWriter w = res.getNegotiatedWriter();
 					session.serialize(output, w);
-					w.close();  // Leave open if exception occurs.
+					w.flush();
+					w.finish();
 				}
 			} catch (SerializeException e) {
 				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);

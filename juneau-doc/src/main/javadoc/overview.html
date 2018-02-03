@@ -13356,6 +13356,13 @@
 					<li>{@link org.apache.juneau.rest.ReaderResourceBuilder}
 					<li>{@link org.apache.juneau.rest.StreamResourceBuilder}
 				</ul>
+			<li>
+				{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} now returns a 
+				{@link org.apache.juneau.rest.FinishableServletOutputStream} and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
+				now returns a {@link org.apache.juneau.rest.FinishablePrintWriter} that allows you to finish the output
+				without closing the stream.
+				<br>The {@link org.apache.juneau.rest.response.DefaultHandler} class now calls <code>finish()</code>
+				instead of <code>close()</code> on the stream.
 		</ul>
 
 		<h5 class='topic'>juneau-rest-client</h5>
