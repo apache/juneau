@@ -49,15 +49,15 @@ public class JavadocLinkTester {
 		}
 	}
 	
-	private static void process(File f) throws Exception {
-		if (f.isDirectory()) {
-			for (File fc : f.listFiles()) {
+	private static void process(File dir) throws Exception {
+		if (dir.isDirectory()) {
+			for (File fc : dir.listFiles()) {
 				if (fc.isFile() && fc.getName().endsWith(".html")) {
 					files++;
 					resolveLinks(fc);
 				}
 			}
-			for (File fc : f.listFiles()) {
+			for (File fc : dir.listFiles()) {
 				if (fc.isDirectory() && ! fc.getName().equals("src-html")) {
 					directories++;
 					process(fc);

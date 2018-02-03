@@ -27,7 +27,7 @@ import org.apache.juneau.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanPropertyAnnotation">Overview &gt; @BeanProperty Annotation</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanPropertyAnnotation">Overview &gt; juneau-marshall &gt; @BeanProperty Annotation</a>
  * </ul>
  */
 @Documented

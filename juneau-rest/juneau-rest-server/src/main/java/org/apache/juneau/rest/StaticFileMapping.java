@@ -60,7 +60,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StaticFiles">Overview &gt; Static Files</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StaticFiles">Overview &gt; juneau-rest-server &gt; Static Files</a>
  * </ul>
  */
 public class StaticFileMapping {

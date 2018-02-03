@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ReaderResource">Overview &gt; ReaderResource</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ReaderResource">Overview &gt; juneau-rest-server &gt; ReaderResource</a>
  * </ul>
  */
 public final class ReaderResourceBuilder {

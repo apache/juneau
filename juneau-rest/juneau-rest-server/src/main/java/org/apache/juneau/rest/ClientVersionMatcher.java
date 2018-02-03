@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ClientVersioning">Overview &gt; Client Versioning</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ClientVersioning">Overview &gt; juneau-rest-server &gt; Client Versioning</a>
  * </ul>
  */
 public class ClientVersionMatcher extends RestMatcher {

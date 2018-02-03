@@ -160,7 +160,7 @@ import org.apache.juneau.xml.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServletDefault">Overview &gt; RestServletDefault</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServletDefault">Overview &gt; juneau-rest-server &gt; RestServletDefault</a>
  * </ul>
  */
 @RestResource(

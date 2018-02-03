@@ -68,7 +68,7 @@ import org.apache.juneau.rest.annotation.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Guards">Overview &gt; Guards</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Guards">Overview &gt; juneau-rest-server &gt; Guards</a>
  * </ul>
  */
 public abstract class RestGuard {

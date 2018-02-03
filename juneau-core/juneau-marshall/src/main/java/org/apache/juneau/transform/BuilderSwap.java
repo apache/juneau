@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; POJO Builders</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; juneau-marshall &gt; POJO Builders</a>
  * </ul>
  * 
  * @param <T> The bean class.

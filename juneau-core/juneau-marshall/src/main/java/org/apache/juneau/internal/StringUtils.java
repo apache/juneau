@@ -1048,8 +1048,7 @@ public final class StringUtils {
 	 * Characters are composed of lower-case ASCII letters and numbers only.
 	 * 
 	 * <p>
-	 * This method conforms to the restrictions for hostnames as specified in <a class="doclink"
-	 * href="https://tools.ietf.org/html/rfc952">RFC 952</a>
+	 * This method conforms to the restrictions for hostnames as specified in <a class="doclink" href="https://tools.ietf.org/html/rfc952">RFC 952</a>
 	 * Since each character has 36 possible values, the square approximation formula for the number of generated IDs
 	 * that would produce a 50% chance of collision is:
 	 * <code>sqrt(36^N)</code>.

@@ -36,7 +36,7 @@ import org.apache.juneau.rest.annotation.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RemoteableProxies">Overview &gt; Remoteable Proxies</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RemoteableProxies">Overview &gt; juneau-rest-server &gt; Remoteable Proxies</a>
  * </ul>
  */
 @SuppressWarnings("serial")
