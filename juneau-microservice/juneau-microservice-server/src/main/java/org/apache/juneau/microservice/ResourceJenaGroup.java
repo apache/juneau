@@ -50,8 +50,7 @@ import org.apache.juneau.svl.vars.*;
 		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
-		},
-		stylesheet="$C{REST/stylesheet,servlet:/styles/devops.css}"
+		}
 	),
 	config="$S{juneau.configFile}",
 	serializers={

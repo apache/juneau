@@ -4495,7 +4495,7 @@
 				Extensive listener APIs.
 		</ul>
 		
-		<h5 class='topic'>Example:</h5>
+		<h5 class='figure'>Example:</h5>
 		<p class='bcode'>
 	<cc>#--------------------------</cc>
 	<cc># My section</cc>
@@ -6264,7 +6264,8 @@
 				</p>
 				<p class='bcode'>
 	<jk>public class</jk> IsAdminMatcher <jk>extends</jk> RestMatcher {
-		<ja>@Override</ja>
+
+		<ja>@Override</ja> <jc>/* RestMatcher */</jc>
 		<jk>public boolean</jk> matches(RestRequest req) {
 			<jk>return</jk> req.isUserInRole(<js>"ADMINS_GROUP"</js>);
 		}
@@ -6438,6 +6439,7 @@
 	
 		<jd>/** Causes a 404 if POST isn't multipart/form-data */</jd>
 		<jk>public static class</jk> MultipartFormDataMatcher <jk>extends</jk> RestMatcher {
+		
 			<ja>@Override</ja> <jc>/* RestMatcher */</jc>
 			<jk>public boolean</jk> matches(RestRequest req) {
 				String contentType = req.getContentType();
@@ -6903,7 +6905,7 @@
 	<jc>// Define a guard that only lets Billy make a request</jc>
 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
 
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* RestGuard */</jc>
 		<jk>public boolean</jk> isRequestAllowed(RestRequest req) {
 			<jk>return</jk> req.getUserPrincipal().getName().equals(<js>"Billy"</js>);
 		}
@@ -6928,7 +6930,8 @@
 			</p>
 			<p class='bcode'>
 	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
-		<ja>@Override</ja>
+
+		<ja>@Override</ja> <jc>/* RestGuard */</jc>
 		<jk>public boolean</jk> isRequestAllowed(RestRequest req) {
 			<jk>return</jk> req.getUserPrincipal().isUserInRole(<js>"ADMIN"</js>);
 		}
@@ -6942,7 +6945,8 @@
 			</p>
 			<p class='bcode'>
 	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
-		<ja>@Override</ja>
+
+		<ja>@Override</ja> <jc>/* RestGuard */</jc>
 		<jk>public boolean</jk> guard(RestRequest req, RestResponse res) <jk>throws</jk> RestException {
 			<jk>if</jk> (! isOkay(req))
 				<jk>throw new</jk> RestException(<jsf>SC_FORBIDDEN</jsf>, <js>"Access denied!!!"</js>);
@@ -7013,7 +7017,7 @@
 	 */</jd>
 	<jk>public class</jk> Traversable <jk>implements</jk> RestConverter {
 	
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* RestConverter */</jc>
 		<jk>public</jk> Object convert(RestRequest req, Object o) <jk>throws</jk> RestException {
 			if (o == <jk>null</jk>)
 				<jk>return null</jk>;
@@ -7200,7 +7204,7 @@
 			<jk>super</jk>(<js>"BRACKET"</js>);
 		}
 			
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* Var */</jc>
 		<jk>public</jk> String resolve(VarResolverSession session, String arg) {
 			<jk>return</jk> <js>'['</js> + arg + <js>']'</js>;
 		}
@@ -7742,7 +7746,7 @@
 			<jk>super</jk>(context);
 		}
 
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* RestInfoProvider */</jc>
 		<jk>public</jk> Swagger getSwagger(RestRequest req) <jk>throws</jk> RestException {
 			Swagger s = <jk>super</jk>.getSwagger(req);
 			<jc>// Made inline modifications to generated swagger.</jc>
@@ -7915,10 +7919,13 @@
 				<p>
 					The <l>Widget</l> class is composed of the following methods:
 				</p>
-				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest) getStyle(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+				<ul class='doctree'>
+					<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest) getStyle(RestRequest)}
+						<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+					</ul>
 				</ul>
 				<p>
 					The HTML content returned by the {@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
@@ -7941,13 +7948,13 @@
 				<p class='bcode'>
 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
 
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* Widget */</jc>
 		<jk>public</jk> String getHtml(RestRequest req) <jk>throws</jk> Exception {
 			UriResolver r = req.getUriResolver(); <jc>// API used for resolving URIs.</jc>
 			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+r.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
 		}
 
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* Widget */</jc>
 		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
 			<jk>return</jk> <js>""</js>
 				+ <js>"\n function myalert(imageElement) {"</js>
@@ -7955,7 +7962,7 @@
 				+ <js>"\n }"</js>;
 		}
 
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* Widget */</jc>
 		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
 			<jk>return</jk> <js>""</js>
 				+ <js>"\n .myimage {"</js>
@@ -7968,24 +7975,27 @@
 					The <l>Widget</l> class also defines the following two convenience methods for loading Javascript and CSS
 					files from the classpath or file system.
 				</p>
-				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getClasspathResourceAsString(String) getClasspathResourceAsString(String)}
-					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
+				<ul class='doctree'>
+					<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getClasspathResourceAsString(String) getClasspathResourceAsString(String)}
+						<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
+					</ul>
 				</ul>
-				<h5 class='section'>Example:</h5>
+				<h5 class='figure'>Example:</h5>
 				<p class='bcode'>
 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
 
 		...
 
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* Widget */</jc>
 		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
-			<jk>return</jk> getResourceAsString(<js>"MyWidget.js"</js>);
+			<jk>return</jk> getClasspathResourceAsString(<js>"MyWidget.js"</js>);
 		}
 
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* Widget */</jc>
 		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
-			<jk>return</jk> getResourceAsString(<js>"MyWidget.css"</js>);
+			<jk>return</jk> getClasspathResourceAsString(<js>"MyWidget.css"</js>);
 		}
 	}
 				</p>
@@ -7999,14 +8009,231 @@
 			<a id="juneau-rest-server.UiCustomization"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.24.2 - UI Customization</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
+					<br>In reality, a better term for them would be a Developer Interface as they're meant to be used 
+					primarily by developers and not end users.
+					<br>Despite that distinction, it is possible to 'brand' the HTML page to whatever you desire.
+				</p>
+				<p>
+					The sample root page below includes some default branding for Juneau and Apache:
+				</p>
+				<img class='bordered' src='doc-files/UiCustomization.1.png' style='width:800px'/>
+				<p>
+					In particular, you may want to replace these icons:
+				</p>
+				<img class='bordered' src='doc-files/UiCustomization.2.png'/>
+				<img class='bordered' src='doc-files/UiCustomization.3.png'/>
+				<p>
+					The Juneau REST framework does not provide specific branding support (i.e. there is no concept of a brand icon).
+					<br>Instead, it just uses the existing open-ended API for defining branding.
+				</p>
+				<p>
+					The Juneau icon shown is a result of the header annotation on the {@link org.apache.juneau.rest.RestServletDefault} class:
+				</p>	
+				<p class='bcode'>			
+	<ja>@RestResource</ja>(
+		...
+		htmldoc=<ja>@HtmlDoc</ja>(
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
+				<js>"&lt;a href='http://juneau.apache.org'&gt;"</js>
+					+<js>"&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;"</js>
+				+<js>"&lt;/a&gt;"</js>
+			},
+			head={
+				<jc>// Browser tab icon.</jc>
+				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
+			}
+		),
+		staticFiles={<js>"htdocs:htdocs"</js>}
+	)
+	<jk>public abstract class</jk> RestServletDefault <jk>extends</jk> RestServlet {...}
+				</p>
+				<p>
+					The <js>"juneau.png"</js> image file is located in <code>org.apache.juneau.rest.htdocs</code> package and 
+					is served up via the <code>staticFiles</code> annotation (i.e. anything in the <code>org.apache.juneau.rest.htdocs</code> 
+					package is served up under the path <code>/servlet-path/htdocs</code>).  
+					<br>Then we just reference using a URI resolution variable <js>"$U{servlet:/htdocs/juneau.png}"</js>.
+				</p>
+				<p>
+					To change this image, you can extend the <l>RestServletDefault</l> class and simply override the annotations
+					pointing to your own icon.
+				</p>
+				<p class='bcode'>			
+	<ja>@RestResource</ja>(
+		...
+		htmldoc=<ja>@HtmlDoc</ja>(
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
+				<js>"&lt;a href='http://my.project.org'&gt;"</js>
+					+<js>"&lt;img src='$U{servlet:/my-htdocs/my-project.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;"</js>
+				+<js>"&lt;/a&gt;"</js>
+			},
+			head={
+				<jc>// Browser tab icon.</jc>
+				<js>"&lt;link rel='icon' href='$U{servlet:/my-htdocs/my-project.png}'/&gt;"</js>
+			}
+		),
+		staticFiles={<js>"my-htdocs:my-htdocs"</js>}
+	)
+	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> RestServletDefault {...}
+				</p>
+				<p>
+					The footer icon shown is generated by a predefined widget:
+				</p>
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				PoweredByApache.<jk>class</jk>
+			},
+			footer=<js>"$W{PoweredByApache}"</js>
+		),
+		...
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> ResourceJenaGroup {...}
+				</p>			
+				<p>
+					The widget definition is shown below:
+				</p>
+				<p class='bcode'>
+	<jk>public class</jk> PoweredByApache <jk>extends</jk> Widget {
+	
+		<jd>/**
+		 * Returns an Apache image tag hyperlinked to <js>"http://apache.org"</js>
+		 */</jd>
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getHtml(RestRequest req) <jk>throws</jk> Exception {
+			UriResolver r = req.getUriResolver();
+			<jk>return</jk> <js>"&lt;a href='http://apache.org'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='"</js>+r.resolve(<js>"servlet:/htdocs/asf.png"</js>)+<js>"'&gt;"</js>;
+		}
+	}
+				</p>
+				<p>
+					To provide your own footer icon, simply define it in your own footer section:
+				</p>
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		htmldoc=<ja>@HtmlDoc</ja>(
+			footer=<js>"&lt;img style='float:right;padding-right:20px;height:32px' src='$U{servlet:/my-htdocs/my-project.png}'&gt;"</js>
+		),
+		staticFiles={<js>"my-htdocs:my-htdocs"</js>}
+		...
+	)
+	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> RestServletDefault {...}
+				</p>
+				<p>
+					Note how the "User Interface" is open-ended to pretty much lets you do whatever you want.
+				</p>
 			</div>
 
 			<!-- ======================================================================================================== -->
 			<a id="juneau-rest-server.Stylesheets"></a>
 			<h4 class='topic' onclick='toggle(this)'>3.1.24.3 - Stylesheets</h4>
 			<div class='topic'>
-				TODO
+				<p>
+					The sample root page renders in the default "devops" look-and-feel:
+				</p>
+				<img class='bordered' src='doc-files/UiCustomization.1.png' style='width:800px'/>
+				<p>
+					The sample root page provides a dropdown widget to try out the other default look-and-feels:
+				</p>
+				<img class='bordered' src='doc-files/Stylesheets.1.png'/>
+				<p>
+					For example, the "light" look-and-feel:
+				</p>
+				<img class='bordered' src='doc-files/Stylesheets.2.png' style='width:800px'/>
+				<p>
+					And the "dark" look-and-feel:
+				</p>
+				<img class='bordered' src='doc-files/Stylesheets.3.png' style='width:800px'/>
+				<p>
+					The stylesheet URL is controlled by the {@link org.apache.juneau.rest.annotation.HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
+					<br>The {@link org.apache.juneau.rest.RestServletDefault} class defines the stylesheet served up as a static file:
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		htmldoc=<ja>@HtmlDoc</ja>(
+			stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>,
+		),
+	
+		staticFiles={<js>"styles:styles"</js>}
+	)
+	<jk>public abstract class</jk> RestServletDefault <jk>extends</jk> RestServlet {...}
+				</p>		
+				<p>
+					The <js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js> variable says to use the URI defined
+					in your servlet's config file, if there is one, and to default to serving up the file
+					<code>org/apache/juneau/rest/styles/devops.css</code>.
+				</p>
+				<p>
+					To provide your own stylesheet, simply override the stylesheet attribute and point to a different
+					file:	
+				</p>
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		htmldoc=<ja>@HtmlDoc</ja>(
+			stylesheet=<js>"servlet:/my-styles/my-style.css}"</js>,
+		),
+		staticFiles={<js>"my-styles:my-styles"</js>}
+	)
+	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> RestServletDefault {...}
+				</p>
+				<p>
+					You can try out different stylesheets by passing in a <code>stylesheet</code> attribute in the request
+					URL.
+					<br>The example above show this in use.
+				</p>
+				<p>
+					In case you're curious about how the menu item works, it's defined via a widget:
+				</p>
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				PoweredByApache.<jk>class</jk>,
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"options: ?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> ResourceJenaGroup {...}
+				</p>
+				<p>
+					The <l>StyleMenuItem</l> is a widget that extends from {@link org.apache.juneau.rest.widget.MenuItemWidget}, a
+					specialized widget for creating pop-up menus.
+					<br>In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
+				</p>
+				<p class='bcode'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+
+	<jk>public class</jk> StyleMenuItem <jk>extends</jk> MenuItemWidget {
+	
+		<jk>private static final</jk> String[] <jsf>BUILT_IN_STYLES</jsf> = {<js>"devops"</js>, <js>"light"</js>, <js>"original"</js>, <js>"dark"</js>};
+	
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getLabel(RestRequest req) {
+			<jk>return</jk> <js>"styles"</js>;
+		}
+
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> Div getContent(RestRequest req) <jk>throws</jk> Exception {
+			Div div = <jsm>div</jsm>();
+			<jk>for</jk> (String s : <jsf>BUILT_IN_STYLES</jsf>) {
+				java.net.URI uri = req.getUri(<jk>true</jk>, <jk>new</jk> AMap&lt;String,String&gt;().append(<js>"stylesheet"</js>, <js>"styles/"</js>+s+<js>".css"</js>));
+				div.children(<jsm>a</jsm>(uri, s), <jsm>br</jsm>());
+			}
+			<jk>return</jk> div;
+		}
+	}
+				</p>
 			</div>
 		</div>
 
@@ -8385,7 +8612,8 @@
 		<jd>/** Serializer for converting images to byte streams */</jd>
 		<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
-			<ja>@Override</ja>
+		
+			<ja>@Override</ja> <jc>/* Serializer */</jc>
 			<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {
 				RenderedImage image = (RenderedImage)o;
 				String mediaType = ctx.getMediaType();
@@ -8396,7 +8624,8 @@
 		<jd>/** Parser for converting byte streams to images */</jd>
 		<ja>@Consumes</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
-			<ja>@Override</ja>
+		
+			<ja>@Override</ja> <jc>/* Parser */</jc>
 			<jk>public</jk> &lt;T&gt; T parse(InputStream in, ClassMeta&lt;T&gt; type, ParserSession session) <jk>throws</jk> ParseException, IOException {
 				BufferedImage image = ImageIO.<jsm>read</jsm>(in);
 				<jk>return</jk> (T)image;
@@ -8434,19 +8663,19 @@
 		<jk>private</jk> ServiceTracker <jf>httpServiceTracker</jf>;
 		<jk>private</jk> BundleContext <jf>context</jf>;
 	
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* BundleActivator */</jc>
 		<jk>public void</jk> start(BundleContext context) <jk>throws</jk> Exception {
 			<jk>this</jk>.<jf>context</jf> = context;
 			<jf>httpServiceTracker</jf> = <jk>new</jk> ServiceTracker(context, HttpService.<jk>class</jk>.getName(), <jk>this</jk>);
 			<jf>httpServiceTracker</jf>.open();
 		}
 	
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* BundleActivator */</jc>
 		<jk>public void</jk> stop(BundleContext context) <jk>throws</jk> Exception {
 			<jf>httpServiceTracker</jf>.close();
 		}
 	
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
 		<jk>public</jk> Object addingService(ServiceReference reference) {
 			Object service = <jf>context</jf>.getService(reference);
 	
@@ -8462,11 +8691,11 @@
 			<jk>return</jk> service;
 		}
 	
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
 		<jk>public void</jk> modifiedService(ServiceReference reference, Object service) {
 		}
 	
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
 		<jk>public void</jk> removedService(ServiceReference reference, Object service) {
 		}
 	}
@@ -8701,7 +8930,7 @@
 			interfaceClass.getClassLoader(),
 			<jk>new</jk> Class[] { interfaceClass },
 			<jk>new</jk> InvocationHandler() {
-				<ja>@Override</ja>
+				<ja>@Override</ja> <jc>/* InvocationHandler */</jc>
 				<jk>public</jk> Object invoke(Object proxy, Method method, Object[] args) {
 					<jk>try</jk> {
 						String uri = <jf>remoteableServletUri</jf> + '/' + interfaceClass.getName() + '/' + ClassUtils.<jsm>getMethodSignature</jsm>(method);
@@ -9035,7 +9264,7 @@
 			<p>
 				Juneau is built as a veneer on top of the Servlet API, allowing you to use low-level Servlet APIs
 				whenever needed.
-				This allows you to take advantage of the newest HTTP/2 features implemented in the new Servlet 4.0 
+				<br>This allows you to take advantage of the newest HTTP/2 features implemented in the new Servlet 4.0 
 				specification.
 			</p>
 			<p>
@@ -9047,7 +9276,89 @@
 		<a id="juneau-rest-server.PredefinedLabelBeans"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.35 - Predefined Label Beans</h4>
 		<div class='topic'>
-			TODO
+			<p>
+				The {@link org.apache.juneau.rest.labels} package contains some reusable beans that are useful for 
+				creating linked items in HTML views.
+			</p>
+			<p>
+				The {@link org.apache.juneau.rest.labels.ResourceDescription} class is a bean with name/description
+				properties for labeling and linking to child resources.
+				<br>The following examples is pulled from the REST examples:
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> PredefinedLabelsResource <jk>extends</jk> Resource {
+	
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> ResourceDescription[] getChildMethods() {
+			<jk>return new</jk> ResourceDescription[] {
+				<jk>new</jk> ResourceDescription(<js>"beanDescription"</js>, <js>"BeanDescription"</js>),
+				<jk>new</jk> ResourceDescription(<js>"htmlLinks"</js>, <js>"HtmlLink"</js>)
+			};
+		}
+	}
+			</p>
+			<p>
+				It get rendered as a table of name/description columns with links to child methods:
+			</p>
+			<img class='bordered' src='doc-files/PredefinedLabelBeans.1.png' style='width:240px'/>
+			<p>
+				The internals of the class show it simply has two bean properties with a link annotation
+				defined on the name property:
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> ResourceDescription {
+
+		<ja>@Html</ja>(link=<js>"servlet:/{name}"</js>)
+		<jk>public</jk> Object getName() {...}
+		
+		<jk>public</jk> Object getDescription() {...}
+	}
+			</p>
+			<p>
+				The {@link org.apache.juneau.rest.labels.BeanDescription} class provides a simple view
+				of a bean and it's properties.
+			</p>
+			<p class='bcode'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/beanDescription"</js>)
+	<jk>public</jk> BeanDescription getBeanDescription() {
+		<jk>return new</jk> BeanDescription(Person.<jk>class</jk>);
+	}	
+			</p>
+			<p>
+				This example renders the following:
+			</p>
+			<img class='bordered' src='doc-files/PredefinedLabelBeans.2.png' style='width:584px'/>
+			<p>
+				The {@link org.apache.juneau.html.annotation.HtmlLink @HtmlLink} annotation can also be useful
+				for rendering custom hyperlinks:
+			</p>
+			<p class='bcode'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
+	<jk>public</jk> ALink[] htmlLinks() {
+		<jk>return new</jk> ALink[] {
+			<jk>new</jk> ALink(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> ALink(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+		};
+	}
+	
+	<ja>@HtmlLink</ja>(nameProperty=<js>"n"</js>, hrefProperty=<js>"l"</js>)
+	<jk>public static class</jk> ALink {
+		<jk>public</jk> String <jf>n</jf>, <jf>l</jf>;
+		<jk>public</jk> ALink(String n, String l) {
+			<jk>this</jk>.<jf>n</jf> = n;
+			<jk>this</jk>.<jf>l</jf> = l;
+		}
+	}
+			</p>			
+			<p>
+				This example renders the following consisting of a list of hyperlinks:
+			</p>
+			<img class='bordered' src='doc-files/PredefinedLabelBeans.3.png' style='width:92px'/>
+			
+			<h5 class='section'>See Also:</h5>
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.dto.LinkString}
+			</ul>
 		</div>
 		
 		<!-- ======================================================================================================== -->
@@ -11152,7 +11463,7 @@
 		* [OPTIONS /*] 
 		* View resource options 
 		*/</jd> 
-		<ja>@Override</ja> /* RestServletDefault */ 
+		<ja>@Override</ja> <jc>/* RestServletDefault */</jc> 
 		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>) 
 		<jk>public</jk> Swagger getOptions(RestRequest req) { 
 			<jk>return</jk> req.getSwagger(); 
@@ -12207,7 +12518,8 @@
 		<jd>/** Serializer for converting images to byte streams */</jd>
 		<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
-			<ja>@Override</ja>
+
+			<ja>@Override</ja> <jc>/* Serializer */</jc>
 			<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {
 				RenderedImage image = (RenderedImage)o;
 				String mediaType = ctx.getMediaType();
@@ -12218,7 +12530,8 @@
 		<jd>/** Parser for converting byte streams to images */</jd>
 		<ja>@Consumes</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
-			<ja>@Override</ja>
+
+			<ja>@Override</ja> <jc>/* Parser */</jc>
 			<jk>public</jk> &lt;T&gt; T parse(InputStream in, ClassMeta&lt;T&gt; type, ParserSession session) <jk>throws</jk> ParseException, IOException {
 				BufferedImage image = ImageIO.<jsm>read</jsm>(in);
 				<jk>return</jk> (T)image;

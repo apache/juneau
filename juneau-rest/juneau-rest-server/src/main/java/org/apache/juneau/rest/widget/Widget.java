@@ -25,9 +25,9 @@ import org.apache.juneau.utils.*;
  * <p>
  * Widgets are associated with resources through the following
  * <ul>
- * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets}
- * 	<li>{@link RestContextBuilder#widgets(Class...)}
- * 	<li>{@link RestContextBuilder#widgets(Widget...)}
+ * 	<li class='ja'>{@link HtmlDoc#widgets() @HtmlDoc.widgets}
+ * 	<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
+ * 	<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
  * </ul>
  * 
  * <p>

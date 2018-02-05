@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.text.*;
 
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.utils.*;
 

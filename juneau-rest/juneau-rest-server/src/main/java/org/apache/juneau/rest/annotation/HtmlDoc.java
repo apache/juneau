@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.widget.*;
@@ -90,9 +89,6 @@ public @interface HtmlDoc {
 	 * Sets the HTML aside section contents.
 	 * 
 	 * <p>
-	 * The format of this value is HTML.
-	 * 
-	 * <p>
 	 * The aside section typically floats on the right side of the page.
 	 * 
 	 * <h5 class='section'>Example:</h5>
@@ -109,10 +105,14 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
+	 * 		The format of this value is HTML.
+	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
@@ -120,8 +120,6 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -134,9 +132,6 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML footer section contents.
-	 * 
-	 * <p>
-	 * The format of this value is HTML.
 	 * 
 	 * <p>
 	 * The footer section typically floats on the bottom of the page.
@@ -155,10 +150,14 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
+	 * 		The format of this value is HTML.
+	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
@@ -166,8 +165,6 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -180,9 +177,6 @@ public @interface HtmlDoc {
 
 	/**
 	 * Adds arbitrary content to the HTML <xt>&lt;head&gt;</xt> element on the page.
-	 * 
-	 * <p>
-	 * The format of this value is HTML.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -201,6 +195,8 @@ public @interface HtmlDoc {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of this value is HTML.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -227,9 +223,6 @@ public @interface HtmlDoc {
 	 * Sets the HTML header section contents.
 	 * 
 	 * <p>
-	 * The format of this value is HTML.
-	 * 
-	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
 	 * to be whatever you want.
 	 * 
@@ -247,7 +240,11 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
+	 * 		The format of this value is HTML.
+	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no header.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -258,8 +255,6 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class if not overridden.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -274,13 +269,7 @@ public @interface HtmlDoc {
 	 * Sets the HTML nav section contents.
 	 * 
 	 * <p>
-	 * The format of this value is HTML.
-	 * 
-	 * <p>
 	 * The nav section of the page contains the links.
-	 * 
-	 * <p>
-	 * The format of this value is HTML.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -296,6 +285,8 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
+	 * 		The format of this value is HTML.
+	 * 	<li>
 	 * 		When a value is specified, the {@link #navlinks()} value will be ignored.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -303,14 +294,14 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -325,15 +316,15 @@ public @interface HtmlDoc {
 	 * Sets the links in the HTML nav section.
 	 * 
 	 * <p>
+	 * The page links are positioned immediately under the title and text.
+	 * 
+	 * <p>
 	 * The value is an array of strings with two possible values:
 	 * <ul>
 	 * 	<li>A key-value pair representing a hyperlink label and href:
 	 * 		<br><js>"google: http://google.com"</js>
 	 * 	<li>Arbitrary HTML.
 	 * </ul>
-	 * 
-	 * <p>
-	 * The page links are positioned immediately under the title and text.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -355,16 +346,16 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This field can also use URIs of any support type in {@link UriResolver}.
+	 * 		The parent links can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
+	 * 		to place a link inside the list of parent links.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.URIs">URI resolution</a> (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		The parent links can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
-	 * 		to place a link inside the list of parent links.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -410,9 +401,6 @@ public @interface HtmlDoc {
 	/**
 	 * Sets the HTML script section contents.
 	 * 
-	 * <p>
-	 * The format of this value is Javascript.
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -427,10 +415,14 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
+	 * 		The format of this value is Javascript.
+	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
@@ -438,8 +430,6 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -452,9 +442,6 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML CSS style section contents.
-	 * 
-	 * <p>
-	 * The format of this value is CSS.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -471,10 +458,14 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
+	 * 		The format of this value is CSS.
+	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
@@ -482,8 +473,6 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -498,13 +487,7 @@ public @interface HtmlDoc {
 	 * Sets the CSS URL in the HTML CSS style section.
 	 * 
 	 * <p>
-	 * The format of this value is a URL.
-	 * 
-	 * <p>
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
-	 * 
-	 * <p>
-	 * The format of this value is CSS.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -517,6 +500,8 @@ public @interface HtmlDoc {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of this value is a URL.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -567,13 +552,18 @@ public @interface HtmlDoc {
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
 	 * 
+	 * <p>
 	 * Widgets resolve the following variables:
-	 * <ul>
-	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
-	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
+	 * 
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
+	 * 	<li>
+	 * 		<js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
 	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
 	 * 			 in the HTML page.
-	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest)}.
+	 * 	<li>
+	 * 		<js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest)}.
 	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
 	 * 			 in the HTML page.
 	 * </ul>
@@ -608,10 +598,7 @@ public @interface HtmlDoc {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_widgets}
-	 * 	<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
-	 * 	<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
-	 * 	<li class='jm'>{@link RestContextBuilder#widgets(boolean,Widget...)}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
 	 * </ul>
 	 */
 	Class<? extends Widget>[] widgets() default {};

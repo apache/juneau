@@ -2720,6 +2720,11 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
+	 * </ul>
 	 */
 	public static final String REST_widgets = PREFIX + "widgets.lo";
 	

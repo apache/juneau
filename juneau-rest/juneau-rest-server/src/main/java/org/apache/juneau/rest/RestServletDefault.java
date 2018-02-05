@@ -199,7 +199,7 @@ import org.apache.juneau.xml.*;
 			"<h2>$R{methodSummary,resourceDescription}</h2>",
 			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
 		},
-		stylesheet="servlet:/styles/light.css",
+		stylesheet="$C{REST/stylesheet,servlet:/styles/devops.css}",
 		head={
 			"<link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/>"
 		}

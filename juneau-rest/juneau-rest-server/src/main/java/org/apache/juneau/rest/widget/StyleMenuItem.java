@@ -57,7 +57,7 @@ public class StyleMenuItem extends MenuItemWidget {
 
 	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original", "dark"};
 
-	@Override /* MenuItemWidget */
+	@Override /* Widget */
 	public String getLabel(RestRequest req) {
 		return "styles";
 	}
@@ -65,7 +65,7 @@ public class StyleMenuItem extends MenuItemWidget {
 	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data
 	 * as plain-text.
 	 */
-	@Override /* Widget */
+	@Override /* MenuItemWidget */
 	public Div getContent(RestRequest req) throws Exception {
 		Div div = div();
 		for (String s : BUILT_IN_STYLES) {

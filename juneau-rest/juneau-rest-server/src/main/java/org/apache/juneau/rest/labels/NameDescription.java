@@ -58,9 +58,12 @@ public class NameDescription {
 	 * Sets the name field on this label to a new value.
 	 * 
 	 * @param name The new name.
+	 * @return This object (for method chaining).
 	 */
-	public void setName(Object name) {
+	@BeanProperty
+	public NameDescription name(Object name) {
 		this.name = name;
+		return this;
 	}
 
 	/**
@@ -76,8 +79,11 @@ public class NameDescription {
 	 * Sets the description field on this label to a new value.
 	 * 
 	 * @param description The new description.
+	 * @return This object (for method chaining).
 	 */
-	public void setDescription(Object description) {
+	@BeanProperty
+	public NameDescription description(Object description) {
 		this.description = description;
+		return this;
 	}
 }
