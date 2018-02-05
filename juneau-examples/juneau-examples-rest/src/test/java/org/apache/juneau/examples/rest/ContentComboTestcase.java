@@ -93,6 +93,7 @@ public class ContentComboTestcase extends RestTestcase {
 		this.comboInput = comboInput;
 	}
 
+	@SuppressWarnings("resource")
 	@Test
 	public void doTest() throws Exception {
 		RestClient rc = getClient(comboInput.mediaType);

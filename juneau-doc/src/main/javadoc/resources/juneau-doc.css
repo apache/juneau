@@ -19,11 +19,10 @@
  * Available classes:
  *	fixedWidth - Force block to be 800 px wide.
  *	table.styled - A table with alternating row colors.
- *	h2/h3/h4/h5/h6.topic - Topic headers.
+ *	h2/h3/h4/h5.topic - Topic headers.
  * 	bordered - Put border around a block (e.g. an image).
  *	padded - Put padding around a block (e.g. an image).
  *	ol/ul.toc - Table of contents.
- *	ol/ul.notes - Notes.
  *	code.snippet - A code snippet.
  *	ol/ul.spaced-list - A spaced list.
  *	ol/ul.javahierarchy - A Java class hierarchy list.
@@ -166,28 +165,28 @@ tr.borderbottom td {
 	margin: 0px;
 }
 
-ol.toc, ol.notes,
-ul.toc, ul.notes,
-.toc ol, .notes ol,
-.toc ul, .notes ul {
+ol.toc,
+ul.toc,
+.toc ol,
+.toc ul {
 	background: #dee3e9;
 	margin: 0px;
 	padding: 0px;
 }
 
-ul.toc, ul.notes,
-.toc ul, .notes ul {
+ul.toc,
+.toc ul {
 	list-style: disc;
 }
 
-ol.toc p, ol.notes p,
-ul.toc p, ul.notes p,
-.toc ol p, .notes ol p,
-.toc ul p, .notes ul p,
-ol.toc div, ol.notes div,
-ul.toc div, ul.notes div,
-.toc ol div, .notes ol div,
-.toc ul div, .notes ul div {
+ol.toc p,
+ul.toc p,
+.toc ol p,
+.toc ul p,
+ol.toc div,
+ul.toc div,
+.toc ol div,
+.toc ul div {
 	color: #353833;
 	font: normal 1em Arial, Helvetica, sans-serif;
 	font-size: 1em;
@@ -201,19 +200,11 @@ ul.toc div, ul.notes div,
 	padding-left: 5px;
 }
 
-.notes li {
-	background: #FFFFFF;
-	margin-left: 30px;
-	padding-left: 5px;
-	padding-top: 10px;
-}
-
 /* Linear gradients */
 
 /* Light-colored background headers */
-h5.toc,h6.toc, 
-h5.notes,h6.notes, 
-h5.topic,h6.topic, 
+h5.toc, 
+h5.topic, 
 h2.title,
 div.docSummary > div.block,
 div.contentContainer > div.block > p:first-child {
@@ -235,8 +226,7 @@ body > p:first-child {
 
 /* Header styles */
 
-h5.toc, h5.notes,
-h6.toc, h6.notes {
+h5.toc {
 	color: #2C4557;
 	margin-bottom: 0px;
 	padding: 5px 30px;
@@ -245,7 +235,7 @@ h6.toc, h6.notes {
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
 
-h5.topic, h6.topic {
+h5.topic {
 	color: #2C4557;
 	padding: 5px 20px;
 	margin: 30px 10px 10px 0px;
@@ -322,6 +312,9 @@ l {
 
 /* Documentation Tree */
 .doctree li {}
+li.normal {
+    list-style-image:none; 
+}
 li.link {
     list-style-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABEElEQVQ4T2M0T3iVLyHKWvnvH4M4AwmAiYnh5adP/7oYvQrevmBmZiJJM8wekCGMvsXv/5NgMYrS33/+M1BkwOOX/ygzYM/pX8QZwMfN+L8lnZOhf+VPhvtP/zKC/HHh1h+Gx6+IdAEHG8P/WRVcDP///2con/aDYcfx34wgzSCAEgatGez/1WSZwDbgAm8//v8v7fcJrgbFAE1Fpv86iowMv/8gzPj7j4Hh7cd/DOkBrAzsrAwM9XN/MvQs/YUwQNb3zX9OdkxLP339z/Dtx3+GT9/+M/BwMv6/sZyTYdKa3wxdS36jKGZkMH9FdjoAh8GwMOD1AwYGBnky88NDRgbTNwkMTP8byDDkIcM/xgYA0dJ4nW6TgR4AAAAASUVORK5CYII=');
 }

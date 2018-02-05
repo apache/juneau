@@ -30,9 +30,10 @@ public class ClientTest {
 			System.out.println("Running client test...");
 
 			// Create a client to handle XML requests and responses.
-			RestClient client = RestClient.create().build();
-			RestClient xmlClient = RestClient.create(XmlSerializer.DEFAULT_NS, XmlParser.DEFAULT).build();
-			try {
+			try (
+					RestClient client = RestClient.create().build();
+					RestClient xmlClient = RestClient.create(XmlSerializer.DEFAULT_NS, XmlParser.DEFAULT).build();
+				) {
 				String root = "http://localhost:10000/addressBook";
 
 				// Get the current contents of the address book
@@ -87,9 +88,6 @@ public class ClientTest {
 				System.out.println("Changed name, response = " + r);
 				p = client.doGet(pp[0].uri).getResponse(Person.class);
 				System.out.println("New name = " + p.name);
-			} finally {
-				client.closeQuietly();
-				xmlClient.closeQuietly();
 			}
 
 		} catch (Exception e) {

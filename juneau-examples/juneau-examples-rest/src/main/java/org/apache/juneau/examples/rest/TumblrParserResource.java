@@ -53,8 +53,7 @@ public class TumblrParserResource extends Resource {
 	@RestMethod(name=GET, path="/{blogName}", summary="Parse the specified blog")
 	public ObjectList parseBlog(@Path String blogName) throws Exception {
 		ObjectList l = new ObjectList();
-		RestClient rc = RestClient.create().build();
-		try {
+		try (RestClient rc = RestClient.create().build()) {
 			String site = "http://" + blogName + ".tumblr.com/api/read/json";
 			ObjectMap m = rc.doGet(site).getResponse(ObjectMap.class);
 			int postsTotal = Math.min(m.getInt("posts-total"), MAX_POSTS);
@@ -83,8 +82,6 @@ public class TumblrParserResource extends Resource {
 					l.add(e);
 				}
 			}
-		} finally {
-			rc.closeQuietly();
 		}
 		return l;
 	}

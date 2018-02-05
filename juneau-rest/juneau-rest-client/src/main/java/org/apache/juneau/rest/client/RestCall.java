@@ -67,7 +67,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked" })
-public final class RestCall extends BeanSession {
+public final class RestCall extends BeanSession implements Closeable {
 
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
@@ -2095,17 +2095,16 @@ public final class RestCall extends BeanSession {
 	/**
 	 * Cleans up this HTTP call.
 	 * 
-	 * @return This object (for method chaining).
 	 * @throws RestCallException Can be thrown by one of the {@link RestCallInterceptor#onClose(RestCall)} calls.
 	 */
-	public RestCall close() throws RestCallException {
+	@Override /* Closeable */
+	public void close() throws RestCallException {
 		if (response != null)
 			EntityUtils.consumeQuietly(response.getEntity());
 		isClosed = true;
 		if (! isFailed)
 			for (RestCallInterceptor r : interceptors)
 				r.onClose(this);
-		return this;
 	}
 
 	/**

@@ -14,6 +14,8 @@ package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
@@ -36,16 +38,19 @@ public class RootResourcesTest extends RestTestcase {
 	@Test
 	public void testJson() throws Exception {
 		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
-		RestCall r = client.doGet("");
-		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
-		assertEquals("helloWorld", x[0].getName());
-		assertEquals("Hello World", x[0].getDescription());
+		
+		try (RestCall r = client.doGet("")) {
+			ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
+			assertEquals("helloWorld", x[0].getName());
+			assertEquals("Hello World", x[0].getDescription());
+		}
 
-		r = jsonClient.doOptions("");
-		ObjectMap x2 = r.getResponse(ObjectMap.class);
-		String s = x2.getObjectMap("info").getString("description");
-		if (debug) System.err.println(s);
-		assertTrue(s, s.startsWith("Example of a router resource page"));
+		try (RestCall r = jsonClient.doOptions("")) {
+			ObjectMap x2 = r.getResponse(ObjectMap.class);
+			String s = x2.getObjectMap("info").getString("description");
+			if (debug) System.err.println(s);
+			assertTrue(s, s.startsWith("Example of a router resource page"));
+		}
 	}
 
 	//====================================================================================================
@@ -53,19 +58,21 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testXml() throws Exception {
-		RestClient client = SamplesMicroservice.client().parser(XmlParser.DEFAULT).build();
-		RestCall r = client.doGet("");
-		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
-		assertEquals("helloWorld", x[0].getName());
-		assertEquals("Hello World", x[0].getDescription());
+		try (RestClient client = SamplesMicroservice.client().parser(XmlParser.DEFAULT).build()) {
 
-		r = jsonClient.doOptions("");
-		ObjectMap x2 = r.getResponse(ObjectMap.class);
-		String s = x2.getObjectMap("info").getString("description");
-		if (debug) System.err.println(s);
-		assertTrue(s, s.startsWith("Example of a router resource page"));
+			try (RestCall r = client.doGet("")) {
+				ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
+				assertEquals("helloWorld", x[0].getName());
+				assertEquals("Hello World", x[0].getDescription());
+			}
 
-		client.closeQuietly();
+			try (RestCall r = jsonClient.doOptions("")) {
+				ObjectMap x2 = r.getResponse(ObjectMap.class);
+				String s = x2.getObjectMap("info").getString("description");
+				if (debug) System.err.println(s);
+				assertTrue(s, s.startsWith("Example of a router resource page"));
+			}
+		}
 	}
 
 	//====================================================================================================
@@ -73,19 +80,21 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testHtmlStripped() throws Exception {
-		RestClient client = SamplesMicroservice.client().parser(HtmlParser.DEFAULT).accept("text/html+stripped").build();
-		RestCall r = client.doGet("");
-		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
-		assertEquals("helloWorld", x[0].getName());
-		assertEquals("Hello World", x[0].getDescription());
-
-		r = jsonClient.doOptions("").accept("text/json");
-		ObjectMap x2 = r.getResponse(ObjectMap.class);
-		String s = x2.getObjectMap("info").getString("description");
-		if (debug) System.err.println(s);
-		assertTrue(s, s.startsWith("Example of a router resource page"));
-
-		client.closeQuietly();
+		try (RestClient client = SamplesMicroservice.client().parser(HtmlParser.DEFAULT).accept("text/html+stripped").build()) {
+			
+			try (RestCall r = client.doGet("")) {
+				ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
+				assertEquals("helloWorld", x[0].getName());
+				assertEquals("Hello World", x[0].getDescription());
+			}
+	
+			try (RestCall r = jsonClient.doOptions("").accept("text/json")) {
+				ObjectMap x2 = r.getResponse(ObjectMap.class);
+				String s = x2.getObjectMap("info").getString("description");
+				if (debug) System.err.println(s);
+				assertTrue(s, s.startsWith("Example of a router resource page"));
+			}
+		}
 	}
 
 	//====================================================================================================
@@ -93,13 +102,15 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testJsonSchema() throws Exception {
-		RestClient client = SamplesMicroservice.client().parser(JsonParser.DEFAULT).accept("text/json+schema").build();
-		RestCall r = client.doGet("");
-		ObjectMap m = r.getResponse(ObjectMap.class);
-		if (debug) System.err.println(m);
-		assertEquals("org.apache.juneau.rest.labels.ChildResourceDescriptions<org.apache.juneau.rest.labels.ResourceDescription>", m.getString("description"));
-		assertEquals("org.apache.juneau.rest.labels.ResourceDescription", m.getObjectMap("items").getString("description"));
-		client.closeQuietly();
+		try (RestClient client = SamplesMicroservice.client().parser(JsonParser.DEFAULT).accept("text/json+schema").build()) {
+			try (RestCall r = client.doGet("")) {
+				ObjectMap m = r.getResponse(ObjectMap.class);
+				if (debug) System.err.println(m);
+				assertEquals("org.apache.juneau.rest.labels.ChildResourceDescriptions<org.apache.juneau.rest.labels.ResourceDescription>", m.getString("description"));
+				assertEquals("org.apache.juneau.rest.labels.ResourceDescription", m.getObjectMap("items").getString("description"));
+				client.closeQuietly();
+			}
+		}
 	}
 
 	//====================================================================================================
@@ -107,9 +118,10 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testOptionsPage() throws Exception {
-		RestCall r = jsonClient.doOptions("");
-		Swagger o = r.getResponse(Swagger.class);
-		if (debug) System.err.println(o);
-		assertEquals("Example of a router resource page.", o.getInfo().getDescription());
+		try (RestCall r = jsonClient.doOptions("")) {
+			Swagger o = r.getResponse(Swagger.class);
+			if (debug) System.err.println(o);
+			assertEquals("Example of a router resource page.", o.getInfo().getDescription());
+		}
 	}
 }

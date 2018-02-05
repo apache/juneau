@@ -60,7 +60,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  */
 @SuppressWarnings("rawtypes")
-public class RestClient extends BeanContext {
+public class RestClient extends BeanContext implements Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -501,6 +501,7 @@ public class RestClient extends BeanContext {
 	 * 
 	 * @throws IOException
 	 */
+	@Override
 	public void close() throws IOException {
 		isClosed = true;
 		if (httpClient != null && ! keepHttpClientOpen)
@@ -995,20 +996,9 @@ public class RestClient extends BeanContext {
 						if (rmm == null)
 							throw new RuntimeException("Method is not exposed as a remoteable method.");
 
-						try {
-							String url = rmm.getUrl();
-							String httpMethod = rmm.getHttpMethod();
-							RestCall rc;
-							// this could be a switch at language level 7
-							if (httpMethod.equals("DELETE")) {
-								rc = doDelete(url);
-							} else if (httpMethod.equals("POST")) {
-								rc = doPost(url);
-							} else if (httpMethod.equals("GET")) {
-								rc = doGet(url);
-							} else if (httpMethod.equals("PUT")) {
-								rc = doPut(url);
-							} else throw new RuntimeException("Unsupported method.");
+						String url = rmm.getUrl();
+						String httpMethod = rmm.getHttpMethod();
+						try (RestCall rc = doCall(httpMethod, url, httpMethod.equals("POST"))) {
 
 							rc.serializer(serializer).parser(parser);
 

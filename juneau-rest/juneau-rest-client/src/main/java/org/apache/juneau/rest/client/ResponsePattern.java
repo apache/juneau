@@ -57,8 +57,8 @@ import java.util.regex.*;
  * 		.run();
  * </p>
  * 
- * <h5 class='notes'>Important Notes:</h5>
- * <ol class='notes'>
+ * <h5 class='section'>Important Notes:</h5>
+ * <ol class='spaced-list'>
  * 	<li>
  * 		Using response patterns does not affect the functionality of any of the other methods
  * 		used to retrieve the response such as {@link RestCall#getResponseAsString()} or {@link RestCall#getResponse(Class)}.
