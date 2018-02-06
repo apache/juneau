@@ -14,8 +14,6 @@ package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;

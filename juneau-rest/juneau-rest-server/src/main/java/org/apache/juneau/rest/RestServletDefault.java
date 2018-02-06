@@ -199,11 +199,18 @@ import org.apache.juneau.xml.*;
 			"<h2>$R{methodSummary,resourceDescription}</h2>",
 			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
 		},
+		navlinks={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS"
+		},
 		stylesheet="$C{REST/stylesheet,servlet:/styles/devops.css}",
 		head={
 			"<link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/>"
 		}
 	),
+	
+	// Optional external configuration file.
+	config="$S{juneau.configFile}",
 
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"

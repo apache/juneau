@@ -44,16 +44,7 @@ import org.apache.juneau.svl.vars.*;
  * </ul>
  */
 @SuppressWarnings("serial")
-@RestResource(
-	htmldoc=@HtmlDoc(
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS"
-		},
-		stylesheet="$C{REST/stylesheet,servlet:/styles/devops.css}"
-	),
-	config="$S{juneau.configFile}"
-)
+@RestResource
 public abstract class ResourceGroup extends RestServletGroupDefault {
 
 	/**

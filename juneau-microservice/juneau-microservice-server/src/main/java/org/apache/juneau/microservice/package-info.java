@@ -10,42 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import static org.apache.juneau.http.HttpMethodName.*;
-
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.labels.*;
 
 /**
- * Specialized subclass of {@link RestServletDefault} for showing "group" pages.
- * 
- * <p>
- * Group pages consist of simple lists of child resource URLs and their labels.
- * They're meant to be used as jumping-off points for child resources.
- * 
- * <p>
- * Child resources are specified using the {@link RestResource#children() @RestResource.children()} annotation.
- * 
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RouterPages">Overview &gt; juneau-rest-server &gt; Router Pages</a>
- * </ul>
+ * Microservice API
  */
-@RestResource
-public abstract class RestServletGroupDefault extends RestServletDefault {
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * [GET /] - Get child resources.
-	 * 
-	 * @param req The HTTP request.
-	 * @return The bean containing links to the child resources.
-	 * @throws Exception 
-	 */
-	@RestMethod(name=GET, path="/", description="Child resources")
-	public ChildResourceDescriptions getChildren(RestRequest req) throws Exception {
-		return new ChildResourceDescriptions(getContext(), req);
-	}
-}
+package org.apache.juneau.microservice;
 
