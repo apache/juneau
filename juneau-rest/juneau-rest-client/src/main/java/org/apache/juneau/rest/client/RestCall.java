@@ -63,7 +63,7 @@ import org.apache.juneau.utils.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">Overview &gt; juneau-rest-client</a>
  * </ul>
  */
 @SuppressWarnings({ "unchecked" })

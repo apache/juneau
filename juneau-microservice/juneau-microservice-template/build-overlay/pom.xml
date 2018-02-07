@@ -17,8 +17,11 @@
 	This project is meant to be used as a starting point for developers to use in creating their own REST microservices.
 	It creates a parent REST interface on port 10000 with a single child hello-world resource.
 	This POM is likewise meant to be used as a starting point for developers. It creates an uber-jar
-	to run the microserice from the command line. Copy the jar as well as the .cfg file and start it
-	with java -jar juneau-microservice-template-1.0.0.jar microservice.cfg
+	to run the microservice from the command line. 
+	
+	Copy the jar as well as the my-microservice.cfg and jetty.xml file and start it with: 
+		java -jar my-microservice-1.0.jar
+		
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -40,7 +43,7 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-server</artifactId>
-			<version>${juneau.version}</version>
+			<version>7.1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	
@@ -49,9 +52,32 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+       			<version>3.0.2</version>
+ 				<executions>
+					<execution>
+						<id>package-config</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target</outputDirectory>
+							<resources>
+								<resource>
+									<directory>.</directory>
+									<includes>my-microservice.cfg,jetty.xml</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -63,9 +89,7 @@
 							</mainClass>
 						</manifest>
 						<manifestEntries>
-							<Rest-Resources>org.apache.juneau.microservice.sample.RootResources
-							</Rest-Resources>
-							<Main-ConfigFile>microservice.cfg</Main-ConfigFile>
+							<Main-ConfigFile>my-microservice.cfg</Main-ConfigFile>
 						</manifestEntries>
 					</archive>
 				</configuration>

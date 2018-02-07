@@ -63,6 +63,11 @@ import org.apache.juneau.uon.*;
  * 	<li>{@link RestClient#create(Class,Class)} - Create from scratch using specified serializer/parser classes.
  * 	<li>{@link RestClient#builder()} - Copy settings from an existing client.
  * </ul>
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">Overview &gt; juneau-rest-client</a>
+ * </ul>
  */
 public class RestClientBuilder extends BeanContextBuilder {
 
