@@ -36,7 +36,10 @@ import org.apache.juneau.*;
  * <p>
  * Instances of this class are NOT guaranteed to be thread safe.
  * 
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
+ * </ul>
  */
 public class VarResolverSession {
 
@@ -370,7 +373,9 @@ public class VarResolverSession {
 	 * 
 	 * @param c The class type to cast to.
 	 * @param name The name of the session object.
-	 * @return The session object.  Never <jk>null</jk>.
+	 * @return 
+	 * 	The session object.  
+	 * 	<br>Never <jk>null</jk>.
 	 * @throws RuntimeException If session object with specified name does not exist.
 	 */
 	@SuppressWarnings("unchecked")

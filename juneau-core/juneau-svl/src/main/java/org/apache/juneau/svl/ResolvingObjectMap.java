@@ -28,6 +28,11 @@ import org.apache.juneau.*;
  * 
  * <p>
  * All other data types are left as-is.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
  */
 @SuppressWarnings({"serial"})
 public class ResolvingObjectMap extends ObjectMap {

@@ -20,6 +20,11 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Builder class for building instances of {@link VarResolver}.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
+ * </ul>
  */
 public class VarResolverBuilder {
 
@@ -62,12 +67,14 @@ public class VarResolverBuilder {
 	 * 	<li>{@link EnvVariablesVar}
 	 * 	<li>{@link SwitchVar}
 	 * 	<li>{@link IfVar}
+	 * 	<li>{@link CoalesceVar}
+	 * 	<li>{@link CoalesceAndRecurseVar}
 	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
 	public VarResolverBuilder defaultVars() {
-		return vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class);
+		return vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class, CoalesceAndRecurseVar.class, CoalesceVar.class);
 	}
 
 	/**

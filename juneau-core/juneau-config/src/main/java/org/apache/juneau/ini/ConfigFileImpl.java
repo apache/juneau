@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.ini.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;

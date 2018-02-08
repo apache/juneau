@@ -15,9 +15,9 @@ package org.apache.juneau.microservice;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import org.apache.juneau.jena.*;
+import org.apache.juneau.microservice.vars.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.svl.vars.*;
 
 /**
  * Superclass for all REST resource groups.

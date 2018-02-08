@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves system properties and $IF vars.</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(IfVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>);
+ * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(IfVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
  * 
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Property $IF{$S{someBooleanFlag},IS,IS NOT} set!"</js>));
@@ -43,10 +43,13 @@ import org.apache.juneau.svl.*;
  * 
  * <p>
  * Since this is a {@link MultipartVar}, any variables contained in the result will be recursively resolved.
- * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
+ * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  * 
- * @see org.apache.juneau.svl
-*/
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
+ */
 public class IfVar extends MultipartVar {
 
 	/** The name of this variable. */

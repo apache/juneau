@@ -10,49 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.svl;
-
-import static org.apache.juneau.internal.StringUtils.*;
 
 /**
- * Interface for the resolution of vars that can have one or more keys where the first non-null resolution is returned.
- * 
- * <p>
- * For example, to resolve the system property <js>"myProperty"</js> but then resolve <js>"myProperty2"</js> if the
- * property doesn't exist: <js>"$S{myProperty1,myProperty2}"</js>
- * 
- * <p>
- * Subclasses must implement the following method:
- * <ul>
- * 	<li class='jm'>{@link #resolve(VarResolverSession, String)}
- * </ul>
- * 
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
- * </ul>
+ * Predefined SVL Variables
  */
-public abstract class MultipartResolvingVar extends SimpleVar {
+package org.apache.juneau.microservice.vars;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param name The name of this variable.
-	 */
-	public MultipartResolvingVar(String name) {
-		super(name);
-	}
-
-	@Override /* Var*/
-	public String doResolve(VarResolverSession session, String s) throws Exception {
-		int i = s.indexOf(',');
-		if (i == -1)
-			return resolve(session, s.trim());
-		for (String s2 : split(s)) {
-			String v = resolve(session, s2);
-			if (v != null)
-				return v;
-		}
-		return null;
-	}
-}

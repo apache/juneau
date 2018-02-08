@@ -26,23 +26,26 @@ import java.io.*;
  * <p>
  * Subclasses must implement one of the following two methods:
  * <ul>
- * 	<li>{@link #resolve(VarResolverSession,String)} - For simple vars.
- * 	<li>{@link #resolveTo(VarResolverSession,Writer,String)} - For streamed vars.
+ * 	<li class='jm'>{@link #resolve(VarResolverSession,String)} - For simple vars.
+ * 	<li class='jm'>{@link #resolveTo(VarResolverSession,Writer,String)} - For streamed vars.
  * </ul>
  * 
  * <p>
  * Subclasses MUST implement a no-arg constructor so that class names can be passed to the
  * {@link VarResolverBuilder#vars(Class...)} method.
- * They must also be thread safe!
+ * <br><b>They must also be thread safe!</b>
  * 
  * <p>
  * Two direct abstract subclasses are provided to differentiated between simple and streamed vars:
  * <ul>
- * 	<li>{@link SimpleVar}
- * 	<li>{@link StreamedVar}
+ * 	<li class='jac'>{@link SimpleVar}
+ * 	<li class='jac'>{@link StreamedVar}
  * </ul>
  * 
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
  */
 public abstract class Var {
 
@@ -111,7 +114,7 @@ public abstract class Var {
 	 * 
 	 * <p>
 	 * The default implementation of this method always returns <jk>true</jk>.  
-	 * Subclasses can override this method to override the default behavior.
+	 * <br>Subclasses can override this method to override the default behavior.
 	 * 
 	 * <h5 class='topic'>Important Note</h5>
 	 * <p>
@@ -129,7 +132,7 @@ public abstract class Var {
 	 * 
 	 * <p>
 	 * Can be overridden to intercept the request and do special handling.
-	 * Default implementation simply calls resolve(String).
+	 * <br>Default implementation simply calls resolve(String).
 	 * 
 	 * @param session The session object used for a single instance of a string resolution.
 	 * @param arg The inside argument of the variable.

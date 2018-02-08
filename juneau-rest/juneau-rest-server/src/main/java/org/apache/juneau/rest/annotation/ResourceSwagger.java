@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.ini.*;
+import org.apache.juneau.ini.vars.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.svl.vars.*;
 

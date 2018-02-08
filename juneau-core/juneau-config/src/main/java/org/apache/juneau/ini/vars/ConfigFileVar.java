@@ -10,60 +10,63 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.svl.vars;
+package org.apache.juneau.ini.vars;
 
+import org.apache.juneau.ini.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
- * JVM args variable resolver.
+ * Config file variable resolver.
  * 
  * <p>
- * The format for this var is <js>"$ARG{argNameOrNum}"</js> or <js>"$ARG{argNameOrNum,defaultValue}"</js>
+ * The format for this var is <js>"$C{key[,defaultValue]}"</js>.
+ * See {@link ConfigFile#getString(String)} for the format of the key.
  * 
  * <p>
- * This variable resolver requires that an {@link Args} object be set as a context object on the resolver or a
+ * This variable resolver requires that a {@link ConfigFile} object be set as a context object on the resolver or a
  * session object on the resolver session.
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<jc>// Create an args object from the main(String[]) method.</jc>
- * 	Args args = new Args(argv);
+ * 	<jc>// Create a config file object.</jc>
+ * 	ConfigFile configFile = new ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
  * 
- * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$ARG{1}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<js>class</js>)
- * 		.addContextObject(<jsf>SESSION_args</jsf>, args);
+ * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<js>class</js>)
+ * 		.addContextObject(<jsf>SESSION_config</jsf>, configFile);
  * 
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $ARG{1}"</js>));
+ * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));
  * </p>
  * 
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  * 
- * @see org.apache.juneau.utils.Args
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
+ * </ul>
  */
-public class ArgsVar extends DefaultingVar {
+public class ConfigFileVar extends DefaultingVar {
 
 	/**
-	 * The name of the session or context object that identifies the {@link Args} object.
+	 * The name of the session or context object that identifies the {@link ConfigFile} object.
 	 */
-	public static final String SESSION_args = "args";
+	public static final String SESSION_config = "config";
 
 	/** The name of this variable. */
-	public static final String NAME = "ARG";
+	public static final String NAME = "C";
 
 	/**
 	 * Constructor.
 	 */
-	public ArgsVar() {
+	public ConfigFileVar() {
 		super(NAME);
 	}
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(Args.class, SESSION_args).getArg(key);
+		return session.getSessionObject(ConfigFile.class, SESSION_config).getString(key);
 	}
 }

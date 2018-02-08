@@ -17,10 +17,15 @@ import static org.apache.juneau.internal.StringUtils.*;
 /**
  * Interface for the resolution of vars that consist of a comma-delimited list.
  * 
- * <p>
- * (e.g. <js>"$X{foo, bar, baz}"</js>)
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode'>
+ * 	<js>"$X{foo, bar, baz}"</js>
+ * </p>
  * 
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
  */
 public abstract class MultipartVar extends SimpleVar {
 

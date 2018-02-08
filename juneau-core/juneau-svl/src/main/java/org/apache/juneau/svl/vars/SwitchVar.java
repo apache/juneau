@@ -38,7 +38,7 @@ import org.apache.juneau.svl.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves system properties and $SW vars.</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(SwitchVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>);
+ * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(SwitchVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
  * 
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"We are running on $SW{$P{os.name},*win*,Windows,Something else}!"</js>));
@@ -46,7 +46,12 @@ import org.apache.juneau.svl.*;
  * 
  * <p>
  * Since this is a {@link MultipartVar}, any variables contained in the result will be recursively resolved.
- * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
+ * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
  */
 public class SwitchVar extends MultipartVar {
 

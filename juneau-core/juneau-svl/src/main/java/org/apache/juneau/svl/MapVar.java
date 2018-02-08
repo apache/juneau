@@ -21,7 +21,10 @@ import org.apache.juneau.internal.*;
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  * 
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
  */
 @SuppressWarnings("rawtypes")
 public abstract class MapVar extends DefaultingVar {

@@ -25,9 +25,11 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
+import org.apache.juneau.ini.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
+import org.apache.juneau.microservice.vars.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;

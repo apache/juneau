@@ -19,13 +19,19 @@ import java.io.*;
  * 
  * <p>
  * Note the difference between this class and {@link StreamedVar} that streams values to writers.
- * Unlike the {@link StreamedVar} class, the returned value from this class can contain nested variables that will be
+ * <br>Unlike the {@link StreamedVar} class, the returned value from this class can contain nested variables that will be
  * recursively resolved by {@link VarResolver}.
  * 
  * <p>
- * Subclasses must implement the {@link #resolve(VarResolverSession, String)} method.
+ * Subclasses must implement the following method:
+ * <ul>
+ * 	<li class='jm'>{@link #resolve(VarResolverSession, String)}
+ * </ul>
  * 
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
  */
 public abstract class SimpleVar extends Var {
 

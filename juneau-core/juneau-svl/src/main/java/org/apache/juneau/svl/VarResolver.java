@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-
 import java.io.*;
 import java.util.*;
 
@@ -47,56 +46,16 @@ import org.apache.juneau.svl.vars.*;
  * 	}
  * 
  * 	<jc>// Create a variable resolver that resolves system properties (e.g. "$S{java.home}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(SystemPropertiesVar.<js>class</js>);
+ * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(SystemPropertiesVar.<jk>class</jk>).build();
  * 
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"java.home is set to $S{java.home}"</js>));
  * </p>
  * 
- * <h5 class='topic'>Context objects</h5>
- * 
- * Var resolvers can have zero or more context objects associated with them.
- * 
- * <p>
- * Context objects are arbitrary objects associated with this var resolver, such as a <code>ConfigFile</code> object.
- * They can be any class type.
- * 
- * <p>
- * Context objects can be retrieved by {@link Var} classes through the
- * {@link VarResolverSession#getSessionObject(Class, String)} method.
- * 
- * <h5 class='topic'>Session objects</h5>
- * 
- * Session objects are considered more ephemeral than context objects.
- * While a context object is unlikely to ever change, a session object may change on every use of the var resolver.
- * For example, the server API defines various <code>Var</code> objects that use the <code>RestRequest</code>
- * object as a session object for the duration of a single HTTP request.
- * 
- * <p>
- * Session objects are used by calling the {@link #createSession()} or {@link #createSession(Map)} methods to create
- * an instance of a {@link VarResolverSession} object that contains {@link VarResolverSession#resolve(String)}
- * and {@link VarResolverSession#resolveTo(String,Writer)} methods that are identical to
- * {@link VarResolver#resolve(String)} and {@link VarResolver#resolveTo(String, Writer)} except that the
- * <code>Var</code> objects have access to the session objects through the
- * {@link VarResolverSession#getSessionObject(Class, String)} method.
- * 
- * <p>
- * Session objects are specified through either the {@link #createSession(Map)} method or the
- * {@link VarResolverSession#sessionObject(String, Object)} methods.
- * 
- * <h5 class='topic'>Cloning</h5>
- * 
- * Var resolvers can be cloned by using the {@link #builder()} method.
- * Cloning a resolver will copy it's {@link Var} class names and context objects.
- * 
- * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- * 	<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>
- * 	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.builder().vars(ConfigVar.<jk>class</jk>,
- * 		ArgsVar.<jk>class</jk>).build();
- * </p>
- * 
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
+ * </ul>
  */
 public class VarResolver {
 
@@ -104,10 +63,12 @@ public class VarResolver {
 	 * Default string variable resolver with support for system properties and environment variables:
 	 * 
 	 * <ul>
-	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - System properties.
-	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - Environment variables.
-	 * 	<li><code>$IF{booleanValue,thenValue[,elseValue]}</code> - If-else patterns.
-	 * 	<li><code>$SW{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - Switch patterns.
+	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - {@link SystemPropertiesVar}
+	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - {@link EnvVariablesVar}
+	 * 	<li><code>$IF{booleanValue,thenValue[,elseValue]}</code> - {@link IfVar}
+	 * 	<li><code>$SW{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - {@link SwitchVar}
+	 * 	<li><code>$CO{arg1[,arg2...]}</code> - {@link CoalesceVar}
+	 * 	<li><code>$CR{arg1[,arg2...]}</code> - {@link CoalesceAndRecurseVar}
 	 * </ul>
 	 * 
 	 * @see SystemPropertiesVar
@@ -118,12 +79,24 @@ public class VarResolver {
 	final VarResolverContext ctx;
 
 	/**
+	 * Instantiates a new clean-slate {@link VarResolverBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> VarResolverBuilder()</code>.
+	 * 
+	 * @return A new {@link VarResolverBuilder} object.
+	 */
+	public static VarResolverBuilder create() {
+		return new VarResolverBuilder();
+	}
+
+	/**
 	 * Constructor.
 	 * 
 	 * @param vars The var classes
 	 * @param contextObjects
 	 */
-	public VarResolver(Class<? extends Var>[] vars, Map<String,Object> contextObjects) {
+	VarResolver(Class<? extends Var>[] vars, Map<String,Object> contextObjects) {
 		this.ctx = new VarResolverContext(vars, contextObjects);
 	}
 
@@ -175,7 +148,7 @@ public class VarResolver {
 	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>createSession(<jk>null</jk>).resolve(s);</code>.
-	 * This method can only be used if the string doesn't contain variables that rely on the existence of session
+	 * <br>This method can only be used if the string doesn't contain variables that rely on the existence of session
 	 * variables.
 	 * 
 	 * @param s The input string.
@@ -190,7 +163,7 @@ public class VarResolver {
 	 * 
 	 * <p>
 	 * This is a shortcut for calling <code>createSession(<jk>null</jk>).resolveTo(s, w);</code>.
-	 * This method can only be used if the string doesn't contain variables that rely on the existence of session
+	 * <br>This method can only be used if the string doesn't contain variables that rely on the existence of session
 	 * variables.
 	 * 
 	 * @param s The input string.

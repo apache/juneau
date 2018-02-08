@@ -23,7 +23,12 @@ import org.apache.juneau.svl.*;
  * <p>
  * The difference between {@link CoalesceVar} and {@link CoalesceAndRecurseVar} is that the first will not resolve
  * inner variables nor recursively resolve variables, and the second will.
- * Use {@link CoalesceVar} when resolving user-input.
+ * <br>Use {@link CoalesceVar} when resolving user-input.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * </ul>
  */
 public class CoalesceAndRecurseVar extends MultipartResolvingVar {
 

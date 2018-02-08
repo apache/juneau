@@ -23,7 +23,10 @@ import java.util.concurrent.*;
  * <p>
  * Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.
  * 
- * @see org.apache.juneau.svl
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
+ * </ul>
  */
 public class VarResolverContext {
 

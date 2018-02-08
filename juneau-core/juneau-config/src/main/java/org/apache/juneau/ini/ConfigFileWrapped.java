@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.ini.vars.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
