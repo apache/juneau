@@ -19,8 +19,11 @@ import java.util.*;
 /**
  * Listener that can be used to listen for change events for a specific section in a config file.
  * 
- * <p>
- * Use the {@link ConfigFile#addListener(ConfigFileListener)} method to register listeners.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.Listeners'>Overview &gt; juneau-config &gt; Listeners</a>
+ * </ul>
  */
 public class SectionListener extends ConfigFileListener {
 

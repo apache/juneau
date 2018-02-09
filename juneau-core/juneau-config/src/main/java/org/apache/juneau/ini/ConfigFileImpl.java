@@ -33,6 +33,11 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Implementation class for {@link ConfigFile}.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
+ * </ul>
  */
 public final class ConfigFileImpl extends ConfigFile {
 

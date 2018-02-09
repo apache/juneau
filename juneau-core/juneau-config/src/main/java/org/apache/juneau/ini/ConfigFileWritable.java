@@ -19,6 +19,11 @@ import org.apache.juneau.http.*;
 
 /**
  * Wraps a {@link ConfigFile} in a {@link Writable} to be rendered as plain text.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
+ * </ul>
  */
 class ConfigFileWritable implements Writable {
 

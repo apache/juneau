@@ -20,6 +20,11 @@ import static org.apache.juneau.internal.IOUtils.*;
  * 
  * <p>
  * This is not intended to be used as strong encryption.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
+ * </ul>
  */
 public final class XorEncoder implements Encoder {
 

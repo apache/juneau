@@ -33,7 +33,12 @@ import org.apache.juneau.svl.*;
  * 
  * <p>
  * This class overrides the {@link #getString(String, String)} to resolve string variables.
- * All other method calls are passed through to the inner config file.
+ * <br>All other method calls are passed through to the inner config file.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
+ * </ul>
  */
 public final class ConfigFileWrapped extends ConfigFile {
 

@@ -34,8 +34,8 @@ import org.apache.juneau.svl.*;
  * Implements the API for accessing the contents of a config file.
  * 
  * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.ini</a>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
  * </ul>
  */
 public abstract class ConfigFile implements Map<String,Section> {

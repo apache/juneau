@@ -46,6 +46,7 @@ import org.apache.juneau.svl.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-config.Variables'>Overview &gt; juneau-config &gt; Variables</a>
  * </ul>
  */
 public class ConfigFileVar extends DefaultingVar {
