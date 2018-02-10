@@ -608,6 +608,11 @@ public class RestClient extends BeanContext implements Closeable {
 	/**
 	 * Perform a <code>POST</code> request against the specified URL.
 	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
+	 * </ul>
+	 * 
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -639,6 +644,11 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <p>
 	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)} to set the
 	 * contents on the result object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
+	 * </ul>
 	 * 
 	 * @param url
 	 * 	The URL of the remote REST resource.
