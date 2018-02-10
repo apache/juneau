@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.ini.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 

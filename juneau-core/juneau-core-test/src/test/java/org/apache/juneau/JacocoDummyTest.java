@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.ini.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.xml.annotation.*;

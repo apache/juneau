@@ -10,9 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.ini;
+package org.apache.juneau.config;
 
-import static org.apache.juneau.ini.ConfigFileFormat.*;
+import static org.apache.juneau.config.ConfigFileFormat.*;
 import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;
@@ -234,7 +234,7 @@ public class ConfigFileBuilder {
 	 * <p>
 	 * Invoke as a normal Java program...
 	 * <p class='bcode'>
-	 * 	java org.apache.juneau.ini.ConfigFileBuilder [args]
+	 * 	java org.apache.juneau.config.ConfigFileBuilder [args]
 	 * </p>
 	 * 
 	 * <p>
@@ -262,7 +262,7 @@ public class ConfigFileBuilder {
 	 * For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the
 	 * file <code>'MyConfig.cfg'</code>.
 	 * <p class='bcode'>
-	 * 	java org.apache.juneau.ini.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg
+	 * 	java org.apache.juneau.config.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg
 	 * 		-batchfile C:\foo\MyConfig.bat
 	 * </p>
 	 * 
@@ -322,9 +322,9 @@ public class ConfigFileBuilder {
 
 	private static void printUsageAndExit() {
 		System.err.println("---Usage---"); // NOT DEBUG
-		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile createBatchEnvFile -configFile <configFile> -envFile <envFile> [-verbose]"); // NOT DEBUG
-		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile createShellEnvFile -configFile <configFile> -envFile <envFile> [-verbose]"); // NOT DEBUG
-		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile setVals -configFile <configFile> -vals [var1 val1 [var2 val2...]] [-verbose]"); // NOT DEBUG
+		System.err.println("java -cp juneau.jar org.apache.juneau.config.ConfigFile createBatchEnvFile -configFile <configFile> -envFile <envFile> [-verbose]"); // NOT DEBUG
+		System.err.println("java -cp juneau.jar org.apache.juneau.config.ConfigFile createShellEnvFile -configFile <configFile> -envFile <envFile> [-verbose]"); // NOT DEBUG
+		System.err.println("java -cp juneau.jar org.apache.juneau.config.ConfigFile setVals -configFile <configFile> -vals [var1 val1 [var2 val2...]] [-verbose]"); // NOT DEBUG
 		int rc = Integer.getInteger("exit.2", 2);
 		if (rc != 0)
 			System.exit(rc);

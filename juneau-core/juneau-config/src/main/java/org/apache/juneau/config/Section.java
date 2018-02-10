@@ -10,10 +10,10 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.ini;
+package org.apache.juneau.config;
 
-import static org.apache.juneau.ini.ConfigFileFormat.*;
-import static org.apache.juneau.ini.ConfigUtils.*;
+import static org.apache.juneau.config.ConfigFileFormat.*;
+import static org.apache.juneau.config.ConfigUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;

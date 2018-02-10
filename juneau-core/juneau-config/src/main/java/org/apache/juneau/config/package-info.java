@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * Predefined SVL Variables
+ * INI File Support
  */
-package org.apache.juneau.ini.vars;
+package org.apache.juneau.config;
 

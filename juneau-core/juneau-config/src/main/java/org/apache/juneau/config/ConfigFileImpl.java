@@ -10,10 +10,10 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.ini;
+package org.apache.juneau.config;
 
-import static org.apache.juneau.ini.ConfigUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.config.ConfigUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.ini.vars.*;
+import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;

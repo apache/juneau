@@ -10,41 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.ini;
-
-import java.io.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.http.*;
+package org.apache.juneau.config;
 
 /**
- * Wraps a {@link ConfigFile} in a {@link Writable} to be rendered as plain text.
+ * API for defining a string encoding/decoding mechanism for entries in {@link ConfigFile}.
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
  * </ul>
  */
-class ConfigFileWritable implements Writable {
+public interface Encoder {
 
-	private ConfigFileImpl cf;
+	/**
+	 * Encode a string.
+	 * 
+	 * @param fieldName The field name being encoded.
+	 * @param in The unencoded input string.
+	 * @return The encoded output string.
+	 */
+	public String encode(String fieldName, String in);
 
-	protected ConfigFileWritable(ConfigFileImpl cf) {
-		this.cf = cf;
-	}
-
-	@Override /* Writable */
-	public void writeTo(Writer out) throws IOException {
-		cf.readLock();
-		try {
-			cf.serializeTo(out);
-		} finally {
-			cf.readUnlock();
-		}
-	}
-
-	@Override /* Writable */
-	public MediaType getMediaType() {
-		return MediaType.PLAIN;
-	}
+	/**
+	 * Decode a string.
+	 * 
+	 * @param fieldName The field name being decoded.
+	 * @param in The encoded input string.
+	 * @return The decoded output string.
+	 */
+	public String decode(String fieldName, String in);
 }

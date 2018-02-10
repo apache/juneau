@@ -10,39 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.ini;
+package org.apache.juneau.config;
 
 import java.util.*;
 
 /**
- * Listener that can be used to listen for change events in config files.
+ * Listener that can be used to listen for change events for a specific entry in a config file.
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.Listeners'>Overview &gt; juneau-config &gt; Listeners</a>
  * </ul>
  */
-public class ConfigFileListener {
+public class EntryListener extends ConfigFileListener {
+
+	private String fullKey;
 
 	/**
-	 * Gets called immediately after a config file has been loaded.
+	 * Constructor.
 	 * 
-	 * @param cf The config file being loaded.
+	 * @param fullKey The key in the config file to listen for changes on.
 	 */
-	public void onLoad(ConfigFile cf) {}
+	public EntryListener(String fullKey) {
+		this.fullKey = fullKey;
+	}
+
+	@Override /* ConfigFileListener */
+	public void onChange(ConfigFile cf, Set<String> changes) {
+		if (changes.contains(fullKey))
+			onChange(cf);
+	}
 
 	/**
-	 * Gets called immediately after a config file has been saved.
+	 * Signifies that the config file entry changed.
 	 * 
-	 * @param cf The config file being saved.
+	 * @param cf The config file being changed.
 	 */
-	public void onSave(ConfigFile cf) {}
-
-	/**
-	 * Signifies that the specified values have changed.
-	 * 
-	 * @param cf The config file being modified.
-	 * @param changes The full keys (e.g. <js>"Section/key"</js>) of entries that have changed in the config file.
-	 */
-	public void onChange(ConfigFile cf, Set<String> changes) {}
+	public void onChange(ConfigFile cf) {}
 }

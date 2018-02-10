@@ -26,12 +26,12 @@ import java.util.*;
 import javax.servlet.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.*;
+import org.apache.juneau.config.vars.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.ini.*;
-import org.apache.juneau.ini.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;

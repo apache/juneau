@@ -20,7 +20,7 @@ import java.util.logging.*;
 import javax.servlet.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.ini.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;

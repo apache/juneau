@@ -22,11 +22,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.ini.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
