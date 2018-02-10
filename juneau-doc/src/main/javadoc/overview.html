@@ -4646,13 +4646,18 @@
 	<p class='bcode' style='width:500px;'>
 	org.apache.juneau.config_7.0.0.jar 
 	</p>	
-	<p>
-		The <code>juneau-config</code> library contains a powerful API for creating and using INI-style config files.
-	</p>
-	<p>
-		An example of an INI file:
-	</p>
-	<p class='bcode'>
+	
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.Overview"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.1 - Overview</h3>
+	<div class='topic'>
+		<p>
+			The <code>juneau-config</code> library contains a powerful API for creating and using INI-style config files.
+		</p>
+		<p>
+			An example of an INI file:
+		</p>
+		<p class='bcode'>
 	<cc># Default section</cc>
 	<ck>key1</ck> = <cv>1</cv>
 	<ck>key2</ck> = <cv>true</cv>
@@ -4665,11 +4670,11 @@
 	<ck>key2</ck> = <cv>false</cv>
 	<ck>key3</ck> = <cv>[4,5,6]</cv>
 	<ck>key4</ck> = <cv>http://bar</cv>
-	</p>
-	<p>
-		This class can be used to easily access contents of the file:
-	</p>
-	<p class='bcode'>
+		</p>
+		<p>
+			This class can be used to easily access contents of the file:
+		</p>
+		<p class='bcode'>
 	<jk>int</jk> key1;
 	<jk>boolean</jk> key2;
 	<jk>int</jk>[] key3;
@@ -4689,11 +4694,11 @@
 	key2 = f.getBoolean(<js>"Section1/key2"</js>);
 	key3 = f.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"Section1/key3"</js>);
 	key4 = f.getObject(URL.<jk>class</jk>, <js>"Section1/key4"</js>);
-	</p>
-	<p>
-		The interface also allows a config file to be easily constructed programmatically:
-	</p>
-	<p class='bcode'>
+		</p>
+		<p>
+			The interface also allows a config file to be easily constructed programmatically:
+		</p>
+		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
@@ -4711,12 +4716,12 @@
 			<js>"key3 = [4,5,6]"</js>,
 			<js>"key4 = http://bar"</js>)
 		.save();
-	</p>
-	<p>
-		The following is equivalent, except that it uses {@link org.apache.juneau.ini.ConfigFile#put(String, Object)} 
-		to set values:
-	</p>
-	<p class='bcode'>
+		</p>
+		<p>
+			The following is equivalent, except that it uses {@link org.apache.juneau.ini.ConfigFile#put(String, Object)} 
+			to set values:
+		</p>
+		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
@@ -4732,29 +4737,29 @@
 	cf.put(<js>"Section1/key3"</js>, <jk>new int</jk>[]{4,5,6});
 	cf.put(<js>"Section1/key4"</js>, <jk>new</jk> URL(<js>"http://bar"</js>));
 	cf.save();
-	</p>
-	<p>
-		Values are LAX JSON (i.e. unquoted attributes, single quotes) except for top-level strings which are left 
-		unquoted.  
-		Any parsable object types are supported as values (e.g. arrays, collections, beans, swappable objects, 
-		enums, etc...).
-	</p>
-	<p>
-		The config file looks deceptively simple, the config file API is a very powerful feature with many 
-		capabilities, including:
-	</p>
-	<ul class='spaced-list'>
-		<li>
-			The ability to use variables to reference environment variables, system properties, other config file 
-			entries, and a host of other types.
-		<li>
-			APIs for updating, modifying, and saving configuration files <b style='text-decoration: underline;'>without losing comments or formatting</b>.
-		<li>
-			Extensive listener APIs.
-	</ul>
-	
-	<h5 class='figure'>Example:</h5>
-	<p class='bcode'>
+		</p>
+		<p>
+			Values are LAX JSON (i.e. unquoted attributes, single quotes) except for top-level strings which are left 
+			unquoted.  
+			Any parsable object types are supported as values (e.g. arrays, collections, beans, swappable objects, 
+			enums, etc...).
+		</p>
+		<p>
+			The config file looks deceptively simple, the config file API is a very powerful feature with many 
+			capabilities, including:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				The ability to use variables to reference environment variables, system properties, other config file 
+				entries, and a host of other types.
+			<li>
+				APIs for updating, modifying, and saving configuration files <b style='text-decoration: underline;'>without losing comments or formatting</b>.
+			<li>
+				Extensive listener APIs.
+		</ul>
+		
+		<h5 class='figure'>Example:</h5>
+		<p class='bcode'>
 	<cc>#--------------------------</cc>
 	<cc># My section</cc>
 	<cc>#--------------------------</cc>
@@ -4798,8 +4803,8 @@
 
 	<cc># A POJO with embedded variables</cc>
 	<ck>aBean2</ck> = <cv>{foo:'$ARG{0}',baz:$C{MySection/anInt}}</cv>
-	</p>
-	<p class='bcode'>
+		</p>
+		<p class='bcode'>
 	<jc>// Java code for accessing config entries above.</jc>
 	ConfigFile cf = Microservice.<jsm>getConfig</jsm>();
 	
@@ -4814,12 +4819,12 @@
 	<jk>int</jk> sameAsAnInt = cf.getInt(<js>"MySection/sameAsAnInt"</js>); 
 	String myArg = cf.getString(<js>"MySection/myArg"</js>); 
 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>); 
-	</p>
-	<p>
-		Config files can also be used to directly populate beans using the 
-		{@link org.apache.juneau.ini.ConfigFile#getSectionAsBean(String,Class,boolean)}:
-	</p>
-	<p class='bcode'>
+		</p>
+		<p>
+			Config files can also be used to directly populate beans using the 
+			{@link org.apache.juneau.ini.ConfigFile#getSectionAsBean(String,Class,boolean)}:
+		</p>
+		<p class='bcode'>
 	<jc>// Example config file</jc>
 	<cs>[MyAddress]</cs>
 	<ck>name</ck> = <cv>John Smith</cv>
@@ -4838,12 +4843,12 @@
 	<jc>// Example usage</jc>
 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
-	</p>
-	<p>
-		Config file sections can also be accessed via interface proxies using 
-		{@link org.apache.juneau.ini.ConfigFile#getSectionAsInterface(String,Class)}:
-	</p>
-	<p class='bcode'>
+		</p>
+		<p>
+			Config file sections can also be accessed via interface proxies using 
+			{@link org.apache.juneau.ini.ConfigFile#getSectionAsInterface(String,Class)}:
+		</p>
+		<p class='bcode'>
 	<jc>// Example config file</jc>
 	<cs>[MySection]</cs>
 	<ck>string</ck> = <cv>foo</cv>
@@ -4881,154 +4886,6 @@
 	<jk>int</jk> myInt = ci.getInt();
 	ci.setBean(<jk>new</jk> MyBean());
 	cf.save();
-	</p>
-	
-	<!-- ======================================================================================================== -->
-	<a id="juneau-config.Overview"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.1 - Overview</h3>
-	<div class='topic'>
-		<p>
-			The {@link org.apache.juneau.ini.ConfigFileBuilder} and {@link org.apache.juneau.ini.ConfigFile} classes 
-			implement an API for working with INI-style configuration files such as the following:
-		</p>
-		<p class='bcode'>
-	<cc>#--------------------------</cc>
-	<cc># Default section</cc>
-	<cc>#--------------------------</cc>
-	<ck>key1</ck> = <cv>1</cv>
-	<ck>key2</ck> = <cv>true</cv>
-	<ck>key3</ck> = <cv>1,2,3</cv>
-	<ck>key4</ck> = <cv>http://foo</cv>
-	
-	<cc>#--------------------------</cc>
-	<cc># A comment about Section 1</cc>
-	<cc>#--------------------------</cc>
-	<cs>[Section1]</cs>
-	<ck>key1</ck> = <cv>2</cv>
-	<ck>key2</ck> = <cv>false</cv>
-	<ck>key3</ck> = <cv>4,5,6</cv>
-	<ck>key4</ck> = <cv>http://bar</cv>
-		</p>
-		
-		<p>
-			The {@link org.apache.juneau.ini.ConfigFileBuilder} class is used to instantiate instances of 
-			{@link org.apache.juneau.ini.ConfigFile} which can then be used to retrieve config file values through either 
-			<js>"key"</js> or <js>"Section/key"</js> identifiers.
-		</p>
-	
-		<p class='bcode'>
-	<jk>int</jk> key1;
-	<jk>boolean</jk> key2;
-	<jk>int</jk>[] key3;
-	URL key4;
-	
-	<jc>// Get our config file using the default config manager</jc>
-	ConfigFile f = ConfigFile.<jsm>create</jsm>().build(<js>"C:/temp/MyConfig.cfg"</js>);
-
-	<jc>// Read values from default section</jc>
-	key1 = f.getInt(<js>"key1"</js>);
-	key2 = f.getBoolean(<js>"key2"</js>);
-	key3 = f.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"key3"</js>);
-	key4 = f.getObject(URL.<jk>class</jk>, <js>"key4"</js>);
-
-	<jc>// Read values from Section #1</jc>
-	key1 = f.getInt(<js>"Section1/key1"</js>);
-	key2 = f.getBoolean(<js>"Section1/key2"</js>);
-	key3 = f.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"Section1/key3"</js>);
-	key4 = f.getObject(URL.<jk>class</jk>, <js>"Section1/key4"</js>);
-		</p>
-	
-		<p>
-			The interface also allows config files to be constructed programmatically...
-		</p>
-		
-		<p class='bcode'>
-	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile f = ConfigFile.<jsm>create</jsm>().build(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
-		.addLines(<jk>null</jk>,                     <jc>// The default 'null' section</jc>
-			<js>"# Default section"</js>,             <jc>// A regular comment</jc>
-			<js>"key1 = 1"</js>,                      <jc>// A numeric entry</jc>
-			<js>"key2 = true"</js>,                   <jc>// A boolean entry</jc>
-			<js>"key3 = 1,2,3"</js>,                  <jc>// An array entry</jc>
-			<js>"key4 = http://foo"</js>,             <jc>// A POJO entry</jc>
-			<js>""</js>)                              <jc>// A blank line</jc>
-		.addHeaderComments(<js>"Section1"</js>,       <jc>// The 'Section1' section</jc>
-			<js>"A comment about Section 1"</js>)     <jc>// A header comment</jc>
-		.addLines(<js>"Section1"</js>,                <jc>// The 'Section1' section</jc>
-			<js>"key1 = 2"</js>,                      <jc>// A numeric entry</jc>
-			<js>"key2 = false"</js>,                  <jc>// A boolean entry</jc>
-			<js>"key3 = 4,5,6"</js>,                  <jc>// An array entry</jc>
-			<js>"key4 = http://bar"</js>)             <jc>// A POJO entry</jc>
-		.save();                            <jc>// Save to MyConfig.cfg</jc>
-		</p>
-		
-		<p>
-			The following is equivalent, except uses {@link org.apache.juneau.ini.ConfigFile#put(String,Object)} to set values.
-			Note how we're setting values as POJOs which will be automatically converted to strings when persisted to disk.
-		<p class='bcode'>
-	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile f = ConfigFile.<jsm>create</jsm>().build(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
-		.addLines(<jk>null</jk>,
-			<js>"# Default section"</js>)
-		.addHeaderComments(<js>"Section1"</js>,
-			<js>"A comment about Section 1"</js>);
-	cf.put(<js>"key1"</js>, 1);
-	cf.put(<js>"key2"</js>, <jk>true</jk>);
-	cf.put(<js>"key3"</js>, <jk>new int</jk>[]{1,2,3});
-	cf.put(<js>"key4"</js>, <jk>new</jk> URL(<js>"http://foo"</js>));
-	cf.put(<js>"Section1/key1"</js>, 2);
-	cf.put(<js>"Section1/key2"</js>, <jk>false</jk>);
-	cf.put(<js>"Section1/key3"</js>, <jk>new int</jk>[]{4,5,6});
-	cf.put(<js>"Section1/key4"</js>, <jk>new</jk> URL(<js>"http://bar"</js>));
-	cf.save();
-		</p>
-		<p>
-			Refer to {@link org.apache.juneau.ini.ConfigFile#put(String,Object,boolean)} for a description of 
-			formats for various data types.
-		</p>
-		<p>
-			Various convenience getter methods are provided for retrieving different data types:
-		</p>
-		<p class='bcode'>
-	<jc>// Strings with default values</jc>
-	<jc>// key1 = foobar</jc>
-	String key1 = cf.getString(<js>"key1"</js>);
-
-	<jc>// Numbers</jc>
-	<jc>// key2 = 123</jc>
-	<jk>float</jk> key2 = cf.getObject(<jk>float</jk>.<jk>class</jk>, <js>"key2"</js>);
-
-	<jc>// Booleans</jc>
-	<jc>// key3 = true</jc>
-	<jk>boolean</jk> key3 = cf.getBoolean(<js>"key3"</js>);
-
-	<jc>// Objects convertable to and from strings using the JSON serializer and parser</jc>
-	<jc>// key4 = http://foo</jc>
-	URL key4 = cf.getObject(URL.<jk>class</jk>, <js>"key4"</js>);
-
-	<jc>// Arrays of strings</jc>
-	<jc>// key5 = foo, bar</jc>
-	String[] key5 = cf.getStringArray(<js>"key5"</js>);
-
-	<jc>// Arrays of objects</jc>
-	<jc>// key6 = http://foo,http://bar</jc>
-	URL[] key6 = cf.getObject(URL[].<jk>class</jk>, <js>"key6"</js>);
-
-	<jc>// Arrays of primitives</jc>
-	<jc>// key7 = 1,2,3</jc>
-	<jk>int</jk>[] key7 = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"key7"</js>);
-
-	<jc>// Enums</jc>
-	<jc>// key8 = MINUTES</jc>
-	TimeUnit key8 = cf.getObject(TimeUnit.<jk>class</jk>, <js>"key8"</js>);
-
-	<jc>// Beans</jc>
-	<jc>// key9 = {name:'John Smith', addresses:[{street:'101 Main St', city:'Anywhere', state:'TX'}]}</jc>
-	Person key9 = cf.getObject(Person.<jk>class</jk>, <js>"key9"</js>);
-
-	<jc>// Generic Maps</jc>
-	<jc>// key10 = {foo:'bar', baz:123}</jc>
-	Map key10 = cf.getObject(ObjectMap.<jk>class</jk>, <js>"key10"</js>);
 		</p>
 	</div>
 	
