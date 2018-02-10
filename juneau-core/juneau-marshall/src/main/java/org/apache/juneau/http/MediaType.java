@@ -263,7 +263,6 @@ public class MediaType implements Comparable<MediaType> {
 	 * 	<ul>
 	 * 		<li><code>7,500</code> for an exact match (e.g. <js>"json+foo"</js>==<js>"json+foo"</js> or <js>"json+foo"</js>==<js>"foo+json"</js>)
 	 * 		<li><code>100</code> for every subtype entry match (e.g. <js>"json"</js>/<js>"json+foo"</js>)
-	 * 		<li><code>10</code> for a subtype entry meta match (e.g. <js>"*"</js>/<js>"json"</js> or <js>"json+*"</js>/<js>"json+foo"</js>)
 	 * 	</ul>
 	 * </ul>
 	 * 
@@ -297,7 +296,7 @@ public class MediaType implements Comparable<MediaType> {
 			else if (ArrayUtils.contains(st1, o.subTypes))
 				c += 100;
 			else if (o.hasSubtypeMeta)
-				c += 10;
+				c += 0;
 			else
 				return 0;
 		}
@@ -307,7 +306,7 @@ public class MediaType implements Comparable<MediaType> {
 			else if (ArrayUtils.contains(st2, subTypes))
 				c += 100;
 			else if (hasSubtypeMeta)
-				c += 10;
+				c += 0;
 			else if (! allowExtraSubTypes)
 				return 0;
 			else

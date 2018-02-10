@@ -265,7 +265,7 @@ public class YamlSerializer extends WriterSerializer {
 	 * 	The property store containing all the settings for this object.
 	 */
 	public YamlSerializer(PropertyStore ps) {
-		this(ps, "application/yaml", "application/yaml", "application/yaml+*", "text/yaml", "text/yaml+*");
+		this(ps, "application/yaml", "application/yaml", "text/yaml");
 	}
 
 	/**

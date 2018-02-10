@@ -19,7 +19,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-public class RootContentTest extends ContentComboTestcase {
+public class RootContentTest extends ContentComboTestBase {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {

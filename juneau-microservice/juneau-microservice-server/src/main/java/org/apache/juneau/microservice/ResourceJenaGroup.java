@@ -14,6 +14,7 @@ package org.apache.juneau.microservice;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
+import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.microservice.vars.*;
 import org.apache.juneau.rest.*;
@@ -54,6 +55,7 @@ import org.apache.juneau.rest.annotation.*;
 	),
 	config="$S{juneau.configFile}",
 	serializers={
+		HtmlDocSerializer.class,  // HTML must be listed first because Internet Explore does not include text/html in their Accept header.
 		RdfSerializer.Xml.class,
 		RdfSerializer.XmlAbbrev.class,
 		RdfSerializer.Turtle.class,

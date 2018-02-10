@@ -31,7 +31,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-public class ContentComboTestcase extends RestTestcase {
+public class ContentComboTestBase extends RestTestcase {
 	
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.
 	private static Map<String,RestClient> clients = new LinkedHashMap<>();
@@ -89,7 +89,7 @@ public class ContentComboTestcase extends RestTestcase {
 	
 	private final ComboInput comboInput;
 	
-	public ContentComboTestcase(ComboInput comboInput) {
+	public ContentComboTestBase(ComboInput comboInput) {
 		this.comboInput = comboInput;
 	}
 
