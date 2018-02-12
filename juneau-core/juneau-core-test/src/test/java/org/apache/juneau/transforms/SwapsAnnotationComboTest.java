@@ -27,7 +27,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests Swap annotation.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class SwapsAnnotationComboTest extends ComboSerializeTest {
 
 	@Parameterized.Parameters

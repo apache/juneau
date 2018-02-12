@@ -23,7 +23,7 @@ import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"serial"})
 public class XmlCollapsedTest {
 
 	//====================================================================================================
@@ -156,7 +156,6 @@ public class XmlCollapsedTest {
 	// testGetters - @Xml.format=COLLAPSED, getters.
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("synthetic-access")
 	public void testGetters() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
@@ -217,7 +216,6 @@ public class XmlCollapsedTest {
 	// testNullConstructibleCollectionFields - @Xml.format=COLLAPSED, null constructible collection fields.
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("synthetic-access")
 	public void testNullConstructibleCollectionFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;

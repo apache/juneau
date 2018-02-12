@@ -26,7 +26,7 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"serial"})
 public class CommonTest {
 
 	private RdfSerializerBuilder getBasicSerializer() {

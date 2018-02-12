@@ -30,7 +30,6 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class ConfigFileTest {
 
 	private ConfigFileBuilder configFileBuilder = new ConfigFileBuilder();

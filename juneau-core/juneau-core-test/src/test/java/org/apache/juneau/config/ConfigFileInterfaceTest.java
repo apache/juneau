@@ -21,7 +21,6 @@ import org.apache.juneau.test.pojos.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class ConfigFileInterfaceTest {
 
 	ConfigFile cf;

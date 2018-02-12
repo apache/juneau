@@ -1635,6 +1635,7 @@ public class PropertyStoreTest {
 		assertNotEquals(ps.hashCode("A","B"),ps.hashCode("B","A"));
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void testEquals() {
 		PropertyStoreBuilder b = PropertyStore.create();

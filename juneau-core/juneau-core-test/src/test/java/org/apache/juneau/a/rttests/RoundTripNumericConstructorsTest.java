@@ -24,7 +24,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"javadoc","deprecation"})
+@SuppressWarnings({"deprecation"})
 public class RoundTripNumericConstructorsTest extends RoundTripTest {
 
 	public RoundTripNumericConstructorsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

@@ -14,7 +14,7 @@ package org.apache.juneau.yaml.proto;
 
 import org.junit.*;
 
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class YamlTest {
 
 	//====================================================================================================

@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"serial"})
 public class RdfTest {
 
 	@Test

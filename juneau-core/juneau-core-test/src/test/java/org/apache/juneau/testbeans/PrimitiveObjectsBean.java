@@ -17,7 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.utils.*;
 
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class PrimitiveObjectsBean {
 
 	// primitive objects

@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"serial"})
 public class Common_UonTest {
 	UonParser p = UonParser.DEFAULT;
 	UonParser pe = UonParser.DEFAULT_DECODING;

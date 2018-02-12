@@ -21,7 +21,6 @@ import java.io.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class IgnoredClassesTest {
 
 	//====================================================================================================

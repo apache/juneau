@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class CharSetTest {
 
 	//====================================================================================================

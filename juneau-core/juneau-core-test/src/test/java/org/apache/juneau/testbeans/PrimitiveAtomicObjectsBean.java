@@ -21,7 +21,7 @@ import org.apache.juneau.utils.*;
  * Test bean fields of type AtomicInteger and AtomicLong.
  * Note that Jena parsers cannot handle these types, so we only test non-Jena parsers.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class PrimitiveAtomicObjectsBean {
 
 	// primitive objects

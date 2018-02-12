@@ -15,7 +15,6 @@ package org.apache.juneau.xml.xml1c;
 import org.apache.juneau.xml.annotation.*;
 
 @Xml(prefix="p2")
-@SuppressWarnings("javadoc")
 public class T8 {
 
 	public int f1 = 1;

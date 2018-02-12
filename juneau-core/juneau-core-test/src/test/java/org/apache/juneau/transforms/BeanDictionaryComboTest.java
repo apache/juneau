@@ -28,7 +28,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests for the CalendarSwap class.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class BeanDictionaryComboTest extends ComboRoundTripTest {
 
 	@Parameterized.Parameters

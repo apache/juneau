@@ -26,7 +26,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class JsonParserEdgeCasesTest {
 
 	@Parameterized.Parameters

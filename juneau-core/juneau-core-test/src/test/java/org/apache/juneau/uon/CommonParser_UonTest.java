@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","serial","javadoc"})
+@SuppressWarnings({"rawtypes","serial"})
 public class CommonParser_UonTest {
 
 	ReaderParser p = UonParser.create().beanDictionary(A1.class).build();

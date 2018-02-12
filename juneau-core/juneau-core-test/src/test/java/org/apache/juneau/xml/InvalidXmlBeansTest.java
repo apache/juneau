@@ -26,7 +26,7 @@ import org.junit.runners.*;
  * Verifies that the correct error messages are displayed when you do something wrong with the @Xml annotation.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class InvalidXmlBeansTest {
 
 	private static final XmlSerializer

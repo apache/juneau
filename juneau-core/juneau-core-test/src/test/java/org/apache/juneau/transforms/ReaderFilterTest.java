@@ -25,7 +25,6 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class ReaderFilterTest {
 
 	//====================================================================================================

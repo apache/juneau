@@ -25,7 +25,6 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class XmlContentTest {
 
 	//--------------------------------------------------------------------------------

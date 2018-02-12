@@ -69,7 +69,6 @@ public class DockerRegistryResource extends Resource {
 	}
 
 	/** [GET /] - Show child resources. */
-	@SuppressWarnings("nls")
 	@RestMethod(name=GET, path="/")
 	public ResourceDescription[] getChildren(RestRequest req) {
 		return new ResourceDescription[] {

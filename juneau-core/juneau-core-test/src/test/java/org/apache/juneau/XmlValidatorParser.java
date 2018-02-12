@@ -26,7 +26,7 @@ import org.apache.juneau.xml.*;
 /**
  * Used to validate that the syntax of XML documents are valid.
  */
-@SuppressWarnings({"unchecked","javadoc"})
+@SuppressWarnings({"unchecked"})
 public class XmlValidatorParser extends XmlParser {
 
 	public XmlValidatorParser() {

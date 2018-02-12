@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","javadoc"})
+@SuppressWarnings({"rawtypes"})
 public class UrlEncodingParserTest {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;

@@ -21,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class CollectionUtilsTest {
 
 	//====================================================================================================

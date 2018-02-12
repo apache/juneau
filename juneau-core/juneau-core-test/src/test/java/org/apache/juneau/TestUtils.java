@@ -37,7 +37,7 @@ import org.w3c.dom.bootstrap.*;
 import org.w3c.dom.ls.*;
 import org.xml.sax.*;
 
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class TestUtils {
 
 	private static JsonSerializer js = JsonSerializer.create()

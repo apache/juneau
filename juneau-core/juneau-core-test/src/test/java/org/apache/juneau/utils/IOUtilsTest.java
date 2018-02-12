@@ -19,7 +19,6 @@ import java.io.*;
 
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class IOUtilsTest {
 
 	//====================================================================================================

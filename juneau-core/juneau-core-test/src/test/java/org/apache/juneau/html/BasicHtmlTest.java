@@ -27,7 +27,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc","serial","rawtypes","unchecked"})
+@SuppressWarnings({"serial","rawtypes","unchecked"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicHtmlTest {
 

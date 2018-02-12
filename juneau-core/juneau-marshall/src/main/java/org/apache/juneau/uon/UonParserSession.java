@@ -781,7 +781,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * @return A new {@link UonReader} object.
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ "static-method" })
+	@SuppressWarnings({ })
 	public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws Exception {
 		Reader r = pipe.getReader();
 		if (r instanceof UonReader)

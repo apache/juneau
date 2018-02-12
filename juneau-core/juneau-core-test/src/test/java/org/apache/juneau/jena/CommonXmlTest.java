@@ -22,7 +22,6 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class CommonXmlTest {
 
 	private RdfSerializerBuilder getBasicSerializer() {

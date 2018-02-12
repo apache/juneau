@@ -23,7 +23,6 @@ import java.io.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class ConfigFileBuilderTest {
 
 	private static File tempDir;

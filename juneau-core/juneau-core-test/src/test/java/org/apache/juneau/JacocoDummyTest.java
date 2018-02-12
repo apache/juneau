@@ -20,7 +20,6 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class JacocoDummyTest {
 
 	//====================================================================================================

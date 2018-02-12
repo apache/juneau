@@ -21,7 +21,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testbeans.*;
 import org.junit.*;
 
-@SuppressWarnings({"javadoc","unchecked","rawtypes","serial"})
+@SuppressWarnings({"unchecked","rawtypes","serial"})
 public class HtmlTest {
 
 	//====================================================================================================

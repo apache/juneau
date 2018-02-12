@@ -16,7 +16,7 @@ import static org.apache.juneau.TestUtils.*;
 
 import org.junit.*;
 
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class EncoderGroupTest {
 
 	//====================================================================================================

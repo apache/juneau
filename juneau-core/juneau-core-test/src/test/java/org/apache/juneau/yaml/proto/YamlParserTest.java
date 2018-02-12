@@ -19,7 +19,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @Ignore
 public class YamlParserTest {
 

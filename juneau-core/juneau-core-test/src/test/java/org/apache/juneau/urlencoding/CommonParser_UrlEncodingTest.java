@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","serial","javadoc"})
+@SuppressWarnings({"rawtypes","serial"})
 public class CommonParser_UrlEncodingTest {
 
 	ReaderParser p = UrlEncodingParser.create().beanDictionary(A1.class).build();

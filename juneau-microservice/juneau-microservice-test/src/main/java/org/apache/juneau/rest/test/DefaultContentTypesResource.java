@@ -28,7 +28,6 @@ import org.apache.juneau.serializer.*;
 	defaultRequestHeaders={" Accept : text/s2 "," Content-Type : text/p2 "},
 	parsers={DefaultContentTypesResource.P1.class,DefaultContentTypesResource.P2.class}, serializers={DefaultContentTypesResource.S1.class,DefaultContentTypesResource.S2.class}
 )
-@SuppressWarnings("synthetic-access")
 public class DefaultContentTypesResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 

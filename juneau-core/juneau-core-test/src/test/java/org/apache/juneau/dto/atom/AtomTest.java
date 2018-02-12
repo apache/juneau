@@ -21,7 +21,6 @@ import java.net.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class AtomTest {
 
 	public Feed createFeed() throws Exception {

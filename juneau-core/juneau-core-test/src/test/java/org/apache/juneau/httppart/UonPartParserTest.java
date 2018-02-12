@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","javadoc"})
+@SuppressWarnings({"rawtypes"})
 public class UonPartParserTest {
 
 	static UonPartParser p = UonPartParser.DEFAULT;

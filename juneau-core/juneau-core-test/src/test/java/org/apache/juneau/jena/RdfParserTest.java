@@ -27,7 +27,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class RdfParserTest {
 
 	@Before

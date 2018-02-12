@@ -29,7 +29,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests DynaBean support.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"serial"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MaxIndentTest {
 

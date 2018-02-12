@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes","javadoc"})
+@SuppressWarnings({"unchecked","rawtypes"})
 public class DataConversionTest {
 
 	@Before

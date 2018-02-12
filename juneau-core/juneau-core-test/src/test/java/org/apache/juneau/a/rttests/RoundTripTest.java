@@ -36,7 +36,7 @@ import org.junit.runners.*;
  * with the same objects for all serializers and parsers.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"unchecked","javadoc"})
+@SuppressWarnings({"unchecked"})
 public abstract class RoundTripTest {
 
 	public static class Flags {

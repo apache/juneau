@@ -28,7 +28,7 @@ import org.junit.runners.*;
  * Note that these are one-way serializations and you're not guaranteed to produce parsable output.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class ReaderObjectSwapTest extends ComboSerializeTest {
 
 	@Parameterized.Parameters

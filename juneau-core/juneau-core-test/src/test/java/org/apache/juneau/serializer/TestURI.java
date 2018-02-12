@@ -19,7 +19,6 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
-@SuppressWarnings("javadoc")
 @Bean(sort=true)
 public class TestURI {
 

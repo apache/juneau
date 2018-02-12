@@ -24,7 +24,6 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-@SuppressWarnings("javadoc")
 public class LocalizedDatesTest {
 
 	private static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));

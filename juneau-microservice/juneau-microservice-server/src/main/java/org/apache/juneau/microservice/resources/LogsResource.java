@@ -48,7 +48,6 @@ import org.apache.juneau.transforms.*;
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
 	}
 )
-@SuppressWarnings("nls")
 public class LogsResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
@@ -138,7 +137,6 @@ public class LogsResource extends Resource {
 			responses={@Response(200),@Response(404)}
 		)
 	)
-	@SuppressWarnings("nls")
 	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, RequestProperties properties, @Query("highlight") boolean highlight, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
 		File f = getFile(path);

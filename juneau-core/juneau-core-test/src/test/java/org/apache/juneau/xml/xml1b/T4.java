@@ -16,7 +16,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 @Bean(typeName="T4", sort=true)
-@SuppressWarnings("javadoc")
 public class T4 {
 
 	public int f1 = 1;

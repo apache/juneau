@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"serial"})
 @Ignore
 public class CommonTest {
 

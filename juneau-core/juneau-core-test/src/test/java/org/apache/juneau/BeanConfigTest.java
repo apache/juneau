@@ -25,7 +25,7 @@ import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes","javadoc"})
+@SuppressWarnings({"unchecked","rawtypes"})
 public class BeanConfigTest {
 
 	//====================================================================================================

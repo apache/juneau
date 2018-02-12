@@ -28,7 +28,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests DynaBean support.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class DynaBeanComboTest extends ComboRoundTripTest {
 
 	@Parameterized.Parameters

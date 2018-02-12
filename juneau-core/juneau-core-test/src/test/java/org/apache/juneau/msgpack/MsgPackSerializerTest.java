@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class MsgPackSerializerTest {
 
 	//====================================================================================================

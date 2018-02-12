@@ -27,7 +27,7 @@ import org.junit.runners.*;
  * Tests serialization of HTML5 templates.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class Html5TemplateComboTest extends ComboRoundTripTest {
 
 	@Parameterized.Parameters

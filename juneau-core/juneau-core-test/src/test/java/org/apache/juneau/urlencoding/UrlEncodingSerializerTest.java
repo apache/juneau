@@ -22,7 +22,6 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class UrlEncodingSerializerTest {
 
 	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;

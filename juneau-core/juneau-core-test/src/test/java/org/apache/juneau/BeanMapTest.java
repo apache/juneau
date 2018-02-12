@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes","serial","javadoc"})
+@SuppressWarnings({"unchecked","rawtypes","serial"})
 public class BeanMapTest {
 
 	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX;

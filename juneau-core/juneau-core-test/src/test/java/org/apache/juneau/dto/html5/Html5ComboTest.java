@@ -25,7 +25,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests for all the HTML5 DTOs.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class Html5ComboTest extends ComboRoundTripTest {
 
 	private static final B btag = b("bbb");

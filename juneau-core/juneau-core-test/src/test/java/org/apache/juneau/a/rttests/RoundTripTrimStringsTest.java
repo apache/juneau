@@ -22,7 +22,6 @@ import org.junit.*;
 /**
  * Tests for the {@link Serializer#SERIALIZER_trimStrings} and {@link Parser#PARSER_trimStrings}.
  */
-@SuppressWarnings("javadoc")
 public class RoundTripTrimStringsTest extends RoundTripTest {
 
 	public RoundTripTrimStringsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

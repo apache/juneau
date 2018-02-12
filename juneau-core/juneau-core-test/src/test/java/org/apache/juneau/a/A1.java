@@ -15,7 +15,7 @@ package org.apache.juneau.a;
 import org.apache.juneau.annotation.*;
 
 // Default class
-@SuppressWarnings({"unused","synthetic-access","javadoc"})
+@SuppressWarnings({"unused"})
 @Bean(sort=true)
 public class A1 {
 	public int f1;

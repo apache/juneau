@@ -22,7 +22,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class JsonParserTest {
 
 	private static final JsonParser p = JsonParser.DEFAULT;

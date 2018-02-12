@@ -27,7 +27,6 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class StringUtilsTest {
 
 	//====================================================================================================

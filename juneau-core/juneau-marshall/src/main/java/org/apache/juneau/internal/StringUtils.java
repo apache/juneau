@@ -1094,7 +1094,6 @@ public final class StringUtils {
 	 * @return The parsed date.
 	 * @throws IllegalArgumentException
 	 */
-	@SuppressWarnings("nls")
 	public static Date parseISO8601Date(String date) throws IllegalArgumentException {
 		if (isEmpty(date))
 			return null;

@@ -21,7 +21,6 @@ import java.net.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
-@SuppressWarnings("javadoc")
 public class CommonXmlTest {
 
 	//====================================================================================================

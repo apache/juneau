@@ -22,7 +22,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes","serial","javadoc"})
+@SuppressWarnings({"unchecked","rawtypes","serial"})
 public class PojoRestTest {
 
 	//====================================================================================================

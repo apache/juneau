@@ -22,7 +22,7 @@ import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"serial"})
 public class JsonTest {
 
 	//====================================================================================================

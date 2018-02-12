@@ -25,7 +25,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 
 	public RoundTripPrimitivesBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

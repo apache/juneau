@@ -24,7 +24,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"serial"})
 public class BasicXmlTest {
 
 	private static final XmlSerializer

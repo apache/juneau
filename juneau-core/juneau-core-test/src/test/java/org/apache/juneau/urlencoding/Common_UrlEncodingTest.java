@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"serial"})
 public class Common_UrlEncodingTest {
 	UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 

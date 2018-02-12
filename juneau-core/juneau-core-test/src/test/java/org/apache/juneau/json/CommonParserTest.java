@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","serial","javadoc"})
+@SuppressWarnings({"rawtypes","serial"})
 public class CommonParserTest {
 
 	//====================================================================================================
