@@ -292,7 +292,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 			produces, 
 			accept
 		);
-		expandedParams = getProperty(URLENC_expandedParams, boolean.class, false);
+		expandedParams = getBooleanProperty(URLENC_expandedParams, false);
 	}
 
 	@Override /* Context */

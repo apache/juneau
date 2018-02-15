@@ -675,11 +675,11 @@ public class HtmlSerializer extends XmlSerializer {
 	public HtmlSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		uriAnchorText = getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
-		lookForLabelParameters = getProperty(HTML_detectLabelParameters, boolean.class, true);
-		detectLinksInStrings = getProperty(HTML_detectLinksInStrings, boolean.class, true);
-		labelParameter = getProperty(HTML_labelParameter, String.class, "label");
-		addKeyValueTableHeaders = getProperty(HTML_addKeyValueTableHeaders, boolean.class, false);
-		addBeanTypeProperties = getProperty(HTML_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		lookForLabelParameters = getBooleanProperty(HTML_detectLabelParameters, true);
+		detectLinksInStrings = getBooleanProperty(HTML_detectLinksInStrings, true);
+		labelParameter = getStringProperty(HTML_labelParameter, "label");
+		addKeyValueTableHeaders = getBooleanProperty(HTML_addKeyValueTableHeaders, false);
+		addBeanTypeProperties = getBooleanProperty(HTML_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
 	}
 
 	@Override /* Context */

@@ -347,8 +347,8 @@ public class UonSerializer extends WriterSerializer {
 	 */
 	public UonSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
-		encodeChars = getProperty(UON_encoding, boolean.class, false);
-		addBeanTypeProperties = getProperty(UON_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		encodeChars = getBooleanProperty(UON_encoding, false);
+		addBeanTypeProperties = getBooleanProperty(UON_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
 		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
 	}
 

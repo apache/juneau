@@ -67,7 +67,7 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	 */
 	public SoapXmlSerializer(PropertyStore ps) {
 		super(ps, "text/xml", "text/xml+soap");
-		soapAction = getProperty(SOAPXML_SOAPAction, String.class, "http://www.w3.org/2003/05/soap-envelope");
+		soapAction = getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope");
 	}
 
 	@Override /* Serializer */

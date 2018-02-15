@@ -123,7 +123,7 @@ public class UrlEncodingParser extends UonParser {
 				.build(), 
 			"application/x-www-form-urlencoded"
 		);
-		expandedParams = getProperty(URLENC_expandedParams, boolean.class, false);
+		expandedParams = getBooleanProperty(URLENC_expandedParams, false);
 	}
 
 	@Override /* Context */

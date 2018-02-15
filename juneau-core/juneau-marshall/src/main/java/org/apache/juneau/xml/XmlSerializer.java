@@ -501,11 +501,11 @@ public class XmlSerializer extends WriterSerializer {
 	 */
 	public XmlSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
-		autoDetectNamespaces = getProperty(XML_autoDetectNamespaces, boolean.class, true);
-		enableNamespaces = getProperty(XML_enableNamespaces, boolean.class, false);
-		addNamespaceUrlsToRoot = getProperty(XML_addNamespaceUrisToRoot, boolean.class, false);
+		autoDetectNamespaces = getBooleanProperty(XML_autoDetectNamespaces, true);
+		enableNamespaces = getBooleanProperty(XML_enableNamespaces, false);
+		addNamespaceUrlsToRoot = getBooleanProperty(XML_addNamespaceUrisToRoot, false);
 		defaultNamespace = getInstanceProperty(XML_defaultNamespace, Namespace.class, DEFAULT_JUNEAU_NAMESPACE);
-		addBeanTypeProperties = getProperty(XML_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		addBeanTypeProperties = getBooleanProperty(XML_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
 		xsNamespace = getInstanceProperty(XML_xsNamespace, Namespace.class, DEFAULT_XS_NAMESPACE);
 		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, new Namespace[0]);
 	}

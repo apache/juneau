@@ -200,7 +200,7 @@ public class JsonParser extends ReaderParser {
 	 */
 	public JsonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		validateEnd = getProperty(JSON_validateEnd, boolean.class, false);
+		validateEnd = getBooleanProperty(JSON_validateEnd, false);
 	}
 
 	@Override /* Context */

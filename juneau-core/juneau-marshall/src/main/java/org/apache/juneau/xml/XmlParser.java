@@ -217,8 +217,8 @@ public class XmlParser extends ReaderParser {
 	 */
 	public XmlParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		validating = getProperty(XML_validating, boolean.class, false);
-		preserveRootElement = getProperty(XML_preserveRootElement, boolean.class, false);
+		validating = getBooleanProperty(XML_validating, false);
+		preserveRootElement = getBooleanProperty(XML_preserveRootElement, false);
 		reporter = getInstanceProperty(XML_reporter, XMLReporter.class, null);
 		resolver = getInstanceProperty(XML_resolver, XMLResolver.class, null);
 		eventAllocator = getInstanceProperty(XML_eventAllocator, XMLEventAllocator.class, null);

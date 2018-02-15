@@ -295,9 +295,9 @@ public class YamlSerializer extends WriterSerializer {
 	 */
 	public YamlSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
-		simpleMode = getProperty(YAML_simpleMode, boolean.class, false);
-		escapeSolidus = getProperty(YAML_escapeSolidus, boolean.class, false);
-		addBeanTypeProperties = getProperty(YAML_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		simpleMode = getBooleanProperty(YAML_simpleMode, false);
+		escapeSolidus = getBooleanProperty(YAML_escapeSolidus, false);
+		addBeanTypeProperties = getBooleanProperty(YAML_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
 	}
 
 	@Override /* Context */

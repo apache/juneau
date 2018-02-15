@@ -994,21 +994,21 @@ public abstract class Serializer extends BeanContext {
 	Serializer(PropertyStore ps, String produces, String...accept) {
 		super(ps);
 		
-		maxDepth = getProperty(SERIALIZER_maxDepth, Integer.class, 100);
-		initialDepth = getProperty(SERIALIZER_initialDepth, Integer.class, 0);
-		detectRecursions = getProperty(SERIALIZER_detectRecursions, boolean.class, false);
-		ignoreRecursions = getProperty(SERIALIZER_ignoreRecursions, boolean.class, false);
-		useWhitespace = getProperty(SERIALIZER_useWhitespace, boolean.class, false);
-		maxIndent = getProperty(SERIALIZER_maxIndent, Integer.class, 100);
-		addBeanTypeProperties = getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true);
-		trimNulls = getProperty(SERIALIZER_trimNullProperties, boolean.class, true);
-		trimEmptyCollections = getProperty(SERIALIZER_trimEmptyCollections, boolean.class, false);
-		trimEmptyMaps = getProperty(SERIALIZER_trimEmptyMaps, boolean.class, false);
-		trimStrings = getProperty(SERIALIZER_trimStrings, boolean.class, false);
-		sortCollections = getProperty(SERIALIZER_sortCollections, boolean.class, false);
-		sortMaps = getProperty(SERIALIZER_sortMaps, boolean.class, false);
-		abridged = getProperty(SERIALIZER_abridged, boolean.class, false);
-		quoteChar = getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
+		maxDepth = getIntegerProperty(SERIALIZER_maxDepth, 100);
+		initialDepth = getIntegerProperty(SERIALIZER_initialDepth, 0);
+		detectRecursions = getBooleanProperty(SERIALIZER_detectRecursions, false);
+		ignoreRecursions = getBooleanProperty(SERIALIZER_ignoreRecursions, false);
+		useWhitespace = getBooleanProperty(SERIALIZER_useWhitespace, false);
+		maxIndent = getIntegerProperty(SERIALIZER_maxIndent, 100);
+		addBeanTypeProperties = getBooleanProperty(SERIALIZER_addBeanTypeProperties, true);
+		trimNulls = getBooleanProperty(SERIALIZER_trimNullProperties, true);
+		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections, false);
+		trimEmptyMaps = getBooleanProperty(SERIALIZER_trimEmptyMaps, false);
+		trimStrings = getBooleanProperty(SERIALIZER_trimStrings, false);
+		sortCollections = getBooleanProperty(SERIALIZER_sortCollections, false);
+		sortMaps = getBooleanProperty(SERIALIZER_sortMaps, false);
+		abridged = getBooleanProperty(SERIALIZER_abridged, false);
+		quoteChar = getStringProperty(SERIALIZER_quoteChar, "\"").charAt(0);
 		uriContext = getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
 		uriResolution = getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
 		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);

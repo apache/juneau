@@ -145,6 +145,8 @@
 	<li><p><a class='doclink' href='#juneau-config'><i>juneau-config</i></a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-config.Overview'>Overview</a></p>
+		<li><p><a class='doclink' href='#juneau-config.SectionBeans'>Section Beans</a></p>
+		<li><p><a class='doclink' href='#juneau-config.SectionInterfaces'>Section Interfaces</a></p>
 		<li><p><a class='doclink' href='#juneau-config.Variables'>Variables</a></p>
 		<li><p><a class='doclink' href='#juneau-config.EncodedEntries'>Encoded Entries</a></p>
 		<li><p><a class='doclink' href='#juneau-config.Listeners'>Listeners</a></p>
@@ -3145,7 +3147,7 @@
 	address.setState(StateEnum.<jsf>NY</jsf>);
 		</p>
 		<p>
-			Getter and setter values can be any parsable values, even other virtual beans.
+			Getter and setter values can be any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> values, even other virtual beans.
 		</p>
 		<p>
 			Under-the-covers, a virtual bean is simply a proxy interface on top of an existing <code>BeanMap</code>
@@ -4655,7 +4657,7 @@
 			The <code>juneau-config</code> library contains a powerful API for creating and using INI-style config files.
 		</p>
 		<p>
-			An example of an INI file:
+			An example of the cotents of a config file:
 		</p>
 		<p class='bcode'>
 	<cc># Default section</cc>
@@ -4699,7 +4701,7 @@
 			The interface also allows a config file to be easily constructed programmatically:
 		</p>
 		<p class='bcode'>
-	<jc>// Construct the sample INI file programmatically</jc>
+	<jc>// Construct the sample config file programmatically</jc>
 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>,
@@ -4722,7 +4724,7 @@
 			to set values:
 		</p>
 		<p class='bcode'>
-	<jc>// Construct the sample INI file programmatically</jc>
+	<jc>// Construct the sample config file programmatically</jc>
 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>)
@@ -4741,7 +4743,7 @@
 		<p>
 			Values are LAX JSON (i.e. unquoted attributes, single quotes) except for top-level strings which are left 
 			unquoted.  
-			Any parsable object types are supported as values (e.g. arrays, collections, beans, swappable objects, 
+			<br>Any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> types are supported as values (e.g. arrays, collections, beans, swappable objects, 
 			enums, etc...).
 		</p>
 		<p>
@@ -4753,7 +4755,7 @@
 				The ability to use variables to reference environment variables, system properties, other config file 
 				entries, and a host of other types.
 			<li>
-				APIs for updating, modifying, and saving configuration files <b style='text-decoration: underline;'>without losing comments or formatting</b>.
+				APIs for updating, modifying, and saving configuration files <b style='text-decoration: underline;'>without losing comments or formatting</b>!
 			<li>
 				Extensive listener APIs.
 		</ul>
@@ -4779,6 +4781,119 @@
 	
 	<cc># A POJO that can be converted from JSON</cc>
 	<ck>aBean</ck> = <cv>{foo:'bar',baz:123}</cv>
+		</p>
+		<p class='bcode'>
+	<jc>// Java code for accessing config entries above.</jc>
+	ConfigFile cf = ConfigFile.<jsf>create</jsf>().build(<js>"MyConfig.cfg"</js>);
+	
+	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>); 
+	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>); 
+	<jk>int</jk>[] anIntArray = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"MySection/anIntArray"</js>); 
+	URL aURL = cf.getObject(URL.<jk>class</jk>, <js>"MySection/aURL"</js>); 
+	MyBean aBean = cf.getObject(MyBean.<jk>class</jk>, <js>"MySection/aBean"</js>); 
+		</p>
+	</div>
+	
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.SectionBeans"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.2 - Section Beans</h3>
+	<div class='topic'>
+		<p>
+			Config files can also be used to directly populate beans using the 
+			{@link org.apache.juneau.config.ConfigFile#getSectionAsBean(String,Class,boolean)}:
+		</p>
+		<p class='bcode'>
+	<jc>// Example config file</jc>
+	<cs>[MyAddress]</cs>
+	<ck>name</ck> = <cv>John Smith</cv>
+	<ck>street</ck> = <cv>123 Main Street</cv>
+	<ck>city</ck> = <cv>Anywhere</cv>
+	<ck>state</ck> = <cv>NY</cv>
+	<ck>zip</ck> = <cv>12345</cv>
+
+	<jc>// Example bean</jc>
+	<jk>public class</jk> Address {
+		public String name, street, city;
+		public StateEnum state;
+		public int zip;
+	}
+
+	<jc>// Example usage</jc>
+	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
+		</p>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.SectionInterfaces"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.3 - Section Interfaces</h3>
+	<div class='topic'>
+		<p>
+			Config file sections can also be accessed via interface proxies using 
+			{@link org.apache.juneau.config.ConfigFile#getSectionAsInterface(String,Class)}:
+		</p>
+		<p class='bcode'>
+	<jc>// Example config file</jc>
+	<cs>[MySection]</cs>
+	<ck>string</ck> = <cv>foo</cv>
+	<ck>int</ck> = <cv>123</cv>
+	<ck>enum</ck> = <cv>ONE</cv>
+	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
+	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
+	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
+
+	<jc>// Example interface.</jc>
+	<jc>// Setters are optional.</jc>
+	<jk>public interface</jk> MyConfigInterface {
+
+		String getString();
+		<jk>void</jk> setString(String x);
+
+		<jk>int</jk> getInt();
+		<jk>void</jk> setInt(<jk>int</jk> x);
+
+		MyEnum getEnum();
+		<jk>void</jk> setEnum(MyEnum x);
+
+		MyBean getBean();
+		<jk>void</jk> setBean(MyBean x);
+
+		<jk>int</jk>[][][] getInt3dArray();
+		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
+		
+		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
+		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
+	}
+	
+	<jc>// Example usage.</jc>
+	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
+	
+	<jc>// Read a value.</jc>
+	<jk>int</jk> myInt = ci.getInt();
+
+	<jc>// Write a value.</jc>
+	ci.setBean(<jk>new</jk> MyBean());
+
+	<jc>// Save your changes.</jc>
+	cf.save();
+		</p>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.Variables"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.4 - Variables</h3>
+	<div class='topic'>
+		<p>
+			Config files can contain variables that get resolved dynamically using the 
+			{@link org.apache.juneau.svl.VarResolver} API.
+		</p>
+		<h5 class='figure'>Example:</h5>
+		<p class='bcode'>
+	<cc>#--------------------------</cc>
+	<cc># My section</cc>
+	<cc>#--------------------------</cc>
+	<cs>[MySection]</cs>
 	
 	<cc># A system property</cc>
 	<ck>locale</ck> = <cv>$S{java.locale, en_US}</cv>
@@ -4806,13 +4921,8 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Java code for accessing config entries above.</jc>
-	ConfigFile cf = Microservice.<jsm>getConfig</jsm>();
+	ConfigFile cf = Microservice.<jsm>getInstance</jsm>().getConfig();
 	
-	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>); 
-	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>); 
-	<jk>int</jk>[] anIntArray = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"MySection/anIntArray"</js>); 
-	URL aURL = cf.getObject(URL.<jk>class</jk>, <js>"MySection/aURL"</js>); 
-	MyBean aBean = cf.getObject(MyBean.<jk>class</jk>, <js>"MySection/aBean"</js>); 
 	Locale locale = cf.getObject(Locale.<jk>class</jk>, <js>"MySection/locale"</js>); 
 	String path = cf.getString(<js>"MySection/path"</js>); 
 	String mainClass = cf.getString(<js>"MySection/mainClass"</js>); 
@@ -4821,92 +4931,11 @@
 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>); 
 		</p>
 		<p>
-			Config files can also be used to directly populate beans using the 
-			{@link org.apache.juneau.config.ConfigFile#getSectionAsBean(String,Class,boolean)}:
-		</p>
-		<p class='bcode'>
-	<jc>// Example config file</jc>
-	<cs>[MyAddress]</cs>
-	<ck>name</ck> = <cv>John Smith</cv>
-	<ck>street</ck> = <cv>123 Main Street</cv>
-	<ck>city</ck> = <cv>Anywhere</cv>
-	<ck>state</ck> = <cv>NY</cv>
-	<ck>zip</ck> = <cv>12345</cv>
-
-	<jc>// Example bean</jc>
-	<jk>public class</jk> Address {
-		public String name, street, city;
-		public StateEnum state;
-		public int zip;
-	}
-
-	<jc>// Example usage</jc>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
-	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
-		</p>
-		<p>
-			Config file sections can also be accessed via interface proxies using 
-			{@link org.apache.juneau.config.ConfigFile#getSectionAsInterface(String,Class)}:
-		</p>
-		<p class='bcode'>
-	<jc>// Example config file</jc>
-	<cs>[MySection]</cs>
-	<ck>string</ck> = <cv>foo</cv>
-	<ck>int</ck> = <cv>123</cv>
-	<ck>enum</ck> = <cv>ONE</cv>
-	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
-	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
-	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
-
-	<jc>// Example interface</jc>
-	<jk>public interface</jk> MyConfigInterface {
-
-		String getString();
-		<jk>void</jk> setString(String x);
-
-		<jk>int</jk> getInt();
-		<jk>void</jk> setInt(<jk>int</jk> x);
-
-		MyEnum getEnum();
-		<jk>void</jk> setEnum(MyEnum x);
-
-		MyBean getBean();
-		<jk>void</jk> setBean(MyBean x);
-
-		<jk>int</jk>[][][] getInt3dArray();
-		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
-		
-		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
-		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
-	}
-	
-	<jc>// Example usage</jc>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
-	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
-	<jk>int</jk> myInt = ci.getInt();
-	ci.setBean(<jk>new</jk> MyBean());
-	cf.save();
-		</p>
-	</div>
-	
-	<!-- ======================================================================================================== -->
-	<a id="juneau-config.Variables"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.2 - Variables</h3>
-	<div class='topic'>
-		<p>
-			Config files can contain variables that get resolved dynamically using the 
-			{@link org.apache.juneau.svl.VarResolver} API.
-		</p>
-		<p>
 			Resolving config files can be retrieved through the following methods:
 		</p>	
 		<ul class='spaced-list'>
-			<li>
-				{@link org.apache.juneau.config.ConfigFile#getResolving()} - Returns a config file that resolves a default 
-				set of variables.
-			<li>
-				{@link org.apache.juneau.config.ConfigFile#getResolving(VarResolver)} - Returns a config file that resolves 
-				a custom set of variables.
+			<li class='jm'>{@link org.apache.juneau.config.ConfigFile#getResolving()} - Returns a config file that resolves a default set of variables.
+			<li class='jm'>{@link org.apache.juneau.config.ConfigFile#getResolving(VarResolver)} - Returns a config file that resolves a custom set of variables.
 		</ul>
 		<p>
 			The default {@link org.apache.juneau.config.ConfigFile#getResolving()} method returns a config file that resolves 
@@ -4954,7 +4983,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="juneau-config.EncodedEntries"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.3 - Encoded Entries</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.5 - Encoded Entries</h3>
 	<div class='topic'>
 		<p>
 			If a config file contains sensitive information such as passwords, those values can be 
@@ -4989,7 +5018,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="juneau-config.Listeners"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.4 - Listeners</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.6 - Listeners</h3>
 	<div class='topic'>
 		<p>
 			The following method is provided for listening to changes made on config files:
@@ -5028,7 +5057,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="juneau-config.CommandLine"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.5 - Command Line API</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.7 - Command Line API</h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.config.ConfigFileBuilder} class contains a 
@@ -5071,7 +5100,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="juneau-config.Serializing"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.6 - Serializing Config Files</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.8 - Serializing Config Files</h3>
 	<div class='topic'>
 		<p>
 			Instances of {@link org.apache.juneau.config.ConfigFile} are POJOs that can be serialized to and parsed from
@@ -5283,7 +5312,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="juneau-config.Merging"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.7 - Merging Config Files</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.9 - Merging Config Files</h3>
 	<div class='topic'>
 		<p>
 			In the previous example, an edit page was shown that allows you to edit config files through
@@ -5295,7 +5324,7 @@
 			trigger listeners when the values are different.
 		</p>
 		<p>
-			The edit page is implemented with this method which is a simple PUT with the contents of the new INI file as 
+			The edit page is implemented with this method which is a simple PUT with the contents of the new config file as 
 			the body of the HTTP request:
 		</p>
 		<p class='bcode'>
@@ -6604,7 +6633,7 @@
 	}
 			</p>
 			<p>
-				Annotations are provided for easy access to URL parameters with automatic conversion to any parsable object type.
+				Annotations are provided for easy access to URL parameters with automatic conversion to any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> type.
 				<br>For example, the following example can process the URL <l>"/urlWithParams?foo=foo&amp;bar=[1,2,3]&amp;baz=067e6162-3b6f-4ae2-a171-2470b63dff00"</l>...
 			</p>
 			<p class='bcode'>
@@ -6969,8 +6998,7 @@
 	<h3 class='topic' onclick='toggle(this)'>7.7 - @Body</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.Body @Body} annotation provides easy access to the HTTP body content as any parsable POJO type
-			(See <a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a>).
+			The {@link org.apache.juneau.rest.annotation.Body @Body} annotation provides easy access to the HTTP body content as any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO type
 			<br>In the example below, we're POSTing beans.
 		</p>
 		<p class='bcode'>
@@ -9517,7 +9545,7 @@
 			<li>
 				The method must be public.
 			<li>
-				The parameter and return types must be <a href='#juneau-marshall.PojoCategories'>serializable and parsable</a>.
+				The parameter and return types must be <a class='doclink' href='#juneau-marshall.PojoCategories'>serializable and parsable</a>.
 		</ul>
 		<p>
 			Juneau provides the capability of calling methods on POJOs on a server through client-side proxy interfaces.
@@ -9645,8 +9673,7 @@
 			a browser with no coding involved.
 		</p>
 		<p>
-			The parameters and return types of the Java methods can be any of the supported serializable and parsable types
-			in <a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a>.
+			The parameters and return types of the Java methods can be any of the supported <a class='doclink' href='#juneau-marshall.PojoCategories'>serializable and parsable types</a>.
 			This ends up being WAY more flexible than other proxy interfaces since Juneau can handle so may POJO types 
 			out-of-the-box.
 			Most of the time you don't even need to modify your existing Java implementation code.
@@ -10547,7 +10574,7 @@
 				- Don't parse any response.  
 				<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
 			<li>
-				Any parsable POJO 
+				Any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO 
 				- The body of the response will be converted to the POJO using the parser defined on the 
 				<code>RestClient</code>.
 			<li>
@@ -11250,7 +11277,7 @@
 			<li>
 				The method must be public.
 			<li>
-				The parameter and return types must be <a href='#juneau-marshall.PojoCategories'>serializable and parsable</a>.
+				The parameter and return types must be <a class='doclink' href='#juneau-marshall.PojoCategories'>serializable and parsable</a>.
 		</ul>
 		<p>
 			One significant feature is that the remoteable services servlet is a full-blown REST interface.  

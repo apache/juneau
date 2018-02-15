@@ -568,9 +568,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		nav = getArrayProperty(HTMLDOC_nav, String.class);
 		aside = getArrayProperty(HTMLDOC_aside, String.class);
 		footer = getArrayProperty(HTMLDOC_footer, String.class);
-		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, false);
+		nowrap = getBooleanProperty(HTMLDOC_nowrap, false);
 		navlinks = getArrayProperty(HTMLDOC_navlinks, String.class);
-		noResultsMessage = getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");
+		noResultsMessage = getStringProperty(HTMLDOC_noResultsMessage, "<p>no results</p>");
 		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, HtmlDocTemplateBasic.class);
 	}
 

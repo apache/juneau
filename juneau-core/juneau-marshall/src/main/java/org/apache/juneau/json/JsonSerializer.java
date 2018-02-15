@@ -403,9 +403,9 @@ public class JsonSerializer extends WriterSerializer {
 	public JsonSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		
-		simpleMode = getProperty(JSON_simpleMode, boolean.class, false);
-		escapeSolidus = getProperty(JSON_escapeSolidus, boolean.class, false);
-		addBeanTypeProperties = getProperty(JSON_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		simpleMode = getBooleanProperty(JSON_simpleMode, false);
+		escapeSolidus = getBooleanProperty(JSON_escapeSolidus, false);
+		addBeanTypeProperties = getBooleanProperty(JSON_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
 	}
 
 	@Override /* Context */

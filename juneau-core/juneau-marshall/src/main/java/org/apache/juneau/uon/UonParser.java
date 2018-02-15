@@ -174,8 +174,8 @@ public class UonParser extends ReaderParser {
 	 */
 	public UonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		this.decodeChars = getProperty(UON_decoding, boolean.class, false);
-		this.validateEnd = getProperty(UON_validateEnd, boolean.class, false);
+		this.decodeChars = getBooleanProperty(UON_decoding, false);
+		this.validateEnd = getBooleanProperty(UON_validateEnd, false);
 	}
 
 	@Override /* Context */

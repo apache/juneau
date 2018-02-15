@@ -81,6 +81,50 @@ public abstract class Context {
 	}
 
 	/**
+	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, def)</code>.
+	 * 
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final Boolean getBooleanProperty(String key, Boolean def) {
+		return getProperty(key, Boolean.class, def);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, def)</code>.
+	 * 
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final Integer getIntegerProperty(String key, Integer def) {
+		return getProperty(key, Integer.class, def);
+	}
+	
+	/**
+	 * Shortcut for calling <code>getProperty(key, Long.<jk>class</jk>, def)</code>.
+	 * 
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final Long getLongProperty(String key, Long def) {
+		return getProperty(key, Long.class, def);
+	}
+	
+	/**
+	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, def)</code>.
+	 * 
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final String getStringProperty(String key, String def) {
+		return getProperty(key, String.class, def);
+	}
+
+	/**
 	 * Returns the class property with the specified name.
 	 * 
 	 * @param key The property name.

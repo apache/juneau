@@ -527,12 +527,12 @@ public abstract class Parser extends BeanContext {
 	Parser(PropertyStore ps, String...consumes) {
 		super(ps);
 
-		trimStrings = getProperty(PARSER_trimStrings, boolean.class, false);
-		strict = getProperty(PARSER_strict, boolean.class, false);
-		autoCloseStreams = getProperty(PARSER_autoCloseStreams, boolean.class, false);
-		unbuffered = getProperty(PARSER_unbuffered, boolean.class, false);
-		inputStreamCharset = getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
-		fileCharset = getProperty(PARSER_fileCharset, String.class, "DEFAULT");
+		trimStrings = getBooleanProperty(PARSER_trimStrings, false);
+		strict = getBooleanProperty(PARSER_strict, false);
+		autoCloseStreams = getBooleanProperty(PARSER_autoCloseStreams, false);
+		unbuffered = getBooleanProperty(PARSER_unbuffered, false);
+		inputStreamCharset = getStringProperty(PARSER_inputStreamCharset, "UTF-8");
+		fileCharset = getStringProperty(PARSER_fileCharset, "DEFAULT");
 		listener = getClassProperty(PARSER_listener, ParserListener.class, null);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {

@@ -1787,21 +1787,21 @@ public class BeanContext extends Context {
 
 		beanHashCode = ps.hashCode("BeanContext");
 
-		beansRequireDefaultConstructor = getProperty(BEAN_beansRequireDefaultConstructor, boolean.class, false);
-		beansRequireSerializable = getProperty(BEAN_beansRequireSerializable, boolean.class, false);
-		beansRequireSettersForGetters = getProperty(BEAN_beansRequireSettersForGetters, boolean.class, false);
-		beansRequireSomeProperties = getProperty(BEAN_beansRequireSomeProperties, boolean.class, true);
-		beanMapPutReturnsOldValue = getProperty(BEAN_beanMapPutReturnsOldValue, boolean.class, false);
-		useInterfaceProxies = getProperty(BEAN_useInterfaceProxies, boolean.class, true);
-		ignoreUnknownBeanProperties = getProperty(BEAN_ignoreUnknownBeanProperties, boolean.class, false);
-		ignoreUnknownNullBeanProperties = getProperty(BEAN_ignoreUnknownNullBeanProperties, boolean.class, true);
-		ignorePropertiesWithoutSetters = getProperty(BEAN_ignorePropertiesWithoutSetters, boolean.class, true);
-		ignoreInvocationExceptionsOnGetters = getProperty(BEAN_ignoreInvocationExceptionsOnGetters, boolean.class, false);
-		ignoreInvocationExceptionsOnSetters = getProperty(BEAN_ignoreInvocationExceptionsOnSetters, boolean.class, false);
-		useJavaBeanIntrospector = getProperty(BEAN_useJavaBeanIntrospector, boolean.class, false);
-		sortProperties = getProperty(BEAN_sortProperties, boolean.class, false);
-		beanTypePropertyName = getProperty(BEAN_beanTypePropertyName, String.class, "_type");
-		debug = getProperty(BEAN_debug, boolean.class, false);
+		beansRequireDefaultConstructor = getBooleanProperty(BEAN_beansRequireDefaultConstructor, false);
+		beansRequireSerializable = getBooleanProperty(BEAN_beansRequireSerializable, false);
+		beansRequireSettersForGetters = getBooleanProperty(BEAN_beansRequireSettersForGetters, false);
+		beansRequireSomeProperties = getBooleanProperty(BEAN_beansRequireSomeProperties, true);
+		beanMapPutReturnsOldValue = getBooleanProperty(BEAN_beanMapPutReturnsOldValue, false);
+		useInterfaceProxies = getBooleanProperty(BEAN_useInterfaceProxies, true);
+		ignoreUnknownBeanProperties = getBooleanProperty(BEAN_ignoreUnknownBeanProperties, false);
+		ignoreUnknownNullBeanProperties = getBooleanProperty(BEAN_ignoreUnknownNullBeanProperties, true);
+		ignorePropertiesWithoutSetters = getBooleanProperty(BEAN_ignorePropertiesWithoutSetters, true);
+		ignoreInvocationExceptionsOnGetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnGetters, false);
+		ignoreInvocationExceptionsOnSetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnSetters, false);
+		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector, false);
+		sortProperties = getBooleanProperty(BEAN_sortProperties, false);
+		beanTypePropertyName = getStringProperty(BEAN_beanTypePropertyName, "_type");
+		debug = getBooleanProperty(BEAN_debug, false);
 
 		beanConstructorVisibility = getProperty(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
 		beanClassVisibility = getProperty(BEAN_beanClassVisibility, Visibility.class, PUBLIC);

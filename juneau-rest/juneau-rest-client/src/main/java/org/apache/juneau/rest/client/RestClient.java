@@ -451,15 +451,15 @@ public class RestClient extends BeanContext implements Closeable {
 		super(ps);
 		this.httpClientBuilder = httpClientBuilder;
 		this.httpClient = httpClient;
-		this.keepHttpClientOpen = getProperty(RESTCLIENT_keepHttpClientOpen, boolean.class, false);
+		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
 		this.headers = getMapProperty(RESTCLIENT_headers, String.class);
 		this.query = getMapProperty(RESTCLIENT_query, String.class);
-		this.retries = getProperty(RESTCLIENT_retries, int.class, 1);
-		this.retryInterval = getProperty(RESTCLIENT_retryInterval, int.class, -1);
+		this.retries = getIntegerProperty(RESTCLIENT_retries, 1);
+		this.retryInterval = getIntegerProperty(RESTCLIENT_retryInterval, -1);
 		this.retryOn = getInstanceProperty(RESTCLIENT_retryOn, RetryOn.class, RetryOn.DEFAULT);
-		this.debug = getProperty(RESTCLIENT_debug, boolean.class, false);
-		this.executorServiceShutdownOnClose = getProperty(RESTCLIENT_executorServiceShutdownOnClose, boolean.class, false);
-		this.rootUrl = StringUtils.nullIfEmpty(getProperty(RESTCLIENT_rootUri, String.class, "").replaceAll("\\/$", ""));
+		this.debug = getBooleanProperty(RESTCLIENT_debug, false);
+		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
+		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		
 		Object o = getProperty(RESTCLIENT_serializer, Object.class, JsonSerializer.class);
 		if (o instanceof Serializer) {

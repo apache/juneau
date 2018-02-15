@@ -336,17 +336,17 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 */
 	public RdfSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
-		addLiteralTypes = getProperty(RDF_addLiteralTypes, boolean.class, false);
-		addRootProperty = getProperty(RDF_addRootProperty, boolean.class, false);
-		useXmlNamespaces = getProperty(RDF_useXmlNamespaces, boolean.class, true);
-		looseCollections = getProperty(RDF_looseCollections, boolean.class, false);
-		autoDetectNamespaces = getProperty(RDF_autoDetectNamespaces, boolean.class, true);
-		rdfLanguage = getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
-		juneauNs = ps.getProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
-		juneauBpNs = ps.getProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
+		addLiteralTypes = getBooleanProperty(RDF_addLiteralTypes, false);
+		addRootProperty = getBooleanProperty(RDF_addRootProperty, false);
+		useXmlNamespaces = getBooleanProperty(RDF_useXmlNamespaces, true);
+		looseCollections = getBooleanProperty(RDF_looseCollections, false);
+		autoDetectNamespaces = getBooleanProperty(RDF_autoDetectNamespaces, true);
+		rdfLanguage = getStringProperty(RDF_language, "RDF/XML-ABBREV");
+		juneauNs = getProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
+		juneauBpNs = getProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
 		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
-		namespaces = ps.getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
-		addBeanTypeProperties = getProperty(RDF_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
+		addBeanTypeProperties = getBooleanProperty(RDF_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
 		
 		Map<String,Object> m = new LinkedHashMap<>();
 		for (String k : getPropertyKeys("RdfCommon")) 

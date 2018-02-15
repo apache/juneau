@@ -205,9 +205,9 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 */
 	public RdfParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		trimWhitespace = getProperty(RDF_trimWhitespace, boolean.class, false);
-		looseCollections = getProperty(RDF_looseCollections, boolean.class, false);
-		rdfLanguage = getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		trimWhitespace = getBooleanProperty(RDF_trimWhitespace, false);
+		looseCollections = getBooleanProperty(RDF_looseCollections, false);
+		rdfLanguage = getStringProperty(RDF_language, "RDF/XML-ABBREV");
 		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
 		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
 		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);

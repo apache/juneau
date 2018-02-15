@@ -2834,15 +2834,15 @@ public final class RestContext extends BeanContext {
 			PropertyStore ps = getPropertyStore().builder().add(builder.properties).build();
 			Class<?> resourceClass = resource.getClass();
 
-			contextPath = nullIfEmpty(getProperty(REST_contextPath, String.class, null));
-			allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
-			allowBodyParam = getProperty(REST_allowBodyParam, boolean.class, true);
-			allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getProperty(REST_allowedMethodParams, String.class, "HEAD,OPTIONS")))));
-			renderResponseStackTraces = getProperty(REST_renderResponseStackTraces, boolean.class, false);
-			useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
-			defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
-			maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
-			clientVersionHeader = getProperty(REST_clientVersionHeader, String.class, "X-Client-Version");
+			contextPath = nullIfEmpty(getStringProperty(REST_contextPath, null));
+			allowHeaderParams = getBooleanProperty(REST_allowHeaderParams, true);
+			allowBodyParam = getBooleanProperty(REST_allowBodyParam, true);
+			allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getStringProperty(REST_allowedMethodParams, "HEAD,OPTIONS")))));
+			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
+			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
+			defaultCharset = getStringProperty(REST_defaultCharset, "utf-8");
+			maxInput = getLongProperty(REST_maxInput, 100_000_000l);
+			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
 			converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, this);
 			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, this);
