@@ -20,6 +20,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
+import org.apache.juneau.config.listener.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
@@ -137,7 +138,7 @@ public class ConfigFileBuilderTest {
 		try { cf.removeSection("A"); fail(); } catch (UnsupportedOperationException e) {}
 		try { cf.save(); fail(); } catch (UnsupportedOperationException e) {}
 		try { cf.merge(cf); fail(); } catch (UnsupportedOperationException e) {}
-		try { cf.addListener(new ConfigFileListener(){}); fail(); } catch (UnsupportedOperationException e) {}
+		try { cf.addListener(new ConfigListener(){}); fail(); } catch (UnsupportedOperationException e) {}
 
 		// All these should succeed.
 		cf.getObject("A", String.class);

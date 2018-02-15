@@ -10,9 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.source;
+package org.apache.juneau.config.store;
 
-import static org.apache.juneau.config.source.FileStore.*;
+import static org.apache.juneau.config.store.FileStore.*;
 
 import java.io.*;
 import java.nio.charset.*;

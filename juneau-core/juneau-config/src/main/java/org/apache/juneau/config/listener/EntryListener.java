@@ -10,9 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config;
+package org.apache.juneau.config.listener;
 
 import java.util.*;
+
+import org.apache.juneau.config.*;
 
 /**
  * Listener that can be used to listen for change events for a specific entry in a config file.
@@ -22,7 +24,7 @@ import java.util.*;
  * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.Listeners'>Overview &gt; juneau-config &gt; Listeners</a>
  * </ul>
  */
-public class EntryListener extends ConfigFileListener {
+public class EntryListener extends ConfigListener {
 
 	private String fullKey;
 
@@ -35,7 +37,7 @@ public class EntryListener extends ConfigFileListener {
 		this.fullKey = fullKey;
 	}
 
-	@Override /* ConfigFileListener */
+	@Override /* ConfigListener */
 	public void onChange(ConfigFile cf, Set<String> changes) {
 		if (changes.contains(fullKey))
 			onChange(cf);

@@ -10,39 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config;
-
-import java.util.*;
 
 /**
- * Listener that can be used to listen for change events in config files.
- * 
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.Listeners'>Overview &gt; juneau-config &gt; Listeners</a>
- * </ul>
+ * Config Encoding Support
  */
-public class ConfigFileListener {
+package org.apache.juneau.config.encode;
 
-	/**
-	 * Gets called immediately after a config file has been loaded.
-	 * 
-	 * @param cf The config file being loaded.
-	 */
-	public void onLoad(ConfigFile cf) {}
-
-	/**
-	 * Gets called immediately after a config file has been saved.
-	 * 
-	 * @param cf The config file being saved.
-	 */
-	public void onSave(ConfigFile cf) {}
-
-	/**
-	 * Signifies that the specified values have changed.
-	 * 
-	 * @param cf The config file being modified.
-	 * @param changes The full keys (e.g. <js>"Section/key"</js>) of entries that have changed in the config file.
-	 */
-	public void onChange(ConfigFile cf, Set<String> changes) {}
-}

@@ -10,73 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.source;
-
-import static org.apache.juneau.internal.StringUtils.*;
-
-import java.io.*;
-import java.util.concurrent.*;
+package org.apache.juneau.config.store;
 
 import org.apache.juneau.*;
 
 /**
- * Filesystem-based storage location for configuration files.
- * 
- * <p>
- * Points to a file system directory containing configuration files.
+ * Builder for {@link MemoryStore} objects.
  */
-public class MemoryStore extends Store {
+public class MemoryStoreBuilder extends StoreBuilder {
 
 	/**
-	 * Create a new builder for this object.
-	 * 
-	 * @return A new builder for this object.
+	 * Constructor, default settings.
 	 */
-	public static MemoryStoreBuilder create() {
-		return new MemoryStoreBuilder();
-	}
-	
-	@Override /* Context */
-	public MemoryStoreBuilder builder() {
-		return new MemoryStoreBuilder(getPropertyStore());
+	public MemoryStoreBuilder() {
+		super();
 	}
 
-	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
-	
 	/**
 	 * Constructor.
 	 * 
-	 * @param ps The settings for this content store.
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	protected MemoryStore(PropertyStore ps) {
+	public MemoryStoreBuilder(PropertyStore ps) {
 		super(ps);
 	}
-	
-	@Override /* Store */
-	public synchronized String read(String name) throws Exception {
-		return cache.get(name);
-	}
 
-	@Override /* Store */
-	public synchronized boolean write(String name, String oldContents, String newContents) throws Exception {
-		String s = cache.get(name);
-		
-		if (! isEquals(s, oldContents)) 
-			return false;
-		
-		if (! isEquals(s, newContents)) {
-			cache.put(name, newContents);
-			onChange(name, newContents);
-		}
-		
-		return true;
-	}
-
-	/**
-	 * No-op.
-	 */
-	@Override /* Closeable */
-	public void close() throws IOException {
-		// No-op
+	@Override /* ContextBuilder */
+	public MemoryStore build() {
+		return new MemoryStore(getPropertyStore());
 	}
 }

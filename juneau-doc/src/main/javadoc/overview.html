@@ -5009,8 +5009,8 @@
 	<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
 		</p>
 		<p>
-			The default encoder is {@link org.apache.juneau.config.XorEncoder} which is a simple XOR+Base64 encoder.
-			<br>If desired, custom encoder can be used by implementing the {@link org.apache.juneau.config.Encoder}
+			The default encoder is {@link org.apache.juneau.config.encode.XorEncoder} which is a simple XOR+Base64 encoder.
+			<br>If desired, custom encoder can be used by implementing the {@link org.apache.juneau.config.encode.Encoder}
 			interface and creating your own <code>ConfigFileBuilder</code> using the 
 			{@link org.apache.juneau.config.ConfigFileBuilder#encoder(Encoder)} method.
 		</p>
@@ -5024,18 +5024,18 @@
 			The following method is provided for listening to changes made on config files:
 		</p>
 		<p>
-			{@link org.apache.juneau.config.ConfigFile#addListener(ConfigFileListener)}.
+			{@link org.apache.juneau.config.ConfigFile#addListener(ConfigListener)}.
 		</p>
 		<p>
 			Subclasses are provided for listening for different kinds of events:
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				{@link org.apache.juneau.config.ConfigFileListener} - Config file is saved, loaded, or modified.
+				{@link org.apache.juneau.config.listener.ConfigListener} - Config file is saved, loaded, or modified.
 			<li>
-				{@link org.apache.juneau.config.SectionListener} - One or more entries in a section are modified.
+				{@link org.apache.juneau.config.listener.SectionListener} - One or more entries in a section are modified.
 			<li>
-				{@link org.apache.juneau.config.EntryListener} - An individual entry is modified.
+				{@link org.apache.juneau.config.listener.EntryListener} - An individual entry is modified.
 		</ul>
 		
 		<h5 class="topic">Example:</h5>
@@ -18234,7 +18234,7 @@
 							<li>{@link org.apache.juneau.config.ConfigFile#getSectionMap(String)} - Get all the resolved values in a section.
 							<li>{@link org.apache.juneau.config.ConfigFile#containsNonEmptyValue(String)} 
 							<li>{@link org.apache.juneau.config.ConfigFile#isEncoded(String)} 
-							<li>{@link org.apache.juneau.config.ConfigFile#addListener(ConfigFileListener)} - Listen for modification events on the config file.
+							<li><code><del>org.apache.juneau.config.ConfigFile.addListener(ConfigFileListener)</del></code> - Listen for modification events on the config file.
 							<li>{@link org.apache.juneau.config.ConfigFile#merge(ConfigFile)} - Merge the contents of another config file into this config file.
 							<li>{@link org.apache.juneau.config.ConfigFile#getResolving()}, <del><code>ConfigFile.getResolving(StringVarResolver)</code></del> - Return an instance of the config file that resolves string variables.
 								Much more efficient than the previous design since the same underlying config file object is shared.
@@ -18253,13 +18253,13 @@
 						</ul>
 					<li>New interfaces:
 						<ul>
-							<li>{@link org.apache.juneau.config.ConfigFileListener}
-							<li>{@link org.apache.juneau.config.SectionListener}
-							<li>{@link org.apache.juneau.config.EntryListener} 
+							<li><code><del>org.apache.juneau.config.ConfigFileListener</del></code>
+							<li><code><del>org.apache.juneau.config.SectionListener</del></code>
+							<li><code><del>org.apache.juneau.config.EntryListener</del></code> 
 						</ul>
-					<li>{@link org.apache.juneau.config.Encoder} methods have access to field names to use them as salt values.
+					<li><code><del>org.apache.juneau.config.Encoder</del></code> methods have access to field names to use them as salt values.
 					<li>The name of the default section is now <js>"default"</js>.  Before it was just <jk>null</jk>.
-					<li>{@link org.apache.juneau.config.XorEncoder} XOR key can be overridden through the <js>"org.apache.juneau.config.XorEncoder.key"</js> system property.
+					<li><code><del>org.apache.juneau.config.XorEncoder</del></code> XOR key can be overridden through the <js>"org.apache.juneau.config.XorEncoder.key"</js> system property.
 				</ul> 
 			<li>Support for converting Strings to POJOs if the POJO class has any of the following static methods: 
 				<ul>

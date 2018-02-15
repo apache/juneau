@@ -10,18 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.source;
+package org.apache.juneau.config.store;
+
+import org.apache.juneau.*;
 
 /**
- * Listens for changes to stored config files.
+ * Base builder class for {@link Store} objects.
  */
-public interface StoreListener {
-	
+public abstract class StoreBuilder extends ContextBuilder {
+
 	/**
-	 * Called when the physical contents of a config file have changed.
-	 * 
-	 * @param name The config name (e.g. the filename without the extension).
-	 * @param contents The new config contents;
+	 * Constructor, default settings.
 	 */
-	void onChange(String name, String contents);
+	public StoreBuilder() {
+		super();
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param ps The initial configuration settings for this builder.
+	 */
+	public StoreBuilder(PropertyStore ps) {
+		super(ps);
+	}
+
+	@Override
+	public abstract Store build();
 }

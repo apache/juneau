@@ -23,6 +23,8 @@ import java.util.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.encode.*;
+import org.apache.juneau.config.listener.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -47,7 +49,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	private final ReaderParser parser;
 	private final BeanSession pBeanSession;
 	private final Charset charset;
-	final List<ConfigFileListener> listeners = Collections.synchronizedList(new ArrayList<ConfigFileListener>());
+	final List<ConfigListener> listeners = Collections.synchronizedList(new ArrayList<ConfigListener>());
 
 	Map<String,Section> sections;  // The actual data.
 
@@ -203,7 +205,7 @@ public final class ConfigFileImpl extends ConfigFile {
 		} finally {
 			writeUnlock();
 		}
-		for (ConfigFileListener l : listeners)
+		for (ConfigListener l : listeners)
 			l.onLoad(this);
 		return this;
 	}
@@ -649,7 +651,7 @@ public final class ConfigFileImpl extends ConfigFile {
 				hasBeenModified = false;
 				modifiedTimestamp = file.lastModified();
 			}
-			for (ConfigFileListener l : listeners)
+			for (ConfigListener l : listeners)
 				l.onSave(this);
 			return this;
 		} finally {
@@ -689,7 +691,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	public ConfigFile addListener(ConfigFileListener listener) {
+	public ConfigFile addListener(ConfigListener listener) {
 		assertFieldNotNull(listener, "listener");
 		writeLock();
 		try {
@@ -700,7 +702,7 @@ public final class ConfigFileImpl extends ConfigFile {
 		}
 	}
 
-	List<ConfigFileListener> getListeners() {
+	List<ConfigListener> getListeners() {
 		return listeners;
 	}
 
@@ -815,7 +817,7 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	final void signalChanges(Set<String> changes) {
 		if (changes != null && ! changes.isEmpty())
-			for (ConfigFileListener l : listeners)
+			for (ConfigListener l : listeners)
 				l.onChange(this, changes);
 	}
 }

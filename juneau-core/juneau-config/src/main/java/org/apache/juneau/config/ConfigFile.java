@@ -25,6 +25,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.listener.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -1164,14 +1165,14 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public abstract ConfigFile addListener(ConfigFileListener listener);
+	public abstract ConfigFile addListener(ConfigListener listener);
 
 	/**
 	 * Merges the contents of the specified config file into this config file.
 	 * 
 	 * <p>
 	 * Pretty much identical to just replacing this config file, but causes the
-	 * {@link ConfigFileListener#onChange(ConfigFile, Set)} method to be invoked on differences between the file.
+	 * {@link ConfigListener#onChange(ConfigFile, Set)} method to be invoked on differences between the file.
 	 * 
 	 * @param cf The config file whose values should be copied into this config file.
 	 * @return This object (for method chaining).

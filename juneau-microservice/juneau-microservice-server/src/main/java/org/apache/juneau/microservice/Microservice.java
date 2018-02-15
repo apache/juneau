@@ -25,6 +25,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.config.listener.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
@@ -577,12 +578,12 @@ public abstract class Microservice {
 		// --------------------------------------------------------------------------------
 		// Add a config file change listener.
 		// --------------------------------------------------------------------------------
-		cf.addListener(new ConfigFileListener() {
-			@Override /* ConfigFileListener */
+		cf.addListener(new ConfigListener() {
+			@Override /* ConfigListener */
 			public void onSave(ConfigFile cf) {
 				onConfigSave(cf);
 			}
-			@Override /* ConfigFileListener */
+			@Override /* ConfigListener */
 			public void onChange(ConfigFile cf, Set<String> changes) {
 				onConfigChange(cf, changes);
 			}

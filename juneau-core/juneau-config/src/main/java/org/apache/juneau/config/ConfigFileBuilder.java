@@ -20,6 +20,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.encode.*;
 import org.apache.juneau.internal.FileWriterBuilder;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;

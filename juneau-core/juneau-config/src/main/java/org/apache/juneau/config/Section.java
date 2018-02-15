@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.config.listener.*;
 
 /**
  * Defines a section in a config file.
@@ -563,7 +564,7 @@ public final class Section implements Map<String,String> {
 
 	void signalChanges(Set<String> changes) {
 		if (changes != null && ! changes.isEmpty())
-			for (ConfigFileListener l : configFile.getListeners())
+			for (ConfigListener l : configFile.getListeners())
 				l.onChange(configFile, changes);
 	}
 

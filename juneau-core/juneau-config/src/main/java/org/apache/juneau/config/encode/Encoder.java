@@ -10,9 +10,35 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
+package org.apache.juneau.config.encode;
+
+import org.apache.juneau.config.*;
 
 /**
- * Config Predefined SVL Variables
+ * API for defining a string encoding/decoding mechanism for entries in {@link ConfigFile}.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
+ * </ul>
  */
-package org.apache.juneau.config.vars;
+public interface Encoder {
 
+	/**
+	 * Encode a string.
+	 * 
+	 * @param fieldName The field name being encoded.
+	 * @param in The unencoded input string.
+	 * @return The encoded output string.
+	 */
+	public String encode(String fieldName, String in);
+
+	/**
+	 * Decode a string.
+	 * 
+	 * @param fieldName The field name being decoded.
+	 * @param in The encoded input string.
+	 * @return The decoded output string.
+	 */
+	public String decode(String fieldName, String in);
+}

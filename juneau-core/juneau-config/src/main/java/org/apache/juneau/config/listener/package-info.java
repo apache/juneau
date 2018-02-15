@@ -10,47 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config;
-
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
 
 /**
- * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.
- * 
- * <p>
- * This is not intended to be used as strong encryption.
- * 
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
- * </ul>
+ * Config Listener Support
  */
-public final class XorEncoder implements Encoder {
+package org.apache.juneau.config.listener;
 
-	/** Reusable XOR-Encoder instance. */
-	public static final XorEncoder INSTANCE = new XorEncoder();
-
-	private static final String key = System.getProperty("org.apache.juneau.config.XorEncoder.key",
-		"nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
-
-	@Override /* Encoder */
-	public String encode(String fieldName, String in) {
-		byte[] b = in.getBytes(UTF8);
-		for (int i = 0; i < b.length; i++) {
-				int j = i % key.length();
-			b[i] = (byte)(b[i] ^ key.charAt(j));
-		}
-		return base64Encode(b);
-	}
-
-	@Override /* Encoder */
-	public String decode(String fieldName, String in) {
-		byte[] b = base64Decode(in);
-		for (int i = 0; i < b.length; i++) {
-			int j = i % key.length();
-			b[i] = (byte)(b[i] ^ key.charAt(j));
-	}
-		return new String(b, UTF8);
-	}
-}

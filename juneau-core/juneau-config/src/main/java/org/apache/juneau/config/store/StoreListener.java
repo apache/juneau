@@ -10,33 +10,18 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.source;
-
-import org.apache.juneau.*;
+package org.apache.juneau.config.store;
 
 /**
- * Builder for {@link MemoryStore} objects.
+ * Listens for changes to stored config files.
  */
-public class MemoryStoreBuilder extends StoreBuilder {
-
+public interface StoreListener {
+	
 	/**
-	 * Constructor, default settings.
-	 */
-	public MemoryStoreBuilder() {
-		super();
-	}
-
-	/**
-	 * Constructor.
+	 * Called when the physical contents of a config file have changed.
 	 * 
-	 * @param ps The initial configuration settings for this builder.
+	 * @param name The config name (e.g. the filename without the extension).
+	 * @param contents The new config contents;
 	 */
-	public MemoryStoreBuilder(PropertyStore ps) {
-		super(ps);
-	}
-
-	@Override /* ContextBuilder */
-	public MemoryStore build() {
-		return new MemoryStore(getPropertyStore());
-	}
+	void onChange(String name, String contents);
 }

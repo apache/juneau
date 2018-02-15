@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.listener.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -224,7 +225,7 @@ public final class ConfigFileWrapped extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	public ConfigFile addListener(ConfigFileListener listener) {
+	public ConfigFile addListener(ConfigListener listener) {
 		cf.addListener(listener);
 		return this;
 	}

@@ -10,57 +10,48 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config;
+package org.apache.juneau.config.encode;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.util.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 /**
- * Listener that can be used to listen for change events for a specific section in a config file.
+ * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.
  * 
+ * <p>
+ * This is not intended to be used as strong encryption.
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.Listeners'>Overview &gt; juneau-config &gt; Listeners</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
  * </ul>
  */
-public class SectionListener extends ConfigFileListener {
+public final class XorEncoder implements Encoder {
 
-	private boolean isDefault;
-	private String prefix;
+	/** Reusable XOR-Encoder instance. */
+	public static final XorEncoder INSTANCE = new XorEncoder();
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param section The name of the section in the config file to listen to.
-	 */
-	public SectionListener(String section) {
-		isDefault = isEmpty(section);
-		prefix = isDefault ? null : (section + '/');
-	}
+	private static final String key = System.getProperty("org.apache.juneau.config.XorEncoder.key",
+		"nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
 
-	@Override /* ConfigFileListener */
-	public void onChange(ConfigFile cf, Set<String> changes) {
-		for (String c : changes) {
-			if (isDefault) {
-				if (c.indexOf('/') == -1) {
-					onChange(cf);
-					return;
-				}
-			} else {
-				if (c.startsWith(prefix)) {
-					onChange(cf);
-					return;
-				}
-			}
+	@Override /* Encoder */
+	public String encode(String fieldName, String in) {
+		byte[] b = in.getBytes(UTF8);
+		for (int i = 0; i < b.length; i++) {
+				int j = i % key.length();
+			b[i] = (byte)(b[i] ^ key.charAt(j));
 		}
+		return base64Encode(b);
 	}
 
-	/**
-	 * Signifies that the config file entry changed.
-	 * 
-	 * @param cf The config file being modified.
-	 */
-	public void onChange(ConfigFile cf) {}
+	@Override /* Encoder */
+	public String decode(String fieldName, String in) {
+		byte[] b = base64Decode(in);
+		for (int i = 0; i < b.length; i++) {
+			int j = i % key.length();
+			b[i] = (byte)(b[i] ^ key.charAt(j));
+	}
+		return new String(b, UTF8);
+	}
 }

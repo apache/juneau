@@ -24,6 +24,8 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.config.encode.*;
+import org.apache.juneau.config.listener.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
@@ -611,20 +613,20 @@ public class ConfigFileTest {
 			final int[] count = new int[]{0};
 
 			cf.addListener(
-				new ConfigFileListener() {
-					@Override /* ConfigFileListener */
+				new ConfigListener() {
+					@Override /* ConfigListener */
 					public void onLoad(ConfigFile f) {
 						super.onLoad(f);
 						changes.add("<load>");
 						count[0]++;
 					}
-					@Override /* ConfigFileListener */
+					@Override /* ConfigListener */
 					public void onSave(ConfigFile f) {
 						super.onSave(f);
 						changes.add("<save>");
 						count[0]++;
 					}
-					@Override /* ConfigFileListener */
+					@Override /* ConfigListener */
 					public void onChange(ConfigFile f, Set<String> ss) {
 						super.onChange(f, ss);
 						for (String sss : ss)
