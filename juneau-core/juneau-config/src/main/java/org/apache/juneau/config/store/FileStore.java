@@ -13,6 +13,8 @@
 package org.apache.juneau.config.store;
 
 import static java.nio.file.StandardWatchEventKinds.*;
+import static java.nio.file.StandardOpenOption.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.nio.*;
@@ -107,6 +109,32 @@ public class FileStore extends Store {
 	public static final String FILESTORE_useWatcher = PREFIX + "useWatcher.s";
 	
 	/**
+	 * Configuration property:  Watcher sensitivity.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"FileStore.watcherSensitivity.s"</js>
+	 * 	<li><b>Data type:</b>  {@link WatcherSensitivity}
+	 * 	<li><b>Default:</b>  {@link WatcherSensitivity#MEDIUM}
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link FileStoreBuilder#watcherSensitivity(WatcherSensitivity)}
+	 * 			<li class='jm'>{@link FileStoreBuilder#watcherSensitivity(String)}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Determines how frequently the file system is polled for updates.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>This relies on internal Sun packages and may not work on all JVMs.
+	 * </ul>
+	 */
+	public static final String FILESTORE_watcherSensitivity = PREFIX + "watcherSensitivity.s";
+	
+	/**
 	 * Configuration property:  Config file extension.
 	 * 
 	 * <h5 class='section'>Property:</h5>
@@ -126,6 +154,19 @@ public class FileStore extends Store {
 	 */
 	public static final String FILESTORE_ext = PREFIX + "ext.s";
 
+	
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/** Default file store, all default values.*/
+	public static final FileStore DEFAULT = FileStore.create().build();
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+	
 	/**
 	 * Create a new builder for this object.
 	 * 
@@ -155,21 +196,91 @@ public class FileStore extends Store {
 		super(ps);
 		try {
 			dir = new File(getStringProperty(FILESTORE_directory, ".")).getCanonicalFile();
+			dir.mkdirs();
 			ext = getStringProperty(FILESTORE_ext, "cfg");
 			charset = getProperty(FILESTORE_charset, Charset.class, Charset.defaultCharset());
-			watcher = getBooleanProperty(FILESTORE_useWatcher, false) ? new WatcherThread(dir) : null;
+			WatcherSensitivity ws = getProperty(FILESTORE_watcherSensitivity, WatcherSensitivity.class, WatcherSensitivity.MEDIUM);
+			watcher = getBooleanProperty(FILESTORE_useWatcher, false) ? new WatcherThread(dir, ws) : null;
 			if (watcher != null)
 				watcher.start();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
+	@Override /* Store */
+	public synchronized String read(String name) throws Exception {
+		String s = cache.get(name);
+		if (s != null)
+			return s;
+		
+		dir.mkdirs();
+		Path p = dir.toPath().resolve(name + '.' + ext);
+		if (! Files.exists(p)) 
+			return null;
+		try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
+			try (FileLock lock = fc.lock()) {
+				ByteBuffer buf = ByteBuffer.allocate(1024);
+				StringBuilder sb = new StringBuilder();
+				while (fc.read(buf) != -1) {
+					sb.append(charset.decode((ByteBuffer)(buf.flip())));
+					buf.clear();
+				}
+				s = sb.toString();
+				cache.put(name, s);
+			}
+		}
+		
+		return cache.get(name);
+	}
+
+	@Override /* Store */
+	public synchronized boolean write(String name, String oldContents, String newContents) throws Exception {
+		dir.mkdirs();
+		Path p = dir.toPath().resolve(name + '.' + ext);
+		boolean exists = Files.exists(p);
+		if (oldContents != null && ! exists)
+			return false;
+		try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
+			try (FileLock lock = fc.lock()) {
+				String currentContents = null;
+				if (exists) {
+					ByteBuffer buf = ByteBuffer.allocate(1024);
+					StringBuilder sb = new StringBuilder();
+					while (fc.read(buf) != -1) {
+						sb.append(charset.decode((ByteBuffer)(buf.flip())));
+						buf.clear();
+					}
+					currentContents = sb.toString();
+				}
+				if (! isEquals(oldContents, currentContents)) {
+					if (currentContents == null)
+						cache.remove(name);
+					else
+						cache.put(name, currentContents);
+					return false;
+				}
+				fc.position(0);
+				fc.write(charset.encode(newContents));
+				cache.put(name, newContents);
+			}
+		}
+		return true;
+	}
+		
+	@Override /* Store */
+	public synchronized FileStore update(String name, String newContents) {
+		cache.put(name, newContents);
+		super.update(name, newContents);
+		return this;
+	}
+
 	@Override /* Closeable */
 	public synchronized void close() {
 		if (watcher != null)
 			watcher.interrupt();
 	}
+	
 	
 	//---------------------------------------------------------------------------------------------
 	// WatcherThread
@@ -177,30 +288,45 @@ public class FileStore extends Store {
 
 	final class WatcherThread extends Thread {
 		private final WatchService watchService;
-
-		WatcherThread(File dir) throws IOException {
+		
+		WatcherThread(File dir, WatcherSensitivity s) throws Exception {
 			watchService = FileSystems.getDefault().newWatchService();
-			dir.toPath().register(watchService, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+			WatchEvent.Kind<?>[] kinds = new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY};
+			WatchEvent.Modifier modifier = lookupModifier(s);
+			dir.toPath().register(watchService, kinds, modifier);
+		}
+		
+		@SuppressWarnings("restriction")
+		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
+			try {
+				switch(s) {
+					case LOW: return com.sun.nio.file.SensitivityWatchEventModifier.LOW;
+					case MEDIUM: return com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
+					case HIGH: return com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
+				}
+			} catch (Exception e) {
+				/* Ignore */
+			}
+			return null;
+			
 		}
 		
 		@SuppressWarnings("unchecked")
 		@Override /* Thread */
 		public void run() {
 		    try {
-				while (true) {
-				    WatchKey key = watchService.take();
-				    
-				    for (WatchEvent<?> event: key.pollEvents()) {
+				WatchKey key;
+				while ((key = watchService.take()) != null) {
+				    for (WatchEvent<?> event : key.pollEvents()) {
 				        WatchEvent.Kind<?> kind = event.kind();
-
 				        if (kind != OVERFLOW) 
 				        		FileStore.this.onFileEvent(((WatchEvent<Path>)event));
-				    }  
-				    
+				    }
 				    if (! key.reset())
 				    		break;
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
 		};
@@ -217,65 +343,25 @@ public class FileStore extends Store {
 		}
 	}
 	
-	synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
-		File f = e.context().toFile();
-		String fn = f.getName();
+	/**
+	 * Gets called when the watcher service on this store is triggered with a file system change.
+	 * 
+	 * @param e The file system event.
+	 * @throws Exception
+	 */
+	protected synchronized void onFileEvent(WatchEvent<Path> e) throws Exception {
+		String fn = e.context().getFileName().toString();
 		String bn = FileUtils.getBaseName(fn);
 		String ext = FileUtils.getExtension(fn);
-		if (ext.equals(ext)) {
-			String newContents = IOUtils.read(f);
+		
+		if (isEquals(this.ext, ext)) {
 			String oldContents = cache.get(bn);
-			if (! StringUtils.isEquals(oldContents, newContents)) {
-				onChange(bn, newContents);
-				cache.put(bn, newContents);
+			cache.remove(bn);
+			String newContents = read(bn);
+			if (! isEquals(oldContents, newContents)) {
+				update(bn, newContents);
 			}
 		}
 	}
 		
-	@Override
-	public synchronized String read(String name) throws Exception {
-		String s = cache.get(name);
-		if (s != null)
-			return s;
-		
-		File f = new File(dir, name + '.' + ext);
-		if (f.exists()) {
-			try (FileInputStream fis = new FileInputStream(f)) {
-				try (FileLock lock = fis.getChannel().lock()) {
-					try (Reader r = new InputStreamReader(fis, charset)) {
-						String contents = IOUtils.read(r);
-						cache.put(name, contents);
-					}
-				}
-			}
-		}
-		
-		return cache.get(name);
-	}
-
-	@Override
-	public synchronized boolean write(String name, String oldContents, String newContents) throws Exception {
-		File f = new File(dir, name + '.' + ext);
-		try (FileChannel fc = FileChannel.open(f.toPath(), StandardOpenOption.READ, StandardOpenOption.WRITE)) {
-			try (FileLock lock = fc.lock()) {
-				ByteBuffer buf = ByteBuffer.allocate(1024);
-				StringBuilder sb = new StringBuilder();
-				while (fc.read(buf) != -1) {
-					sb.append(charset.decode(buf));
-					sb.append(charset.decode((ByteBuffer)(buf.flip())));
-					buf.clear();
-				}
-				String s = sb.toString();
-				if (! StringUtils.isEquals(oldContents, sb.toString())) {
-					cache.put(name, s);
-					return false;
-				}
-				fc.position(0);
-				fc.write(charset.encode(newContents));
-				cache.put(name, newContents);
-				return true;
-			}
-			
-		}
-	}
 }

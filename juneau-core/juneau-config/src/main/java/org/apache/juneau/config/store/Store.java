@@ -93,7 +93,7 @@ public abstract class Store extends Context implements Closeable {
 	 * @param contents The new contents.
 	 * @return This object (for method chaining).
 	 */
-	protected Store onChange(String name, String contents) {
+	public Store update(String name, String contents) {
 		for (StoreListener l : listeners)
 			l.onChange(name, contents);
 		return this;

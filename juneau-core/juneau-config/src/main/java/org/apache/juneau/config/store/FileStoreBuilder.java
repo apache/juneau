@@ -169,6 +169,48 @@ public class FileStoreBuilder extends StoreBuilder {
 	}
 	
 	/**
+	 * Configuration property:  Watcher sensitivity.
+	 * 
+	 * <p>
+	 * Determines how frequently the file system is polled for updates.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link FileStore#FILESTORE_watcherSensitivity}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link WatcherSensitivity#MEDIUM}
+	 * @return This object (for method chaining).
+	 */
+	public FileStoreBuilder watcherSensitivity(WatcherSensitivity value) {
+		super.set(FILESTORE_watcherSensitivity, value);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Watcher sensitivity.
+	 * 
+	 * <p>
+	 * Determines how frequently the file system is polled for updates.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link FileStore#FILESTORE_watcherSensitivity}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link WatcherSensitivity#MEDIUM}
+	 * @return This object (for method chaining).
+	 */
+	public FileStoreBuilder watcherSensitivity(String value) {
+		super.set(FILESTORE_watcherSensitivity, value);
+		return this;
+	}
+
+	/**
 	 * Configuration property:  Config file extension.
 	 * 
 	 * <p>

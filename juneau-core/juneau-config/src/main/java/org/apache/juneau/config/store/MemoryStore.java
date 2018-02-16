@@ -27,6 +27,18 @@ import org.apache.juneau.*;
  */
 public class MemoryStore extends Store {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/** Default memory store, all default values.*/
+	public static final MemoryStore DEFAULT = MemoryStore.create().build();
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+	
 	/**
 	 * Create a new builder for this object.
 	 * 
@@ -66,10 +78,18 @@ public class MemoryStore extends Store {
 		
 		if (! isEquals(s, newContents)) {
 			cache.put(name, newContents);
-			onChange(name, newContents);
+			update(name, newContents);
 		}
 		
 		return true;
+	}
+
+	
+	@Override /* Store */
+	public synchronized MemoryStore update(String name, String newContents) {
+		cache.put(name, newContents);
+		super.update(name, newContents);
+		return this;
 	}
 
 	/**

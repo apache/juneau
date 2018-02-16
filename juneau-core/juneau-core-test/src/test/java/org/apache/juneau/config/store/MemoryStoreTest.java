@@ -1,0 +1,73 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              * 
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.config.store;
+
+import static org.junit.Assert.*;
+
+import java.util.concurrent.*;
+
+import org.junit.*;
+
+public class MemoryStoreTest {
+	
+	@Test
+	public void testNoFile() throws Exception {
+		MemoryStore fs = MemoryStore.create().build();
+		assertEquals(null, fs.read("X"));
+	}
+
+	@Test
+	public void testSimpleCreate() throws Exception {
+		MemoryStore fs = MemoryStore.create().build();
+		assertTrue(fs.write("X", null, "foo"));
+		assertEquals("foo", fs.read("X"));
+	}
+
+	@Test
+	public void testFailOnMismatch() throws Exception {
+		MemoryStore fs = MemoryStore.create().build();
+		assertFalse(fs.write("X", "xxx", "foo"));
+		assertEquals(null, fs.read("X"));
+		assertTrue(fs.write("X", null, "foo"));
+		assertEquals("foo", fs.read("X"));
+		assertFalse(fs.write("X", "xxx", "foo"));
+		assertEquals("foo", fs.read("X"));
+		assertTrue(fs.write("X", "foo", "bar"));
+		assertEquals("bar", fs.read("X"));
+	}
+	
+	@Test
+	public void testUpdate() throws Exception {
+		MemoryStore fs = MemoryStore.create().build();
+
+		final CountDownLatch latch = new CountDownLatch(2);
+		final boolean[] error = {false};
+		fs.register(new StoreListener() {
+			@Override
+			public void onChange(String name, String contents) {
+				if ("X".equals(name) && "xxx".equals(contents))
+					latch.countDown();
+				else if ("Y".equals(name) && "yyy".equals(contents))
+					latch.countDown();
+				else
+					error[0] = true;
+			}
+		});
+		
+		fs.update("X", "xxx");
+		fs.update("Y", "yyy");
+		if (! latch.await(10, TimeUnit.SECONDS))
+			throw new Exception("CountDownLatch never reached zero.");
+		assertFalse(error[0]);
+	}	
+}
