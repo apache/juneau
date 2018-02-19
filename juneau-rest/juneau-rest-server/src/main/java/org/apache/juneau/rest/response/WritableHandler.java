@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -42,7 +43,7 @@ public final class WritableHandler implements ResponseHandler {
 				if (mediaType != null)
 					res.setContentType(mediaType.toString());
 				for (Map.Entry<String,Object> h : r.getHeaders().entrySet())
-					res.setHeader(h.getKey(), StringUtils.toString(h.getValue()));
+					res.setHeader(h.getKey(), asString(h.getValue()));
 			}
 			try (Writer w = res.getNegotiatedWriter()) {
 				((Writable)output).writeTo(w);

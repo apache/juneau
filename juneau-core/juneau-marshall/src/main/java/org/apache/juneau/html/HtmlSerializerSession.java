@@ -14,7 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.html.HtmlSerializerSession.ContentResult.*;
-import static org.apache.juneau.xml.XmlUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -427,7 +427,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				out.attr("style", style);
 			out.cTag();
 			if (link != null)
-				out.oTag(i+3, "a").attrUri("href", link.replace("{#}", StringUtils.toString(value))).cTag();
+				out.oTag(i+3, "a").attrUri("href", link.replace("{#}", asString(value))).cTag();
 			ContentResult cr = serializeAnything(out, key, keyType, null, 2, null, false);
 			if (link != null)
 				out.eTag("a");
@@ -646,7 +646,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.attr("style", style);
 				out.cTag();
 				if (link != null)
-					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", StringUtils.toString(o))).cTag();
+					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", asString(o))).cTag();
 				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, 1, null, false);
 				if (link != null)
 					out.eTag("a");

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 import java.util.Map.*;
 
@@ -92,7 +94,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 		Builder b = new Builder(token);
 		this.mediaType = b.mediaType;
 		this.qValue = b.qValue;
-		this.extensions = (b.extensions == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(b.extensions));
+		this.extensions = unmodifiableMap(b.extensions);
 	}
 
 	static final class Builder {

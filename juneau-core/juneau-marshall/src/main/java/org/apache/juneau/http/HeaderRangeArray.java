@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -42,7 +44,7 @@ public class HeaderRangeArray {
 	 */
 	protected HeaderRangeArray(String value) {
 		this.typeRanges = StringRange.parse(value);
-		this.typeRangesList = Collections.unmodifiableList(Arrays.asList(typeRanges));
+		this.typeRangesList = immutableList(typeRanges);
 	}
 
 	/**

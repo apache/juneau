@@ -15,8 +15,8 @@ package org.apache.juneau.serializer;
 import java.net.URI;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
 @Bean(sort=true)
@@ -69,7 +69,7 @@ public class TestURI {
 	@org.apache.juneau.annotation.URI
 	public String
 		f3a = "http://www.apache.org/f3a/x?label=MY_LABEL&foo=bar",
-		f3b = XmlUtils.urlEncode("<>&'\""),
+		f3b = StringUtils.urlEncode("<>&'\""),
 		f3c = "<>&'\"";  // Invalid URI, but should produce parsable output.
 
 	// @URI on bean

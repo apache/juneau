@@ -14,8 +14,10 @@ package org.apache.juneau.config.store;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.proto.*;
 
 /**
  * Represents a storage location for configuration files.
@@ -31,6 +33,8 @@ public abstract class Store extends Context implements Closeable {
 	
 	private final List<StoreListener> listeners = new LinkedList<>();
 	
+	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();
+	
 	/**
 	 * Constructor.
 	 * 
@@ -45,21 +49,22 @@ public abstract class Store extends Context implements Closeable {
 	 * 
 	 * @param name The config file name.
 	 * @return The contents of the configuration file.
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	public abstract String read(String name) throws Exception;
+	public abstract String read(String name) throws IOException;
 
 	/**
 	 * Saves the contents of the configuration file if the underlying storage hasn't been modified.
 	 * 
 	 * @param name The config file name.
-	 * @param oldContents The old contents.
+	 * @param expectedContents The expected contents of the file.
 	 * @param newContents The new contents.
-	 * @return <jk>true</jk> if we successfully saved the new configuration file contents, or <jk>false</jk> if the
-	 * 	underlying storage changed since the last time the {@link #read(String)} method was called.
-	 * @throws Exception
+	 * @return 
+	 * 	If <jk>null</jk>, then we successfully stored the contents of the file.
+	 * 	<br>Otherwise the contents of the file have changed and we return the new contents of the file.
+	 * @throws IOException
 	 */
-	public abstract boolean write(String name, String oldContents, String newContents) throws Exception;
+	public abstract String write(String name, String expectedContents, String newContents) throws IOException;
 
 	/**
 	 * Registers a new listener on this store.
@@ -84,6 +89,27 @@ public abstract class Store extends Context implements Closeable {
 	}
 
 	/**
+	 * Returns a map file containing the parsed contents of a configuration.
+	 * 
+	 * @param name The configuration name.
+	 * @return 
+	 * 	The parsed configuration.
+	 * 	<br>Never <jk>null</jk>.
+	 * @throws IOException
+	 */
+	public ConfigMap getMap(String name) throws IOException {
+		ConfigMap cm = configMaps.get(name);
+		if (cm != null)
+			return cm;
+		cm = new ConfigMap(this, name);
+		ConfigMap cm2 = configMaps.putIfAbsent(name, cm);
+		if (cm2 != null)
+			return cm2;
+		listeners.add(cm);
+		return cm;
+	}
+	
+	/**
 	 * Called when the physical contents of a config file have changed.
 	 * 
 	 * <p>
@@ -97,6 +123,20 @@ public abstract class Store extends Context implements Closeable {
 		for (StoreListener l : listeners)
 			l.onChange(name, contents);
 		return this;
+	}
+
+	/**
+	 * Convenience method for updating the contents of a file with lines.
+	 * 
+	 * @param name The config name (e.g. the filename without the extension).
+	 * @param contentLines The new contents.
+	 * @return This object (for method chaining).
+	 */
+	public Store update(String name, String...contentLines) {
+		StringBuilder sb = new StringBuilder();
+		for (String l : contentLines)
+			sb.append(l).append('\n');
+		return update(name, sb.toString());
 	}
 	
 	/**

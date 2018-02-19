@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -290,7 +292,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Object get(Object property) {
-		String pName = StringUtils.toString(property);
+		String pName = asString(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return null;
@@ -307,7 +309,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The raw property value.
 	 */
 	public Object getRaw(Object property) {
-		String pName = StringUtils.toString(property);
+		String pName = asString(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return null;

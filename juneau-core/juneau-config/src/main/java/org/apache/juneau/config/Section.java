@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.config.ConfigFileFormat.*;
 import static org.apache.juneau.config.ConfigUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -59,7 +60,7 @@ public final class Section implements Map<String,String> {
 	Section setReadOnly() {
 		// This method is only called once from ConfigFileImpl constructor.
 		this.readOnly = true;
-		this.entries = Collections.unmodifiableMap(entries);
+		this.entries = immutableMap(entries);
 		return this;
 	}
 

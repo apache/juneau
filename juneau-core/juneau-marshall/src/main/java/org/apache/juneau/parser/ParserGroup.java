@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -114,7 +116,7 @@ public final class ParserGroup extends BeanContext {
 	 */
 	public ParserGroup(PropertyStore ps, Parser[] parsers) {
 		super(ps);
-		this.parsers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(parsers)));
+		this.parsers = immutableList(parsers);
 
 		List<MediaType> lmt = new ArrayList<>();
 		List<Parser> l = new ArrayList<>();
@@ -126,7 +128,7 @@ public final class ParserGroup extends BeanContext {
 		}
 
 		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
-		this.mediaTypesList = Collections.unmodifiableList(lmt);
+		this.mediaTypesList = unmodifiableList(lmt);
 		this.mediaTypeParsers = l.toArray(new Parser[l.size()]);
 	}
 

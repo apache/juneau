@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -80,7 +81,7 @@ public class ReaderResource implements Writable {
 		this.mediaType = mediaType;
 		this.varSession = varSession;
 
-		this.headers = headers == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(new LinkedHashMap<>(headers));
+		this.headers = immutableMap(headers);
 
 		this.contents = new String[contents.length];
 		for (int i = 0; i < contents.length; i++) {

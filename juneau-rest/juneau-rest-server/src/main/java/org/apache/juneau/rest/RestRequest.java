@@ -20,7 +20,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.net.*;
 import java.nio.charset.*;

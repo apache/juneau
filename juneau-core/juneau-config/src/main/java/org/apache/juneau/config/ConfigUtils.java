@@ -17,14 +17,26 @@ package org.apache.juneau.config;
  */
 public class ConfigUtils {
 
-	static final String getSectionName(String key) {
+	/**
+	 * Parses a config key and returns just the section name.
+	 * 
+	 * @param key The config key.
+	 * @return The section name.
+	 */
+	public static final String getSectionName(String key) {
 		int i = key.indexOf('/');
 		if (i == -1)
 			return "default";
 		return key.substring(0, i);
 	}
 
-	static final String getSectionKey(String key) {
+	/**
+	 * Parses a config key and returns just the section key.
+	 * 
+	 * @param key The config key.
+	 * @return The section key.
+	 */
+	public static final String getSectionKey(String key) {
 		int i = key.indexOf('/');
 		if (i == -1)
 			return key;

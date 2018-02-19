@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.reflect.*;
@@ -432,7 +433,7 @@ public final class ArrayUtils {
 		String[] r = new String[c.size()];
 		int i = 0;
 		for (Object o : c)
-			r[i++] = StringUtils.toString(o);
+			r[i++] = asString(o);
 		return r;
 	}
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -106,7 +108,7 @@ public final class SerializerGroup extends BeanContext {
 	 */
 	public SerializerGroup(PropertyStore ps, Serializer[] serializers) {
 		super(ps);
-		this.serializers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(serializers)));
+		this.serializers = immutableList(serializers);
 
 		List<MediaType> lmt = new ArrayList<>();
 		List<Serializer> l = new ArrayList<>();
@@ -118,7 +120,7 @@ public final class SerializerGroup extends BeanContext {
 		}
 
 		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
-		this.mediaTypesList = Collections.unmodifiableList(lmt);
+		this.mediaTypesList = unmodifiableList(lmt);
 		this.mediaTypeSerializers = l.toArray(new Serializer[l.size()]);
 	}
 

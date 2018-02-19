@@ -722,7 +722,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof Object[])
 			r = ArrayUtils.toStringArray(Arrays.asList((Object[])s));
 		else
-			r = split(StringUtils.toString(s));
+			r = split(asString(s));
 		return (r.length == 0 ? def : r);
 	}
 

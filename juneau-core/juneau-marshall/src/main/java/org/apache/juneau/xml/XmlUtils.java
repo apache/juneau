@@ -15,7 +15,6 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import javax.xml.stream.*;
@@ -585,33 +584,5 @@ public final class XmlUtils {
 		if (t == 15)
 			return "ENTITY_DECLARATION";
 		return "UNKNOWN";
-	}
-
-	/**
-	 * Shortcut for calling <code>URLEncoder.<jsm>encode</jsm>(o.toString(), <js>"UTF-8"</js>)</code>.
-	 * 
-	 * @param o The object to encode.
-	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
-	 */
-	public static String urlEncode(Object o) {
-		try {
-			if (o != null)
-				return URLEncoder.encode(o.toString(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {}
-		return null;
-	}
-
-	/**
-	 * Shortcut for calling <code>URLEncoder.<jsm>decode</jsm>(o.toString(), <js>"UTF-8"</js>)</code>.
-	 * 
-	 * @param s The string to decode.
-	 * @return The decoded string, or <jk>null</jk> if the string was null.
-	 */
-	public static String urlDecode(String s) {
-		try {
-			if (s != null)
-				return URLDecoder.decode(s, "UTF-8");
-		} catch (UnsupportedEncodingException e) {}
-		return null;
 	}
 }

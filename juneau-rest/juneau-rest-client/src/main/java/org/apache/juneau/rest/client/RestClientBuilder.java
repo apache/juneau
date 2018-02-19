@@ -13,14 +13,13 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.json.JsonSerializer.*;
 import static org.apache.juneau.parser.Parser.*;
-import static org.apache.juneau.uon.UonSerializer.*;
 import static org.apache.juneau.rest.client.RestClient.*;
+import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.uon.UonSerializer.*;
 
 import java.lang.reflect.*;
 import java.net.*;
-import java.net.URI;
 import java.security.*;
 import java.util.*;
 import java.util.concurrent.*;

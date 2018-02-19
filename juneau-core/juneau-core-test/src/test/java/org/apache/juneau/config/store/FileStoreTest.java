@@ -46,7 +46,7 @@ public class FileStoreTest {
 	@Test
 	public void testSimpleCreate() throws Exception {
 		FileStore fs = FileStore.create().directory(DIR).build();
-		assertTrue(fs.write("X", null, "foo"));
+		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertFileExists("X.cfg");
 	}
@@ -54,21 +54,21 @@ public class FileStoreTest {
 	@Test
 	public void testFailOnMismatch() throws Exception {
 		FileStore fs = FileStore.create().directory(DIR).build();
-		assertFalse(fs.write("X", "xxx", "foo"));
+		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertEquals(null, fs.read("X"));
 		assertFileNotExists("X.cfg");
-		assertTrue(fs.write("X", null, "foo"));
+		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
-		assertFalse(fs.write("X", "xxx", "foo"));
+		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertEquals("foo", fs.read("X"));
-		assertTrue(fs.write("X", "foo", "bar"));
+		assertNull(fs.write("X", "foo", "bar"));
 		assertEquals("bar", fs.read("X"));
 	}
 	
 	@Test
 	public void testCharset() throws Exception {
 		FileStore fs = FileStore.create().directory(DIR).charset("UTF-8").build();
-		assertTrue(fs.write("X", null, "foo"));
+		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 	}		
 	

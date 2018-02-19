@@ -18,6 +18,7 @@ import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Filesystem-based storage location for configuration files.
@@ -65,23 +66,23 @@ public class MemoryStore extends Store {
 	}
 	
 	@Override /* Store */
-	public synchronized String read(String name) throws Exception {
+	public synchronized String read(String name) {
 		return cache.get(name);
 	}
 
 	@Override /* Store */
-	public synchronized boolean write(String name, String oldContents, String newContents) throws Exception {
-		String s = cache.get(name);
+	public synchronized String write(String name, String expectedContents, String newContents) {
+		String currentContents = read(name);
 		
-		if (! isEquals(s, oldContents)) 
-			return false;
+		if (! isEquals(currentContents, expectedContents)) 
+			return StringUtils.emptyIfNull(currentContents);
 		
-		if (! isEquals(s, newContents)) {
+		if (! isEquals(currentContents, newContents)) {
 			cache.put(name, newContents);
 			update(name, newContents);
 		}
 		
-		return true;
+		return null;
 	}
 
 	

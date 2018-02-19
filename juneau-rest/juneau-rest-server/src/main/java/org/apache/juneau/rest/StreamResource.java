@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -76,7 +77,7 @@ public class StreamResource implements Streamable {
 	public StreamResource(MediaType mediaType, Map<String,Object> headers, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 
-		this.headers = headers == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(new LinkedHashMap<>(headers));
+		this.headers = immutableMap(headers);
 
 		this.contents = new byte[contents.length][];
 		for (int i = 0; i < contents.length; i++) {

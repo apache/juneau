@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * Config Listener Support
+ * Config Event and Listener Support
  */
 package org.apache.juneau.config.listener;
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -88,7 +90,7 @@ public class StaticFileMapping {
 		this.resourceClass = resourceClass;
 		this.path = StringUtils.trimSlashes(path);
 		this.location = StringUtils.trimSlashes(location);
-		this.responseHeaders = responseHeaders == null ? null : Collections.unmodifiableMap(new LinkedHashMap<>(responseHeaders));
+		this.responseHeaders = immutableMap(responseHeaders);
 	}
 	
 	/**
@@ -116,7 +118,7 @@ public class StaticFileMapping {
 		this.location = StringUtils.trimSlashes(parts[1]); 
 		if (parts.length == 3) {
 			try {
-				responseHeaders = Collections.unmodifiableMap(new ObjectMap(parts[2]));
+				responseHeaders = unmodifiableMap(new ObjectMap(parts[2]));
 			} catch (ParseException e) {
 				throw new FormattedRuntimeException(e, "Invalid mapping string format: ''{0}''", mappingString);
 			}

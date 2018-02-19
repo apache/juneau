@@ -19,8 +19,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.net.*;
 
-import org.apache.juneau.internal.*;
-
 /**
  * Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to
  * make such resolutions.
@@ -105,7 +103,7 @@ public class UriResolver {
 	}
 
 	private String resolve(Object uri, UriResolution res) {
-		String s = StringUtils.toString(uri);
+		String s = asString(uri);
 		if (isAbsoluteUri(s))
 			return hasDotSegments(s) && res != NONE ? normalize(s) : s;
 		if (res == ROOT_RELATIVE && startsWith(s, '/'))
@@ -149,7 +147,7 @@ public class UriResolver {
 	public Appendable append(Appendable a, Object o) {
 
 		try {
-			String uri = StringUtils.toString(o);
+			String uri = asString(o);
 			uri = nullIfEmpty(uri);
 			boolean needsNormalize = hasDotSegments(uri) && resolution != null;
 

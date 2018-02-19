@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -118,11 +119,11 @@ public class BeanMeta<T> {
 
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
-		this.properties = b.properties == null ? null : Collections.unmodifiableMap(b.properties);
-		this.getterProps = Collections.unmodifiableMap(b.getterProps);
-		this.setterProps = Collections.unmodifiableMap(b.setterProps);
+		this.properties = unmodifiableMap(b.properties);
+		this.getterProps = unmodifiableMap(b.getterProps);
+		this.setterProps = unmodifiableMap(b.setterProps);
 		this.dynaProperty = b.dynaProperty;
-		this.typeVarImpls = b.typeVarImpls == null ? null : Collections.unmodifiableMap(b.typeVarImpls);
+		this.typeVarImpls = unmodifiableMap(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
 		this.extMeta = b.extMeta;

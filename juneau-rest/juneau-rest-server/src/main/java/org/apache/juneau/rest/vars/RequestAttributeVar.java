@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import javax.servlet.http.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -79,6 +80,6 @@ public class RequestAttributeVar extends MultipartResolvingVar {
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
-		return StringUtils.toString(req.getAttribute(key));
+		return asString(req.getAttribute(key));
 	}
 }

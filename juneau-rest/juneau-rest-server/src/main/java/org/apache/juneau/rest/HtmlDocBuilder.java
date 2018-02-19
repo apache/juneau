@@ -13,13 +13,13 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
 
@@ -484,7 +484,7 @@ public class HtmlDocBuilder {
 	private static String[] resolveLinks(Object[] value, String[] prev) {
 		List<String> list = new ArrayList<>();
 		for (Object v : value) {
-			String s = StringUtils.toString(v);
+			String s = asString(v);
 			if ("INHERIT".equals(s)) {
 				list.addAll(Arrays.asList(prev));
 			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
@@ -504,7 +504,7 @@ public class HtmlDocBuilder {
 	private static String[] resolveSet(Object[] value, String[] prev) {
 		Set<String> set = new HashSet<>();
 		for (Object v : value) {
-			String s = StringUtils.toString(v);
+			String s = asString(v);
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
 					set.addAll(Arrays.asList(prev));
@@ -520,7 +520,7 @@ public class HtmlDocBuilder {
 	private static String[] resolveList(Object[] value, String[] prev) {
 		Set<String> set = new LinkedHashSet<>();
 		for (Object v : value) {
-			String s = StringUtils.toString(v);
+			String s = asString(v);
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
 					set.addAll(Arrays.asList(prev));

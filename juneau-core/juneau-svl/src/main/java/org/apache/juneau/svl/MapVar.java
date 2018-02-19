@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
@@ -46,6 +45,6 @@ public abstract class MapVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String varVal) {
-		return StringUtils.toString(m.get(varVal));
+		return asString(m.get(varVal));
 	}
 }

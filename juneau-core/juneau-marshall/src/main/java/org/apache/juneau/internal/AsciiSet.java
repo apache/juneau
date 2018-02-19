@@ -69,4 +69,22 @@ public final class AsciiSet {
 				return true;
 		return false;
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified string contains only characters in this set.
+	 * 
+	 * @param s The string to test.
+	 * @return 
+	 * 	<jk>true</jk> if the string contains only characters in this set.
+	 * 	<br>Nulls always return <jk>false</jk>.
+	 * 	<br>Blanks always return <jk>true</jk>.
+	 */
+	public boolean containsOnly(String s) {
+		if (s == null)
+			return false;
+		for (int i = 0; i < s.length(); i++)
+			if (! contains(s.charAt(i)))
+				return false;
+		return true;
+	}
 }

@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -33,7 +34,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
@@ -2851,11 +2851,11 @@ public final class RestContext extends BeanContext {
 			Map<Class<?>,RestParam> _paramResolvers = new HashMap<>();
 			for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, this)) 
 				_paramResolvers.put(rp.forClass(), rp);
-			paramResolvers = Collections.unmodifiableMap(_paramResolvers);
+			paramResolvers = unmodifiableMap(_paramResolvers);
 			
 			Map<String,Object> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 			_defaultRequestHeaders.putAll(getMapProperty(REST_defaultRequestHeaders, String.class));
-			defaultRequestHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(_defaultRequestHeaders));
+			defaultRequestHeaders = unmodifiableMap(new LinkedHashMap<>(_defaultRequestHeaders));
 			
 			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);	
@@ -2925,7 +2925,7 @@ public final class RestContext extends BeanContext {
 			Map<String,Widget> _widgets = new LinkedHashMap<>();
 			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], true, ps))
 				_widgets.put(w.getName(), w);
-			this.widgets = Collections.unmodifiableMap(_widgets);
+			this.widgets = unmodifiableMap(_widgets);
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -3096,7 +3096,7 @@ public final class RestContext extends BeanContext {
 				}
 			}
 
-			this.callMethods = Collections.unmodifiableMap(_javaRestMethods);
+			this.callMethods = unmodifiableMap(_javaRestMethods);
 			this.preCallMethods = _preCallMethods.values().toArray(new Method[_preCallMethods.size()]);
 			this.postCallMethods = _postCallMethods.values().toArray(new Method[_postCallMethods.size()]);
 			this.startCallMethods = _startCallMethods.values().toArray(new Method[_startCallMethods.size()]);
@@ -3115,7 +3115,7 @@ public final class RestContext extends BeanContext {
 			Map<String,RestCallRouter> _callRouters = new LinkedHashMap<>();
 			for (RestCallRouter.Builder crb : routers.values())
 				_callRouters.put(crb.getHttpMethodName(), crb.build());
-			this.callRouters = Collections.unmodifiableMap(_callRouters);
+			this.callRouters = unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
 			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverDefault.class : parentContext.resourceResolver, true, this);

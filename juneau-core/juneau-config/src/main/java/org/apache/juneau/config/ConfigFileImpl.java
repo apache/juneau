@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.config.ConfigUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -101,7 +102,7 @@ public final class ConfigFileImpl extends ConfigFile {
 		load();
 		this.readOnly = readOnly;
 		if (readOnly) {
-			this.sections = Collections.unmodifiableMap(this.sections);
+			this.sections = immutableMap(this.sections);
 			for (Section s : sections.values())
 				s.setReadOnly();
 		}

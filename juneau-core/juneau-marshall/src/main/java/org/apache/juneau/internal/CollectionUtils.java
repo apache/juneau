@@ -174,6 +174,71 @@ public final class CollectionUtils {
 	}
 	
 	/**
+	 * Creates an immutable list from the specified collection.
+	 * 
+	 * @param l The collection to copy from.
+	 * @return An unmodifiable {@link ArrayList} copy of the collection, or a {@link Collections#emptyList()}
+	 * 	if the collection was empty or <jk>null</jk>.
+	 */
+	public static <T> List<T> immutableList(Collection<T> l) {
+		if (l == null || l.isEmpty())
+			return Collections.emptyList();
+		return Collections.unmodifiableList(new ArrayList<>(l));
+	}
+	
+	/**
+	 * Creates an unmodifiable list from the specified collection.
+	 * 
+	 * @param l The collection to copy from.
+	 * @return An unmodifiable view of the list, or a {@link Collections#emptyList()}
+	 * 	if the list was empty or <jk>null</jk>.
+	 */
+	public static <T> List<T> unmodifiableList(List<T> l) {
+		if (l == null || l.isEmpty())
+			return Collections.emptyList();
+		return Collections.unmodifiableList(l);
+	}
+
+	/**
+	 * Creates an immutable list from the specified array.
+	 * 
+	 * @param l The array to copy from.
+	 * @return An unmodifiable {@link ArrayList} copy of the collection, or a {@link Collections#emptyList()}
+	 * 	if the collection was empty or <jk>null</jk>.
+	 */
+	public static <T> List<T> immutableList(T[] l) {
+		if (l == null || l.length == 0)
+			return Collections.emptyList();
+		return Collections.unmodifiableList(new ArrayList<>(Arrays.asList(l)));
+	}
+	
+	/**
+	 * Creates an immutable map from the specified map.
+	 * 
+	 * @param m The map to copy from.
+	 * @return An unmodifiable {@link LinkedHashMap} copy of the collection, or a {@link Collections#emptyMap()}
+	 * 	if the collection was empty or <jk>null</jk>.
+	 */
+	public static <K,V> Map<K,V> immutableMap(Map<K,V> m) {
+		if (m == null || m.isEmpty())
+			return Collections.emptyMap();
+		return Collections.unmodifiableMap(new LinkedHashMap<>(m));
+	}
+	
+	/**
+	 * Creates an unmodifiable map from the specified map.
+	 * 
+	 * @param m The map to copy from.
+	 * @return An unmodifiable view of the collection, or a {@link Collections#emptyMap()}
+	 * 	if the collection was empty or <jk>null</jk>.
+	 */
+	public static <K,V> Map<K,V> unmodifiableMap(Map<K,V> m) {
+		if (m == null || m.isEmpty())
+			return Collections.emptyMap();
+		return Collections.unmodifiableMap(m);
+	}
+
+	/**
 	 * Asserts that all entries in the list are either instances or subclasses of at least one of the specified classes.
 	 * 
 	 * @param l The list to check.

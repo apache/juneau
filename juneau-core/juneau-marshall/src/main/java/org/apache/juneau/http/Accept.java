@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -167,7 +168,7 @@ public final class Accept {
 
 	private Accept(String value) {
 		this.mediaRanges = MediaTypeRange.parse(value);
-		this.mediaRangesList = Collections.unmodifiableList(Arrays.asList(mediaRanges));
+		this.mediaRangesList = immutableList(mediaRanges);
 	}
 
 	/**

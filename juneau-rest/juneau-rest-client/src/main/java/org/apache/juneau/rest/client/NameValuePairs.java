@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -63,7 +64,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairs append(String name, Object value) {
-		super.add(new BasicNameValuePair(name, StringUtils.toString(value)));
+		super.add(new BasicNameValuePair(name, asString(value)));
 		return this;
 	}
 

@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -1850,12 +1851,12 @@ public class BeanContext extends Context {
 		Map<String,String[]> m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_includeProperties, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
-		includeProperties = Collections.unmodifiableMap(m2);
+		includeProperties = unmodifiableMap(m2);
 
 		m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_excludeProperties, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
-		excludeProperties = Collections.unmodifiableMap(m2);
+		excludeProperties = unmodifiableMap(m2);
 
 		locale = getInstanceProperty(BEAN_locale, Locale.class, null);
 		timeZone = getInstanceProperty(BEAN_timeZone, TimeZone.class, null);

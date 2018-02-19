@@ -13,13 +13,13 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A lookup table for resolving bean types by name.
@@ -75,7 +75,7 @@ public class BeanRegistry {
 				} else if (isParentClass(Map.class, c)) {
 					Map<?,?> m = beanContext.newInstance(Map.class, c);
 					for (Map.Entry<?,?> e : m.entrySet()) {
-						String typeName = StringUtils.toString(e.getKey());
+						String typeName = asString(e.getKey());
 						Object v = e.getValue();
 						ClassMeta<?> val = null;
 						if (v instanceof Type)

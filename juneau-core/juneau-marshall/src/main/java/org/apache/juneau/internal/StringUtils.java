@@ -1297,24 +1297,24 @@ public final class StringUtils {
 	 * @param o The object to convert to a string.
 	 * @return The object converted to a string, or <jk>null</jk> if the object was null.
 	 */
-	public static String toString(Object o) {
+	public static String asString(Object o) {
 		return (o == null ? null : o.toString());
 	}
-
+	
 	/**
 	 * Converts an array of objects to an array of strings.
 	 * 
 	 * @param o The array of objects to convert to strings.
 	 * @return A new array of objects converted to strings.
 	 */
-	public static String[] toStrings(Object[] o) {
+	public static String[] asStrings(Object...o) {
 		if (o == null)
 			return null;
 		if (o instanceof String[])
 			return (String[])o;
 		String[] s = new String[o.length];
 		for (int i = 0; i < o.length; i++)
-			s[i] = toString(o[i]);
+			s[i] = asString(o[i]);
 		return s;
 	}
 
@@ -1513,6 +1513,20 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Shortcut for calling <code>URLEncoder.<jsm>encode</jsm>(o.toString(), <js>"UTF-8"</js>)</code>.
+	 * 
+	 * @param o The object to encode.
+	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
+	 */
+	public static String urlEncode(Object o) {
+		try {
+			if (o != null)
+				return URLEncoder.encode(o.toString(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {}
+		return null;
+	}
+
+	/**
 	 * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
 	 * 
 	 * @param s The string to decode.
@@ -1527,10 +1541,11 @@ public final class StringUtils {
 			if (c == '+' || c == '%')
 				needsDecode = true;
 		}
-		if (needsDecode)
-		try {
+		if (needsDecode) {
+			try {
 				return URLDecoder.decode(s, "UTF-8");
 			} catch (UnsupportedEncodingException e) {/* Won't happen */}
+		}
 		return s;
 	}
 
@@ -1553,6 +1568,25 @@ public final class StringUtils {
 		}
 		return s;
 	}
+	
+	/**
+	 * Splits a string into equally-sized parts.
+	 * 
+	 * @param s The string to split.
+	 * @param size The token sizes.
+	 * @return The tokens, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static List<String> splitEqually(String s, int size) {
+		if (s == null)
+			return null;
+		
+		List<String> l = new ArrayList<>((s.length() + size - 1) / size);
+
+		for (int i = 0; i < s.length(); i += size) 
+			l.add(s.substring(i, Math.min(s.length(), i + size)));
+
+		return l;
+	}
 
 	/**
 	 * Returns the first non-whitespace character in the string.
@@ -1565,6 +1599,22 @@ public final class StringUtils {
 	public static char firstNonWhitespaceChar(String s) {
 		if (s != null)
 			for (int i = 0; i < s.length(); i++)
+				if (! Character.isWhitespace(s.charAt(i)))
+					return s.charAt(i);
+		return 0;
+	}
+
+	/**
+	 * Returns the last non-whitespace character in the string.
+	 * 
+	 * @param s The string to check.
+	 * @return
+	 * 	The last non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
+	 * 	of only whitespace.
+	 */
+	public static char lastNonWhitespaceChar(String s) {
+		if (s != null)
+			for (int i = s.length()-1; i >= 0; i--)
 				if (! Character.isWhitespace(s.charAt(i)))
 					return s.charAt(i);
 		return 0;

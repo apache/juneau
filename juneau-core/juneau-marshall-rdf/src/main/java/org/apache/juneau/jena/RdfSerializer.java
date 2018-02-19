@@ -13,6 +13,7 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -352,7 +353,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		for (String k : getPropertyKeys("RdfCommon")) 
 			if (k.startsWith("jena."))
 				m.put(k.substring(5), getProperty(k));
-		jenaSettings = Collections.unmodifiableMap(m);
+		jenaSettings = unmodifiableMap(m);
 	}
 	
 	/**

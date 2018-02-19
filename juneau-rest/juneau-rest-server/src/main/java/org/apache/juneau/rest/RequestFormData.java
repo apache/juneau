@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -85,7 +86,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 				Object value = e.getValue();
 				String[] v = get(key);
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-					put(key, new String[]{StringUtils.toString(value)});
+					put(key, asStrings(value));
 			}
 		}
 		return this;
@@ -116,7 +117,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param value The parameter value.
 	 */
 	public void put(String name, Object value) {
-		super.put(name, new String[]{StringUtils.toString(value)});
+		super.put(name, asStrings(value));
 	}
 
 	/**

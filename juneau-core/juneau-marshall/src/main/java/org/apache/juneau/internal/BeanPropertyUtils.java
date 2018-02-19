@@ -32,7 +32,7 @@ public final class BeanPropertyUtils {
 	 * @return The converted value, or <jk>null</jk> if the input was null.
 	 */
 	public static String toStringVal(Object o) {
-		return StringUtils.toString(o);
+		return StringUtils.asString(o);
 	}
 
 	/**

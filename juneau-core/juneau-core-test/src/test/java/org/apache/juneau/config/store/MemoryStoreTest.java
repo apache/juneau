@@ -29,20 +29,20 @@ public class MemoryStoreTest {
 	@Test
 	public void testSimpleCreate() throws Exception {
 		MemoryStore fs = MemoryStore.create().build();
-		assertTrue(fs.write("X", null, "foo"));
+		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 	}
 
 	@Test
 	public void testFailOnMismatch() throws Exception {
 		MemoryStore fs = MemoryStore.create().build();
-		assertFalse(fs.write("X", "xxx", "foo"));
+		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertEquals(null, fs.read("X"));
-		assertTrue(fs.write("X", null, "foo"));
+		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
-		assertFalse(fs.write("X", "xxx", "foo"));
+		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertEquals("foo", fs.read("X"));
-		assertTrue(fs.write("X", "foo", "bar"));
+		assertNull(fs.write("X", "foo", "bar"));
 		assertEquals("bar", fs.read("X"));
 	}
 	

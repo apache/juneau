@@ -15,6 +15,7 @@ package org.apache.juneau.microservice;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -622,7 +623,7 @@ public abstract class Microservice {
 		consoleCommands = new LinkedHashMap<>();
 		for (ConsoleCommand cc : createConsoleCommands())
 			consoleCommands.put(cc.getName(), cc);
-		consoleCommands = Collections.unmodifiableMap(consoleCommands);
+		consoleCommands = unmodifiableMap(consoleCommands);
 		
 		final Map<String,ConsoleCommand> commands = consoleCommands;
 		final MessageBundle mb2 = mb;

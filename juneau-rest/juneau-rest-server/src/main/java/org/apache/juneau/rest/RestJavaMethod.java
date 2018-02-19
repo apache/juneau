@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
@@ -95,7 +96,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.priority = b.priority;
 		this.supportedAcceptTypes = b.supportedAcceptTypes;
 		this.supportedContentTypes = b.supportedContentTypes;
-		this.widgets = Collections.unmodifiableMap(b.widgets);
+		this.widgets = unmodifiableMap(b.widgets);
 	}
 
 	private static final class Builder  {
@@ -381,11 +382,11 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				supportedAcceptTypes = 
 					m.produces().length > 0 
-					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.produces()))))) 
+					? immutableList(MediaType.forStrings(resolveVars(vr, m.produces()))) 
 					: serializers.getSupportedMediaTypes();
 				supportedContentTypes =
 					m.consumes().length > 0 
-					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.consumes()))))) 
+					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes()))) 
 					: parsers.getSupportedMediaTypes();
 					
 				params = context.findParams(method, pathPattern, false);

@@ -209,7 +209,7 @@ public class FileStore extends Store {
 	}
 	
 	@Override /* Store */
-	public synchronized String read(String name) throws Exception {
+	public synchronized String read(String name) throws IOException {
 		String s = cache.get(name);
 		if (s != null)
 			return s;
@@ -235,12 +235,12 @@ public class FileStore extends Store {
 	}
 
 	@Override /* Store */
-	public synchronized boolean write(String name, String oldContents, String newContents) throws Exception {
+	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 		dir.mkdirs();
 		Path p = dir.toPath().resolve(name + '.' + ext);
 		boolean exists = Files.exists(p);
-		if (oldContents != null && ! exists)
-			return false;
+		if (expectedContents != null && ! exists)
+			return "";
 		try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
 			try (FileLock lock = fc.lock()) {
 				String currentContents = null;
@@ -253,19 +253,19 @@ public class FileStore extends Store {
 					}
 					currentContents = sb.toString();
 				}
-				if (! isEquals(oldContents, currentContents)) {
+				if (! isEquals(expectedContents, currentContents)) {
 					if (currentContents == null)
 						cache.remove(name);
 					else
 						cache.put(name, currentContents);
-					return false;
+					return currentContents;
 				}
 				fc.position(0);
 				fc.write(charset.encode(newContents));
 				cache.put(name, newContents);
 			}
 		}
-		return true;
+		return null;
 	}
 		
 	@Override /* Store */

@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.PropertyType.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -836,7 +837,7 @@ public final class PropertyStore {
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''List<{1}>'' on property ''{2}''", type, eType, name);
 					l.add(t);
 				}
-				return Collections.unmodifiableList(l); 
+				return unmodifiableList(l); 
 			} else {
 				throw new ConfigException("Invalid property conversion ''{0}'' to ''List<{1}>'' on property ''{2}''", type, eType, name);
 			}
@@ -857,7 +858,7 @@ public final class PropertyStore {
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''Map<String,{1}>'' on property ''{2}''", type, eType, name);
 					m.put(e.getKey(), t);
 				}
-				return Collections.unmodifiableMap(m); 
+				return unmodifiableMap(m); 
 			} else {
 				throw new ConfigException("Invalid property conversion ''{0}'' to ''Map<String,{1}>'' on property ''{2}''", type, eType, name);
 			}

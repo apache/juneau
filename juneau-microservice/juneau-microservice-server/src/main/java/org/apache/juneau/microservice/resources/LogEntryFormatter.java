@@ -13,6 +13,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -177,7 +178,7 @@ public class LogEntryFormatter extends Formatter {
 		sre = sre.replaceAll("\\\\%n", "\\\\n");
 
 		rePattern = Pattern.compile(sre);
-		fieldIndexes = Collections.unmodifiableMap(fieldIndexes);
+		fieldIndexes = unmodifiableMap(fieldIndexes);
 	}
 
 	/**

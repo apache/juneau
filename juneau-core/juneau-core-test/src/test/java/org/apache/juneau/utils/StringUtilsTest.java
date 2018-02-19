@@ -799,4 +799,45 @@ public class StringUtilsTest {
 		assertObjectEquals("['\"foo\"']", splitQuoted("'\"foo\"'"));
 		assertObjectEquals("['\\'foo\\'']", splitQuoted("\"'foo'\""));
 	}
+	
+	//====================================================================================================
+	// firstNonWhitespaceChar(String)
+	//====================================================================================================
+	@Test
+	public void testFirstNonWhitespaceChar() {
+		assertEquals('f', firstNonWhitespaceChar("foo"));
+		assertEquals('f', firstNonWhitespaceChar(" foo"));
+		assertEquals('f', firstNonWhitespaceChar("\tfoo"));
+		assertEquals(0, firstNonWhitespaceChar(""));
+		assertEquals(0, firstNonWhitespaceChar(" "));
+		assertEquals(0, firstNonWhitespaceChar("\t"));
+		assertEquals(0, firstNonWhitespaceChar(null));
+	}
+
+	//====================================================================================================
+	// lastNonWhitespaceChar(String)
+	//====================================================================================================
+	@Test
+	public void testLastNonWhitespaceChar() {
+		assertEquals('r', lastNonWhitespaceChar("bar"));
+		assertEquals('r', lastNonWhitespaceChar(" bar "));
+		assertEquals('r', lastNonWhitespaceChar("\tbar\t"));
+		assertEquals(0, lastNonWhitespaceChar(""));
+		assertEquals(0, lastNonWhitespaceChar(" "));
+		assertEquals(0, lastNonWhitespaceChar("\t"));
+		assertEquals(0, lastNonWhitespaceChar(null));
+	}
+
+	//====================================================================================================
+	// testSplitEqually(String,int)
+	//====================================================================================================
+	@Test
+	public void testSplitEqually() {
+		assertNull(null, splitEqually(null, 3));
+		assertEquals("", join(splitEqually("", 3), '|'));
+		assertEquals("a", join(splitEqually("a", 3), '|'));
+		assertEquals("ab", join(splitEqually("ab", 3), '|'));
+		assertEquals("abc", join(splitEqually("abc", 3), '|'));
+		assertEquals("abc|d", join(splitEqually("abcd", 3), '|'));
+	}
 }

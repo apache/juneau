@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -25,7 +26,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Represents the query parameters in an HTTP request.
@@ -84,7 +84,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 				Object value = e.getValue();
 				String[] v = get(key);
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-					put(key, new String[]{StringUtils.toString(value)});
+					put(key, asStrings(value));
 			}
 		}
 		return this;
@@ -123,7 +123,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		if (value == null)
 			put(name, null);
 		else
-			put(name, new String[]{StringUtils.toString(value)});
+			put(name, asStrings(value));
 	}
 
 	/**
@@ -629,7 +629,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 			for (int i = 0; i < e.getValue().length; i++) {
 				if (sb.length() > 0)
 					sb.append("&");
-				sb.append(XmlUtils.urlEncode(e.getKey())).append('=').append(XmlUtils.urlEncode(e.getValue()[i]));
+				sb.append(urlEncode(e.getKey())).append('=').append(urlEncode(e.getValue()[i]));
 			}
 		}
 		return sb.toString();

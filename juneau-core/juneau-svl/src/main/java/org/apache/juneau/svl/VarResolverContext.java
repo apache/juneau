@@ -13,6 +13,7 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -52,8 +53,8 @@ public class VarResolverContext {
 			m.put(v.getName(), v);
 		}
 
-		this.varMap = Collections.unmodifiableMap(m);
-		this.contextObjects = contextObjects == null ? null : Collections.unmodifiableMap(new ConcurrentHashMap<>(contextObjects));
+		this.varMap = unmodifiableMap(m);
+		this.contextObjects = immutableMap(contextObjects);
 	}
 
 	/**

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -89,7 +91,7 @@ public final class EncoderGroup {
 	 * @param encoders The encoders to add to this group.
 	 */
 	public EncoderGroup(Encoder[] encoders) {
-		this.encoders = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(encoders)));
+		this.encoders = immutableList(encoders);
 
 		List<String> lc = new ArrayList<>();
 		List<Encoder> l = new ArrayList<>();
@@ -101,7 +103,7 @@ public final class EncoderGroup {
 		}
 
 		this.encodings = lc.toArray(new String[lc.size()]);
-		this.encodingsList = Collections.unmodifiableList(lc);
+		this.encodingsList = unmodifiableList(lc);
 		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
 	}
 
