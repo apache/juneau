@@ -34,10 +34,11 @@ class ConfigFileWritable implements Writable {
 	}
 
 	@Override /* Writable */
-	public void writeTo(Writer out) throws IOException {
+	public Writer writeTo(Writer out) throws IOException {
 		cf.readLock();
 		try {
 			cf.serializeTo(out);
+			return out;
 		} finally {
 			cf.readUnlock();
 		}

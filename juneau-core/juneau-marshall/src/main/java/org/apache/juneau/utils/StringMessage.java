@@ -45,9 +45,9 @@ public class StringMessage implements CharSequence, Writable {
 	}
 
 	@Override /* Writable */
-	public void writeTo(Writer w) throws IOException {
+	public Writer writeTo(Writer w) throws IOException {
 		w.write(toString());
-
+		return w;
 	}
 
 	@Override /* Writable */

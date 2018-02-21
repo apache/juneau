@@ -24,5 +24,5 @@ public interface ChangeEventListener {
 	 * 
 	 * @param events The change events.
 	 */
-	void onEvents(List<ChangeEvent> events);
+	void onChange(List<ChangeEvent> events);
 }

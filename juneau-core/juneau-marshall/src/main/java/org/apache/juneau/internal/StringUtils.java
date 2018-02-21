@@ -1579,6 +1579,8 @@ public final class StringUtils {
 	public static List<String> splitEqually(String s, int size) {
 		if (s == null)
 			return null;
+		if (size <= 0) 
+			return Collections.singletonList(s);
 		
 		List<String> l = new ArrayList<>((s.length() + size - 1) / size);
 

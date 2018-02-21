@@ -28,9 +28,10 @@ public interface Writable {
 	 * Serialize this object to the specified writer.
 	 * 
 	 * @param w The writer to write to.
+	 * @return The same writer passed in.
 	 * @throws IOException
 	 */
-	void writeTo(Writer w) throws IOException;
+	Writer writeTo(Writer w) throws IOException;
 
 	/**
 	 * Returns the serialized media type for this resource (e.g. <js>"text/html"</js>)

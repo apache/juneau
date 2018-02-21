@@ -83,9 +83,10 @@ public class StringObject implements CharSequence, Writable {
 	}
 
 	@Override /* Writable */
-	public void writeTo(Writer w) throws IOException {
+	public Writer writeTo(Writer w) throws IOException {
 		try {
 			s.serialize(o, w);
+			return w;
 		} catch (SerializeException e) {
 			throw new IOException(e);
 		}

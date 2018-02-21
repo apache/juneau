@@ -114,13 +114,14 @@ public class ReaderResource implements Writable {
 	}
 
 	@Override /* Writeable */
-	public void writeTo(Writer w) throws IOException {
+	public Writer writeTo(Writer w) throws IOException {
 		for (String s : contents) {
 			if (varSession != null)
 				varSession.resolveTo(s, w);
 			else
 				w.write(s);
 		}
+		return w;
 	}
 
 	@Override /* Writeable */

@@ -45,12 +45,12 @@ public class ConfigMapListenerTest {
 		};
 		
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setValue("default", "foo", "baz");
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("foo = baz|", cm.toString());
 	}
@@ -72,12 +72,12 @@ public class ConfigMapListenerTest {
 		};
 		
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setValue("S1", "foo", "baz");
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("[S1]|foo = baz|", cm.toString());
 	}
@@ -101,13 +101,13 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setValue("default", "k", "vb");
 		cm.setValue("S1", "k1", "v1b");
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("k = vb|[S1]|k1 = v1b|", cm.toString());
 	}
@@ -127,13 +127,13 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setEntry("default", "k", "kb", "^*", "C", Arrays.asList("#k"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "C1", Arrays.asList("#k1"));
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("#k|k^* = kb # C|[S1]|#k1|k1^* = k1b # C1|", cm.toString());
 	}
@@ -159,13 +159,13 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setEntry("default", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", Arrays.asList("#k1b"));
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("#kb|k^* = kb # Cb|#S1|[S1]|#k1b|k1^* = k1b # Cb1|", cm.toString());
 	}
@@ -192,13 +192,13 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setValue("default", "k", null);
 		cm.setValue("S1", "k1", null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("[S1]|", cm.toString());
 	}
@@ -224,13 +224,13 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setValue("default", "k", null);
 		cm.setValue("S1", "k1", null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("#S1|[S1]|", cm.toString());
 	}
@@ -254,7 +254,7 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setSection("default", Arrays.asList("#D1"));
 		cm.setSection("S1", Arrays.asList("#S1"));
 		cm.setSection("S2", null);
@@ -263,7 +263,7 @@ public class ConfigMapListenerTest {
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|", cm.toString());
 	}
@@ -289,7 +289,7 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setSection("default", Arrays.asList("#Db"));
 		cm.setSection("S1", Arrays.asList("#S1b"));
 		cm.setSection("S2", null);
@@ -298,7 +298,7 @@ public class ConfigMapListenerTest {
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("#Db||#S1b|[S1]|[S2]|[S3]|k3 = v3|", cm.toString());
 	}
@@ -334,7 +334,7 @@ public class ConfigMapListenerTest {
 		};
 
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.removeSection("default");
 		cm.removeSection("S1");
 		cm.removeSection("S2");
@@ -342,7 +342,7 @@ public class ConfigMapListenerTest {
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("", cm.toString());
 	}
@@ -365,7 +365,7 @@ public class ConfigMapListenerTest {
 		};
 		
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		s.update("Foo",
 			"#Da",
 			"",
@@ -382,7 +382,7 @@ public class ConfigMapListenerTest {
 		);
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("#Da||k = v # cv||#S1|[S1]|#k1|k1 = v1 # cv1|[S2]|#k2|k2 = v2 # cv2|[S3]|", cm.toString());
 	}
@@ -411,7 +411,7 @@ public class ConfigMapListenerTest {
 		};
 		
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setValue("S2", "k2", "v2b");
 		s.update("Foo",
 			"[S1]",
@@ -420,7 +420,7 @@ public class ConfigMapListenerTest {
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("[S1]|k1 = v1b|[S2]|k2 = v2b|", cm.toString());
 	}
@@ -449,7 +449,7 @@ public class ConfigMapListenerTest {
 		};
 		
 		ConfigMap cm = s.getMap("Foo");
-		cm.registerListener(l);
+		cm.register(l);
 		cm.setValue("S1", "k1", "v1c");
 		s.update("Foo",
 			"[S1]",
@@ -458,7 +458,7 @@ public class ConfigMapListenerTest {
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
-		cm.unregisterListener(l);
+		cm.unregister(l);
 		
 		assertTextEquals("[S1]|k1 = v1c|", cm.toString());
 	}
@@ -495,12 +495,12 @@ public class ConfigMapListenerTest {
 			};
 			
 			ConfigMap cm = s.getMap("Foo");
-			cm.registerListener(l);
+			cm.register(l);
 			cm.setValue("S1", "k1", "v1c");
 			cm.save();
 			wait(latch);
 			assertNull(l.error);
-			cm.unregisterListener(l);
+			cm.unregister(l);
 			
 			assertTextEquals("[S1]|k1 = v1c|", cm.toString());
 			
@@ -540,7 +540,7 @@ public class ConfigMapListenerTest {
 			};
 			
 			ConfigMap cm = s.getMap("Foo");
-			cm.registerListener(l);
+			cm.register(l);
 			cm.setValue("S1", "k1", "v1c");
 			try {
 				cm.save();
@@ -550,7 +550,7 @@ public class ConfigMapListenerTest {
 			}
 			wait(latch);
 			assertNull(l.error);
-			cm.unregisterListener(l);
+			cm.unregister(l);
 			
 			assertTextEquals("[S1]|k1 = v1c|", cm.toString());
 			
@@ -575,7 +575,7 @@ public class ConfigMapListenerTest {
 		}
 		
 		@Override
-		public void onEvents(List<ChangeEvent> events) {
+		public void onChange(List<ChangeEvent> events) {
 			try {
 				check(events);
 			} catch (Exception e) {

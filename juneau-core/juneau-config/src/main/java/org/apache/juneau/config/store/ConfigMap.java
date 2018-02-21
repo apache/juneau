@@ -21,12 +21,13 @@ import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Represents the parsed contents of a configuration.
  */
-public class ConfigMap implements StoreListener {
+public class ConfigMap implements StoreListener, Writable {
 
 	private final Store store;               // The store that created this object.
 	private volatile String contents;        // The original contents of this object.
@@ -210,6 +211,19 @@ public class ConfigMap implements StoreListener {
 		}
 	}
 
+	/**
+	 * Returns the keys of the entries in the specified section.
+	 * 
+	 * @param section 
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return
+	 * 	An unmodifiable set of keys, or <jk>null</jk> if the section doesn't exist.
+	 */
+	public Set<String> getKeys(String section) {
+		ConfigSection cs = entries.get(section);
+		return cs == null ? null : Collections.unmodifiableSet(cs.entries.keySet());
+	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	// Setters
@@ -242,7 +256,7 @@ public class ConfigMap implements StoreListener {
 	public ConfigMap removeSection(String section) {
 		return applyChange(true, ChangeEvent.removeSection(section));
 	}
-	
+		
 	/**
 	 * Sets the pre-lines on an entry without modifying any other attributes.
 	 * 
@@ -433,7 +447,7 @@ public class ConfigMap implements StoreListener {
 	 * @param listener The new listener.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigMap registerListener(ChangeEventListener listener) {
+	public ConfigMap register(ChangeEventListener listener) {
 		listeners.add(listener);
 		return this;
 	}
@@ -444,7 +458,7 @@ public class ConfigMap implements StoreListener {
 	 * @param listener The listener to remove.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigMap unregisterListener(ChangeEventListener listener) {
+	public ConfigMap unregister(ChangeEventListener listener) {
 		listeners.remove(listener);
 		return this;
 	}
@@ -469,9 +483,86 @@ public class ConfigMap implements StoreListener {
 			signal(changes);
 	}
 	
+	@Override /* Object */
+	public String toString() {
+		readLock();
+		try {
+			return asString();
+		} finally {
+			readUnlock();
+		}
+	}
+
+	@Override /* Writable */
+	public Writer writeTo(Writer w) throws IOException {
+		for (ConfigSection cs : entries.values())
+			cs.writeTo(w);
+		return w;
+	}
+
+	@Override /* Writable */
+	public MediaType getMediaType() {
+		return MediaType.PLAIN;
+	}
+
+	
+	//--------------------------------------------------------------------------------
+	// Private methods
+	//--------------------------------------------------------------------------------
+
+	private void readLock() {
+		lock.readLock().lock();
+	}
+
+	private void readUnlock() {
+		lock.readLock().unlock();
+	}
+
+	private void writeLock() {
+		lock.writeLock().lock();
+	}
+
+	private void writeUnlock() {
+		lock.writeLock().unlock();
+	}
+
+	private boolean isValidSectionName(String s) {
+		return "default".equals(s) || isValidNewSectionName(s);
+	}
+	
+	private boolean isValidKeyName(String s) {
+		if (s == null)
+			return false;
+		s = s.trim();
+		if (s.isEmpty())
+			return false;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#')
+				return false;
+		}
+		return true;
+	}
+
+	private boolean isValidNewSectionName(String s) {
+		if (s == null)
+			return false;
+		s = s.trim();
+		if (s.isEmpty())
+			return false;
+		if ("default".equals(s))
+			return false;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == '/' || c == '\\' || c == '[' || c == ']')
+				return false;
+		}
+		return true;
+	}
+
 	private void signal(List<ChangeEvent> changes) {
 		for (ChangeEventListener l : listeners)
-			l.onEvents(changes);
+			l.onChange(changes);
 	}
 
 	private List<ChangeEvent> findDiffs(String updatedContents) {
@@ -510,6 +601,18 @@ public class ConfigMap implements StoreListener {
 		return changes;
 	}
 
+	// This method should only be called from behind a lock.
+	private String asString() {
+		try {
+			StringWriter sw = new StringWriter();
+			for (ConfigSection cs : entries.values())
+				cs.writeTo(sw);
+			return sw.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);  // Not possible.
+		}
+	}
+	
 	
 	//---------------------------------------------------------------------------------------------
 	// ConfigSection
@@ -586,97 +689,22 @@ public class ConfigMap implements StoreListener {
 			return this;
 		}
 		
-		Writer writeTo(Writer out) throws IOException {
+		Writer writeTo(Writer w) throws IOException {
 			for (String s : preLines)
-				out.append(s).append('\n');
+				w.append(s).append('\n');
 			
 			if (! name.equals("default"))
-				out.append(rawLine).append('\n');
+				w.append(rawLine).append('\n');
 			else {
 				// Need separation between default prelines and first-entry prelines.
 				if (! preLines.isEmpty())
-					out.append('\n');
+					w.append('\n');
 			}
 
 			for (ConfigEntry e : entries.values()) 
-				e.writeTo(out);
+				e.writeTo(w);
 			
-			return out;
+			return w;
 		}
-	}
-
-	@Override /* Object */
-	public String toString() {
-		readLock();
-		try {
-			return asString();
-		} finally {
-			readUnlock();
-		}
-	}
-
-	String asString() {
-		try {
-			StringWriter sw = new StringWriter();
-			for (ConfigSection cs : entries.values())
-				cs.writeTo(sw);
-			return sw.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);  // Not possible.
-		}
-	}
-	
-	private boolean isValidNewSectionName(String s) {
-		if (s == null)
-			return false;
-		s = s.trim();
-		if (s.isEmpty())
-			return false;
-		if ("default".equals(s))
-			return false;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '/' || c == '\\' || c == '[' || c == ']')
-				return false;
-		}
-		return true;
-	}
-
-	private boolean isValidSectionName(String s) {
-		return "default".equals(s) || isValidNewSectionName(s);
-	}
-	
-	private boolean isValidKeyName(String s) {
-		if (s == null)
-			return false;
-		s = s.trim();
-		if (s.isEmpty())
-			return false;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#')
-				return false;
-		}
-		return true;
-	}
-
-	//--------------------------------------------------------------------------------
-	// Private methods
-	//--------------------------------------------------------------------------------
-
-	void readLock() {
-		lock.readLock().lock();
-	}
-
-	void readUnlock() {
-		lock.readLock().unlock();
-	}
-
-	void writeLock() {
-		lock.writeLock().lock();
-	}
-
-	void writeUnlock() {
-		lock.writeLock().unlock();
 	}
 }

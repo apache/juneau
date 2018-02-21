@@ -109,34 +109,43 @@ public class ConfigEntry {
 	public boolean hasModifier(char m) {
 		return modifiers.indexOf(m) != -1;
 	}
+
+	/**
+	 * Returns the modifiers for this entry.
+	 * 
+	 * @return The modifiers for this entry, or an empty string if it has no modifiers.
+	 */
+	public String getModifiers() {
+		return modifiers;
+	}
 	
-	Writer writeTo(Writer out) throws IOException {
+	Writer writeTo(Writer w) throws IOException {
 		if (value == null)
-			return out;
+			return w;
 		for (String pl : preLines)
-			out.append(pl).append('\n');
+			w.append(pl).append('\n');
 		if (rawLine != null) {
 			String l = rawLine;
 			if (l.indexOf('\n') != -1)
 				l = l.replaceAll("(\\r?\\n)", "$1\t");
-			out.append(l).append('\n');
+			w.append(l).append('\n');
 		} else {
-			out.append(key);
-			out.append(modifiers);
-			out.append(" = ");
+			w.append(key);
+			w.append(modifiers);
+			w.append(" = ");
 			
 			String val = value;
 			if (val.indexOf('\n') != -1)
 				val = val.replaceAll("(\\r?\\n)", "$1\t");
 			if (val.indexOf('#') != -1)
 				val = val.replaceAll("#", "\\\\#");
-			out.append(val);
+			w.append(val);
 				
 			if (comment != null) 
-				out.append(" # ").append(comment);
+				w.append(" # ").append(comment);
 
-			out.append('\n');
+			w.append('\n');
 		}
-		return out;
+		return w;
 	}
 }
