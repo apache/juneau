@@ -145,14 +145,33 @@
 	<li><p><a class='doclink' href='#juneau-config'><i>juneau-config</i></a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-config.Overview'>Overview</a></p>
-		<li><p><a class='doclink' href='#juneau-config.SectionBeans'>Section Beans</a></p>
-		<li><p><a class='doclink' href='#juneau-config.SectionInterfaces'>Section Interfaces</a></p>
+		<li><p><a class='doclink' href='#juneau-config.EntryTypes'>Entry Types</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-config.PrimitiveTypes'>Primitive Types</a></p>
+			<li><p><a class='doclink' href='#juneau-config.POJOs'>POJOs</a></p>
+			<li><p><a class='doclink' href='#juneau-config.Arrays'>Arrays</a></p>
+			<li><p><a class='doclink' href='#juneau-config.Collections'>Collections</a></p>
+			<li><p><a class='doclink' href='#juneau-config.BinaryData'>Binary Data</a></p>
+		</ol>
 		<li><p><a class='doclink' href='#juneau-config.Variables'>Variables</a></p>
 		<li><p><a class='doclink' href='#juneau-config.EncodedEntries'>Encoded Entries</a></p>
+		<li><p><a class='doclink' href='#juneau-config.SectionMaps'>Section Maps</a></p>
+		<li><p><a class='doclink' href='#juneau-config.SectionBeans'>Section Beans</a></p>
+		<li><p><a class='doclink' href='#juneau-config.SectionInterfaces'>Section Interfaces</a></p>
+		<li><p><a class='doclink' href='#juneau-config.SettingValues'>Setting Values</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-config.CustomEntrySerialization'>Custom Entry Serialization</a></p>
+			<li><p><a class='doclink' href='#juneau-config.BulkSettingValues'>Setting Values in Bulk</a></p>
+		</ol>		
 		<li><p><a class='doclink' href='#juneau-config.Listeners'>Listeners</a></p>
-		<li><p><a class='doclink' href='#juneau-config.CommandLine'>Command Line API</a></p>
-		<li><p><a class='doclink' href='#juneau-config.Serializing'>Serializing Config Files</a></p>
-		<li><p><a class='doclink' href='#juneau-config.Merging'>Merging Config Files</a></p>
+		<li><p><a class='doclink' href='#juneau-config.Serializing'>Serializing</a></p>
+		<li><p><a class='doclink' href='#juneau-config.ConfigStores'>Config Stores</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-config.ConfigMemoryStore'>ConfigMemoryStore</a></p>
+			<li><p><a class='doclink' href='#juneau-config.ConfigFileStore'>ConfigFileStore</a></p>
+		</ol>
+		<li><p><a class='doclink' href='#juneau-config.ReadOnlyConfigs'>Read-only Configs</a></p>
+		<li><p><a class='doclink' href='#juneau-config.ClosingConfigs'>Closing Configs</a></p>
 	</ol>
 	<li><p><a class='doclink' href='#juneau-rest-server'><i>juneau-rest-server</i></a></p>
 	<ol>
@@ -4648,6 +4667,142 @@
 	<p class='bcode' style='width:500px;'>
 	org.apache.juneau.config_7.0.0.jar 
 	</p>	
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.Overview"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.1 - Overview</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.EntryTypes"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.2 - Entry Types</h3>
+	<div class='topic'>
+
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.PrimitiveTypes"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.2.1 - Primitive Types</h4>
+		<div class='topic'>
+		</div>
+
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.POJOs"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.2.2 - POJOs</h4>
+		<div class='topic'>
+		</div>
+
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.Arrays"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.2.3 - Arrays</h4>
+		<div class='topic'>
+		</div>
+
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.Collections"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.2.4 - Collections</h4>
+		<div class='topic'>
+		</div>
+
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.BinaryData"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.2.5 - Binary Data</h4>
+		<div class='topic'>
+		</div>
+
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.Variables"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.3 - Variables</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.EncodedEntries"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.4 - Encoded Entries</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.SectionMaps"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.5 - Section Maps</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.SectionBeans"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.6 - Section Beans</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.SectionInterfaces"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.7 - Section Interfaces</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.SettingValues"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.8 - Setting Values</h3>
+	<div class='topic'>
+
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.CustomEntrySerialization"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.8.1 - Custom Entry Serialization</h4>
+		<div class='topic'>
+		</div>
+
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.BulkSettingValues"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.8.2 - Setting Values in Bulk</h4>
+		<div class='topic'>
+		</div>
+
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.Listeners"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.9 - Listeners</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.Serializing"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.10 - Serializing</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.ConfigStores"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.11 - Config Stores</h3>
+	<div class='topic'>
+		
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.ConfigMemoryStore"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.11.1 - ConfigMemoryStore</h4>
+		<div class='topic'>
+		</div>
+		
+		<!-- ======================================================================================================== -->
+		<a id="juneau-config.ConfigFileStore"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.11.2 - ConfigFileStoren</h4>
+		<div class='topic'>
+		</div>
+
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="juneau-config.ReadOnlyConfigs"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.12 - Read-only Configs</h3>
+	<div class='topic'>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="#juneau-config.ClosingConfigs"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.13 - Closing Configs</h3>
+	<div class='topic'>
+	</div>
+
 	
 	<!-- ======================================================================================================== -->
 	<a id="juneau-config.Overview"></a>
