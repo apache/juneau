@@ -166,7 +166,7 @@ public enum HookEvent {
 	 * 			<li>{@link Swagger}
 	 * 			<li>{@link RequestPathMatch}
 	 * 			<li>{@link RequestBody}
-	 * 			<li>{@link ConfigFile}
+	 * 			<li>{@link Config}
 	 * 			<li>{@link UriContext}
 	 * 			<li>{@link UriResolver}
 	 * 		</ul>

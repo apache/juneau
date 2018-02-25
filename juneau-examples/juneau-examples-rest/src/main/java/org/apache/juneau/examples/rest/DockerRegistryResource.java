@@ -57,7 +57,7 @@ public class DockerRegistryResource extends Resource {
 	 */
 	@RestHook(INIT) 
 	public void initRegistry(RestContextBuilder builder) throws Exception {
-		ConfigFile cf = builder.getConfigFile();
+		Config cf = builder.getConfig();
 		registryUrl = cf.getString("DockerRegistry/url");
 		rc = RestClient.create().build();
 	}

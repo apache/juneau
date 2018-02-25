@@ -497,6 +497,7 @@ public abstract class Context {
 	 * 
 	 * @return A new map containing the properties defined on this context.
 	 */
+	@BeanIgnore
 	public ObjectMap asMap() {
 		return new ObjectMap();
 	}
@@ -518,7 +519,7 @@ public abstract class Context {
 	}
 
 	@Override /* Object */
-	public final String toString() {
+	public String toString() {
 		try {
 			return asMap().toString(JsonSerializer.DEFAULT_LAX_READABLE);
 		} catch (SerializeException e) {

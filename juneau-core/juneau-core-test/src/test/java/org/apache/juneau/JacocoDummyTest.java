@@ -14,7 +14,6 @@ package org.apache.juneau;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.config.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.xml.annotation.*;
@@ -29,7 +28,7 @@ public class JacocoDummyTest {
 	public void accessPrivateConstructorsOnStaticUtilityClasses() throws Exception {
 
 		Class<?>[] classes = new Class[] {
-			StringUtils.class, ArrayUtils.class, ClassUtils.class, CollectionUtils.class, ConfigUtils.class
+			StringUtils.class, ArrayUtils.class, ClassUtils.class, CollectionUtils.class
 		};
 
 		for (Class<?> c : classes) {
@@ -38,7 +37,6 @@ public class JacocoDummyTest {
 			c1.newInstance();
 		}
 
-		ConfigFileFormat.valueOf(ConfigFileFormat.INI.toString());
 		RdfCollectionFormat.valueOf(RdfCollectionFormat.DEFAULT.toString());
 		XmlFormat.valueOf(XmlFormat.DEFAULT.toString());
 		Visibility.valueOf(Visibility.DEFAULT.toString());

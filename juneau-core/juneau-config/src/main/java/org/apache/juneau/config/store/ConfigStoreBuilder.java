@@ -12,16 +12,29 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
+import org.apache.juneau.*;
+
 /**
- * Listens for changes to stored config files.
+ * Base builder class for {@link ConfigStore} objects.
  */
-public interface StoreListener {
-	
+public abstract class ConfigStoreBuilder extends ContextBuilder {
+
 	/**
-	 * Called when the physical contents of a config file have changed.
-	 * 
-	 * @param name The config name (e.g. the filename without the extension).
-	 * @param contents The new config contents;
+	 * Constructor, default settings.
 	 */
-	void onChange(String name, String contents);
+	public ConfigStoreBuilder() {
+		super();
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param ps The initial configuration settings for this builder.
+	 */
+	public ConfigStoreBuilder(PropertyStore ps) {
+		super(ps);
+	}
+
+	@Override
+	public abstract ConfigStore build();
 }

@@ -58,7 +58,7 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
+	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
 	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
@@ -115,7 +115,7 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
+	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
 	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
@@ -172,7 +172,7 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
+	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
 	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
@@ -235,7 +235,7 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
+	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
 	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
@@ -273,7 +273,7 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
+	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
 	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
@@ -311,7 +311,7 @@ public @interface ResourceSwagger {
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
-	 * {@link ConfigFileVar $C} 
+	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
 	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 

@@ -26,7 +26,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.config.listener.*;
+import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
@@ -95,9 +95,7 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		{@link #onStop()} - Gets executed before {@link #stop()}.
  * 	<li>
- * 		{@link #onConfigSave(ConfigFile)} - Gets executed after a config file has been saved.
- * 	<li>
- * 		{@link #onConfigChange(ConfigFile, Set)} - Gets executed after a config file has been modified.
+ * 		{@link #onConfigChange(List)} - Gets executed after a config file has been modified.
  * </ul>
  * 
  * <h5 class='topic'>Other Methods</h5>
@@ -109,7 +107,7 @@ import org.apache.juneau.utils.*;
  * 		returned by {@link #getConfig()}.
  * </ul>
  */
-public abstract class Microservice {
+public abstract class Microservice implements ConfigEventListener {
 
 	private static volatile Microservice INSTANCE;
 
@@ -119,7 +117,7 @@ public abstract class Microservice {
 
 	private Logger logger;
 	private Args args;
-	private ConfigFile cf;
+	private Config cf;
 	private ManifestFile mf;
 	private VarResolver vr;
 	private Map<String,ConsoleCommand> consoleCommands;
@@ -169,7 +167,7 @@ public abstract class Microservice {
 	 * If you do not specify the config file location, we attempt to resolve it through the following methods:
 	 * <ol>
 	 * 	<li>The first argument in the command line arguments passed in through the constructor.
-	 * 	<li>The value of the <code>Main-ConfigFile</code> entry in the manifest file.
+	 * 	<li>The value of the <code>Main-Config</code> entry in the manifest file.
 	 * 	<li>A config file in the same location and with the same name as the executable jar file.
 	 * 		(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
 	 * </ol>
@@ -186,16 +184,16 @@ public abstract class Microservice {
 		File f = new File(cfPath);
 		if (! f.exists()) {
 			if (! create)
-				throw new FileNotFoundException("Could not locate config file at '"+f.getAbsolutePath()+"'.");
+				throw new FileNotFoundException("Could not locate config at '"+f.getAbsolutePath()+"'.");
 			if (! f.createNewFile())
-				throw new FileNotFoundException("Could not create config file at '"+f.getAbsolutePath()+"'.");
+				throw new FileNotFoundException("Could not create config at '"+f.getAbsolutePath()+"'.");
 		}
 		this.cfPath = cfPath;
 		return this;
 	}
 
 	/**
-	 * Specifies the config file for this microservice.
+	 * Specifies the config for this microservice.
 	 * 
 	 * <p>
 	 * Note that if you use this method instead of {@link #setConfig(String,boolean)}, the config file will not use
@@ -203,7 +201,7 @@ public abstract class Microservice {
 	 * 
 	 * @param cf The config file for this application, or <jk>null</jk> if no config file is needed.
 	 */
-	public void setConfig(ConfigFile cf) {
+	public void setConfig(Config cf) {
 		this.cf = cf;
 	}
 
@@ -311,11 +309,11 @@ public abstract class Microservice {
 	protected VarResolverBuilder createVarResolver() {
 		VarResolverBuilder b = new VarResolverBuilder()
 			.defaultVars()
-			.vars(ConfigFileVar.class, ManifestFileVar.class, ArgsVar.class, SwitchVar.class, IfVar.class)
+			.vars(ConfigVar.class, ManifestFileVar.class, ArgsVar.class, SwitchVar.class, IfVar.class)
 			.contextObject(ManifestFileVar.SESSION_manifest, mf)
 			.contextObject(ArgsVar.SESSION_args, args);
 		if (cf != null)
-			b.contextObject(ConfigFileVar.SESSION_config, cf);
+			b.contextObject(ConfigVar.SESSION_config, cf);
 		return b;
 	}
 
@@ -338,22 +336,22 @@ public abstract class Microservice {
 	 * Returns the external INI-style configuration file that can be used to configure your microservice.
 	 * 
 	 * <p>
-	 * The config file location is determined in the following order:
+	 * The config location is determined in the following order:
 	 * <ol class='spaced-list'>
 	 * 	<li>
 	 * 		The first argument passed to the microservice jar.
 	 * 	<li>
-	 * 		The <code>Main-ConfigFile</code> entry in the microservice jar manifest file.
+	 * 		The <code>Main-Config</code> entry in the microservice jar manifest file.
 	 * 	<li>
 	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g. 
 	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
 	 * </ol>
 	 * 
 	 * <p>
-	 * If all methods for locating the config file fail, then this method returns <jk>null</jk>.
+	 * If all methods for locating the config fail, then this method returns <jk>null</jk>.
 	 * 
 	 * <p>
-	 * Subclasses can set their own config file by calling the {@link #setConfig(ConfigFile)} method.
+	 * Subclasses can set their own config file by calling the {@link #setConfig(Config)} method.
 	 * 
 	 * <p>
 	 * String variables defined by {@link #createVarResolver()} are automatically resolved when using this method.
@@ -410,7 +408,7 @@ public abstract class Microservice {
 	 * 
 	 * <p class='bcode'>
 	 * 	<jc>// Java code for accessing config entries above.</jc>
-	 * 	ConfigFile cf = getConfig();
+	 * 	Config cf = getConfig();
 	 * 
 	 * 	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>);
 	 * 	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>);
@@ -427,7 +425,7 @@ public abstract class Microservice {
 	 * 
 	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
 	 */
-	public ConfigFile getConfig() {
+	public Config getConfig() {
 		return cf;
 	}
 
@@ -526,10 +524,11 @@ public abstract class Microservice {
 		// --------------------------------------------------------------------------------
 		// Resolve the config file if the path was specified.
 		// --------------------------------------------------------------------------------
-		ConfigFileBuilder cfb = new ConfigFileBuilder();
+		ConfigBuilder cfb = Config.create();
 		if (cfPath != null)
-			cf = cfb.build(cfPath).getResolving(createVarResolver().build());
+			cf = cfb.name(cfPath).varResolver(createVarResolver().defaultVars().build()).build();
 
+		
 		// --------------------------------------------------------------------------------
 		// Find config file.
 		// Can either be passed in as first parameter, or we discover it using
@@ -538,8 +537,8 @@ public abstract class Microservice {
 		if (cf == null) {
 			if (args.hasArg(0))
 				cfPath = args.getArg(0);
-			else if (mf.containsKey("Main-ConfigFile"))
-				cfPath = mf.getString("Main-ConfigFile");
+			else if (mf.containsKey("Main-Config"))
+				cfPath = mf.getString("Main-Config");
 			else {
 				String cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
 				if (cmd.endsWith(".jar"))
@@ -549,7 +548,7 @@ public abstract class Microservice {
 			if (cfPath == null) {
 				cf = cfb.build();
 			} else {
-				cf = cfb.build(cfPath).getResolving(createVarResolver().build());
+				cf = cfb.name(cfPath).varResolver(createVarResolver().build()).build();
 			}
 		}
 
@@ -561,10 +560,10 @@ public abstract class Microservice {
 		// --------------------------------------------------------------------------------
 		// Set system properties.
 		// --------------------------------------------------------------------------------
-		Set<String> spKeys = cf.getSectionKeys("SystemProperties");
+		Set<String> spKeys = cf.getKeys("SystemProperties");
 		if (spKeys != null)
 			for (String key : spKeys)
-				System.setProperty(key, cf.get("SystemProperties", key));
+				System.setProperty(key, cf.getString("SystemProperties/"+key));
 
 		// --------------------------------------------------------------------------------
 		// Initialize logging.
@@ -579,16 +578,7 @@ public abstract class Microservice {
 		// --------------------------------------------------------------------------------
 		// Add a config file change listener.
 		// --------------------------------------------------------------------------------
-		cf.addListener(new ConfigListener() {
-			@Override /* ConfigListener */
-			public void onSave(ConfigFile cf) {
-				onConfigSave(cf);
-			}
-			@Override /* ConfigListener */
-			public void onChange(ConfigFile cf, Set<String> changes) {
-				onConfigChange(cf, changes);
-			}
-		});
+		cf.addListener(this);
 
 		consoleEnabled = cf.getBoolean("Console/enabled", true);
 
@@ -713,7 +703,7 @@ public abstract class Microservice {
 	 * 
 	 * 	<cc># The maximum log file size.
 	 * 	# Suffixes available for numbers.
-	 * 	# See ConfigFile.getInt(String,int) for details.
+	 * 	# See Config.getInt(String,int) for details.
 	 * 	# Default is 1M.</cc>
 	 * 	<ck>limit</ck> = 10M
 	 * 
@@ -739,7 +729,7 @@ public abstract class Microservice {
 	 * @throws Exception
 	 */
 	protected void initLogging() throws Exception {
-		ConfigFile cf = getConfig();
+		Config cf = getConfig();
 		logger = Logger.getLogger("");
 		String logFile = cf.getString("Logging/logFile");
 		if (! isEmpty(logFile)) {
@@ -829,25 +819,15 @@ public abstract class Microservice {
 	protected void onStop() {}
 
 	/**
-	 * Called if the {@link ConfigFile#save()} is called on the config file.
-	 * 
-	 * <p>
-	 * Subclasses can override this method to listen for config file changes.
-	 * 
-	 * @param cf The config file.
-	 */
-	protected void onConfigSave(ConfigFile cf) {}
-
-	/**
 	 * Called if one or more changes occur in the config file.
 	 * 
 	 * <p>
 	 * Subclasses can override this method to listen for config file changes.
 	 * 
-	 * @param cf The config file.
-	 * @param changes The list of keys in the config file being changed.
+	 * @param events The list of changes in the config file.
 	 */
-	protected void onConfigChange(ConfigFile cf, Set<String> changes) {}
+	@Override /* ConfigEventListener */
+	public void onConfigChange(List<ConfigEvent> events) {}
 
 	
 	//--------------------------------------------------------------------------------
@@ -934,6 +914,6 @@ public abstract class Microservice {
 	 */
 	protected void err(MessageBundle mb, String messageKey, Object...args) {
 		if (consoleEnabled)
-			System.err.println(mb.getString(messageKey, args));
+			System.err.println(mb.getString(messageKey, args));  // NOT DEBUG
 	}
 }

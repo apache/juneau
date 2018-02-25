@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.Map;
 
 import org.apache.juneau.*;
-import org.apache.juneau.config.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
@@ -52,8 +51,8 @@ public class ConfigResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(name=GET, path="/", description="Show contents of config file.")
-	public ConfigFile getConfigContents() throws Exception {
-		return getServletConfig().getConfigFile();
+	public ObjectMap getConfig() throws Exception {
+		return getServletConfig().getConfig().asMap();
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class ConfigResource extends Resource {
 					tr(th().child("Contents")),
 					tr(th().child(
 						textarea().name("contents").rows(40).cols(120).style("white-space:pre;word-wrap:normal;overflow-x:scroll;font-family:monospace;")
-							.text(getConfigContents().toString()))
+							.text(getServletConfig().getConfig().toString()))
 					)
 				)
 			)
@@ -134,7 +133,7 @@ public class ConfigResource extends Resource {
 			}
 		)
 	)
-	public ConfigFile setConfigContentsFormPost(@FormData("contents") String contents) throws Exception {
+	public ObjectMap setConfigContentsFormPost(@FormData("contents") String contents) throws Exception {
 		return setConfigContents(new StringReader(contents));
 	}
 
@@ -153,9 +152,8 @@ public class ConfigResource extends Resource {
 			}
 		)
 	)
-	public ConfigFile setConfigContents(@Body Reader contents) throws Exception {
-		ConfigFile cf2 = new ConfigFileBuilder().build(contents);
-		return getConfigContents().merge(cf2).save();
+	public ObjectMap setConfigContents(@Body Reader contents) throws Exception {
+		return getServletConfig().getConfig().write(contents, true).asMap();
 	}
 
 	/**
@@ -175,8 +173,8 @@ public class ConfigResource extends Resource {
 			}
 		)
 	)
-	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,String> contents) throws Exception {
-		getConfigContents().setSection(section, contents);
+	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,Object> contents) throws Exception {
+		getServletConfig().getConfig().setSection(section, null, contents);
 		return getSection(section);
 	}
 
@@ -200,12 +198,12 @@ public class ConfigResource extends Resource {
 		)
 	)
 	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws Exception {
-		getConfigContents().put(section, key, value, false);
+		getServletConfig().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
 	}
 
 	private ObjectMap getSection(String name) throws Exception {
-		ObjectMap m = getConfigContents().getSectionMap(name);
+		ObjectMap m = getServletConfig().getConfig().getSectionAsMap(name);
 		if (m == null)
 			throw new RestException(SC_NOT_FOUND, "Section not found.");
 		return m;

@@ -24,7 +24,6 @@ import java.nio.file.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Filesystem-based storage location for configuration files.
@@ -32,26 +31,26 @@ import org.apache.juneau.internal.*;
  * <p>
  * Points to a file system directory containing configuration files.
  */
-public class FileStore extends Store {
+public class ConfigFileStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "FileStore.";
+	private static final String PREFIX = "ConfigFileStore.";
 
 	/**
 	 * Configuration property:  Local file system directory.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"FileStore.directory.s"</js>
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.directory.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"."</js>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link FileStoreBuilder#directory(String)}
-	 * 			<li class='jm'>{@link FileStoreBuilder#directory(File)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#directory(String)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#directory(File)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -66,13 +65,13 @@ public class FileStore extends Store {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"FileStore.charset.s"</js>
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.charset.s"</js>
 	 * 	<li><b>Data type:</b>  {@link Charset}
 	 * 	<li><b>Default:</b>  {@link Charset#defaultCharset()}
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link FileStoreBuilder#charset(String)}
-	 * 			<li class='jm'>{@link FileStoreBuilder#charset(Charset)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#charset(String)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#charset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -87,13 +86,12 @@ public class FileStore extends Store {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"FileStore.useWatcher.b"</js>
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.useWatcher.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link FileStoreBuilder#useWatcher()}
-	 * 			<li class='jm'>{@link FileStoreBuilder#useWatcher(boolean)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#useWatcher()}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -113,13 +111,13 @@ public class FileStore extends Store {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"FileStore.watcherSensitivity.s"</js>
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.watcherSensitivity.s"</js>
 	 * 	<li><b>Data type:</b>  {@link WatcherSensitivity}
 	 * 	<li><b>Default:</b>  {@link WatcherSensitivity#MEDIUM}
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link FileStoreBuilder#watcherSensitivity(WatcherSensitivity)}
-	 * 			<li class='jm'>{@link FileStoreBuilder#watcherSensitivity(String)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#watcherSensitivity(WatcherSensitivity)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#watcherSensitivity(String)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -135,24 +133,28 @@ public class FileStore extends Store {
 	public static final String FILESTORE_watcherSensitivity = PREFIX + "watcherSensitivity.s";
 	
 	/**
-	 * Configuration property:  Config file extension.
+	 * Configuration property:  Update-on-write.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"FileStore.ext.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"cfg"</js>
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.updateOnWrite.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link FileStoreBuilder#ext(String)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#updateOnWrite()}
 	 * 		</ul>
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * File extension identifier for config files.
+	 * When enabled, the {@link #update(String, String)} method will be called immediately following
+	 * calls to {@link #write(String, String, String)} when the contents are changing.
+	 * <br>This allows for more immediate responses to configuration changes on file systems that use
+	 * polling watchers.
+	 * <br>This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.
 	 */
-	public static final String FILESTORE_ext = PREFIX + "ext.s";
+	public static final String FILESTORE_updateOnWrite = PREFIX + "updateOnWrite.b";
 
 	
 	//-------------------------------------------------------------------------------------------------------------------
@@ -160,7 +162,7 @@ public class FileStore extends Store {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default file store, all default values.*/
-	public static final FileStore DEFAULT = FileStore.create().build();
+	public static final ConfigFileStore DEFAULT = ConfigFileStore.create().build();
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -172,19 +174,19 @@ public class FileStore extends Store {
 	 * 
 	 * @return A new builder for this object.
 	 */
-	public static FileStoreBuilder create() {
-		return new FileStoreBuilder();
+	public static ConfigFileStoreBuilder create() {
+		return new ConfigFileStoreBuilder();
 	}
 	
 	@Override /* Context */
-	public FileStoreBuilder builder() {
-		return new FileStoreBuilder(getPropertyStore());
+	public ConfigFileStoreBuilder builder() {
+		return new ConfigFileStoreBuilder(getPropertyStore());
 	}
 
 	private final File dir;
-	private final String ext;
 	private final Charset charset;
 	private final WatcherThread watcher;
+	private final boolean updateOnWrite;
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 	
 	/**
@@ -192,13 +194,13 @@ public class FileStore extends Store {
 	 * 
 	 * @param ps The settings for this content store.
 	 */
-	protected FileStore(PropertyStore ps) {
+	protected ConfigFileStore(PropertyStore ps) {
 		super(ps);
 		try {
 			dir = new File(getStringProperty(FILESTORE_directory, ".")).getCanonicalFile();
 			dir.mkdirs();
-			ext = getStringProperty(FILESTORE_ext, "cfg");
 			charset = getProperty(FILESTORE_charset, Charset.class, Charset.defaultCharset());
+			updateOnWrite = getBooleanProperty(FILESTORE_updateOnWrite, false);
 			WatcherSensitivity ws = getProperty(FILESTORE_watcherSensitivity, WatcherSensitivity.class, WatcherSensitivity.MEDIUM);
 			watcher = getBooleanProperty(FILESTORE_useWatcher, false) ? new WatcherThread(dir, ws) : null;
 			if (watcher != null)
@@ -208,16 +210,19 @@ public class FileStore extends Store {
 		}
 	}
 	
-	@Override /* Store */
+	@Override /* ConfigStore */
 	public synchronized String read(String name) throws IOException {
 		String s = cache.get(name);
 		if (s != null)
 			return s;
 		
 		dir.mkdirs();
-		Path p = dir.toPath().resolve(name + '.' + ext);
+		
+		// If file doesn't exist, don't trigger creation.
+		Path p = dir.toPath().resolve(name);
 		if (! Files.exists(p)) 
-			return null;
+			return "";
+		
 		try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
 			try (FileLock lock = fc.lock()) {
 				ByteBuffer buf = ByteBuffer.allocate(1024);
@@ -234,16 +239,25 @@ public class FileStore extends Store {
 		return cache.get(name);
 	}
 
-	@Override /* Store */
+	@Override /* ConfigStore */
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
+
+		// This is a no-op.
+		if (isEquals(expectedContents, newContents))
+			return null;
+
 		dir.mkdirs();
-		Path p = dir.toPath().resolve(name + '.' + ext);
+		Path p = dir.toPath().resolve(name);
+		
 		boolean exists = Files.exists(p);
-		if (expectedContents != null && ! exists)
+		
+		// Don't create the file if we're not going to match.
+		if ((!exists) && (!isEmpty(expectedContents)))
 			return "";
+		
 		try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
 			try (FileLock lock = fc.lock()) {
-				String currentContents = null;
+				String currentContents = "";
 				if (exists) {
 					ByteBuffer buf = ByteBuffer.allocate(1024);
 					StringBuilder sb = new StringBuilder();
@@ -253,7 +267,7 @@ public class FileStore extends Store {
 					}
 					currentContents = sb.toString();
 				}
-				if (! isEquals(expectedContents, currentContents)) {
+				if (expectedContents != null && ! isEquals(currentContents, expectedContents)) {
 					if (currentContents == null)
 						cache.remove(name);
 					else
@@ -262,14 +276,19 @@ public class FileStore extends Store {
 				}
 				fc.position(0);
 				fc.write(charset.encode(newContents));
-				cache.put(name, newContents);
 			}
 		}
+		
+		if (updateOnWrite)
+			update(name, newContents);
+		else 
+			cache.remove(name);  // Invalidate the cache.
+		
 		return null;
 	}
 		
-	@Override /* Store */
-	public synchronized FileStore update(String name, String newContents) {
+	@Override /* ConfigStore */
+	public synchronized ConfigFileStore update(String name, String newContents) {
 		cache.put(name, newContents);
 		super.update(name, newContents);
 		return this;
@@ -320,7 +339,7 @@ public class FileStore extends Store {
 				    for (WatchEvent<?> event : key.pollEvents()) {
 				        WatchEvent.Kind<?> kind = event.kind();
 				        if (kind != OVERFLOW) 
-				        		FileStore.this.onFileEvent(((WatchEvent<Path>)event));
+				        		ConfigFileStore.this.onFileEvent(((WatchEvent<Path>)event));
 				    }
 				    if (! key.reset())
 				    		break;
@@ -347,21 +366,16 @@ public class FileStore extends Store {
 	 * Gets called when the watcher service on this store is triggered with a file system change.
 	 * 
 	 * @param e The file system event.
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	protected synchronized void onFileEvent(WatchEvent<Path> e) throws Exception {
+	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
 		String fn = e.context().getFileName().toString();
-		String bn = FileUtils.getBaseName(fn);
-		String ext = FileUtils.getExtension(fn);
 		
-		if (isEquals(this.ext, ext)) {
-			String oldContents = cache.get(bn);
-			cache.remove(bn);
-			String newContents = read(bn);
-			if (! isEquals(oldContents, newContents)) {
-				update(bn, newContents);
-			}
+		String oldContents = cache.get(fn);
+		cache.remove(fn);
+		String newContents = read(fn);
+		if (! isEquals(oldContents, newContents)) {
+			update(fn, newContents);
 		}
 	}
-		
 }

@@ -185,7 +185,7 @@ public class HeadersResource extends RestServlet {
 	}
 
 	public static class IdentityAnythingEncoder extends IdentityEncoder {
-		@Override /* Encoder */
+		@Override /* ConfigEncoder */
 		public String[] getCodings() {
 			return new String[]{"*"};
 		}

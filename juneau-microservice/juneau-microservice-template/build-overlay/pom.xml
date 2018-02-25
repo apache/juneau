@@ -89,7 +89,7 @@
 							</mainClass>
 						</manifest>
 						<manifestEntries>
-							<Main-ConfigFile>my-microservice.cfg</Main-ConfigFile>
+							<Main-Config>my-microservice.cfg</Main-Config>
 						</manifestEntries>
 					</archive>
 				</configuration>

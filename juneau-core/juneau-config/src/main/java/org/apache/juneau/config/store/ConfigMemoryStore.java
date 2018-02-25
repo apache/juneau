@@ -18,7 +18,6 @@ import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Filesystem-based storage location for configuration files.
@@ -26,14 +25,14 @@ import org.apache.juneau.internal.*;
  * <p>
  * Points to a file system directory containing configuration files.
  */
-public class MemoryStore extends Store {
+public class ConfigMemoryStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default memory store, all default values.*/
-	public static final MemoryStore DEFAULT = MemoryStore.create().build();
+	public static final ConfigMemoryStore DEFAULT = ConfigMemoryStore.create().build();
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -45,13 +44,13 @@ public class MemoryStore extends Store {
 	 * 
 	 * @return A new builder for this object.
 	 */
-	public static MemoryStoreBuilder create() {
-		return new MemoryStoreBuilder();
+	public static ConfigMemoryStoreBuilder create() {
+		return new ConfigMemoryStoreBuilder();
 	}
 	
 	@Override /* Context */
-	public MemoryStoreBuilder builder() {
-		return new MemoryStoreBuilder(getPropertyStore());
+	public ConfigMemoryStoreBuilder builder() {
+		return new ConfigMemoryStoreBuilder(getPropertyStore());
 	}
 
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
@@ -61,33 +60,36 @@ public class MemoryStore extends Store {
 	 * 
 	 * @param ps The settings for this content store.
 	 */
-	protected MemoryStore(PropertyStore ps) {
+	protected ConfigMemoryStore(PropertyStore ps) {
 		super(ps);
 	}
 	
-	@Override /* Store */
+	@Override /* ConfigStore */
 	public synchronized String read(String name) {
-		return cache.get(name);
+		return emptyIfNull(cache.get(name));
 	}
 
-	@Override /* Store */
+	@Override /* ConfigStore */
 	public synchronized String write(String name, String expectedContents, String newContents) {
+
+		// This is a no-op.
+		if (isEquals(expectedContents, newContents))
+			return null;
+		
 		String currentContents = read(name);
 		
-		if (! isEquals(currentContents, expectedContents)) 
-			return StringUtils.emptyIfNull(currentContents);
+		if (expectedContents != null && ! isEquals(currentContents, expectedContents)) 
+			return currentContents;
 		
-		if (! isEquals(currentContents, newContents)) {
-			cache.put(name, newContents);
-			update(name, newContents);
-		}
+		cache.put(name, newContents);
+		update(name, newContents);
 		
 		return null;
 	}
 
 	
-	@Override /* Store */
-	public synchronized MemoryStore update(String name, String newContents) {
+	@Override /* ConfigStore */
+	public synchronized ConfigMemoryStore update(String name, String newContents) {
 		cache.put(name, newContents);
 		super.update(name, newContents);
 		return this;

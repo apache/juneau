@@ -43,7 +43,7 @@ public class ThrowableUtils {
 	 */
 	public static void assertFieldNotNull(Object fieldValue, String fieldName) throws IllegalArgumentException {
 		if (fieldValue == null)
-			throw new FormattedIllegalArgumentException("Field ''{0}'' cannot be null.", fieldName);
+			throw new IllegalArgumentException("Field '"+fieldName+"' cannot be null.");
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class ThrowableUtils {
 	 */
 	public static void assertFieldPositive(int fieldValue, String fieldName) throws IllegalArgumentException {
 		if (fieldValue <= 0)
-			throw new FormattedIllegalArgumentException("Field ''{0}'' must be a positive integer.", fieldName);
+			throw new IllegalArgumentException("Field '"+fieldName+"' must be a positive integer.");
 	}
 
 	/**

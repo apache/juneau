@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Provides access to the following initialized resources:
  * <ul>
- * 	<li>{@link #getConfigFile()} - The external configuration file for this resource.
+ * 	<li>{@link #getConfig()} - The external configuration for this resource.
  * 	<li>{@link #getProperties()} - The modifiable configuration properties for this resource.
  * 	<li>{@link #getVarResolverBuilder()} - The variable resolver for this resource.
  * </ul>
@@ -100,7 +100,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	//---------------------------------------------------------------------------
 
 	RestContextProperties properties;
-	ConfigFile configFile;
+	Config config;
 	VarResolverBuilder varResolverBuilder;
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
@@ -124,12 +124,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Constructor.
 	 * 
-	 * @param config The servlet config passed into the servlet by the servlet container.
+	 * @param servletConfig The servlet config passed into the servlet by the servlet container.
 	 * @param resource The class annotated with <ja>@RestResource</ja>.
 	 * @throws ServletException Something bad happened.
 	 */
-	RestContextBuilder(ServletConfig config, Class<?> resourceClass, RestContext parentContext) throws ServletException {
-		this.inner = config;
+	RestContextBuilder(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
+		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
 		
@@ -140,15 +140,15 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 		try {
 
-			ConfigFileBuilder cfb = new ConfigFileBuilder();
+//			ConfigBuilder cfb = Config.create();
 
 			htmlDocBuilder = new HtmlDocBuilder(properties);
-			configFile = cfb.build();
+//			this.config = cfb.build();
 			varResolverBuilder = new VarResolverBuilder()
 				.vars(
 					SystemPropertiesVar.class,
 					EnvVariablesVar.class,
-					ConfigFileVar.class,
+					ConfigVar.class,
 					IfVar.class,
 					SwitchVar.class,
 					CoalesceVar.class,
@@ -165,18 +165,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				if (! r.config().isEmpty())
 					configPath = r.config();
 			String cf = vr.resolve(configPath);
+			ConfigBuilder cb = Config.create().varResolver(vr);
 			if (! cf.isEmpty())
-				configFile = cfb.build(cf);
-			configFile = configFile.getResolving(vr);
+				cb.name(cf);
+		
+			this.config = cb.build();
 
 			// Add our config file to the variable resolver.
-			varResolverBuilder.contextObject(ConfigFileVar.SESSION_config, configFile);
+			varResolverBuilder.contextObject(ConfigVar.SESSION_config, config);
 			vr = varResolverBuilder.build();
 
 			// Add the servlet init parameters to our properties.
-			for (Enumeration<String> ep = config.getInitParameterNames(); ep.hasMoreElements();) {
+			for (Enumeration<String> ep = servletConfig.getInitParameterNames(); ep.hasMoreElements();) {
 				String p = ep.nextElement();
-				String initParam = config.getInitParameter(p);
+				String initParam = servletConfig.getInitParameter(p);
 				set(vr.resolve(p), vr.resolve(initParam));
 			}
 
@@ -348,8 +350,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * information.
 	 * 
 	 * <p>
-	 * For example, the {@link ConfigFileVar} needs access to this resource's {@link ConfigFile} through the
-	 * {@link ConfigFileVar#SESSION_config} object that can be specified as either a session object (temporary) or
+	 * For example, the {@link ConfigVar} needs access to this resource's {@link Config} through the
+	 * {@link ConfigVar#SESSION_config} object that can be specified as either a session object (temporary) or
 	 * context object (permanent).
 	 * In this case, we call the following code to add it to the context map:
 	 * <p class='bcode'>
@@ -373,11 +375,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * annotation.
 	 * This method allows you to programmatically override it with your own custom config file.
 	 * 
-	 * @param configFile The new config file.
+	 * @param config The new config file.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder configFile(ConfigFile configFile) {
-		this.configFile = configFile;
+	public RestContextBuilder config(Config config) {
+		this.config = config;
 		return this;
 	}
 
@@ -414,7 +416,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * The config file can be programmatically overridden by adding the following method to your resource:
 	 * <p class='bcode'>
-	 * 	<jk>public</jk> ConfigFile createConfigFile(ServletConfig servletConfig) <jk>throws</jk> ServletException;
+	 * 	<jk>public</jk> Config createConfig(ServletConfig servletConfig) <jk>throws</jk> ServletException;
 	 * </p>
 	 * 
 	 * <p>
@@ -422,8 +424,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @return The external config file for this resource.  Never <jk>null</jk>.
 	 */
-	public ConfigFile getConfigFile() {
-		return configFile;
+	public Config getConfig() {
+		return config;
 	}
 
 	/**
@@ -456,7 +458,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <ul>
 	 * 	<li>{@link SystemPropertiesVar}
 	 * 	<li>{@link EnvVariablesVar}
-	 * 	<li>{@link ConfigFileVar}
+	 * 	<li>{@link ConfigVar}
 	 * 	<li>{@link IfVar}
 	 * 	<li>{@link SwitchVar}
 	 * </ul>

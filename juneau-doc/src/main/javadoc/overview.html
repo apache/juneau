@@ -277,9 +277,9 @@
 		<ol>
 			<li><p><a class='doclink' href='#juneau-microservice-server.ManifestApi'>Manifest API</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-microservice-server.ConfigFile'>Config File</a></p>
+		<li><p><a class='doclink' href='#juneau-microservice-server.Config'>Config</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-microservice-server.ConfigFileApi'>Config File API</a></p>
+			<li><p><a class='doclink' href='#juneau-microservice-server.ConfigApi'>Config API</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-microservice-server.ResourceClasses'>Resource Classes</a></p>
 		<li><p><a class='doclink' href='#juneau-microservice-server.PredefinedResourceClasses'>Predefined Resource Classes</a></p>
@@ -4345,7 +4345,7 @@
 		<p>
 			The <l>juneau-svl</l> module defines an API for a language called <l>Simple Variable Language</l>.
 			<br>In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
-			<br>It is used extensively in the ConfigFile, REST and Microservice APIs.
+			<br>It is used extensively in the Config, REST and Microservice APIs.
 		</p>
 		<p>
 			Most variables can be recursively nested within the varKey (e.g. <js>"$FOO{$BAR{xxx},$BAZ{xxx}}"</js>)
@@ -4469,7 +4469,7 @@
 			</tr>
 			<tr class='light dd'>
 				<td rowspan="1" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-config</td>
-				<td>{@link org.apache.juneau.config.vars.ConfigFileVar}</td>
+				<td>{@link org.apache.juneau.config.vars.ConfigVar}</td>
 				<td class='code'>$C{key[,defaultValue]}</td>
 			</tr>
 			<tr class='dark'>
@@ -4560,7 +4560,7 @@
 		</ul>
 		<p>
 			Var resolvers can rely on the existence of other objects.
-			<br>For example, {@link org.apache.juneau.config.vars.ConfigFileVar} relies on the existence of a {@link org.apache.juneau.config.ConfigFile}.
+			<br>For example, {@link org.apache.juneau.config.vars.ConfigVar} relies on the existence of a {@link org.apache.juneau.config.Config}.
 			<br>This is accomplished through the following:
 		</p>
 		<ul class='spaced-list'>
@@ -4598,7 +4598,7 @@
 	<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>
 	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>
 		.builder()
-		.vars(ConfigFileVar.<jk>class</jk>, ArgsVar.<jk>class</jk>)
+		.vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>)
 		.build();
 		</p>
 	</div>	
@@ -4683,7 +4683,7 @@
 	URL key4;
 	
 	<jc>// Load our config file</jc>
-	ConfigFile f = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	Config f = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	
 	<jc>// Read values from default section</jc>
 	key1 = f.getInt(<js>"key1"</js>);
@@ -4702,7 +4702,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample config file programmatically</jc>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
+	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build()
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>,
 			<js>"key1 = 1"</js>,
@@ -4720,12 +4720,12 @@
 		.save();
 		</p>
 		<p>
-			The following is equivalent, except that it uses {@link org.apache.juneau.config.ConfigFile#put(String, Object)} 
+			The following is equivalent, except that it uses <code><del>Config#put(String, Object)</del></code> 
 			to set values:
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample config file programmatically</jc>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
+	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build()
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>)
 		.addHeaderComments(<js>"section1"</js>,
@@ -4784,7 +4784,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Java code for accessing config entries above.</jc>
-	ConfigFile cf = ConfigFile.<jsf>create</jsf>().build(<js>"MyConfig.cfg"</js>);
+	Config cf = Config.<jsf>create</jsf>().name(<js>"MyConfig.cfg"</js>).build();
 	
 	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>); 
 	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>); 
@@ -4800,7 +4800,7 @@
 	<div class='topic'>
 		<p>
 			Config files can also be used to directly populate beans using the 
-			{@link org.apache.juneau.config.ConfigFile#getSectionAsBean(String,Class,boolean)}:
+			{@link org.apache.juneau.config.Config#getSectionAsBean(String,Class,boolean)}:
 		</p>
 		<p class='bcode'>
 	<jc>// Example config file</jc>
@@ -4819,7 +4819,7 @@
 	}
 
 	<jc>// Example usage</jc>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
 		</p>
 	</div>
@@ -4830,7 +4830,7 @@
 	<div class='topic'>
 		<p>
 			Config file sections can also be accessed via interface proxies using 
-			{@link org.apache.juneau.config.ConfigFile#getSectionAsInterface(String,Class)}:
+			{@link org.apache.juneau.config.Config#getSectionAsInterface(String,Class)}:
 		</p>
 		<p class='bcode'>
 	<jc>// Example config file</jc>
@@ -4866,7 +4866,7 @@
 	}
 	
 	<jc>// Example usage.</jc>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
 	
 	<jc>// Read a value.</jc>
@@ -4921,7 +4921,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Java code for accessing config entries above.</jc>
-	ConfigFile cf = Microservice.<jsm>getInstance</jsm>().getConfig();
+	Config cf = Microservice.<jsm>getInstance</jsm>().getConfig();
 	
 	Locale locale = cf.getObject(Locale.<jk>class</jk>, <js>"MySection/locale"</js>); 
 	String path = cf.getString(<js>"MySection/path"</js>); 
@@ -4934,11 +4934,10 @@
 			Resolving config files can be retrieved through the following methods:
 		</p>	
 		<ul class='spaced-list'>
-			<li class='jm'>{@link org.apache.juneau.config.ConfigFile#getResolving()} - Returns a config file that resolves a default set of variables.
-			<li class='jm'>{@link org.apache.juneau.config.ConfigFile#getResolving(VarResolver)} - Returns a config file that resolves a custom set of variables.
+			<li class='jm'><code><del>Config#getResolving(VarResolver)</del></code> - Returns a config file that resolves a custom set of variables.
 		</ul>
 		<p>
-			The default {@link org.apache.juneau.config.ConfigFile#getResolving()} method returns a config file that resolves 
+			The default <code><del>ConfigFile#getResolving(VarResolver)</del></code> method returns a config file that resolves 
 			the following variables:
 		</p>
 		<ul class='spaced-list'>
@@ -5009,10 +5008,10 @@
 	<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
 		</p>
 		<p>
-			The default encoder is {@link org.apache.juneau.config.encode.XorEncoder} which is a simple XOR+Base64 encoder.
-			<br>If desired, custom encoder can be used by implementing the {@link org.apache.juneau.config.encode.Encoder}
-			interface and creating your own <code>ConfigFileBuilder</code> using the 
-			{@link org.apache.juneau.config.ConfigFileBuilder#encoder(Encoder)} method.
+			The default encoder is {@link org.apache.juneau.config.encode.ConfigXorEncoder} which is a simple XOR+Base64 encoder.
+			<br>If desired, custom encoder can be used by implementing the {@link org.apache.juneau.config.encode.ConfigEncoder}
+			interface and creating your own <code>Config</code> using the 
+			<code><del>ConfigBuilder#encoder(Encoder)</del></code> method.
 		</p>
 	</div>
 	
@@ -5024,24 +5023,24 @@
 			The following method is provided for listening to changes made on config files:
 		</p>
 		<p>
-			{@link org.apache.juneau.config.ConfigFile#addListener(ConfigListener)}.
+			<code><del>Config#addListener(ConfigListener)</del></code>.
 		</p>
 		<p>
 			Subclasses are provided for listening for different kinds of events:
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				{@link org.apache.juneau.config.event.ConfigListener} - Config file is saved, loaded, or modified.
+				<code><del>ConfigListener</del></code> - Config file is saved, loaded, or modified.
 			<li>
-				{@link org.apache.juneau.config.event.SectionListener} - One or more entries in a section are modified.
+				<code><del>SectionListener</del></code> - One or more entries in a section are modified.
 			<li>
-				{@link org.apache.juneau.config.event.EntryListener} - An individual entry is modified.
+				<code><del>EntryListener</del></code> - An individual entry is modified.
 		</ul>
 		
 		<h5 class="topic">Example:</h5>
 	<p class='bcode'>
 	<jc>// Get our config file using the default config manager</jc>
-	ConfigFile f = ConfigFile.<jsm>create</jsm>().build(<js>"C:/temp/MyConfig.cfg"</js>);
+	Config f = Config.<jsm>create</jsm>().name(<js>"C:/temp/MyConfig.cfg"</js>).build();
 
 	<jc>// Add a listener for an entry</jc>
 	f.addListener(
@@ -5055,55 +5054,13 @@
 		</p>
 	</div>
 	
-	<!-- ======================================================================================================== -->
-	<a id="juneau-config.CommandLine"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.7 - Command Line API</h3>
-	<div class='topic'>
-		<p>
-			The {@link org.apache.juneau.config.ConfigFileBuilder} class contains a 
-			{@link org.apache.juneau.config.ConfigFileBuilder#main(String[])} method that can be used to work with config 
-			files through a command-line prompt.
-			<br>This is invoked as a normal Java command:
-		</p>
-		<p class='bcode'>
-	java -jar juneau.jar org.apache.juneau.config.ConfigFileBuilder [args]
-		</p>
-		<p>
-			Arguments can be any of the following...
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				No arguments
-				<br>Prints usage message.
-			<li>
-				<code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code>
-				<br>Creates a batch file that will set each config file entry as an environment variable.
-				<br>Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
-				will be converted to underscores.
-			<li>
-				<code>createShellEnvFile -configFile &lt;configFile&gt; -envFile &lt;configFile&gt; [-verbose]</code>
-				Creates a shell script that will set each config file entry as an environment variable.
-				<br>Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
-				will be converted to underscores.
-			<li>
-				<code>setVals -configFile &lt;configFile&gt; -vals [var1=val1 [var2=val2...]] [-verbose]</code>
-				Sets values in config files.
-		</ul>
-		<p>
-			For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the 
-			file <code>'MyConfig.cfg'</code>.
-		</p>
-		<p class='bcode'>
-	java org.apache.juneau.config.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg -batchfile C:\foo\MyConfig.bat
-		</p>
-	</div>
 	
 	<!-- ======================================================================================================== -->
 	<a id="juneau-config.Serializing"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.8 - Serializing Config Files</h3>
 	<div class='topic'>
 		<p>
-			Instances of {@link org.apache.juneau.config.ConfigFile} are POJOs that can be serialized to and parsed from
+			Instances of {@link org.apache.juneau.config.Config} are POJOs that can be serialized to and parsed from
 				all supported Juneau languages.
 		</p>
 		<p>
@@ -5285,7 +5242,7 @@
 		</p>
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>)
-	<jk>public</jk> ConfigFile getConfigContents() <jk>throws</jk> Exception {
+	<jk>public</jk> Config getConfigContents() <jk>throws</jk> Exception {
 		<jk>return</jk> getConfig();
 	}
 		</p>
@@ -5294,7 +5251,7 @@
 		</p>
 		<img class='bordered' src="doc-files/juneau-config.Serializing.3.png">
 		<p>
-			This latter page uses the {@link org.apache.juneau.config.ConfigFile#toString()} method to retrieve the
+			This latter page uses the {@link org.apache.juneau.config.Config#toString()} method to retrieve the
 			contents of the config file in INI format.
 		</p>
 		<p>
@@ -5306,7 +5263,7 @@
 	RestClient c = RestClient.<jsm>create</jsm>().build();
 
 	<jc>// Retrieve config file through REST interface</jc>
-	ConfigFile cf = c.doGet(<js>"http://localhost:10000/sample/config"</js>).getResponse(ConfigFileImpl.<jk>class</jk>);
+	Config cf = c.doGet(<js>"http://localhost:10000/sample/config"</js>).getResponse(Config.<jk>class</jk>);
 		</p>
 	</div>
 	
@@ -5314,12 +5271,12 @@
 	<a id="juneau-config.Merging"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.9 - Merging Config Files</h3>
 	<div class='topic'>
-		<p>
+		<!--p>
 			In the previous example, an edit page was shown that allows you to edit config files through
 			a REST interface.
 			<br>Note that if only a single entry is modified in the config file, we only want to trigger
 			listeners for that change, not trigger all listeners.
-			<br>This is where the {@link org.apache.juneau.config.ConfigFile#merge(ConfigFile)} method comes into play.
+			<br>This is where the <code><del>Config#merge(ConfigFile)</del></code> method comes into play.
 			<br>This method will copy the contents of one config file over to another config file, but only
 			trigger listeners when the values are different.
 		</p>
@@ -5343,7 +5300,7 @@
 		// Then return the modified config file to be parsed as a POJO.</jc>
 		<jk>return</jk> getConfig().merge(cf2).save();
 	}
-		</p>
+		</p-->
 	</div>
 	
 </div>
@@ -6257,7 +6214,7 @@
 								<li class='jc'>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
 								<li class='jc'>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
 								<li class='jc'>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
-								<li class='jc'>{@link org.apache.juneau.config.ConfigFile} - The external config file for the resource.
+								<li class='jc'>{@link org.apache.juneau.config.Config} - The external config for the resource.
 								<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} - API for modifying request-time configuration properties.
 							</ul>
 					</ul>
@@ -6335,7 +6292,7 @@
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger() getLogger()}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider() getInfoProvider()}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfigFile() getConfigFile()}
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfig() getConfig()}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession() getVarResolverSession()}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessageBundle() getMessageBundle()}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties() getProperties()}
@@ -7980,7 +7937,7 @@
 			</tr>
 			<tr class='light dd'>
 				<td rowspan="1" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-config</td>
-				<td>{@link org.apache.juneau.config.vars.ConfigFileVar}</td>
+				<td>{@link org.apache.juneau.config.vars.ConfigVar}</td>
 				<td class='code'>$C{key[,defaultValue]}</td>
 				<td style='text-align:center;font-weight:bold'>yes</td>
 				<td style='text-align:center;font-weight:bold'>yes</td>
@@ -8112,10 +8069,10 @@
 	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the environment path is $C{MyProperties/path}.</cv>
 		</p>
 		<p>
-			These properties are then accessible through the {@link org.apache.juneau.config.ConfigFile} class.
+			These properties are then accessible through the {@link org.apache.juneau.config.Config} class.
 		</p>
 		<p class='bcode'>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"myconfig.cfg"</js>);
+	Config cf = Config.<jsm>create</jsm>().name(<js>"myconfig.cfg"</js>).build();
 	String path = cf.getString(<js>"MyProperties/path"</js>);
 	File javaHome = cf.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
 	String customMessage = cf.getString(<js>"MyProperties/customMessage"</js>);
@@ -8151,7 +8108,7 @@
 		</p>
 		<p>
 			Once a config file has been associated with a REST resource, it can be accessed through the 
-			{@link org.apache.juneau.rest.RestContextBuilder#getConfigFile()} method.
+			{@link org.apache.juneau.rest.RestContextBuilder#getConfig()} method.
 		</p>
 		<p>
 			A common usage is to use this method to initialize fields in your servlet.
@@ -8167,7 +8124,7 @@
 		<jk>private final</jk> File <jf>javaHome</jf>;
 	
 		<jk>public</jk> MyResource(RestContextBuilder builder) {
-			ConfigFile cf = builder.getConfig();
+			Config cf = builder.getConfig();
 			<jf>path</jf> = cf.getString(<js>"MyProperties/path"</js>);
 			<jf>javaHome</jf> = cf.getObject(File.<jk>class</jk>, <js>"MyProperties/javaHome"</js>);
 		}
@@ -8187,7 +8144,7 @@
 		</p>
 		<p>
 			It's even possible to reference request-level variables in your config file if you use 
-			{@link org.apache.juneau.rest.RestRequest#getConfigFile()} to access the config file:
+			{@link org.apache.juneau.rest.RestRequest#getConfig()} to access the config file:
 		</p>
 		<p class='bcode'>
 	<cc>#-------------------------------------</cc>
@@ -10647,7 +10604,7 @@
 				The {@link org.apache.juneau.rest.client.SSLOpts} class itself is a bean that can be created by the 
 				parsers.
 				For example, SSL options can be specified in a config file and retrieved as a bean using the 
-				{@link org.apache.juneau.config.ConfigFile} class.
+				{@link org.apache.juneau.config.Config} class.
 			</p>
 			
 			<h5 class='figure'>Contents of <code>MyConfig.cfg</code></h5>
@@ -10663,7 +10620,7 @@
 			<h5 class='figure'>Code that reads an <code>SSLOpts</code> bean from the config file</h5>
 			<p class='bcode'>
 	<jc>// Read config file and set SSL options based on what's in that file.</jc>
-	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	SSLOpts ssl = cf.getObject(SSLOpts.<jk>class</jk>, <js>"Connection/ssl"</js>);
 	RestClient rc = RestClient.<jsm>create</jsm>().enableSSL(ssl).build();
 			</p>
@@ -11776,8 +11733,8 @@
 	</div>
 
 	<!-- =========================================================================================================== -->
-	<a id="juneau-microservice-server.ConfigFile"></a>
-	<h3 class='topic' onclick='toggle(this)'>10.4 - Config File</h3>
+	<a id="juneau-microservice-server.Config"></a>
+	<h3 class='topic' onclick='toggle(this)'>10.4 - Config</h3>
 	<div class='topic'>
 		<p>
 			The microservice config file is an external INI-style configuration file that is used to configure
@@ -11855,7 +11812,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Java code for accessing config entries above.</jc>
-	ConfigFile cf = Microservice.<jsm>getInstance</jsm>().getConfig();
+	Config cf = Microservice.<jsm>getInstance</jsm>().getConfig();
 	
 	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>); 
 	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>); 
@@ -11872,7 +11829,7 @@
 		</p>
 	
 		<!-- =========================================================================================================== -->
-		<a id="juneau-microservice-server.ConfigFileApi"></a>
+		<a id="juneau-microservice-server.ConfigApi"></a>
 		<h4 class='topic' onclick='toggle(this)'>10.4.1 - Config File API</h4>
 		<div class='topic'>
 			<p>
@@ -11881,7 +11838,7 @@
 			<ul class='doctree'>
 				<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig()} 
 					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time variables</a> and <l>$ARG</l> and <l>$MF</l> variables can be used.
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfigFile()} 
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfig()} 
 					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time variables</a> and <l>$ARG</l> and <l>$MF</l> variables can be used.
 					<h5 class='figure'>Example usage:</h5>
 					<p class='bcode'>
@@ -11910,7 +11867,7 @@
 						and using the {@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
 					</p>
 				<li class='jm'>
-					{@link org.apache.juneau.rest.RestRequest#getConfigFile()} 
+					{@link org.apache.juneau.rest.RestRequest#getConfig()} 
 					- An instance method to access it from inside a REST method.
 					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time or request-time variables</a> and <l>$ARG</l> and <l>$MF</l> variables can be used.
 					
@@ -14612,7 +14569,7 @@
 				Using the {@link org.apache.juneau.rest.labels.ResourceDescription} class to implement a top-level 
 				'router' page.
 			<li>
-				Using the {@link org.apache.juneau.rest.RestContext#getConfigFile()} method to access external 
+				Using the {@link org.apache.juneau.rest.RestContext#getConfig()} method to access external 
 				configuration file values.
 		</ul>
 		<p>
@@ -15018,7 +14975,7 @@
 			<li>
 				Using the {@link org.apache.juneau.dto.ResultSetList} to serialize database result sets.
 			<li>
-				Using {@link org.apache.juneau.rest.RestContext#getConfigFile()} to access config properties.
+				Using {@link org.apache.juneau.rest.RestContext#getConfig()} to access config properties.
 			<li>
 				Using form entry beans.
 		</ul>
@@ -15055,7 +15012,7 @@
 	<jk>public class</jk> SqlQueryResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
-		<jk>private</jk> ConfigFile <jf>cf</jf> = getConfig(); 
+		<jk>private</jk> Config <jf>cf</jf> = getConfig(); 
 		
 		<jk>private</jk> String <jf>driver</jf> = cf.getString(<js>"SqlQueryResource/driver"</js>); 
 		<jk>private</jk> String <jf>connectionUrl</jf> = cf.getString(<js>"SqlQueryResource/connectionUrl"</js>); 
@@ -15213,7 +15170,7 @@
 	<a id="juneau-examples-rest.ConfigResource"></a>
 	<h4 class='topic' onclick='toggle(this)'>12.15 - ConfigResource</h4>
 	<div class='topic'>
-		<p>
+		<!--p>
 			The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
 			<br>It provides a REST interface for reading and altering the microservice config file.
 		</p>
@@ -15226,7 +15183,7 @@
 		</p>
 		<img class='bordered' src='doc-files/Samples.ConfigResource.3.png'>
 		<p>
-			The {@link org.apache.juneau.config.ConfigFile} class is a serializable POJO, which makes the resource
+			The {@link org.apache.juneau.config.Config} class is a serializable POJO, which makes the resource
 				relatively straightforward to implement.
 		</p>
 		
@@ -15257,7 +15214,7 @@
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
-		<jk>public</jk> ConfigFile getConfigContents() <jk>throws</jk> Exception { 
+		<jk>public</jk> Config getConfigContents() <jk>throws</jk> Exception { 
 			<jk>return</jk> getConfig(); 
 		} 
 		
@@ -15325,7 +15282,7 @@
 				<ja>@Parameter</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
 			} 
 		) 
-		<jk>public</jk> ConfigFile setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
+		<jk>public</jk> Config setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
 			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(contents)); 
 		} 
 		
@@ -15342,8 +15299,8 @@
 				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
 			} 
 		) 
-		<jk>public</jk> ConfigFile setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
-			ConfigFile cf2 = ConfigFile.<jsm>create</jsm>().build().load(contents); 
+		<jk>public</jk> Config setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
+			Config cf2 = Config.<jsm>create</jsm>().build().load(contents); 
 			<jk>return</jk> getConfig().merge(cf2).save(); 
 		} 
 		
@@ -15423,7 +15380,7 @@
 		<xt>&lt;/form&gt;</xt> 
 	<xt>&lt;/body&gt;</xt> 
 	<xt>&lt;/html&gt;</xt> 		
-		</p>
+		</p-->
 	</div>
 
 	<!-- ======================================================================================================= -->
@@ -16163,7 +16120,7 @@
 					<li>{@link org.apache.juneau.parser.ParserGroup#create()}
 					<li>{@link org.apache.juneau.encoders.EncoderGroup#create()}
 					<li>{@link org.apache.juneau.rest.client.RestClient#create()}
-					<li>{@link org.apache.juneau.config.ConfigFile#create()}
+					<li><code><del>ConfigFile.create()</del></code>
 				</ul>
 			<li>
 				The order of the parameters in {@link org.apache.juneau.serializer.SerializerSession#serialize(Object,Object)}
@@ -17044,24 +17001,24 @@
 	<jc>// Example</jc>
 	<jk>int</jk> i = JsonParser.<jsf>DEFAULT</jsf>.parse(<js>"123M"</js>);  <jc>// 123MB</jc>
 				</p>
-			<li>New/modified methods on {@link org.apache.juneau.config.ConfigFile}:
+			<li>New/modified methods on <code><del>ConfigFile</del></code>:
 				<ul>
-					<li>{@link org.apache.juneau.config.ConfigFile#put(String,String,String,boolean) put(String,String,String,boolean)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#put(String,String,Object,Serializer,boolean,boolean) put(String,String,Object,boolean,boolean)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,Type,Type...) getObject(String,Type,Type...)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,Parser,Type,Type...) getObject(String,Parser,Type,Type...)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,Class) getObject(String,Class)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,Parser,Class) getObject(String,Parser,Class)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,String,Type,Type...) getObject(String,String,Type,Type...)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,String,Parser,Type,Type...) getObject(String,String,Parser,Type,Type...)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,String,Class) getObject(String,String,Class)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObject(String,String,Parser,Class) getObject(String,String,Parser,Class)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,Object,Type,Type)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObjectWithDefault(String,Parser,Object,Type,Type...) getObjectWithDefault(String,Parser,Object,Type,Type)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,Object,Class)} 
-					<li>{@link org.apache.juneau.config.ConfigFile#getObjectWithDefault(String,Parser,Object,Class) getObjectWithDefault(String,Parser,Object,Class)} 
+					<li><code><del>ConfigFile.put(String,String,String,boolean)</del></code>
+					<li><code><del>ConfigFile.put(String,String,Object,Serializer,boolean,boolean)</del></code>
+					<li><code><del>ConfigFile.getObject(String,Type,Type...)</del></code>
+					<li><code><del>ConfigFile.getObject(String,Parser,Type,Type...)</del></code>
+					<li><code><del>ConfigFile.getObject(String,Class)</del></code>
+					<li><code><del>ConfigFile.getObject(String,Parser,Class)</del></code>
+					<li><code><del>ConfigFile.getObject(String,String,Type,Type...)</del></code>
+					<li><code><del>ConfigFile.getObject(String,String,Parser,Type,Type...)</del></code>
+					<li><code><del>ConfigFile.getObject(String,String,Class)</del></code>
+					<li><code><del>ConfigFile.getObject(String,String,Parser,Class)</del></code>
+					<li><code><del>ConfigFile.getObjectWithDefault(String,Object,Type,Type...)</del></code> 
+					<li><code><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Type,Type...)</del></code>
+					<li><code><del>ConfigFile.getObjectWithDefault(String,Object,Class)</del></code>
+					<li><code><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Class)</del></code> 
 				</ul>
-			<li>New ability to interact with config file sections with proxy interfaces with new method {@link org.apache.juneau.config.ConfigFile#getSectionAsInterface(String,Class)}.
+			<li>New ability to interact with config file sections with proxy interfaces with new method <code><del>ConfigFile.getSectionAsInterface(String,Class)</del></code>.
 			<li>{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation can now be applied to getters
 				and setters defined on interfaces.
 			<li>New methods on {@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
@@ -17263,7 +17220,7 @@
 					<li>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
 					<li>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
 					<li>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
-					<li>{@link org.apache.juneau.config.ConfigFile} - The external config file for the resource.
+					<li><code><del>ConfigFile</del></code> - The external config file for the resource.
 				</ul>
 				So, for example...
 				<p class='bcode'>
@@ -17467,7 +17424,7 @@
 					<li>{@link org.apache.juneau.parser.ParserGroupBuilder}
 					<li>{@link org.apache.juneau.encoders.EncoderGroupBuilder}
 				</ul>
-			<li>Revamped the config file API to use a build:  {@link org.apache.juneau.config.ConfigFileBuilder}.
+			<li>Revamped the config file API to use a build:  <code><del>ConfigFileBuilder</del></code>.
 			<li>Removed the <code><del>Lockable</del></code> interface.
 			<li>New <code>addBeanTypeProperties</code> setting added to serializers to override the 
 				<code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> setting
@@ -18226,30 +18183,30 @@
 			<li>Significant changes and enhancements to the <code>org.apache.juneau.config</code> API.
 				<ul>
 					<li>More consistent handling of comma-delimited lists of objects.
-					<li>New methods in {@link org.apache.juneau.config.ConfigFile}:
+					<li>New methods in <code><del>ConfigFile</del></code>:
 						<ul>
-							<li>{@link org.apache.juneau.config.ConfigFile#getStringArray(String)},{@link org.apache.juneau.config.ConfigFile#getStringArray(String,String[])}
-							<li>{@link org.apache.juneau.config.ConfigFile#getSectionAsBean(String,Class)} - Instantiate a new bean with property values in the specfied section..
-							<li>{@link org.apache.juneau.config.ConfigFile#writeProperties(String,Object,boolean,Class[])} - Copy the properties in a config file section into properties on an existing bean or POJO.
-							<li>{@link org.apache.juneau.config.ConfigFile#getSectionMap(String)} - Get all the resolved values in a section.
-							<li>{@link org.apache.juneau.config.ConfigFile#containsNonEmptyValue(String)} 
-							<li>{@link org.apache.juneau.config.ConfigFile#isEncoded(String)} 
-							<li><code><del>org.apache.juneau.config.ConfigFile.addListener(ConfigFileListener)</del></code> - Listen for modification events on the config file.
-							<li>{@link org.apache.juneau.config.ConfigFile#merge(ConfigFile)} - Merge the contents of another config file into this config file.
-							<li>{@link org.apache.juneau.config.ConfigFile#getResolving()}, <del><code>ConfigFile.getResolving(StringVarResolver)</code></del> - Return an instance of the config file that resolves string variables.
+							<li><code><del>ConfigFile.getStringArray(String)</del></code>,<code><del>ConfigFile.getStringArray(String,String[])</del></code>
+							<li><code><del>ConfigFile.getSectionAsBean(String,Class)</del></code> - Instantiate a new bean with property values in the specified section..
+							<li><code><del>ConfigFile.writeProperties(String,Object,boolean,Class[])</del></code> - Copy the properties in a config file section into properties on an existing bean or POJO.
+							<li><code><del>ConfigFile.getSectionMap(String)</del></code> - Get all the resolved values in a section.
+							<li><code><del>ConfigFile.containsNonEmptyValue(String)</del></code> 
+							<li><code><del>ConfigFile.isEncoded(String)</del></code> 
+							<li><code><del>ConfigFile.addListener(ConfigFileListener)</del></code> - Listen for modification events on the config file.
+							<li><code><del>ConfigFile.merge(ConfigFile)} - Merge the contents of another config file into this config file.
+							<li><code><del>ConfigFile.getResolving()}, <del><code>ConfigFile.getResolving(StringVarResolver)</code></del> - Return an instance of the config file that resolves string variables.
 								Much more efficient than the previous design since the same underlying config file object is shared.
-							<li>{@link org.apache.juneau.config.ConfigFile#toWritable()} - Wraps the config file in a {@link org.apache.juneau.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
-							<li>{@link org.apache.juneau.config.ConfigFile#getInt(String)} - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
+							<li><code><del>ConfigFile.toWritable()</del></code> - Wraps the config file in a {@link org.apache.juneau.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
+							<li><code><del>ConfigFile.getInt(String)</del></code> - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
 						</ul>
 					<li>New methods in <code><del>ConfigMgr</del></code>:
 						<ul>
 							<li><code><del>ConfigMgr.create()</del></code>, <code><del>ConfigMgr.create(Reader)</del></code>, <code><del>ConfigMgr.create(File)</del></code>
 							<li><code><del>ConfigMgr.deleteAll()</del></code>	
 						</ul>
-					<li>New methods in {@link org.apache.juneau.config.Section}:
+					<li>New methods in <code><del>Section</del></code>:
 						<ul>
-							<li>{@link org.apache.juneau.config.Section#setParent(ConfigFileImpl)} - Used by parsers to set the config file for this section.
-							<li>{@link org.apache.juneau.config.Section#setName(String)} - Used by parsers to set the name for this section.
+							<li><code><del>Section.setParent(ConfigFileImpl)</del></code> - Used by parsers to set the config file for this section.
+							<li><code><del>Section.setName(String)</del></code> - Used by parsers to set the name for this section.
 						</ul>
 					<li>New interfaces:
 						<ul>
@@ -18283,8 +18240,8 @@
 			<li>Parsers have been enhanced to allow parent POJOs and field names to be passed into child POJOs.
 				New {@link org.apache.juneau.annotation.NameProperty @NameProperty} and {@link org.apache.juneau.annotation.ParentProperty @ParentProperty}
 					annotations are provided for identifying methods for setting names and parent POJOs on child POJOs.
-				For example, the config file {@link org.apache.juneau.config.Section} class represents a section
-				in a config file.  It needs to know it's own name and have a link to the {@link org.apache.juneau.config.ConfigFile} 
+				For example, the config file <code><del>Section</del></code> class represents a section
+				in a config file.  It needs to know it's own name and have a link to the <code><del>ConfigFile</del></code> 
 				that it belongs to.  With these new annotations, config files can be reconstructed using any of the parsers.
 			<li>New classes and interfaces:
 				<ul>
@@ -18643,14 +18600,14 @@
 	<div class='topic'>
 		<p>
 			Juno 5.1.0.20 is a moderate update.
-			The biggest improvement is the ability to associate external INI config files with REST servlets using the {@link org.apache.juneau.config.ConfigFile} functionality.
+			The biggest improvement is the ability to associate external INI config files with REST servlets using the <code><del>ConfigFile</del></code> functionality.
 		</p>
 		
 		<h5 class='topic'>Core</h5>
 		<ul class='spaced-list'>
 			<li>Significant API changes to <code>org.apache.juneau.config</code> API.
 				<ul>
-					<li>{@link org.apache.juneau.config.ConfigFile} is now thread safe and can be shared across multiple threads.
+					<li><code><del>ConfigFile</del></code> is now thread safe and can be shared across multiple threads.
 					<li>New <code><del>ConfigMgr</del></code> class for managing configuration files.
 					<li>Serializers and parsers can be associated with config files for storing and retrieving POJOs.  
 						Default support provided for JSON.
@@ -18712,7 +18669,7 @@
 			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#encoders() @RestMethod.encoders()} and 
 				<code><del>RestMethod.inheritEncoders()</del></code> annotations.  
 				Allows encoders to be fine-tuned at the method level.
-			<li>New {@link org.apache.juneau.rest.annotation.RestResource#config() @RestResource.config()} annotation for associating external {@link org.apache.juneau.config.ConfigFile} config files with servlets.
+			<li>New {@link org.apache.juneau.rest.annotation.RestResource#config() @RestResource.config()} annotation for associating external <code><del>ConfigFile</del></code> config files with servlets.
 			<li><code><del>ResourceLink</del></code>.
 			<li>New <code>org.apache.juneau.rest.matchers</code> package for commonly-used {@link org.apache.juneau.rest.RestMatcher RestMatchers}:
 				<ul>
@@ -19110,7 +19067,7 @@
 
 		<h5 class='topic'>Core</h5>		
 		<ul class='spaced-list'>
-			<li>Fixed {@link org.apache.juneau.config.ConfigFile#isEmpty()} method.
+			<li>Fixed <code><del>ConfigFile.isEmpty()</del></code> method.
 			<li>Changed behavior on {@link org.apache.juneau.uon.UonParser} to not treat <js>'~'</js> characters as escapes
 				unless followed by one of the following characters:  <code>( ) , $ = ~</code>.
 		</ul>

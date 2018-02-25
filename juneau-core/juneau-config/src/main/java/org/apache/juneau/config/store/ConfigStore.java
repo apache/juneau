@@ -25,13 +25,12 @@ import org.apache.juneau.*;
  * Content stores require two methods to be implemented:
  * <ul>
  * 	<li class='jm'>{@link #read(String)} - Retrieve a config file.
- * 	<li class='jm'>{@link #write(String,String,String)} - Store a config file.
+ * 	<li class='jm'>{@link #write(String,String,String)} - ConfigStore a config file.
  * </ul>
  */
-public abstract class Store extends Context implements Closeable {
+public abstract class ConfigStore extends Context implements Closeable {
 	
-	private final List<StoreListener> listeners = new LinkedList<>();
-	
+	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();
 	
 	/**
@@ -39,7 +38,7 @@ public abstract class Store extends Context implements Closeable {
 	 * 
 	 * @param ps The settings for this content store.
 	 */
-	protected Store(PropertyStore ps) {
+	protected ConfigStore(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -47,7 +46,10 @@ public abstract class Store extends Context implements Closeable {
 	 * Returns the contents of the configuration file.
 	 * 
 	 * @param name The config file name.
-	 * @return The contents of the configuration file.
+	 * @return 
+	 * 	The contents of the configuration file.
+	 * 	<br>A blank string if the config does not exist.
+	 * 	<br>Never <jk>null</jk>.
 	 * @throws IOException
 	 */
 	public abstract String read(String name) throws IOException;
@@ -68,22 +70,31 @@ public abstract class Store extends Context implements Closeable {
 	/**
 	 * Registers a new listener on this store.
 	 * 
+	 * @param name The configuration name to listen for.
 	 * @param l The new listener.
 	 * @return This object (for method chaining).
 	 */
-	public Store register(StoreListener l) {
-		this.listeners.add(l);
+	public synchronized ConfigStore register(String name, ConfigStoreListener l) {
+		Set<ConfigStoreListener> s = listeners.get(name);
+		if (s == null) {
+			s = Collections.synchronizedSet(Collections.newSetFromMap(new IdentityHashMap<ConfigStoreListener,Boolean>()));
+			listeners.put(name, s);
+		}
+		s.add(l);
 		return this;
 	}
 	
 	/**
 	 * Unregisters a listener from this store.
 	 * 
+	 * @param name The configuration name to listen for.
 	 * @param l The listener to unregister.
 	 * @return This object (for method chaining).
 	 */
-	public Store unregister(StoreListener l) {
-		this.listeners.remove(l);
+	public synchronized ConfigStore unregister(String name, ConfigStoreListener l) {
+		Set<ConfigStoreListener> s = listeners.get(name);
+		if (s != null) 
+			s.remove(l);
 		return this;
 	}
 
@@ -96,7 +107,7 @@ public abstract class Store extends Context implements Closeable {
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws IOException
 	 */
-	public ConfigMap getMap(String name) throws IOException {
+	public synchronized ConfigMap getMap(String name) throws IOException {
 		ConfigMap cm = configMaps.get(name);
 		if (cm != null)
 			return cm;
@@ -104,7 +115,7 @@ public abstract class Store extends Context implements Closeable {
 		ConfigMap cm2 = configMaps.putIfAbsent(name, cm);
 		if (cm2 != null)
 			return cm2;
-		listeners.add(cm);
+		register(name, cm);
 		return cm;
 	}
 	
@@ -112,15 +123,17 @@ public abstract class Store extends Context implements Closeable {
 	 * Called when the physical contents of a config file have changed.
 	 * 
 	 * <p>
-	 * Triggers calls to {@link StoreListener#onChange(String, String)} on all registered listeners.
+	 * Triggers calls to {@link ConfigStoreListener#onChange(String)} on all registered listeners.
 	 * 
 	 * @param name The config name (e.g. the filename without the extension).
 	 * @param contents The new contents.
 	 * @return This object (for method chaining).
 	 */
-	public Store update(String name, String contents) {
-		for (StoreListener l : listeners)
-			l.onChange(name, contents);
+	public synchronized ConfigStore update(String name, String contents) {
+		Set<ConfigStoreListener> s = listeners.get(name);
+		if (s != null)
+			for (ConfigStoreListener l : listeners.get(name))
+				l.onChange(contents);
 		return this;
 	}
 
@@ -131,7 +144,7 @@ public abstract class Store extends Context implements Closeable {
 	 * @param contentLines The new contents.
 	 * @return This object (for method chaining).
 	 */
-	public Store update(String name, String...contentLines) {
+	public synchronized ConfigStore update(String name, String...contentLines) {
 		StringBuilder sb = new StringBuilder();
 		for (String l : contentLines)
 			sb.append(l).append('\n');

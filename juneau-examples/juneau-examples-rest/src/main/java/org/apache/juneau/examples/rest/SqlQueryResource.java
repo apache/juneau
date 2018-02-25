@@ -70,7 +70,7 @@ public class SqlQueryResource extends Resource {
 	 */
 	@RestHook(INIT) 
 	public void initConnection(RestContextBuilder builder) throws Exception {
-		ConfigFile cf = builder.getConfigFile();
+		Config cf = builder.getConfig();
 
 		driver = cf.getString("SqlQueryResource/driver");
 		connectionUrl = cf.getString("SqlQueryResource/connectionUrl");

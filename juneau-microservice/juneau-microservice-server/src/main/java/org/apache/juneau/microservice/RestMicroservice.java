@@ -21,6 +21,7 @@ import javax.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.config.event.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -289,7 +290,7 @@ public class RestMicroservice extends Microservice {
 	protected Server createServer() throws Exception {
 		onCreateServer();
 
-		ConfigFile cf = getConfig();
+		Config cf = getConfig();
 		ObjectMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 		
@@ -402,7 +403,7 @@ public class RestMicroservice extends Microservice {
 	}
 
 	/**
-	 * Called when {@link ConfigFile#save()} is called on the config file.
+	 * Called when {@link Config#save()} is called on the config file.
 	 * 
 	 * <p>
 	 * The default behavior is configured by the following value in the config file:
@@ -416,9 +417,9 @@ public class RestMicroservice extends Microservice {
 	 * </p>
 	 */
 	@Override /* Microservice */
-	protected void onConfigSave(ConfigFile cf) {
+	public void onConfigChange(List<ConfigEvent> events) {
 		try {
-			String saveConfigAction = cf.getString("saveConfigAction", "NOTHING");
+			String saveConfigAction = getConfig().getString("saveConfigAction", "NOTHING");
 			if (saveConfigAction.equals("RESTART_SERVER")) {
 				new Thread() {
 					@Override /* Thread */

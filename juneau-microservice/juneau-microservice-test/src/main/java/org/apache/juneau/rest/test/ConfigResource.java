@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.config.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -29,12 +28,12 @@ import org.apache.juneau.rest.annotation.*;
 public class ConfigResource extends Resource {
 
 	@RestMethod(name=GET, path="/")
-	public ConfigFile test1(RestRequest req) {
-		return req.getConfigFile();
+	public Object test1(RestRequest req) {
+		return req.getConfig().asMap();
 	}
 
 	@RestMethod(name=GET, path="/{key}/{class}")
 	public Object test2(RestRequest req, @Path("key") String key, @Path("class") Class<?> c) throws Exception {
-		return req.getConfigFile().getObject(key, c);
+		return req.getConfig().getObject(key, c);
 	}
 }

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.event;
 
-import static org.apache.juneau.config.event.ChangeEventType.*;
+import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.util.*;
 
@@ -23,23 +23,21 @@ import org.apache.juneau.internal.*;
  * Represents a change to a config.
  */
 @BeanIgnore
-public class ChangeEvent {
+public class ConfigEvent {
 	
-	private final ChangeEventType type;
+	private final ConfigEventType type;
 	private final String section, key, value, comment;
 	private final List<String> preLines;
 	private final String modifiers;
 	
-	private ChangeEvent(ChangeEventType type, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
+	private ConfigEvent(ConfigEventType type, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
 		this.type = type;
 		this.section = section;
 		this.key = key;
 		this.value = value;
 		this.comment = comment;
-		if (preLines == null)
-			preLines = Collections.emptyList();
 		this.preLines = preLines;
-		this.modifiers = StringUtils.emptyIfNull(modifiers);
+		this.modifiers = modifiers;
 	}
 	
 	//---------------------------------------------------------------------------------------------
@@ -66,10 +64,10 @@ public class ChangeEvent {
 	 * 	Comment lines that occur before this entry.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return
-	 * 	A new {@link ChangeEvent} object.
+	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ChangeEvent setEntry(String section, String key, String value, String modifiers, String comment, List<String> prelines) {
-		return new ChangeEvent(SET_ENTRY, section, key, value, modifiers, comment, prelines);
+	public static ConfigEvent setEntry(String section, String key, String value, String modifiers, String comment, List<String> prelines) {
+		return new ConfigEvent(SET_ENTRY, section, key, value, modifiers, comment, prelines);
 	}
 	
 	/**
@@ -82,12 +80,11 @@ public class ChangeEvent {
 	 * 	The entry name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return
-	 * 	A new {@link ChangeEvent} object.
+	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ChangeEvent removeEntry(String section, String key) {
-		return new ChangeEvent(SET_ENTRY, section, key, null, null, null, null);
+	public static ConfigEvent removeEntry(String section, String key) {
+		return new ConfigEvent(REMOVE_ENTRY, section, key, null, null, null, null);
 	}
-	
 	
 	/**
 	 * Adds a new empty section to the config.
@@ -98,10 +95,10 @@ public class ChangeEvent {
 	 * 	Comment lines that occur before this section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return
-	 * 	A new {@link ChangeEvent} object.
+	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ChangeEvent setSection(String section, List<String> prelines) {
-		return new ChangeEvent(SET_SECTION, section, null, null, null, null, prelines);
+	public static ConfigEvent setSection(String section, List<String> prelines) {
+		return new ConfigEvent(SET_SECTION, section, null, null, null, null, prelines);
 	}
 	
 	/**
@@ -110,10 +107,10 @@ public class ChangeEvent {
 	 * @param section
 	 * 	The section name.
 	 * @return
-	 * 	A new {@link ChangeEvent} object.
+	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ChangeEvent removeSection(String section) {
-		return new ChangeEvent(REMOVE_SECTION, section, null, null, null, null, null);
+	public static ConfigEvent removeSection(String section) {
+		return new ConfigEvent(REMOVE_SECTION, section, null, null, null, null, null);
 	}
 	
 	
@@ -126,7 +123,7 @@ public class ChangeEvent {
 	 *
 	 * @return The event type.
 	 */
-	public ChangeEventType getType() {
+	public ConfigEventType getType() {
 		return type;
 	}
 
@@ -176,16 +173,6 @@ public class ChangeEvent {
 	}
 
 	/**
-	 * Returns whether this entry is encoded.
-	 * 
-	 * @param c The modifier character.
-	 * @return Whether this entry is encoded.
-	 */
-	public boolean hasModifier(char c) {
-		return modifiers.indexOf(c) != -1;
-	}
-
-	/**
 	 * Returns the modifiers on this entry.
 	 * 
 	 * @return 
@@ -201,12 +188,15 @@ public class ChangeEvent {
 		switch(type) {
 			case REMOVE_SECTION:
 				return "REMOVE_SECTION("+section+")";
+			case REMOVE_ENTRY:
+				return "REMOVE_ENTRY("+section+"/"+key+")";
 			case SET_SECTION:
 				return "SET_SECTION("+section+", preLines="+StringUtils.join(preLines, '|')+")";
 			case SET_ENTRY:
 				StringBuilder out = new StringBuilder("SET(");
 				out.append(key);
-				out.append(modifiers);
+				if (modifiers != null)
+					out.append(modifiers);
 				out.append(" = ");
 				String val = value == null ? "null" : value;
 				if (val.indexOf('\n') != -1)
@@ -214,7 +204,7 @@ public class ChangeEvent {
 				if (val.indexOf('#') != -1)
 					val = val.replaceAll("#", "\\\\#");
 				out.append(val);
-				if (comment != null) 
+				if (! StringUtils.isEmpty(comment)) 
 					out.append(" # ").append(comment);
 				out.append(')');
 				return out.toString();

@@ -79,7 +79,7 @@ import org.apache.juneau.utils.*;
  * 	</ul>
  * 	<li><b>Other objects</b>
  * 	<ul>
- * 		<li class='jc'>{@link ConfigFile}
+ * 		<li class='jc'>{@link Config}
  * 		<li class='jc'>{@link HttpMethod}
  * 		<li class='jc'>{@link InputStream}
  * 		<li class='jc'>{@link Locale}

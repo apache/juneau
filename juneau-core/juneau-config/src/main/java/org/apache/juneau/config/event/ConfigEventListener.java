@@ -10,21 +10,19 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config;
+package org.apache.juneau.config.event;
 
-import java.io.*;
+import java.util.*;
 
 /**
- * Valid formats that can be passed to the {@link ConfigFile#serializeTo(Writer, ConfigFileFormat)} method.
+ * Listener that can be used to listen for change events in config maps.
  */
-public enum ConfigFileFormat {
+public interface ConfigEventListener {
 
-	/** Normal INI file format*/
-	INI,
-
-	/** Batch file with "set X" commands */
-	BATCH,
-
-	/** Shell script file with "export X" commands */
-	SHELL;
+	/**
+	 * Gets called immediately after a config file has been loaded.
+	 * 
+	 * @param events The change events.
+	 */
+	void onConfigChange(List<ConfigEvent> events);
 }

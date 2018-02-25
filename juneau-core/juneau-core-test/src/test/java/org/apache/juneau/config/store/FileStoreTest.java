@@ -31,62 +31,66 @@ public class FileStoreTest {
 	
 	@Test
 	public void testNoFile() throws Exception {
-		FileStore fs = FileStore.create().directory(DIR).build();
-		assertEquals(null, fs.read("X"));
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		assertEquals("", fs.read("X.cfg"));
 		assertFileNotExists("X.cfg");
 	}
 
 	@Test
 	public void testDifferentExtension() throws Exception {
-		FileStore fs = FileStore.create().directory(DIR).ext("ini").build();
-		assertEquals(null, fs.read("X"));
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		assertEquals("", fs.read("X.ini"));
 		assertFileNotExists("X.ini");
 	}
 
 	@Test
 	public void testSimpleCreate() throws Exception {
-		FileStore fs = FileStore.create().directory(DIR).build();
-		assertNull(fs.write("X", null, "foo"));
-		assertEquals("foo", fs.read("X"));
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		assertNull(fs.write("X.cfg", null, "foo"));
+		assertEquals("foo", fs.read("X.cfg"));
 		assertFileExists("X.cfg");
 	}
 
 	@Test
 	public void testFailOnMismatch() throws Exception {
-		FileStore fs = FileStore.create().directory(DIR).build();
-		assertNotNull(fs.write("X", "xxx", "foo"));
-		assertEquals(null, fs.read("X"));
 		assertFileNotExists("X.cfg");
-		assertNull(fs.write("X", null, "foo"));
-		assertEquals("foo", fs.read("X"));
-		assertNotNull(fs.write("X", "xxx", "foo"));
-		assertEquals("foo", fs.read("X"));
-		assertNull(fs.write("X", "foo", "bar"));
-		assertEquals("bar", fs.read("X"));
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		assertNotNull(fs.write("X.cfg", "xxx", "foo"));
+		assertFileNotExists("X.cfg");
+		assertEquals("", fs.read("X.cfg"));
+		assertFileNotExists("X.cfg");
+		assertNull(fs.write("X.cfg", null, "foo"));
+		assertEquals("foo", fs.read("X.cfg"));
+		assertNotNull(fs.write("X.cfg", "xxx", "foo"));
+		assertEquals("foo", fs.read("X.cfg"));
+		assertNull(fs.write("X.cfg", "foo", "bar"));
+		assertEquals("bar", fs.read("X.cfg"));
 	}
 	
 	@Test
 	public void testCharset() throws Exception {
-		FileStore fs = FileStore.create().directory(DIR).charset("UTF-8").build();
-		assertNull(fs.write("X", null, "foo"));
-		assertEquals("foo", fs.read("X"));
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset("UTF-8").build();
+		assertNull(fs.write("X.cfg", null, "foo"));
+		assertEquals("foo", fs.read("X.cfg"));
 	}		
 	
 	@Test
 	public void testWatcher() throws Exception {
-		FileStore fs = FileStore.create().directory(DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
-		final boolean[] error = {false};
-		fs.register(new StoreListener() {
+		fs.register("X.cfg", new ConfigStoreListener() {
 			@Override
-			public void onChange(String name, String contents) {
-				if ("X".equals(name) && "xxx".equals(contents))
+			public void onChange(String contents) {
+				if ("xxx".equals(contents))
 					latch.countDown();
-				else if ("Y".equals(name) && "yyy".equals(contents))
+			}
+		});
+		fs.register("Y.cfg", new ConfigStoreListener() {
+			@Override
+			public void onChange(String contents) {
+				if ("yyy".equals(contents))
 					latch.countDown();
-				else
-					error[0] = true;
 			}
 		});
 		IOUtils.write(new File(DIR, "Z.ini"), new StringReader("zzz"));
@@ -94,34 +98,33 @@ public class FileStoreTest {
 		IOUtils.write(new File(DIR, "Y.cfg"), new StringReader("yyy"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
-		assertFalse(error[0]);
 	}
 	
 	@Test
 	public void testUpdate() throws Exception {
-		FileStore fs = FileStore.create().directory(DIR).build();
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
-		final boolean[] error = {false};
-		fs.register(new StoreListener() {
+		fs.register("X.cfg", new ConfigStoreListener() {
 			@Override
-			public void onChange(String name, String contents) {
-				if ("X".equals(name) && "xxx".equals(contents))
+			public void onChange(String contents) {
+				if ("xxx".equals(contents))
 					latch.countDown();
-				else if ("Y".equals(name) && "yyy".equals(contents))
+			}
+		});
+		fs.register("Y.cfg", new ConfigStoreListener() {
+			@Override
+			public void onChange(String contents) {
+				if ("yyy".equals(contents))
 					latch.countDown();
-				else
-					error[0] = true;
 			}
 		});
 		
-		fs.update("X", "xxx");
-		fs.update("Y", "yyy");
+		fs.update("X.cfg", "xxx");
+		fs.update("Y.cfg", "yyy");
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
-		assertFalse(error[0]);
 	}	
-	
 	
 	private void assertFileExists(String name) {
 		assertTrue(new File(DIR, name).exists());
@@ -130,5 +133,4 @@ public class FileStoreTest {
 	private void assertFileNotExists(String name) {
 		assertTrue(! new File(DIR, name).exists());
 	}
-	
 }

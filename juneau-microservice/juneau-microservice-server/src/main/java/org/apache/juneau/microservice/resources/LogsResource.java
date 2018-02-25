@@ -69,13 +69,13 @@ public class LogsResource extends Resource {
 	 */
 	@RestHook(INIT) 
 	public void init(RestContextBuilder builder) throws Exception {
-		ConfigFile cf = builder.getConfigFile();
+		Config c = builder.getConfig();
 
-		logDir = new File(cf.getString("Logging/logDir", "."));
+		logDir = new File(c.getString("Logging/logDir", "."));
 		leFormatter = new LogEntryFormatter(
-			cf.getString("Logging/format", "[{date} {level}] {msg}%n"),
-			cf.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss"),
-			cf.getBoolean("Logging/useStackTraceHashes")
+			c.getString("Logging/format", "[{date} {level}] {msg}%n"),
+			c.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss"),
+			c.getBoolean("Logging/useStackTraceHashes")
 		);
 	}
 

@@ -13,33 +13,33 @@
 package org.apache.juneau.config.store;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.config.event.ChangeEventType.*;
+import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Represents the parsed contents of a configuration.
  */
-public class ConfigMap implements StoreListener, Writable {
+public class ConfigMap implements ConfigStoreListener {
 
-	private final Store store;               // The store that created this object.
+	private final ConfigStore store;               // The store that created this object.
 	private volatile String contents;        // The original contents of this object.
 	private final String name;               // The name  of this object.
 
 	private final static AsciiSet MOD_CHARS = new AsciiSet("#$%&*+^@~");
 	
 	// Changes that have been applied since the last load.
-	private final List<ChangeEvent> changes = Collections.synchronizedList(new ArrayList<ChangeEvent>());
+	private final List<ConfigEvent> changes = Collections.synchronizedList(new ArrayList<ConfigEvent>());
 	
 	// Registered listeners listening for changes during saves or reloads.
-	private final Set<ChangeEventListener> listeners = Collections.synchronizedSet(new HashSet<ChangeEventListener>());
+	private final Set<ConfigEventListener> listeners = Collections.synchronizedSet(new HashSet<ConfigEventListener>());
 
 	// The parsed entries of this map with all changes applied.
 	final Map<String,ConfigSection> entries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigSection>());
@@ -56,7 +56,7 @@ public class ConfigMap implements StoreListener, Writable {
 	 * @param name The config name.
 	 * @throws IOException
 	 */
-	public ConfigMap(Store store, String name) throws IOException {
+	public ConfigMap(ConfigStore store, String name) throws IOException {
 		this.store = store;
 		this.name = name;
 		load(store.read(name));
@@ -118,11 +118,14 @@ public class ConfigMap implements StoreListener, Writable {
 			String l = li.previous();
 			char c = l.isEmpty() ? 0 : l.charAt(0);
 			if (c == '\t') {
-				if (accumulator == null)
-					accumulator = l.substring(1);
-				else
-					accumulator = l.substring(1) + "\n" + accumulator;
-				li.remove();
+				c = firstNonWhitespaceChar(l);
+				if (c != '#') {
+					if (accumulator == null)
+						accumulator = l.substring(1);
+					else
+						accumulator = l.substring(1) + "\n" + accumulator;
+					li.remove();
+				}
 			} else if (accumulator != null) {
 				li.set(l + "\n" + accumulator);
 				accumulator = null;
@@ -175,11 +178,18 @@ public class ConfigMap implements StoreListener, Writable {
 	/**
 	 * Reads an entry from this map.
 	 * 
-	 * @param section The section name.
-	 * @param key The entry key.
+	 * @param section 
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * @param key 
+	 * 	The entry key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The entry, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public ConfigEntry getEntry(String section, String key) {
+		checkSectionName(section);
+		checkKeyName(key);
 		readLock();
 		try {
 			ConfigSection cs = entries.get(section);
@@ -198,10 +208,12 @@ public class ConfigMap implements StoreListener, Writable {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
 	 * @return
 	 * 	An unmodifiable list of lines, or <jk>null</jk> if the section doesn't exist.
 	 */
 	public List<String> getPreLines(String section) {
+		checkSectionName(section);
 		readLock();
 		try {
 			ConfigSection cs = entries.get(section);
@@ -214,15 +226,41 @@ public class ConfigMap implements StoreListener, Writable {
 	/**
 	 * Returns the keys of the entries in the specified section.
 	 * 
+	 * @return
+	 * 	An unmodifiable set of keys.
+	 */
+	public Set<String> getSections() {
+		return Collections.unmodifiableSet(entries.keySet());
+	}
+
+	/**
+	 * Returns the keys of the entries in the specified section.
+	 * 
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
 	 * @return
-	 * 	An unmodifiable set of keys, or <jk>null</jk> if the section doesn't exist.
+	 * 	An unmodifiable set of keys, or an empty set if the section doesn't exist.
 	 */
 	public Set<String> getKeys(String section) {
+		checkSectionName(section);
 		ConfigSection cs = entries.get(section);
-		return cs == null ? null : Collections.unmodifiableSet(cs.entries.keySet());
+		return cs == null ? Collections.<String>emptySet() : Collections.unmodifiableSet(cs.entries.keySet());
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if this config has the specified section.
+	 * 
+	 * @param section 
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * @return <jk>true</jk> if this config has the specified section.
+	 */
+	public boolean hasSection(String section) {
+		checkSectionName(section);
+		return entries.get(section) != null;
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
@@ -232,16 +270,50 @@ public class ConfigMap implements StoreListener, Writable {
 	/**
 	 * Adds a new section or replaces the pre-lines on an existing section.
 	 * 
-	 * @param section The section name.
+	 * @param section 
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
 	 * @param preLines
 	 * 	The pre-lines on the section.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigMap setSection(String section, List<String> preLines) {
-		if (! isValidSectionName(section))
-			throw new ConfigException("Invalid section name: {0}", section);
-		return applyChange(true, ChangeEvent.setSection(section, preLines));
+		checkSectionName(section);
+		return applyChange(true, ConfigEvent.setSection(section, preLines));
+	}
+	
+	/**
+	 * Adds or overwrites an existing entry.
+	 * 
+	 * @param section 
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * @param key 
+	 * 	The entry key.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param value 
+	 * 	The entry value.
+	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
+	 * @param modifiers 
+	 * 	Optional modifiers.
+	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
+	 * @param comment 
+	 * 	Optional comment.  
+	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
+	 * @param preLines 
+	 * 	Optional pre-lines.
+	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
+	 * @return This object (for method chaining).
+	 */
+	public ConfigMap setEntry(String section, String key, String value, String modifiers, String comment, List<String> preLines) {
+		checkSectionName(section);
+		checkKeyName(key);
+		if (modifiers != null && ! MOD_CHARS.containsOnly(modifiers))
+			throw new ConfigException("Invalid modifiers: {0}", modifiers);
+		return applyChange(true, ConfigEvent.setEntry(section, key, value, modifiers, comment, preLines));
 	}
 	
 	/**
@@ -250,121 +322,36 @@ public class ConfigMap implements StoreListener, Writable {
 	 * <p>
 	 * This eliminates all entries in the section as well.
 	 * 
-	 * @param section The section name.
+	 * @param section 
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigMap removeSection(String section) {
-		return applyChange(true, ChangeEvent.removeSection(section));
+		checkSectionName(section);
+		return applyChange(true, ConfigEvent.removeSection(section));
 	}
 		
 	/**
-	 * Sets the pre-lines on an entry without modifying any other attributes.
+	 * Removes an entry.
 	 * 
-	 * @param section The section name.
-	 * @param key The entry key.
-	 * @param preLines 
-	 * 	The new pre-lines.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param section 
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * @param key 
+	 * 	The entry key.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigMap setPreLines(String section, String key, List<String> preLines) {
-		ChangeEvent cv = null;
-		readLock();
-		try {
-			ConfigSection cs = entries.get(section);
-			ConfigEntry ce = (cs  == null ? null : cs.entries.get(key));
-			if (ce != null)
-				cv = ChangeEvent.setEntry(section, key, ce.value, ce.modifiers, ce.comment, preLines);
-		} finally {
-			readUnlock();
-		}
-		return applyChange(true, cv);
+	public ConfigMap removeEntry(String section, String key) {
+		checkSectionName(section);
+		checkKeyName(key);
+		return applyChange(true, ConfigEvent.removeEntry(section, key));
 	}
-	
-	/**
-	 * Sets the value on an entry without modifying any other attributes.
-	 * 
-	 * @param section The section name.
-	 * @param key The entry key.
-	 * @param value 
-	 * 	The new value.
-	 * 	<br>Can be <jk>null</jk> which will delete the entry.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigMap setValue(String section, String key, String value) {
-		
-		if (! isValidSectionName(section))
-			throw new ConfigException("Invalid section name: {0}", section);
-		if (! isValidKeyName(key))
-			throw new ConfigException("Invalid key name: {0}", key);
 
-		ChangeEvent cv = null;
-		readLock();
-		try {
-			ConfigSection cs = entries.get(section);
-			ConfigEntry ce = (cs  == null ? null : cs.entries.get(key));
-			if (ce != null)
-				cv = ChangeEvent.setEntry(section, key, value, ce.modifiers, ce.comment, ce.preLines);
-			else
-				cv = ChangeEvent.setEntry(section, key, value, null, null, null);
-		} finally {
-			readUnlock();
-		}
-		return applyChange(true, cv);
-	}
-	
-	/**
-	 * Sets the comment on an entry without modifying any other attributes.
-	 * 
-	 * @param section The section name.
-	 * @param key The entry key.
-	 * @param comment 
-	 * 	The new comment.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigMap setComment(String section, String key, String comment) {
-		ChangeEvent cv = null;
-		readLock();
-		try {
-			ConfigSection cs = entries.get(section);
-			ConfigEntry ce = (cs  == null ? null : cs.entries.get(key));
-			if (ce != null)
-				cv = ChangeEvent.setEntry(section, key, ce.value, ce.modifiers, comment, ce.preLines);
-		} finally {
-			readUnlock();
-		}
-		return applyChange(true, cv);
-	}
-	
-	/**
-	 * Adds or overwrites an existing entry.
-	 * 
-	 * @param section The section name.
-	 * @param key The entry key.
-	 * @param value The entry value.
-	 * @param modifiers 
-	 * 	Optional modifiers.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param comment 
-	 * 	Optional comment.  
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param preLines 
-	 * 	Optional pre-lines.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigMap setEntry(String section, String key, String value, String modifiers, String comment, List<String> preLines) {
-		if (! isValidSectionName(section))
-			throw new ConfigException("Invalid section name: {0}", section);
-		if (! isValidKeyName(key))
-			throw new ConfigException("Invalid key name: {0}", key);
-		if (modifiers != null && ! MOD_CHARS.containsOnly(modifiers))
-			throw new ConfigException("Invalid modifiers: {0}", modifiers);
-		return applyChange(true, ChangeEvent.setEntry(section, key, value, modifiers, comment, preLines));
-	}
-	
-	private ConfigMap applyChange(boolean addToChangeList, ChangeEvent ce) {
+	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
 		if (ce == null)
 			return this;
 		writeLock();
@@ -376,14 +363,27 @@ public class ConfigMap implements StoreListener, Writable {
 					cs = new ConfigSection(section);
 					entries.put(section, cs);
 				}
-				cs.addEntry(ce.getKey(), ce.getValue(), ce.getModifiers(), ce.getComment(), ce.getPreLines());
+				ConfigEntry oe = cs.entries.get(ce.getKey());
+				if (oe == null)
+					oe = ConfigEntry.NULL;
+				cs.addEntry(
+					ce.getKey(), 
+					ce.getValue() == null ? oe.value : ce.getValue(), 
+					ce.getModifiers() == null ? oe.modifiers : ce.getModifiers(), 
+					ce.getComment() == null ? oe.comment : ce.getComment(), 
+					ce.getPreLines() == null ? oe.preLines : ce.getPreLines()
+				);
 			} else if (ce.getType() == SET_SECTION) {
 				if (cs == null) {
 					cs = new ConfigSection(section);
 					entries.put(section, cs);
 				}
-				cs.setPreLines(ce.getPreLines());
-			} else {
+				if (ce.getPreLines() != null)
+					cs.setPreLines(ce.getPreLines());
+			} else if (ce.getType() == REMOVE_ENTRY) {
+				if (cs != null)
+					cs.entries.remove(ce.getKey());
+			} else if (ce.getType() == REMOVE_SECTION) {
 				if (cs != null)
 					entries.remove(section);
 			}
@@ -395,6 +395,34 @@ public class ConfigMap implements StoreListener, Writable {
 		return this;	
 	}	
 	
+	/**
+	 * Overwrites the contents of the config file.
+	 * 
+	 * @param contents The new contents of the config file.
+	 * @param synchronous Wait until the change has been persisted before returning this map.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public ConfigMap write(String contents, boolean synchronous) throws IOException, InterruptedException {
+		
+		if (synchronous) {
+			final CountDownLatch latch = new CountDownLatch(1);
+			ConfigStoreListener l = new ConfigStoreListener() {
+				@Override
+				public void onChange(String contents) {
+					latch.countDown();
+				}
+			};
+			store.register(name, l);
+			store.write(name, null, contents);
+			latch.await(30, TimeUnit.SECONDS);
+			store.unregister(name, l);
+		} else {
+			store.write(name, null, contents);
+		}
+		return this;
+	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	// Lifecycle events
@@ -427,7 +455,7 @@ public class ConfigMap implements StoreListener, Writable {
 				String currentContents = store.write(name, contents, newContents);
 				if (currentContents == null) 
 					break;
-				onChange(name, currentContents);
+				onChange(currentContents);
 			}
 			this.changes.clear();
 		} finally {
@@ -447,7 +475,7 @@ public class ConfigMap implements StoreListener, Writable {
 	 * @param listener The new listener.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigMap register(ChangeEventListener listener) {
+	public ConfigMap register(ConfigEventListener listener) {
 		listeners.add(listener);
 		return this;
 	}
@@ -458,14 +486,14 @@ public class ConfigMap implements StoreListener, Writable {
 	 * @param listener The listener to remove.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigMap unregister(ChangeEventListener listener) {
+	public ConfigMap unregister(ConfigEventListener listener) {
 		listeners.remove(listener);
 		return this;
 	}
 	
-	@Override /* StoreListener */
-	public void onChange(String name, String newContents) {
-		List<ChangeEvent> changes = null;
+	@Override /* ConfigStoreListener */
+	public void onChange(String newContents) {
+		List<ConfigEvent> changes = null;
 		writeLock();
 		try {
 			if (! StringUtils.isEquals(contents, newContents)) {
@@ -473,7 +501,7 @@ public class ConfigMap implements StoreListener, Writable {
 				load(newContents);
 				
 				// Reapply our changes on top of the modifications.
-				for (ChangeEvent ce : this.changes)
+				for (ConfigEvent ce : this.changes)
 					applyChange(false, ce);
 			}
 		} finally {
@@ -492,17 +520,68 @@ public class ConfigMap implements StoreListener, Writable {
 			readUnlock();
 		}
 	}
+	
+	/**
+	 * Returns the values in this config map as a map of maps.
+	 * 
+	 * <p>
+	 * This is considered a snapshot copy of the config map.
+	 * 
+	 * <p>
+	 * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.
+	 * 
+	 * @return A copy of this config as a map of maps.
+	 */
+	public ObjectMap asMap() {
+		ObjectMap m = new ObjectMap();
+		readLock();
+		try {
+			for (ConfigSection cs : entries.values()) {
+				Map<String,String> m2 = new LinkedHashMap<>();
+				for (ConfigEntry ce : cs.entries.values())
+					m2.put(ce.key, ce.value);
+				m.put(cs.name, m2);
+			}
+		} finally {
+			readUnlock();
+		}
+		return m;
+	}
 
-	@Override /* Writable */
+	/**
+	 * Serializes this map to the specified writer.
+	 * 
+	 * @param w The writer to serialize to.
+	 * @return The same writer passed in.
+	 * @throws IOException
+	 */
 	public Writer writeTo(Writer w) throws IOException {
-		for (ConfigSection cs : entries.values())
-			cs.writeTo(w);
+		readLock();
+		try {
+			for (ConfigSection cs : entries.values())
+				cs.writeTo(w);
+		} finally {
+			readUnlock();
+		}
 		return w;
 	}
 
-	@Override /* Writable */
-	public MediaType getMediaType() {
-		return MediaType.PLAIN;
+	/**
+	 * Does a rollback of any changes on this map currently in memory.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public ConfigMap rollback() {
+		if (changes.size() > 0) {
+			writeLock();
+			try {
+				changes.clear();
+				load(contents);
+		 	} finally {
+				writeUnlock();
+			}
+		}
+		return this;
 	}
 
 	
@@ -526,10 +605,16 @@ public class ConfigMap implements StoreListener, Writable {
 		lock.writeLock().unlock();
 	}
 
-	private boolean isValidSectionName(String s) {
-		return "default".equals(s) || isValidNewSectionName(s);
+	private void checkSectionName(String s) {
+		if (! ("default".equals(s) || isValidNewSectionName(s)))
+			throw new IllegalArgumentException("Invalid section name: '" + s + "'");
 	}
-	
+
+	private void checkKeyName(String s) {
+		if (! isValidKeyName(s))
+			throw new IllegalArgumentException("Invalid key name: '" + s + "'");
+	}
+
 	private boolean isValidKeyName(String s) {
 		if (s == null)
 			return false;
@@ -560,32 +645,32 @@ public class ConfigMap implements StoreListener, Writable {
 		return true;
 	}
 
-	private void signal(List<ChangeEvent> changes) {
-		for (ChangeEventListener l : listeners)
-			l.onChange(changes);
+	private void signal(List<ConfigEvent> changes) {
+		for (ConfigEventListener l : listeners)
+			l.onConfigChange(changes);
 	}
 
-	private List<ChangeEvent> findDiffs(String updatedContents) {
-		List<ChangeEvent> changes = new ArrayList<>();
+	private List<ConfigEvent> findDiffs(String updatedContents) {
+		List<ConfigEvent> changes = new ArrayList<>();
 		ConfigMap newMap = new ConfigMap(updatedContents);
 		for (ConfigSection ns : newMap.oentries.values()) {
 			ConfigSection s = oentries.get(ns.name);
 			if (s == null) {
-				//changes.add(ChangeEvent.setSection(ns.name, ns.preLines));
+				//changes.add(ConfigEvent.setSection(ns.name, ns.preLines));
 				for (ConfigEntry ne : ns.entries.values()) {
-					changes.add(ChangeEvent.setEntry(ns.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
+					changes.add(ConfigEvent.setEntry(ns.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
 				}
 			} else {
 				for (ConfigEntry ne : ns.oentries.values()) {
 					ConfigEntry e = s.oentries.get(ne.key);
 					if (e == null || ! isEquals(e.value, ne.value)) {
-						changes.add(ChangeEvent.setEntry(s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
+						changes.add(ConfigEvent.setEntry(s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
 					}
 				}
 				for (ConfigEntry e : s.oentries.values()) {
 					ConfigEntry ne = ns.oentries.get(e.key);
 					if (ne == null) {
-						changes.add(ChangeEvent.removeEntry(s.name, e.key));
+						changes.add(ConfigEvent.removeEntry(s.name, e.key));
 					}
 				}
 			}
@@ -593,9 +678,9 @@ public class ConfigMap implements StoreListener, Writable {
 		for (ConfigSection s : oentries.values()) {
 			ConfigSection ns = newMap.oentries.get(s.name);
 			if (ns == null) {
-				//changes.add(ChangeEvent.removeSection(s.name));
+				//changes.add(ConfigEvent.removeSection(s.name));
 				for (ConfigEntry e : s.oentries.values())
-					changes.add(ChangeEvent.removeEntry(s.name, e.key));
+					changes.add(ConfigEvent.removeEntry(s.name, e.key));
 			}
 		}
 		return changes;

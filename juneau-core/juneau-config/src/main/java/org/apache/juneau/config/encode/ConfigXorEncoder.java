@@ -27,31 +27,39 @@ import static org.apache.juneau.internal.IOUtils.*;
  * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
  * </ul>
  */
-public final class XorEncoder implements Encoder {
+public final class ConfigXorEncoder implements ConfigEncoder {
 
-	/** Reusable XOR-Encoder instance. */
-	public static final XorEncoder INSTANCE = new XorEncoder();
+	/** Reusable XOR-ConfigEncoder instance. */
+	public static final ConfigXorEncoder INSTANCE = new ConfigXorEncoder();
 
 	private static final String key = System.getProperty("org.apache.juneau.config.XorEncoder.key",
 		"nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
 
-	@Override /* Encoder */
+	@Override /* ConfigEncoder */
 	public String encode(String fieldName, String in) {
 		byte[] b = in.getBytes(UTF8);
 		for (int i = 0; i < b.length; i++) {
 				int j = i % key.length();
 			b[i] = (byte)(b[i] ^ key.charAt(j));
 		}
-		return base64Encode(b);
+		return '{' + base64Encode(b) + '}';
 	}
 
-	@Override /* Encoder */
+	@Override /* ConfigEncoder */
 	public String decode(String fieldName, String in) {
+		if (! isEncoded(in))
+			return in;
+		in = in.substring(1, in.length()-1);
 		byte[] b = base64Decode(in);
 		for (int i = 0; i < b.length; i++) {
 			int j = i % key.length();
 			b[i] = (byte)(b[i] ^ key.charAt(j));
 	}
 		return new String(b, UTF8);
+	}
+
+	@Override /* ConfigEncoder */
+	public boolean isEncoded(String in) {
+		return in != null && in.length() > 1 && in.charAt(0) == '{' && in.charAt(in.length()-1) == '}';
 	}
 }

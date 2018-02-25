@@ -2775,7 +2775,7 @@ public final class RestContext extends BeanContext {
 	private final StaticFileMapping[] staticFiles;
 	private final String[] staticFilesPaths;
 	private final MessageBundle msgs;
-	private final ConfigFile configFile;
+	private final Config config;
 	private final VarResolver varResolver;
 	private final Map<String,RestCallRouter> callRouters;
 	private final Map<String,RestJavaMethod> callMethods;
@@ -2882,7 +2882,7 @@ public final class RestContext extends BeanContext {
 				.build()
 			;
 
-			configFile = builder.configFile.getResolving(this.varResolver);
+			config = builder.config.resolving(this.varResolver.createSession());
 			
 			properties = builder.properties;
 			serializers = SerializerGroup.create().append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], true, resource, ps)).build();
@@ -3261,15 +3261,15 @@ public final class RestContext extends BeanContext {
 	 * The config file is identified via one of the following:
 	 * <ul>
 	 * 	<li class='ja'>{@link RestResource#config()}
-	 * 	<li class='jm'>{@link RestContextBuilder#configFile(ConfigFile)}
+	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
 	 * 
 	 * @return 
 	 * 	The resolving config file associated with this servlet.  
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ConfigFile getConfigFile() {
-		return configFile;
+	public Config getConfig() {
+		return config;
 	}
 
 	/**

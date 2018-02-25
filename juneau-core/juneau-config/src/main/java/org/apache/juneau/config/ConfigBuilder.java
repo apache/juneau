@@ -10,9 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.proto;
+package org.apache.juneau.config;
 
-import static org.apache.juneau.config.proto.Config.*;
+import static org.apache.juneau.config.Config.*;
 
 import java.util.*;
 
@@ -29,8 +29,8 @@ import org.apache.juneau.svl.*;
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	Config cf = Config.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
- * 	String setting = cf.get(<js>"MySection/mysetting"</js>);
+ * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+ * 	String setting = cf.getString(<js>"MySection/mysetting"</js>);
  * </p>
  * 
  * <h5 class='section'>See Also:</h5>
@@ -71,8 +71,8 @@ public class ConfigBuilder extends ContextBuilder {
 	 * 
 	 * <p>
 	 * Specifies the configuration name.
-	 * <br>This is typically the configuration file name minus the file extension, although
-	 * the name can be anything identifiable by the {@link Store} used for retrieving and storing the configuration.
+	 * <br>This is typically the configuration file name, although
+	 * the name can be anything identifiable by the {@link ConfigStore} used for retrieving and storing the configuration.
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
@@ -91,11 +91,23 @@ public class ConfigBuilder extends ContextBuilder {
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link FileStore#DEFAULT}.
+	 * 	<br>The default is {@link ConfigFileStore#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigBuilder store(Store value) {
+	public ConfigBuilder store(ConfigStore value) {
 		return set(CONFIG_store, value);
+	}
+
+	/**
+	 * Configuration property:  Configuration store.
+	 * 
+	 * <p>
+	 * Convenience method for calling <code>store(ConfigMemoryStore.<jsf>DEFAULT</jsf>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public ConfigBuilder memStore() {
+		return set(CONFIG_store, ConfigMemoryStore.DEFAULT);
 	}
 
 	/**
@@ -166,10 +178,10 @@ public class ConfigBuilder extends ContextBuilder {
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link XorEncoder#INSTANCE}.
+	 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigBuilder encoder(Encoder value) {
+	public ConfigBuilder encoder(ConfigEncoder value) {
 		return set(CONFIG_encoder, value);
 	}
 
@@ -181,10 +193,10 @@ public class ConfigBuilder extends ContextBuilder {
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link XorEncoder#INSTANCE}.
+	 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigBuilder encoder(Class<? extends Encoder> value) {
+	public ConfigBuilder encoder(Class<? extends ConfigEncoder> value) {
 		return set(CONFIG_encoder, value);
 	}
 	
@@ -263,15 +275,23 @@ public class ConfigBuilder extends ContextBuilder {
 	 * <p>
 	 * When enabled, serialized POJOs will be placed on a separate line from the key.
 	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigBuilder beansOnSeparateLines(boolean value) {
-		return set(CONFIG_beansOnSeparateLines, value);
+	public ConfigBuilder beansOnSeparateLines() {
+		return set(CONFIG_beansOnSeparateLines, true);
 	}
 	
+	/**
+	 * Configuration property:  Beans on separate lines.
+	 * 
+	 * <p>
+	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public ConfigBuilder readOnly() {
+		return set(CONFIG_readOnly, true);
+	}
 	
 	@Override /* ContextBuilder */
 	public ConfigBuilder set(String name, Object value) {

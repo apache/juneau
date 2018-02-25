@@ -12,31 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
-import org.apache.juneau.*;
-
 /**
- * Builder for {@link MemoryStore} objects.
+ * Listens for changes to stored config files.
  */
-public class MemoryStoreBuilder extends StoreBuilder {
-
+public interface ConfigStoreListener {
+	
 	/**
-	 * Constructor, default settings.
-	 */
-	public MemoryStoreBuilder() {
-		super();
-	}
-
-	/**
-	 * Constructor.
+	 * Called when the physical contents of a config file have changed.
 	 * 
-	 * @param ps The initial configuration settings for this builder.
+	 * @param contents The new config contents;
 	 */
-	public MemoryStoreBuilder(PropertyStore ps) {
-		super(ps);
-	}
-
-	@Override /* ContextBuilder */
-	public MemoryStore build() {
-		return new MemoryStore(getPropertyStore());
-	}
+	void onChange(String contents);
 }

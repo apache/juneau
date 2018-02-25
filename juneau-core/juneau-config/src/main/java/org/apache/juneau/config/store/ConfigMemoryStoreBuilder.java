@@ -10,25 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.event;
+package org.apache.juneau.config.store;
+
+import org.apache.juneau.*;
 
 /**
- * Possible event types for the {@link ChangeEvent} class.
+ * Builder for {@link ConfigMemoryStore} objects.
  */
-public enum ChangeEventType {
+public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 
 	/**
-	 * Set an individual entry value in a config.
+	 * Constructor, default settings.
 	 */
-	SET_ENTRY,
-	
+	public ConfigMemoryStoreBuilder() {
+		super();
+	}
+
 	/**
-	 * Adds or replaces a section in a config.
+	 * Constructor.
+	 * 
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	SET_SECTION,
-	
-	/**
-	 * Removes a section from a config.
-	 */
-	REMOVE_SECTION;
+	public ConfigMemoryStoreBuilder(PropertyStore ps) {
+		super(ps);
+	}
+
+	@Override /* ContextBuilder */
+	public ConfigMemoryStore build() {
+		return new ConfigMemoryStore(getPropertyStore());
+	}
 }

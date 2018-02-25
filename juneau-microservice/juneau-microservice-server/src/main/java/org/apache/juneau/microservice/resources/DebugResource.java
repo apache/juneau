@@ -70,7 +70,7 @@ public class DebugResource extends Resource {
 	@RestMethod(name=POST, path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
 	public String createJettyDump(RestRequest req, RestResponse res) throws Exception {
 		String dump = RestMicroservice.getInstance().getServer().dump();
-		try (FileWriter fw = new FileWriter(req.getConfigFile().getString("Logging/logDir") + "/jetty-thread-dump.log")) {
+		try (FileWriter fw = new FileWriter(req.getConfig().getString("Logging/logDir") + "/jetty-thread-dump.log")) {
 			IOUtils.pipe(dump, fw);
 		}
 		return "OK";

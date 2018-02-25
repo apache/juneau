@@ -214,7 +214,7 @@ public @interface RestResource {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestContextBuilder#configFile(ConfigFile)}
+	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
 	 */
 	String config() default "";

@@ -314,7 +314,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 							g.append(c);
 						} catch (Exception e) {
 							throw new RestServletException(
-								"Exception occurred while trying to instantiate Encoder on method ''{0}'': ''{1}''", sig, c.getSimpleName()).initCause(e);
+								"Exception occurred while trying to instantiate ConfigEncoder on method ''{0}'': ''{1}''", sig, c.getSimpleName()).initCause(e);
 						}
 					}
 					encoders = g.build();

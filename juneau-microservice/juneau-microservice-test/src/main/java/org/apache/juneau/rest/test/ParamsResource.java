@@ -405,8 +405,8 @@ public class ParamsResource extends RestServletDefault {
 		return t != null;
 	}
 
-	@RestMethod(name=GET, path="/otherObjects/ConfigFile")
-	public boolean testOtherConfigFile(ConfigFile t) {
+	@RestMethod(name=GET, path="/otherObjects/Config")
+	public boolean testOtherConfig(Config t) {
 		return t != null;
 	}
 }

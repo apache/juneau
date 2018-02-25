@@ -16,6 +16,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
+import java.util.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
@@ -30,10 +33,12 @@ public class ConfigTest extends RestTestcase {
 	@Test
 	public void test() throws Exception {
 		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
+		
+		Map<String,Map<String,Object>> m = c.doGet(URL).getResponse(Map.class, String.class, ObjectMap.class);
 
-		ConfigFile cf = c.doGet(URL).getResponse(ConfigFileImpl.class);
+		Config cf = Config.create().memStore().build().load(m);
 
-		assertObjectEquals("{int1:'1',int2:'[1,2,3]',int3:'$C{Test/int1, -1}',int4:'$C{Test/int3, -1}',int5:'$C{XXX, -1}',boolean1:'true',boolean2:'[true,true]',path:'$E{PATH}',testManifestEntry:'$MF{Test-Entry}'}", cf.get("Test"));
+		assertObjectEquals("{int1:'1',int2:'[1,2,3]',int3:'1',int4:'1',int5:'-1',boolean1:'true',boolean2:'[true,true]',testManifestEntry:'$MF{Test-Entry}'}", cf.getSectionAsMap("Test"));
 
 		assertEquals("'1'", c.doGet(URL + "/Test%2Fint1/" + getName(String.class)).getResponseAsString());
 		assertEquals("'[1,2,3]'", c.doGet(URL + "/Test%2Fint2/" + getName(String.class)).getResponseAsString());
@@ -45,9 +50,9 @@ public class ConfigTest extends RestTestcase {
 		assertEquals("-1", c.doGet(URL + "/Test%2Fint5/" + getName(Integer.class)).getResponseAsString());
 		assertEquals("true", c.doGet(URL + "/Test%2Fboolean1/" + getName(Boolean.class)).getResponseAsString());
 		assertEquals("[true,true]", c.doGet(URL + "/Test%2Fboolean2/" + getName(Boolean[].class)).getResponseAsString());
-		assertTrue(c.doGet(URL + "/Test%2Fpath/" + getName(String.class)).getResponseAsString().length() > 10);
 		assertEquals("'test-value'", c.doGet(URL + "/Test%2FtestManifestEntry/" + getName(String.class)).getResponseAsString());
 
+		cf.close();
 		c.closeQuietly();
 	}
 

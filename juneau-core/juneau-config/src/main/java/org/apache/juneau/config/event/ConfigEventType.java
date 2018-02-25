@@ -10,31 +10,30 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.store;
-
-import org.apache.juneau.*;
+package org.apache.juneau.config.event;
 
 /**
- * Base builder class for {@link Store} objects.
+ * Possible event types for the {@link ConfigEvent} class.
  */
-public abstract class StoreBuilder extends ContextBuilder {
+public enum ConfigEventType {
 
 	/**
-	 * Constructor, default settings.
+	 * Set an individual entry value in a config.
 	 */
-	public StoreBuilder() {
-		super();
-	}
+	SET_ENTRY,
+	
+	/**
+	 * Removes an entry value from a config.
+	 */
+	REMOVE_ENTRY,
 
 	/**
-	 * Constructor.
-	 * 
-	 * @param ps The initial configuration settings for this builder.
+	 * Adds or replaces a section in a config.
 	 */
-	public StoreBuilder(PropertyStore ps) {
-		super(ps);
-	}
-
-	@Override
-	public abstract Store build();
+	SET_SECTION,
+	
+	/**
+	 * Removes a section from a config.
+	 */
+	REMOVE_SECTION;
 }

@@ -842,8 +842,8 @@ public class ParamsTest extends RestTestcase {
 	}
 
 	@Test
-	public void testOtherConfigFile() throws Exception {
-		String r = CLIENT.doGet(URL + "/otherObjects/ConfigFile").getResponseAsString();
+	public void testOtherConfig() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/Config").getResponseAsString();
 		assertEquals("true", r);
 	}
 }

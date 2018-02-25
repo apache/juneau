@@ -13,7 +13,7 @@
 package org.apache.juneau.config.store;
 
 /**
- * Determines how often the file system is polled by the watcher in {@link FileStore}.
+ * Determines how often the file system is polled by the watcher in {@link ConfigFileStore}.
  * 
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>

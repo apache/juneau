@@ -27,10 +27,10 @@ import org.apache.juneau.rest.annotation.*;
 public class GzipResource {
 
 	//================================================================================
-	// Encoder for "myencoding" encoding
+	// ConfigEncoder for "myencoding" encoding
 	//================================================================================
 	public static class MyEncoder extends GzipEncoder {
-		@Override /* Encoder */
+		@Override /* ConfigEncoder */
 		public String[] getCodings() {
 			return new String[]{"mycoding"};
 		}

@@ -10,12 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.proto;
+package org.apache.juneau.config;
 
+import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.config.proto.ConfigMod.*;
-import static java.lang.reflect.Modifier.*;
 
 import java.beans.*;
 import java.io.*;
@@ -24,11 +23,12 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.encode.*;
-import org.apache.juneau.config.encode.Encoder;
+import org.apache.juneau.config.encode.ConfigEncoder;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
 /**
  * TODO
  */
-public final class Config extends Context implements ChangeEventListener, Closeable, Writable {
+public final class Config extends Context implements ConfigEventListener, Writable {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -52,7 +52,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.name.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"Configuration"</js>
+	 * 	<li><b>Default:</b>  <js>"Configuration.cfg"</js>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#name(String)}
@@ -62,8 +62,8 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the configuration name.
-	 * <br>This is typically the configuration file name minus the file extension, although
-	 * the name can be anything identifiable by the {@link Store} used for retrieving and storing the configuration.
+	 * <br>This is typically the configuration file name, although
+	 * the name can be anything identifiable by the {@link ConfigStore} used for retrieving and storing the configuration.
 	 */
 	public static final String CONFIG_name = PREFIX + "name.s";
 
@@ -73,11 +73,11 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.store.o"</js>
-	 * 	<li><b>Data type:</b>  {@link Store}
-	 * 	<li><b>Default:</b>  {@link FileStore#DEFAULT}
+	 * 	<li><b>Data type:</b>  {@link ConfigStore}
+	 * 	<li><b>Default:</b>  {@link ConfigFileStore#DEFAULT}
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#store(Store)}
+	 * 			<li class='jm'>{@link ConfigBuilder#store(ConfigStore)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -135,12 +135,12 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.encoder.o"</js>
-	 * 	<li><b>Data type:</b>  {@link Encoder}
-	 * 	<li><b>Default:</b>  {@link XorEncoder#INSTANCE}
+	 * 	<li><b>Data type:</b>  {@link ConfigEncoder}
+	 * 	<li><b>Default:</b>  {@link ConfigXorEncoder#INSTANCE}
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#encoder(Class)}
-	 * 			<li class='jm'>{@link ConfigBuilder#encoder(Encoder)}
+	 * 			<li class='jm'>{@link ConfigBuilder#encoder(ConfigEncoder)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -230,7 +230,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#beansOnSeparateLines(boolean)}
+	 * 			<li class='jm'>{@link ConfigBuilder#beansOnSeparateLines()}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -240,24 +240,43 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 */
 	public static final String CONFIG_beansOnSeparateLines = PREFIX + "beansOnSeparateLines.b";
 	
-	
+	/**
+	 * Configuration property:  Read-only.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Config.readOnly.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ConfigBuilder#readOnly()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
+	 */
+	public static final String CONFIG_readOnly = PREFIX + "readOnly.b";
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final String name;
-	private final Store store;
+	private final ConfigStore store;
 	private final WriterSerializer serializer;
 	private final ReaderParser parser;
-	private final Encoder encoder;
+	private final ConfigEncoder encoder;
 	private final VarResolverSession varSession;
 	private final int binaryLineLength;
 	private final String binaryFormat;
-	private final boolean beansOnSeparateLines;
+	private final boolean beansOnSeparateLines, readOnly;
 	private final ConfigMap configMap;
 	private final BeanSession beanSession;
 	private volatile boolean closed;
-	private final List<ChangeEventListener> listeners = Collections.synchronizedList(new LinkedList<ChangeEventListener>());
+	private final List<ConfigEventListener> listeners = Collections.synchronizedList(new LinkedList<ConfigEventListener>());
 
 
 	/**
@@ -287,23 +306,24 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	public Config(PropertyStore ps) throws IOException {
 		super(ps);
 		
-		name = getStringProperty(CONFIG_name, "Configuration");
-		store = getInstanceProperty(CONFIG_store, Store.class, FileStore.DEFAULT);
+		name = getStringProperty(CONFIG_name, "Configuration.cfg");
+		store = getInstanceProperty(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
 		configMap = store.getMap(name);
 		configMap.register(this);
 		serializer = getInstanceProperty(CONFIG_serializer, WriterSerializer.class, JsonSerializer.DEFAULT_LAX);
 		parser = getInstanceProperty(CONFIG_parser, ReaderParser.class, JsonParser.DEFAULT);
 		beanSession = parser.createBeanSession();
-		encoder = getInstanceProperty(CONFIG_encoder, Encoder.class, XorEncoder.INSTANCE);
+		encoder = getInstanceProperty(CONFIG_encoder, ConfigEncoder.class, ConfigXorEncoder.INSTANCE);
 		varSession = getInstanceProperty(CONFIG_varResolver, VarResolver.class, VarResolver.DEFAULT)
 			.builder()
-			.vars(ConfigFileVar.class)
-			.contextObject(ConfigFileVar.SESSION_config, this)
+			.vars(ConfigVar.class)
+			.contextObject(ConfigVar.SESSION_config, this)
 			.build()
 			.createSession();
 		binaryLineLength = getIntegerProperty(CONFIG_binaryLineLength, -1);
 		binaryFormat = getStringProperty(CONFIG_binaryFormat, "BASE64").toUpperCase();
 		beansOnSeparateLines = getBooleanProperty(CONFIG_beansOnSeparateLines, false);
+		readOnly = getBooleanProperty(CONFIG_readOnly, false);
 	}
 	
 	Config(Config copyFrom, VarResolverSession varSession) { 
@@ -319,6 +339,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 		binaryLineLength = copyFrom.binaryLineLength;
 		binaryFormat = copyFrom.binaryFormat;
 		beansOnSeparateLines = copyFrom.beansOnSeparateLines;
+		readOnly = copyFrom.readOnly;
 		beanSession = copyFrom.beanSession;
 	}
 	
@@ -353,6 +374,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 		
 		String sname = sname(key);
 		String skey = skey(key); 
+		
 		ConfigEntry ce = configMap.getEntry(sname, skey);
 		
 		if (ce == null || ce.getValue() == null)
@@ -361,7 +383,8 @@ public final class Config extends Context implements ChangeEventListener, Closea
 		String val = ce.getValue();
 		for (ConfigMod m : ConfigMod.asModifiersReverse(ce.getModifiers())) {
 			if (m == ENCODED) {
-				val = encoder.decode(key, val);
+				if (encoder.isEncoded(val))
+					val = encoder.decode(key, val);
 			}
 		}
 		
@@ -379,21 +402,28 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * @param key The key.  
 	 * @param value The value.
 	 * @return This object (for method chaining).
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config set(String key, String value) {
+		checkWrite();
 		assertFieldNotNull(key, "key");
 		String sname = sname(key);
 		String skey = skey(key); 
+		
 		ConfigEntry ce = configMap.getEntry(sname, skey);
+		if (ce == null && value == null)
+			return this;
+		
+		String mod = ce == null ? "" : ce.getModifiers();
 		
 		String s = asString(value);
-		for (ConfigMod m : ConfigMod.asModifiers(ce.getModifiers())) {
+		for (ConfigMod m : ConfigMod.asModifiers(mod)) {
 			if (m == ENCODED) {
-				value = encoder.encode(key, s);
+				s = encoder.encode(key, s);
 			}
 		}
-		
-		configMap.setValue(sname, skey, s);
+
+		configMap.setEntry(sname, skey, s, null, null, null);
 		return this;
 	}
 
@@ -409,7 +439,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
-	 * @throws UnsupportedOperationException If config file is read only.
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config set(String key, Object value) throws SerializeException {
 		return set(key, value, null);
@@ -427,7 +457,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
-	 * @throws UnsupportedOperationException If config file is read only.
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config set(String key, Object value, Serializer serializer) throws SerializeException {
 		return set(key, serialize(value, serializer));
@@ -441,34 +471,62 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @param modifiers 
-	 * 	Optional modifiers to apply to the value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param modifier 
+	 * 	Optional modifier to apply to the value.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
 	 * @param comment 
 	 * 	Optional same-line comment to add to this value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
 	 * @param preLines 
 	 * 	Optional comment or blank lines to add before this entry.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
-	 * @throws UnsupportedOperationException If config file is read only.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config set(String key, Object value, Serializer serializer, ConfigMod modifier, String comment, List<String> preLines) throws SerializeException {
+		return set(key, value, serializer, modifier == null ? null : new ConfigMod[]{modifier}, comment, preLines);
+	}
+
+	/**
+	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
+	 * 
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param value The new value.
+	 * @param serializer
+	 * 	The serializer to use for serializing the object.
+	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * @param modifiers 
+	 * 	Optional modifiers to apply to the value.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
+	 * @param comment 
+	 * 	Optional same-line comment to add to this value.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
+	 * @param preLines 
+	 * 	Optional comment or blank lines to add before this entry.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws SerializeException
+	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines) throws SerializeException {
+		checkWrite();
 		assertFieldNotNull(key, "key");
 		String sname = sname(key);
 		String skey = skey(key); 
-		ConfigEntry ce = configMap.getEntry(sname, skey);
 		
 		String s = serialize(value, serializer);
-		for (ConfigMod m : ConfigMod.asModifiers(ce.getModifiers())) {
-			if (m == ENCODED) {
-				s = encoder.encode(key, s);
+		if (modifiers != null) {
+			for (ConfigMod m : modifiers) {
+				if (m == ENCODED) {
+					s = encoder.encode(key, s);
+				}
 			}
 		}
 		
-		configMap.setEntry(sname, skey, s, ConfigMod.asString(modifiers), comment, preLines);
+		configMap.setEntry(sname, skey, s, modifiers == null ? null : ConfigMod.asString(modifiers), comment, preLines);
 		return this;
 	}
 
@@ -477,12 +535,39 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
-	 * @throws UnsupportedOperationException If config file is read only.
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config remove(String key) {
-		return set(key, null);
+		checkWrite();
+		String sname = sname(key);
+		String skey = skey(key); 
+		configMap.removeEntry(sname, skey);
+		return this;
 	}
 	
+	/**
+	 * Encodes and unencoded entries in this config.
+	 * 
+	 * <p>
+	 * If any entries in the config are marked as encoded but not actually encoded,
+	 * this will encode them.
+	 * 
+	 * @return This object (for method chaining).
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config encodeEntries() {
+		checkWrite();
+		for (String section : configMap.getSections()) {
+			for (String key : configMap.getKeys(section)) {
+				ConfigEntry ce = configMap.getEntry(section, key);
+				if (ce != null && ce.hasModifier('*') && ! encoder.isEncoded(ce.getValue())) {
+					configMap.setEntry(section, key, encoder.encode(section + '/' + key, ce.getValue()), null, null, null);
+				}
+			}
+		}
+		
+		return this;
+	}
 	
 	//--------------------------------------------------------------------------------
 	// API methods
@@ -504,7 +589,12 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public String getString(String key) {
-		return getString(key, null);
+		String s = get(key);
+		if (s == null)
+			return null;
+		if (varSession != null)
+			s = varSession.resolve(s);
+		return s;
 	}
 
 	/**
@@ -525,7 +615,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 */
 	public String getString(String key, String def) {
 		String s = get(key);
-		if (s == null)
+		if (isEmpty(s))
 			return def;
 		if (varSession != null)
 			s = varSession.resolve(s);
@@ -536,7 +626,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * Gets the entry with the specified key, splits the value on commas, and returns the values as trimmed strings.
 	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @return The value, or an empty list if the section or key does not exist.
+	 * @return The value, or an empty array if the section or key does not exist.
 	 */
 	public String[] getStringArray(String key) {
 		return getStringArray(key, new String[0]);
@@ -547,13 +637,13 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if section or key does not exist.
-	 * @return The value, or an empty list if the section or key does not exist.
+	 * @return The value, or the default value if the section or key does not exist or is blank.
 	 */
 	public String[] getStringArray(String key, String[] def) {
 		String s = getString(key);
-		if (s == null)
+		if (isEmpty(s))
 			return def;
-		String[] r = isEmpty(s) ? new String[0] : split(s);
+		String[] r = split(s);
 		return r.length == 0 ? def : r;
 	}
 
@@ -650,6 +740,47 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	}
 	
 	/**
+	 * Convenience method for getting byte array config values.
+	 * 
+	 * <p>
+	 * This is equivalent to calling the following:
+	 * <p class='bcode'>
+	 * 	<jk>byte</jk>[] b = config.getObject(key, <jk>byte</jk>[].<jk>class</jk>);
+	 * </p>
+	 * 
+	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link #CONFIG_binaryFormat} setting.
+	 * 
+	 * @param key The key.  
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 * @throws ParseException If value could not be converted to a byte array.
+	 */
+	public byte[] getBytes(String key) throws ParseException {
+		String s = get(key);
+		if (s == null)
+			return null;
+		if (s.isEmpty())
+			return new byte[0];
+		return getObject(key, byte[].class);
+	}
+	
+	/**
+	 * Same as {@link #getBytes(String)} but with a default value if the entry doesn't exist.
+	 * 
+	 * @param key The key.  
+	 * @param def The default value.
+	 * @return The value, or the default value if the section or key does not exist.
+	 * @throws ParseException If value could not be converted to a byte array.
+	 */
+	public byte[] getBytes(String key, byte[] def) throws ParseException {
+		String s = get(key);
+		if (s == null)
+			return def;
+		if (s.isEmpty())
+			return def;
+		return getObjectWithDefault(key, def, byte[].class);
+	}
+
+	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
 	 * 
 	 * <p>
@@ -666,7 +797,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 * 
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myListOfStrings"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
@@ -748,7 +879,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 * 
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = cf.getObject(<js>"MySection/mySimpleString"</js>, String.<jk>class</jk>);
@@ -880,9 +1011,26 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	}
 
 	/**
+	 * Returns the keys of the entries in the specified section.
+	 * 
+	 * @param section 
+	 * 	The section name to write from.
+	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return
+	 * 	An unmodifiable set of keys, or an empty set if the section doesn't exist.
+	 */
+	public Set<String> getKeys(String section) {
+		return configMap.getKeys(section(section));
+	}
+
+	/**
 	 * Copies the entries in a section to the specified bean by calling the public setters on that bean.
 	 * 
-	 * @param section The section name to write from.
+	 * @param section 
+	 * 	The section name to write from.
+	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param bean The bean to set the properties on.
 	 * @param ignoreUnknownProperties
 	 * 	If <jk>true</jk>, don't throw an {@link IllegalArgumentException} if this section contains a key that doesn't
@@ -892,30 +1040,27 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties) throws ParseException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		checkWrite();
 		assertFieldNotNull(bean, "bean");
+		section = section(section);
 
 		Set<String> keys = configMap.getKeys(section);
 		if (keys == null)
-			throw new IllegalArgumentException("Section not found");
-		keys = new LinkedHashSet<>(keys);
+			throw new IllegalArgumentException("Section '"+section+"' not found in configuration.");
 		
-		for (Method m : bean.getClass().getMethods()) {
-			int mod = m.getModifiers();
-			if (isPublic(mod) && (!isStatic(mod)) && m.getName().startsWith("set") && m.getParameterTypes().length == 1) {
-				Class<?> pt = m.getParameterTypes()[0];
-				String propName = Introspector.decapitalize(m.getName().substring(3));
-				Object value = getObject(section + '/' + propName, pt);
-				if (value != null) {
-					m.invoke(bean, value);
-					keys.remove(propName);
-				}
+		BeanMap<?> bm = beanSession.toBeanMap(bean);
+		for (String k : keys) {
+			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
+			if (bpm == null) {
+				if (! ignoreUnknownProperties)
+					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, section);
+			} else {
+				bm.put(k, getObject(section + '/' + k, bpm.getClassMeta().getInnerClass()));
 			}
 		}
-		
-		if (! (ignoreUnknownProperties || keys.isEmpty()))
-			throw new ParseException("Invalid properties found in config file section ''{0}'': {1}", section, keys);
 		
 		return this;
 	}
@@ -923,13 +1068,16 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	/**
 	 * Shortcut for calling <code>getSectionAsBean(sectionName, c, <jk>false</jk>)</code>.
 	 * 
-	 * @param sectionName The section name to write from.
+	 * @param section 
+	 * 	The section name to write from.
+	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param c The bean class to create.
 	 * @return A new bean instance.
 	 * @throws ParseException
 	 */
-	public <T> T getSectionAsBean(String sectionName, Class<T>c) throws ParseException {
-		return getSectionAsBean(sectionName, c, false);
+	public <T> T getSectionAsBean(String section, Class<T>c) throws ParseException {
+		return getSectionAsBean(section, c, false);
 	}
 
 	/**
@@ -959,34 +1107,69 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * <h5 class='figure'>Example usage</h5>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
 	 * </p>
 	 * 
-	 * @param section The section name to write from.
+	 * @param section 
+	 * 	The section name to write from.
+	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param c The bean class to create.
 	 * @param ignoreUnknownProperties
 	 * 	If <jk>false</jk>, throws a {@link ParseException} if the section contains an entry that isn't a bean property
 	 * 	name.
-	 * @return A new bean instance.
+	 * @return A new bean instance, or <jk>null</jk> if the section doesn't exist.
 	 * @throws ParseException
 	 */
 	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
 		assertFieldNotNull(c, "c");
+		section = section(section);
+		
+		if (! configMap.hasSection(section))
+			return null;
 
+		Set<String> keys = configMap.getKeys(section);
+		
 		BeanMap<T> bm = beanSession.newBeanMap(c);
-		for (String k : configMap.getKeys(section)) {
+		for (String k : keys) {
 			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
 			if (bpm == null) {
 				if (! ignoreUnknownProperties)
-					throw new ParseException("Unknown property {0} encountered", k);
+					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, section);
 			} else {
 				bm.put(k, getObject(section + '/' + k, bpm.getClassMeta().getInnerClass()));
 			}
 		}
+		
 		return bm.getBean();
 	}
 
+	/**
+	 * Returns a section of this config copied into an {@link ObjectMap}.
+	 * 
+	 * @param section 
+	 * 	The section name to write from.
+	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return A new {@link ObjectMap}, or <jk>null</jk> if the section doesn't exist.
+	 * @throws ParseException 
+	 */
+	public ObjectMap getSectionAsMap(String section) throws ParseException {
+		section = section(section);
+		
+		if (! configMap.hasSection(section))
+			return null;
+		
+		Set<String> keys = configMap.getKeys(section);
+		
+		ObjectMap om = new ObjectMap();
+		for (String k : keys) 
+			om.put(k, getObject(section + '/' + k, Object.class));
+		return om;
+	}
+	
+	
 	/**
 	 * Wraps a config file section inside a Java interface so that values in the section can be read and
 	 * write using getters and setters.
@@ -1028,7 +1211,7 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * <h5 class='figure'>Example usage</h5>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
+	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 * 
 	 * 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
 	 * 
@@ -1039,16 +1222,25 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 	cf.save();
 	 * </p>
 	 * 
-	 * @param sectionName The section name to retrieve as an interface proxy.
+	 * <h5 class='notes'>
+	 * <ul class='spaced-list'>
+	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
+	 * </ul>
+	 * 
+	 * @param section 
+	 * 	The section name to write from.
+	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param c The proxy interface class.
 	 * @return The proxy interface.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getSectionAsInterface(final String sectionName, final Class<T> c) {
+	public <T> T getSectionAsInterface(String section, final Class<T> c) {
 		assertFieldNotNull(c, "c");
+		final String section2 = section(section);
 
 		if (! c.isInterface())
-			throw new UnsupportedOperationException("Class passed to getSectionAsInterface is not an interface.");
+			throw new IllegalArgumentException("Class '"+c.getName()+"' passed to getSectionAsInterface() is not an interface.");
 
 		InvocationHandler h = new InvocationHandler() {
 
@@ -1058,11 +1250,11 @@ public final class Config extends Context implements ChangeEventListener, Closea
 				for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
 					Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
 					if (method.equals(rm))
-						return Config.this.getObject(sectionName + '/' + pd.getName(), rm.getGenericReturnType());
+						return Config.this.getObject(section2 + '/' + pd.getName(), rm.getGenericReturnType());
 					if (method.equals(wm))
-						return Config.this.set(sectionName + '/' + pd.getName(), args[0]);
+						return Config.this.set(section2 + '/' + pd.getName(), args[0]);
 				}
-				throw new UnsupportedOperationException("Unsupported interface method.  method=[ " + method + " ]");
+				throw new UnsupportedOperationException("Unsupported interface method.  method='" + method + "'");
 			}
 		};
 
@@ -1088,16 +1280,16 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * @param name 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> for the default section.
+	 * 	<br>Use blank or <js>"default"</js> for the default section.
 	 * @param preLines 
 	 * 	Optional comment and blank lines to add immediately before the section.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
 	 * @return The appended or existing section.
-	 * @throws UnsupportedOperationException If config file is read only.
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config setSection(String name, List<String> preLines) {
 		try {
-			return setSection(name, preLines, null);
+			return setSection(section(name), preLines, null);
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);  // Impossible.
 		}
@@ -1112,20 +1304,21 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 	<br>Use <js>"default"</js> for the default section.
 	 * @param preLines 
 	 * 	Optional comment and blank lines to add immediately before the section.
-	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
 	 * @param contents 
 	 * 	Values to set in the new section.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return The appended or existing section.
 	 * @throws SerializeException 
-	 * @throws UnsupportedOperationException If config file is read only.
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config setSection(String name, List<String> preLines, Map<String,Object> contents) throws SerializeException {
-		configMap.setSection(name, preLines);
+		checkWrite();
+		configMap.setSection(section(name), preLines);
 		
 		if (contents != null)
 			for (Map.Entry<String,Object> e : contents.entrySet())
-				set(e.getKey(), e.getValue());
+				set(section(name) + '/' + e.getKey(), e.getValue());
 		
 		return this;
 	}
@@ -1135,9 +1328,26 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * @param name The name of the section to remove
 	 * @return This object (for method chaining).
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config removeSection(String name) {
+		checkWrite();
 		configMap.removeSection(name);
+		return this;
+	}
+	
+	/**
+	 * Loads the contents of the specified map of maps into this config.
+	 * 
+	 * @param m The maps to load.
+	 * @return This object (for method chaining).
+	 * @throws SerializeException
+	 */
+	public Config load(Map<String,Map<String,Object>> m) throws SerializeException {
+		if (m != null)
+			for (Map.Entry<String,Map<String,Object>> e : m.entrySet()) {
+				setSection(e.getKey(), null, e.getValue());
+			}
 		return this;
 	}
 
@@ -1146,8 +1356,10 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException 
+	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config save() throws IOException {
+		checkWrite();
 		configMap.save();
 		return this;
 	}
@@ -1171,13 +1383,12 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * Add a listener to this config to react to modification events.
 	 * 
 	 * <p>
-	 * Listeners should be removed using {@link #removeListener(ChangeEventListener)}.
+	 * Listeners should be removed using {@link #removeListener(ConfigEventListener)}.
 	 * 
 	 * @param listener The new listener to add.
 	 * @return This object (for method chaining).
-	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public Config addListener(ChangeEventListener listener) {
+	public Config addListener(ConfigEventListener listener) {
 		listeners.add(listener);
 		return this;
 	}
@@ -1187,13 +1398,87 @@ public final class Config extends Context implements ChangeEventListener, Closea
 	 * 
 	 * @param listener The listener to remove.
 	 * @return This object (for method chaining).
-	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public Config removeListener(ChangeEventListener listener) {
+	public Config removeListener(ConfigEventListener listener) {
 		listeners.remove(listener);
 		return this;
 	}
 
+	/**
+	 * Closes this configuration object by unregistering it from the underlying config map.
+	 * 
+	 * @throws IOException
+	 */
+	public void close() throws IOException {
+		configMap.unregister(this);
+		closed = true;
+	}
+	
+	/**
+	 * Overwrites the contents of the config file.
+	 * 
+	 * @param contents The new contents of the config file.
+	 * @param synchronous Wait until the change has been persisted before returning this map.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config write(Reader contents, boolean synchronous) throws IOException, InterruptedException {
+		checkWrite();
+		configMap.write(IOUtils.read(contents), synchronous);
+		return this;
+	}
+
+	/**
+	 * Overwrites the contents of the config file.
+	 * 
+	 * @param contents The new contents of the config file.
+	 * @param synchronous Wait until the change has been persisted before returning this map.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config write(String contents, boolean synchronous) throws IOException, InterruptedException {
+		checkWrite();
+		configMap.write(contents, synchronous);
+		return this;
+	}
+
+	/**
+	 * Does a rollback of any changes on this config currently in memory.
+	 * 
+	 * @return This object (for method chaining).
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config rollback() {
+		checkWrite();
+		configMap.rollback();
+		return this;
+	}
+
+	/**
+	 * Returns the values in this config map as a map of maps.
+	 * 
+	 * <p>
+	 * This is considered a snapshot copy of the config map.
+	 * 
+	 * <p>
+	 * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.
+	 * 
+	 * @return A copy of this config as a map of maps.
+	 */
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return configMap.asMap();
+	}
+	
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
 	/**
 	 * Unused.
 	 */
@@ -1210,30 +1495,17 @@ public final class Config extends Context implements ChangeEventListener, Closea
 		throw new UnsupportedOperationException();
 	}
 
-	@Override /* Closeable */
-	public void close() throws IOException {
-		configMap.unregister(this);
-		closed = true;
-	}
-	
-	@Override /* Object */
-	protected void finalize() throws Throwable {
-		if (! closed) {
-			System.err.println("Config object not closed.");
-		}
-	}
-	
-	@Override /* ChangeEventListener */
-	public void onChange(List<ChangeEvent> events) {
-		for (ChangeEventListener l : listeners)
-			l.onChange(events);
+	@Override /* ConfigEventListener */
+	public void onConfigChange(List<ConfigEvent> events) {
+		for (ConfigEventListener l : listeners)
+			l.onConfigChange(events);
 	}
 	
 	@Override /* Writable */
 	public MediaType getMediaType() {
 		return MediaType.PLAIN;
 	}
-	
+
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private methods
@@ -1289,21 +1561,27 @@ public final class Config extends Context implements ChangeEventListener, Closea
 		if (type == byte[].class) {
 			if (s.indexOf('\n') != -1)
 				s = s.replaceAll("\n", "");
-			switch (binaryFormat) {
-				case "HEX": return (T)fromHex(s);
-				case "SPACED_HEX": return (T)fromSpacedHex(s);
-				default: return (T)base64Decode(s);
+			try {
+				switch (binaryFormat) {
+					case "HEX": return (T)fromHex(s);
+					case "SPACED_HEX": return (T)fromSpacedHex(s);
+					default: return (T)base64Decode(s);
+				}
+			} catch (Exception e) {
+				throw new ParseException("Value could not be converted to a byte array.").initCause(e);
 			}
 		}
 		
-		char s1 = firstNonWhitespaceChar(s);
-		if (isArray(type) && s1 != '[')
-			s = '[' + s + ']';
-		else if (s1 != '[' && s1 != '{' && ! "null".equals(s))
-			s = '\'' + s + '\'';
-
 		if (parser == null)
 			parser = this.parser;
+		
+		if (parser instanceof JsonParser) {
+			char s1 = firstNonWhitespaceChar(s);
+			if (isArray(type) && s1 != '[')
+				s = '[' + s + ']';
+			else if (s1 != '[' && s1 != '{' && ! "null".equals(s))
+				s = '\'' + s + '\'';
+		}
 
 		return parser.parse(s, type, args);
 	}
@@ -1335,5 +1613,35 @@ public final class Config extends Context implements ChangeEventListener, Closea
 		if (i == -1)
 			return key;
 		return key.substring(i+1);
+	}
+
+	private String section(String section) {
+		assertFieldNotNull(section, "section");
+		if (isEmpty(section))
+			return "default";
+		return section;
+	}
+	
+	private void checkWrite() {
+		if (readOnly)
+			throw new UnsupportedOperationException("Cannot call this method on a read-only configuration.");
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Object */
+	public String toString() {
+		return configMap.toString();
+	}
+	
+	@Override /* Object */
+	protected void finalize() throws Throwable {
+		// If Config objects are not closed, listeners on the underlying ConfigMap don't get cleaned up.
+		if (! closed) {
+			System.err.println("Config object not closed.");
+		}
 	}
 }

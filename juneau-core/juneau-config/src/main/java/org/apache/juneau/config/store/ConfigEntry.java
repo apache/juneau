@@ -13,6 +13,7 @@
 package org.apache.juneau.config.store;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -29,6 +30,8 @@ public class ConfigEntry {
 	final String key, value, comment;
 	final String modifiers;
 	final List<String> preLines;
+	
+	static final ConfigEntry NULL = new ConfigEntry(null, null, null, null, null);
 	
 	private final static AsciiSet MOD_CHARS = new AsciiSet("#$%&*+^@~");
 
@@ -131,7 +134,8 @@ public class ConfigEntry {
 			w.append(l).append('\n');
 		} else {
 			w.append(key);
-			w.append(modifiers);
+			if (modifiers != null)
+				w.append(modifiers);
 			w.append(" = ");
 			
 			String val = value;
@@ -141,7 +145,7 @@ public class ConfigEntry {
 				val = val.replaceAll("#", "\\\\#");
 			w.append(val);
 				
-			if (comment != null) 
+			if (! isEmpty(comment)) 
 				w.append(" # ").append(comment);
 
 			w.append('\n');

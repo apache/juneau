@@ -20,16 +20,16 @@ import org.apache.juneau.svl.*;
  * 
  * <p>
  * The format for this var is <js>"$C{key[,defaultValue]}"</js>.
- * See {@link ConfigFile#getString(String)} for the format of the key.
+ * See {@link Config#getString(String)} for the format of the key.
  * 
  * <p>
- * This variable resolver requires that a {@link ConfigFile} object be set as a context object on the resolver or a
+ * This variable resolver requires that a {@link Config} object be set as a context object on the resolver or a
  * session object on the resolver session.
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<jc>// Create a config file object.</jc>
- * 	ConfigFile configFile = new ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+ * 	<jc>// Create a config object.</jc>
+ * 	Config config = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  * 
  * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
  * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<js>class</js>)
@@ -49,10 +49,10 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-config.Variables'>Overview &gt; juneau-config &gt; Variables</a>
  * </ul>
  */
-public class ConfigFileVar extends DefaultingVar {
+public class ConfigVar extends DefaultingVar {
 
 	/**
-	 * The name of the session or context object that identifies the {@link ConfigFile} object.
+	 * The name of the session or context object that identifies the {@link Config} object.
 	 */
 	public static final String SESSION_config = "config";
 
@@ -62,12 +62,12 @@ public class ConfigFileVar extends DefaultingVar {
 	/**
 	 * Constructor.
 	 */
-	public ConfigFileVar() {
+	public ConfigVar() {
 		super(NAME);
 	}
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(ConfigFile.class, SESSION_config).getString(key);
+		return session.getSessionObject(Config.class, SESSION_config).getString(key);
 	}
 }

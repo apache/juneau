@@ -55,8 +55,6 @@ public class AcceptCharsetTest extends RestTestcase {
 		String url = "/testAcceptCharset/testQValues";
 		r = client.doGet(url).acceptCharset(requestCharset).connect();
 
-		if (! r.getResponse().getFirstHeader("Content-Type").getValue().toLowerCase().contains(responseCharset))
-			System.err.println("Expected '"+responseCharset+"', actual '"+r.getResponse().getFirstHeader("Content-Type").getValue().toLowerCase()+"'");
 		assertTrue(r.getResponse().getFirstHeader("Content-Type").getValue().toLowerCase().contains(responseCharset));
 		is = r.getInputStream();
 		assertEquals("foo", read(new InputStreamReader(is, responseCharset)));

@@ -115,7 +115,7 @@ class RestParamDefaults {
 			SwaggerObject.class,
 			RequestPathMatchObject.class,
 			RequestBodyObject.class,
-			ConfigFileObject.class,
+			ConfigObject.class,
 			UriContextObject.class,
 			UriResolverObject.class,
 			RestRequestPropertiesObject.class
@@ -921,15 +921,15 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ConfigFileObject extends RestParam {
+	static final class ConfigObject extends RestParam {
 
-		protected ConfigFileObject() {
-			super(OTHER, null, ConfigFile.class);
+		protected ConfigObject() {
+			super(OTHER, null, Config.class);
 		}
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getConfigFile();
+			return req.getConfig();
 		}
 	}
 

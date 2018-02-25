@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.config.store.FileStore.*;
+import static org.apache.juneau.config.store.ConfigFileStore.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -20,14 +20,14 @@ import java.nio.charset.*;
 import org.apache.juneau.*;
 
 /**
- * Builder for {@link FileStore} objects.
+ * Builder for {@link ConfigFileStore} objects.
  */
-public class FileStoreBuilder extends StoreBuilder {
+public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public FileStoreBuilder() {
+	public ConfigFileStoreBuilder() {
 		super();
 	}
 
@@ -36,7 +36,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public FileStoreBuilder(PropertyStore ps) {
+	public ConfigFileStoreBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -53,7 +53,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_directory}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_directory}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -61,7 +61,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 	<br>The default is <js>"."</js>.
 	 * @return This object (for method chaining).
 	 */
-	public FileStoreBuilder directory(String value) {
+	public ConfigFileStoreBuilder directory(String value) {
 		super.set(FILESTORE_directory, value);
 		return this;
 	}
@@ -74,7 +74,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_directory}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_directory}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -82,7 +82,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 	<br>The default is <js>"."</js>.
 	 * @return This object (for method chaining).
 	 */
-	public FileStoreBuilder directory(File value) {
+	public ConfigFileStoreBuilder directory(File value) {
 		super.set(FILESTORE_directory, value);
 		return this;
 	}
@@ -95,7 +95,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_charset}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_charset}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -103,7 +103,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 	<br>The default is <js>"."</js>.
 	 * @return This object (for method chaining).
 	 */
-	public FileStoreBuilder charset(String value) {
+	public ConfigFileStoreBuilder charset(String value) {
 		super.set(FILESTORE_charset, value);
 		return this;
 	}
@@ -116,7 +116,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_charset}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_charset}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -124,7 +124,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 	<br>The default is <js>"."</js>.
 	 * @return This object (for method chaining).
 	 */
-	public FileStoreBuilder charset(Charset value) {
+	public ConfigFileStoreBuilder charset(Charset value) {
 		super.set(FILESTORE_charset, value);
 		return this;
 	}
@@ -133,37 +133,16 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * Configuration property:  Use watcher.
 	 * 
 	 * <p>
-	 * Use a file system watcher for file system changes.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_useWatcher}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public FileStoreBuilder useWatcher(boolean value) {
-		super.set(FILESTORE_useWatcher, value);
-		return this;
-	}
-
-	/**
-	 * Configuration property:  Use watcher.
-	 * 
-	 * <p>
 	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_useWatcher}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_useWatcher}
 	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
-	public FileStoreBuilder useWatcher() {
+	public ConfigFileStoreBuilder useWatcher() {
 		super.set(FILESTORE_useWatcher, true);
 		return this;
 	}
@@ -176,7 +155,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_watcherSensitivity}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_watcherSensitivity}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -184,8 +163,26 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 	<br>The default is {@link WatcherSensitivity#MEDIUM}
 	 * @return This object (for method chaining).
 	 */
-	public FileStoreBuilder watcherSensitivity(WatcherSensitivity value) {
+	public ConfigFileStoreBuilder watcherSensitivity(WatcherSensitivity value) {
 		super.set(FILESTORE_watcherSensitivity, value);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Update-on-write.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_updateOnWrite}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public ConfigFileStoreBuilder updateOnWrite() {
+		super.set(FILESTORE_updateOnWrite, true);
 		return this;
 	}
 
@@ -197,7 +194,7 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link FileStore#FILESTORE_watcherSensitivity}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_watcherSensitivity}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -205,29 +202,13 @@ public class FileStoreBuilder extends StoreBuilder {
 	 * 	<br>The default is {@link WatcherSensitivity#MEDIUM}
 	 * @return This object (for method chaining).
 	 */
-	public FileStoreBuilder watcherSensitivity(String value) {
+	public ConfigFileStoreBuilder watcherSensitivity(String value) {
 		super.set(FILESTORE_watcherSensitivity, value);
 		return this;
 	}
 
-	/**
-	 * Configuration property:  Config file extension.
-	 * 
-	 * <p>
-	 * File extension identifier for config files.
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <js>"cfg"</js>.
-	 * @return This object (for method chaining).
-	 */
-	public FileStoreBuilder ext(String value) {
-		super.set(FILESTORE_ext, value);
-		return this;
-	}
-
 	@Override /* ContextBuilder */
-	public FileStore build() {
-		return new FileStore(getPropertyStore());
+	public ConfigFileStore build() {
+		return new ConfigFileStore(getPropertyStore());
 	}
 }

@@ -181,7 +181,8 @@ public class RestCallHandlerDefault implements RestCallHandler {
 
 			// Make sure our writer in RestResponse gets written.
 			res.flushBuffer();
-
+			req.close();
+			
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 
 		} catch (RestException e) {

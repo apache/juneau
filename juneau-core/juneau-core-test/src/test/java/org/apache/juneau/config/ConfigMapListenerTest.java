@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.proto;
+package org.apache.juneau.config;
 
 import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
@@ -31,7 +31,7 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testBasicDefaultSection() throws Exception {
-		Store s = initStore("Foo", 
+		ConfigStore s = initStore("Foo.cfg", 
 			"foo=bar"
 		);		
 		
@@ -39,14 +39,14 @@ public class ConfigMapListenerTest {
 		
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(foo = baz)']", events);
 			}
 		};
 		
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setValue("default", "foo", "baz");
+		cm.setEntry("default", "foo", "baz", null, null, null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -57,7 +57,7 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testBasicNormalSection() throws Exception {
-		Store s = initStore("Foo", 
+		ConfigStore s = initStore("Foo.cfg", 
 			"[S1]",
 			"foo=bar"
 		);		
@@ -66,14 +66,14 @@ public class ConfigMapListenerTest {
 		
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(foo = baz)']", events);
 			}
 		};
 		
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setValue("S1", "foo", "baz");
+		cm.setEntry("S1", "foo", "baz", null, null, null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -88,22 +88,22 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testAddNewEntries() throws Exception {
-		Store s = initStore("Foo"
+		ConfigStore s = initStore("Foo.cfg"
 		);		
 		
 		final CountDownLatch latch = new CountDownLatch(2);
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(k = vb)','SET(k1 = v1b)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setValue("default", "k", "vb");
-		cm.setValue("S1", "k1", "v1b");
+		cm.setEntry("default", "k", "vb", null, null, null);
+		cm.setEntry("S1", "k1", "v1b", null, null, null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -114,19 +114,19 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testAddNewEntriesWithAttributes() throws Exception {
-		Store s = initStore("Foo"
+		ConfigStore s = initStore("Foo.cfg"
 		);		
 		
 		final CountDownLatch latch = new CountDownLatch(2);
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(k^* = kb # C)','SET(k1^* = k1b # C1)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("default", "k", "kb", "^*", "C", Arrays.asList("#k"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "C1", Arrays.asList("#k1"));
@@ -140,7 +140,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testAddExistingEntriesWithAttributes() throws Exception {
-		Store s = initStore("Foo",
+		ConfigStore s = initStore("Foo.cfg",
 			"#ka",
 			"k=va # Ca",
 			"#S1",
@@ -153,12 +153,12 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(k^* = kb # Cb)','SET(k1^* = k1b # Cb1)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("default", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", Arrays.asList("#k1b"));
@@ -176,7 +176,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testRemoveExistingEntries() throws Exception {
-		Store s = initStore("Foo",
+		ConfigStore s = initStore("Foo.cfg",
 			"k=v",
 			"[S1]",
 			"k1=v1"
@@ -186,15 +186,15 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
-				assertObjectEquals("['SET(k = null)','SET(k1 = null)']", events);
+			public void check(List<ConfigEvent> events) throws Exception {
+				assertObjectEquals("['REMOVE_ENTRY(default/k)','REMOVE_ENTRY(S1/k1)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setValue("default", "k", null);
-		cm.setValue("S1", "k1", null);
+		cm.removeEntry("default", "k");
+		cm.removeEntry("S1", "k1");
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -205,7 +205,7 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testRemoveExistingEntriesWithAttributes() throws Exception {
-		Store s = initStore("Foo",
+		ConfigStore s = initStore("Foo.cfg",
 			"#ka",
 			"k=va # Ca",
 			"#S1",
@@ -218,15 +218,15 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
-				assertObjectEquals("['SET(k = null)','SET(k1 = null)']", events);
+			public void check(List<ConfigEvent> events) throws Exception {
+				assertObjectEquals("['REMOVE_ENTRY(default/k)','REMOVE_ENTRY(S1/k1)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setValue("default", "k", null);
-		cm.setValue("S1", "k1", null);
+		cm.removeEntry("default", "k");
+		cm.removeEntry("S1", "k1");
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -241,25 +241,25 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testAddNewSections() throws Exception {
-		Store s = initStore("Foo"
+		ConfigStore s = initStore("Foo.cfg"
 		);		
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(k3 = v3)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setSection("default", Arrays.asList("#D1"));
 		cm.setSection("S1", Arrays.asList("#S1"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
-		cm.setValue("S3", "k3", "v3");
+		cm.setEntry("S3", "k3", "v3", null, null, null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -270,7 +270,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testModifyExistingSections() throws Exception {
-		Store s = initStore("Foo",
+		ConfigStore s = initStore("Foo.cfg",
 			"#Da",
 			"",
 			"#S1a",
@@ -283,18 +283,18 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(k3 = v3)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setSection("default", Arrays.asList("#Db"));
 		cm.setSection("S1", Arrays.asList("#S1b"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
-		cm.setValue("S3", "k3", "v3");
+		cm.setEntry("S3", "k3", "v3", null, null, null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -309,7 +309,7 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testRemoveSections() throws Exception {
-		Store s = initStore("Foo",
+		ConfigStore s = initStore("Foo.cfg",
 			"#Da",
 			"",
 			"k = v",
@@ -328,12 +328,12 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
-				assertObjectEquals("['SET(k = null)','SET(k1 = null)','SET(k2 = null)']", events);
+			public void check(List<ConfigEvent> events) throws Exception {
+				assertObjectEquals("['REMOVE_ENTRY(default/k)','REMOVE_ENTRY(S1/k1)','REMOVE_ENTRY(S2/k2)']", events);
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.removeSection("default");
 		cm.removeSection("S1");
@@ -353,20 +353,20 @@ public class ConfigMapListenerTest {
 	
 	@Test
 	public void testUpdateFromStore() throws Exception {
-		Store s = initStore("Foo");
+		ConfigStore s = initStore("Foo.cfg");
 
 		final CountDownLatch latch = new CountDownLatch(3);
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(k = v # cv)','SET(k1 = v1 # cv1)','SET(k2 = v2 # cv2)']", events);
 			}
 		};
 		
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		s.update("Foo",
+		s.update("Foo.cfg",
 			"#Da",
 			"",
 			"k = v # cv",
@@ -393,7 +393,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testMergeNoOverwrite() throws Exception {
-		Store s = initStore("Foo",
+		ConfigStore s = initStore("Foo.cfg",
 			"[S1]",
 			"k1 = v1a"
 		);
@@ -405,15 +405,15 @@ public class ConfigMapListenerTest {
 		
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals(eventList.poll(), events);
 			}
 		};
 		
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setValue("S2", "k2", "v2b");
-		s.update("Foo",
+		cm.setEntry("S2", "k2", "v2b", null, null, null);
+		s.update("Foo.cfg",
 			"[S1]",
 			"k1 = v1b"
 		);
@@ -431,7 +431,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testMergeWithOverwrite() throws Exception {
-		Store s = initStore("Foo",
+		ConfigStore s = initStore("Foo.cfg",
 			"[S1]",
 			"k1 = v1a"
 		);
@@ -443,15 +443,15 @@ public class ConfigMapListenerTest {
 		
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ChangeEvent> events) throws Exception {
+			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals(eventList.poll(), events);
 			}
 		};
 		
-		ConfigMap cm = s.getMap("Foo");
+		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setValue("S1", "k1", "v1c");
-		s.update("Foo",
+		cm.setEntry("S1", "k1", "v1c", null, null, null);
+		s.update("Foo.cfg",
 			"[S1]",
 			"k1 = v1b"
 		);
@@ -476,7 +476,7 @@ public class ConfigMapListenerTest {
 		contents.add("[S1]\nk1 = v1c");
 		contents.add("[S1]\nk1 = v1c");
 		
-		MemoryStore s = new MemoryStore(null) {
+		ConfigMemoryStore s = new ConfigMemoryStore(null) {
 			public synchronized String read(String name) {
 				return contents.poll();
 			}
@@ -489,14 +489,14 @@ public class ConfigMapListenerTest {
 			
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
-				public void check(List<ChangeEvent> events) throws Exception {
+				public void check(List<ConfigEvent> events) throws Exception {
 					assertObjectEquals(eventList.poll(), events);
 				}
 			};
 			
-			ConfigMap cm = s.getMap("Foo");
+			ConfigMap cm = s.getMap("Foo.cfg");
 			cm.register(l);
-			cm.setValue("S1", "k1", "v1c");
+			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			cm.save();
 			wait(latch);
 			assertNull(l.error);
@@ -512,7 +512,7 @@ public class ConfigMapListenerTest {
 	@Test
 	public void testMergeWithConstantlyUpdatingFile() throws Exception {
 		
-		MemoryStore s = new MemoryStore(null) {
+		ConfigMemoryStore s = new ConfigMemoryStore(null) {
 			char c = 'a';
 			public synchronized String read(String name) {
 				return "[S1]\nk1 = v1" + (c++);
@@ -534,14 +534,14 @@ public class ConfigMapListenerTest {
 			
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
-				public void check(List<ChangeEvent> events) throws Exception {
+				public void check(List<ConfigEvent> events) throws Exception {
 					assertObjectEquals(eventList.poll(), events);
 				}
 			};
 			
-			ConfigMap cm = s.getMap("Foo");
+			ConfigMap cm = s.getMap("Foo.cfg");
 			cm.register(l);
-			cm.setValue("S1", "k1", "v1c");
+			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			try {
 				cm.save();
 				fail("Exception expected.");
@@ -563,11 +563,11 @@ public class ConfigMapListenerTest {
 	// Utilities.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static Store initStore(String name, String...contents) {
-		return MemoryStore.create().build().update(name, contents);
+	private static ConfigStore initStore(String name, String...contents) {
+		return ConfigMemoryStore.create().build().update(name, contents);
 	}
 	
-	public static class LatchedListener implements ChangeEventListener {
+	public static class LatchedListener implements ConfigEventListener {
 		private final CountDownLatch latch;
 		private volatile String error = null;
 		public LatchedListener(CountDownLatch latch) {
@@ -575,7 +575,7 @@ public class ConfigMapListenerTest {
 		}
 		
 		@Override
-		public void onChange(List<ChangeEvent> events) {
+		public void onConfigChange(List<ConfigEvent> events) {
 			try {
 				check(events);
 			} catch (Exception e) {
@@ -585,7 +585,7 @@ public class ConfigMapListenerTest {
 				latch.countDown();
 		}
 		
-		public void check(List<ChangeEvent> events) throws Exception {
+		public void check(List<ConfigEvent> events) throws Exception {
 		}
 	}
 	

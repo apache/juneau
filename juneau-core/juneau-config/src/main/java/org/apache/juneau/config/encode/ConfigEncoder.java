@@ -10,19 +10,45 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.event;
+package org.apache.juneau.config.encode;
 
-import java.util.*;
+import org.apache.juneau.config.*;
 
 /**
- * Listener that can be used to listen for change events in config maps.
+ * API for defining a string encoding/decoding mechanism for entries in {@link Config}.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
+ * </ul>
  */
-public interface ChangeEventListener {
+public interface ConfigEncoder {
 
 	/**
-	 * Gets called immediately after a config file has been loaded.
+	 * Encode a string.
 	 * 
-	 * @param events The change events.
+	 * @param fieldName The field name being encoded.
+	 * @param in The unencoded input string.
+	 * @return The encoded output string.
 	 */
-	void onChange(List<ChangeEvent> events);
+	public String encode(String fieldName, String in);
+
+	/**
+	 * Decode a string.
+	 * 
+	 * @param fieldName The field name being decoded.
+	 * @param in The encoded input string.
+	 * @return The decoded output string.
+	 */
+	public String decode(String fieldName, String in);
+	
+	/**
+	 * Returns <jk>true</jk> if the specified string is encoded.
+	 * 
+	 * @param in The input string.
+	 * @return 
+	 * 	<jk>true</jk> if the specified string is encoded.
+	 * 	<br>Returns <jk>false</jk> if the string is <jk>null</jk>.
+	 */
+	public boolean isEncoded(String in);
 }

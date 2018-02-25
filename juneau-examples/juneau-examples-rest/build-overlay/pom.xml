@@ -116,7 +116,7 @@
 							<manifestEntries>
 								<Main-Class>org.apache.juneau.microservice.RestMicroservice</Main-Class>
 								<Rest-Resources>org.apache.juneau.examples.rest.RootResources</Rest-Resources>
-								<Main-ConfigFile>examples.cfg</Main-ConfigFile>
+								<Main-Config>examples.cfg</Main-Config>
 							</manifestEntries>
 						</transformer>
 					</transformers>

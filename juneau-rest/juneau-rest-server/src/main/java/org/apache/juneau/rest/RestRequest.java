@@ -87,7 +87,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private UriContext uriContext;
 	private String charset;
 	private RequestHeaders headers;
-	private ConfigFile cf;
+	private Config cf;
 	private Swagger swagger;
 
 	/**
@@ -1303,7 +1303,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * The config file is identified via one of the following:
 	 * <ul>
 	 * 	<li class='ja'>{@link RestResource#config()}
-	 * 	<li class='jm'>{@link RestContextBuilder#configFile(ConfigFile)}
+	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>
@@ -1312,7 +1312,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 * 
 	 * 		<jc>// Get config file.</jc>
-	 * 		ConfigFile cf = req.getConfigFile();
+	 * 		Config cf = req.getConfig();
 	 * 
 	 * 		<jc>// Get simple values from config file.</jc>
 	 * 		<jk>int</jk> timeout = cf.getInt(<js>"MyResource/timeout"</js>, 10000);
@@ -1325,7 +1325,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The {@link ConfigFile} object can also be passed as a parameter on the method.
+	 * 		The {@link Config} object can also be passed as a parameter on the method.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -1337,9 +1337,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The config file associated with the resource, or <jk>null</jk> if resource does not have a config file
 	 * 	associated with it.
 	 */
-	public ConfigFile getConfigFile() {
+	public Config getConfig() {
 		if (cf == null)
-			cf = context.getConfigFile().getResolving(getVarResolverSession());
+			cf = context.getConfig().resolving(getVarResolverSession());
 		return cf;
 	}
 
@@ -1418,6 +1418,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public RestLogger getLogger() {
 		return context.getLogger();
+	}
+	
+	void close() {
+		if (cf != null) {
+			try {
+				cf.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	//--------------------------------------------------------------------------------

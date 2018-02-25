@@ -107,6 +107,7 @@ public class VarResolverSession {
 						s = "";
 					return (v.allowRecurse() ? resolve(s) : s);
 				} catch (Exception e) {
+					e.printStackTrace();
 					return '{' + e.getLocalizedMessage() + '}';
 				}
 			}
