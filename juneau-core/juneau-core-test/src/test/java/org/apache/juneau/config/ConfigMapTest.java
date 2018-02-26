@@ -64,10 +64,10 @@ public class ConfigMapTest {
 		
 		assertTextEquals("foo=bar|", cm);
 		
-		assertEquals("", join(cm.getPreLines("default"), '|'));
-		assertEquals("", join(cm.getEntry("default", "foo").getPreLines(), '|'));
+		assertEquals("", join(cm.getPreLines(""), '|'));
+		assertEquals("", join(cm.getEntry("", "foo").getPreLines(), '|'));
 		
-		assertEquals("bar", cm.getEntry("default", "foo").getValue());
+		assertEquals("bar", cm.getEntry("", "foo").getValue());
 		
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
@@ -88,10 +88,10 @@ public class ConfigMapTest {
 		
 		assertTextEquals("#comment|foo=bar|", cm);
 
-		assertEquals("", join(cm.getPreLines("default"), '|'));
-		assertEquals("#comment", join(cm.getEntry("default", "foo").getPreLines(), '|'));
+		assertEquals("", join(cm.getPreLines(""), '|'));
+		assertEquals("#comment", join(cm.getEntry("", "foo").getPreLines(), '|'));
 
-		assertEquals("bar", cm.getEntry("default", "foo").getValue());
+		assertEquals("bar", cm.getEntry("", "foo").getValue());
 		
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
@@ -112,7 +112,7 @@ public class ConfigMapTest {
 		
 		assertTextEquals("[MySection]|foo=bar|", cm);
 		
-		assertEquals("", join(cm.getPreLines("default"), '|'));
+		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("", join(cm.getPreLines("MySection"), '|'));
 		assertEquals("", join(cm.getEntry("MySection", "foo").getPreLines(), '|'));
 		
@@ -137,7 +137,7 @@ public class ConfigMapTest {
 		
 		assertTextEquals("[MySection]|foo=bar|", cm);
 		
-		assertEquals("", join(cm.getPreLines("default"), '|'));
+		assertEquals("", join(cm.getPreLines(""), '|'));
 		
 		assertNull(cm.getPreLines("XXX"));
 
@@ -163,7 +163,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 		assertTextEquals("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|", cm);
 		
-		assertEquals("", join(cm.getPreLines("default"), '|'));
+		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("#S1", join(cm.getPreLines("S1"), '|'));
 		assertEquals("#k1", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		assertEquals("#S2", join(cm.getPreLines("S2"), '|'));
@@ -196,12 +196,12 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 		assertTextEquals("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|", cm);
 
-		assertEquals("#D", join(cm.getPreLines("default"), '|'));
-		assertEquals("#k", join(cm.getEntry("default", "k").getPreLines(), '|'));
+		assertEquals("#D", join(cm.getPreLines(""), '|'));
+		assertEquals("#k", join(cm.getEntry("", "k").getPreLines(), '|'));
 		assertEquals("#S1", join(cm.getPreLines("S1"), '|'));
 		assertEquals("#k1", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		
-		assertEquals("v", cm.getEntry("default", "k").getValue());
+		assertEquals("v", cm.getEntry("", "k").getValue());
 		assertEquals("v1", cm.getEntry("S1", "k1").getValue());
 		
 		// Round trip.
@@ -240,12 +240,12 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 		assertTextEquals("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|", cm);
 
-		assertEquals("#Da|#Db", join(cm.getPreLines("default"), '|'));
-		assertEquals("#ka||#kb|", join(cm.getEntry("default", "k").getPreLines(), '|'));
+		assertEquals("#Da|#Db", join(cm.getPreLines(""), '|'));
+		assertEquals("#ka||#kb|", join(cm.getEntry("", "k").getPreLines(), '|'));
 		assertEquals("|#S1a||#S1b|", join(cm.getPreLines("S1"), '|'));
 		assertEquals("|#k1a||#k1b|", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		
-		assertEquals("v", cm.getEntry("default", "k").getValue());
+		assertEquals("v", cm.getEntry("", "k").getValue());
 		assertEquals("v1", cm.getEntry("S1", "k1").getValue());
 		
 		// Round trip.
@@ -261,7 +261,7 @@ public class ConfigMapTest {
 	public void testMalformedSectionHeaders() throws Exception {
 		
 		String[] test = {
-			"[default]", "[ default ]", " [ default ] ", "\t[\tdefault\t]\t",
+			"[]", "[  ]", " [  ] ", "\t[\t\t]\t",
 			"[/]", "[[]", "[]]", "[\\]", 
 			"[foo/bar]", "[foo[bar]", "[foo]bar]", "[foo\\bar]", 
 			"[]", "[ ]", "[\t]", " [] ",
@@ -315,13 +315,13 @@ public class ConfigMapTest {
 		);		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		
-		assertEquals("", join(cm.getEntry("default", "k1").getPreLines(), '|'));
-		assertEquals("", join(cm.getEntry("default", "k2").getPreLines(), '|'));
+		assertEquals("", join(cm.getEntry("", "k1").getPreLines(), '|'));
+		assertEquals("", join(cm.getEntry("", "k2").getPreLines(), '|'));
 
 		assertTextEquals("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 
-		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("default", "k1").getValue());
-		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("default", "k2").getValue());
+		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("", "k1").getValue());
+		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("", "k2").getValue());
 		
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
@@ -347,13 +347,13 @@ public class ConfigMapTest {
 		);		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		
-		assertEquals("|#k1|", join(cm.getEntry("default", "k1").getPreLines(), '|'));
-		assertEquals("|#k2|", join(cm.getEntry("default", "k2").getPreLines(), '|'));
+		assertEquals("|#k1|", join(cm.getEntry("", "k1").getPreLines(), '|'));
+		assertEquals("|#k2|", join(cm.getEntry("", "k2").getPreLines(), '|'));
 
 		assertTextEquals("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 
-		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("default", "k1").getValue());
-		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("default", "k2").getValue());
+		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("", "k1").getValue());
+		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("", "k2").getValue());
 		
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
@@ -549,12 +549,12 @@ public class ConfigMapTest {
 		ConfigStore s = initStore("Foo.cfg");		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		
-		cm.setEntry("default", "k", "v1\nv2\nv3", null, null, null);
+		cm.setEntry("", "k", "v1\nv2\nv3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\nv2\nv3", null, null, null);
 		
 		assertTextEquals("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
 		
-		assertEquals("v1\nv2\nv3", cm.getEntry("default", "k").getValue());
+		assertEquals("v1\nv2\nv3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\nv2\nv3", cm.getEntry("S1", "k1").getValue());
 		cm.save();
 		assertTextEquals("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
@@ -569,12 +569,12 @@ public class ConfigMapTest {
 		ConfigStore s = initStore("Foo.cfg");		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		
-		cm.setEntry("default", "k", "v1 \n v2 \n v3", null, null, null);
+		cm.setEntry("", "k", "v1 \n v2 \n v3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\t\n\tv2\t\n\tv3", null, null, null);
 		
 		assertTextEquals("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
 		
-		assertEquals("v1 \n v2 \n v3", cm.getEntry("default", "k").getValue());
+		assertEquals("v1 \n v2 \n v3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\t\n\tv2\t\n\tv3", cm.getEntry("S1", "k1").getValue());
 		cm.save();
 		assertTextEquals("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
@@ -611,11 +611,11 @@ public class ConfigMapTest {
 		);		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		
-		cm.setSection("default", Arrays.asList("#D"));
+		cm.setSection("", Arrays.asList("#D"));
 		assertTextEquals("#D||[S1]|k1 = v1|", cm);
-		cm.setSection("default", Collections.<String>emptyList());
+		cm.setSection("", Collections.<String>emptyList());
 		assertTextEquals("[S1]|k1 = v1|", cm);
-		cm.setSection("default", null);
+		cm.setSection("", null);
 		assertTextEquals("[S1]|k1 = v1|", cm);
 	}
 
@@ -643,7 +643,7 @@ public class ConfigMapTest {
 		String[] test = {
 			"/", "[", "]",
 			"foo/bar", "foo[bar", "foo]bar", 
-			"", " ",
+			" ",
 			null
 		};
 		
@@ -711,12 +711,6 @@ public class ConfigMapTest {
 		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 		
 		try {
-			cm.removeSection("");
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Invalid section name: ''", e.getLocalizedMessage());
-		}
-		try {
 			cm.removeSection(null);
 			fail();
 		} catch (IllegalArgumentException e) {
@@ -736,7 +730,7 @@ public class ConfigMapTest {
 		);		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		
-		cm.removeSection("default");
+		cm.removeSection("");
 		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 	
@@ -755,7 +749,7 @@ public class ConfigMapTest {
 		);		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		
-		cm.removeSection("default");
+		cm.removeSection("");
 		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 	
@@ -890,7 +884,7 @@ public class ConfigMapTest {
 		String[] test = {
 			"/", "[", "]",
 			"foo/bar", "foo[bar", "foo]bar", 
-			"", " ",
+			" ",
 			null
 		};
 		
@@ -1086,7 +1080,7 @@ public class ConfigMapTest {
 		String[] test = {
 			"/", "[", "]",
 			"foo/bar", "foo[bar", "foo]bar", 
-			"", " ",
+			" ",
 			null
 		};
 		

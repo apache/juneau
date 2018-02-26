@@ -189,7 +189,7 @@ public class ConfigEvent {
 			case REMOVE_SECTION:
 				return "REMOVE_SECTION("+section+")";
 			case REMOVE_ENTRY:
-				return "REMOVE_ENTRY("+section+"/"+key+")";
+				return "REMOVE_ENTRY("+section+(section.isEmpty() ? "" : "/")+key+")";
 			case SET_SECTION:
 				return "SET_SECTION("+section+", preLines="+StringUtils.join(preLines, '|')+")";
 			case SET_ENTRY:

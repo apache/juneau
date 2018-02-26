@@ -46,7 +46,7 @@ public class ConfigMapListenerTest {
 		
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setEntry("default", "foo", "baz", null, null, null);
+		cm.setEntry("", "foo", "baz", null, null, null);
 		cm.save();
 		wait(latch);
 		assertNull(l.error);
@@ -102,7 +102,7 @@ public class ConfigMapListenerTest {
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setEntry("default", "k", "vb", null, null, null);
+		cm.setEntry("", "k", "vb", null, null, null);
 		cm.setEntry("S1", "k1", "v1b", null, null, null);
 		cm.save();
 		wait(latch);
@@ -128,7 +128,7 @@ public class ConfigMapListenerTest {
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setEntry("default", "k", "kb", "^*", "C", Arrays.asList("#k"));
+		cm.setEntry("", "k", "kb", "^*", "C", Arrays.asList("#k"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "C1", Arrays.asList("#k1"));
 		cm.save();
 		wait(latch);
@@ -160,7 +160,7 @@ public class ConfigMapListenerTest {
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setEntry("default", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
+		cm.setEntry("", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", Arrays.asList("#k1b"));
 		cm.save();
 		wait(latch);
@@ -187,13 +187,13 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(List<ConfigEvent> events) throws Exception {
-				assertObjectEquals("['REMOVE_ENTRY(default/k)','REMOVE_ENTRY(S1/k1)']", events);
+				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']", events);
 			}
 		};
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.removeEntry("default", "k");
+		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
 		cm.save();
 		wait(latch);
@@ -219,13 +219,13 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(List<ConfigEvent> events) throws Exception {
-				assertObjectEquals("['REMOVE_ENTRY(default/k)','REMOVE_ENTRY(S1/k1)']", events);
+				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']", events);
 			}
 		};
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.removeEntry("default", "k");
+		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
 		cm.save();
 		wait(latch);
@@ -255,7 +255,7 @@ public class ConfigMapListenerTest {
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setSection("default", Arrays.asList("#D1"));
+		cm.setSection("", Arrays.asList("#D1"));
 		cm.setSection("S1", Arrays.asList("#S1"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
@@ -290,7 +290,7 @@ public class ConfigMapListenerTest {
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.setSection("default", Arrays.asList("#Db"));
+		cm.setSection("", Arrays.asList("#Db"));
 		cm.setSection("S1", Arrays.asList("#S1b"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
@@ -329,13 +329,13 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(List<ConfigEvent> events) throws Exception {
-				assertObjectEquals("['REMOVE_ENTRY(default/k)','REMOVE_ENTRY(S1/k1)','REMOVE_ENTRY(S2/k2)']", events);
+				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)','REMOVE_ENTRY(S2/k2)']", events);
 			}
 		};
 
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
-		cm.removeSection("default");
+		cm.removeSection("");
 		cm.removeSection("S1");
 		cm.removeSection("S2");
 		cm.removeSection("S3");

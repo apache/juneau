@@ -49,7 +49,7 @@ public class ConfigTest {
 		Config c = init("a=1", "[S]", "b=2");
 		
 		assertEquals("1", c.get("a"));
-		assertEquals("1", c.get("default/a"));
+		assertEquals("1", c.get("a"));
 		assertEquals("2", c.get("S/b"));
 		assertNull(c.get("b"));
 		assertNull(c.get("S/c"));
@@ -73,13 +73,13 @@ public class ConfigTest {
 		
 		c.set("a1", "2");
 		c.set("a2", "3");
-		c.set("default/a3", "4");
+		c.set("a3", "4");
 		c.set("S/b1", "5");
 		c.set("S/b2", "6");
 		c.set("T/c1", "7");
 		
 		assertEquals("2", c.get("a1"));
-		assertEquals("3", c.get("default/a2"));
+		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
@@ -88,7 +88,7 @@ public class ConfigTest {
 		c.save();
 		
 		assertEquals("2", c.get("a1"));
-		assertEquals("3", c.get("default/a2"));
+		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
@@ -97,7 +97,7 @@ public class ConfigTest {
 		c = cb.build();
 		
 		assertEquals("2", c.get("a1"));
-		assertEquals("3", c.get("default/a2"));
+		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
@@ -115,13 +115,13 @@ public class ConfigTest {
 		
 		c.set("a1", 2);
 		c.set("a2", 3);
-		c.set("default/a3", 4);
+		c.set("a3", 4);
 		c.set("S/b1", 5);
 		c.set("S/b2", 6);
 		c.set("T/c1", 7);
 		
 		assertEquals("2", c.get("a1"));
-		assertEquals("3", c.get("default/a2"));
+		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
@@ -130,7 +130,7 @@ public class ConfigTest {
 		c.save();
 		
 		assertEquals("2", c.get("a1"));
-		assertEquals("3", c.get("default/a2"));
+		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
@@ -139,7 +139,7 @@ public class ConfigTest {
 		c = cb.build();
 		
 		assertEquals("2", c.get("a1"));
-		assertEquals("3", c.get("default/a2"));
+		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
@@ -158,13 +158,13 @@ public class ConfigTest {
 		ABean b = new ABean().init();
 		c.set("a1", b, UonSerializer.DEFAULT);
 		c.set("a2", b, UonSerializer.DEFAULT);
-		c.set("default/a3", b, UonSerializer.DEFAULT);
+		c.set("a3", b, UonSerializer.DEFAULT);
 		c.set("S/b1", b, UonSerializer.DEFAULT);
 		c.set("S/b2", b, UonSerializer.DEFAULT);
 		c.set("T/c1", b, UonSerializer.DEFAULT);
 		
 		assertEquals("(foo=bar)", c.get("a1"));
-		assertEquals("(foo=bar)", c.get("default/a2"));
+		assertEquals("(foo=bar)", c.get("a2"));
 		assertEquals("(foo=bar)", c.get("a3"));
 		assertEquals("(foo=bar)", c.get("S/b1"));
 		assertEquals("(foo=bar)", c.get("S/b2"));
@@ -181,7 +181,7 @@ public class ConfigTest {
 		ABean b = new ABean().init();
 		c.set("a1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("a2", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
-		c.set("default/a3", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
+		c.set("a3", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("S/b1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("S/b2", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("T/c1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
@@ -193,7 +193,7 @@ public class ConfigTest {
 		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
 
 		assertEquals("(foo=bar)", c.get("a1"));
-		assertEquals("(foo=bar)", c.get("default/a2"));
+		assertEquals("(foo=bar)", c.get("a2"));
 		assertEquals("(foo=bar)", c.get("a3"));
 		assertEquals("(foo=bar)", c.get("S/b1"));
 		assertEquals("(foo=bar)", c.get("S/b2"));
@@ -208,8 +208,8 @@ public class ConfigTest {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1");
 		
 		c.remove("a1");
-		c.remove("default/a2");
-		c.remove("default/a3");
+		c.remove("a2");
+		c.remove("a3");
 		c.remove("S/b1");
 		c.remove("T/c1");
 		
@@ -228,7 +228,7 @@ public class ConfigTest {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		
 		assertEquals("1", c.getString("a1"));
-		assertEquals("2", c.getString("default/a2"));
+		assertEquals("2", c.getString("a2"));
 		assertEquals(null, c.getString("a3"));
 		assertEquals("1", c.getString("S/b1"));
 		assertEquals("", c.getString("S/b2"));
@@ -244,7 +244,7 @@ public class ConfigTest {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		
 		assertEquals("1", c.getString("a1", "foo"));
-		assertEquals("2", c.getString("default/a2", "foo"));
+		assertEquals("2", c.getString("a2", "foo"));
 		assertEquals("foo", c.getString("a3", "foo"));
 		assertEquals("1", c.getString("S/b1", "foo"));
 		assertEquals("foo", c.getString("S/b2", "foo"));
@@ -260,7 +260,7 @@ public class ConfigTest {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
 		
 		assertObjectEquals("['1','2']", c.getStringArray("a1"));
-		assertObjectEquals("['2','3']", c.getStringArray("default/a2"));
+		assertObjectEquals("['2','3']", c.getStringArray("a2"));
 		assertObjectEquals("[]", c.getStringArray("a3"));
 		assertObjectEquals("['1']", c.getStringArray("S/b1"));
 		assertObjectEquals("[]", c.getStringArray("S/b2"));
@@ -276,7 +276,7 @@ public class ConfigTest {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
 		
 		assertObjectEquals("['1','2']", c.getStringArray("a1", new String[] {"foo"}));
-		assertObjectEquals("['2','3']", c.getStringArray("default/a2", new String[] {"foo"}));
+		assertObjectEquals("['2','3']", c.getStringArray("a2", new String[] {"foo"}));
 		assertObjectEquals("['foo']", c.getStringArray("a3", new String[] {"foo"}));
 		assertObjectEquals("['1']", c.getStringArray("S/b1", new String[] {"foo"}));
 		assertObjectEquals("['foo']", c.getStringArray("S/b2", new String[] {"foo"}));
@@ -292,7 +292,7 @@ public class ConfigTest {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		
 		assertEquals(1, c.getInt("a1"));
-		assertEquals(2, c.getInt("default/a2"));
+		assertEquals(2, c.getInt("a2"));
 		assertEquals(0, c.getInt("a3"));
 		assertEquals(1, c.getInt("S/b1"));
 		assertEquals(0, c.getInt("S/b2"));
@@ -330,7 +330,7 @@ public class ConfigTest {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		
 		assertEquals(1, c.getInt("a1", -1));
-		assertEquals(2, c.getInt("default/a2", -1));
+		assertEquals(2, c.getInt("a2", -1));
 		assertEquals(-1, c.getInt("a3", -1));
 		assertEquals(1, c.getInt("S/b1", -1));
 		assertEquals(-1, c.getInt("S/b2", -1));
@@ -368,7 +368,7 @@ public class ConfigTest {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
 		
 		assertEquals(true, c.getBoolean("a1"));
-		assertEquals(false, c.getBoolean("default/a2"));
+		assertEquals(false, c.getBoolean("a2"));
 		assertEquals(false, c.getBoolean("a3"));
 		assertEquals(true, c.getBoolean("S/b1"));
 		assertEquals(false, c.getBoolean("S/b2"));
@@ -394,7 +394,7 @@ public class ConfigTest {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
 		
 		assertEquals(true, c.getBoolean("a1", true));
-		assertEquals(false, c.getBoolean("default/a2", true));
+		assertEquals(false, c.getBoolean("a2", true));
 		assertEquals(true, c.getBoolean("a3", true));
 		assertEquals(true, c.getBoolean("S/b1", true));
 		assertEquals(true, c.getBoolean("S/b2", true));
@@ -420,7 +420,7 @@ public class ConfigTest {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		
 		assertEquals(1l, c.getLong("a1"));
-		assertEquals(2l, c.getLong("default/a2"));
+		assertEquals(2l, c.getLong("a2"));
 		assertEquals(0l, c.getLong("a3"));
 		assertEquals(1l, c.getLong("S/b1"));
 		assertEquals(0l, c.getLong("S/b2"));
@@ -458,7 +458,7 @@ public class ConfigTest {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		
 		assertEquals(1l, c.getLong("a1", Long.MAX_VALUE));
-		assertEquals(2l, c.getLong("default/a2", Long.MAX_VALUE));
+		assertEquals(2l, c.getLong("a2", Long.MAX_VALUE));
 		assertEquals(Long.MAX_VALUE, c.getLong("a3", Long.MAX_VALUE));
 		assertEquals(1l, c.getLong("S/b1", Long.MAX_VALUE));
 		assertEquals(Long.MAX_VALUE, c.getLong("S/b2", Long.MAX_VALUE));
@@ -496,7 +496,7 @@ public class ConfigTest {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 		
 		assertObjectEquals("[102,111,111]", c.getBytes("a1"));
-		assertObjectEquals("[102,111,111]", c.getBytes("default/a2"));
+		assertObjectEquals("[102,111,111]", c.getBytes("a2"));
 		assertObjectEquals("[]", c.getBytes("a3"));
 		assertNull(null, c.getBytes("a4"));
 	}
@@ -509,7 +509,7 @@ public class ConfigTest {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 		
 		assertObjectEquals("[102,111,111]", c.getBytes("a1", new byte[] {1}));
-		assertObjectEquals("[102,111,111]", c.getBytes("default/a2", new byte[] {1}));
+		assertObjectEquals("[102,111,111]", c.getBytes("a2", new byte[] {1}));
 		assertObjectEquals("[1]", c.getBytes("a3", new byte[] {1}));
 		assertObjectEquals("[1]", c.getBytes("a4", new byte[] {1}));
 	}
@@ -865,7 +865,7 @@ public class ConfigTest {
 	public void getKeys() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		
-		assertObjectEquals("['a1','a2']", c.getKeys("default"));
+		assertObjectEquals("['a1','a2']", c.getKeys(""));
 		assertObjectEquals("['a1','a2']", c.getKeys(""));
 		assertObjectEquals("['b1','b2']", c.getKeys("S"));
 		assertTrue(c.getKeys("T").isEmpty());
@@ -913,7 +913,7 @@ public class ConfigTest {
 
 		c.writeProperties("", b, true);
 		assertObjectEquals("{foo:'qux'}", b);
-		c.writeProperties("default", a, true);
+		c.writeProperties("", a, true);
 		assertObjectEquals("{foo:'qux'}", a);
 
 		try {
@@ -935,14 +935,14 @@ public class ConfigTest {
 		
 		a = c.getSectionAsBean("", ABean.class);
 		assertObjectEquals("{foo:'qux'}", a);
-		a = c.getSectionAsBean("default", ABean.class);
+		a = c.getSectionAsBean("", ABean.class);
 		assertObjectEquals("{foo:'qux'}", a);
 		a = c.getSectionAsBean("S", ABean.class);
 		assertObjectEquals("{foo:'baz'}", a);
 		
 		b = c.getSectionAsBean("", BBean.class);
 		assertObjectEquals("{foo:'qux'}", b);
-		b = c.getSectionAsBean("default", BBean.class);
+		b = c.getSectionAsBean("", BBean.class);
 		assertObjectEquals("{foo:'qux'}", b);
 		b = c.getSectionAsBean("S", BBean.class);
 		assertObjectEquals("{foo:'baz'}", b);
@@ -1026,7 +1026,7 @@ public class ConfigTest {
 		Config c = init("a=1", "[S]", "b=2", "[T]");
 		
 		assertObjectEquals("{a:'1'}", c.getSectionAsMap(""));
-		assertObjectEquals("{a:'1'}", c.getSectionAsMap("default"));
+		assertObjectEquals("{a:'1'}", c.getSectionAsMap(""));
 		assertObjectEquals("{b:'2'}", c.getSectionAsMap("S"));
 		assertObjectEquals("{}", c.getSectionAsMap("T"));
 		assertNull(c.getSectionAsMap("U"));
@@ -1049,7 +1049,7 @@ public class ConfigTest {
 		a = c.getSectionAsInterface("", AInterface.class);
 		assertEquals("qux", a.getFoo());
 	
-		a = c.getSectionAsInterface("default", AInterface.class);
+		a = c.getSectionAsInterface("", AInterface.class);
 		assertEquals("qux", a.getFoo());
 
 		a = c.getSectionAsInterface("S", AInterface.class);
@@ -1101,7 +1101,7 @@ public class ConfigTest {
 		c.setSection("", Arrays.asList("#C1", "#C2"));
 		assertTextEquals("#C1|#C2||", c);
 
-		c.setSection("default", Arrays.asList("#C3", "#C4"));
+		c.setSection("", Arrays.asList("#C3", "#C4"));
 		assertTextEquals("#C3|#C4||", c);
 		
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"));
@@ -1132,7 +1132,7 @@ public class ConfigTest {
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
 		assertTextEquals("#C1|#C2||a = b|", c);
 
-		c.setSection("default", Arrays.asList("#C3", "#C4"), m);
+		c.setSection("", Arrays.asList("#C3", "#C4"), m);
 		assertTextEquals("#C3|#C4||a = b|", c);
 		
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"), m);
@@ -1164,7 +1164,7 @@ public class ConfigTest {
 		
 		assertTextEquals("a=1|", c);
 		
-		c.removeSection("default");
+		c.removeSection("");
 		assertTextEquals("", c);
 	}
 
@@ -1426,7 +1426,7 @@ public class ConfigTest {
 				@Override
 				public void onConfigChange(List<ConfigEvent> events) {
 					for (ConfigEvent ce : events) {
-						String key = (ce.getSection().equals("default") ? "" : (ce.getSection() + '/')) + ce.getKey();
+						String key = (ce.getSection().equals("") ? "" : (ce.getSection() + '/')) + ce.getKey();
 						if (ce.getType() == ConfigEventType.REMOVE_ENTRY) {
 							changes.add("REMOVE_ENTRY("+key+")");
 						} else if (ce.getType() == ConfigEventType.REMOVE_SECTION) {

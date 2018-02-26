@@ -51,10 +51,10 @@ public class ConfigBuilderTest {
 		assertFalse(f.exists());
 
 		cf.save();
-		assertObjectEquals("{'default':{},Test:{A:'a'}}", cf.asMap());
+		assertObjectEquals("{'':{},Test:{A:'a'}}", cf.asMap());
 
 		String NL = System.getProperty("line.separator");
 		cf = cf.write("[Test]"+NL+"A = b"+NL, true);
-		assertObjectEquals("{'default':{},Test:{A:'b'}}", cf.asMap());
+		assertObjectEquals("{'':{},Test:{A:'b'}}", cf.asMap());
 	}
 }

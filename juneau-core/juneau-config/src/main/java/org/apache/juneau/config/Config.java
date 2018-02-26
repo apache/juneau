@@ -275,7 +275,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	private final boolean beansOnSeparateLines, readOnly;
 	private final ConfigMap configMap;
 	private final BeanSession beanSession;
-	private volatile boolean closed;
 	private final List<ConfigEventListener> listeners = Collections.synchronizedList(new LinkedList<ConfigEventListener>());
 
 
@@ -1015,7 +1014,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 
 	 * @param section 
 	 * 	The section name to write from.
-	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return
 	 * 	An unmodifiable set of keys, or an empty set if the section doesn't exist.
@@ -1029,7 +1028,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 
 	 * @param section 
 	 * 	The section name to write from.
-	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param bean The bean to set the properties on.
 	 * @param ignoreUnknownProperties
@@ -1070,7 +1069,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 
 	 * @param section 
 	 * 	The section name to write from.
-	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param c The bean class to create.
 	 * @return A new bean instance.
@@ -1113,7 +1112,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 
 	 * @param section 
 	 * 	The section name to write from.
-	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param c The bean class to create.
 	 * @param ignoreUnknownProperties
@@ -1150,7 +1149,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 
 	 * @param section 
 	 * 	The section name to write from.
-	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new {@link ObjectMap}, or <jk>null</jk> if the section doesn't exist.
 	 * @throws ParseException 
@@ -1229,7 +1228,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 
 	 * @param section 
 	 * 	The section name to write from.
-	 * 	<br>If empty or <js>"default"</js>, refers to the default section.
+	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param c The proxy interface class.
 	 * @return The proxy interface.
@@ -1280,7 +1279,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param name 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use blank or <js>"default"</js> for the default section.
+	 * 	<br>Use blank for the default section.
 	 * @param preLines 
 	 * 	Optional comment and blank lines to add immediately before the section.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
@@ -1301,7 +1300,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param name 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> for the default section.
+	 * 	<br>Use blank for the default section.
 	 * @param preLines 
 	 * 	Optional comment and blank lines to add immediately before the section.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
@@ -1411,7 +1410,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	public void close() throws IOException {
 		configMap.unregister(this);
-		closed = true;
 	}
 	
 	/**
@@ -1604,7 +1602,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		assertFieldNotNull(key, "key");
 		int i = key.indexOf('/');
 		if (i == -1)
-			return "default";
+			return "";
 		return key.substring(0, i);
 	}
 
@@ -1618,7 +1616,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	private String section(String section) {
 		assertFieldNotNull(section, "section");
 		if (isEmpty(section))
-			return "default";
+			return "";
 		return section;
 	}
 	
@@ -1639,9 +1637,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	
 	@Override /* Object */
 	protected void finalize() throws Throwable {
-		// If Config objects are not closed, listeners on the underlying ConfigMap don't get cleaned up.
-		if (! closed) {
-			System.err.println("Config object not closed.");
-		}
+		close();
 	}
 }

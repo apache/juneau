@@ -93,7 +93,7 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 		
-		// Add [default] section.
+		// Add [blank] section.
 		boolean inserted = false;
 		boolean foundComment = false;
 		for (ListIterator<String> li = lines.listIterator(); li.hasNext();) {
@@ -101,7 +101,7 @@ public class ConfigMap implements ConfigStoreListener {
 			char c = StringUtils.firstNonWhitespaceChar(l);
 			if (c != '#') {
 				if (c == 0 && foundComment) {
-					li.set("[default]");
+					li.set("[]");
 					inserted = true;
 				}
 				break;
@@ -109,7 +109,7 @@ public class ConfigMap implements ConfigStoreListener {
 			foundComment = true;
 		}
 		if (! inserted)
-			lines.add(0, "[default]");
+			lines.add(0, "[]");
 		
 		// Collapse any multi-lines.
 		ListIterator<String> li = lines.listIterator(lines.size());
@@ -181,7 +181,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @param key 
 	 * 	The entry key.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -208,7 +208,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @return
 	 * 	An unmodifiable list of lines, or <jk>null</jk> if the section doesn't exist.
 	 */
@@ -239,7 +239,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @return
 	 * 	An unmodifiable set of keys, or an empty set if the section doesn't exist.
 	 */
@@ -255,7 +255,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @return <jk>true</jk> if this config has the specified section.
 	 */
 	public boolean hasSection(String section) {
@@ -273,7 +273,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @param preLines
 	 * 	The pre-lines on the section.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
@@ -290,7 +290,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @param key 
 	 * 	The entry key.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -325,7 +325,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigMap removeSection(String section) {
@@ -339,7 +339,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param section 
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Use <js>"default"</js> to refer to the default section.
+	 * 	<br>Use blank to refer to the default section.
 	 * @param key 
 	 * 	The entry key.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -606,7 +606,7 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	private void checkSectionName(String s) {
-		if (! ("default".equals(s) || isValidNewSectionName(s)))
+		if (! ("".equals(s) || isValidNewSectionName(s)))
 			throw new IllegalArgumentException("Invalid section name: '" + s + "'");
 	}
 
@@ -634,8 +634,6 @@ public class ConfigMap implements ConfigStoreListener {
 			return false;
 		s = s.trim();
 		if (s.isEmpty())
-			return false;
-		if ("default".equals(s))
 			return false;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
@@ -705,7 +703,7 @@ public class ConfigMap implements ConfigStoreListener {
 	
 	class ConfigSection {
 
-		final String name;   // The config section name, or "default" if the default section.  Never null.
+		final String name;   // The config section name, or blank if the default section.  Never null.
 
 		final List<String> preLines = Collections.synchronizedList(new ArrayList<String>());
 		private final String rawLine;
@@ -778,7 +776,7 @@ public class ConfigMap implements ConfigStoreListener {
 			for (String s : preLines)
 				w.append(s).append('\n');
 			
-			if (! name.equals("default"))
+			if (! name.equals(""))
 				w.append(rawLine).append('\n');
 			else {
 				// Need separation between default prelines and first-entry prelines.
