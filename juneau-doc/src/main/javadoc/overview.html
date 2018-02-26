@@ -145,6 +145,9 @@
 	<li><p><a class='doclink' href='#juneau-config'><i>juneau-config</i></a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-config.Overview'>Overview</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-config.SyntaxRules'>Syntax Rules</a></p>
+		</ol>
 		<li><p><a class='doclink' href='#juneau-config.EntryTypes'>Entry Types</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-config.PrimitiveTypes'>Primitive Types</a></p>
@@ -4723,8 +4726,8 @@
 		</ul>
 		
 		<!-- ======================================================================================================== -->
-		<a id="juneau-config.EntryTypes"></a>
-		<h4 class='topic' onclick='toggle(this)'>6.1.1 - Formatting Rules</h4>
+		<a id="juneau-config.SyntaxRules"></a>
+		<h4 class='topic' onclick='toggle(this)'>6.1.1 - Syntax Rules</h4>
 		<div class='topic'>
 			<p>
 				Each config file contains zero or more sections containing zero or more entries:
@@ -4796,7 +4799,7 @@
 				<br><code>/ \ [ ] = #</code>
 			</p>
 			<p>
-				Leading and trailing whitespace on values are ignored.
+				Leading and trailing whitespace on values are ignored except between lines on a multi-line value.
 			</p>
 		</div>
 	</div>
@@ -15789,7 +15792,15 @@
 		<h5 class='topic'>juneau-config</h5>
 		<ul class='spaced-list'>
 			<li>
-				<code>org.apache.juneau.ini</code> package renamed to <code>org.apache.juneau.config</code>.
+				The Config API has been completely revamped.
+				<br>New features include:
+				<ul>
+					<li>Support for pluggable storage.
+					<li>File-system watcher integration support.
+						<br>Changes made to file system files now automatically reflected in configurations
+						and interface proxies.
+					<li>New builder-based design.
+				</ul>
 		</ul>
 		
 		<h5 class='topic'>juneau-dto</h5>
