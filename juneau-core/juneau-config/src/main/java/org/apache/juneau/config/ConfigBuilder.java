@@ -270,15 +270,15 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans on separate lines.
+	 * Configuration property:  Multi-line values on separate lines.
 	 * 
 	 * <p>
-	 * When enabled, serialized POJOs will be placed on a separate line from the key.
+	 * When enabled, multi-line values will always be placed on a separate line from the key.
 	 * 
 	 * @return This object (for method chaining).
 	 */
-	public ConfigBuilder beansOnSeparateLines() {
-		return set(CONFIG_beansOnSeparateLines, true);
+	public ConfigBuilder multiLineValuesOnSeparateLines() {
+		return set(CONFIG_multiLineValuesOnSeparateLines, true);
 	}
 	
 	/**

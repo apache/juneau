@@ -1704,17 +1704,20 @@ public class ConfigTest {
 		cf.set("a", "a,#b,=c");
 		cf.set("A/a", "a,#b,=c");
 
-		assertTextEquals("a = a,\\#b,=c|[A]|a = a,\\#b,=c|", cf);
+		assertTextEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
 		cf.save();
-		assertTextEquals("a = a,\\#b,=c|[A]|a = a,\\#b,=c|", cf);
+		assertTextEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
 
 		assertEquals("a,#b,=c", cf.getString("a"));
 		assertEquals("a,#b,=c", cf.getString("A/a"));
 		
 		cf.set("a", "a,#b,=c", null, (ConfigMod)null, "comment#comment", null);
-		assertTextEquals("a = a,\\#b,=c # comment#comment|[A]|a = a,\\#b,=c|", cf);
+		assertTextEquals("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|", cf);
 		assertEquals("a,#b,=c", cf.getString("a"));
-		
+	}
+	
+	public static void main(String[] args) {
+		System.err.println(Integer.parseInt("1_000"));
 	}
 	
 	

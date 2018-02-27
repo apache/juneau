@@ -1244,6 +1244,20 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Creates an escaped-unicode sequence (e.g. <js>"\\u1234"</js>) for the specified character.
+	 * 
+	 * @param c The character to create a sequence for.
+	 * @return An escaped-unicode sequence.
+	 */
+	public static String unicodeSequence(char c) {
+		StringBuilder sb = new StringBuilder(6);
+		sb.append('\\').append('u');
+		for (char cc : toHex(c))
+			sb.append(cc);
+		return sb.toString();
+	}
+	
+	/**
 	 * Returns the specified field in a delimited string without splitting the string.
 	 * 
 	 * <p>
@@ -1900,7 +1914,7 @@ public final class StringUtils {
 			m = 1024;
 			s = s.substring(0, s.length()-1).trim();
 		}
-		return Integer.parseInt(s) * m;
+		return Integer.decode(s) * m;
 	}
 	
 	/**
@@ -1930,7 +1944,7 @@ public final class StringUtils {
 			m = 1024;
 			s = s.substring(0, s.length()-1).trim();
 		}
-		return Long.parseLong(s) * m;
+		return Long.decode(s) * m;
 	}
 	
 	/**

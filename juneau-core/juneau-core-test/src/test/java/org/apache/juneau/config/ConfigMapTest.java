@@ -934,7 +934,7 @@ public class ConfigMapTest {
 		
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
-		assertTextEquals("[S1]|k1 = v1 \\# foo|", cm);
+		assertTextEquals("[S1]|k1 = v1 \\u0023 foo|", cm);
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1130,7 +1130,7 @@ public class ConfigMapTest {
 		
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
-		assertTextEquals("[S1]|k1 = v1 \\# foo|", cm);
+		assertTextEquals("[S1]|k1 = v1 \\u0023 foo|", cm);
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------

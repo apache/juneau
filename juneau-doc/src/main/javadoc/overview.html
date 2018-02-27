@@ -4682,6 +4682,7 @@
 			An example of the contents of a config file:
 		</p>
 		<p class='bcode'>
+	<cc># A set of entries</cc>
 	<cs>[Section1]</cs>
 
 	<cc># An integer</cc>
@@ -4705,8 +4706,8 @@
 	
 	<jc>// Read values from section #1</jc>
 	<jk>int</jk> key1 = c.getInt(<js>"Section1/key1"</js>);
-	<jk>boolean</jk>key2 = c.getBoolean(<js>"Section1/key2"</js>);
-	<jk>int</jk>[]key3 = c.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>, );
+	<jk>boolean</jk> key2 = c.getBoolean(<js>"Section1/key2"</js>);
+	<jk>int</jk>[] key3 = c.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>);
 	URL key4 = c.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
 		</p>
 		<p>
@@ -4714,93 +4715,119 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				APIs for updating, modifying, and saving configuration files <b style='text-decoration: underline;'>without losing comments or formatting</b>!
+				Support for storing and retrieving any of the following data types:
+				<ul>
+					<li>Primitives
+					<li>POJOs
+					<li>Beans
+					<li>Arrays, Maps, and Collections of anything
+					<li>Binary data
+				</ul>
 			<li>
-				The ability to use variables to reference environment variables, system properties, other config file entries, and a host of other types.
+				A listener API that allows you to, for example, reinitialize your REST resource if the config file 
+				changes, or listen for changes to particular sections or values.
 			<li>
-				Extensive listener APIs.
+				Filesystem watcher integration allows configs to reflect changes on the file system in real-time.
 			<li>
-				Full file system watcher integration.
+				Config files can be modified through the Config class (e.g. add/remove/modify sections and keys, add/remove comments and whitespace, etc...).
+				<br>When using these APIs, you <b>DO NOT</b> lose formatting in your existing configuration file.
+				All existing whitespace and comments are preserved for you!
 			<li>
-				Support for user-defined storage mechanisms.
+				Support for encoding of values for added security.
+			<li>
+				Config sections can be used to directly populate beans.
+			<li>
+				Config sections can be accessed and manipulated through Java interface proxies.
+			<li>
+				An extensible storage API allows you to write your own config storage location for files such as databases or the cloud.
 		</ul>
 		
 		<!-- ======================================================================================================== -->
 		<a id="juneau-config.SyntaxRules"></a>
 		<h4 class='topic' onclick='toggle(this)'>6.1.1 - Syntax Rules</h4>
 		<div class='topic'>
-			<p>
-				Each config file contains zero or more sections containing zero or more entries:
-			</p>
-			<p class='bcode'>
-		<cs>[Section1]</cs>
-		<ck>key1</ck> = <cv>1</cv>
+			<ul class='spaced-list'>
+				<li>
+					Each config file contains zero or more sections containing zero or more entries:
+					<p class='bcode'>
+	<cs>[Section1]</cs>
+	<ck>key1</ck> = <cv>1</cv>
+
+	<cs>[Section2]</cs>
+	<ck>key1</ck> = <cv>2</cv>
+					</p>
+				<li>
+					Unicode escapes can be used in values.
+					<p class='bcode'>
+	<ck>key1</ck> = <cv>\u0070\u0075\u0062\u006c\u0069\u0063</cv>
+					</p>
+				<li>
+					Comment lines start with the <js>'#'</js> character and can be placed on lines before sections and entries:
+					<p class='bcode'>
+	<cc># A comment about this section</cc>
+	<cs>[Section1]</cs>
 	
-		<cs>[Section2]</cs>
-		<ck>key1</ck> = <cv>2</cv>
-			</p>
-			<p>
-				Comments start with the <js>'#'</js> character and can be placed on lines before sections and entries:
-			</p>
-			<p class='bcode'>
-		<cs># A comment about this section</cs>
-		<cs>[Section1]</cs>
-		
-		<cs># A comment about this entry</cs>
-		<ck>key1</ck> = <cv>1</cv>
-			</p>
-			<p>
-				Comments can also be placed on the same line as entries:
-			</p>
-			<p class='bcode'>
-		
-		<ck>key1</ck> = <cv>1</cv> <cs># A comment about this entry
-			</p>
-			<p>
-				Values containing <js>'#'</js> must be escaped to prevent identification as a comment character:
-			</p>
-			<p class='bcode'>
-		<ck>valueContainingPound</ck> = <cv>Value containing \# character</cv>
-			</p>
-			<p>
-				Values containing newlines can span multiple lines.
-				<br>Subsequent lines start with a tab character.
-			</p>
-			<p class='bcode'>
-		<ck>multiLineValue</ck> = <cv>Line 1,</cv>
-			<cv>Line 2,</cv>
-			<cv>Line 3</cv>
-			</p>
-			<p>
-				Blank lines can be used anywhere in the file.
-			</p>
-			<p class='bcode'>
-		<cs># A comment line</cs>
-		
-		<cs># Another comment line</cs>
-		<cs>[Section1]</cs>
-			</p>
-			<p>
-				Values located before any sections are considered part of the no-name section, meaning
-				they are accessed simply by key and not section+key.
-			</p>
-			<p class='bcode'>
-		<cs># Top of file</cs>
-		
-		<cs># A value in the no-name section</cs>
-		<ck>key1</ck> = <cv>val1</cv>
-		
-		<cs># The first section</cs>
-		<cs>[Section1]</cs>
-			</p>
-			<p>
-				Section and key names must be at least one character long and not consist of any of the following
-				characters:
-				<br><code>/ \ [ ] = #</code>
-			</p>
-			<p>
-				Leading and trailing whitespace on values are ignored except between lines on a multi-line value.
-			</p>
+	<cc># A comment about this entry</cc>
+	<ck>key1</ck> = <cv>1</cv>
+					</p>
+				<li>
+					Comments can also be placed on the same line as entries:
+					<p class='bcode'>
+	<ck>key1</ck> = <cv>1</cv>  <cc># A comment about this entry</cc>
+					</p>
+				<li>
+					Values containing <js>'#'</js> must be escaped to prevent identification as a comment character:
+					<p class='bcode'>
+	<ck>valueContainingPound</ck> = <cv>Value containing \u0023 character</cv>
+					</p>
+					<br>Likewise, <js>'\'</js> should be escaped to prevent confusion with unicode escapes.
+				<li>
+					Values containing newlines can span multiple lines.
+					<br>Subsequent lines start with a tab character.
+					<p class='bcode'>
+	<ck>multiLineValue</ck> = 
+		<cv>Line 1,</cv>
+		<cv>Line 2,</cv>
+		<cv>Line 3</cv>
+					</p>
+					<br>When retrieved, the above translates to <js>"Line1,\nLine2,\nLine3"</js>.
+				<li>
+					Leading and trailing whitespace on values are ignored.
+				<li>
+					Whitespace is not ignored within multi-line values (except for the leading tab character on each line).
+				<li>
+					Blank lines can be used anywhere in the file.
+					<p class='bcode'>
+	<cc># A comment line</cc>
+	
+	<cc># Another comment line</cc>
+	<cs>[Section1]</cs>
+	...
+					</p>
+				<li>
+					Values located before any sections are considered part of the no-name section, meaning
+					they are accessed simply by key and not section/key.
+					<p class='bcode'>
+	<cc># Top of file</cc>
+	
+	<cc># Use config.getString("key1") to retrieve.</cc>
+	<ck>key1</ck> = <cv>val1</cv>
+	
+	<cc># The first section</cc>
+	<cs>[Section1]</cs>
+
+	<cc># Use config.getString("Section1/key2") to retrieve.</cc>
+	<ck>key2</ck> = <cv>val2</cv>
+					</p>
+				<li>
+					Section and key names must be at least one character long and not consist of any of the following
+					characters:
+					<p class='bcode'>
+	/ \ [ ] = #
+					</p>
+				<li>
+					Whitespace in section and key names is technically allowed but discouraged.
+			</ul>
 		</div>
 	</div>
 		
@@ -4846,28 +4873,42 @@
 					<li class='jm'>{@link org.apache.juneau.config.Config#getInt(String,int) getInt(String,int)}
 					<li class='jm'>{@link org.apache.juneau.config.Config#getLong(String) getLong(String)}
 					<li class='jm'>{@link org.apache.juneau.config.Config#getLong(String,long) getLong(String,long)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getFloat(String) getFloat(String)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getFloat(String,float) getFloat(String,long)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getDouble(String) getDouble(String)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getDouble(String,double) getDouble(String,long)}
 				</ul>
 			</ul>
 			<p>
 				On integers and longs, <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
 			</p>	
 			<p class='bcode'>
-	<ck>key1</ck> = <cv>100K</cv> <cc># Same as 1024000</cc>
-	<ck>key2</ck> = <cv>100M</cv> <cc># Same as 104857600</cc>
+	<ck>key1</ck> = <cv>100K</cv>  <cc># Same as 1024000</cc>
+	<ck>key2</ck> = <cv>100M</cv>  <cc># Same as 104857600</cc>
 			</p>
 			<p>
-				Strings can be broken into separate lines by starting the next line with a tab:
+				Numbers can also use hexadecimal and octal notation:
+			</p>	
+			<p class='bcode'>
+	<ck>hex1</ck> = <cv>0x12FE</cv>
+	<ck>hex2</ck> = <cv>0X12FE</cv>
+	<ck>octal1</ck> = <cv>01234</cv>
+			</p>
+			<p>
+				Strings with newlines get broken into separate lines:
 			</p>
 			<p class='bcode'>
 	<ck>key1</ck> = <cv>This is a particularly long sentence that we want to split</cv>
 		<cv>onto separate lines</cv>.
 			</p>
 			<p>
-				Broken lines are not trimmed between lines, and are concatenated with newlines.
-				<br>The example above translates to <js>"This is a particularly....split\nonto separate lines"</js>, but
-				could could pad the start and end of lines with spaces if you wish.
+				Typically, multi-line values are started on the next line for clarity like so:
 			</p>
-
+			<p class='bcode'>
+	<ck>key1</ck> = 
+		<cv>This is a particularly long sentence that we want to split</cv>
+		<cv>onto separate lines</cv>.
+			</p>
 		</div>
 
 		<!-- ======================================================================================================== -->
@@ -4881,9 +4922,77 @@
 				<li class='jc'>{@link org.apache.juneau.config.Config}
 				<ul>
 					<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Class) getObject(String,Class)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,T,Class)}
+				</ul>
+			</ul>
+			<p>
+				In theory, any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO type can be represented
+				as a config value. 
+				<br>However in practice, we're typically talking about the following:
+			</p>
+			<ul>
+				<li>Objects convertable from Strings.
+				<li>Beans.
+			</ul>
+			<p>
+				An example of an object convertible from a String was already shown in an example above.
+				<br>In that case, it was a URL which has a public constructor that takes in a String:
+			</p>
+			<p class='bcode'>
+	<cc># A POJO</cc>
+	<ck>key4</ck> = <cv>http://bar</cv>
+			</p>
+			<p class='bcode'>
+	<jc>// Read values from section #1</jc>
+	URL key4 = c.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+			</p>
+			<p>
+				Beans are represented as Lax JSON by default:
+			</p>
+			<p class='bcode'>
+	<jc>// Contact information</jc>
+	<cs>[ContactInfo]</cs>
+	<ck>address</ck> = 
+		<cv>{
+			street: '123 Main Street',
+			city: 'Anywhere',
+			state: 'NY',
+			zip: 12345
+		}</cv>
+			</p>
+			<p class='bcode'>
+	<jc>// Example bean</jc>
+	<jk>public class</jk> Address {
+		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
+		<jk>public</jk> StateEnum <jf>state</jf>;
+		<jk>public int</jk> <jf>zip</jf>;
+	}
+
+	<jc>// Example usage</jc>
+	Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	Address myAddress = c.getObject(<js>"ContactInfo/address"</js>, Address.<jk>class</jk>);
+			</p>
+			<p>
+				The format for beans depends on the serializer and parser registered on the Config which 
+				is defined in the builder via the following methods:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.config.ConfigBuilder}
+				<ul>
+					<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(Class) serializer(Class)}
+					<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(WriterSerializer) serializer(WriterSerializer)}
+					<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(Class) parser(Class)}
+					<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(ReaderParser) parser(ReaderParser)}
+				</ul>
+			</ul>
+			<p>
+				The default parser can also be overridden using the following getters:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.config.Config}
+				<ul>
 					<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
-					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,T,Class) getObjectWithDefault(String,T,Class)}
-					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,T,Parser,Class) getObjectWithDefault(String,T,Parser,Class)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Parser,Object,Class) getObjectWithDefault(String,T,Parser,Class)}
 				</ul>
 			</ul>
 		</div>
@@ -4904,6 +5013,55 @@
 					<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
 				</ul>
 			</ul>
+			<p>
+				The <code>getStringArray()</code> methods allow you to retrieve comma-delimited lists of values:
+			<p class='bcode'>
+	<ck>key1</ck> = <cv>foo, bar, baz</cv>
+			</p>
+			<p class='bcode'>
+	String[] key1 = c.getStringArray(<js>"key1"</js>);
+			</p>
+			<p>
+				String arrays can also be represented in JSON when using the <code>getObject()</code> methods:
+			</p>
+			<p class='bcode'>
+	<ck>key1</ck> = <cv>['foo','bar','baz']</cv>
+			</p>
+			<p class='bcode'>
+	String[] key1 = c.getObject(<js>"key1"</js>, String.<jk>class</jk>);
+			</p>
+			<p>
+				Primitive arrays can also be retrieved using the <code>getObject()</code> methods:
+			</p>
+			<p class='bcode'>
+	<ck>key1</ck> = <cv>[1,2,3]</cv>
+			</p>
+			<p class='bcode'>
+	<jk>int</jk>[] key1 = c.getObject(<js>"key1"</js>, <jk>int</jk>[].<jk>class</jk>);
+			</p>
+			<p>
+				Arrays of POJOs can also be retrieved using the <code>getObject()</code> methods:
+			</p>
+			<p class='bcode'>
+	<ck>addresses</ck> = 
+		<cv>[
+			{
+				street: '123 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}</cv>,
+			<cv>{
+				street: '456 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}
+		]</cv>
+			</p>
+			<p class='bcode'>
+	Address[] addresses = c.getObject(<js>"addresses"</js>, Address[].<jk>class</jk>);
+			</p>
 		</div>
 
 		<!-- ======================================================================================================== -->
@@ -4918,9 +5076,65 @@
 				<ul>
 					<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Type,Type...) getObject(String,Type,Type...)}
 					<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Type,Type...) getObject(String,Parser,Type,Type...)}
-					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,T,Type,Type...) getObjectWithDefault(String,T,Type,Type...)}
-					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,T,Parser,Type,Type...) getObjectWithDefault(String,T,Parser,Type,Type...)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,T,Type,Type...)}
+					<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Parser,Object,Type,Type...) getObjectWithDefault(String,T,Parser,Type,Type...)}
 				</ul>
+			</ul>
+			<p>
+				The <code>Type,Type...</code> arguments allow you to specify the component types for maps and collections.
+				<br><code>List</code> class arguments can be followed by zero or one arguments representing the entry types.
+				<br><code>Map</code> class arguments can be followed by zero or two arguments representing the key and value types.
+				<br>The arguments can be chained to produce any data structure consisting of maps, collections, or POJOs.
+			</p>
+			<p>
+				<br>Examples are shown below:
+			</p>
+			<ul class='spaced-list'>
+				<li><code>getObject(<js>"..."</js>, List.<jk>class</jk>)</code>
+					<br>Produces: <code>List&lt;?&gt;</code>
+				<li><code>getObject(<js>"..."</js>, LinkedList.<jk>class</jk>)</code>
+					<br>Produces: <code>LinkedList&lt;?&gt;</code>
+				<li><code>getObject(<js>"..."</js>, HashSet.<jk>class</jk>, Integer.<jk>class</jk>)</code>
+					<br>Produces: <code>HashSet&lt;Integer&gt;</code>
+				<li><code>getObject(<js>"..."</js>, Map.<jk>class</jk>)</code>
+					<br>Produces: <code>Map&lt;?,?&gt;</code>
+				<li><code>getObject(<js>"..."</js>, HashMap.<jk>class</jk>)</code>
+					<br>Produces: <code>HashMap&lt;?,?&gt;</code>
+				<li><code>getObject(<js>"..."</js>, LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>)</code>
+					<br>Produces: <code>LinkedHashMap&lt;String,MyBean&gt;</code> 
+				<li><code>getObject(<js>"..."</js>, HashMap.<jk>class</jk>, Integer.<jk>class</jk>, ArrayList.<jk>class</jk>, MyBean[].<jk>class</jk>)</code>
+					<br>Produces: <code>LinkedHashMap&lt;Integer,ArrayList&lt;MyBean[]&gt;&gt;</code> 
+			</ul>
+			<p>
+				For example:
+			</p>
+			<p class='bcode'>
+	<ck>addresses</ck> = 
+		<cv>[
+			{
+				street: '123 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}</cv>,
+			<cv>{
+				street: '456 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}
+		]</cv>
+			</p>
+			<p class='bcode'>
+	List&lt;Address&gt; addresses = c.getObject(<js>"addresses"</js>, ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
+			</p>
+			<p>
+				Oftentimes, it might be useful to parse into the {@link org.apache.juneau.ObjectList} and {@link org.apache.juneau.ObjectMap}
+				classes that provide the various convenience methods for working with JSON-like data structures:
+			</p>
+			<ul>
+				<li><code>getObject(<js>"..."</js>, ObjectList.<jk>class</jk>)</code>
+				<li><code>getObject(<js>"..."</js>, ObjectMap.<jk>class</jk>)</code> 
 			</ul>
 		</div>
 
@@ -4929,7 +5143,7 @@
 		<h4 class='topic' onclick='toggle(this)'>6.2.5 - Binary Data</h4>
 		<div class='topic'>
 			<p>
-				The following methods are provided for accessing maps and collections:
+				The following methods are provided for accessing binary data:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.config.Config}
@@ -4937,6 +5151,48 @@
 					<li class='jm'>{@link org.apache.juneau.config.Config#getBytes(String) getBytes(String)}
 					<li class='jm'>{@link org.apache.juneau.config.Config#getBytes(String,byte[]) getBytes(String,byte[])}
 				</ul>
+			</ul>
+			<p>
+				Binary data can be represented in 3 formats:
+			</p>
+			<ul class='spaced-list'>
+				<li>BASE-64 (default)
+					<br>Example: <code><js>"Zm9vYmFycw=="</js></code>
+				<li>Hexadecimal
+					<br>Example: <code><js>"666F6F62617273</js></code>
+				<li>Spaced hexadecimal
+					<br>Example: <code><js>"66 6F 6F 62 61 72 73</js></code>
+			</ul>
+			<p>
+				The binary data format is controlled via the following:
+			</p>
+			<ul class='doctree'>
+				<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_binaryFormat}
+				<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#binaryFormat(String)}
+			</ul>
+			<p>
+				For example:
+			</p>
+			<p class='bcode'>
+	<ck>bytes</ck> = <cv>Zm9vYmFycw==</cv>
+			</p>
+			<p class='bcode'>
+	<jk>byte</jk>[] bytes = c.getBytes(<js>"bytes"</js>);
+			</p>
+			<p>
+				Binary lines can be split up into separate lines for readability:
+			</p>
+			<p class='bcode'>
+	<ck>bytes</ck> = 
+		<cv>Zm9vYm
+		Fycw==</cv>
+			</p>
+			<p>
+				Binary data line wrapping can be controlled via the following:
+			</p>
+			<ul class='doctree'>
+				<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_binaryLineLength}
+				<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#binaryLineLength(int)}
 			</ul>
 		</div>
 
@@ -4947,8 +5203,7 @@
 	<h3 class='topic' onclick='toggle(this)'>6.3 - Variables</h3>
 	<div class='topic'>
 		<p>
-			Config files can contain variables that get resolved dynamically using the 
-			{@link org.apache.juneau.svl.VarResolver} API.
+			Config files can contain variables that get resolved dynamically using the {@link org.apache.juneau.svl.VarResolver} API.
 		</p>
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode'>
@@ -4963,82 +5218,51 @@
 	<cc># An environment variable</cc>
 	<ck>path</ck> = <cv>$E{PATH, unknown}</cv>
 	
-	<cc># A manifest file entry</cc>
-	<ck>mainClass</ck> = <cv>$MF{Main-Class}</cv>
-	
+	<cc># Another system property</cc>
+	<ck>anInt</ck> = <cv>$C{anInt, -1}</cv>
+
 	<cc># Another value in this config file</cc>
 	<ck>sameAsAnInt</ck> = <cv>$C{MySection/anInt}</cv>
 	
-	<cc># A command-line argument in the form "myarg=foo"</cc>
-	<ck>myArg</ck> = <cv>$ARG{myarg}</cv>
-	
-	<cc># The first command-line argument</cc>
-	<ck>firstArg</ck> = <cv>$ARG{0}</cv>
-
-	<cc># Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.</cc>
-	<ck>nested</ck> = <cv>$S{mySystemProperty,$E{MY_ENV_VAR,$ARG{0}}}</cv>
+	<cc># Look for system property, or env var if that doesn't exist, or a default value if that doesn't exist.</cc>
+	<ck>nested</ck> = <cv>$S{mySystemProperty,$E{MY_ENV_VAR,$C{MySection/anInt}}}</cv>
 
 	<cc># A POJO with embedded variables</cc>
-	<ck>aBean2</ck> = <cv>{foo:'$ARG{0}',baz:$C{MySection/anInt}}</cv>
+	<ck>aBean</ck> = <cv>{foo:'$S{foo}',baz:$C{MySection/anInt}}</cv>
 		</p>
 		<p class='bcode'>
-	<jc>// Java code for accessing config entries above.</jc>
-	Config cf = Microservice.<jsm>getInstance</jsm>().getConfig();
+	Config c = Config.<jsf>create</jsf>().build();
 	
-	Locale locale = cf.getObject(Locale.<jk>class</jk>, <js>"MySection/locale"</js>); 
+	Locale locale = cf.getObject(<js>"MySection/locale"</js>, Locale.<jk>class</jk>); 
 	String path = cf.getString(<js>"MySection/path"</js>); 
-	String mainClass = cf.getString(<js>"MySection/mainClass"</js>); 
 	<jk>int</jk> sameAsAnInt = cf.getInt(<js>"MySection/sameAsAnInt"</js>); 
-	String myArg = cf.getString(<js>"MySection/myArg"</js>); 
-	String firstArg = cf.getString(<js>"MySection/firstArg"</js>); 
+	ABean bean = cf.getObject(<js>"MySection/aBean"</js>, ABean.<jk>class</jk>); 
 		</p>
 		<p>
-			Resolving config files can be retrieved through the following methods:
-		</p>	
-		<ul class='spaced-list'>
-			<li class='jm'><code><del>Config#getResolving(VarResolver)</del></code> - Returns a config file that resolves a custom set of variables.
-		</ul>
-		<p>
-			The default <code><del>ConfigFile#getResolving(VarResolver)</del></code> method returns a config file that resolves 
-			the following variables:
+			By default, <code>Configs</code> use the {@link org.apache.juneau.svl.VarResolver#DEFAULT} variable resolver
+			which provides support for the following variables and constructs (in addition to the <code>$C</code> variable):
 		</p>
 		<ul class='spaced-list'>
-			<li>
-				<code>$S{key}</code>, <code>$S{key,default}</code> - System properties.
-			<li>
-				<code>$E{key}</code>, <code>$E{key,default}</code> - Environment variables.
-			<li>
-				<code>$C{key}</code>, <code>$C{key,default}</code> - Values in this configuration file.
+			<li><code>$S{key}</code>,<code>$S{key,default}</code> - {@link org.apache.juneau.svl.vars.SystemPropertiesVar}
+			<li><code>$E{key}</code>,<code>$E{key,default}</code> - {@link org.apache.juneau.svl.vars.EnvVariablesVar}
+			<li><code>$IF{booleanValue,thenValue[,elseValue]}</code> - {@link org.apache.juneau.svl.vars.IfVar}
+			<li><code>$SW{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - {@link org.apache.juneau.svl.vars.SwitchVar}
+			<li><code>$CO{arg1[,arg2...]}</code> - {@link org.apache.juneau.svl.vars.CoalesceVar}
+			<li><code>$CR{arg1[,arg2...]}</code> - {@link org.apache.juneau.svl.vars.CoalesceAndRecurseVar}
 		</ul>
-		
-		<h5 class='topic'>Examples:</h5>
-		<p class='bcode'>
-	<cc>#--------------------------</cc>
-	<cc># Examples </cc>
-	<cc>#--------------------------</cc>
-	<cs>[MyProperties]</cs>
-	<ck>javaHome</ck> = <cv>$S{java.home}</cv>
-	<ck>path</ck> = <cv>$E{PATH}</cv>
-	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the environment path is $C{MyProperties/path}.</cv>
-		</p>
 		<p>
-			Support for variables is extensible.  You can add support for your own variables by implementing custom 
-			{@link org.apache.juneau.svl.VarResolver VarResolvers}.
-			<br>For example, the microservice <code>Resource</code> class provides access to config files that
-			can contain any of the following variables:
+			The variable resolver can be overridden via the following:
 		</p>
-		<ul>
-			<li><code>$C</code> - Config variables.
-			<li><code>$S</code> - System properties.
-			<li><code>$E</code> - Environment variables.
-			<li><code>$I</code> - Servlet init parameters.
-			<li><code>$ARG</code> - JVM command-line arguments.
-			<li><code>$MF</code> - Main jar manifest file entries.
-			<li><code>$L</code> - Localized strings.
-			<li><code>$A</code> - HTTP request attributes.
-			<li><code>$P</code> - HTTP request URL parameters.
-			<li><code>$R</code> - HTTP request variables.
-			<li><code>$UE</code> - URL-encoding function.
+		<ul class='doctree'>
+			<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_varResolver}
+			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#varResolver(Class)}
+			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#varResolver(VarResolver)}
+		</ul>
+		<p>
+			Additionally, the following method can be used to retrieve a <code>Config</code> with a different variable resolver:
+		</p>
+		<ul class='doctree'>
+			<li class='jf'>{@link org.apache.juneau.config.Config#resolving(VarResolverSession)}
 		</ul>
 	</div>
 
@@ -5047,21 +5271,13 @@
 	<h3 class='topic' onclick='toggle(this)'>6.4 - Encoded Entries</h3>
 	<div class='topic'>
 		<p>
-			If a config file contains sensitive information such as passwords, those values can be 
-			marked for encoding by appending <js>'*'</js> to the end of the key name.
-			<br>If a marked and unencoded value is detected in the file during load, it will be encoded and saved immediately.
+			Encoded entries allow for sensitive information such as passwords to be obfuscated.
+		</p>
+		<p>
+			Encoded entries are denoted with a <js>'*'</js> character at the end of the key name.
 		</p>
 		<p>
 			For example, the following password is marked for encoding....
-		</p>
-		<p class='bcode'>
-	<cs>[MyHost]</cs>
-	<ck>url</ck> = <cv>http://localhost:9080/foo</cv>
-	<ck>user</ck> = <cv>me</cv>
-	<ck>password*</ck> = <cv>mypassword</cv>
-		</p>
-		<p>
-			After initial loading, the file contents will contain an encoded value...
 		</p>
 		<p class='bcode'>
 	<cs>[MyHost]</cs>
@@ -5071,9 +5287,25 @@
 		</p>
 		<p>
 			The default encoder is {@link org.apache.juneau.config.encode.ConfigXorEncoder} which is a simple XOR+Base64 encoder.
-			<br>If desired, custom encoder can be used by implementing the {@link org.apache.juneau.config.encode.ConfigEncoder}
-			interface and creating your own <code>Config</code> using the 
-			<code><del>ConfigBuilder#encoder(Encoder)</del></code> method.
+		</p>
+		<p>
+			Custom encoders can be used to provide your own encoding support by implementing the {@link org.apache.juneau.config.encode.ConfigEncoder} interface.
+		</p>
+		<p>
+			Encoders are controlled via the following:
+		</p>
+		<ul class='doctree'>
+			<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_encoder}
+			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#encoder(Class)}
+			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#encoder(ConfigEncoder)}
+		</ul>
+		<p>
+			Encoded values can be set to plain-text values.  
+			<br>The curly brackets around the value identify whether the value has been encoded or not. 
+		</p>
+		<p>
+			Unencoded values are encoded when the file is saved using the {@link org.apache.juneau.config.Config#save()} method.
+			<br>They can also be encoded by calling {@link org.apache.juneau.config.Config#encodeEntries()}.
 		</p>
 	</div>
 
@@ -5081,6 +5313,29 @@
 	<a id="juneau-config.SectionMaps"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.5 - Section Maps</h3>
 	<div class='topic'>
+		<p>
+			Config sections can be retrieved in-bulk using the  
+			{@link org.apache.juneau.config.Config#getSectionAsMap(String)} method:
+		</p>
+		<p class='bcode'>
+	<jc>// Example config file</jc>
+	<cs>[MyAddress]</cs>
+	<ck>street</ck> = <cv>123 Main Street</cv>
+	<ck>city</ck> = <cv>Anywhere</cv>
+	<ck>state</ck> = <cv>NY</cv>
+	<ck>zip</ck> = <cv>12345</cv>
+		</p>
+		<p class='bcode'>
+	<jc>// Example usage</jc>
+	Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	
+	ObjectMap m = c.getSectionAsMap(<js>"MyAddress"</js>);
+	
+	String street = m.getString(<js>"street"</js>);
+	String city = m.getString(<js>"city"</js>);
+	String state = m.getString(<js>"state"</js>);
+	<jk>int</jk> zip = m.getInt(<js>"zip"</js>);
+		</p>
 	</div>
 
 	<!-- ======================================================================================================== -->
@@ -5094,22 +5349,22 @@
 		<p class='bcode'>
 	<jc>// Example config file</jc>
 	<cs>[MyAddress]</cs>
-	<ck>name</ck> = <cv>John Smith</cv>
 	<ck>street</ck> = <cv>123 Main Street</cv>
 	<ck>city</ck> = <cv>Anywhere</cv>
 	<ck>state</ck> = <cv>NY</cv>
 	<ck>zip</ck> = <cv>12345</cv>
-
+		</p>
+		<p class='bcode'>
 	<jc>// Example bean</jc>
 	<jk>public class</jk> Address {
-		public String name, street, city;
+		public String street, city;
 		public StateEnum state;
 		public int zip;
 	}
 
 	<jc>// Example usage</jc>
 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
+	Address myAddress = cf.getSectionAsBean(<js>"MyAddress"</js>, Address.<jk>class</jk>);
 		</p>
 	</div>
 
@@ -5118,8 +5373,12 @@
 	<h3 class='topic' onclick='toggle(this)'>6.7 - Section Interfaces</h3>
 	<div class='topic'>
 		<p>
-			Config file sections can also be accessed via interface proxies using 
-			{@link org.apache.juneau.config.Config#getSectionAsInterface(String,Class)}:
+			Config sections can also be accessed via interface proxies using 
+			{@link org.apache.juneau.config.Config#getSectionAsInterface(String,Class)}.
+		</p>
+		<p>
+			While section maps and beans retrieve copies of the configuration data at the time of the method
+			call, section interfaces can also be use to set values in the underlying configuration.
 		</p>
 		<p class='bcode'>
 	<jc>// Example config file</jc>
@@ -5130,7 +5389,8 @@
 	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
 	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
-
+		</p>
+		<p class='bcode'>
 	<jc>// Example interface.</jc>
 	<jc>// Setters are optional.</jc>
 	<jk>public interface</jk> MyConfigInterface {
@@ -5155,8 +5415,8 @@
 	}
 	
 	<jc>// Example usage.</jc>
-	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
+	Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	MyConfigInterface ci = c.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
 	
 	<jc>// Read a value.</jc>
 	<jk>int</jk> myInt = ci.getInt();
@@ -5165,7 +5425,7 @@
 	ci.setBean(<jk>new</jk> MyBean());
 
 	<jc>// Save your changes.</jc>
-	cf.save();
+	c.save();
 		</p>
 	</div>
 
@@ -5173,10 +5433,23 @@
 	<a id="juneau-config.SettingValues"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.8 - Setting Values</h3>
 	<div class='topic'>
-
 		<p>
-			The interface also allows a config file to be easily constructed programmatically:
+			The following methods allow you to add, remove, and modify entries and sections in a config file:
 		</p>
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.config.Config}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object) set(String,Object)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer) set(String,Object,Serializer)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod,String,List) set(String,Object,Serializer,ConfigMod,String,List)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List) set(String,Object,Serializer,ConfigMod[],String,List)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#set(String,String) set(String,String)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#remove(String) remove(String)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#setSection(String,List) setSection(String,List)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#setSection(String,List,Map) setSection(String,List,Map)}
+				<li class='jm'>{@link org.apache.juneau.config.Config#removeSection(String) removeSection(String)}
+			</ul>
+		</ul>
 		<p class='bcode'>
 	<jc>// Construct the sample config file programmatically</jc>
 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build()
@@ -5209,39 +5482,6 @@
 	<a id="juneau-config.Listeners"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.9 - Listeners</h3>
 	<div class='topic'>
-		<p>
-			The following method is provided for listening to changes made on config files:
-		</p>
-		<p>
-			<code><del>Config#addListener(ConfigListener)</del></code>.
-		</p>
-		<p>
-			Subclasses are provided for listening for different kinds of events:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				<code><del>ConfigListener</del></code> - Config file is saved, loaded, or modified.
-			<li>
-				<code><del>SectionListener</del></code> - One or more entries in a section are modified.
-			<li>
-				<code><del>EntryListener</del></code> - An individual entry is modified.
-		</ul>
-		
-		<h5 class="topic">Example:</h5>
-	<p class='bcode'>
-	<jc>// Get our config file using the default config manager</jc>
-	Config f = Config.<jsm>create</jsm>().name(<js>"C:/temp/MyConfig.cfg"</js>).build();
-
-	<jc>// Add a listener for an entry</jc>
-	f.addListener(
-		<jk>new</jk> EntryListener(<js>"Section1/key1"</js>) {
-			<ja>@Override</ja>
-			<jk>public void</jk> onChange(ConfigFile cf) {
-				System.<jsf>err</jsf>.println(<js>"Entry changed!  New value is "</js> + cf.getString(<js>"Section1/key1"</js>));
-			}
-		}
-	);
-		</p>
 	</div>
 
 	<!-- ======================================================================================================== -->
@@ -5263,7 +5503,7 @@
 		
 		<!-- ======================================================================================================== -->
 		<a id="juneau-config.ConfigFileStore"></a>
-		<h4 class='topic' onclick='toggle(this)'>6.11.2 - ConfigFileStoren</h4>
+		<h4 class='topic' onclick='toggle(this)'>6.11.2 - ConfigFileStore</h4>
 		<div class='topic'>
 		</div>
 
@@ -5284,13 +5524,13 @@
 			their listeners get unregistered from the underlying storage APIs.
 		</p>
 		<p class='bcode'>
-			<jc>// Create a transient config.</jc>
-			Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-			
-			<jc>// Do stuff with it.</jc>
-			
-			<jc>// Then close the config to unregister the listeners.</jc>
-			c.close();
+	<jc>// Create a transient config.</jc>
+	Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	
+	<jc>// Do stuff with it.</jc>
+	
+	<jc>// Then close the config to unregister the listeners.</jc>
+	c.close();
 		</p>
 	</div>
 

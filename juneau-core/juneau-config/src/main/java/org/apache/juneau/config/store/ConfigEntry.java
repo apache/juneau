@@ -62,7 +62,7 @@ public class ConfigEntry {
 			this.comment = null;
 		}
 	
-		this.value = line.trim();
+		this.value = StringUtils.replaceUnicodeSequences(line.trim());
 
 		this.preLines = immutableList(preLines);
 	}
@@ -128,10 +128,14 @@ public class ConfigEntry {
 		for (String pl : preLines)
 			w.append(pl).append('\n');
 		if (rawLine != null) {
-			String l = rawLine;
-			if (l.indexOf('\n') != -1)
-				l = l.replaceAll("(\\r?\\n)", "$1\t");
-			w.append(l).append('\n');
+			for (int i = 0; i < rawLine.length(); i++) {
+				char c = rawLine.charAt(i);
+				if (c == '\n')
+					w.append('\n').append('\t');
+				else if (c != '\r') 
+					w.append(c);
+			}
+			w.append('\n');
 		} else {
 			w.append(key);
 			if (modifiers != null)
@@ -139,17 +143,26 @@ public class ConfigEntry {
 			w.append(" = ");
 			
 			String val = value;
-			if (val.indexOf('\n') != -1)
-				val = val.replaceAll("(\\r?\\n)", "$1\t");
-			if (val.indexOf('#') != -1)
-				val = val.replaceAll("#", "\\\\#");
-			w.append(val);
+			for (int i = 0; i < val.length(); i++) {
+				char c = val.charAt(i);
+				if (c == '\n')
+					w.append('\n').append('\t');
+				else if (c != '\r') {
+					if (REPLACE_CHARS.contains(c) || (Character.isISOControl(c) && ! (c == '\n' || c == '\r' || c == '\t'))) {
+						w.append(StringUtils.unicodeSequence(c));
+					} else {
+						w.append(c);
+					}
+				}
+			}
 				
 			if (! isEmpty(comment)) 
 				w.append(" # ").append(comment);
-
+			
 			w.append('\n');
 		}
 		return w;
 	}
+	
+	private static final AsciiSet REPLACE_CHARS = new AsciiSet("\\#");
 }

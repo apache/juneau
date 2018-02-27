@@ -221,24 +221,24 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public static final String CONFIG_binaryFormat = PREFIX + "binaryFormat.s";
 
 	/**
-	 * Configuration property:  Beans on separate lines.
+	 * Configuration property:  Multi-line values should always be on separate lines.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Config.beanOnSeparateLines.b"</js>
+	 * 	<li><b>Name:</b>  <js>"Config.multiLineValuesOnSeparateLines.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#beansOnSeparateLines()}
+	 * 			<li class='jm'>{@link ConfigBuilder#multiLineValuesOnSeparateLines()}
 	 * 		</ul>
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * When enabled, serialized POJOs will be placed on a separate line from the key.
+	 * When enabled, multi-line values will always be placed on a separate line from the key.
 	 */
-	public static final String CONFIG_beansOnSeparateLines = PREFIX + "beansOnSeparateLines.b";
+	public static final String CONFIG_multiLineValuesOnSeparateLines = PREFIX + "multiLineValuesOnSeparateLines.b";
 	
 	/**
 	 * Configuration property:  Read-only.
@@ -272,7 +272,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	private final VarResolverSession varSession;
 	private final int binaryLineLength;
 	private final String binaryFormat;
-	private final boolean beansOnSeparateLines, readOnly;
+	private final boolean multiLineValuesOnSeparateLines, readOnly;
 	private final ConfigMap configMap;
 	private final BeanSession beanSession;
 	private final List<ConfigEventListener> listeners = Collections.synchronizedList(new LinkedList<ConfigEventListener>());
@@ -321,7 +321,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			.createSession();
 		binaryLineLength = getIntegerProperty(CONFIG_binaryLineLength, -1);
 		binaryFormat = getStringProperty(CONFIG_binaryFormat, "BASE64").toUpperCase();
-		beansOnSeparateLines = getBooleanProperty(CONFIG_beansOnSeparateLines, false);
+		multiLineValuesOnSeparateLines = getBooleanProperty(CONFIG_multiLineValuesOnSeparateLines, false);
 		readOnly = getBooleanProperty(CONFIG_readOnly, false);
 	}
 	
@@ -337,7 +337,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		this.varSession = varSession;
 		binaryLineLength = copyFrom.binaryLineLength;
 		binaryFormat = copyFrom.binaryFormat;
-		beansOnSeparateLines = copyFrom.beansOnSeparateLines;
+		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 		readOnly = copyFrom.readOnly;
 		beanSession = copyFrom.beanSession;
 	}
@@ -433,7 +433,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * Equivalent to calling <code>put(key, value, isEncoded(key))</code>.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param value The new value POJO.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException
@@ -448,7 +448,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Same as {@link #set(String, Object)} but allows you to specify the serializer to use to serialize the
 	 * value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param value The new value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
@@ -465,7 +465,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param value The new value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
@@ -491,7 +491,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param value The new value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
@@ -532,7 +532,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Removes an entry with the specified key.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
@@ -584,7 +584,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public String getString(String key) {
@@ -608,8 +608,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value.
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist.
 	 */
 	public String getString(String key, String def) {
@@ -624,7 +624,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Gets the entry with the specified key, splits the value on commas, and returns the values as trimmed strings.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @return The value, or an empty array if the section or key does not exist.
 	 */
 	public String[] getStringArray(String key) {
@@ -634,8 +634,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Same as {@link #getStringArray(String)} but returns a default value if the value cannot be found.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value if section or key does not exist.
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist or is blank.
 	 */
 	public String[] getStringArray(String key, String[] def) {
@@ -649,16 +649,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Convenience method for getting int config values.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @return The value, or <code>0</code> if the section or key does not exist or cannot be parsed as an integer.
-	 */
-	public int getInt(String key) {
-		return getInt(key, 0);
-	}
-
-	/**
-	 * Convenience method for getting int config values.
-	 * 
 	 * <p>
 	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
 	 * 
@@ -670,9 +660,28 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 		<code><js>"100M"</js> => 104857600</code>
 	 * </ul>
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value if config file or value does not exist.
-	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as an integer.
+	 * <p>
+	 * Uses {@link Integer#decode(String)} underneath, so any of the following integer formats are supported:
+	 * <ul>
+	 * 	<li><js>"0x..."</js>
+	 * 	<li><js>"0X..."</js>
+	 * 	<li><js>"#..."</js>
+	 * 	<li><js>"0..."</js>
+	 * </ul>
+	 * 
+	 * @param key The key.
+	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 */
+	public int getInt(String key) {
+		return getInt(key, 0);
+	}
+
+	/**
+	 * Same as {@link #getInt(String)} but returns a default value if not set.
+	 * 
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
+	 * @return The value, or the default value if the value does not exist or the value is empty.
 	 */
 	public int getInt(String key, int def) {
 		String s = getString(key);
@@ -684,7 +693,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Convenience method for getting boolean config values.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @return The value, or <jk>false</jk> if the section or key does not exist or cannot be parsed as a boolean.
 	 */
 	public boolean getBoolean(String key) {
@@ -694,23 +703,13 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Convenience method for getting boolean config values.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value if config file or value does not exist.
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as a boolean.
 	 */
 	public boolean getBoolean(String key, boolean def) {
 		String s = getString(key);
 		return isEmpty(s) ? def : Boolean.parseBoolean(s);
-	}
-
-	/**
-	 * Convenience method for getting long config values.
-	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @return The value, or <code>0</code> if the section or key does not exist or cannot be parsed as a long.
-	 */
-	public long getLong(String key) {
-		return getLong(key, 0);
 	}
 
 	/**
@@ -727,9 +726,28 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 		<code><js>"100M"</js> => 104857600</code>
 	 * </ul>
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value if config file or value does not exist.
-	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as an integer.
+	 * <p>
+	 * Uses {@link Long#decode(String)} underneath, so any of the following number formats are supported:
+	 * <ul>
+	 * 	<li><js>"0x..."</js>
+	 * 	<li><js>"0X..."</js>
+	 * 	<li><js>"#..."</js>
+	 * 	<li><js>"0..."</js>
+	 * </ul>
+	 * 
+	 * @param key The key.
+	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 */
+	public long getLong(String key) {
+		return getLong(key, 0);
+	}
+
+	/**
+	 * Same as {@link #getLong(String)} but returns a default value if not set.
+	 * 
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
+	 * @return The value, or the default value if the value does not exist or the value is empty.
 	 */
 	public long getLong(String key, long def) {
 		String s = getString(key);
@@ -738,6 +756,72 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return parseLongWithSuffix(s);
 	}
 	
+	/**
+	 * Convenience method for getting double config values.
+	 * 
+	 * <p>
+	 * Uses {@link Double#valueOf(String)} underneath, so any of the following number formats are supported:
+	 * <ul>
+	 * 	<li><js>"0x..."</js>
+	 * 	<li><js>"0X..."</js>
+	 * 	<li><js>"#..."</js>
+	 * 	<li><js>"0..."</js>
+	 * </ul>
+	 * 
+	 * @param key The key.
+	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 */
+	public double getDouble(String key) {
+		return getDouble(key, 0);
+	}
+
+	/**
+	 * Same as {@link #getDouble(String)} but returns a default value if not set.
+	 * 
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
+	 * @return The value, or the default value if the value does not exist or the value is empty.
+	 */
+	public double getDouble(String key, double def) {
+		String s = getString(key);
+		if (isEmpty(s))
+			return def;
+		return Double.valueOf(s);
+	}
+
+	/**
+	 * Convenience method for getting float config values.
+	 * 
+	 * <p>
+	 * Uses {@link Float#valueOf(String)} underneath, so any of the following number formats are supported:
+	 * <ul>
+	 * 	<li><js>"0x..."</js>
+	 * 	<li><js>"0X..."</js>
+	 * 	<li><js>"#..."</js>
+	 * 	<li><js>"0..."</js>
+	 * </ul>
+	 * 
+	 * @param key The key.
+	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 */
+	public float getFloat(String key) {
+		return getFloat(key, 0);
+	}
+
+	/**
+	 * Same as {@link #getFloat(String)} but returns a default value if not set.
+	 * 
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
+	 * @return The value, or the default value if the value does not exist or the value is empty.
+	 */
+	public float getFloat(String key, float def) {
+		String s = getString(key);
+		if (isEmpty(s))
+			return def;
+		return Float.valueOf(s);
+	}
+
 	/**
 	 * Convenience method for getting byte array config values.
 	 * 
@@ -766,7 +850,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Same as {@link #getBytes(String)} but with a default value if the entry doesn't exist.
 	 * 
 	 * @param key The key.  
-	 * @param def The default value.
+	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist.
 	 * @throws ParseException If value could not be converted to a byte array.
 	 */
@@ -833,7 +917,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 		Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -851,7 +935,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Same as {@link #getObject(String, Type, Type...)} but allows you to specify the parser to use to parse the value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
 	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
@@ -897,7 +981,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 * 
 	 * @param <T> The class type of the object being created.
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException
@@ -912,7 +996,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Same as {@link #getObject(String, Class)} but allows you to specify the parser to use to parse the value.
 	 * 
 	 * @param <T> The class type of the object being created.
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
 	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
@@ -933,8 +1017,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * Same as {@link #getObject(String, Class)}, but with a default value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value if section or key does not exist.
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
 	 * @param type The class to convert the value to.
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
@@ -947,11 +1031,11 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Same as {@link #getObjectWithDefault(String, Object, Class)} but allows you to specify the parser to use to parse
 	 * the value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
 	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
-	 * @param def The default value if section or key does not exist.
+	 * @param def The default value if the value does not exist.
 	 * @param type The class to convert the value to.
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
@@ -968,8 +1052,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * Same as {@link #getObject(String, Type, Type...)}, but with a default value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value if section or key does not exist.
+	 * @param key The key.
+	 * @param def The default value if the value does not exist.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -988,11 +1072,11 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Same as {@link #getObjectWithDefault(String, Object, Type, Type...)} but allows you to specify the parser to use
 	 * to parse the value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
 	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
-	 * @param def The default value if section or key does not exist.
+	 * @param def The default value if the value does not exist.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -1263,7 +1347,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Returns <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 * 
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param key The key.
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
@@ -1515,6 +1599,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		if (serializer == null)
 			serializer = this.serializer;
 		Class<?> c = value.getClass();
+		if (value instanceof CharSequence) 
+			return nlIfMl((CharSequence)value); 
 		if (isSimpleType(c))
 			return value.toString();
 
@@ -1532,12 +1618,12 @@ public final class Config extends Context implements ConfigEventListener, Writab
 				return s;
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < s.length(); i += l) 
-				sb.append('\n').append(s.substring(i, Math.min(s.length(), i + l)));
+				sb.append(binaryLineLength > 0 ? "\n" : "").append(s.substring(i, Math.min(s.length(), i + l)));
 			return sb.toString();
 		}
 		
 		String r = null;
-		if (beansOnSeparateLines)
+		if (multiLineValuesOnSeparateLines)
 			r = "\n" + (String)serializer.serialize(value);
 		else
 			r = (String)serializer.serialize(value);
@@ -1545,6 +1631,13 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		if (r.startsWith("'"))
 			return r.substring(1, r.length()-1);
 		return r;
+	}
+	
+	private String nlIfMl(CharSequence cs) {
+		String s = cs.toString();
+		if (s.indexOf('\n') != -1 && multiLineValuesOnSeparateLines)
+			return "\n" + s;
+		return s;
 	}
 	
 	@SuppressWarnings({ "unchecked" })
