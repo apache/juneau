@@ -284,8 +284,8 @@
 		<url>http://www.apache.org/</url>
 	</organization>
 	<scm>
-		<connection>scm:git:https://git-wip-us.apache.org/repos/asf/juneau.git</connection>
-		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/juneau.git</developerConnection>
+		<connection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</connection>
+		<developerConnection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</developerConnection>
 		<url>https://github.com/apache/juneau</url>
 		<tag>HEAD</tag>
 	</scm>
