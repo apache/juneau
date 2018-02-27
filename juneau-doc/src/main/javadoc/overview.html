@@ -5452,7 +5452,7 @@
 		</ul>
 		<p class='bcode'>
 	<jc>// Construct the sample config file programmatically</jc>
-	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build()
+	Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build()
 		.set(<js>"key1"</js>, 1)
 		.set(<js>"key2"</js>, <jk>true</jk>)
 		.set(<js>"key3"</js>, <jk>new int</jk>[]{1,2,3})
@@ -5513,6 +5513,21 @@
 	<a id="juneau-config.ReadOnlyConfigs"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.12 - Read-only Configs</h3>
 	<div class='topic'>
+		<p>
+			The following settings can be used to create read-only <code>Config</code> objects:
+		</p>
+		<ul class='doctree'>
+			<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_readOnly}
+			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#readOnly()}
+		</ul>
+		<h6 class='figure'>Example:</h6>
+		<p class='bcode'>
+	<jc>// Create a read-only config</jc>
+	Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).readOnly().build();
+		</p>
+		<p>
+			This causes all methods that make modifications to throw {@link java.lang.UnsupportedOperationException}.
+		</p>
 	</div>
 
 	<!-- ======================================================================================================== -->
