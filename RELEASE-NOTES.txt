@@ -11,6 +11,18 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 7.1.0
+
+** Bug
+    * [JUNEAU-75] - Documentation not clear on how to customize htdocs folder
+    * [JUNEAU-78] - Is org.apache.juneau.dto.swagger.SchemaInfo missing a $ref field?
+    * [JUNEAU-79] - org.apache.juneau.microservice.RestMicroservice.stop() should not dump stack traces on the console
+    * [JUNEAU-80] - RestCallHandlerDefault service method calls handleResponse which seems to close output stream right before it runs res.flushbuffer which throws an IO exception because the stream is closed.
+
+** Improvement
+    * [JUNEAU-76] - Improvements to Context/Builder APIs
+    * [JUNEAU-77] - Document how to customize the favicon
+
 
 Release Notes - Juneau - Version 7.0.1
 
