@@ -25,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.encode.ConfigEncoder;
 import org.apache.juneau.config.event.*;
+import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.http.*;
@@ -35,7 +36,12 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
 /**
- * TODO
+ * Main configuration API class.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
+ * </ul>
  */
 public final class Config extends Context implements ConfigEventListener, Writable {
 
@@ -290,6 +296,19 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return new ConfigBuilder();
 	}
 	
+	/**
+	 * Same as {@link #create()} but initializes the builder with the specified config name.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> ConfigBuilder().name(name)</code>.
+	 * 
+	 * @param name The configuration name.
+	 * @return A new {@link ConfigBuilder} object.
+	 */
+	public static ConfigBuilder create(String name) {
+		return new ConfigBuilder().name(name);
+	}
+
 	@Override /* Context */
 	public ConfigBuilder builder() {
 		return new ConfigBuilder(getPropertyStore());
@@ -1435,15 +1454,15 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	/**
-	 * Saves this config to the store.
+	 * Commit the changes in this config to the store.
 	 * 
 	 * @return This object (for method chaining).
 	 * @throws IOException 
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
-	public Config save() throws IOException {
+	public Config commit() throws IOException {
 		checkWrite();
-		configMap.save();
+		configMap.commit();
 		return this;
 	}
 
@@ -1506,9 +1525,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @throws InterruptedException
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
-	public Config write(Reader contents, boolean synchronous) throws IOException, InterruptedException {
+	public Config load(Reader contents, boolean synchronous) throws IOException, InterruptedException {
 		checkWrite();
-		configMap.write(IOUtils.read(contents), synchronous);
+		configMap.load(IOUtils.read(contents), synchronous);
 		return this;
 	}
 
@@ -1522,9 +1541,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @throws InterruptedException
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
-	public Config write(String contents, boolean synchronous) throws IOException, InterruptedException {
+	public Config load(String contents, boolean synchronous) throws IOException, InterruptedException {
 		checkWrite();
-		configMap.write(contents, synchronous);
+		configMap.load(contents, synchronous);
 		return this;
 	}
 

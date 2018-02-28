@@ -85,7 +85,7 @@ public class ConfigTest {
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
 		
-		c.save();
+		c.commit();
 		
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
@@ -127,7 +127,7 @@ public class ConfigTest {
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
 		
-		c.save();
+		c.commit();
 		
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
@@ -187,7 +187,7 @@ public class ConfigTest {
 		c.set("T/c1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		
 		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
-		c.save();
+		c.commit();
 		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
 		c = cb.build();
 		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
@@ -214,7 +214,7 @@ public class ConfigTest {
 		c.remove("T/c1");
 		
 		assertTextEquals("[S]|", c.toString());
-		c.save();
+		c.commit();
 		assertTextEquals("[S]|", c.toString());
 		c = cb.build();
 		assertTextEquals("[S]|", c.toString());
@@ -1216,7 +1216,7 @@ public class ConfigTest {
 		cf.set("section1/key3", new int[]{4,5,6});
 		cf.set("section1/key4", new URL("http://bar"));
 
-		cf.save();
+		cf.commit();
 
 		assertEquals(1, cf.getInt("key1"));
 		assertEquals(true, cf.getBoolean("key2"));
@@ -1239,7 +1239,7 @@ public class ConfigTest {
 		);
 		assertEquals(TimeUnit.MINUTES, cf.getObject("key1", TimeUnit.class));
 
-		cf.save();
+		cf.commit();
 
 		assertEquals(TimeUnit.MINUTES, cf.getObject("key1", TimeUnit.class));
 	}
@@ -1257,14 +1257,14 @@ public class ConfigTest {
 		
 		assertEquals("mypassword", cf.getString("s1/foo"));
 
-		cf.save();
+		cf.commit();
 		String expected = "[s1]||foo* = {AwwJVhwUQFZEMg==}|";
 
 		assertTextEquals(expected, cf);
 
 		assertEquals("mypassword", cf.getString("s1/foo"));
 
-		cf.write(new StringReader("[s1]\nfoo* = mypassword2\n"), true);
+		cf.load(new StringReader("[s1]\nfoo* = mypassword2\n"), true);
 		
 		assertEquals("mypassword2", cf.getString("s1/foo"));
 
@@ -1287,7 +1287,7 @@ public class ConfigTest {
 		);
 
 		cf.encodeEntries();
-		cf.save();
+		cf.commit();
 		String expected = "[s1]||foo* = {AwwJVhwUQFZEMg==}|";
 		assertTextEquals(expected, ConfigMemoryStore.DEFAULT.read("Test.cfg"));
 	}
@@ -1448,7 +1448,7 @@ public class ConfigTest {
 		cf.set("B/b1", 3);
 		cf.set("B/b3", 3);
 		assertObjectEquals("[]", changes);
-		cf.save();
+		cf.commit();
 		assertObjectEquals("['a1=3','a3=3','B/b1=3','B/b3=3']", changes);
 
 		// Rollback.
@@ -1459,7 +1459,7 @@ public class ConfigTest {
 		cf.set("B/b3", 3);
 		assertObjectEquals("[]", changes);
 		cf.rollback();
-		cf.save();
+		cf.commit();
 		assertObjectEquals("[]", changes);
 
 		// Overwrite
@@ -1470,21 +1470,21 @@ public class ConfigTest {
 		cf.set("B/b2", "2");
 		cf.set("C/c1", "2");
 		cf.set("C/c2", "2");
-		cf.save();
+		cf.commit();
 		assertObjectEquals("['a1=2','a2=2','B/b1=2','B/b2=2','C/c1=2','C/c2=2']", changes);
 
 		// Encoded
 		changes.clear();
 		cf.set("a4", "4", null, ConfigMod.ENCODED, null, null);
 		cf.set("B/b4", "4", null, ConfigMod.ENCODED, null, null);
-		cf.save();
+		cf.commit();
 		assertObjectEquals("['a4={Wg==}','B/b4={Wg==}']", changes);
 		
 		// Encoded overwrite
 		changes.clear();
 		cf.set("a4", "5");
 		cf.set("B/b4", "5");
-		cf.save();
+		cf.commit();
 		assertObjectEquals("['a4={Ww==}','B/b4={Ww==}']", changes);
 
 		// Remove entries
@@ -1494,32 +1494,32 @@ public class ConfigTest {
 		cf.remove("B/b4");
 		cf.remove("B/bx");
 		cf.remove("X/bx");
-		cf.save();
+		cf.commit();
 		assertObjectEquals("['REMOVE_ENTRY(a4)','REMOVE_ENTRY(B/b4)']", changes);
 
 		// Add section
 		// Shouldn't trigger listener.
 		changes.clear();
 		cf.setSection("D", Arrays.asList("#comment"));
-		cf.save();
+		cf.commit();
 		assertObjectEquals("[]", changes);
 
 		// Add section with contents
 		changes.clear();
 		cf.setSection("E", null, new AMap<String,Object>().append("e1", "1").append("e2", "2"));
-		cf.save();
+		cf.commit();
 		assertObjectEquals("['E/e1=1','E/e2=2']", changes);
 
 		// Remove section
 		changes.clear();
 		cf.removeSection("E");
-		cf.save();
+		cf.commit();
 		assertObjectEquals("['REMOVE_ENTRY(E/e1)','REMOVE_ENTRY(E/e2)']", changes);
 
 		// Remove non-existent section
 		changes.clear();
 		cf.removeSection("E");
-		cf.save();
+		cf.commit();
 		assertObjectEquals("[]", changes);
 	}
 
@@ -1705,7 +1705,7 @@ public class ConfigTest {
 		cf.set("A/a", "a,#b,=c");
 
 		assertTextEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
-		cf.save();
+		cf.commit();
 		assertTextEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
 
 		assertEquals("a,#b,=c", cf.getString("a"));

@@ -19,7 +19,7 @@ import org.apache.juneau.config.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
  * </ul>
  */
 public interface ConfigEncoder {

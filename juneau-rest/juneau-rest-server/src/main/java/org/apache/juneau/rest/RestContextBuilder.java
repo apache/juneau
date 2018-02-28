@@ -140,10 +140,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 		try {
 
-//			ConfigBuilder cfb = Config.create();
-
 			htmlDocBuilder = new HtmlDocBuilder(properties);
-//			this.config = cfb.build();
 			varResolverBuilder = new VarResolverBuilder()
 				.vars(
 					SystemPropertiesVar.class,
@@ -151,8 +148,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					ConfigVar.class,
 					IfVar.class,
 					SwitchVar.class,
-					CoalesceVar.class,
-					CoalesceAndRecurseVar.class
+					CoalesceVar.class
 				);
 
 			VarResolver vr = varResolverBuilder.build();

@@ -153,7 +153,7 @@ public class ConfigResource extends Resource {
 		)
 	)
 	public ObjectMap setConfigContents(@Body Reader contents) throws Exception {
-		return getServletConfig().getConfig().write(contents, true).asMap();
+		return getServletConfig().getConfig().load(contents, true).asMap();
 	}
 
 	/**

@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.junit.*;
 
@@ -503,7 +504,7 @@ public class ConfigMapTest {
 		
 		assertTextEquals("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", cm);
 		
-		cm.save();
+		cm.commit();
 		assertTextEquals("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", s.read("Foo.cfg"));
 		
 		// Round trip.
@@ -536,7 +537,7 @@ public class ConfigMapTest {
 		
 		assertTextEquals("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", cm);
 		
-		cm.save();
+		cm.commit();
 		assertTextEquals("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", s.read("Foo.cfg"));
 		
 		// Round trip.
@@ -556,7 +557,7 @@ public class ConfigMapTest {
 		
 		assertEquals("v1\nv2\nv3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\nv2\nv3", cm.getEntry("S1", "k1").getValue());
-		cm.save();
+		cm.commit();
 		assertTextEquals("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
 		
 		// Round trip.
@@ -576,7 +577,7 @@ public class ConfigMapTest {
 		
 		assertEquals("v1 \n v2 \n v3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\t\n\tv2\t\n\tv3", cm.getEntry("S1", "k1").getValue());
-		cm.save();
+		cm.commit();
 		assertTextEquals("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
 		
 		// Round trip.
@@ -668,12 +669,12 @@ public class ConfigMapTest {
 		for (char c : validChars.toCharArray()) {
 			String test = ""+c;
 			cm.setSection(test, Arrays.asList("test"));
-			cm.save();
+			cm.commit();
 			assertEquals("test", cm.getPreLines(test).get(0));
 			
 			test = "foo"+c+"bar";
 			cm.setSection(test, Arrays.asList("test"));
-			cm.save();
+			cm.commit();
 			assertEquals("test", cm.getPreLines(test).get(0));
 		}
 	}
@@ -953,7 +954,7 @@ public class ConfigMapTest {
 
 		cm.setEntry("S1", "k1", null, null, "", null);
 		assertTextEquals("[S1]|k1 = v1|", cm);
-		cm.save();
+		cm.commit();
 		assertTextEquals("[S1]|k1 = v1|", cm);
 		
 		cm.setEntry("S1", "k1", null, null, null, null);

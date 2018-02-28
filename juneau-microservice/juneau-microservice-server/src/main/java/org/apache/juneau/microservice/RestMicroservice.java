@@ -403,7 +403,7 @@ public class RestMicroservice extends Microservice {
 	}
 
 	/**
-	 * Called when {@link Config#save()} is called on the config file.
+	 * Called when {@link Config#commit()} is called on the config file.
 	 * 
 	 * <p>
 	 * The default behavior is configured by the following value in the config file:

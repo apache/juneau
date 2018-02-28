@@ -68,7 +68,6 @@ public class VarResolver {
 	 * 	<li><code>$IF{booleanValue,thenValue[,elseValue]}</code> - {@link IfVar}
 	 * 	<li><code>$SW{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - {@link SwitchVar}
 	 * 	<li><code>$CO{arg1[,arg2...]}</code> - {@link CoalesceVar}
-	 * 	<li><code>$CR{arg1[,arg2...]}</code> - {@link CoalesceAndRecurseVar}
 	 * </ul>
 	 * 
 	 * @see SystemPropertiesVar

@@ -20,6 +20,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
+import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.junit.*;
 
@@ -47,7 +48,7 @@ public class ConfigMapListenerTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("", "foo", "baz", null, null, null);
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -74,7 +75,7 @@ public class ConfigMapListenerTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("S1", "foo", "baz", null, null, null);
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -104,7 +105,7 @@ public class ConfigMapListenerTest {
 		cm.register(l);
 		cm.setEntry("", "k", "vb", null, null, null);
 		cm.setEntry("S1", "k1", "v1b", null, null, null);
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -130,7 +131,7 @@ public class ConfigMapListenerTest {
 		cm.register(l);
 		cm.setEntry("", "k", "kb", "^*", "C", Arrays.asList("#k"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "C1", Arrays.asList("#k1"));
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -162,7 +163,7 @@ public class ConfigMapListenerTest {
 		cm.register(l);
 		cm.setEntry("", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", Arrays.asList("#k1b"));
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -195,7 +196,7 @@ public class ConfigMapListenerTest {
 		cm.register(l);
 		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -227,7 +228,7 @@ public class ConfigMapListenerTest {
 		cm.register(l);
 		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -260,7 +261,7 @@ public class ConfigMapListenerTest {
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
 		cm.setEntry("S3", "k3", "v3", null, null, null);
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -295,7 +296,7 @@ public class ConfigMapListenerTest {
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
 		cm.setEntry("S3", "k3", "v3", null, null, null);
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -339,7 +340,7 @@ public class ConfigMapListenerTest {
 		cm.removeSection("S1");
 		cm.removeSection("S2");
 		cm.removeSection("S3");
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -417,7 +418,7 @@ public class ConfigMapListenerTest {
 			"[S1]",
 			"k1 = v1b"
 		);
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -455,7 +456,7 @@ public class ConfigMapListenerTest {
 			"[S1]",
 			"k1 = v1b"
 		);
-		cm.save();
+		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
@@ -497,7 +498,7 @@ public class ConfigMapListenerTest {
 			ConfigMap cm = s.getMap("Foo.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
-			cm.save();
+			cm.commit();
 			wait(latch);
 			assertNull(l.error);
 			cm.unregister(l);
@@ -543,7 +544,7 @@ public class ConfigMapListenerTest {
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			try {
-				cm.save();
+				cm.commit();
 				fail("Exception expected.");
 			} catch (ConfigException e) {
 				assertEquals("Unable to store contents of config to store.", e.getMessage());

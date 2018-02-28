@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.internal.*;
 
 /**
  * Represents a storage location for configuration files.

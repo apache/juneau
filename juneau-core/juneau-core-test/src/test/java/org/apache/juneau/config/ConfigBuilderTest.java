@@ -50,11 +50,11 @@ public class ConfigBuilderTest {
 		f = new File(tempDir, "TestGet.cfg");
 		assertFalse(f.exists());
 
-		cf.save();
+		cf.commit();
 		assertObjectEquals("{'':{},Test:{A:'a'}}", cf.asMap());
 
 		String NL = System.getProperty("line.separator");
-		cf = cf.write("[Test]"+NL+"A = b"+NL, true);
+		cf = cf.load("[Test]"+NL+"A = b"+NL, true);
 		assertObjectEquals("{'':{},Test:{A:'b'}}", cf.asMap());
 	}
 }

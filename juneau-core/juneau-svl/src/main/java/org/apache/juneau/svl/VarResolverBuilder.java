@@ -68,13 +68,12 @@ public class VarResolverBuilder {
 	 * 	<li>{@link SwitchVar}
 	 * 	<li>{@link IfVar}
 	 * 	<li>{@link CoalesceVar}
-	 * 	<li>{@link CoalesceAndRecurseVar}
 	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
 	public VarResolverBuilder defaultVars() {
-		return vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class, CoalesceAndRecurseVar.class, CoalesceVar.class);
+		return vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class, CoalesceVar.class);
 	}
 
 	/**

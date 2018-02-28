@@ -81,7 +81,6 @@ public class ConfigMemoryStore extends ConfigStore {
 		if (expectedContents != null && ! isEquals(currentContents, expectedContents)) 
 			return currentContents;
 		
-		cache.put(name, newContents);
 		update(name, newContents);
 		
 		return null;
@@ -91,7 +90,7 @@ public class ConfigMemoryStore extends ConfigStore {
 	@Override /* ConfigStore */
 	public synchronized ConfigMemoryStore update(String name, String newContents) {
 		cache.put(name, newContents);
-		super.update(name, newContents);
+		super.update(name, newContents);  // Trigger any listeners.
 		return this;
 	}
 

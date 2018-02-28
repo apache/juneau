@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.store;
+package org.apache.juneau.config.internal;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
@@ -22,6 +22,7 @@ import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
+import org.apache.juneau.config.store.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -404,7 +405,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public ConfigMap write(String contents, boolean synchronous) throws IOException, InterruptedException {
+	public ConfigMap load(String contents, boolean synchronous) throws IOException, InterruptedException {
 		
 		if (synchronous) {
 			final CountDownLatch latch = new CountDownLatch(1);
@@ -445,7 +446,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */
-	public ConfigMap save() throws IOException {
+	public ConfigMap commit() throws IOException {
 		writeLock();
 		try {
 			String newContents = asString();

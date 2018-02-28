@@ -60,7 +60,6 @@ public @interface ResourceSwagger {
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
 	 * {@link FileVar $F} 
 	 * {@link ServletInitParamVar $I},
@@ -117,7 +116,6 @@ public @interface ResourceSwagger {
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
 	 * {@link FileVar $F} 
 	 * {@link ServletInitParamVar $I},
@@ -174,7 +172,6 @@ public @interface ResourceSwagger {
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
 	 * {@link FileVar $F} 
 	 * {@link ServletInitParamVar $I},
@@ -237,7 +234,6 @@ public @interface ResourceSwagger {
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
 	 * {@link FileVar $F} 
 	 * {@link ServletInitParamVar $I},
@@ -275,7 +271,6 @@ public @interface ResourceSwagger {
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
 	 * {@link FileVar $F} 
 	 * {@link ServletInitParamVar $I},
@@ -313,7 +308,6 @@ public @interface ResourceSwagger {
 	 * Value can contain any of the following variables:  
 	 * {@link ConfigVar $C} 
 	 * {@link CoalesceVar $CO}
-	 * {@link CoalesceAndRecurseVar $CR}
 	 * {@link EnvVariablesVar $E} 
 	 * {@link FileVar $F} 
 	 * {@link ServletInitParamVar $I},

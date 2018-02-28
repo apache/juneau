@@ -20,10 +20,6 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is <js>"$CO{arg1[,arg2...]}"</js>.
  * 
- * <p>
- * The difference between {@link CoalesceVar} and {@link CoalesceAndRecurseVar} is that the first will not resolve
- * inner variables nor recursively resolve variables, and the second will.
- * <br>Use {@link CoalesceVar} when resolving user-input.
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -45,15 +41,5 @@ public class CoalesceVar extends MultipartResolvingVar {
 	@Override
 	public String resolve(VarResolverSession session, String arg) throws Exception {
 		return arg;
-	}
-
-	@Override /* Var */
-	protected boolean allowNested() {
-		return false;
-	}
-	
-	@Override /* Var */
-	protected boolean allowRecurse() {
-		return false;
 	}
 }
