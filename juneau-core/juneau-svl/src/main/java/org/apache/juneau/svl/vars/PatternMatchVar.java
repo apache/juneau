@@ -16,16 +16,15 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.regex.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
- * A basic switch/case logic variable resolver.
+ * A logical variable resolver that resolves to <js>"true</js> if a pattern matches.
  * 
  * <p>
  * The format for this var is one of the following:
  * <ul>
- * 	<li><js>"$SW{stringArg, pattern:thenValue[, pattern:thenValue...]}"</js>
+ * 	<li><js>"$PM{stringArg, pattern}"</js>
  * 	<li>...
  * </ul>
  * 
@@ -36,10 +35,10 @@ import org.apache.juneau.svl.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves system properties and $SW vars.</jc>
- * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(SwitchVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
+ * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(PatternMatchVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
  * 
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"We are running on $SW{$P{os.name},*win*:Windows,*:Something else}!"</js>));
+ * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Running on Windows?  $PM{$P{os.name},*win*}!"</js>));
  * </p>
  * 
  * <p>
@@ -51,37 +50,26 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
  * </ul>
  */
-public class SwitchVar extends MultipartVar {
+public class PatternMatchVar extends MultipartVar {
 
 	/** The name of this variable. */
-	public static final String NAME = "SW";
+	public static final String NAME = "PM";
 
 	/**
 	 * Constructor.
 	 */
-	public SwitchVar() {
+	public PatternMatchVar() {
 		super(NAME);
 	}
 
 	@Override /* MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		if (args.length < 2)
-			illegalArg("Invalid number of arguments passed to $SW var.  Must have 2 or more arguments.");
+			illegalArg("Invalid number of arguments passed to $PM var.  Must have 2 or more arguments.");
 
 		String stringArg = args[0];
-		for (int i = 1; i < args.length; i++) {
-			String pattern = args[i];
-			
-			String[] parts = StringUtils.split(pattern, ':', 2);
-			if (parts.length < 2)
-				illegalArg("Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'.");
-			
-			Pattern p = Pattern.compile(parts[0].replace("*", ".*").replace("?", "."));
-			if (p.matcher(stringArg).matches())
-				return parts[1];
-		}
-
-		// Nothing matched and no else clause.
-		return "";
+		String pattern = args[1];
+		Pattern p = Pattern.compile(pattern.replace("*", ".*").replace("?", "."));
+		return String.valueOf(p.matcher(stringArg).matches());
 	}
 }

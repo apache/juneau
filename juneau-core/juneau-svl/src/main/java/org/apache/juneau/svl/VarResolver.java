@@ -65,9 +65,13 @@ public class VarResolver {
 	 * <ul>
 	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - {@link SystemPropertiesVar}
 	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - {@link EnvVariablesVar}
-	 * 	<li><code>$IF{booleanValue,thenValue[,elseValue]}</code> - {@link IfVar}
-	 * 	<li><code>$SW{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - {@link SwitchVar}
+	 * 	<li><code>$IF{booleanValue, thenValue[, elseValue]}</code> - {@link IfVar}
+	 * 	<li><code>$SW{stringValue, matchPattern:thenValue[, matchPattern:thenValue}</code> - {@link SwitchVar}
 	 * 	<li><code>$CO{arg1[,arg2...]}</code> - {@link CoalesceVar}
+	 * 	<li><code>$PM{stringValue,matchPattern}</code> - {@link PatternMatchVar}
+	 * 	<li><code>$UC{stringValue}</code> - {@link UpperCaseVar}
+	 * 	<li><code>$LC{stringValue}</code> - {@link LowerCaseVar}
+	 * 	<li><code>$NE{stringValue}</code> - {@link NotEmptyVar}
 	 * </ul>
 	 * 
 	 * @see SystemPropertiesVar

@@ -17,36 +17,17 @@ import static org.junit.Assert.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
-public class SwitchVarTest {
+public class LowerCaseVarTest {
 
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(SwitchVar.class, SystemPropertiesVar.class).build();
+		VarResolver vr = new VarResolverBuilder().vars(LowerCaseVar.class, SystemPropertiesVar.class).build();
 
-		System.setProperty("SwitchVarTest.test", "foobar");
+		System.setProperty("LowerCaseVar.test", "fooBAR");
 
-		assertEquals("YES", vr.resolve("$SW{$S{SwitchVarTest.test},foobar:YES}"));
-		assertEquals("YES", vr.resolve("$SW{ $S{ SwitchVarTest.test } , foobar : YES }"));
-		assertEquals("", vr.resolve("$SW{$S{SwitchVarTest.test},foobar2:YES}"));
-		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},foobar2:YES,*:NO}"));
-		assertEquals("NO", vr.resolve("$SW{ $S{ SwitchVarTest.test } , foobar2 : YES , *:NO }"));
-
-		assertEquals("YES", vr.resolve("$SW{$S{SwitchVarTest.test},foo*:YES,*:NO}"));
-		assertEquals("YES", vr.resolve("$SW{$S{SwitchVarTest.test},*bar:YES,*:NO}"));
-		assertEquals("YES", vr.resolve("$SW{$S{SwitchVarTest.test},*:YES,*:NO}"));
-		assertEquals("YES", vr.resolve("$SW{$S{SwitchVarTest.test},??????:YES,*:NO}"));
-
-		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},foox*:YES,*:NO}"));
-		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},*xbar:YES,*:NO}"));
-		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},?????:YES,*:NO}"));
-		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},???????:YES,*:NO}"));
-
-		assertEquals("YES2", vr.resolve("$SW{$S{SwitchVarTest.test},foox*:YES1,foo*:YES2}"));
-		assertEquals("YES2", vr.resolve("$SW{$S{SwitchVarTest.test},foox*:YES1,foo*:YES2,*:NO}"));
-
-		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},foox*:YES1,fooy*:YES2,*:NO}"));
+		assertEquals("foobar", vr.resolve("$LC{$S{LowerCaseVar.test}}"));
 	}
 }

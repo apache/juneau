@@ -494,3 +494,5 @@ maven
 configurability
 navlinks
 fav
+transactional
+rollback
