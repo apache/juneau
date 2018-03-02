@@ -16,7 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.labels.*;
 import org.apache.juneau.rest.widget.*;
@@ -42,7 +42,7 @@ import org.apache.juneau.rest.widget.*;
 		}
 	)
 )
-public class PredefinedLabelsResource extends Resource {
+public class PredefinedLabelsResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/")

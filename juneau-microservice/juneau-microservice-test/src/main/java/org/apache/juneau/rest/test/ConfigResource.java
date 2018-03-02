@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -25,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/testConfig"
 )
 @SuppressWarnings("serial")
-public class ConfigResource extends Resource {
+public class ConfigResource extends RestServletDefault {
 
 	@RestMethod(name=GET, path="/")
 	public Object test1(RestRequest req) {

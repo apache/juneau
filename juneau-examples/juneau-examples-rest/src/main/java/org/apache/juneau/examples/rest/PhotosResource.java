@@ -19,13 +19,11 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import java.awt.image.*;
 import java.io.*;
 import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import javax.imageio.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -57,7 +55,7 @@ import org.apache.juneau.serializer.*;
 		@Property(name=HTML_uriAnchorText, value="SERVLET_RELATIVE")
 	}
 )
-public class PhotosResource extends Resource {
+public class PhotosResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	// Our cache of photos

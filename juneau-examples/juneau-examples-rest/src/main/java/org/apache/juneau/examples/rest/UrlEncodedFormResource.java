@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
@@ -50,7 +49,7 @@ import org.apache.juneau.transforms.*;
 		}
 	)
 )
-public class UrlEncodedFormResource extends Resource {
+public class UrlEncodedFormResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */

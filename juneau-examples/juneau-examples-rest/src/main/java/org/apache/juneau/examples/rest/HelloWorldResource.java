@@ -14,7 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -38,7 +38,7 @@ import org.apache.juneau.rest.annotation.*;
 		}
 	)
 )
-public class HelloWorldResource extends Resource {
+public class HelloWorldResource extends RestServletDefault {
 
 	/** GET request handler */
 	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")

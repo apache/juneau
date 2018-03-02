@@ -142,14 +142,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			htmlDocBuilder = new HtmlDocBuilder(properties);
 			varResolverBuilder = new VarResolverBuilder()
-				.vars(
-					SystemPropertiesVar.class,
-					EnvVariablesVar.class,
-					ConfigVar.class,
-					IfVar.class,
-					SwitchVar.class,
-					CoalesceVar.class
-				);
+				.defaultVars()
+				.vars(ConfigVar.class);
 
 			VarResolver vr = varResolverBuilder.build();
 

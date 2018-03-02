@@ -13,8 +13,8 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.util.*;
 import java.util.Map;
@@ -68,7 +68,7 @@ import org.apache.juneau.transforms.*;
 	),
 	staticFiles={"htdocs:htdocs"}
 )
-public class PetStoreResource extends ResourceJena {
+public class PetStoreResource extends RestServletJenaDefault {
 	private static final long serialVersionUID = 1L;
 
 	// Our database.

@@ -65,6 +65,8 @@ public class VarResolverBuilder {
 	 * <ul>
 	 * 	<li>{@link SystemPropertiesVar}
 	 * 	<li>{@link EnvVariablesVar}
+	 * 	<li>{@link ArgsVar}
+	 * 	<li>{@link ManifestFileVar}
 	 * 	<li>{@link SwitchVar}
 	 * 	<li>{@link IfVar}
 	 * 	<li>{@link CoalesceVar}
@@ -77,7 +79,18 @@ public class VarResolverBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public VarResolverBuilder defaultVars() {
-		return vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class, CoalesceVar.class, PatternMatchVar.class, UpperCaseVar.class, LowerCaseVar.class, NotEmptyVar.class);
+		return vars(
+			SystemPropertiesVar.class, 
+			EnvVariablesVar.class, 
+			ManifestFileVar.class, 
+			ArgsVar.class,
+			SwitchVar.class, 
+			IfVar.class, 
+			CoalesceVar.class, 
+			PatternMatchVar.class, 
+			UpperCaseVar.class, 
+			LowerCaseVar.class, 
+			NotEmptyVar.class);
 	}
 
 	/**

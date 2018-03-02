@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -24,6 +24,6 @@ import org.apache.juneau.rest.annotation.*;
 	description="This is a sample router page",
 	children={ConfigResource.class,LogsResource.class}
 )
-public class SampleRootResource extends ResourceGroup {
+public class SampleRootResource extends RestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

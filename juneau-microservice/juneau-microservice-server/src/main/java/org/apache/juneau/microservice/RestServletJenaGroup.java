@@ -12,55 +12,29 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import static org.apache.juneau.rest.annotation.HookEvent.*;
-
-import org.apache.juneau.microservice.vars.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.jena.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Superclass for all REST resource groups.
- * 
- * <p>
- * In additional to the functionality of the {@link RestServletGroupDefault} group,
- * augments the {@link RestContext#getVarResolver()} method with the following additional variable types:
- * <ul class='spaced-list'>
- * 	<li>
- * 		<jk>$ARG{...}</jk> - Command line arguments.
- * 		<br>Resolves values from {@link Microservice#getArgs()}.
- * 		
- * 		<h5>Example:</h5>
- * 		<p class='bcode'>
- * 	String firstArg = request.getVarResolver().resolve(<js>"$ARG{0}"</js>);  <jc>// First argument.</jc>
- * 	String namedArg = request.getVarResolver().resolve(<js>"$ARG{myarg}"</js>);  <jc>// Named argument (e.g. "myarg=foo"). </jc>
- * 		</p>
- * 	<li>
- * 		<jk>$MF{...}</jk> - Manifest file entries.
- * 		
- * 		<h5>Example:</h5>
- * 		<p class='bcode'>
- * 	String mainClass = request.getVarResolver().resolve(<js>"$MF{Main-Class}"</js>);  <jc>// Main class. </jc>
- * 		</p>
- * </ul>
+ * Resource group with additional RDF support.
  */
 @SuppressWarnings("serial")
-@RestResource
-public abstract class ResourceGroup extends RestServletGroupDefault {
-
-	/**
-	 * Initializes the registry URL and rest clent.
-	 * 
-	 * @param builder The resource config.
-	 * @throws Exception
-	 */
-	@RestHook(INIT) 
-	public void addConfigVars(RestContextBuilder builder) throws Exception {
-		Microservice m = Microservice.getInstance();
-		if (m != null) {
-			builder
-				.vars(ArgsVar.class, ManifestFileVar.class)
-				.varContextObject(ArgsVar.SESSION_args, m.getArgs())
-				.varContextObject(ManifestFileVar.SESSION_manifest, m.getManifest());
-		}
+@RestResource(
+	serializers={
+		HtmlDocSerializer.class,  // HTML must be listed first because Internet Explore does not include text/html in their Accept header.
+		RdfSerializer.Xml.class,
+		RdfSerializer.XmlAbbrev.class,
+		RdfSerializer.Turtle.class,
+		RdfSerializer.NTriple.class,
+		RdfSerializer.N3.class
+	},
+	parsers={
+		RdfParser.Xml.class,
+		RdfParser.Turtle.class,
+		RdfParser.NTriple.class,
+		RdfParser.N3.class
 	}
-}
+)
+public abstract class RestServletJenaGroup extends RestServletGroup {}

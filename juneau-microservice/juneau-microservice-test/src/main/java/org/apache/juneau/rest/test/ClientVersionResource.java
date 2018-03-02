@@ -14,7 +14,7 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -28,12 +28,12 @@ import org.apache.juneau.rest.annotation.*;
 	}
 )
 @SuppressWarnings("serial")
-public class ClientVersionResource extends Resource {
+public class ClientVersionResource extends RestServletDefault {
 
 	@RestResource(
 		path="/defaultHeader"
 	)
-	public static class DefaultHeader extends Resource {
+	public static class DefaultHeader extends RestServletDefault {
 
 		@RestMethod(name=GET, path="/")
 		public String test0() {
@@ -65,7 +65,7 @@ public class ClientVersionResource extends Resource {
 		path="/customHeader",
 		clientVersionHeader="Custom-Client-Version"
 	)
-	public static class CustomHeader extends Resource {
+	public static class CustomHeader extends RestServletDefault {
 
 		@RestMethod(name=GET, path="/")
 		public String test0() {

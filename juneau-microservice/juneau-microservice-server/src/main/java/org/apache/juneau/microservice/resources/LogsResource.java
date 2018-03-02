@@ -26,7 +26,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.LinkString;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
@@ -48,7 +47,7 @@ import org.apache.juneau.transforms.*;
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
 	}
 )
-public class LogsResource extends Resource {
+public class LogsResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	private File logDir;

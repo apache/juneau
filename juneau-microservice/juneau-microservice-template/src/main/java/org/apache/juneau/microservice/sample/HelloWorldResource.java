@@ -14,7 +14,7 @@ package org.apache.juneau.microservice.sample;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.microservice.Resource;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.RestMethod;
 import org.apache.juneau.rest.annotation.RestResource;
 
@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.RestResource;
 	path="/helloworld",
 	description="Simplest possible REST resource"
 )
-public class HelloWorldResource extends Resource {
+public class HelloWorldResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	/** 

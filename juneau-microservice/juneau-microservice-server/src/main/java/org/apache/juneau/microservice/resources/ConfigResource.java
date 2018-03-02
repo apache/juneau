@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
@@ -41,7 +40,7 @@ import org.apache.juneau.rest.annotation.Body;
 		}
 	)
 )
-public class ConfigResource extends Resource {
+public class ConfigResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	/**

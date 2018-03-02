@@ -117,7 +117,7 @@ import org.apache.juneau.utils.*;
 		externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
 	)
 )
-public class AddressBookResource extends ResourceJena {
+public class AddressBookResource extends RestServletJenaDefault {
 	private static final long serialVersionUID = 1L;
 
 	// The in-memory address book

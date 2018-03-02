@@ -10,7 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.vars;
+package org.apache.juneau.svl.vars;
+
+import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -19,23 +21,28 @@ import org.apache.juneau.utils.*;
  * JVM args variable resolver.
  * 
  * <p>
- * The format for this var is <js>"$ARG{argNameOrNum}"</js> or <js>"$ARG{argNameOrNum,defaultValue}"</js>
+ * The format for this var is <js>"$A{arg[,default]}"</js>.
  * 
  * <p>
- * This variable resolver requires that an {@link Args} object be set as a context object on the resolver or a
- * session object on the resolver session.
+ * This variable resolver requires that the command-line arguments be made available through any of the following:
+ * <ul class='spaced-list'>
+ * 	<li><js>"sun.java.command"</js> system property.
+ * 	<li><js>"juneau.args"</js> system property.
+ * 	<li>{@link #init(Args)} has been called.
+ * </ul>
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create an args object from the main(String[]) method.</jc>
  * 	Args args = new Args(argv);
  * 
- * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$ARG{1}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<js>class</js>)
- * 		.addContextObject(<jsf>SESSION_args</jsf>, args);
+ * 	ArgsVar.<jsm>init</jsm>(args);
+ * 
+ * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$A{1}")</jc>
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<js>class</js>);
  * 
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $ARG{1}"</js>));
+ * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $A{1}"</js>));
  * </p>
  * 
  * <p>
@@ -47,23 +54,42 @@ import org.apache.juneau.utils.*;
  */
 public class ArgsVar extends DefaultingVar {
 
-	/**
-	 * The name of the session or context object that identifies the {@link Args} object.
-	 */
-	public static final String SESSION_args = "args";
-
 	/** The name of this variable. */
-	public static final String NAME = "ARG";
+	public static final String NAME = "A";
+	
+	private static volatile Args ARGS;
+	
+	/**
+	 * Initialize the args for this variable.
+	 * 
+	 * @param args The parsed command-line arguments.
+	 */
+	public static void init(Args args) {
+		ARGS = args;
+	}
+	
+	private final Args args;
 
 	/**
 	 * Constructor.
 	 */
 	public ArgsVar() {
 		super(NAME);
+		if (ARGS != null)
+			this.args = ARGS;
+		else {
+			String s = System.getProperty("sun.java.command");
+			if (! isEmpty(s)) {
+				int i = s.indexOf(' ');
+				args = new Args(i == -1 ? "" : s.substring(i+1));
+			} else {
+				args = new Args(System.getProperty("juneau.args"));
+			}
+		}
 	}
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(Args.class, SESSION_args).getArg(key);
+		return args.getArg(key);
 	}
 }

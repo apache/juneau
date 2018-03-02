@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testBpi"
 )
-public class BpiResource extends ResourceJena {
+public class BpiResource extends RestServletJenaDefault {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

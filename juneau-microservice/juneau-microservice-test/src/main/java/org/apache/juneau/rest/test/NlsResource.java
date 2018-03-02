@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
 	}
 )
 @SuppressWarnings({"serial"})
-public class NlsResource extends RestServletGroupDefault {
+public class NlsResource extends RestServletGroup {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

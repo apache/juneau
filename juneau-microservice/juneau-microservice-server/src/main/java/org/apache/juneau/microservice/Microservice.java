@@ -31,9 +31,9 @@ import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.microservice.vars.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
+import org.apache.juneau.svl.vars.ManifestFileVar;
 import org.apache.juneau.utils.*;
 
 /**
@@ -150,7 +150,8 @@ public abstract class Microservice implements ConfigEventListener {
 		Console c = System.console();
 		consoleReader = new Scanner(c == null ? new InputStreamReader(System.in) : c.reader());
 		consoleWriter = c == null ? new PrintWriter(System.out, true) : c.writer();
-		this.args = new Args(args);
+		setArgs(new Args(args));
+		setManifest(this.getClass());
 	}
 	
 	private static void setInstance(Microservice m) {
@@ -218,9 +219,22 @@ public abstract class Microservice implements ConfigEventListener {
 	 * </ol>
 	 * 
 	 * @param mf The manifest file of this microservice.
+	 * @return This object (for method chaining).
 	 */
-	public void setManifest(Manifest mf) {
-		this.mf = new ManifestFile(mf);
+	public Microservice setManifest(ManifestFile mf) {
+		this.mf = mf;
+		ManifestFileVar.init(this.mf);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <code>setManifest(<jk>new</jk> ManifestFile(mf))</code>.
+	 * 
+	 * @param mf The manifest file of this microservice.
+	 * @return This object (for method chaining).
+	 */
+	public Microservice setManifest(Manifest mf) {
+		return setManifest(new ManifestFile(mf));
 	}
 
 	/**
@@ -232,18 +246,18 @@ public abstract class Microservice implements ConfigEventListener {
 	 */
 	public Microservice setManifestContents(String...contents) throws IOException {
 		String s = StringUtils.join(contents, "\n") + "\n";
-		this.mf = new ManifestFile(new Manifest(new ByteArrayInputStream(s.getBytes("UTF-8"))));
-		return this;
+		return setManifest(new ManifestFile(new Manifest(new ByteArrayInputStream(s.getBytes("UTF-8")))));
 	}
 
 	/**
 	 * Same as {@link #setManifest(Manifest)} except specified through a {@link File} object.
 	 * 
 	 * @param f The manifest file of this microservice.
+	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
-	public void setManifest(File f) throws IOException {
-		this.mf = new ManifestFile(f);
+	public Microservice setManifest(File f) throws IOException {
+		return setManifest(new ManifestFile(f));
 	}
 
 	/**
@@ -251,10 +265,11 @@ public abstract class Microservice implements ConfigEventListener {
 	 * specified class is contained within.
 	 * 
 	 * @param c The class whose jar file contains the manifest to use for this microservice.
+	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
-	public void setManifest(Class<?> c) throws IOException {
-		this.mf = new ManifestFile(c);
+	public Microservice setManifest(Class<?> c) throws IOException {
+		return setManifest(new ManifestFile(c));
 	}
 
 	/**
@@ -262,15 +277,19 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 
 	 * <p>
 	 * The default implementation resolves the following variables:
-	 * <ul>
-	 * 	<li><code>$S{key}</code>, <code>$S{key,default}</code> - System properties.
-	 * 	<li><code>$E{key}</code>, <code>$E{key,default}</code> - Environment variables.
-	 * 	<li><code>$C{key}</code>, <code>$C{key,default}</code> - Config file entries.
-	 * 	<li><code>$MF{key}</code>, <code>$MF{key,default}</code> - Manifest file entries.
-	 * 	<li><code>$ARG{key}</code>, <code>$ARG{key,default}</code> - Command-line arguments.
-	 * 	<li><code>$IF{boolArg,thenValue}</code>, <code>$IF{boolArg,thenValue,elseValue}</code> - If-block logic.
-	 * 	<li><code>$SW{stringArg,pattern,thenVal...}</code>, 
-	 * 		<code>$SW{stringArg,pattern,thenVal,elseVal...}</code>  - Switch-block logic.
+	 * <ul class='doctree'>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - <code>$S{key[,default]}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - <code>$E{key[,default]}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.ArgsVar} - <code>$A{key[,default]}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.ManifestFileVar} - <code>$MF{key[,default]}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.IfVar} - <code>$IF{arg,then[,else]}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.SwitchVar} - <code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.CoalesceVar} - <code>$CO{arg1[,arg2...]}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code> 
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.NotEmptyVar} - <code>$NE{arg}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.UpperCaseVar} - <code>$UC{arg}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
+	 * 	<li class='jc'>{@link org.apache.juneau.config.vars.ConfigVar} - <code>$C{key[,default]}</code>
 	 * </ul>
 	 * 
 	 * <p>
@@ -309,9 +328,7 @@ public abstract class Microservice implements ConfigEventListener {
 	protected VarResolverBuilder createVarResolver() {
 		VarResolverBuilder b = new VarResolverBuilder()
 			.defaultVars()
-			.vars(ConfigVar.class, ManifestFileVar.class, ArgsVar.class, SwitchVar.class, IfVar.class)
-			.contextObject(ManifestFileVar.SESSION_manifest, mf)
-			.contextObject(ArgsVar.SESSION_args, args);
+			.vars(ConfigVar.class, SwitchVar.class, IfVar.class);
 		if (cf != null)
 			b.contextObject(ConfigVar.SESSION_config, cf);
 		return b;
@@ -330,6 +347,18 @@ public abstract class Microservice implements ConfigEventListener {
 	 */
 	public Args getArgs() {
 		return args;
+	}
+
+	/**
+	 * Sets the arguments for this microservice.
+	 * 
+	 * @param args The arguments for this microservice.
+	 * @return This object (for method chaining).
+	 */
+	public Microservice setArgs(Args args) {
+		this.args = args;
+		ArgsVar.init(args);
+		return this;
 	}
 
 	/**
@@ -394,16 +423,16 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	<ck>sameAsAnInt</ck> = $C{MySection/anInt}
 	 * 
 	 * 	<cc># A command-line argument in the form "myarg=foo"</cc>
-	 * 	<ck>myArg</ck> = $ARG{myarg}
+	 * 	<ck>myArg</ck> = $A{myarg}
 	 * 
 	 * 	<cc># The first command-line argument</cc>
-	 * 	<ck>firstArg</ck> = $ARG{0}
+	 * 	<ck>firstArg</ck> = $A{0}
 	 * 
 	 * 	<cc># Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.</cc>
-	 * 	<ck>nested</ck> = $S{mySystemProperty,$E{MY_ENV_VAR,$ARG{0}}}
+	 * 	<ck>nested</ck> = $S{mySystemProperty,$E{MY_ENV_VAR,$A{0}}}
 	 * 
 	 * 	<cc># A POJO with embedded variables</cc>
-	 * 	<ck>aBean2</ck> = {foo:'$ARG{0}',baz:$C{MySection/anInt}}
+	 * 	<ck>aBean2</ck> = {foo:'$A{0}',baz:$C{MySection/anInt}}
 	 * </p>
 	 * 
 	 * <p class='bcode'>

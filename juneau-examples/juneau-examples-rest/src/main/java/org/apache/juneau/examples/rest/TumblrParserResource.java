@@ -15,9 +15,9 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.LinkString;
+import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 
@@ -40,7 +40,7 @@ import org.apache.juneau.rest.client.*;
 		}
 	)
 )
-public class TumblrParserResource extends Resource {
+public class TumblrParserResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	private static final int MAX_POSTS = 100;

@@ -16,7 +16,6 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -45,7 +44,7 @@ import org.apache.juneau.rest.annotation.*;
 	)
 )
 @SuppressWarnings({"serial"})
-public class CodeFormatterResource extends Resource {
+public class CodeFormatterResource extends RestServletDefault {
 
 	/** [GET /] - Display query entry page. */
 	@RestMethod(name=GET, path="/")

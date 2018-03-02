@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.util.*;
 
 import org.apache.juneau.config.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -41,7 +40,7 @@ import org.apache.juneau.rest.labels.*;
 		aside="$F{resources/DockerRegistryResourceAside.html}"
 	)
 )
-public class DockerRegistryResource extends Resource {
+public class DockerRegistryResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	// Get registry URL from examples.cfg file.

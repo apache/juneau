@@ -63,15 +63,17 @@ public class VarResolver {
 	 * Default string variable resolver with support for system properties and environment variables:
 	 * 
 	 * <ul>
-	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - {@link SystemPropertiesVar}
-	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - {@link EnvVariablesVar}
-	 * 	<li><code>$IF{booleanValue, thenValue[, elseValue]}</code> - {@link IfVar}
-	 * 	<li><code>$SW{stringValue, matchPattern:thenValue[, matchPattern:thenValue}</code> - {@link SwitchVar}
-	 * 	<li><code>$CO{arg1[,arg2...]}</code> - {@link CoalesceVar}
-	 * 	<li><code>$PM{stringValue,matchPattern}</code> - {@link PatternMatchVar}
-	 * 	<li><code>$UC{stringValue}</code> - {@link UpperCaseVar}
-	 * 	<li><code>$LC{stringValue}</code> - {@link LowerCaseVar}
-	 * 	<li><code>$NE{stringValue}</code> - {@link NotEmptyVar}
+	 * 	<li><code>$S{key[,default]}</code> - {@link SystemPropertiesVar}
+	 * 	<li><code>$E{key[,default]}</code> - {@link EnvVariablesVar}
+	 * 	<li><code>$A{key[,default]}</code> - {@link ArgsVar}
+	 * 	<li><code>$MF{key[,default]}</code> - {@link ManifestFileVar}
+	 * 	<li><code>$IF{arg,then[,else]}</code> - {@link IfVar}
+	 * 	<li><code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code> - {@link SwitchVar}
+	 * 	<li><code>$CO{arg[,arg2...]}</code> - {@link CoalesceVar}
+	 * 	<li><code>$PM{arg,pattern}</code> - {@link PatternMatchVar}
+	 * 	<li><code>$UC{arg}</code> - {@link UpperCaseVar}
+	 * 	<li><code>$LC{arg}</code> - {@link LowerCaseVar}
+	 * 	<li><code>$NE{arg}</code> - {@link NotEmptyVar}
 	 * </ul>
 	 * 
 	 * @see SystemPropertiesVar

@@ -13,10 +13,9 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
-import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.net.*;
 
@@ -53,7 +52,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	encoders=GzipEncoder.class
 )
-public class AtomFeedResource extends ResourceJena {
+public class AtomFeedResource extends RestServletJenaDefault {
 	private static final long serialVersionUID = 1L;
 
 	private Feed feed;     // The root resource object

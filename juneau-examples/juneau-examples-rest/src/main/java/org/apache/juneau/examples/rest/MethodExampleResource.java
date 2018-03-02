@@ -17,10 +17,8 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Method;
 import org.apache.juneau.rest.labels.*;
 import org.apache.juneau.utils.*;
 
@@ -44,7 +42,7 @@ import org.apache.juneau.utils.*;
 		}
 	)
 )
-public class MethodExampleResource extends Resource {
+public class MethodExampleResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	private static final UUID SAMPLE_UUID = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");

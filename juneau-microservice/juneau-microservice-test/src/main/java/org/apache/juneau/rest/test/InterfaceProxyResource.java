@@ -31,7 +31,7 @@ import org.junit.*;
  */
 @RestResource(
 	path="/testInterfaceProxyResource")
-public class InterfaceProxyResource extends ResourceJena {
+public class InterfaceProxyResource extends RestServletJenaDefault {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

@@ -39,7 +39,7 @@ import org.apache.juneau.rest.labels.*;
 	allowedMethodParams="OPTIONS,POST"
 )
 @SuppressWarnings("javadoc")
-public class DebugResource extends Resource {
+public class DebugResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	/**

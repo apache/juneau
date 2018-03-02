@@ -14,9 +14,9 @@ package org.apache.juneau.examples.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
-import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.sql.*;
 import java.util.*;
@@ -24,7 +24,6 @@ import java.util.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
@@ -56,7 +55,7 @@ import org.apache.juneau.rest.widget.*;
 		}
 	)
 )
-public class SqlQueryResource extends Resource {
+public class SqlQueryResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	private String driver, connectionUrl;

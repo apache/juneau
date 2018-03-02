@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.sample;
 
-import org.apache.juneau.microservice.ResourceGroup;
 import org.apache.juneau.microservice.resources.ConfigResource;
 import org.apache.juneau.microservice.resources.LogsResource;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.HtmlDoc;
 import org.apache.juneau.rest.annotation.RestResource;
 import org.apache.juneau.rest.widget.ContentTypeMenuItem;
@@ -42,6 +42,6 @@ import org.apache.juneau.rest.widget.StyleMenuItem;
 		LogsResource.class
 	}
 )
-public class RootResources extends ResourceGroup {
+public class RootResources extends RestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

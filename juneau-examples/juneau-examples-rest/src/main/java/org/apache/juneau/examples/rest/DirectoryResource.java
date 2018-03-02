@@ -12,18 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
 
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
@@ -57,7 +56,7 @@ import org.apache.juneau.utils.*;
 		@Property(name="allowPuts", value="false")
 	}
 )
-public class DirectoryResource extends Resource {
+public class DirectoryResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	private File rootDir;     // The root directory

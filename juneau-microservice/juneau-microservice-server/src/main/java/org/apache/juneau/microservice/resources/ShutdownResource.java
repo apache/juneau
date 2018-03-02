@@ -14,7 +14,7 @@ package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/shutdown",
 	title="Shut down this resource"
 )
-public class ShutdownResource extends Resource {
+public class ShutdownResource extends RestServletDefault {
 
 	private static final long serialVersionUID = 1L;
 

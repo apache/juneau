@@ -13,15 +13,14 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.serializer.Serializer.*;
 
 import java.util.*;
 import java.util.Map;
 
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
@@ -88,7 +87,7 @@ import org.apache.juneau.rest.widget.*;
 		externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
 	) 
 )
-public class SystemPropertiesResource extends Resource {
+public class SystemPropertiesResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(
