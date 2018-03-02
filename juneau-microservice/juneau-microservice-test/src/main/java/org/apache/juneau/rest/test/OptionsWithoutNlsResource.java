@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testOptionsWithoutNls"
 )
-public class OptionsWithoutNlsResource extends RestServletDefault {
+public class OptionsWithoutNlsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

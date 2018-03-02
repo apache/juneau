@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
 	}
 )
 @SuppressWarnings({"serial"})
-public class NlsResource extends RestServletGroup {
+public class NlsResource extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================
@@ -45,7 +45,7 @@ public class NlsResource extends RestServletGroup {
 		title="Test1.a",
 		description="Test1.b"
 	)
-	public static class Test1 extends RestServletDefault {
+	public static class Test1 extends BasicRestServlet {
 
 		@RestMethod(
 			name=POST, path="/{a}",
@@ -84,7 +84,7 @@ public class NlsResource extends RestServletGroup {
 		path="/test2",
 		messages="NlsResource"
 	)
-	public static class Test2 extends RestServletDefault {
+	public static class Test2 extends BasicRestServlet {
 
 		@RestMethod(
 			name=POST, path="/{a}"
@@ -102,7 +102,7 @@ public class NlsResource extends RestServletGroup {
 		path="/test3",
 		messages="NlsResource"
 	)
-	public static class Test3 extends RestServletDefault {
+	public static class Test3 extends BasicRestServlet {
 
 		@RestMethod(
 			name=POST, path="/{a}"
@@ -127,7 +127,7 @@ public class NlsResource extends RestServletGroup {
 		path="/test4",
 		messages="NlsResource"
 	)
-	public static class Test4 extends RestServletDefault {
+	public static class Test4 extends BasicRestServlet {
 
 		@RestMethod(
 			name=POST, path="/{a}"
@@ -145,7 +145,7 @@ public class NlsResource extends RestServletGroup {
 		path="/test5",
 		messages="NlsResource"
 	)
-	public static class Test5 extends RestServletDefault {
+	public static class Test5 extends BasicRestServlet {
 
 		@RestMethod(
 			name=POST, path="/{a}"
@@ -165,7 +165,7 @@ public class NlsResource extends RestServletGroup {
 		title="$L{foo}",
 		description="$L{foo}"
 	)
-	public static class Test6 extends RestServletDefault {
+	public static class Test6 extends BasicRestServlet {
 
 		@RestMethod(
 			name=POST, path="/{a}",

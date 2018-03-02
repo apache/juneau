@@ -38,7 +38,7 @@ import org.apache.juneau.rest.annotation.*;
 		}
 	)
 )
-public class HelloWorldResource extends RestServletDefault {
+public class HelloWorldResource extends BasicRestServlet {
 
 	/** GET request handler */
 	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")

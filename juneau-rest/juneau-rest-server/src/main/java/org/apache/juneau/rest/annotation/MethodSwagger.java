@@ -47,7 +47,7 @@ public @interface MethodSwagger {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestInfoProviderDefault#isDeprecated(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.isDeprecated(Method,RestRequest)}
+	 * 	<li class='jm'>{@link BasicRestInfoProvider#isDeprecated(java.lang.reflect.Method, RestRequest) BasicRestInfoProvider.isDeprecated(Method,RestRequest)}
 	 * </ul>
 	 */
 	boolean deprecated() default false;
@@ -87,7 +87,7 @@ public @interface MethodSwagger {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodExternalDocs(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodExternalDocs(Method,RestRequest)}
+	 * 	<li class='jm'>{@link BasicRestInfoProvider#getMethodExternalDocs(java.lang.reflect.Method, RestRequest) BasicRestInfoProvider.getMethodExternalDocs(Method,RestRequest)}
 	 * </ul>
 	 */
 	String externalDocs() default "";
@@ -126,7 +126,7 @@ public @interface MethodSwagger {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodParameters(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodParameters(Method,RestRequest)}
+	 * 	<li class='jm'>{@link BasicRestInfoProvider#getMethodParameters(java.lang.reflect.Method, RestRequest) BasicRestInfoProvider.getMethodParameters(Method,RestRequest)}
 	 * </ul>
 	 */
 	Parameter[] parameters() default {};
@@ -168,7 +168,7 @@ public @interface MethodSwagger {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodResponses(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodResponses(Method,RestRequest)}
+	 * 	<li class='jm'>{@link BasicRestInfoProvider#getMethodResponses(java.lang.reflect.Method, RestRequest) BasicRestInfoProvider.getMethodResponses(Method,RestRequest)}
 	 * </ul>
 	 */
 	Response[] responses() default {};
@@ -203,7 +203,7 @@ public @interface MethodSwagger {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestInfoProviderDefault#getMethodTags(java.lang.reflect.Method, RestRequest) RestInfoProviderDefault.getMethodTags(Method,RestRequest)}
+	 * 	<li class='jm'>{@link BasicRestInfoProvider#getMethodTags(java.lang.reflect.Method, RestRequest) BasicRestInfoProvider.getMethodTags(Method,RestRequest)}
 	 * </ul>
 	 */
 	String tags() default "";

@@ -24,6 +24,6 @@ import org.apache.juneau.rest.annotation.*;
 	description="This is a sample router page",
 	children={ConfigResource.class,LogsResource.class}
 )
-public class SampleRootResource extends RestServletGroup {
+public class SampleRootResource extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

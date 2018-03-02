@@ -33,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
 		HtmlDocResource.HtmlDocResource2.class
 	}
 )
-public class HtmlDocResource extends RestServletDefault {
+public class HtmlDocResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(path="/test1")

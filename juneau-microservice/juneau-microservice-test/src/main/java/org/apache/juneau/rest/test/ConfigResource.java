@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/testConfig"
 )
 @SuppressWarnings("serial")
-public class ConfigResource extends RestServletDefault {
+public class ConfigResource extends BasicRestServlet {
 
 	@RestMethod(name=GET, path="/")
 	public Object test1(RestRequest req) {

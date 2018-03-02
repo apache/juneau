@@ -55,7 +55,7 @@ import org.apache.juneau.serializer.*;
 		@Property(name=HTML_uriAnchorText, value="SERVLET_RELATIVE")
 	}
 )
-public class PhotosResource extends RestServletDefault {
+public class PhotosResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Our cache of photos

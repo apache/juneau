@@ -40,7 +40,7 @@ import org.apache.juneau.rest.annotation.Body;
 		}
 	)
 )
-public class ConfigResource extends RestServletDefault {
+public class ConfigResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**

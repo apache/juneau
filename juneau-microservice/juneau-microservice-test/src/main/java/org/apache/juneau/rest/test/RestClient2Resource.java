@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testRestClient"
 )
-public class RestClient2Resource extends RestServletDefault {
+public class RestClient2Resource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

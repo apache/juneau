@@ -42,7 +42,7 @@ import org.apache.juneau.rest.widget.*;
 		}
 	)
 )
-public class PredefinedLabelsResource extends RestServletDefault {
+public class PredefinedLabelsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/")

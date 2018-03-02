@@ -18,7 +18,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resource group with additional RDF support.
+ * Resource servlet with additional RDF support.
  */
 @SuppressWarnings("serial")
 @RestResource(
@@ -37,4 +37,4 @@ import org.apache.juneau.rest.annotation.*;
 		RdfParser.N3.class
 	}
 )
-public abstract class RestServletJenaGroup extends RestServletGroup {}
+public abstract class BasicRestServletJena extends BasicRestServlet {}

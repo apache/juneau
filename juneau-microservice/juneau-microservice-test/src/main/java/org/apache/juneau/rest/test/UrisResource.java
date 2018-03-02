@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 		UrisResource.Child.class
 	}
 )
-public class UrisResource extends RestServletDefault {
+public class UrisResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/*")
@@ -53,7 +53,7 @@ public class UrisResource extends RestServletDefault {
 			GrandChild.class
 		}
 	)
-	public static class Child extends RestServletDefault {
+	public static class Child extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@RestMethod(name=GET, path="/*")
@@ -80,7 +80,7 @@ public class UrisResource extends RestServletDefault {
 	@RestResource(
 		path="/grandchild"
 	)
-	public static class GrandChild extends RestServletDefault {
+	public static class GrandChild extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@RestMethod(name=GET, path="/*")

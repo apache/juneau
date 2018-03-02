@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.RestResource;
 	path="/helloworld",
 	description="Simplest possible REST resource"
 )
-public class HelloWorldResource extends RestServletDefault {
+public class HelloWorldResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/** 

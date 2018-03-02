@@ -68,7 +68,7 @@ import org.apache.juneau.transforms.*;
 	),
 	staticFiles={"htdocs:htdocs"}
 )
-public class PetStoreResource extends RestServletJenaDefault {
+public class PetStoreResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 
 	// Our database.

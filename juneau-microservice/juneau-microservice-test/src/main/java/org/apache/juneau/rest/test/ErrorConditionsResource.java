@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testErrorConditions"
 )
-public class ErrorConditionsResource extends RestServletDefault {
+public class ErrorConditionsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

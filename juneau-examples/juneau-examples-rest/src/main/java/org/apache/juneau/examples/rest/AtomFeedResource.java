@@ -52,7 +52,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	encoders=GzipEncoder.class
 )
-public class AtomFeedResource extends RestServletJenaDefault {
+public class AtomFeedResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 
 	private Feed feed;     // The root resource object

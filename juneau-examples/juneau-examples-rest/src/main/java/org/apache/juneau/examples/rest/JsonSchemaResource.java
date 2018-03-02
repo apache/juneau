@@ -46,7 +46,7 @@ import org.apache.juneau.rest.widget.*;
 		}
 	)
 )
-public class JsonSchemaResource extends RestServletJenaDefault {
+public class JsonSchemaResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 
 	private Schema schema;     // The schema document

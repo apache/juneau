@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
 		}
 	)
 )
-public class MethodExampleResource extends RestServletDefault {
+public class MethodExampleResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final UUID SAMPLE_UUID = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");

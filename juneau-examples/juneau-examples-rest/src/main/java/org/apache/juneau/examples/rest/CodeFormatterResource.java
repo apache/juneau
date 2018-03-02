@@ -44,7 +44,7 @@ import org.apache.juneau.rest.annotation.*;
 	)
 )
 @SuppressWarnings({"serial"})
-public class CodeFormatterResource extends RestServletDefault {
+public class CodeFormatterResource extends BasicRestServlet {
 
 	/** [GET /] - Display query entry page. */
 	@RestMethod(name=GET, path="/")

@@ -43,7 +43,7 @@ import org.apache.juneau.serializer.*;
  * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
  * 		}
  * 	)
- * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+ * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
  * </p>
  * 
  * <p>
@@ -288,7 +288,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 				value=<js>"['options: ?method=OPTIONS', 'doc: doc']"</js>)
 	 * 		}
 	 * 	)
-	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
 	 * </p>
 	 * 
 	 * <p>
@@ -306,7 +306,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 			}
 	 * 		)
 	 * 	)
-	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
 	 * </p>
 	 */
 	public static final String HTMLDOC_navlinks = PREFIX + "navlinks.ls";

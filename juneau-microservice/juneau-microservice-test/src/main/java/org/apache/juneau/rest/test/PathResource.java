@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 		PathResource.TestPath2.class
 	}
 )
-public class PathResource extends RestServletDefault {
+public class PathResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================
@@ -44,7 +44,7 @@ public class PathResource extends RestServletDefault {
 			PathResource.TestPath3.class
 		}
 	)
-	public static class TestPath2 extends RestServletDefault {
+	public static class TestPath2 extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		// Basic tests
 		@RestMethod(name=GET, path="/")
@@ -56,7 +56,7 @@ public class PathResource extends RestServletDefault {
 	@RestResource(
 		path="/testPath3"
 	)
-	public static class TestPath3a extends RestServletDefault {
+	public static class TestPath3a extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		// Basic tests
 		@RestMethod(name=GET, path="/")

@@ -63,7 +63,7 @@ import org.apache.juneau.transforms.*;
 		EnumerationSwap.class
 	}
 )
-public class RequestEchoResource extends RestServletDefault {
+public class RequestEchoResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */

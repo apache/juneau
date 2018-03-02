@@ -40,7 +40,7 @@ import org.apache.juneau.rest.client.*;
 		}
 	)
 )
-public class TumblrParserResource extends RestServletDefault {
+public class TumblrParserResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final int MAX_POSTS = 100;

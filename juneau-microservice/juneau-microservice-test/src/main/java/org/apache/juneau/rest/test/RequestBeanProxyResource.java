@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/testRequestBeanProxy"
 )
 @SuppressWarnings("serial")
-public class RequestBeanProxyResource extends RestServletJenaDefault {
+public class RequestBeanProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/echoQuery")
 	public Reader echoQuery(RestRequest req) throws Exception {

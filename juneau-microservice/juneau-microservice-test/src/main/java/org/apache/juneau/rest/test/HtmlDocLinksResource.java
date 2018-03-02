@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 		HtmlDocLinksResource.HtmlDocLinksResource2.class
 	}
 )
-public class HtmlDocLinksResource extends RestServletDefault {
+public class HtmlDocLinksResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(path="/test1")

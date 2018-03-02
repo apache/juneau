@@ -36,7 +36,7 @@ import org.apache.juneau.utils.*;
 	path="/testThirdPartyProxy"
 )
 @SuppressWarnings("serial")
-public class ThirdPartyProxyResource extends RestServletJenaDefault {
+public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	public static FileWriter logFile;
 	static {

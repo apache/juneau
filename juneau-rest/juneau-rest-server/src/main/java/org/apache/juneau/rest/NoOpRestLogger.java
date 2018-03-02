@@ -27,7 +27,7 @@ import java.util.logging.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; juneau-rest-server &gt; Logging and Error Handling</a>
  * </ul>
  */
-public class RestLoggerNoOp extends RestLoggerDefault {
+public class NoOpRestLogger extends BasicRestLogger {
 
 	/**
 	 * Log a message to the logger.

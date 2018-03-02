@@ -10,31 +10,42 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice;
+package org.apache.juneau.rest;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.jena.*;
-import org.apache.juneau.rest.*;
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.labels.*;
 
 /**
- * Resource servlet with additional RDF support.
+ * Specialized subclass of {@link BasicRestServlet} for showing "group" pages.
+ * 
+ * <p>
+ * Group pages consist of simple lists of child resource URLs and their labels.
+ * They're meant to be used as jumping-off points for child resources.
+ * 
+ * <p>
+ * Child resources are specified using the {@link RestResource#children() @RestResource.children()} annotation.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RouterPages">Overview &gt; juneau-rest-server &gt; Router Pages</a>
+ * </ul>
  */
-@SuppressWarnings("serial")
-@RestResource(
-	serializers={
-		HtmlDocSerializer.class,  // HTML must be listed first because Internet Explore does not include text/html in their Accept header.
-		RdfSerializer.Xml.class,
-		RdfSerializer.XmlAbbrev.class,
-		RdfSerializer.Turtle.class,
-		RdfSerializer.NTriple.class,
-		RdfSerializer.N3.class
-	},
-	parsers={
-		RdfParser.Xml.class,
-		RdfParser.Turtle.class,
-		RdfParser.NTriple.class,
-		RdfParser.N3.class
+@RestResource
+public class BasicRestServletGroup extends BasicRestServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * [GET /] - Get child resources.
+	 * 
+	 * @param req The HTTP request.
+	 * @return The bean containing links to the child resources.
+	 * @throws Exception 
+	 */
+	@RestMethod(name=GET, path="/", description="Child resources")
+	public ChildResourceDescriptions getChildren(RestRequest req) throws Exception {
+		return new ChildResourceDescriptions(getContext(), req);
 	}
-)
-public abstract class RestServletJenaDefault extends RestServletDefault {}
+}
+

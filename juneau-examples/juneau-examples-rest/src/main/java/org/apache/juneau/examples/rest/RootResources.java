@@ -81,7 +81,7 @@ import org.apache.juneau.rest.widget.*;
 		ShutdownResource.class
 	}
 )
-public class RootResources extends RestServletJenaGroup {
+public class RootResources extends BasicRestServletJenaGroup {
 	// IMPORTANT!  If you don't need RDF support, change the parent class to ResourceGroup.
 	// It allows you to remove the Jena prerequisite.
 

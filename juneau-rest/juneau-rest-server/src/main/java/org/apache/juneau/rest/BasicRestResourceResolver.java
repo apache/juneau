@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; juneau-rest-server &gt; Resource Resolvers</a>
  * </ul>
  */
-public class RestResourceResolverDefault implements RestResourceResolver {
+public class BasicRestResourceResolver implements RestResourceResolver {
 
 	@Override /* RestResourceResolver */
 	public Object resolve(Object parent, Class<?> c, RestContextBuilder builder) throws Exception {

@@ -39,7 +39,7 @@ import org.apache.juneau.serializer.*;
 		@Property(name="R6",value="$R{C}"),
 	}
 )
-public class PropertiesResource extends RestServletDefault {
+public class PropertiesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

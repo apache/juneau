@@ -28,12 +28,12 @@ import org.apache.juneau.rest.annotation.*;
 	}
 )
 @SuppressWarnings("serial")
-public class ClientVersionResource extends RestServletDefault {
+public class ClientVersionResource extends BasicRestServlet {
 
 	@RestResource(
 		path="/defaultHeader"
 	)
-	public static class DefaultHeader extends RestServletDefault {
+	public static class DefaultHeader extends BasicRestServlet {
 
 		@RestMethod(name=GET, path="/")
 		public String test0() {
@@ -65,7 +65,7 @@ public class ClientVersionResource extends RestServletDefault {
 		path="/customHeader",
 		clientVersionHeader="Custom-Client-Version"
 	)
-	public static class CustomHeader extends RestServletDefault {
+	public static class CustomHeader extends BasicRestServlet {
 
 		@RestMethod(name=GET, path="/")
 		public String test0() {

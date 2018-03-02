@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
 	pojoSwaps={CalendarSwap.DateMedium.class},
 	messages="ParamsResource"
 )
-public class ParamsResource extends RestServletDefault {
+public class ParamsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

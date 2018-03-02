@@ -25,7 +25,7 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	path="/testPathVariables"
 )
-public class PathVariablesResource extends RestServletDefault {
+public class PathVariablesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/test1/{x}/foo/{y}/bar/{z}/*")

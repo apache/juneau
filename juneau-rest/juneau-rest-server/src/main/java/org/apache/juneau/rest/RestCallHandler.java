@@ -34,7 +34,7 @@ public interface RestCallHandler {
 	 * 
 	 * <p>
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link RestCallHandlerDefault} if not specified at any level.
+	 * ultimately {@link BasicRestCallHandler} if not specified at any level.
 	 */
 	public interface Null extends RestCallHandler {}
 

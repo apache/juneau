@@ -49,7 +49,7 @@ import org.apache.juneau.transforms.*;
 		}
 	)
 )
-public class UrlEncodedFormResource extends RestServletDefault {
+public class UrlEncodedFormResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */

@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/shutdown",
 	title="Shut down this resource"
 )
-public class ShutdownResource extends RestServletDefault {
+public class ShutdownResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 

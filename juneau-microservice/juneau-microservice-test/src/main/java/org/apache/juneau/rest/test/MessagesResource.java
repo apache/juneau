@@ -33,7 +33,7 @@ import org.apache.juneau.transform.*;
 		MessagesResource.ResourceBundleSwap.class
 	}
 )
-public class MessagesResource extends RestServletDefault {
+public class MessagesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

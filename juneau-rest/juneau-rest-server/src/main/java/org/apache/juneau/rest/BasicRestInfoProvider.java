@@ -40,7 +40,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
  * </ul>
  */
-public class RestInfoProviderDefault implements RestInfoProvider {
+public class BasicRestInfoProvider implements RestInfoProvider {
 
 	private final RestContext context;
 	private final String
@@ -60,7 +60,7 @@ public class RestInfoProviderDefault implements RestInfoProvider {
 	 * 
 	 * @param context The resource context.
 	 */
-	public RestInfoProviderDefault(RestContext context) {
+	public BasicRestInfoProvider(RestContext context) {
 		this.context = context;
 
 		Builder b = new Builder(context);

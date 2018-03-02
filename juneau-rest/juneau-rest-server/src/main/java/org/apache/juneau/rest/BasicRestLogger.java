@@ -35,7 +35,7 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; juneau-rest-server &gt; Logging and Error Handling</a>
  * </ul>
  */
-public class RestLoggerDefault implements RestLogger {
+public class BasicRestLogger implements RestLogger {
 
 	private final JuneauLogger logger = JuneauLogger.getLogger(getClass());
 

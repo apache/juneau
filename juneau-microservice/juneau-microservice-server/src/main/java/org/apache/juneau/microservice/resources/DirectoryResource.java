@@ -73,7 +73,7 @@ import org.apache.juneau.utils.*;
 		@Property(name="DirectoryResource.rootDir", value="")
 	}
 )
-public class DirectoryResource extends RestServletDefault {
+public class DirectoryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private File rootDir;     // The root directory

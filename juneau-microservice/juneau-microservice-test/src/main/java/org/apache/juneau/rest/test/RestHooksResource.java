@@ -34,7 +34,7 @@ import org.apache.juneau.utils.*;
 		RestHooksResource.Post.class,
 	}
 )
-public class RestHooksResource extends RestServletDefault {
+public class RestHooksResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestResource(
@@ -69,7 +69,7 @@ public class RestHooksResource extends RestServletDefault {
 		}
 	}
 
-	public static class StartParent extends RestServletDefault {
+	public static class StartParent extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		private boolean start1Called;
@@ -121,7 +121,7 @@ public class RestHooksResource extends RestServletDefault {
 		}
 	}
 
-	public static class PreParent extends RestServletDefault {
+	public static class PreParent extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		private boolean pre1Called;
@@ -168,7 +168,7 @@ public class RestHooksResource extends RestServletDefault {
 		}
 	}
 
-	public static class PostParent extends RestServletDefault {
+	public static class PostParent extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		private boolean post1Called;
 

@@ -37,7 +37,7 @@ import org.apache.juneau.utils.*;
  * 	path=<js>"/myresource"</js>,
  * 	staticFiles={<js>"htdocs:docs"</js>}
  * )
- * <jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {...}
+ * <jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
  * </p>
  * 
  * <p>
@@ -48,7 +48,7 @@ import org.apache.juneau.utils.*;
  * the <l>foobar.html</l> file in the following ordered locations:
  * <ol>
  * 	<li><l>com.foo.mypackage.docs</l> package.
- * 	<li><l>org.apache.juneau.rest.docs</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.rest</l>).
+ * 	<li><l>org.apache.juneau.rest.docs</l> package (since <l>BasicRestServlet</l> is in <l>org.apache.juneau.rest</l>).
  * 	<li><l>[working-dir]/docs</l> directory.
  * </ol>
  * 

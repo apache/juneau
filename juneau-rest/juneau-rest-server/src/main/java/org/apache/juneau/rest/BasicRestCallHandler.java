@@ -38,7 +38,7 @@ import org.apache.juneau.rest.vars.*;
  * 	<li class='jf'>{@link RestContext#REST_callHandler}
  * </ul>
  */
-public class RestCallHandlerDefault implements RestCallHandler {
+public class BasicRestCallHandler implements RestCallHandler {
 
 	private final RestContext context;
 	private final RestLogger logger;
@@ -49,7 +49,7 @@ public class RestCallHandlerDefault implements RestCallHandler {
 	 * 
 	 * @param context The resource context.
 	 */
-	public RestCallHandlerDefault(RestContext context) {
+	public BasicRestCallHandler(RestContext context) {
 		this.context = context;
 		this.logger = context.getLogger();
 		this.restCallRouters = context.getCallRouters();

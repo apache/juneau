@@ -32,13 +32,13 @@ import org.apache.juneau.rest.annotation.*;
 		RestHooksInitResource.Sub.class
 	}
 )
-public class RestHooksInitResource extends RestServletDefault {
+public class RestHooksInitResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestResource(
 		path="/super"
 	)
-	public static class Super extends RestServletDefault {
+	public static class Super extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		protected List<String> init = new ArrayList<String>();

@@ -87,7 +87,7 @@ import org.apache.juneau.rest.widget.*;
 		externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
 	) 
 )
-public class SystemPropertiesResource extends RestServletDefault {
+public class SystemPropertiesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(

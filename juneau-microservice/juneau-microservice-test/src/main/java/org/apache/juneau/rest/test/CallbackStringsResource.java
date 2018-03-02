@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testCallback"
 )
-public class CallbackStringsResource extends RestServletDefault {
+public class CallbackStringsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

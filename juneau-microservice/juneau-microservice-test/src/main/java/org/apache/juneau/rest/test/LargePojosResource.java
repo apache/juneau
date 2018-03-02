@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testLargePojos"
 )
-public class LargePojosResource extends RestServletJenaDefault {
+public class LargePojosResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

@@ -47,7 +47,7 @@ import org.apache.juneau.transforms.*;
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
 	}
 )
-public class LogsResource extends RestServletDefault {
+public class LogsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private File logDir;

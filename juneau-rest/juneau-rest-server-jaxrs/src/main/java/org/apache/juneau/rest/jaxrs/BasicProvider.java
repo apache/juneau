@@ -24,7 +24,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
 /**
- * JAX-RS provider for the same serialize/parse support provided by the {@link RestServletDefault} class.
+ * JAX-RS provider for the same serialize/parse support provided by the {@link BasicRestServlet} class.
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -71,5 +71,5 @@ import org.apache.juneau.xml.*;
 		UrlEncodingParser.class,
 	}
 )
-public final class DefaultProvider extends BaseProvider {}
+public final class BasicProvider extends BaseProvider {}
 

@@ -55,7 +55,7 @@ import org.apache.juneau.rest.widget.*;
 		}
 	)
 )
-public class SqlQueryResource extends RestServletDefault {
+public class SqlQueryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private String driver, connectionUrl;

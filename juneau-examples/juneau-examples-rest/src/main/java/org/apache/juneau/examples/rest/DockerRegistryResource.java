@@ -40,7 +40,7 @@ import org.apache.juneau.rest.labels.*;
 		aside="$F{resources/DockerRegistryResourceAside.html}"
 	)
 )
-public class DockerRegistryResource extends RestServletDefault {
+public class DockerRegistryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Get registry URL from examples.cfg file.

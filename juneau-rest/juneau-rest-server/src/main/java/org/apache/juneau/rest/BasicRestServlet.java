@@ -160,7 +160,7 @@ import org.apache.juneau.xml.*;
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServletDefault">Overview &gt; juneau-rest-server &gt; RestServletDefault</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.BasicRestServlet">Overview &gt; juneau-rest-server &gt; BasicRestServlet</a>
  * </ul>
  */
 @RestResource(
@@ -216,7 +216,7 @@ import org.apache.juneau.xml.*;
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
 	staticFiles={"htdocs:htdocs","styles:styles"}
 )
-public abstract class RestServletDefault extends RestServlet {
+public abstract class BasicRestServlet extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**

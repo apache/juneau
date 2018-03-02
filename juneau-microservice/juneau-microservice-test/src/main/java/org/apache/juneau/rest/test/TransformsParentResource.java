@@ -21,6 +21,6 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	pojoSwaps={TransformsResource.SwapA1.class}
 )
-public class TransformsParentResource extends RestServletDefault {
+public class TransformsParentResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 }

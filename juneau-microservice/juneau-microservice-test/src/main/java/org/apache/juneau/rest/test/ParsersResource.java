@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
 	parsers=ParsersResource.TestParserA.class,
 	serializers=PlainTextSerializer.class
 )
-public class ParsersResource extends RestServletDefault {
+public class ParsersResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	public static class TestParserA extends ReaderParser {

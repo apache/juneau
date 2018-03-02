@@ -134,7 +134,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.parentContext = parentContext;
 		
 		properties = new RestContextProperties();
-		logger(RestLoggerDefault.class);
+		logger(BasicRestLogger.class);
 		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
 		encoders(IdentityEncoder.INSTANCE);
 
@@ -561,7 +561,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestCallHandlerDefault}.
+	 * 	<br>The default is {@link BasicRestCallHandler}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder callHandler(Class<? extends RestCallHandler> value) {
@@ -581,7 +581,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestCallHandlerDefault}.
+	 * 	<br>The default is {@link BasicRestCallHandler}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder callHandler(RestCallHandler value) {
@@ -987,7 +987,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestInfoProviderDefault}.
+	 * 	<br>The default is {@link BasicRestInfoProvider}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder infoProvider(Class<? extends RestInfoProvider> value) {
@@ -1007,7 +1007,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestInfoProviderDefault}.
+	 * 	<br>The default is {@link BasicRestInfoProvider}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder infoProvider(RestInfoProvider value) {
@@ -1027,7 +1027,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.  
-	 * 	<br>The default is {@link RestLoggerDefault}.
+	 * 	<br>The default is {@link BasicRestLogger}.
 	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
@@ -1048,7 +1048,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.  
-	 * 	<br>The default is {@link RestLoggerDefault}.
+	 * 	<br>The default is {@link BasicRestLogger}.
 	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
@@ -1424,7 +1424,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestResourceResolverDefault}.
+	 * 	<br>The default is {@link BasicRestResourceResolver}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder resourceResolver(Class<? extends RestResourceResolver> value) {
@@ -1444,7 +1444,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestResourceResolverDefault}.
+	 * 	<br>The default is {@link BasicRestResourceResolver}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder resourceResolver(RestResourceResolver value) {

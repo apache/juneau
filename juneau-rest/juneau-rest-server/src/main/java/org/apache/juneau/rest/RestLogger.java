@@ -35,7 +35,7 @@ public interface RestLogger {
 	 * 
 	 * <p>
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link RestLoggerDefault} if not specified at any level.
+	 * ultimately {@link BasicRestLogger} if not specified at any level.
 	 */
 	public interface Null extends RestLogger {}
 

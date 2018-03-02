@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testQuery"
 )
-public class QueryResource extends RestServletDefault {
+public class QueryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

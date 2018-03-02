@@ -274,7 +274,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
 	 * 	<li><b>Data type:</b>  {@link RestCallHandler} | <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link RestCallHandlerDefault}
+	 * 	<li><b>Default:</b>  {@link BasicRestCallHandler}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -295,7 +295,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Our customized call handler.</jc>
-	 * 	<jk>public class</jk> MyRestCallHandler <jk>extends</jk> RestCallHandlerDefault {
+	 * 	<jk>public class</jk> MyRestCallHandler <jk>extends</jk> BasicRestCallHandler {
 	 * 		
 	 * 		<jc>// Must provide this constructor!</jc>
 	 * 		<jk>public</jk> MyRestCallHandler(RestContext context) {
@@ -455,7 +455,7 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
-	 * 		by default is {@link RestResourceResolverDefault} which requires the class have one of the following
+	 * 		by default is {@link BasicRestResourceResolver} which requires the class have one of the following
 	 * 		constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
@@ -1155,7 +1155,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.infoProvider.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link RestInfoProvider} | Class&lt;? <jk>extends</jk> {@link RestInfoProvider}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link RestInfoProviderDefault}
+	 * 	<li><b>Default:</b>  {@link BasicRestInfoProvider}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -1176,7 +1176,7 @@ public final class RestContext extends BeanContext {
 	 * <p class='bcode'>
 	 * 	<jc>// Our customized info provider.</jc>
 	 * 	<jc>// Extend from the default implementation and selectively override values.</jc>
-	 * 	<jk>public class</jk> MyRestInfoProvider <jk>extends</jk> RestInfoProviderDefault {
+	 * 	<jk>public class</jk> MyRestInfoProvider <jk>extends</jk> BasicRestInfoProvider {
 	 * 		
 	 * 		<jc>// Must provide this constructor!</jc>
 	 * 		<jk>public</jk> MyRestInfoProvider(RestContext context) {
@@ -1244,7 +1244,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.logger.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link RestLogger} | Class&lt;? <jk>extends</jk> {@link RestLogger}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link RestLoggerDefault}
+	 * 	<li><b>Default:</b>  {@link BasicRestLogger}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -1264,8 +1264,8 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Two implementations are provided by default:
 	 * <ul>
-	 * 	<li class='jc'>{@link RestLoggerDefault} - Default logging.
-	 * 	<li class='jc'>{@link RestLoggerNoOp} - Logging disabled.
+	 * 	<li class='jc'>{@link BasicRestLogger} - Default logging.
+	 * 	<li class='jc'>{@link NoOpRestLogger} - Logging disabled.
 	 * </ul>
 	 * 
 	 * <p>
@@ -1278,7 +1278,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Our customized logger.</jc>
-	 * 	<jk>public class</jk> MyRestLogger <jk>extends</jk> RestLoggerDefault {
+	 * 	<jk>public class</jk> MyRestLogger <jk>extends</jk> BasicRestLogger {
 	 * 		
 	 * 		<ja>@Override</ja>
 	 * 		<jk>public void</jk> log(Level level, Throwable cause, String msg, Object...args) {
@@ -1701,7 +1701,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * 	<li>
-	 * 		Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
+	 * 		Typically, you'll want your resource to extend directly from {@link BasicRestServlet} which comes
 	 * 		preconfigured with the following parsers:
 	 * 		<ul>
 	 * 			<li class='jc'>{@link JsonParser}
@@ -1992,7 +1992,7 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContext#isRenderResponseStackTraces() RestContext.isRenderResponseStackTraces()}
 	 * 		</ul>
-	 * 		That method is used by {@link RestCallHandlerDefault#renderError(HttpServletRequest, HttpServletResponse, RestException)}.
+	 * 		That method is used by {@link BasicRestCallHandler#renderError(HttpServletRequest, HttpServletResponse, RestException)}.
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
@@ -2004,7 +2004,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.resourceResolver.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link RestResourceResolver} | Class&lt;? <jk>extends</jk> {@link RestResourceResolver}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link RestResourceResolverDefault}
+	 * 	<li><b>Default:</b>  {@link BasicRestResourceResolver}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -2259,7 +2259,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * 	<li>
-	 * 		Typically, you'll want your resource to extend directly from {@link RestServletDefault} which comes
+	 * 		Typically, you'll want your resource to extend directly from {@link BasicRestServlet} which comes
 	 * 		preconfigured with the following serializers:
 	 * 		<ul>
 	 * 			<li class='jc'>{@link HtmlDocSerializer}
@@ -2391,7 +2391,7 @@ public final class RestContext extends BeanContext {
 	 * 			<js>"styles:styles"</js>
 	 * 		}
 	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {...}
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
 	 * </p>
 	 * 
 	 * <p>
@@ -2860,7 +2860,7 @@ public final class RestContext extends BeanContext {
 			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);	
 			
-			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLoggerNoOp.class, true, this);
+			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, true, this);
 
 			varResolver = builder.varResolverBuilder
 				.vars(
@@ -3118,7 +3118,7 @@ public final class RestContext extends BeanContext {
 			this.callRouters = unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverDefault.class : parentContext.resourceResolver, true, this);
+			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? BasicRestResourceResolver.class : parentContext.resourceResolver, true, this);
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
 				String path = null;
 				Object r = null;
@@ -3158,8 +3158,8 @@ public final class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandlerDefault.class, true, this);
-			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProviderDefault.class, true, this);
+			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, BasicRestCallHandler.class, true, this);
+			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, BasicRestInfoProvider.class, true, this);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -3216,7 +3216,7 @@ public final class RestContext extends BeanContext {
 	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo,bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
 	 * 		}
 	 * 	)
-	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> RestServletDefault {
+	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet {
 	 * </p>
 	 * 
 	 * <p>

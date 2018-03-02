@@ -36,7 +36,7 @@ public interface RestInfoProvider {
 	 * 
 	 * <p>
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link RestInfoProviderDefault} if not specified at any level.
+	 * ultimately {@link BasicRestInfoProvider} if not specified at any level.
 	 */
 	public interface Null extends RestInfoProvider {}
 

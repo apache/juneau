@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testClientFutures"
 )
-public class ClientFuturesResource extends RestServletDefault {
+public class ClientFuturesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

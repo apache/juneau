@@ -28,7 +28,7 @@ import org.apache.juneau.rest.annotation.*;
 		PathsResource.A.class
 	}
 )
-public class PathsResource extends RestServletDefault {
+public class PathsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/*")
@@ -44,7 +44,7 @@ public class PathsResource extends RestServletDefault {
 	@RestResource(
 		path="/a"
 	)
-	public static class A extends RestServletDefault {
+	public static class A extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestMethod(name=GET, path="/*")
 		public ObjectMap doGet1(RestRequest req, @PathRemainder String r) {

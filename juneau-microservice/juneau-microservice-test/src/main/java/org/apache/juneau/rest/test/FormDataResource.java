@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testFormData"
 )
-public class FormDataResource extends RestServletDefault {
+public class FormDataResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

@@ -78,7 +78,7 @@ import org.apache.juneau.rest.labels.*;
 		ShutdownResource.class,
 	}
 )
-public class Root extends RestServletDefault {
+public class Root extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/")

@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/testOverlappingMethods",
 	serializers=PlainTextSerializer.class
 )
-public class OverlappingMethodsResource extends RestServletDefault {
+public class OverlappingMethodsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
 	path="/testSerializers",
 	serializers=SerializersResource.TestSerializerA.class
 )
-public class SerializersResource extends RestServletDefault {
+public class SerializersResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	public static class TestSerializerA extends WriterSerializer {
