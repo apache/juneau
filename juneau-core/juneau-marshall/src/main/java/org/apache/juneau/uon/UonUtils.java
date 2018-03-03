@@ -21,8 +21,8 @@ import org.apache.juneau.internal.*;
  */
 public final class UonUtils {
 
-	private static final AsciiSet needsQuoteChars = new AsciiSet("),=\n\t\r\b\f ");
-	private static final AsciiSet maybeNeedsQuotesFirstChar = new AsciiSet("),=\n\t\r\b\f tfn+-.#0123456789");
+	private static final AsciiSet needsQuoteChars = AsciiSet.create("),=\n\t\r\b\f ");
+	private static final AsciiSet maybeNeedsQuotesFirstChar = AsciiSet.create("),=\n\t\r\b\f tfn+-.#0123456789");
 
 	/**
 	 * Returns <jk>true</jk> if the specified string needs to be quoted per UON notation.

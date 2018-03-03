@@ -33,7 +33,7 @@ import org.apache.juneau.transform.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class YamlParserSession extends ReaderParserSession {
 
-	private static final AsciiSet decChars = new AsciiSet("0123456789");
+	private static final AsciiSet decChars = AsciiSet.create().ranges("0-9").build();
 
 	/**
 	 * Create a new session using properties specified in the context.

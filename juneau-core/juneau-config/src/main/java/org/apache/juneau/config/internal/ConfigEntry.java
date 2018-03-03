@@ -33,7 +33,7 @@ public class ConfigEntry {
 	
 	static final ConfigEntry NULL = new ConfigEntry(null, null, null, null, null);
 	
-	private final static AsciiSet MOD_CHARS = new AsciiSet("#$%&*+^@~");
+	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
 
 	ConfigEntry(String line, List<String> preLines) {
 		this.rawLine = line;
@@ -164,5 +164,5 @@ public class ConfigEntry {
 		return w;
 	}
 	
-	private static final AsciiSet REPLACE_CHARS = new AsciiSet("\\#");
+	private static final AsciiSet REPLACE_CHARS = AsciiSet.create("\\#");
 }

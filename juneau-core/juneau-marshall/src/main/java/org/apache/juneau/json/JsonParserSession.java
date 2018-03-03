@@ -34,7 +34,7 @@ import org.apache.juneau.transform.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class JsonParserSession extends ReaderParserSession {
 
-	private static final AsciiSet decChars = new AsciiSet("0123456789");
+	private static final AsciiSet decChars = AsciiSet.create().ranges("0-9").build();
 	
 	private final boolean validateEnd; 
 

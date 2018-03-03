@@ -34,6 +34,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
@@ -755,7 +756,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			StringBuilder authority = new StringBuilder(getScheme()).append("://").append(getServerName());
 			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
 				authority.append(':').append(port);
-			uriContext = new UriContext(authority.toString(), getContextPath(), getServletPath(), super.getPathInfo());
+			uriContext = new UriContext(authority.toString(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(super.getPathInfo()));
 		}
 		return uriContext;
 	}

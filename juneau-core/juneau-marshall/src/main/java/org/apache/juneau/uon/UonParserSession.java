@@ -35,7 +35,7 @@ import org.apache.juneau.transform.*;
 public class UonParserSession extends ReaderParserSession {
 
 	// Characters that need to be preceded with an escape character.
-	private static final AsciiSet escapedChars = new AsciiSet("~'\u0001\u0002");
+	private static final AsciiSet escapedChars = AsciiSet.create("~'\u0001\u0002");
 
 	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
 
@@ -692,7 +692,7 @@ public class UonParserSession extends ReaderParserSession {
 		return ("null".equals(s) ? null : trim(s));
 	}
 
-	private static final AsciiSet endCharsParam = new AsciiSet(""+AMP), endCharsNormal = new AsciiSet(",)"+AMP);
+	private static final AsciiSet endCharsParam = AsciiSet.create(""+AMP), endCharsNormal = AsciiSet.create(",)"+AMP);
 
 
 	/*

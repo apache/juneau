@@ -37,24 +37,28 @@ public class AddressBook extends LinkedList<Person> implements IAddressBook {
 	}
 
 	@Override /* IAddressBook */
-	public void init() throws Exception {
+	public void init() {
 		clear();
-		createPerson(
-			new CreatePerson(
-				"Barack Obama",
-				toCalendar("Aug 4, 1961"),
-				new CreateAddress("1600 Pennsylvania Ave", "Washington", "DC", 20500, true),
-				new CreateAddress("5046 S Greenwood Ave", "Chicago", "IL", 60615, false)
-			)
-		);
-		createPerson(
-			new CreatePerson(
-				"George Walker Bush",
-				toCalendar("Jul 6, 1946"),
-				new CreateAddress("43 Prairie Chapel Rd", "Crawford", "TX", 76638, true),
-				new CreateAddress("1600 Pennsylvania Ave", "Washington", "DC", 20500, false)
-			)
-		);
+		try {
+			createPerson(
+				new CreatePerson(
+					"Barack Obama",
+					toCalendar("Aug 4, 1961"),
+					new CreateAddress("1600 Pennsylvania Ave", "Washington", "DC", 20500, true),
+					new CreateAddress("5046 S Greenwood Ave", "Chicago", "IL", 60615, false)
+				)
+			);
+			createPerson(
+				new CreatePerson(
+					"George Walker Bush",
+					toCalendar("Jul 6, 1946"),
+					new CreateAddress("43 Prairie Chapel Rd", "Crawford", "TX", 76638, true),
+					new CreateAddress("1600 Pennsylvania Ave", "Washington", "DC", 20500, false)
+				)
+			);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override /* IAddressBook */

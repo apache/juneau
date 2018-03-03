@@ -12,9 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import java.util.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
+import java.util.*;
+import java.util.Map;
+
+import org.apache.juneau.dto.*;
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.examples.addressbook.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.remoteable.*;
 
@@ -32,14 +38,6 @@ import org.apache.juneau.rest.remoteable.*;
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
-		},
-		aside={
-			"<div style='max-width:400px;min-width:200px' class='text'>",
-			"	<p>Shows how to use the <code>RemoteableServlet</code> class to define RPC-style remoteable interfaces using REST as a protocol.</p>",
-			"	<p>Remoteable proxies are retrieved on the client side using <code>RestClient.getInterfaceProxy(Class)</code>.</p>",
-			"	<p>Methods are invoked using POSTs of serialized arrays of objects and the returned value is marshalled back as a response.</p>",
-			"	<p>GET requests (as shown here) show the available methods on the interface.</p>",
-			"</div>"
 		}
 	),
 	// Allow us to use method=POST from a browser.
@@ -48,7 +46,12 @@ import org.apache.juneau.rest.remoteable.*;
 )
 public class SampleRemoteableServlet extends RemoteableServlet {
 
-	AddressBook addressBook = new AddressBook();
+	private final AddressBook addressBook;
+	
+	public SampleRemoteableServlet() {
+		addressBook = new AddressBook();
+		addressBook.init();
+	}
 
 	@Override /* RemoteableServlet */
 	protected Map<Class<?>,Object> getServiceMap() throws Exception {
@@ -61,4 +64,66 @@ public class SampleRemoteableServlet extends RemoteableServlet {
 		m.put(AddressBook.class, addressBook);
 		return m;
 	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Overridden methods to provide aside messages
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@Override /* RemoteableServlet */
+	@RestMethod(name=GET, path="/",
+		htmldoc=@HtmlDoc(
+			aside={
+				"<div style='max-width:400px;min-width:200px' class='text'>",
+				"	<p>Shows how to use the <code>RemoteableServlet</code> class to define RPC-style remoteable interfaces using REST as a protocol.</p>",
+				"	<p>Remoteable proxies are retrieved on the client side using <code>RestClient.getInterfaceProxy(Class)</code>.</p>",
+				"	<p>Methods are invoked using POSTs of serialized arrays of objects and the returned value is marshalled back as a response.</p>",
+				"	<p>This page shows the list of keys returned by the getServiceMap() method which returns a Map&lt;Class,Object&gt; which maps interfaces to objects.</p>",
+				"	<p>This example shows the differences between using interfaces (preferred) and classes as keys.</p>",
+				"</div>"
+			}
+		)
+	)
+	public List<LinkString> getInterfaces(RestRequest req) throws Exception {
+		return super.getInterfaces(req);
+	}
+
+	@Override /* RemoteableServlet */
+	@RestMethod(name=GET, path="/{javaInterface}", summary="List of available methods on $RP{javaInterface}.",
+		htmldoc=@HtmlDoc(
+			aside={
+				"<div style='max-width:400px;min-width:200px' class='text'>",
+				"	<p>Shows the list of methods defined on this interface.</p>",
+				"	<p>Links take you to a form-entry page for testing.</p>",
+				"</div>"
+			}
+		)
+	)
+	public Collection<LinkString> listMethods(RestRequest req, @Path("javaInterface") String javaInterface) throws Exception {
+		return super.listMethods(req, javaInterface);
+	}
+
+	/**
+	 * [GET /{javaInterface] - Get the list of all remoteable methods on the specified interface name.
+	 * 
+	 * @param req The HTTP servlet request.
+	 * @param javaInterface The Java interface name.
+	 * @param javaMethod The Java method name or signature.
+	 * @return A simple form entry page for invoking a remoteable method.
+	 * @throws Exception
+	 */
+	@Override /* RemoteableServlet */
+	@RestMethod(name=GET, path="/{javaInterface}/{javaMethod}", summary="Form entry for method $RP{javaMethod} on interface $RP{javaInterface}",
+		htmldoc=@HtmlDoc(
+			aside={
+				"<div style='max-width:400px;min-width:200px' class='text'>",
+				"	<p>A rudimentary form-entry page.</p>",
+				"	<p>When using this form, arguments are passed as a URL-encoded FORM post.</p>",
+				"	<p>However, other formats such as JSON and XML can also be posted.</p>",
+				"</div>"
+			}
+		)
+	)
+	public Div showEntryForm(RestRequest req, @Path("javaInterface") String javaInterface, @Path("javaMethod") String javaMethod) throws Exception {
+		return super.showEntryForm(req, javaInterface, javaMethod);
+	} 
 }

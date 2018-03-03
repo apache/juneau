@@ -13,13 +13,19 @@
 package org.apache.juneau.rest.remoteable;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
+import java.util.Map;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.*;
+import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -76,7 +82,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		boolean useAll = ! useOnlyAnnotated();
 		for (Class<?> c : getServiceMap().keySet()) {
 			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())
-				l.add(new LinkString(c.getName(), "{0}/{1}", req.getRequestURI(), c.getName()));
+				l.add(new LinkString(c.getName(), "{0}/{1}", req.getRequestURI(), urlEncode(c.getName())));
 		}
 		return l;
 	}
@@ -84,14 +90,62 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	/**
 	 * [GET /{javaInterface] - Get the list of all remoteable methods on the specified interface name.
 	 * 
+	 * @param req The HTTP servlet request.
 	 * @param javaInterface The Java interface name.
 	 * @return The methods defined on the interface.
 	 * @throws Exception
 	 */
-	@RestMethod(name=GET, path="/{javaInterface}")
-	public Collection<String> listMethods(@Path String javaInterface) throws Exception {
-		return getMethods(javaInterface).keySet();
+	@RestMethod(name=GET, path="/{javaInterface}", summary="List of available methods on $RP{javaInterface}.")
+	public Collection<LinkString> listMethods(RestRequest req, @Path("javaInterface") String javaInterface) throws Exception {
+		List<LinkString> l = new ArrayList<>();
+		for (String s : getMethods(javaInterface).keySet()) {
+			l.add(new LinkString(s, "{0}/{1}", req.getRequestURI(), urlEncode(s)));
+		}
+		return l;
 	}
+
+	/**
+	 * [GET /{javaInterface] - Get the list of all remoteable methods on the specified interface name.
+	 * 
+	 * @param req The HTTP servlet request.
+	 * @param javaInterface The Java interface name.
+	 * @param javaMethod The Java method name or signature.
+	 * @return A simple form entry page for invoking a remoteable method.
+	 * @throws Exception
+	 */
+	@RestMethod(name=GET, path="/{javaInterface}/{javaMethod}", summary="Form entry for method $RP{javaMethod} on interface $RP{javaInterface}")
+	public Div showEntryForm(RestRequest req, @Path("javaInterface") String javaInterface, @Path("javaMethod") String javaMethod) throws Exception {
+		
+		// Find the method.
+		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
+		if (m == null)
+			throw new RestException(SC_NOT_FOUND, "Method not found");
+
+		Table t = table();
+		
+		Type[] types = m.getGenericParameterTypes();
+		if (types.length == 0) {
+			t.child(tr(td("No arguments").colspan(3).style("text-align:center")));
+		} else {
+			t.child(tr(th("Index"),th("Type"),th("Value")));
+			for (int i = 0; i < types.length; i++) {
+				String type = ClassUtils.toString(types[i]);
+				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));
+			}
+		}
+		
+		t.child(
+			tr(
+				td().colspan(3).style("text-align:right").children(
+					types.length == 0 ? null : button("reset", "Reset"),
+					button("button","Cancel").onclick("window.location.href='/'"),
+					button("submit", "Submit")
+				)
+			)
+		);
+
+		return div(form().id("form").action("request:/").method(POST).children(t));
+	} 
 
 	/**
 	 * [POST /{javaInterface}/{javaMethod}] - Invoke the specified service method.

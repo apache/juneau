@@ -33,16 +33,16 @@ public final class UonWriter extends SerializerWriter {
 	private final boolean encodeChars, plainTextParams;
 
 	// Characters that do not need to be URL-encoded in strings.
-	private static final AsciiSet unencodedChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789;/?:@-_.!*'$(),~=");
+	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~=").build();
 
 	// Characters that do not need to be URL-encoded in attribute names.
 	// Identical to unencodedChars, but excludes '='.
-	private static final AsciiSet unencodedCharsAttrName = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789;/?:@-_.!*'$(),~");
+	private static final AsciiSet unencodedCharsAttrName = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~").build();
 
 	// Characters that need to be preceded with an escape character.
-	private static final AsciiSet escapedChars = new AsciiSet("~'");
+	private static final AsciiSet escapedChars = AsciiSet.create("~'");
 
-	private static final AsciiSet noChars = new AsciiSet("");
+	private static final AsciiSet noChars = AsciiSet.create("");
 
 	private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 

@@ -31,7 +31,7 @@ public final class YamlWriter extends SerializerWriter {
 
 	// Characters that trigger special handling of serializing attribute values.
 	private static final AsciiSet
-		encodedChars = new AsciiSet("\n\t\b\f\r'\"\\");
+		encodedChars = AsciiSet.create("\n\t\b\f\r'\"\\");
 
 	private static final KeywordSet reservedWords = new KeywordSet(
 		"y","Y","yes","Yes","YES","n","N","no","No","NO",
@@ -45,8 +45,8 @@ public final class YamlWriter extends SerializerWriter {
 	// These are actually more strict than the actual Javascript specification, but
 	// can be narrowed in the future if necessary.
 	// For example, we quote attributes that start with $ even though we don't need to.
-	private static final AsciiSet validAttrChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
-	private static final AsciiSet validFirstAttrChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_");
+	private static final AsciiSet validAttrChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars("_").build();
+	private static final AsciiSet validFirstAttrChars = AsciiSet.create().ranges("a-z","A-Z").chars("_").build();
 
 	private final AsciiSet ec;
 

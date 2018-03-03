@@ -37,17 +37,17 @@ import org.apache.juneau.parser.ParseException;
  */
 public final class StringUtils {
 
-	private static final AsciiSet numberChars = new AsciiSet("-xX.+-#pP0123456789abcdefABCDEF");
-	private static final AsciiSet firstNumberChars = new AsciiSet("+-.#0123456789");
-	private static final AsciiSet octChars = new AsciiSet("01234567");
-	private static final AsciiSet decChars = new AsciiSet("0123456789");
-	private static final AsciiSet hexChars = new AsciiSet("0123456789abcdefABCDEF");
+	private static final AsciiSet numberChars = AsciiSet.create("-xX.+-#pP0123456789abcdefABCDEF");
+	private static final AsciiSet firstNumberChars =AsciiSet.create("+-.#0123456789");
+	private static final AsciiSet octChars = AsciiSet.create("01234567");
+	private static final AsciiSet decChars = AsciiSet.create("0123456789");
+	private static final AsciiSet hexChars = AsciiSet.create("0123456789abcdefABCDEF");
 
 	// Maps 6-bit nibbles to BASE64 characters.
 	private static final char[] base64m1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
 	// Characters that do not need to be URL-encoded
-	private static final AsciiSet unencodedChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'()\\");
+	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars("-_.!~*'()\\").build();
 
 	// Maps BASE64 characters to 6-bit nibbles.
 	private static final byte[] base64m2 = new byte[128];
@@ -1540,6 +1540,77 @@ public final class StringUtils {
 		return null;
 	}
 
+	private static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS = 
+		AsciiSet.create().ranges("a-z","A-Z","0-9").chars("-_.*/()").build();
+	
+	/**
+	 * Similar to {@link #urlEncode(Object)} but doesn't encode <js>"/"</js> characters.
+	 * 
+	 * @param o The object to encode.
+	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
+	 */
+	public static String urlEncodePath(Object o) {
+		if (o == null)
+			return null;
+		String s = asString(o);
+
+		boolean needsEncode = false;
+		for (int i = 0; i < s.length() && ! needsEncode; i++) 
+			needsEncode = URL_ENCODE_PATHINFO_VALIDCHARS.contains(s.charAt(i));
+		if (! needsEncode)
+			return s;
+		
+		StringBuilder sb = new StringBuilder();
+		CharArrayWriter caw = new CharArrayWriter();
+		int caseDiff = ('a' - 'A');
+		
+		for (int i = 0; i < s.length();) {
+			char c = s.charAt(i);
+			if (URL_ENCODE_PATHINFO_VALIDCHARS.contains(c)) {
+				sb.append(c);
+				i++;
+			} else {
+				if (c == ' ') {
+					sb.append('+');
+					i++;
+				} else {
+					do {
+						caw.write(c);
+						if (c >= 0xD800 && c <= 0xDBFF) {
+							if ( (i+1) < s.length()) {
+								int d = s.charAt(i+1);
+								if (d >= 0xDC00 && d <= 0xDFFF) {
+									caw.write(d);
+									i++;
+								}
+							}
+						}
+						i++;
+					} while (i < s.length() && !URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));
+					
+					caw.flush();
+					String s2 = new String(caw.toCharArray());
+					byte[] ba = s2.getBytes(IOUtils.UTF8);
+					for (int j = 0; j < ba.length; j++) {
+						sb.append('%');
+						char ch = Character.forDigit((ba[j] >> 4) & 0xF, 16);
+						if (Character.isLetter(ch)) {
+							ch -= caseDiff;
+						}
+						sb.append(ch);
+						ch = Character.forDigit(ba[j] & 0xF, 16);
+						if (Character.isLetter(ch)) {
+							ch -= caseDiff;
+						}
+						sb.append(ch);
+					}
+					caw.reset();
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 	/**
 	 * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
 	 * 

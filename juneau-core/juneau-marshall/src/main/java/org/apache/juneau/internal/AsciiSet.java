@@ -12,25 +12,98 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import java.util.Arrays;
+
 /**
  * Stores a set of ASCII characters for quick lookup.
  */
 public final class AsciiSet {
-	final boolean[] store = new boolean[128];
+	private final boolean[] store;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param chars The characters to keep in this store.
-	 */
-	public AsciiSet(String chars) {
-		for (int i = 0; i < chars.length(); i++) {
-			char c = chars.charAt(i);
-			if (c < 128)
-				store[c] = true;
-		}
+	AsciiSet(boolean[] store) {
+		this.store = Arrays.copyOf(store, store.length);
 	}
 
+	/**
+	 * Creates an ASCII set with the specified characters.
+	 * 
+	 * @param chars The characters to keep in this store.
+	 * @return A new object.
+	 */
+	public static AsciiSet create(String chars) {
+		return new Builder().chars(chars).build();
+	}
+	
+	/**
+	 * Creates a builder for an ASCII set.
+	 * 
+	 * @return A new builder.
+	 */
+	public static AsciiSet.Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Builder class for {@link AsciiSet} objects.
+	 */
+	public static class Builder {
+		final boolean[] store = new boolean[128];
+		
+		/**
+		 * Adds a range of characters to this set.
+		 * 
+		 * @param start The start character.
+		 * @param end The end character.
+		 * @return This object (for method chaining).
+		 */
+		public AsciiSet.Builder range(char start, char end) {
+			for (char c = start; c <= end; c++)
+				if (c < 128)
+					store[c] = true;
+			return this;
+		}
+		
+		/**
+		 * Shortcut for calling multiple ranges.
+		 * 
+		 * @param s Strings of the form "A-Z" where A and Z represent the first and last characters in the range.
+		 * @return This object (for method chaining).
+		 */
+		public AsciiSet.Builder ranges(String...s) {
+			for (String ss : s) {
+				if (ss.length() != 3 || ss.charAt(1) != '-')
+					throw new RuntimeException("Value passed to ranges() must be 3 characters");
+				range(ss.charAt(0), ss.charAt(2));
+			}
+			return this;
+		}
+		
+		/**
+		 * Adds a set of characters to this set.
+		 * 
+		 * @param chars The characters to keep in this store.
+		 * @return This object (for method chaining).
+		 */
+		public AsciiSet.Builder chars(String chars) {
+			for (int i = 0; i < chars.length(); i++) {
+				char c = chars.charAt(i);
+				if (c < 128)
+					store[c] = true;
+			}
+			return this;
+		}
+		
+		/**
+		 * Create a new {@link AsciiSet} object with the contents of this builder.
+		 * 
+		 * @return A new {link AsciiSet} object.
+		 */
+		public AsciiSet build() {
+			return new AsciiSet(store);
+		}
+	}
+	
+	
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
 	 * 

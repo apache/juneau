@@ -34,7 +34,7 @@ public class ConfigMap implements ConfigStoreListener {
 	private volatile String contents;        // The original contents of this object.
 	private final String name;               // The name  of this object.
 
-	private final static AsciiSet MOD_CHARS = new AsciiSet("#$%&*+^@~");
+	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
 	
 	// Changes that have been applied since the last load.
 	private final List<ConfigEvent> changes = Collections.synchronizedList(new ArrayList<ConfigEvent>());
