@@ -84,7 +84,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	}
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlDocSerializerSession(this, args);
+	public HtmlSchemaDocSerializerSession createSession(SerializerSessionArgs args) {
+		return new HtmlSchemaDocSerializerSession(this, args);
 	}
 }

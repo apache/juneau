@@ -53,7 +53,7 @@ public class DefaultHandler implements ResponseHandler {
 			MediaType mediaType = res.getMediaType();
 			if (mediaType == null)
 				mediaType = sm.getMediaType();
-			res.setContentType(mediaType.toString());
+			res.setContentType(s.getResponseContentType().toString());
 
 			try {
 				RequestProperties p = res.getProperties();

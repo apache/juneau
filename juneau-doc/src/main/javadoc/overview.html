@@ -16427,12 +16427,16 @@
 		<ul class='spaced-list'>
 			<li>
 				Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
+			<li>
+				Fixed bug where HTML-Schema was not being rendered correctly.
 		</ul>
 		
 		<h5 class='topic'>juneau-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				Fixed bug in <code>UriResolver</code> when request path info had special characters.
+			<li>
+				Fixed bug where incorrect media type was being set on responses (e.g. <code>text/html+schema</code> instead of <code>text/html</code> for schema documents).
 			<li>
 				{@link org.apache.juneau.rest.remoteable.RemoteableServlet} now provides a form page for invoking remoteable methods in a browser.
 			<li>
