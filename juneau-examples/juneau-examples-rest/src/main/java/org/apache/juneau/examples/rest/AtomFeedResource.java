@@ -59,7 +59,6 @@ public class AtomFeedResource extends BasicRestServletJena {
 
 	@Override /* Servlet */
 	public void init() {
-
 		try {
 			feed =
 				feed("tag:juneau.sample.com,2013:1", "Juneau ATOM specification", "2013-05-08T12:29:29Z")

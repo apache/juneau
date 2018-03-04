@@ -13,7 +13,6 @@
 package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
-import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;
 
@@ -34,7 +33,8 @@ public class TestMultiPartFormPostsTest extends RestTestcase {
 	@Test
 	public void testUpload() throws Exception {
 		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
-		File f = createTempFile("testMultiPartFormPosts.txt");
+		File f = new File("tmp/testMultiPartFormPosts.txt");
+		f.deleteOnExit();
 		try (FileWriter fw = new FileWriter(f)) {
 			IOPipe.create(new StringReader("test!"), fw).run();
 		}

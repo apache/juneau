@@ -105,7 +105,7 @@ public class SqlQueryResource extends BasicRestServlet {
 				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
 				+"\n	}"
 			),
-			form("sqlQuery").method(POST).target("buf").children(
+			form("servlet:/").method(POST).target("buf").children(
 				table(
 					tr(
 						th("Position (1-10000):"),

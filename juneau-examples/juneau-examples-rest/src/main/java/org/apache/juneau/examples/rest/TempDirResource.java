@@ -14,11 +14,13 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
 
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
+import org.apache.commons.io.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -31,7 +33,7 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	path="/tempDir",
 	title="Temp Directory View Service",
-	description="View and download files in the '$S{java.io.tmpdir}' directory.",
+	description="View and download files in the '$R{rootDir}' directory.",
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
@@ -53,7 +55,7 @@ import org.apache.juneau.utils.*;
 		}
 	),
 	properties={
-		@Property(name="rootDir", value="$S{java.io.tmpdir}"),
+		@Property(name="rootDir", value="$C{TempDirResource/dir,$S{java.io.tmpdir}}"),
 		@Property(name="allowViews", value="true"),
 		@Property(name="allowDeletes", value="true"),
 		@Property(name="allowPuts", value="false")
@@ -62,6 +64,21 @@ import org.apache.juneau.utils.*;
 public class TempDirResource extends DirectoryResource {
 	private static final long serialVersionUID = 1L;
 
+	@Override /* DirectoryResource */
+	@RestHook(INIT)
+	public void init(RestContextBuilder b) throws Exception { 
+		super.init(b);
+		File rootDir = getRootDir();
+		if (! rootDir.exists()) {
+			rootDir.mkdirs();
+			
+			// Make some dummy files.
+			FileUtils.touch(new File(rootDir, "A.txt"));
+			FileUtils.touch(new File(rootDir, "B.txt"));
+			FileUtils.touch(new File(rootDir, "C.txt"));
+		}
+	}
+	
 	/**
 	 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
 	 */

@@ -14801,9 +14801,15 @@
 				Because you added the <l>Traversable</l> converter to the <l>getPerson</l> method, you can also address 
 				child nodes in the POJO model through path remainders:
 			</p>
-			<img class="bordered" src="doc-files/Samples.AddressBookResource.Traversable.1.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people/1/addresses/0
+			</p>			
+			<img class="bordered" src="doc-files/juneau-examples-rest.AddressBookResource.Traversable.1.png" style='width:800px;'>
 			<br><br>
-			<img class="bordered" src="doc-files/Samples.AddressBookResource.Traversable.2.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people/1/addresses/0/street
+			</p>			
+			<img class="bordered" src="doc-files/juneau-examples-rest.AddressBookResource.Traversable.2.png" style='width:800px;'>
 		</div>
 
 		<!-- ======================================================================================================= -->
@@ -14816,13 +14822,22 @@
 			</p>
 			
 			<h5 class='figure'>Show only the name and addresses columns</h5>
-			<img class="bordered" src="doc-files/Samples.AddressBookResource.Queryable.1.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?v=name,addresses
+			</p>			
+			<img class="bordered" src="doc-files/juneau-examples-rest.AddressBookResource.Queryable.1.png" style='width:800px;'>
 			
 			<h5 class='figure'>Show only names that start with 'B*'</h5>
-			<img class="bordered" src="doc-files/Samples.AddressBookResource.Queryable.2.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?s=name=B*
+			</p>			
+			<img class="bordered" src="doc-files/juneau-examples-rest.AddressBookResource.Queryable.2.png" style='width:800px;'>
 			
 			<h5 class='figure'>Show only entries with age greater than 60</h5>
-			<img class="bordered" src="doc-files/Samples.AddressBookResource.Queryable.3.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?s=age>=60
+			</p>			
+			<img class="bordered" src="doc-files/juneau-examples-rest.AddressBookResource.Queryable.3.png" style='width:800px;'>
 		</div>
 	
 		<!-- ======================================================================================================= -->
@@ -14833,7 +14848,10 @@
 				The <l>Introspectable</l> converter on the <l>getPerson</l> method allows us to invoke public methods 
 				on the addressed POJO (in this case, public methods on the <l>String</l> class):
 			</p>
-			<img class="bordered" src="doc-files/Samples.AddressBookResource.Introspectable.1.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people/1/name?invokeMethod=substring(int,int)&amp;invokeArgs=[1,5]
+			</p>			
+			<img class="bordered" src="doc-files/juneau-examples-rest.AddressBookResource.Introspectable.1.png" style='width:800px;'>
 		</div>
 	
 		<!-- ======================================================================================================= -->
@@ -14914,7 +14932,7 @@
 				System.<jsf>out</jsf>.println(<js>"Created address "</js> + a.<jf>uri</jf>); 
 				
 				<jc>// Find 1st person, and change name</jc> 
-				Person[] pp = client.doGet(root + <js>"/people?q=(name='Barack+Obama')"</js>).getResponse(Person[].<jk>class</jk>); 
+				Person[] pp = client.doGet(root + <js>"/people?s=name=Barack+Obama"</js>).getResponse(Person[].<jk>class</jk>); 
 				String r = client.doPut(pp[0].uri + <js>"/name"</js>, <js>"Barack Hussein Obama"</js>).getResponse(String.<jk>class</jk>); 
 				System.<jsf>out</jsf>.println(<js>"Changed name, response = "</js> + r); 
 				p = client.doGet(pp[0].<jf>uri</jf>).getResponse(Person.<jk>class</jk>); 
@@ -14942,10 +14960,10 @@
 	Deleted person Barack Obama, response = DELETE successful
 	Deleted person George Walker Bush, response = DELETE successful
 	Number of entries = 0
-	Created person Barack Obama, uri = http://localhost:9081/sample/addressBook/people/3
-	Created person George Walker Bush, uri = http://localhost:9081/sample/addressBook/people/4
-	Created address http://localhost:9081/sample/addressBook/addresses/7
-	Created address http://localhost:9081/sample/addressBook/addresses/8
+	Created person Barack Obama, uri = http://localhost:10000/addressBook/people/3
+	Created person George Walker Bush, uri = http://localhost:10000/addressBook/people/4
+	Created address http://localhost:10000/addressBook/addresses/7
+	Created address http://localhost:10000/addressBook/addresses/8
 	Changed name, response = PUT successful
 	New name = Barack Hussein Obama		
 			</p>
@@ -14958,8 +14976,8 @@
 			<p>
 				The Juneau architecture is designed to make it easy to debug REST resources using nothing more than a 
 				browser.
-				The same actions done programmatically in the last section can also be done using URLs.
-				By default, you can override the HTTP Method and Content through GET parameters, as shown below:
+				<br>The same actions done programmatically in the last section can also be done using URLs.
+				<br>By default, you can override the HTTP Method and Content through GET parameters, as shown below:
 			</p>
 			<p class='bcode'>
 	<jc>// Delete the existing entries</jc>
@@ -14967,15 +14985,15 @@
 	http://localhost:10000/addressBook/people/2?method=DELETE
 
 	<jc>// Add 1st person again</jc>
-	http://localhost:10000/addressBook/people?method=POST&amp;content={name:'Barack Obama',birthDate:'Aug 4, 1961',addresses:[{street:'1600 Pennsylvania Ave',city:'Washington',state:'DC',zip:20500,isCurrent:true},{street:'5046 S Greenwood Ave',city:'Chicago',state:'IL',zip:60615,isCurrent:false}]}
+	http://localhost:10000/addressBook/people?method=POST&amp;content=(name=Barack+Obama,birthDate='Aug+4,+1961',addresses=@((street=1600+Pennsylvania+Ave,city=Washington,state=DC,zip=20500,isCurrent=true),(street=5046+S+Greenwood+Ave,city=Chicago,state=IL,zip=60615,isCurrent=false)))
 	
 	<jc>// Add 2nd person again</jc>
-	http://localhost:10000/addressBook/people?method=POST&amp;content={name:'George Walker Bush',birthDate:'Jul 6, 1946'}
-	http://localhost:10000/addressBook/people/4/addresses?method=POST&amp;content={street:'43 Prairie Chapel Rd',city:'Crawford',state:'TX',zip:76638,isCurrent:true}
-	http://localhost:10000/addressBook/people/4/addresses?method=POST&amp;content={street:'1600 Pennsylvania Ave',city:'Washington',state:'DC',zip:20500,isCurrent:false}
+	http://localhost:10000/addressBook/people?method=POST&amp;content=(name=George+Walker+Bush,birthDate='Jul+6,+1946')
+	http://localhost:10000/addressBook/people/4/addresses?method=POST&amp;content=(street=43+Prairie+Chapel+Rd,city=Crawford,state=TX,zip=76638,isCurrent=true)
+	http://localhost:10000/addressBook/people/4/addresses?method=POST&amp;content=(street=1600+Pennsylvania+Ave,city=Washington,state=DC,zip=20500,isCurrent=false)
 		
 	<jc>// Change name of 1st person</jc>
-	http://localhost:10000/addressBook/people/3/name?method=PUT&amp;content="'Barack Hussein Obama'"	
+	http://localhost:10000/addressBook/people/3/name?method=PUT&amp;content=Barack+Hussein+Obama	
 			</p>
 			<p>
 				The ability to overload methods is enabled through the 
@@ -14998,89 +15016,10 @@
 			<li>
 				Using the {@link org.apache.juneau.rest.client.RestClient} class to create remoteable proxy interfaces. 
 		</ul>
-		<p>
-			The <l>RemoteableServlet</l> class has a single abstract method, 
-			{@link org.apache.juneau.rest.remoteable.RemoteableServlet#getServiceMap()}, that defines interface 
-			keys and POJO values. 		
-		</p>
-		<p>
-			The <l>SampleRemoteableServlet</l> exposes the <l>AddressBook</l> bean from the previous example as a 
-			service.
-		</p>
-		<p class='bcode'>
-	<ja>@RestResource</ja>( 
-		path=<js>"/remoteable"</js>, 
-		messages=<js>"nls/SampleRemoteableServlet"</js>, 
-		title=<js>"Remoteable Service Proxy API"</js>, 
-		description=<js>"Sample class showing how to use remoteable proxies. The list below are exposed services that 
-			can be retrieved using RestClient.getProxyInterface(Class)."</js>, 
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			}
-		),
-		<jc>// Allow us to use method=POST from a browser.</jc> 
-		allowedMethodParams=<js>"*"</js> 
-	) 
-	<jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet { 
-	
-		AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook(); 
-		
-		<ja>@Override</ja> <jc>/* RemoteableServlet */</jc> 
-		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception { 
-			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;(); 
-			
-			<jc>// In this simplified example, you expose the same POJO service under two different interfaces.</jc> 
-			<jc>// One is IAddressBook which only exposes methods defined on that interface, and</jc> 
-			<jc>// the other is AddressBook itself which exposes all methods defined on the class itself.</jc> 
-			m.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>); 
-			m.put(AddressBook.<jk>class</jk>, <jf>addressBook</jf>); 
-
-			<jk>return</jk> m; 
-		} 
-	}
-		</p>
-		<p>
-			Pointing a browser to the resource shows the following:
-		</p>
-		<img class='bordered' src='doc-files/Samples.SampleRemoteableServlet.1.png'>
-		<p>
-			Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
-			Note that the <l>IAddressBook</l> link shows that you can only invoke methods defined on that
-			interface, whereas the <l>AddressBook</l> link shows ALL public methods defined on that class.
-			Since <l>AddressBook</l> extends from <l>LinkedList</l>, you may notice familiar collections
-			framework methods listed.
-		</p>
-		<img class='bordered' src='doc-files/Samples.SampleRemoteableServlet.2.png'>
-		<br><br>
-		<img class='bordered' src='doc-files/Samples.SampleRemoteableServlet.3.png'>
-		<ul class='doctree'>
-			<li class='info'>
-				As good practice, you'll want to use interfaces to prevent all public methods from being exposed.
+		<h5 class='section'>See Also:</h5>
+		<ul>
+			<li class='link'><a class='doclink' href='#juneau-rest-server.RemoteableProxiesServerSide'>Remoteable Proxies - Server Side</a>
 		</ul>
-		<p>
-			Proxy interfaces are then retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
-		</p>
-		<p>
-			The client side code for invoking this method is shown below:
-		</p>
-		<p class='bcode'>
-	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>()
-		.rootUrl(<js>"http://localhost:10000/remoteable"</js>)
-		.build();
-	
-	<jc>// Create a proxy interface.</jc>
-	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
-	
-	<jc>// Invoke a method on the server side and get the returned result.</jc>
-	Person p = ab.createPerson(
-		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
-			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
-			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
-	);
-		</p>
 	</div>	
 
 	<!-- ======================================================================================================= -->
@@ -15103,11 +15042,24 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.TempDirResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/tempDir
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.TempDirResource.1.png' style='width:800px;'>
 		<p>
 			Pointing a browser to the <l>upload</l> link shows a form entry page:
 		</p>
-		<img class='bordered' src='doc-files/Samples.TempDirResource.2.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/tempDir/upload
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.TempDirResource.2.png' style='width:800px;'>
+		<p>
+			Submitting a file redirects to the top-level page:
+		</p>	
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/tempDir
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.TempDirResource.3.png' style='width:800px;'>
 		
 		<h5 class='figure'>TempDirResource.java</h5>
 		<p class='bcode'>
@@ -15115,40 +15067,76 @@
 	* Sample resource that extends DirectoryResource to open up the temp directory as a REST resource. 
 	*/</jd> 
 	<ja>@RestResource</ja>( 
-		path=<js>"/tempDir"</js>, 
-		messages=<js>"nls/TempDirResource"</js>, 
+		path=<js>"/tempDir"</js>,
+		title=<js>"Temp Directory View Service"</js>,
+		description=<js>"View and download files in the '$R{rootDir}' directory."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
 			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"upload: servlet:/upload"</js>
+				<js>"upload: servlet:/upload"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows how to use the predefined DirectoryResource class.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Also shows how to use HTML5 beans to create a form entry page.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
 		),
-		properties={ 
-			<ja>@Property</ja>(name=<js>"DirectoryResource.rootDir"</js>, value=<js>"$S{java.io.tmpdir}"</js>), 
-			<ja>@Property</ja>(name=<js>"DirectoryResource.allowViews"</js>, value=<js>"true"</js>), 
-			<ja>@Property</ja>(name=<js>"DirectoryResource.allowDeletes"</js>, value=<js>"true"</js>), 
-			<ja>@Property</ja>(name=<js>"DirectoryResource.allowPuts"</js>, value=<js>"false"</js>) 
-		}, 
-		stylesheet=<js>"styles/devops.css"</js> 
+		properties={
+			<ja>@Property</ja>(name=<js>"rootDir"</js>, value=<js>"$C{TempDirResource/dir,$S{java.io.tmpdir}}"</js>),
+			<ja>@Property</ja>(name=<js>"allowViews"</js>, value=<js>"true"</js>),
+			<ja>@Property</ja>(name=<js>"allowDeletes"</js>, value=<js>"true"</js>),
+			<ja>@Property</ja>(name=<js>"allowPuts"</js>, value=<js>"false"</js>)
+		}
 	) 
 	<jk>public class</jk> TempDirResource <jk>extends</jk> DirectoryResource { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 	
-		<jd>/** 
-		* [GET /upload] - Display the form entry page for uploading a file to the temp directory. 
-		*/</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/upload"</js>) 
-		<jk>public</jk> ReaderResource getUploadPage(RestRequest req) <jk>throws</jk> IOException { 
-			<jk>return</jk> req.getClasspathReaderResource(<js>"TempDirUploadPage.html"</js>, <jk>true</jk>); 
-		} 
+		<ja>@Override</ja> <jc>/* DirectoryResource */</jc>
+		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		<jk>public void</jk> init(RestContextBuilder b) <jk>throws</jk> Exception { 
+			<jk>super</jk>.<jk>init</jk>(b);
+			File rootDir = getRootDir();
+			<jk>if</jk> (! rootDir.exists()) {
+				rootDir.mkdirs();
+				
+				<jc>// Make some dummy files.</jc>
+				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"A.txt"</js>));
+				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"B.txt"</js>));
+				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"C.txt"</js>));
+			}
+		}
+		
+		<jd>/**
+		 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/upload"</js>)
+		<jk>public</jk> Form getUploadForm() {
+			<jk>return</jk>
+				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/upload"</js>).method(<jsf>POST</jsf>).enctype(<js>"multipart/form-data"</js>)
+				.children(
+					<jsm>input</jsm>().name(<js>"contents"</js>).type(<js>"file"</js>),
+					<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>)
+				)
+			;
+		}
 		
 		<jd>/** 
 		* [POST /upload] - Upload a file as a multipart form post. 
 		* Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/upload"</js>, 
-			matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>) 
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>, 
+			path=<js>"/upload"</js>, 
+			matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>
+		) 
 		<jk>public</jk> Redirect uploadFile(RestRequest req) <jk>throws</jk> Exception { 
 			ServletFileUpload upload = <jk>new</jk> ServletFileUpload(); 
 			FileItemIterator iter = upload.getItemIterator(req); 
@@ -15172,43 +15160,6 @@
 		} 
 	}		
 		</p>
-		
-		<h5 class='figure'>TempDirResource.properties</h5>
-		<p class='bcode'>
-	<cc>#--------------------------------------------------------------------------------
-	# TempDirResource labels
-	#--------------------------------------------------------------------------------</cc>
-	<ck>title</ck> = <cv>Temp Directory View Service</cv>
-	<ck>description</ck> = <cv>View and download files in the '$S{java.io.tmpdir}' directory.</cv>
-		</p>
-		<p>
-			Note how a system property variable can be defined in the properties file.
-		</p>
-		
-		<h5 class='figure'>TempDirUploadPage.html</h5>
-		<b>TODO - Needs update</b>
-		<p class='bcode'>
-	<xt>&lt;html&gt;</xt>
-	<xt>&lt;head&gt;</xt>
-		<xt>&lt;meta</xt> <xa>http-equiv</xa>=<xs>"Content-Type"</xs> <xa>content</xa>=<xs>"text/html; <xa>charset</xa>=UTF-8"</xs><xt>&gt;</xt>
-		<xt>&lt;style</xt> <xa>type</xa>=<xs>'text/css'</xs><xt>&gt;</xt>
-			<xt>@import</xt> <xs>'$R{servletURI}/style.css'</xs>;
-		<xt>&lt;/style&gt;</xt>
-	<xt>&lt;/head&gt;</xt>
-	<xt>&lt;body&gt;</xt>
-		<xt>&lt;h1&gt;</xt>$R{resourceTitle}<xt>&lt;/h1&gt;</xt>
-		<xt>&lt;h2&gt;</xt>$R{resourceDescription}<xt>&lt;/h2&gt;</xt>
-		<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt>
-			<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}/upload'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>target</xa>=<xs>'buff'</xs> <xa>enctype</xa>=<xs>"multipart/form-data"</xs><xt>&gt;</xt>
-				<xt>&lt;input</xt> <xa>name</xa>=<xs>"contents"</xs> <xa>type</xa>=<xs>"file"</xs><xt>&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>"submit"</xs><xt>&gt;</xt>Submit<xt>&lt;/button&gt;</xt>
-			<xt>&lt;/form&gt;</xt>
-		<xt>&lt;/div&gt;</xt>
-	<xt>&lt;/body&gt;</xt>
-	<xt>&lt;/html&gt;</xt>		
-		</p>
-		<p>
-			Note how the HTML file contains localized variables for the servlet label and description.
-		</p>
 	</div>	
 
 	<!-- ======================================================================================================= -->
@@ -15225,15 +15176,24 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.AtomFeedResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/atom
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.AtomFeedResource.1.png' style='width:800px;'>
 		<p>
 			True ATOM feeds require using an <l>Accept:text/xml</l> header:
 		</p>
-		<img class='bordered' src='doc-files/Samples.AtomFeedResource.2.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/atom?Accept=text/xml&amp;plainText=true
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.AtomFeedResource.2.png' style='width:800px;'>
 		<p>
 			Other languages, such as JSON are also supported:
 		</p>
-		<img class='bordered' src='doc-files/Samples.AtomFeedResource.3.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/atom?Accept=text/json&amp;plainText=true
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.AtomFeedResource.3.png' style='width:800px;'>
 		
 		<h5 class='figure'>AtomFeedResource.java</h5>
 		<p class='bcode'>
@@ -15241,12 +15201,20 @@
 	* Sample resource that shows how to generate ATOM feeds. 
 	*/</jd> 
 	<ja>@RestResource</ja>( 
-		path=<js>"/atom"</js>, 
-		messages=<js>"nls/AtomFeedResource"</js>, 
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>,
+		description=<js>"Sample resource that shows how to render ATOM feeds"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
 			navlinks={
 				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
 			}
 		),
 		properties={ 
@@ -15257,50 +15225,45 @@
 		encoders=GzipEncoder.<jk>class</jk> 
 	) 
 	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 	
 		<jk>private</jk> Feed <jf>feed</jf>; <jc>// The root resource object</jc> 
 		
 		<ja>@Override</ja> <jc>/* Servlet */</jc> 
 		<jk>public void</jk> init() { 
-		
-			<jk>try</jk> { 
-				<jf>feed</jf> = <jk>new</jk> Feed() 
-					.setTitle(<jk>new</jk> Text(<js>"text"</js>, <js>"Juneau ATOM specification"</js>)) 
-					.setSubTitle(<jk>new</jk> Text(<js>"html"</js>, <js>"Decribes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>)) 
-					.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>)) 
-					.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>)) 
-					.addLinks( 
-						<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/"</js>).setHreflang(<js>"en"</js>), 
-						<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
-					) 
-					.setRights(<jk>new</jk> Text(<js>"Copyright (c) ..."</js>)) 
-					.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setVersion(<js>"1.0"</js>)) 
-					.addEntries( 
-						<jk>new</jk> Entry() 
-							.setTitle(<jk>new</jk> Text(<js>"Juneau ATOM specification snapshot"</js>)) 
-							.addLinks( 
-								<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
-								<jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).setLength(12345) 
-					) 
-					.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>)) 
-					.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>)) 
-					.setPublished(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>)) 
-					.addAuthors(<jk>new</jk> Person(<js>"James Bognar"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setEmail(<js>"james.bognar@apache.org"</js>)) 
-					.addContributors( 
-						<jk>new</jk> Person(<js>"Barry M. Caceres"</js>) 
-					) 
-					.setContent( 
-						<jk>new</jk> Content() 
-							.setLang(<js>"en"</js>) 
-							.setBase(<jk>new</jk> URI(<js>"http://www.apache.org/"</js>)) 
-							.setType(<js>"xhtml"</js>) 
-							.setText(<js>"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>) 
-					) 
-			); 
-			} <jk>catch</jk> (Exception e) { 
-				<jk>throw new</jk> RuntimeException(e); 
-			} 
+			<jk>try</jk> {
+				<jf>feed</jf> =
+					<jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>, <js>"2013-05-08T12:29:29Z"</js>)
+					.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
+					.links(
+						<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+						<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+					)
+					.generator(
+						<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+					)
+					.entries(
+						<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2013-05-08T12:29:29Z"</js>)
+						.links(
+							<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
+							<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
+						)
+						.published(<js>"2013-05-08T12:29:29Z"</js>)
+						.authors(
+							<jsm>person</jsm>(<js>"James Bognar"</js>).uri(<jk>new</jk> URI(<js>"http://www.sample.com/"</js>)).email(<js>"jamesbognar@apache.org"</js>)
+						)
+						.contributors(
+							<jsm>person</jsm>(<js>"Barry M. Caceres"</js>)
+						)
+						.content(
+							<jsm>content</jsm>(<js>"xhtml"</js>)
+							.lang(<js>"en"</js>)
+							.base(<js>"http://www.apache.org/"</js>)
+							.text(<js>"&lt;div&gt;&lt;p&gt;[Update: Juneau supports ATOM.]&lt;/p&gt;&lt;/div&gt;"</js>)
+						)
+					);
+			} <jk>catch</jk> (Exception e) {
+				<jk>throw new</jk> RuntimeException(e);
+			}
 		} 
 		
 		<jd>/** 
@@ -15316,7 +15279,7 @@
 		* Replaces the feed with the specified content, and then mirrors it as the response. 
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> Feed setFeed(<ja>@org.apache.juneau.rest.annotation.Content</ja> Feed feed) <jk>throws</jk> Exception { 
+		<jk>public</jk> Feed setFeed(<ja>@Body</ja> Feed feed) <jk>throws</jk> Exception { 
 			<jk>this</jk>.<jf>feed</jf> = feed; 
 			<jk>return</jk> feed; 
 		} 
@@ -15344,52 +15307,73 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.DockerRegistryResource.1.png'>
-		<p>
-			Clicking the <l>search</l> link provides you with the search results against the Docker registry:
-		</p>
-		<img class='bordered' src='doc-files/Samples.DockerRegistryResource.2.png'>
-		
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/docker
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.DockerRegistryResource.1.png' style='width:800px;'>
 		<h5 class='figure'>DockerRegistryResource.java</h5>
 		<p class='bcode'>
 	<jd>/** 
 	* Sample resource that shows how to mirror query results from a Docker registry. 
 	*/</jd> 
 	<ja>@RestResource</ja>( 
-		path=<js>"/docker"</js>, 
-		title=<js>"Sample Docker resource"</js>, 
+		path=<js>"/docker"</js>,
+		title=<js>"Sample Docker resource"</js>,
+		description=<js>"Docker registry explorer"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
 			navlinks={
 				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			}
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			<jc>// Pull in aside contents from file.</jc>
+			aside=<js>"$F{resources/DockerRegistryResourceAside.html}"</js>
 		)
 	) 
 	<jk>public class</jk> DockerRegistryResource <jk>extends</jk> BasicRestServlet { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
-		
 		<jc>// Get registry URL from examples.cfg file.</jc>
-		<jk>private</jk> String <jf>registryUrl</jf> = getConfig().getString(<js>"DockerRegistry/url"</js>); 
-		RestClient <jf>rc</jf> = RestClient.<jsm>create</jsm>().build(); 
-		
-		<jd>/** [GET /] - Show child resources. */</jd> 
-		<ja>@SuppressWarnings</ja>(<js>"nls"</js>) 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> ResourceDescription[] getChildren(RestRequest req) { 
-			<jk>return new</jk> ResourceDescription[] { 
-				<jk>new</jk> ResourceDescription(req, <js>"search"</js>, <js>"Search Registry"</js>) 
-			}; 
-		} 
-		
-		<jd>/** 
-		* PUT request handler. 
-		* Replaces the feed with the specified content, and then mirrors it as the response. 
-		*/</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/search"</js>) 
-		<jk>public</jk> QueryResults query(<ja>@Query</ja>(<js>"q"</js>) String q) <jk>throws</jk> Exception { 
-			String url = <jf>registryUrl</jf> + <js>"/search"</js> + (q == <jk>null</jk> ? <js>""</js> : <js>"?q="</js> + q); 
-			<jk>return</jk> <jf>rc</jf>.doGet(url).getResponse(QueryResults.<jk>class</jk>); 
-		} 
+		<jk>private</jk> String <jf>registryUrl</jf>;
+	
+		<jk>private</jk> RestClient <jf>rc</jf>;
+	
+		<jd>/**
+		 * Initializes the registry URL and rest client.
+		 * 
+		 * @param builder The resource config.
+		 * @throws Exception
+		 */</jd>
+		<ja>@RestHook</ja>(<jsf>INIT</jsf>) 
+		<jk>public void</jk> initRegistry(RestContextBuilder builder) <jk>throws</jk> Exception {
+			Config cf = builder.getConfig();
+			<jf>registryUrl</jf> = cf.getString(<js>"DockerRegistry/url"</js>);
+			<jf>rc</jf> = RestClient.<jsm>create</jsm>().build();
+		}
+	
+		<ja>@Override</ja> <jc>/* Servlet */</jc>
+		<jk>public synchronized void</jk> destroy() {
+			<jf>rc</jf>.closeQuietly();
+			<jk>super</jk>.destroy();
+		}
+	
+		<jd>/** [GET /] - Show child resources. */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> ResourceDescription[] getChildren(RestRequest req) {
+			<jk>return new</jk> ResourceDescription[] {
+				<jk>new</jk> ResourceDescription(<js>"search"</js>, <js>"Search Registry"</js>)
+			};
+		}
+	
+		<jd>/**
+		 * PUT request handler.
+		 * Replaces the feed with the specified content, and then mirrors it as the response.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/search"</js>)
+		<jk>public</jk> QueryResults query(<ja>@Query</ja>(<js>"q"</js>) String q) <jk>throws</jk> Exception {
+			String url = <jf>registryUrl</jf> + <js>"/search"</js> + (q == <jk>null</jk> ? <js>""</js> : <js>"?q="</js> + q);
+			<jk>synchronized</jk>(<jf>rc</jf>) {
+				<jk>return</jk> rc.doGet(url).getResponse(QueryResults.<jk>class</jk>);
+			}
+		}
 		
 		<jk>public static class</jk> QueryResults { 
 			<jk>public int</jk> <jf>num_results</jf>; 
@@ -15402,6 +15386,17 @@
 		} 
 	} 		
 		</p>
+		<p>
+			In this example, we're pulling the aside message from an external file:
+		</p>
+		<h5 class='figure'>resources/DockerRegistryResourceAside.html</h5>
+		<p class='bcode'>
+	<xt>&lt;div</xt> <xa>style</xa>=<xs>'min-width:200px'</xs> <xa>class</xa>=<xs>'text'</xs><xt>&gt;</xt>
+		<xt>&lt;p&gt;</xt>REST API for searching Docker registries.<xt>&lt;/p&gt;</xt>
+		<xt>&lt;p&gt;</xt>To use, you must first specify the Docker registry URL in the <xt>&lt;code&gt;</xt>[Docker]<xt>&lt;/code&gt;</xt> section of the config file.<xt>&lt;/p&gt;</xt>
+	<xt>&lt;/div&gt;	</xt>	
+		</p>	
+		
 		<p>
 			The Docker registry URL is specified in the <l>examples.cfg</l> file:
 		</p>
@@ -15420,6 +15415,9 @@
 	<a id="juneau-examples-rest.TumblrParserResource"></a>
 	<h4 class='topic' onclick='toggle(this)'>12.11 - TumblrParserResource</h4>
 	<div class='topic'>
+		<p>
+			<b>Note:</b>  As of March 2018, this resource is known to not work against the Tumblr API.
+		</p>
 		<p>	
 			The <l>TumblrParserResource</l> class shows examples of the following:
 		</p>
@@ -15434,19 +15432,29 @@
 			Pointing a browser at a Tumblr blog name, such as <l>ibmblr</l> causes a REST call to be make to the Tumblr
 			blog and the results to be parsed:
 		</p>
-		<img class='bordered' src='doc-files/Samples.TumblrParserResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/tumblrParser/ibmblr
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.TumblrParserResource.1.png' style='width:800px;'>
 		
 		<h5 class='figure'>TumblrParserResource.java</h5>
 		<p class='bcode'>
 	<ja>@RestResource</ja>( 
-		path=<js>"/tumblrParser"</js>, 
-		messages=<js>"nls/TumblrParserResource"</js>, 
-		title=<js>"Tumblr parser service"</js>, 
-		description=<js>"Specify a URL to a Tumblr blog and parse the results."</js>, 
+		path=<js>"/tumblrParser"</js>,
+		messages=<js>"nls/TumblrParserResource"</js>,
+		title=<js>"Tumblr parser service"</js>,
+		description=<js>"Specify a URL to a Tumblr blog and parse the results."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
 			navlinks={
 				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;An example of a REST interface that retrieves data from another REST interface.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;&lt;a class='link' href='$U{servlet:/ibmblr}'&gt;try me&lt;/a&gt;&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
 		)
 	) 
@@ -15516,11 +15524,17 @@
 		<p>
 			The resource consists of a simple registry of images with integer IDs.
 		</p>
-		<img class='bordered' src='doc-files/Samples.PhotosResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/photos
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.PhotosResource.1.png' style='width:800px;'>
 		<p>
 			It is initialized with a single entry, which can be accessed through a GET request.
 		</p>
-		<img class='bordered' src='doc-files/Samples.PhotosResource.2.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/photos/cat
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.PhotosResource.2.png' style='width:800px;'>
 		
 		<h5 class='figure'>PhotosResource.java</h5>
 		<p class='bcode'>
@@ -15531,25 +15545,35 @@
 		path=<js>"/photos"</js>,
 		messages=<js>"nls/PhotosResource"</js>,
 		title=<js>"Photo REST service"</js>,
-		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
+		description=<js>"Sample resource that allows images to be uploaded and retrieved."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
 			navlinks={
-				<js>"options: servlet:/?method=OPTIONS"</js>
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px;min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows an example of using custom serializers and parsers to create REST interfaces over binary resources.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a &lt;code&gt;TreeMap&lt;/code&gt;).&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
-		)
+		),
+		properties={
+			<jc>// Make the anchor text on URLs be just the path relative to the servlet.</jc>
+			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<js>"SERVLET_RELATIVE"</js>)
+		}
 	)
 	<jk>public class</jk> PhotosResource <jk>extends</jk> BasicRestServlet {
 	
 		<jc>// Our cache of photos</jc>
-		<jk>private</jk> Map&lt;Integer,Photo&gt; photos = <jk>new</jk> TreeMap&lt;Integer,Photo&gt;();
-		
+		<jk>private</jk> Map&lt;String,Photo&gt; <jf>photos</jf> = <jk>new</jk> TreeMap&lt;&gt;();
+	
 		<ja>@Override</ja> <jc>/* Servlet */</jc>
 		<jk>public void</jk> init() {
-			<jk>try</jk> {
-				<jc>// Preload an image.</jc>
-				InputStream is = getClass().getResourceAsStream(<js>"averycutedog.jpg"</js>);
+			<jk>try</jk> (InputStream is = getClass().getResourceAsStream(<js>"averycutecat.jpg"</js>)) {
 				BufferedImage image = ImageIO.<jsm>read</jsm>(is);
-				Photo photo = <jk>new</jk> Photo(0, image);
+				Photo photo = <jk>new</jk> Photo(<js>"cat"</js>, image);
 				<jf>photos</jf>.put(photo.<jf>id</jf>, photo);
 			} <jk>catch</jk> (IOException e) {
 				<jk>throw new</jk> RuntimeException(e);
@@ -15558,91 +15582,104 @@
 
 		<jd>/** Bean class for storing photos */</jd>
 		<jk>public static class</jk> Photo {
-			<jk>private int</jk> <jf>id</jf>;
+			<jk>private</jk> String <jf>id</jf>;
 			BufferedImage <jf>image</jf>;
 			
-			Photo(int id, BufferedImage image) {
+			Photo(String id, BufferedImage image) {
 				<jk>this</jk>.<jf>id</jf> = id;
 				<jk>this</jk>.<jf>image</jf> = image;
 			}
 			
 			<jk>public</jk> URI getURI() <jk>throws</jk> URISyntaxException {
-				<jk>return new</jk> URI(<js>"photos/"</js>+<jf>id</jf>);
-			}
-			
-			<jk>public int</jk> getID() {
-				<jk>return</jk> <jf>id</jf>;
+				<jk>return new</jk> URI(<js>"servlet:/"</js> + <jf>id</jf>);
 			}
 		}
 		
 		<jd>/** GET request handler for list of all photos */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-			res.setPageTitle(<js>"Photo REST service"</js>);
-			res.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
-			<jk>return</jk> photos.values();
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, summary=<js>"Show the list of all currently loaded photos"</js>)
+		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos() <jk>throws</jk> Exception {
+			<jk>return</jk> <jf>photos</jf>.values();
 		}
-		
+	
 		<jd>/** GET request handler for single photo */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
-		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja> int id) <jk>throws</jk> Exception {
-			Photo p = photos.get(id);
-			if (p == <jk>null</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>, summary=<js>"Get a photo by ID"</js>)
+		<jk>public</jk> BufferedImage getPhoto(<ja>@Path</ja> String id) <jk>throws</jk> Exception {
+			Photo p = <jf>photos</jf>.get(id);
+			<jk>if</jk> (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
-			<jk>return</jk> p.image;
+			<jk>return</jk> p.<jf>image</jf>;
 		}
-		
+	
 		<jd>/** PUT request handler */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
-			photos.put(id, <jk>new</jk> Photo(id, image));
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>, summary=<js>"Add or overwrite a photo"</js>)
+		<jk>public</jk> String addPhoto(<ja>@Path</ja> String id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
+			<jf>photos</jf>.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
-		
+	
 		<jd>/** POST request handler */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
-			<jk>int</jk> id = photos.size();
-			Photo p = <jk>new</jk> Photo(id, image);
-			photos.put(id, p);
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>, summary=<js>"Add a photo"</js>)
+		<jk>public</jk> Photo setPhoto(<ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
+			Photo p = <jk>new</jk> Photo(UUID.<jsm>randomUUID</jsm>().toString(), image);
+			<jf>photos</jf>.put(p.<jf>id</jf>, p);
 			<jk>return</jk> p;
 		}
-		
+	
 		<jd>/** DELETE request handler */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>)
-		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
-			Photo p = photos.remove(id);
-			if (p == <jk>null</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>, summary=<js>"Delete a photo by ID"</js>)
+		<jk>public</jk> String deletePhoto(<ja>@Path</ja> String id) <jk>throws</jk> Exception {
+			Photo p = <jf>photos</jf>.remove(id);
+			<jk>if</jk> (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
 			<jk>return</jk> <js>"OK"</js>;
 		}
 	
-		<jd>/** OPTIONS request handler */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
-		<jk>public</jk> Swagger getOptions(RestRequest req) {
-			<jk>return</jk> req.getSwagger();
-		}
-
 		<jd>/** Serializer for converting images to byte streams */</jd>
-		<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
-
-			<ja>@Override</ja> <jc>/* Serializer */</jc>
-			<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {
-				RenderedImage image = (RenderedImage)o;
-				String mediaType = ctx.getMediaType();
-				ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), out);
-			}	
+	
+			<jd>/**
+			 * Constructor.
+			 * <ja>@param</ja> ps The property store containing all the settings for this object.
+			 */</jd>
+			<jk>public</jk> ImageSerializer(PropertyStore ps) {
+				<jk>super</jk>(ps, <jk>null</jk>, <js>"image/png"</js>, <js>"image/jpeg"</js>);
+			}
+	
+			<ja>@Override</ja> <jc>/* Serializer */</jc> 
+			<jk>public</jk> OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+				<jk>return new</jk> OutputStreamSerializerSession(args) {
+					
+					<ja>@Override</ja> <jc>/* SerializerSession */</jc> 
+					<jk>protected void</jk> doSerialize(SerializerPipe out, Object o) <jk>throws</jk> Exception {
+						RenderedImage image = (RenderedImage)o;
+						String mediaType = getProperty(<js>"mediaType"</js>, String.<jk>class</jk>, (String)<jk>null</jk>);
+						ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), out.getOutputStream());
+					}
+				};
+			}
 		}
-		
+	
 		<jd>/** Parser for converting byte streams to images */</jd>
-		<ja>@Consumes</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
-
+	
+			<jd>/**
+			 * Constructor.
+			 * <ja>@param</ja> ps The property store containing all the settings for this object.
+			 */</jd>
+			<jk>public</jk> ImageParser(PropertyStore ps) {
+				<jk>super</jk>(ps, <js>"image/png"</js>, <js>"image/jpeg"</js>);
+			}
+	
 			<ja>@Override</ja> <jc>/* Parser */</jc>
-			<jk>public</jk> &lt;T&gt; T parse(InputStream in, ClassMeta&lt;T&gt; type, ParserSession session) <jk>throws</jk> ParseException, IOException {
-				BufferedImage image = ImageIO.<jsm>read</jsm>(in);
-				<jk>return</jk> (T)image;
+			<jk>public</jk> InputStreamParserSession createSession(<jk>final</jk> ParserSessionArgs args) {
+				<jk>return new</jk> InputStreamParserSession(args) {
+					
+					<ja>@Override</ja> <jc>/* ParserSession */</jc>
+					<ja>@SuppressWarnings</ja>(<js>"unchecked"</js>)
+					<jk>protected</jk> &lt;T&gt; T doParse(ParserPipe pipe, ClassMeta&lt;T&gt; type) <jk>throws</jk> Exception {
+						<jk>return</jk> (T)ImageIO.<jsm>read</jsm>(pipe.getInputStream());
+					}
+				};
 			}
 		}
 	}
@@ -15665,11 +15702,17 @@
 			The resource consists of a pre-initialized {@link org.apache.juneau.dto.jsonschema.Schema} object.
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.JsonSchemaResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/jsonSchema
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.JsonSchemaResource.1.png' style='width:800px;'>
 		<p>
 			For true JSON-Schema, you need to specify the header <l>Accept: text/json</l>:
 		</p>
-		<img class='bordered' src='doc-files/Samples.JsonSchemaResource.2.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/jsonSchema?Accept=text/json&amp;plainText=true
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.JsonSchemaResource.2.png' style='width:800px;'>
 		
 		<h5 class='figure'>JsonSchemaResource.java</h5>
 		<p class='bcode'>
@@ -15677,13 +15720,26 @@
 	* Sample resource that shows how to serialize JSON-Schema documents. 
 	*/</jd> 
 	<ja>@RestResource</ja>( 
-		path=<js>"/jsonSchema"</js>, 
-		messages=<js>"nls/JsonSchemaResource"</js>, 
-		title=<js>"Sample JSON-Schema document"</js>, 
+		path=<js>"/jsonSchema"</js>,
+		messages=<js>"nls/JsonSchemaResource"</js>,
+		title=<js>"Sample JSON-Schema document"</js>,
+		description=<js>"Sample resource that shows how to generate JSON-Schema documents"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
 			navlinks={
 				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
 		)
 	) 
@@ -15755,11 +15811,18 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.SqlQueryResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/sqlQuery
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.SqlQueryResource.1.png' style='width:800px;'>
 		<p>
 			Running a query results in the following output:
 		</p>
-		<img class='bordered' src='doc-files/Samples.SqlQueryResource.2.png'>
+		<p class='bcode' style='width:800px;'>
+	select count(*) from SYS.SYSTABLES;
+	select TABLEID,TABLENAME,TABLETYPE from SYS.SYSTABLES;
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.SqlQueryResource.2.png' style='width:800px;'>
 		
 		<h5 class='figure'>SqlQueryResource.java</h5>
 		<p class='bcode'>
@@ -15767,43 +15830,99 @@
 	* Sample resource that shows how Juneau can serialize ResultSets. 
 	*/</jd> 
 	<ja>@RestResource</ja>( 
-		path=<js>"/sqlQuery"</js>, 
-		messages=<js>"nls/SqlQueryResource"</js>, 
-		title=<js>"SQL query service"</js>, 
-		description=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>, 
+		path=<js>"/sqlQuery"</js>,
+		messages=<js>"nls/SqlQueryResource"</js>,
+		title=<js>"SQL query service"</js>,
+		description=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={ 
+				StyleMenuItem.<jk>class</jk> 
+			},
 			navlinks={
 				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
+				<js>"options: servlet:/.."</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;An example of a REST interface over a relational database.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;&lt;a class='link' href='?sql=select+*+from sys.systables'&gt;try me&lt;/a&gt;&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
 		)
 	) 
 	<jk>public class</jk> SqlQueryResource <jk>extends</jk> BasicRestServlet { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
-		
-		<jk>private</jk> Config <jf>cf</jf> = getConfig(); 
-		
-		<jk>private</jk> String <jf>driver</jf> = cf.getString(<js>"SqlQueryResource/driver"</js>); 
-		<jk>private</jk> String <jf>connectionUrl</jf> = cf.getString(<js>"SqlQueryResource/connectionUrl"</js>); 
-		<jk>private boolean</jk> 
-			<jf>allowUpdates</jf> = cf.getBoolean(<js>"SqlQueryResource/allowUpdates"</js>, <jk>false</jk>), 
-			<jf>allowTempUpdates</jf> = cf.getBoolean(<js>"SqlQueryResource/allowTempUpdates"</js>, <jk>false</jk>), 
-			<jf>includeRowNums</jf> = cf.getBoolean(<js>"SqlQueryResource/includeRowNums"</js>, <jk>false</jk>); 
-		
-		<ja>@Override</ja> <jc>/* Servlet */</jc> 
-		<jk>public void</jk> init() { 
-			<jk>try</jk> { 
-				Class.<jsm>forName</jsm>(driver).newInstance(); 
-			} <jk>catch</jk> (Exception e) { 
-				<jk>throw new</jk> RuntimeException(e); 
-			} 
-		} 
-		
-		<jd>/** GET request handler - Display the query entry page. */</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
-			<jk>return</jk> req.getClasspathReaderResource(<js>"SqlQueryResource.html"</js>, <jk>true</jk>); 
-		} 
+
+		<jk>private</jk> String <jf>driver</jf>, <jf>connectionUrl</jf>;
+		<jk>private boolean</jk> <jf>allowUpdates</jf>, <jf>allowTempUpdates</jf>, <jf>includeRowNums</jf>;
+	
+		<jd>/**
+		 * Initializes the registry URL and rest client.
+		 * 
+		 * <ja>@param</ja> builder The resource config.
+		 * <ja>@throws</ja> Exception
+		 */</jd>
+		<ja>@RestHook</ja>(<jsf>INIT</jsf>) 
+		<jk>public void</jk> initConnection(RestContextBuilder builder) <jk>throws</jk> Exception {
+			Config cf = builder.getConfig();
+	
+			<jf>driver</jf> = cf.getString(<js>"SqlQueryResource/driver"</js>);
+			<jf>connectionUrl</jf> = cf.getString(<js>"SqlQueryResource/connectionUrl"</js>);
+			<jf>allowUpdates</jf> = cf.getBoolean(<js>"SqlQueryResource/allowUpdates"</js>, <jk>false</jk>);
+			<jf>allowTempUpdates</jf> = cf.getBoolean(<js>"SqlQueryResource/allowTempUpdates"</js>, <jk>false</jk>);
+			<jf>includeRowNums</jf> = cf.getBoolean("<js>SqlQueryResource/includeRowNums"</js>, <jk>false</jk>);
+	
+			<jk>try</jk> {
+				Class.<jsm>forName</jsm>(<jf>driver</jf>).newInstance();
+			} <jk>catch</jk> (Exception e) {
+				<jk>throw new</jk> RuntimeException(e);
+			}
+		}
+	
+		<jd>/** GET request handler - Display the query entry page. */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, summary=<js>"Display the query entry page"</js>)
+		<jk>public</jk> Div doGet(RestRequest req, <ja>@Query</ja>(<js>"sql"</js>) String sql) {
+			<jk>return</jk> <jsm>div</jsm>(
+				<jsm>script</jsm>(<js>"text/javascript"</js>,
+					<js>"\n	// Quick and dirty function to allow tabs in textarea."</js>
+					+<js>"\n	function checkTab(e) {"</js>
+					+<js>"\n		if (e.keyCode == 9) {"</js>
+					+<js>"\n			var t = e.target;"</js>
+					+<js>"\n			var ss = t.selectionStart, se = t.selectionEnd;"</js>
+					+<js>"\n			t.value = t.value.slice(0,ss).concat('\\t').concat(t.value.slice(ss,t.value.length));"</js>
+					+<js>"\n			e.preventDefault();"</js>
+					+<js>"\n		}"</js>
+					+<js>"\n	}"</js>
+					+<js>"\n	// Load results from IFrame into this document."</js>
+					+<js>"\n	function loadResults(b) {"</js>
+					+<js>"\n		var doc = b.contentDocument || b.contentWindow.document;"</js>
+					+<js>"\n		var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];"</js>
+					+<js>"\n		document.getElementById('results').innerHTML = data.innerHTML;"</js>
+					+<js>"\n	}"</js>
+				),
+				<jsm>form</jsm>(<js>"servlet:/"</js>).method(<jsf>POST</jsf>).target(<js>"buf"</js>).children(
+					<jsm>table</jsm>(
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"Position (1-10000):"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"pos"</js>).type(<js>"number"</js>).value(1)),
+							<jsm>th</jsm>(<js>"Limit (1-10000):"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"limit"</js>).type(<js>"number"</js>).value(100)),
+							<jsm>td</jsm>(<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>), <jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>td</jsm>().colspan(5).children(
+								<jsm>textarea</jsm>().name(<js>"sql"</js>).text(sql == <jk>null</jk> ? <js>" "</js> : sql)
+								.style(<js>"width:100%;height:200px;font-family:Courier;font-size:9pt;"</js>).onkeydown(<js>"checkTab(event)"</js>)
+							)
+						)
+					)
+				),
+				<jsm>br</jsm>(),
+				<jsm>div</jsm>().id(<js>"results"</js>),
+				<jsm>iframe</jsm>().name(<js>"buf"</js>).style(<js>"display:none"</js>).onload(<js>"parent.loadResults(this)"</js>)
+			);
+		}
 		
 		<jd>/** POST request handler - Execute the query. */</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>) 
@@ -15866,62 +15985,7 @@
 			<jk>public int</jk> <jf>pos</jf> = 1, <jf>limit</jf> = 100; 
 		} 
 	} 
-			</p>
-			
-			<h5 class='figure'>SqlQueryResource.html</h5>
-			<b>TODO - Needs update</b>
-			<p class='bcode'>
-	<xt>&lt;html&gt;</xt> 
-	<xt>&lt;head&gt;</xt> 
-		<xt>&lt;style</xt> <xa>type</xa>=<xs>'text/css'</xs><xt>&gt;</xt> 
-			<xt>@import</xt> <xs>'$R{servletURI}/style.css'</xs>; 
-		<xt>&lt;/style&gt;</xt> 
-		<xt>&lt;script&gt;</xt> 
-			<jc>// Quick and dirty function to allow tabs in textarea.</jc> 
-			<jk>function</jk> checkTab(e) { 
-				<jk>if</jk> (e.keyCode == 9) { 
-					<jk>var</jk> t = e.target; 
-					<jk>var</jk> ss = t.selectionStart, se = t.selectionEnd; 
-					t.value = t.value.slice(0,ss).concat(<js>'\t'</js>).concat(t.value.slice(ss,t.value.length)); 
-					e.preventDefault(); 
-				} 
-			} 
-			<jc>// Load results from IFrame into this document.</jc> 
-			<jk>function</jk> loadResults(b) { 
-				<jk>var</jk> doc = b.contentDocument || b.contentWindow.document; 
-				<jk>var</jk> data = doc.getElementById(<js>'data'</js>) || doc.getElementsByTagName(<js>'body'</js>)[0]; 
-				document.getElementById(<js>'results'</js>).innerHTML = data.innerHTML; 
-			} 
-		<xt>&lt;/script&gt;</xt> 
-	<xt>&lt;/head&gt;</xt> 
-	<xt>&lt;body&gt;</xt> 
-		<xt>&lt;h1&gt;</xt>SQL Query API<xt>&lt;/h1&gt;</xt> 
-		<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt> 
-			<xt>&lt;form</xt> <xa>action</xa>=<xs>'sqlQuery'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>target</xa>=<xs>'buf'</xs><xt>&gt;</xt> 
-				<xt>&lt;table&gt;</xt> 
-					<xt>&lt;tr&gt;</xt> 
-						<xt>&lt;th&gt;</xt>Position (1-10000):<xt>&lt;/th&gt;</xt> 
-						<xt>&lt;td&gt;</xt><xt>&lt;input</xt> <xa>name</xa>=<xs>'pos'</xs> <xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'1'</xs><xt>&gt;</xt><xt>&lt;/td&gt;</xt> 
-						<xt>&lt;th&gt;</xt>Limit (1-10000):<xt>&lt;/th&gt;</xt> 
-						<xt>&lt;td&gt;</xt><xt>&lt;input</xt> <xa>name</xa>=<xs>'limit'</xs> <xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'100'</xs><xt>&gt;</xt><xt>&lt;/td&gt;</xt> 
-						<xt>&lt;td&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>'submit'</xs><xt>&gt;</xt>Submit<xt>&lt;/button&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>'reset'</xs><xt>&gt;</xt>Reset<xt>&lt;/button&gt;</xt><xt>&lt;/td&gt;</xt> 
-					<xt>&lt;/tr&gt;</xt> 
-					<xt>&lt;tr&gt;</xt> 
-						<xt>&lt;td</xt> <xa>colspan</xa>=<xs>"5"</xs><xt>&gt;</xt> 
-							<xt>&lt;textarea</xt> <xa>name</xa>=<xs>'sql'</xs> <xa>style</xa>=<xs>'width:100%;height:200px;font-family:Courier;font-size:9pt;'</xs> <xa>onkeydown</xa>=<xs>'checkTab(event)'</xs><xt>&gt;</xt><xt>&lt;/textarea&gt;</xt> 
-						<xt>&lt;/td&gt;</xt> 
-					<xt>&lt;/tr&gt;</xt> 
-				<xt>&lt;/table&gt;</xt> 
-			<xt>&lt;/form&gt;</xt> 
-			<xt>&lt;br&gt;</xt> 
-			<xt>&lt;div</xt> <xa>id</xa>=<xs>'results'</xs><xt>&gt;</xt> 
-			<xt>&lt;/div&gt;</xt> 
-		<xt>&lt;/div&gt;</xt> 
-		<xt>&lt;iframe</xt> <xa>name</xa>=<xs>'buf'</xs> <xa>style</xa>=<xs>'display:none'</xs> <xa>onload</xa>=<xs>"parent.loadResults(this)"</xs><xt>&gt;</xt><xt>&lt;/iframe&gt;</xt> 
-	<xt>&lt;/body&gt;</xt> 
-	<xt>&lt;/html&gt;</xt> 		
 		</p>
-		
 		<h5 class='figure'>samples.cfg</h5>
 		<p class='bcode'>
 	<cc>#================================================================================
@@ -15946,11 +16010,11 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.ConfigResource.1.png'>
+		<img class='bordered' src='doc-files/juneau-examples-rest.ConfigResource.1.png'>
 		<p>
 			An edit page is provided for altering the raw config file:
 		</p>
-		<img class='bordered' src='doc-files/Samples.ConfigResource.3.png'>
+		<img class='bordered' src='doc-files/juneau-examples-rest.ConfigResource.3.png'>
 		<p>
 			The {@link org.apache.juneau.config.Config} class is a serializable POJO, which makes the resource
 				relatively straightforward to implement.
@@ -16163,15 +16227,10 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.LogsResource.1.png'>
-		<p>
-			The <l>highlighted</l> links show the contents of the log file with color highlighting:
-		</p>
-		<img class='bordered' src='doc-files/Samples.LogsResource.2.png'>
-		<p>
-			The <l>parsed</l> links parse the log file and return the entries as serialized POJOs:
-		</p>
-		<img class='bordered' src='doc-files/Samples.LogsResource.3.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/logs
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.LogsResource.1.png' style='width:800px;'>
 	</div>
 
 </div>

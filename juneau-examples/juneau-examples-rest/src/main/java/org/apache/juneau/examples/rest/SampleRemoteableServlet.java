@@ -41,8 +41,7 @@ import org.apache.juneau.rest.remoteable.*;
 		}
 	),
 	// Allow us to use method=POST from a browser.
-	allowedMethodParams="*",
-	config="$S{juneau.configFile}"  // So we can resolve $C{Source/gitHub} above.
+	allowedMethodParams="*"
 )
 public class SampleRemoteableServlet extends RemoteableServlet {
 
@@ -102,15 +101,6 @@ public class SampleRemoteableServlet extends RemoteableServlet {
 		return super.listMethods(req, javaInterface);
 	}
 
-	/**
-	 * [GET /{javaInterface] - Get the list of all remoteable methods on the specified interface name.
-	 * 
-	 * @param req The HTTP servlet request.
-	 * @param javaInterface The Java interface name.
-	 * @param javaMethod The Java method name or signature.
-	 * @return A simple form entry page for invoking a remoteable method.
-	 * @throws Exception
-	 */
 	@Override /* RemoteableServlet */
 	@RestMethod(name=GET, path="/{javaInterface}/{javaMethod}", summary="Form entry for method $RP{javaMethod} on interface $RP{javaInterface}",
 		htmldoc=@HtmlDoc(
