@@ -6389,6 +6389,9 @@
 		<p>
 			This is what it looks like in a browser:
 		</p>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/helloWorld
+		</p>
 		<img class='bordered' src='doc-files/juneau-rest-server.HelloWorldExample.1.png' style='width:800px'>
 		<p>
 			It doesn't much simpler than that.  
@@ -6698,6 +6701,9 @@
 				When you bring up this resource in a browser, you see the following that provides a list
 				of navigable links to your child resources:
 			</p>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000
+		</p>
 			<img class='bordered' src="doc-files/juneau-rest-server.RouterPages.1.png" style='width:800px;'/>
 			<p> 
 				The {@link org.apache.juneau.rest.BasicRestServletGroup} class is nothing more than a subclass of 
@@ -9243,6 +9249,9 @@
 			
 		</p>
 		<h5 class='figure'>OPTIONS page for HelloWorld sample resource</h5>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/helloWorld/?method=OPTIONS
+		</p>
 	 	<img class='bordered' src='doc-files/juneau-rest-server.OptionsPages.1.png' style='width:800px;'>
 		<p>
 	 		The {@link org.apache.juneau.rest.BasicRestServlet} class implements the page by creating a method 
@@ -9688,6 +9697,9 @@
 			<p>
 				The sample root page below includes some default branding for Juneau and Apache:
 			</p>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/helloWorld
+		</p>
 			<img class='bordered' src='doc-files/juneau-rest-server.UiCustomization.1.png' style='width:800px'/>
 			<p>
 				In particular, you may want to replace these icons:
@@ -9807,7 +9819,10 @@
 			<p>
 				The sample root page renders in the default "devops" look-and-feel:
 			</p>
-			<img class='bordered' src='doc-files/UiCustomization.1.png' style='width:800px'/>
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000
+			</p>
+			<img class='bordered' src='doc-files/juneau-rest-server.Stylesheets.0.png' style='width:800px'/>
 			<p>
 				The sample root page provides a dropdown widget to try out the other default look-and-feels:
 			</p>
@@ -9815,9 +9830,15 @@
 			<p>
 				For example, the "light" look-and-feel:
 			</p>
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/?stylesheet=styles%2Flight.css
+			</p>
 			<img class='bordered' src='doc-files/juneau-rest-server.Stylesheets.2.png' style='width:800px'/>
 			<p>
 				And the "dark" look-and-feel:
+			</p>
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/?stylesheet=styles%2Fdark.css
 			</p>
 			<img class='bordered' src='doc-files/juneau-rest-server.Stylesheets.3.png' style='width:800px'/>
 			<p>
@@ -10645,6 +10666,9 @@
 			<p>
 				If you point your browser to that URL, you get a list of available interfaces:
 			</p>
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/remoteable
+			</p>
 			<img class='bordered' src="doc-files/juneau-rest-server.RemoteableProxiesServerSide.1.png" style='width:800px;'>
 			<p>
 				Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
@@ -10652,12 +10676,18 @@
 				interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
 			</p>
 			<h5 class='figure'>IAddressBook</h5>
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook
+			</p>
 			<img class='bordered' src="doc-files/juneau-rest-server.RemoteableProxiesServerSide.2.png" style='width:800px;'>
 			<p>
 				Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
 				framework methods listed.
 			</p>
 			<h5 class='figure'>AddressBook</h5>
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.AddressBook
+			</p>
 			<img class='bordered' src="doc-files/juneau-rest-server.RemoteableProxiesServerSide.3.png" style='width:800px;'>
 			<p>
 				Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
@@ -10704,7 +10734,7 @@
 				<br>Methods are invoked by POSTing the serialized object array to the URI of the interface method.
 				In this case, we want to POST our JSON to the following URL:
 			</p>
-			<p class='bcode'>
+			<p class='bcode' style='width:800px;'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
 			</p>
 			<p>
@@ -10741,7 +10771,7 @@
 			<p>
 				For example, to invoke the <code>getPeople()</code> method on our bean:
 			</p>
-			<p class='bcode'>
+			<p class='bcode' style='width:800px;'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
 			</p>			
 			<img class='bordered' src="doc-files/juneau-rest-server.RemoteableProxiesServerSide.6.png" style='width:800px;'>
@@ -10750,7 +10780,7 @@
 				returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
 				browser):
 			</p>
-			<p class='bcode'>
+			<p class='bcode' style='width:800px;'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
 			</p>			
 			<img class='bordered' src="doc-files/juneau-rest-server.RemoteableProxiesServerSide.7.png" style='width:800px;'>
@@ -12484,6 +12514,9 @@
 				Now open your browser and point to <l>http://localhost:10000</l>.  
 				You should see the following:
 			</p>
+			<p class='bcode' style='width:400px;'>
+	http://localhost:10000
+			</p>			
 			<img class='bordered' src="doc-files/juneau-microservice-server.Running.1.png" style='width:400px;'>
 			<p>
 				You have started a REST interface on port 10000.
@@ -12728,6 +12761,9 @@
 			Now let's take a look at the resource classes themselves.  
 			<br>The top-level page...
 		</p>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000
+		</p>			
 		<img class='bordered' src='doc-files/juneau-microservice-server.Running.1.png' style='width:800px;'>
 		<p>
 			...is generated by this class...
@@ -12768,6 +12804,9 @@
 		<p>
 			If you click the <l>helloWorld</l> link in your application, you'll get a simple hello world message:
 		</p>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/helloWorld
+		</p>			
 		<img class='bordered' src='doc-files/juneau-microservice-server.ResourceClasses.1.png' style='width:800px;'>
 		<p>
 			...which is generated by this class...
@@ -12968,7 +13007,10 @@
 		The microservice can be started from the <code>juneau-examples-rest.launch</code> file.
 		It will start up the microservice on port 10000 which you can then view through a browser:
 	</p>
-	<img class='bordered' src='doc-files/juneau-examples-rest.4.png' style='width:466px'>
+		<p class='bcode' style='width:400px;'>
+	http://localhost:10000
+		</p>			
+	<img class='bordered' src='doc-files/juneau-examples-rest.4.png' style='width:400px'>
 		
 	<!-- ======================================================================================================= -->
 	<a id="juneau-examples-rest.RootResources"></a>
@@ -12999,7 +13041,10 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.Running.3.png' style='width:800px'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.RootResources.1.png' style='width:800px'>
 		<p>
 			The <l>RootResources</l> class can also be defined as a servlet in a <l>web.xml</l> file:
 		</p>
@@ -13174,12 +13219,18 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.HelloWorldResource.1.png' style='width:800px'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/helloWorld
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.HelloWorldResource.1.png' style='width:800px'>
 		<p>
 			Using the special <l>&amp;Accept=text/json</l> and <l>&amp;plainText=true</l> parameters
 				allows us to see this page rendered as JSON:
 		</p>		
-		<img class='bordered' src='doc-files/Samples.HelloWorldResource.2.png' style='width:800px'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/helloWorld?Accept=text/json&amp;plainText=true
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.HelloWorldResource.2.png' style='width:800px'>
 	</div>	
 
 	<!-- ======================================================================================================= -->
@@ -13436,11 +13487,17 @@
 		<p>
 			When you visit this page through the router page, you can see the top level page:
 		</p>
-		<img class='bordered' src="doc-files/Samples.MethodExampleResource.1.png" style='width:800px;'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/methodExample
+		</p>			
+		<img class='bordered' src="doc-files/juneau-examples-rest.MethodExampleResource.1.png" style='width:800px;'>
 		<p>
 			Clicking the first link on the page results in this page:
 		</p>
-		<img class='bordered' src="doc-files/Samples.MethodExampleResource.2.png" style='width:800px;'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/methodExample/example1/foo/123/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/path-remainder?q1=456&amp;q2=bar		
+		</p>			
+		<img class='bordered' src="doc-files/juneau-examples-rest.MethodExampleResource.2.png" style='width:800px;'>
 		<p>
 			Notice how the conversion to POJOs is automatically done for us, even for non-standard POJOs such as UUID.
 		</p>
@@ -13506,7 +13563,10 @@
 		<p>
 			Clicking the <l>options</l> link on the page presents you with information about how to use this resource:
 		</p>
-		<img class='bordered' src="doc-files/Samples.MethodExampleResource.3.png" style='width:800px;'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/methodExample/?method=OPTIONS
+		</p>			
+		<img class='bordered' src="doc-files/juneau-examples-rest.MethodExampleResource.3.png" style='width:800px;'>
 		<p>
 			This page (like any other) can also be rendered in JSON or XML by using the <l>&amp;Accept</l> URL parameter.
 		</p>
@@ -13640,12 +13700,18 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.UrlEncodedFormResource.1.png' style='width:800px;'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/urlEncodedForm
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.UrlEncodedFormResource.1.png' style='width:800px;'>
 		<p>
 			Entering some values and clicking <l>submit</l> causes the form bean to be populated
 			and returned back as a POJO response:
 		</p>
-		<img class='bordered' src='doc-files/Samples.UrlEncodedFormResource.2.png' style='width:800px;'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/urlEncodedForm
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.UrlEncodedFormResource.2.png' style='width:800px;'>
 
 		<h5 class='toc'>Additional Information</h5>
 		<ul class='toc'>
@@ -13693,23 +13759,38 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		path=<js>"/echo"</js>,
-		messages=<js>"nls/RequestEchoResource"</js>,
+		title=<js>"Request echo service"</js>,
+		description=<js>"Echos the current HttpServletRequest object back to the browser."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
 			navlinks={
 				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px;min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows how even arbitrary POJOs such as &lt;code&gt;HttpServletRequest&lt;/code&gt; can be serialized by the framework.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Also shows how to specify serializer properties, filters, and swaps at the servlet level to control how POJOs are serialized.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Also provides an example of how to use the Traversable and Queryable APIs.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
 		),
 		properties={
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_maxDepth</jsf>, value=<js>"10"</js>),
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_detectRecursions</jsf>, value=<js>"true"</js>)
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_maxDepth</jsf>, value=<js>"5"</js>),
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_detectRecursions</jsf>, value="<js>true"</js>)
 		},
 		beanFilters={
 			<jc>// Interpret these as their parent classes, not subclasses</jc>
 			HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>,
 		},
 		pojoSwaps={
-			<jc>// Add a special POJO swap for Enumerations</jc>
+			<jc>// Add a special filter for Enumerations</jc>
 			EnumerationSwap.<jk>class</jk>
 		}
 	)
@@ -13728,11 +13809,10 @@
 		</p>
 		<p>
 			Again, there's a lot going on here that's new that requires some explanation.
-			The <l>HttpServletRequest</l> object is not a tree-shaped POJO model.  
-			Instead, it contains lots of loops that can cause stack overflow errors if you were to try
-				to serialize it as-is.
-			Also, you want to look only at the properties defined on the <l>HttpServletRequest</l> class, 
-				not implementation-specific (i.e. WAS or Jetty) fields which can get messy.
+			<br>The <l>HttpServletRequest</l> object is not a tree-shaped POJO model.  
+			<br>Instead, it contains lots of loops that can cause stack overflow errors if you were to try to serialize it as-is.
+			<br>Also, you want to look only at the properties defined on the <l>HttpServletRequest</l> class, 
+			not implementation-specific (i.e. WAS or Jetty) fields which can get messy.
 		</p>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()}, 
@@ -13740,8 +13820,8 @@
 				{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResopurce.pojoSwaps()} 
 				annotations are used to set behavior properties on the resource's underlying bean context, serializers, 
 				and parsers.  
-			You're using them here to modify the behavior of serialization for all content types.  
-			The annotations are functionally equivalent to using the {@link org.apache.juneau.rest.RestContextBuilder} class, 
+			<br>You're using them here to modify the behavior of serialization for all content types.  
+			<br>The annotations are functionally equivalent to using the {@link org.apache.juneau.rest.RestContextBuilder} class, 
 			as follows:
 		</p>
 		
@@ -13758,7 +13838,7 @@
 		builder
 			.beanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
 			.pojoSwaps(EnumerationSwap.<jk>class</jk>)
-			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 10)
+			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 5)
 			.setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>)
 			.pageLinks(<js>"{...}"</js>);
 	}
@@ -13770,7 +13850,10 @@
 			Pointing a browser to the resource shows the following:
 		</p>
 		
-		<img class='bordered' src="doc-files/Samples.RequestEchoResource.1.png">
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/echo
+		</p>			
+		<img class='bordered' src="doc-files/juneau-examples-rest.RequestEchoResource.1.png" style='width:800px;'>
 		<p>
 			This gives you an idea of what kinds of POJO models can be serialized, since you are serializing a regular 
 			old <l>HttpServletRequest</l> object.
@@ -13823,7 +13906,10 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.AddressBookResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.AddressBookResource.1.png' style='width:800px'>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-examples-rest.AddressBookResource.Classes"></a>
@@ -13856,9 +13942,9 @@
 			<p>
 				The <l>package-info.java</l> file is used to define XML and RDF namespaces on beans and properties in 
 				this package.
-				Here you define a default XML and RDF namespaces and URL mappings for namespace short-names used 
+				<br>Here you define a default XML and RDF namespaces and URL mappings for namespace short-names used 
 				throughout this package.
-				It should be noted that these features are entirely optional, and there are often several ways of 
+				<br>It should be noted that these features are entirely optional, and there are often several ways of 
 				defining these namespaces.
 			</p>
 			
@@ -13883,6 +13969,11 @@
 	)
 	<jk>package</jk> org.apache.juneau.examples.addressBook;
 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
+			</p>
+			<p>
+				Technically since the RDF and XML namespaces used are the same, we didn't need to define them separately
+				since the {@link org.apache.juneau.jena.RdfCommon#RDF_useXmlNamespaces} setting is enabled by default.
+				<br>We keep them separate here though to show that they can be defined separately.
 			</p>
 			<p> 
 				Our address book uses the following interface:
@@ -13919,7 +14010,7 @@
 	} 
 			</p>
 			
-			<h5 class='topic'>Notes</h5>
+			<h5 class='section'>Notes:</h5>
 			<ul class='spaced-list'>
 				<li>
 					You interface an interface for our address book so that you can later
@@ -13933,88 +14024,25 @@
 			<h5 class='figure'>AddressBook.java</h5>
 			<p class='bcode'>
 	<jd>/** Address book bean */</jd>
+	<ja>@Bean</ja>(typeName=<js>"addressBook"</js>)
 	<jk>public class</jk> AddressBook <jk>extends</jk> LinkedList&lt;Person&gt; <jk>implements</jk> IAddressBook {
 	
-		<jc>// The URL of this resource</jc>
-		<jk>private</jk> URI <jf>uri</jf>;
-
 		<jd>/** Bean constructor - Needed for instantiating on client side */</jd>
 		<jk>public</jk> AddressBook () {}
 
 		<jd>/** Normal constructor - Needed for instantiating on server side */</jd>
 		<jk>public</jk> AddressBook (URI uri) {...}
 		
-		<ja>@Override</ja> <jc>/* IAddressBook */</jc>
-		<jk>public</jk> List&lt;Person&gt; getPeople() { 
-			<jk>return</jk> <jk>this</jk>; 
-		} 
-		
-		<ja>@Override</ja> <jc>/* IAddressBook */</jc>
-		<jk>public</jk> Person createPerson(CreatePerson cp) <jk>throws</jk> Exception { 
-			Person p = <jk>new</jk> Person(uri, cp); 
-			add(p); 
-			<jk>return</jk> p; 
-		} 
-		
-		<ja>@Override</ja> <jc>/* IAddressBook */</jc>
-		<jk>public</jk> Person findPerson(<jk>int</jk> id) { 
-			<jk>for</jk> (Person p : <jk>this</jk>) 
-				<jk>if</jk> (p.<jf>id</jf> == id) 
-					<jk>return</jk> p; 
-			<jk>return null</jk>; 
-		} 
-		
-		<ja>@Override</ja> <jc>/* IAddressBook */</jc>
-		<jk>public</jk> Address findAddress(<jk>int</jk> id) { 
-			<jk>for</jk> (Person p : <jk>this</jk>) 
-				<jk>for</jk> (Address a : p.<jf>addresses</jf>) 
-					<jk>if</jk> (a.<jf>id</jf> == id) 
-						<jk>return</jk> a; 
-			<jk>return null</jk>; 
-		} 
-		
-		<ja>@Override</ja> <jc>/* IAddressBook */</jc>
-		<jk>public</jk> Person findPersonWithAddress(<jk>int</jk> id) { 
-			<jk>for</jk> (Person p : <jk>this</jk>) 
-				<jk>for</jk> (Address a : p.<jf>addresses</jf>) 
-					<jk>if</jk> (a.<jf>id</jf> == id) 
-					<jk>return</jk> p; 
-			<jk>return null</jk>; 
-		} 
-		
-		<ja>@Override</ja> <jc>/* IAddressBook */</jc>
-		<jk>public</jk> List&lt;Address&gt; getAddresses() { 
-			Set&lt;Address&gt; s = <jk>new</jk> LinkedHashSet&lt;Address&gt;(); 
-			<jk>for</jk> (Person p : <jk>this</jk>) 
-				<jk>for</jk> (Address a : p.<jf>addresses</jf>) 
-					s.add(a); 
-			<jk>return new</jk> ArrayList&lt;Address&gt;(s); 
-		} 
-		
-		<ja>@Override</ja> <jc>/* IAddressBook */</jc>
-		<jk>public</jk> Person removePerson(<jk>int</jk> id) { 
-			Person p = findPerson(id); 
-			<jk>if</jk> (p != <jk>null</jk>) 
-				remove(p); 
-			<jk>return</jk> p; 
-		} 
-		
-		<jd>/** Utility method */</jd> 
-		<jk>public static</jk> Calendar toCalendar(String birthDate) <jk>throws</jk> Exception { 
-			Calendar c = <jk>new</jk> GregorianCalendar(); 
-			c.setTime(DateFormat.<jsm>getDateInstance</jsm>(DateFormat.<jsf>MEDIUM</jsf>, 
-				Locale.<jsf>US</jsf>).parse(birthDate)); 
-			<jk>return</jk> c; 
-		}
+		<jc>// Fields and methods omitted.</jc>
 	} 
 			</p>
 			
-			<h5 class='topic'>Notes</h5>
+			<h5 class='section'>Notes:</h5>
 			<ul class='spaced-list'>
 				<li>
-					The <code><ja>@Xml</ja>(elementName=<js>"addressBook"</js>)</code> annotation tells the toolkit that 
+					The <code><ja>@Bean</ja>(typeName=<js>"addressBook"</js>)</code> annotation tells the toolkit that 
 					when serialized as XML, the element name is <xt>&lt;addressBook&gt;</xt>. 
-					Without this annotation, the element would revert to the generalized <xt>&lt;array&gt;</xt> tag.
+					<br>Without this annotation, the element would revert to the generalized <xt>&lt;array&gt;</xt> tag.
 				<li>
 					The separate constructors are implementation specific and are needed because you're going to be 
 					using this class in two ways, since you'll be demonstrating the client code as well as the server 
@@ -14033,35 +14061,33 @@
 			<h5 class='figure'>Person.java</h5>
 			<p class='bcode'>
 	<jd>/** Person bean */</jd>
-	<ja>@Xml</ja>(ns=<js>"per"</js>)
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
 	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
 	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
 	
-		<jk>private static int</jk> <jsf>nextPersonId</jsf> = 1;
-
-		<jc>// Bean properties.</jc>
-		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) public URI <jf>uri</jf>;
+		<jc>// Bean properties</jc>
+		
+		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) 
+		<jk>public</jk> URI <jf>uri</jf>;
+		
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
+		
 		<jk>public</jk> String <jf>id</jf>;
+		
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@BeanProperty</ja>(swap=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
-		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = new LinkedList&lt;Address&gt;();
+		
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.Medium.<jk>class</jk>) 
+		<jk>public</jk> Calendar <jf>birthDate</jf>;
+		
+		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;&gt;();
+		
 		
 		<jd>/** Bean constructor - Needed for instantiating on server side */</jd> 
 		<jk>public</jk> Person() {} 
 		
 		<jd>/** Normal constructor - Needed for instantiating on client side */</jd> 
-		<jk>public</jk> Person(URI addressBookUri, CreatePerson cp) <jk>throws</jk> Exception { 
-			<jk>this</jk>.<jf>id</jf> = <jsf>nextPersonId</jsf>++; 
-			<jk>this</jk>.<jf>addressBookUri</jf> = addressBookUri; 
-			<jk>if</jk> (addressBookUri != <jk>null</jk>) 
-				<jk>this</jk>.<jf>uri</jf> = addressBookUri.resolve(<js>"people/"</js> + <jf>id</jf>); 
-			<jk>this</jk>.<jf>name</jf> = cp.<jf>name</jf>; 
-			<jk>this</jk>.<jf>birthDate</jf> = cp.<jf>birthDate</jf>; 
-			<jk>for</jk> (CreateAddress ca : cp.<jf>addresses</jf>) 
-				<jk>this</jk>.<jf>addresses</jf>.add(<jk>new</jk> Address(addressBookUri, <jf>uri</jf>, ca)); 
-		} 
+		<jk>public</jk> Person(URI addressBookUri, CreatePerson cp) <jk>throws</jk> Exception {...} 
 		
 		<jd>/** Extra read-only bean property */</jd> 
 		<jk>public int</jk> getAge() { 
@@ -14069,34 +14095,29 @@
 		} 
 		
 		<jd>/** Convenience method - Add an address for this person */</jd> 
-		<jk>public</jk> Address createAddress(CreateAddress ca) <jk>throws</jk> Exception { 
-			Address a = <jk>new</jk> Address(<jf>addressBookUri</jf>, <jf>uri</jf>, ca); 
-			<jf>addresses</jf>.add(a); 
-			<jk>return</jk> a; 
-		} 
+		<jk>public</jk> Address createAddress(CreateAddress ca) <jk>throws</jk> Exception {...} 
 		
 		<jd>/** Extra method (for method invocation example) */</jd> 
 		<jk>public</jk> String sayHello(String toPerson, <jk>int</jk> age) { 
-			<jk>return</jk> <jf>name</jf> + <js>" says hello to "</js> + toPerson + <js>" who is "</js> 
-				+ age + <js>" years old"</js>; 
+			<jk>return</jk> <jf>name</jf> + <js>" says hello to "</js> + toPerson + <js>" who is "</js> + age + <js>" years old"</js>; 
 		} 
 	}
 			</p>
 			
-			<h5 class='topic'>Notes</h5>
+			<h5 class='section'>Notes:</h5>
 			<ul class='spaced-list'>
 				<li>
-					The <l>ns="per"</l> annotations override the default <l>"ab"</l> namespace defined on the package.
-					It applies to this class and all properties of this class.
+					The <l>prefix="per"</l> annotations override the default <l>"ab"</l> namespace defined on the package.
+					<br>It applies to this class and all properties of this class.
 				<li>
 					The <code><ja>@Rdf</ja>(beanUri=<jk>true</jk>)</code> annotation identifies the <l>uri</l> property 
 					as the resource URI for this resource.  
-					This property has special meaning for the RDF serializer.  
-					The RDF serializer uses this property for the value of the <l>rdf:resource</l> attribute.
+					<br>This property has special meaning for the RDF serializer.  
+					<br>The RDF serializer uses this property for the value of the <l>rdf:resource</l> attribute.
 				<li>
 					The <code><ja>@BeanProperty</ja>(swap=CalendarSwap.Medium.<jk>class</jk>)</code> annotation causes 
 					the date field to be serialized in the format <l>"MM dd, yyyy"</l>.
-					This could have also been specified globally on the resource level through the 
+					<br>This could have also been specified globally on the resource level through the 
 					{@link org.apache.juneau.rest.annotation.RestResource#properties} annotation.
 			</ul>
 			<p>	
@@ -14105,49 +14126,45 @@
 			
 			<h5 class='figure'>Address.java</h5>
 			<p class='bcode'>
-	<jd>/** 
-	* Address bean 
-	*/</jd> 
+	<jd>/** Address bean */</jd> 
 	<ja>@Xml</ja>(prefix=<js>"addr"</js>) 
 	<ja>@Rdf</ja>(prefix=<js>"addr"</js>) 
 	<ja>@Bean</ja>(typeName=<js>"address"</js>) 
 	<jk>public class</jk> Address { 
 		
-		<jk>private static int</jk> <jsf>nextAddressId</jsf> = 1; 
-		
 		<jc>// Bean properties</jc> 
-		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) <jk>public</jk> URI <jf>uri</jf>; 
+		
+		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) 
+		<jk>public</jk> URI <jf>uri</jf>; 
+		
 		<jk>public</jk> URI <jf>personUri</jf>; 
+		
 		<jk>public int</jk> <jf>id</jf>; 
-		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+		
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>; 
-		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+		
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
 		<jk>public int</jk> <jf>zip</jf>; 
+		
 		<jk>public boolean</jk> <jf>isCurrent</jf>; 
+		
 		
 		<jd>/** Bean constructor - Needed for instantiating on client side */</jd> 
 		<jk>public</jk> Address() {} 
 		
 		<jd>/** Normal constructor - Needed for instantiating on server side */</jd> 
-		<jk>public</jk> Address(URI addressBookUri, URI personUri, CreateAddress ca) <jk>throws</jk> Exception { 
-			<jk>this</jk>.<jf>id</jf> = <jsf>nextAddressId</jsf>++; 
-			<jk>if</jk> (addressBookUri != <jk>null</jk>) 
-				<jk>this</jk>.<jf>uri</jf> = addressBookUri.resolve(<js>"addresses/"</js> + <jf>id</jf>); 
-			<jk>this</jk>.<jf>personUri</jf> = personUri</jf>; 
-			<jk>this</jk>.<jf>street</jf> = ca.<jf>street</jf>; 
-			<jk>this</jk>.<jf>city</jf> = ca.<jf>city</jf>; 
-			<jk>this</jk>.<jf>state</jf> = ca.<jf>state</jf>; 
-			<jk>this</jk>.<jf>zip</jf> = ca.<jf>zip</jf>; 
-			<jk>this</jk>.<jf>isCurrent</jf> = ca.<jf>isCurrent</jf>; 
-		} 
+		<jk>public</jk> Address(URI addressBookUri, URI personUri, CreateAddress ca) <jk>throws</jk> Exception {...}
 	}
 			</p>
 			
-			<h5 class='topic'>Notes</h5>
+			<h5 class='section'>Notes:</h5>
 			<ul class='spaced-list'>
 				<li>
 					This class shows how the namespace can be overridden at the property level through the 
-					<code><ja>@Xml</ja>(ns=<js>"mail"</js>)</code> annotation.
+					<code><ja>@Xml</ja>(prefix=<js>"mail"</js>)</code> annotation.
 			</ul>
 			<p>	
 				The <l>CreatePerson</l> bean is used as the input data for creating a person.
@@ -14155,16 +14172,21 @@
 			
 			<h5 class='figure'>CreatePerson.java</h5>
 			<p class='bcode'>
-	<jd>/** Bean for creating a new person */</jd>
-	<ja>@Xml</ja>(ns=<js>"per"</js>)
-	<ja>@Rdf</ja>(ns=<js>"addr"</js>)
+	<jd>/** Person creator bean */</jd>
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+	<ja>@Rdf</ja>(prefix=<js>"addr"</js>)
 	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> CreatePerson {
 		
 		<jc>// Bean properties</jc>
+
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@BeanProperty(</ja>swap=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		
+		<ja>@BeanProperty(</ja>swap=CalendarSwap.Medium.<jk>class</jk>) 
+		<jk>public</jk> Calendar <jf>birthDate</jf>;
+		
 		<jk>public</jk> LinkedList&lt;CreateAddress&gt; <jf>addresses</jf>;
+		
 		
 		<jd>/** Bean constructor - Needed for instantiating on server side */</jd>
 		<jk>public</jk> CreatePerson() {}
@@ -14179,25 +14201,30 @@
 			
 			<h5 class='figure'>CreateAddress.java</h5>
 			<p class='bcode'>
-	<jd>/** Bean for creating a new address */</jd>
+	<jd>/** Address creator bean */</jd>
 	<ja>@Xml</ja>(ns=<js>"addr"</js>)
 	<ja>@Rdf</ja>(ns=<js>"addr"</js>)
 	<ja>@Bean</ja>(typeName=<js>"address"</js>)
 	<jk>public class</jk> CreateAddress {
 	
 		<jc>// Bean properties</jc>
-		<ja>@Xml</ja>(ns=<js>"mail"</js>) <ja>@Rdf</ja>(ns=<js>"mail"</js>) 
+
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
-		<ja>@Xml</ja>(ns=<js>"mail"</js>) <ja>@Rdf</ja>(ns=<js>"mail"</js>) 
+
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
 		<jk>public int</jk> <jf>zip</jf>;
+
 		<jk>public boolean</jk> <jf>isCurrent</jf>;
+
 		
-		<jd>/** Bean constructor -Needed for instantiating on server side */</jd>
+		<jd>/** Bean constructor - Needed for instantiating on server side */</jd>
 		<jk>public</jk> CreateAddress() {}
 		
 		<jd>/** Normal constructor - Needed for instantiating on client side */</jd>
-		<jk>public</jk> CreateAddress(String street, String city, String state, <jk>int</jk> zip, 
-			<jk>boolean</jk> isCurrent) {...}
+		<jk>public</jk> CreateAddress(String street, String city, String state, <jk>int</jk> zip, <jk>boolean</jk> isCurrent) {...}
 	}
 			</p>
 			<p>
@@ -14211,60 +14238,84 @@
 	* Consists of an in-memory address book repository. 
 	*/</jd> 
 	<ja>@RestResource</ja>( 
-		path=<js>"/addressBook"</js>, 
-		messages=<js>"nls/AddressBookResource"</js>, 
-
-		<jc>// Links on the HTML rendition page.
-		// "request:/..." URIs are relative to the request URI.
-		// "servlet:/..." URIs are relative to the servlet URI.
-		// "$C{...}" variables are pulled from the config file.</jc>
+		path=<js>"/addressBook"</js>,
+		messages=<js>""nls/AddressBookResource"</js>,
+	
 		htmldoc=<ja>@HtmlDoc</ja>(
+			
+			<jc>// Widgets for $W variables.</jc>
+			widgets={
+				PoweredByJuneau.<jk>class</jk>,
+				ContentTypeMenuItem.<jk>class</jk>,
+				QueryMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+	
+			<jc>// Links on the HTML rendition page.</jc>
+			<jc>// "request:/..." URIs are relative to the request URI.</jc>
+			<jc>// "servlet:/..." URIs are relative to the servlet URI.</jc>
+			<jc>// "$C{...}" variables are pulled from the config file.</jc>
 			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>
-			}
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/$R{servletClassSimple}.java"</js>
+			},
+			
+			<jc>// Arbitrary HTML message on the left side of the page.</jc>
+			aside={
+				<js>"&lt;div style='max-width:400px;min-width:200px'&gt;"</js>,
+				<js>"	&lt;p&gt;Proof-of-concept resource that shows off the capabilities of working with POJO resources.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Provides examples of: &lt;/p&gt;"</js>,
+				<js>"	&lt;ul&gt;"</js>,
+				<js>"		&lt;li&gt;XML and RDF namespaces"</js>,
+				<js>"		&lt;li&gt;Swagger documentation"</js>,
+				<js>"		&lt;li&gt;Widgets"</js>,
+				<js>"	&lt;/ul&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+			
+			<jc>// Juneau icon added to footer.</jc>
+			footer=<js>"$W{PoweredByJuneau}"</js>
 		),
-
+	
 		<jc>// Allow INIT as a method parameter.</jc>
 		allowedMethodParams=<js>"*"</js>,
-	
+		
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
 		properties={
-			
+	
 			<jc>// Use single quotes.</jc>
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
-			
+	
 			<jc>// Make RDF/XML readable.</jc>
 			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>),
-			
+	
 			<jc>// Make RDF parsable by adding a root node.</jc>
 			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>),
-			
+	
 			<jc>// Make URIs absolute so that we can easily reference them on the client side.</jc>
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_uriResolution</jsf>, value=<js>"ABSOLUTE"</js>)
-		
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_uriResolution</jsf>, value=<js>"ABSOLUTE"</js>),
+	
 			<jc>// Make the anchor text on URLs be just the path relative to the servlet.</jc>
 			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<js>"SERVLET_RELATIVE"</js>)
 		},
-		
-		<jc>// Our stylesheet for the HTML rendition.</jc>
-		stylesheet=<js>"styles/devops.css"</js>,
-		
+	
 		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
 		encoders=GzipEncoder.<jk>class</jk>,
-		
+	
 		<jc>// Swagger info.</jc>
-		contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
-		license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
-		version=<js>"2.0"</js>,
-		termsOfService=<js>"You're on your own."</js>,
-		tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',
-			url:'http://juneau.apache.org'}}]"</js>,
-		externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		swagger=<ja>@ResourceSwagger</ja>(
+			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+			version=<js>"2.0"</js>,
+			termsOfService=<js>"You're on your own."</js>,
+			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		)
 	) 
 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
 		<jc>// The in-memory address book</jc> 
 		<jk>private</jk> AddressBook <jf>addressBook</jf>; 
@@ -14276,29 +14327,11 @@
 				<jc>// Create the address book</jc> 
 				<jf>addressBook</jf> = <jk>new</jk> AddressBook(java.net.URI.create(<js>"servlet:/"</js>)); 
 				
-				<jc>// Add some people to our address book by default</jc> 
-				<jf>addressBook</jf>.createPerson( 
-					<jk>new</jk> CreatePerson( 
-						<js>"Barack Obama"</js>, 
-						<jsm>toCalendar</jsm>(<js>"Aug 4, 1961"</js>), 
-						<jk>new</jk> CreateAddress(<js>"1600 Pennsylvania Ave"</js>, <js>"Washington"</js>, 
-							<js>"DC"</js>, 20500, <jk>true</jk>), 
-						<jk>new</jk> CreateAddress(<js>"5046 S Greenwood Ave"</js>, <js>"Chicago"</js>, 
-							<js>"IL"</js>, 60615, <jk>false</jk>) 
-					) 
-				); 
-				<jf>addressBook</jf>.createPerson( 
-					<jk>new</jk> CreatePerson( 
-						<js>"George Walker Bush"</js>, 
-						<jsm>toCalendar</jsm>(<js>"Jul 6, 1946"</js>), 
-						<jk>new</jk> CreateAddress(<js>"43 Prairie Chapel Rd"</js>, <js>"Crawford"</js>, 
-							<js>"TX"</js>, 76638, <jk>true</jk>), 
-						<jk>new</jk> CreateAddress(<js>"1600 Pennsylvania Ave"</js>, <js>"Washington"</js>, 
-							<js>"DC"</js>, 20500, <jk>false</jk>) 
-					) 
-				); 
+				<jc>// Initialize it with some contents.</jc>
+				addressBook.init();
 			
 			} <jk>catch</jk> (Exception e) { 
+				<jc>// Gets converted to 500</jc>
 				<jk>throw new</jk> RuntimeException(e); 
 			} 
 		} 
@@ -14497,15 +14530,14 @@
 			<jk>return new</jk> DataSet(items, <jf>addressBook</jf>, <jk>this</jk>.getBeanContext()); 
 		} 
 		
-		<jd>/** 
-		* [OPTIONS /*] 
-		* View resource options 
-		*/</jd> 
-		<ja>@Override</ja> <jc>/* BasicRestServlet */</jc> 
-		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>) 
-		<jk>public</jk> Swagger getOptions(RestRequest req) { 
-			<jk>return</jk> req.getSwagger(); 
-		} 
+		<jd>/**
+		 * [PROXY /*]
+		 * Return a proxy interface to IAddressBook.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/proxy/*"</js>)
+		<jk>public</jk> IAddressBook getProxy() {
+			<jk>return</jk> <jf>addressBook</jf>;
+		}
 		
 		<jd>/** Convenience method - Find a person by ID */</jd> 
 		<jk>private</jk> Person findPerson(<jk>int</jk> id) <jk>throws</jk> RestException { 
@@ -14525,7 +14557,7 @@
 	} 	
 			</p>
 			
-			<h5 class='topic'>Notes</h5>
+			<h5 class='section'>Notes:</h5>
 			<ul class='spaced-list'>
 				<li>
 					The <l>@RestResource.messages()</l> annotation identifies 
@@ -14558,8 +14590,7 @@
 					The <l>doInit()</l> method shows an example of an overloaded method using the 
 					<l>@RestMethod(name=<jsf>INIT</jsf>)</l> annotation.
 				<li>
-					The <l>getOptions()</l> method shows the default OPTIONS page augmented with some additional 
-					information.
+					The <l>getProxy()</l> method shows how to access the AddressBook bean through a proxy interface.
 			</ul>
 			<p>
 				The OPTIONS page uses the servlet resource bundle to specify the labels so that they're globalizable.
@@ -14653,11 +14684,17 @@
 			<p>
 				Pointing a browser to the resource shows the results of running the <l>getRoot()</l> method:
 			</p>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.1.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook
+			</p>			
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.01.png" style='width:800px;'>
 			<p>
 				Clicking the <l>people</l> link shows you the result of running the <l>getAllPeople()</l> method:
 			</p>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.2.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people
+			</p>			
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.02.png" style='width:800px;'>
 			<p>
 				Notice how the <l>URI</l> properties automatically became hyperlinks.  
 			</p>
@@ -14670,13 +14707,22 @@
 			</p>
 			
 			<h5 class='figure'>JSON</h5>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.3.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?Accept=text/json&amp;plainText=true
+			</p>
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.03.png" style='width:800px;'>
 			
 			<h5 class='figure'>Lax JSON</h5>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.4.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?Accept=text/json+simple&amp;plainText=true
+			</p>
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.04.png" style='width:800px;'>
 			
 			<h5 class='figure'>XML</h5>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.5.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?Accept=text/xml&amp;plainText=true
+			</p>
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.05.png" style='width:800px;'>
 			<p>
 				Notice how our <l>XML_enableNamespaces</l> and <l>XML_autoDetectNamespaces</l> settings result
 				in namespaces being used.
@@ -14687,7 +14733,10 @@
 			</p>
 			
 			<h5 class='figure'>RDF/XML</h5>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.6.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?Accept=text/xml+rdf+abbrev&amp;plainText=true
+			</p>
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.06.png" style='width:800px;'>
 			<p>
 				Notice how the <code><ja>@BeanProperty</ja>(uri=<jk>true</jk>)</code> annotations are used to identify 
 				values for <l>rdf:about</l> values.
@@ -14701,13 +14750,22 @@
 			</p>
 			
 			<h5 class='figure'>HTML Schema</h5>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.7.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?Accept=text/html+schema
+			</p>
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.07.png" style='width:800px;'>
 			
 			<h5 class='figure'>JSON Schema</h5>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.8.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?Accept=text/json+schema&amp;plainText=true
+			</p>
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.08.png" style='width:800px;'>
 			
 			<h5 class='figure'>XML Schema</h5>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.9.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people?Accept=text/xml+schema&amp;plainText=true
+			</p>
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.09.png" style='width:800px;'>
 			<p>
 				Now let's see what else you can do.
 			</p>
@@ -14715,12 +14773,18 @@
 				Clicking on the first <l>personUri</l> link executes the <l>getPerson()</l> method, which renders a 
 				serialized <l>Person</l> object:
 			</p>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.10.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/people/1
+			</p>			
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.10.png" style='width:800px;'>
 			<p>
 				Clicking on the OPTIONS link on the page shows you the Swagger doc generated from our annotations and 
 				resource bundle properties:
 			</p>
-			<img class='bordered' src="doc-files/Samples.AddressBookResource.Options.png">
+			<p class='bcode' style='width:800px;'>
+	http://localhost:10000/addressBook/?method=OPTIONS
+			</p>			
+			<img class='bordered' src="doc-files/juneau-examples-rest.AddressBookResource.Demo.11.png" style='width:800px;'>
 		</div>
 	
 		<!-- ======================================================================================================= -->

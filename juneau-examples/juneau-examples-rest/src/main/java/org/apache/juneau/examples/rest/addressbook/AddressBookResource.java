@@ -134,6 +134,7 @@ public class AddressBookResource extends BasicRestServletJena {
 			addressBook.init();
 
 		} catch (Exception e) {
+			// Gets converted to 500
 			throw new RuntimeException(e);
 		}
 	}
