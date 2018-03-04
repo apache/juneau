@@ -59,7 +59,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	public void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		int i = 0;
 		for (String s : session.getScript())
-			w.sIf(i++ > 0).appendln(3, s);
+			w.sIf(i++ > 0).append(3, s).append('\n'); // Must always append a newline even if whitespace disabled!
 	}
 
 	@Override /* HtmlDocTemplate */
