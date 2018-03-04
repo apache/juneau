@@ -695,8 +695,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		c = sort(c);
 
 		String type2 = null;
-		if (sType != eType)
-			type2 = sType.getDictionaryName();
 
 		String eName = type2;
 		Namespace eNs = null;

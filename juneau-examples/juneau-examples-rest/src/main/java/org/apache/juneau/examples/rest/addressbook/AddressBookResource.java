@@ -91,6 +91,12 @@ import org.apache.juneau.utils.*;
 		// Use single quotes.
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 
+		// Enable XML namespaces.
+		@Property(name=XML_enableNamespaces, value="true"),
+
+		// Add namespace URIs to root node.
+		@Property(name=XML_addNamespaceUrisToRoot, value="true"),
+		
 		// Make RDF/XML readable.
 		@Property(name=RDF_rdfxml_tab, value="5"),
 

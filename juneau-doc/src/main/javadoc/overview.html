@@ -14289,6 +14289,12 @@
 			<jc>// Use single quotes.</jc>
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
 	
+			<jc>// Enable XML namespaces.</jc>
+			<ja>@Property</ja>(name=<jsf>XML_enableNamespaces</jsf>, value=<js>"true"</js>),
+
+			<jc>// Add namespace URIs to root node.</jc>
+			<ja>@Property</ja>(name=<jsf>XML_addNamespaceUrisToRoot</jsf>, value=<js>"true"</js>),
+
 			<jc>// Make RDF/XML readable.</jc>
 			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>),
 	
@@ -16416,6 +16422,12 @@
 		<p>
 			TBD
 		</p>
+		
+		<h5 class='topic'>juneau-marshall</h5>
+		<ul class='spaced-list'>
+			<li>
+				Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
+		</ul>
 		
 		<h5 class='topic'>juneau-server</h5>
 		<ul class='spaced-list'>

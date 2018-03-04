@@ -656,8 +656,14 @@ public final class ClassMeta<T> implements Type {
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			Bean b = c.getAnnotation(Bean.class);
-			if (b != null && b.beanDictionary().length != 0)
-				beanRegistry = new BeanRegistry(beanContext, null, b.beanDictionary());
+			if (b != null) {
+				if (b.beanDictionary().length != 0)
+					beanRegistry = new BeanRegistry(beanContext, null, b.beanDictionary());
+				
+				// This could be a non-bean POJO with a type name.
+				if (dictionaryName == null && ! b.typeName().isEmpty())
+					dictionaryName = b.typeName();
+			}
 		}
 
 		private BeanFilter findBeanFilter() {

@@ -203,10 +203,10 @@ public final class HtmlParserSession extends XmlParserSession {
 
 			if (cm != null) {
 				sType = eType = cm;
-				typeName = sType.isArray() ? "array" : "object";
+				typeName = sType.isCollectionOrArray() ? "array" : "object";
 			} else if (! "array".equals(typeName)) {
 				// Type name could be a subtype name.
-				typeName = "object";
+				typeName = sType.isCollectionOrArray() ? "array" : "object";
 			}
 
 			if (typeName.equals("object")) {
