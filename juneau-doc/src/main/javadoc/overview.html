@@ -6690,7 +6690,7 @@
 			ShutdownResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> RestServletGroup {
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
 		<jc>// NO CODE!!!</jc>
 	}
 			</p>
@@ -6706,9 +6706,9 @@
 				<br>The method returns a POJO with is just a linked-list of beans with name/description properties.
 			</p>	
 			<p class='bcode'>
-	<jc>// The entire contents of the RestServletGroup class.</jc>
+	<jc>// The entire contents of the BasicRestServletGroup class.</jc>
 	
-	<jk>public class</jk> RestServletGroup <jk>extends</jk> BasicRestServlet {
+	<jk>public class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {
 	
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Child resources"</js>)
 		<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest req) {
@@ -8470,7 +8470,7 @@
 
 	<jc>// Servlet with class-level guard applied</jc>
 	<ja>@RestResource</ja>(guards=BillyGuard.<jk>class</jk>)
-	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServletDefult {
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 
  		<jc>// Delete method that only Billy is allowed to call.</jc>
  		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>)
@@ -8541,7 +8541,7 @@
 		<p class='bcode'>
 	<jc>// Associate the Traversable converter to all Java REST methods in this servlet</jc>
 	<ja>@RestResource</ja>(converters=Traversable.<jk>class</jk>)
-	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 		...
 	}
 		</p>
@@ -8637,7 +8637,7 @@
 		<p class='bcode'>
 	<jc>// Servlet with associated resource bundle</jc>
 	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
-	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 
 		<jc>// Returns the localized greeting from the "greeting" key in MyMessages.properties</jc>
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
@@ -8692,7 +8692,7 @@
 		<p class='bcode'>
 	<jc>// Servlet with automated support for GZIP compression</jc>
 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
-	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 		...
 	}
 		</p>
@@ -9128,6 +9128,10 @@
 		}
 	}
 		</p>
+		<h5 class='section'>See Also:</h5>
+		<ul class='doctree'>
+			<li class='link'><a class='doclink' href='#juneau-config'>juneau-config</a>
+		</ul>
 	</div>
 	
 	<!-- ======================================================================================================== -->
@@ -9760,7 +9764,7 @@
 		),
 		...
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> RestServletJenaGroup {...}
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {...}
 			</p>			
 			<p>
 				The widget definition is shown below:
@@ -9870,7 +9874,7 @@
 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
 			},
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> RestServletJenaGroup {...}
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {...}
 			</p>
 			<p>
 				The <l>StyleMenuItem</l> is a widget that extends from {@link org.apache.juneau.rest.widget.MenuItemWidget}, a
@@ -9930,7 +9934,7 @@
 		<jc>// Add a version header attribute to all responses</jc>
 		defaultResponseHeaders={<js>"X-Version: 1.0"</js>}
 	)
-	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 		...
 	}			
 		</p>
@@ -10889,7 +10893,7 @@
 			...
 		}
 	)
-	<jk>public class</jk> Root <jk>extends</jk> RestServletGroup {
+	<jk>public class</jk> Root <jk>extends</jk> BasicRestServletGroup {
 		
 		<jk>private final</jk> RestResourceResolver <jf>resolver</jf>;
 		
@@ -12191,7 +12195,7 @@
 		<p>
 			The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
 			Eclipse Jetty Servlet Container.  
-			<br>It includes all libraries needed to execute in a Java 1.6+ environment.
+			<br>It includes all libraries needed to execute in a Java 1.7+ environment.
 		</p>
 		<p>
 			Features include:
@@ -12202,7 +12206,7 @@
 			<li>
 				Packaged as a simple executable jar and configuration file.
 			<li>
-				All the power of the Juneau Cloud Tools for defining REST servlets and clients with the ability to 
+				All the power of the Juneau ecosystem for defining REST servlets and clients with the ability to 
 				serialize and parse POJOs as HTML, JSON, XML, RDF, URL-Encoding, and others.
 			<li>
 				An extensible API that allows you to hook into various lifecycle events.
@@ -12286,7 +12290,7 @@
 			LogsResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> RestServletJenaGroup {
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
 		<jc>// No code</jc>
 	}
 					</p>
@@ -12547,7 +12551,7 @@
 		</p>
 		<p class='bcode'>
 	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.RestMicroservice</mv>
-	<mk>Main-ConfigFile</mk>: <mv>microservice.cfg</mv>
+	<mk>Main-ConfigFile</mk>: <mv>my-microservice.cfg</mv>
 		<p>
 		 	The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
 		 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.RestMicroservice</l>.
@@ -12573,13 +12577,10 @@
 			<p class='bcode'>
 	<jc>// Get Main-Class from manifest file.</jc>
 	String mainClass = Microservice.<jsm>getInstance</jsm>().getManifest().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
-	 
-	<jc>// Get Rest-Resources from manifest file.</jc>
-	String[] restResources = Microservice.<jsm>getInstance</jsm>().getManifest().getStringArray(<js>"Rest-Resources"</js>);
 			</p>
 			<p>
-				The {@link org.apache.juneau.utils.ManifestFile} class extends {@link org.apache.juneau.ObjectMap}.
-				<br>That makes it possible to retrieve entries as a wide variety of object types such as java primitives, arrays, collections, 
+				The {@link org.apache.juneau.utils.ManifestFile} class extends {@link org.apache.juneau.ObjectMap},
+				making it possible to retrieve entries as a wide variety of object types such as java primitives, arrays, collections, 
 				maps, or even POJOs serialized as JSON.
 			</p>
 		</div>
@@ -12594,93 +12595,10 @@
 			The microservice config file is an external INI-style configuration file that is used to configure
 			your microservice.
 		</p>
-		<p>
-			If you open the <l>my-microservice.cfg</l> file, you'll see several predefined sections and settings.
-			<br>The contents were shown in the previous sections.
-		</p>
-		<p>
-			Although the config file looks deceptively simple, the config file API is a very powerful feature with many 
-			capabilities, including:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				The ability to use variables to reference environment variables, system properties, other config file 
-				entries, and a host of other types.
-			<li>
-				The ability to store and retrieve POJOs as JSON.
-			<li>
-				APIs for updating, modifying, and saving configuration files without losing comments or formatting.
-			<li>
-				Extensive listener APIs.
+		<h5 class='section'>See Also:</h5>
+		<ul class='doctree'>
+			<li class='link'><a class='doclink' href='#juneau-config'>juneau-config</a>
 		</ul>
-		
-		<h5 class='figure'>Examples:</h5>
-		<p class='bcode'>
-	<cc>#--------------------------</cc>
-	<cc># My section</cc>
-	<cc>#--------------------------</cc>
-	<cs>[MySection]</cs>
-	
-	<cc># An integer</cc>
-	<ck>anInt</ck> = <cv>1 </cv>
-	
-	<cc># A boolean</cc>
-	<ck>aBoolean</ck> = <cv>true </cv>
-	
-	<cc># An int array</cc>
-	<ck>anIntArray</ck> = <cv>1,2,3 </cv>
-	
-	<cc># A POJO that can be converted from a String</cc>
-	<ck>aURL</ck> = <cv>http://foo </cv>
-	
-	<cc># An encoded password</cc>
-	<ck>aPassword*</ck> = <cv>{HRAaRQoT}</cv>
-
-	<cc># A POJO that can be converted from JSON</cc>
-	<ck>aBean</ck> = <cv>{foo:'bar',baz:123}</cv>
-	
-	<cc># A system property</cc>
-	<ck>locale</ck> = <cv>$S{java.locale, en_US}</cv>
-	
-	<cc># An environment variable</cc>
-	<ck>path</ck> = <cv>$E{PATH, unknown}</cv>
-	
-	<cc># A manifest file entry</cc>
-	<ck>mainClass</ck> = <cv>$MF{Main-Class}</cv>
-	
-	<cc># Another value in this config file</cc>
-	<ck>sameAsAnInt</ck> = <cv>$C{MySection/anInt}</cv>
-	
-	<cc># A command-line argument in the form "myarg=foo"</cc>
-	<ck>myArg</ck> = <cv>$A{myarg}</cv>
-	
-	<cc># The first command-line argument</cc>
-	<ck>firstArg</ck> = <cv>$A{0}</cv>
-
-	<cc># Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.</cc>
-	<ck>nested</ck> = <cv>$S{mySystemProperty,$E{MY_ENV_VAR,$A{0}}}</cv>
-
-	<cc># A POJO with embedded variables</cc>
-	<ck>aBean2</ck> = <cv>{foo:'$A{0}',baz:$C{MySection/anInt}}</cv>
-	
-	</p>
-	<p class='bcode'>
-	<jc>// Java code for accessing config entries above.</jc>
-	Config c = Microservice.<jsm>getInstance</jsm>().getConfig();
-	
-	<jk>int</jk> anInt = c.getInt(<js>"MySection/anInt"</js>); 
-	<jk>boolean</jk> aBoolean = c.getBoolean(<js>"MySection/aBoolean"</js>); 
-	<jk>int</jk>[] anIntArray = c.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"MySection/anIntArray"</js>); 
-	URL aURL = c.getObject(URL.<jk>class</jk>, <js>"MySection/aURL"</js>); 
-	String aPassword = c.getString(<js>"MySection/aPassword"</js>);
-	MyBean aBean = c.getObject(MyBean.<jk>class</jk>, <js>"MySection/aBean"</js>); 
-	Locale locale = c.getObject(Locale.<jk>class</jk>, <js>"MySection/locale"</js>); 
-	String path = c.getString(<js>"MySection/path"</js>); 
-	String mainClass = c.getString(<js>"MySection/mainClass"</js>); 
-	<jk>int</jk> sameAsAnInt = c.getInt(<js>"MySection/sameAsAnInt"</js>); 
-	String myArg = c.getString(<js>"MySection/myArg"</js>); 
-	String firstArg = c.getString(<js>"MySection/firstArg"</js>); 
-		</p>
 	
 		<!-- =========================================================================================================== -->
 		<a id="juneau-microservice-server.ConfigApi"></a>
@@ -12691,9 +12609,9 @@
 			</p>
 			<ul class='doctree'>
 				<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig()} 
-					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time variables</a> and <l>$A</l> and <l>$MF</l> variables can be used.
+					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time variables</a> can be used.
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfig()} 
-					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time variables</a> and <l>$A</l> and <l>$MF</l> variables can be used.
+					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time variables</a> can be used.
 					<h5 class='figure'>Example usage:</h5>
 					<p class='bcode'>
 	<cc>#-------------------------------</cc>
@@ -12723,7 +12641,7 @@
 				<li class='jm'>
 					{@link org.apache.juneau.rest.RestRequest#getConfig()} 
 					- An instance method to access it from inside a REST method.
-					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time or request-time variables</a> and <l>$A</l> and <l>$MF</l> variables can be used.
+					<br>Any <a class='doclink' href='#DefaultRestSvlVariables'>initialization-time or request-time variables</a> can be used.
 					
 					<h5 class='figure'>Example usage:</h5>
 					<p class='bcode'>
@@ -12810,7 +12728,7 @@
 			Now let's take a look at the resource classes themselves.  
 			<br>The top-level page...
 		</p>
-		<img class='bordered' src='doc-files/MicroserviceServer.Running.6.png' style='width:800px;'>
+		<img class='bordered' src='doc-files/juneau-microservice-server.Running.1.png' style='width:800px;'>
 		<p>
 			...is generated by this class...
 		<p class='bcode'>
@@ -12819,10 +12737,6 @@
 		title=<js>"My Microservice"</js>,
 		description=<js>"Top-level resources page"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			widgets={
-				ContentTypeMenuItem.<jk>class</jk>,
-				StyleMenuItem.<jk>class</jk>
-			},
 			navlinks={
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -12833,7 +12747,7 @@
 			LogsResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> RestServletJenaGroup {
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
 		<jc>// No code! </jc>
 	}
 		</p>
@@ -12996,7 +12910,7 @@
 		<code>juneau-examples-core-7.1.0.zip</code> file. 
 	</p>
 	
-	<h5 class='topic'>Instructions on how to install juneau-examples-core project</h5>
+	<h5 class='topic'>juneau-examples-core install instructions</h5>
 	<p>
 		Download the <code>juneau-examples-core-7.1.0.zip</code> file from the downloads page
 		(located in the binaries) and import it into your workspace as an existing project:
@@ -13036,7 +12950,7 @@
 		using embedded Jetty.
 	</p>	
 	
-	<h5 class='topic'>Instructions on how to install juneau-examples-rest project</h5>
+	<h5 class='topic'>juneau-examples-rest install instructions</h5>
 	<p>
 		Download the <code>juneau-examples-rest-7.1.0.zip</code> file from the downloads page
 		(located in the binaries) and import it into your workspace as an existing project:
@@ -13069,16 +12983,13 @@
 		</p>
 		<ul class='doctree'>
 			<li class='jac'>
-				{@link org.apache.juneau.rest.RestServlet org.apache.juneau.rest.RestServlet}
-				<br>Contains all the REST servlet logic.
+				{@link org.apache.juneau.rest.RestServlet} - Contains all the REST servlet logic.
 				<ul>
 					<li class='jac'>
-						{@link org.apache.juneau.rest.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
-						<br>Defines default serializers and parsers, and OPTIONs page logic.
+						{@link org.apache.juneau.rest.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
 						<ul>
 							<li class='jac'>
-								{@link org.apache.juneau.rest.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
-								<br>Specialized subclass for grouping other resources
+								{@link org.apache.juneau.rest.BasicRestServletGroup} - Specialized subclass for grouping other resources.
 							</li>
 						</ul>
 					</li>
@@ -13088,7 +12999,7 @@
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.Running.3.png'>
+		<img class='bordered' src='doc-files/Samples.Running.3.png' style='width:800px'>
 		<p>
 			The <l>RootResources</l> class can also be defined as a servlet in a <l>web.xml</l> file:
 		</p>
@@ -13115,75 +13026,76 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		path=<js>"/"</js>,
-		messages=<js>"nls/RootResources"</js>,
+		title=<js>"Root resources"</js>,
+		description=<js>"Example of a router resource page."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				PoweredByApache.<jk>class</jk>,
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
 			navlinks={
-				<js>"options: ?method=OPTIONS"</js>
-			}
+				<js>"options: ?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;options&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+				<js><js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;sources&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
+				"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+			footer=<js>"$W{PoweredByApache}"</js>
 		),
+		properties={
+			<jc>// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+			// String comparisons.
+			// You can apply any of the Serializer/Parser/BeanContext settings this way.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+		},
 		children={
-			HelloWorldResource.<jk>class</jk>, 
-			MethodExampleResource.<jk>class</jk>, 
-			RequestEchoResource.<jk>class</jk>, 
-			TempDirResource.<jk>class</jk>, 
-			AddressBookResource.<jk>class</jk>, 
-			SampleRemoteableServlet.<jk>class</jk>, 
-			PhotosResource.<jk>class</jk>, 
-			AtomFeedResource.<jk>class</jk>, 
-			JsonSchemaResource.<jk>class</jk>, 
-			SqlQueryResource.<jk>class</jk>, 
-			TumblrParserResource.<jk>class</jk>, 
-			CodeFormatterResource.<jk>class</jk>, 
-			UrlEncodedFormResource.<jk>class</jk>, 
-			SourceResource.<jk>class</jk>, 
-			ConfigResource.<jk>class</jk>, 
-			LogsResource.<jk>class</jk>, 
-			DockerRegistryResource.<jk>class</jk>, 
-			ShutdownResource.<jk>class</jk> 		
+			HelloWorldResource.<jk>class</jk>,
+			PetStoreResource.<jk>class</jk>,
+			SystemPropertiesResource.<jk>class</jk>,
+			MethodExampleResource.<jk>class</jk>,
+			RequestEchoResource.<jk>class</jk>,
+			TempDirResource.<jk>class</jk>,
+			AddressBookResource.<jk>class</jk>,
+			SampleRemoteableServlet.<jk>class</jk>,
+			PhotosResource.<jk>class</jk>,
+			AtomFeedResource.<jk>class</jk>,
+			JsonSchemaResource.<jk>class</jk>,
+			SqlQueryResource.<jk>class</jk>,
+			TumblrParserResource.<jk>class</jk>,
+			CodeFormatterResource.<jk>class</jk>,
+			UrlEncodedFormResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			LogsResource.<jk>class</jk>,
+			DockerRegistryResource.<jk>class</jk>,
+			PredefinedLabelsResource.<jk>class</jk>,
+			DebugResource.<jk>class</jk>,
+			ShutdownResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> RestServletJenaGroup {
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
+		<jc>// No code!</jc>
 	}
 		</p>
 		<p>
-			The resource bundle contains the localized strings for the resource:
-		</p>
-		
-		<h5 class='figure'>RootResources.properties</h5>
-		<p class='bcode'>
-	<cc>#--------------------------------------------------------------------------------
-	# RootResources labels
-	#--------------------------------------------------------------------------------</cc>
-	<ck>title</ck> = <cv>Root resources</cv>
-	<ck>description</ck> = <cv>This is an example of a router resource that is used to access other resources.</cv>
-		</p>
-		<p>
-			The <l>title</l> and <l>description</l> keys identify the localized values
-			return by the {@link org.apache.juneau.rest.RestRequest#getResourceTitle()} and 
-			{@link org.apache.juneau.rest.RestRequest#getResourceDescription()} methods.
-		</p>
-		<p>
 			The <l>children</l> annotation defines the child resources of this router resource.
-			These are resources whose paths are relative to the parent resource.			
+			<br>These are resources whose paths are direct decendents to the parent resource.			
 		</p>
 		<p>
-			Child resources must also be subclasses of {@link org.apache.juneau.rest.RestServlet}, and
-			must specify a {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource.path()} annotation to 
+			Child resources must be annotated with the {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource.path()} annotation to 
 			identify the subpath of the child.
-			For example, the <l>HelloWorldResource</l> class is annotated as follows:
-		</p>
-		
-		<h5 class='figure'>HelloWorldResource.java</h5>
-		<p class='bcode'>
-	<ja>@RestResource</ja>(messages=<js>"nls/HelloWorldResource"</js>, path=<js>"/helloWorld"</js>)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+			<br>Children CAN extend from {@link org.apache.juneau.rest.BasicRestServlet}, but it is not a requirement.
 		</p>
 		<p>
-			It should be noted that child resources do not need to be defined this way.  
-			They could also be defined as servlets in the same way as the root resource.  
-			The <l>children</l> annotation approach simply makes it easier to define them without having to touch the 
-			<l>web.xml</l> file again.
 			Child resources can also be defined programmatically by using the 
 			{@link org.apache.juneau.rest.RestContextBuilder#children(Class[])} method.
 		</p>
@@ -13191,21 +13103,20 @@
 			Note that these router pages can be arbitrarily nested deep.  
 			You can define many levels of router pages for arbitrarily hierarchical REST interfaces. 
 		</p>
-		<ul class='doctree'>
-			<li class='info'>
-				Let's step back and describe what's going on here:
-				<br>During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the 
-				<l>@RestResource.children()</l> annotation.  
-				If it finds it, it instantiates instances of each class and recursively performs servlet initialization 
-				on them.  
-				It then associates the child resource with the parent by the name specified by the 
-				<l>@RestResource.path()</l> annotation on the child class.  
-				When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet 
-				gets the request and sees that the URL remainder matches one of its child resources.  
-				It then forwards the request to the child resource for processing.  
-				The request passed to the child resource is the same as if the child resource had been deployed 
-				independently (e.g. path-info, resource-URI, and so forth).
-		</ul>
+		<p>
+			Let's step back and describe what's going on here:
+			<br>During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the 
+			<l>@RestResource.children()</l> annotation.  
+			<br>If it finds it, it instantiates instances of each class and recursively performs servlet initialization 
+			on them.  
+			<br>It then associates the child resource with the parent by the name specified by the 
+			<l>@RestResource.path()</l> annotation on the child class.  
+			<br>When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet 
+			gets the request and sees that the URL remainder matches one of its child resources.  
+			<br>It then forwards the request to the child resource for processing.  
+			<br>The request passed to the child resource is the same as if the child resource had been deployed 
+			independently (e.g. path-info, resource-URI, and so forth).
+		</p>
 	</div>	
 
 	<!-- ======================================================================================================= -->
@@ -13222,17 +13133,19 @@
 	* Sample REST resource that prints out a simple "Hello world!" message. 
 	*/</jd> 
 	<ja>@RestResource</ja>( 
-		messages=<js>"nls/HelloWorldResource"</js>, 
-		path=<js>"/helloWorld"</js>, 
+		title=<js>"Hello World"</js>,
+		description=<js>"An example of the simplest-possible resource"</js>,
+		path=<js>"/helloWorld"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
 		)
 	) 
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
+	<jk>public class</jk> HelloWorldResource <jk>implements</jk> BasicRestConfig { 
 		
 		<jd>/** GET request handler */</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>) 
@@ -13241,40 +13154,32 @@
 		} 
 	}
 		</p>
-		
-		<h5 class='figure'>HelloWorldResource.properties</h5>
-		<p class='bcode'>
-	<cc>#--------------------------------------------------------------------------------
-	# HelloWorldResource labels
-	#--------------------------------------------------------------------------------</cc>
-	<ck>title</ck> = <cv>Hello World sample resource</cv>
-	<ck>description</ck> = <cv>Simplest possible resource</cv>
-	<ck>sayHello.summary</ck> = <cv>Responds with "Hello world!"</cv> 	
+		<p>
+			Notice that in this case we're not extending from {@link org.apache.juneau.rest.RestServlet}.  
+			<br>We are however implementing {@link org.apache.juneau.rest.BasicRestConfig} which is a no-op
+			interface that defines a default <ja>@RestResource</ja> annotation with all the serializers, parsers, 
+			and configuration defined on the {@link org.apache.juneau.rest.BasicRestServlet} class.
 		</p>
 		<p>
-			The class hierarchy for this class is:
+			The only difference between implementing <l>BasicRestConfig</l> and extending from <l>BasicRestServlet</l>
+			is that the latter provides the following additional features:
 		</p>
-		<ul class='doctree'>
-			<li class='jac'>
-				{@link org.apache.juneau.rest.RestServlet org.apache.juneau.rest.RestServlet}
-				<br>Contains all the REST servlet logic.
-				<ul>
-					<li class='jac'>
-						{@link org.apache.juneau.rest.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
-						<br>Defines default serializers and parsers, and OPTIONs page logic.
-					</li>
-				</ul>
-			</li>
+		<ul class='spaced-list'>
+			<li>A default OPTIONS method.
+			<li>It can be deployed like any servlet.
 		</ul>
+		<p>
+			All other examples in this project extend from <l>BasicRestServlet</l> so that they provide automatic OPTIONS page support.
+		</p>
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.HelloWorldResource.1.png'>
+		<img class='bordered' src='doc-files/Samples.HelloWorldResource.1.png' style='width:800px'>
 		<p>
 			Using the special <l>&amp;Accept=text/json</l> and <l>&amp;plainText=true</l> parameters
 				allows us to see this page rendered as JSON:
 		</p>		
-		<img class='bordered' src='doc-files/Samples.HelloWorldResource.2.png'>
+		<img class='bordered' src='doc-files/Samples.HelloWorldResource.2.png' style='width:800px'>
 	</div>	
 
 	<!-- ======================================================================================================= -->
@@ -13307,23 +13212,44 @@
 	*/</jd> 
 	<ja>@RestResource</ja>( 
 		path=<js>"/methodExample"</js>, 
-		messages=<js>"nls/MethodExampleResource"</js>, 
+		messages=<js>"nls/MethodExampleResource"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
 			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
+				<js>"up: servlet:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows the different methods for retrieving HTTP query/form-data parameters, headers, and path variables.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Each method is functionally equivalent but demonstrate different ways to accomplish the same tasks.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
 			}
 		)
 	) 
 	<jk>public class</jk> MethodExampleResource <jk>extends</jk> BasicRestServlet { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
-		<jd>/** Example GET request that redirects to our example method */</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> Redirect doExample() <jk>throws</jk> Exception { 
-			<jk>return new</jk> Redirect(<js>"example1/xxx/123/{0}/xRemainder?q1=123&amp;q2=yyy"</js>, 
-				UUID.<jsm>randomUUID</jsm>()); 
-		} 
+		<jk>private static final</jk> UUID <jsf>SAMPLE_UUID</jsf> = UUID.<jsm>fromString</jsm>(<js>"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</js>);
+		<jk>private static final</jk> String <jsf>SAMPLE_UUID_STRING</jsf> = <js>"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</js>;
+	
+		<jd>/** Example GET request that redirects to our example method */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> ResourceDescription[] doExample() <jk>throws</jk> Exception {
+			<jk>return new</jk> ResourceDescription[] {
+				<jk>new</jk> ResourceDescription(
+					<js>"example1/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
+					<js>"Example 1 - Annotated method attributes."</js>
+				),
+				<jk>new</jk> ResourceDescription(
+					<js>"example2/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
+					<js>"Example 2 - Low-level RestRequest/RestResponse objects."</js>
+				),
+				<jk>new</jk> ResourceDescription(
+					<js>"example3/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
+					<js>"Example 3 - Intermediate-level APIs."</js>
+				)
+			};
+		}
 		
 		<jd>/** 
 		 * Methodology #1 - GET request using annotated attributes.
@@ -13344,11 +13270,19 @@
 				<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack
 			) {
 	
-			<jc>// Send back a simple String response</jc>
-			String output = String.<jsm>format</jsm>(
-					<js>"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d"</js>,
-					method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
-			<jk>return</jk> output;
+			<jc>// Send back a simple Map response</jc>
+			<jk>return new</jk> AMap&lt;String,Object&gt;()
+				.append(<js>"method"</js>, method)
+				.append(<js>"path-p1"</js>, p1)
+				.append(<js>"path-p2"</js>, p2)
+				.append(<js>"path-p3"</js>, p3)
+				.append(<js>"remainder"</js>, remainder)
+				.append(<js>"query-q1"</js>, q1)
+				.append(<js>"query-q2"</js>, q2)
+				.append(<js>"query-q3"</js>, q3)
+				.append(<js>"header-lang"</js>, lang)
+				.append(<js>"header-accept"</js>, accept)
+				.append(<js>"header-doNotTrack"</js>, doNotTrack);
 		}
 
 		<jd>/** 
@@ -13356,7 +13290,7 @@
 		 * This approach uses low-level request/response objects to perform the same as above.
 		 */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{p1}/{p2}/{p3}/*"</js>)
-		<jk>public</jk> String example2(
+		<jk>public</jk> void example2(
 				RestRequest req,          <jc>// A direct subclass of HttpServletRequest.</jc>
 				RestResponse res          <jc>// A direct subclass of HttpServletResponse.</jc>
 			) {
@@ -13384,11 +13318,20 @@
 			String accept = req.getHeader(<js>"Accept"</js>);
 			<jk>int</jk> doNotTrack = req.getHeaders().get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
 	
-			<jc>// Send back a simple String response</jc>
-			String output = String.format(
-					<js>"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d"</js>,
-					method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
-			res.setOutput(output);  <jc>// Or use getWriter().</jc>
+			<jc>// Send back a simple Map response</jc>
+			Map&lt;String,Object&gt; m = <jk>new</jk> AMap&lt;String,Object&gt;()
+				.append(<js>"method"</js>, method)
+				.append(<js>"path-p1"</js>, p1)
+				.append(<js>"path-p2"</js>, p2)
+				.append(<js>"path-p3"</js>, p3)
+				.append(<js>"remainder"</js>, remainder)
+				.append(<js>"query-q1"</js>, q1)
+				.append(<js>"query-q2"</js>, q2)
+				.append(<js>"query-q3"</js>, q3)
+				.append(<js>"header-lang"</js>, lang)
+				.append(<js>"header-accept"</js>, accept)
+				.append(<js>"header-doNotTrack"</js>, doNotTrack);
+			res.setOutput(m);  <jc>// Use setOutput(Object) just to be different.</jc>
 		}
 
 		<jd>/** 
@@ -13422,11 +13365,19 @@
 			<jc>// Headers.</jc>
 			int doNotTrack = headers.get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
 	
-			<jc>// Send back a simple String response</jc>
-			String output = String.format(
-					<js>"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d"</js>,
-					method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
-			res.setOutput(output);
+			<jc>// Send back a simple Map response</jc>
+			<jk>return new</jk> AMap&lt;String,Object&gt;()
+				.append(<js>"method"</js>, method)
+				.append(<js>"path-p1"</js>, p1)
+				.append(<js>"path-p2"</js>, p2)
+				.append(<js>"path-p3"</js>, p3)
+				.append(<js>"remainder"</js>, remainder)
+				.append(<js>"query-q1"</js>, q1)
+				.append(<js>"query-q2"</js>, q2)
+				.append(<js>"query-q3"</js>, q3)
+				.append(<js>"header-lang"</js>, lang)
+				.append(<js>"header-accept"</js>, accept)
+				.append(<js>"header-doNotTrack"</js>, doNotTrack);
 		}
 	}
 		</p>
@@ -13474,19 +13425,22 @@
 		</ul>
 		<p>
 			There's a lot going on in this method.  
-			Notice how you're able to access URL attributes, parameters, headers, and content as parsed POJOs.  
-			All the input parsing is already done by the toolkit.  
-			You simply work with the resulting POJOs.
+			<br>Notice how you're able to access URL attributes, parameters, headers, and content as parsed POJOs.  
+			<br>All the input parsing is already done by the toolkit.  
+			<br>You simply work with the resulting POJOs.
 		</p>
 		<p>
 			As you might notice, using annotations typically results in fewer lines of code and are therefore usually 
 			preferred over the API approach, but both are equally valid.
 		</p>	
 		<p>
-			When you visit this page through the router page, you can see the following (after the automatic 
-			redirection occurs):
+			When you visit this page through the router page, you can see the top level page:
 		</p>
-		<img class='bordered' src="doc-files/Samples.MethodExampleResource.1.png">
+		<img class='bordered' src="doc-files/Samples.MethodExampleResource.1.png" style='width:800px;'>
+		<p>
+			Clicking the first link on the page results in this page:
+		</p>
+		<img class='bordered' src="doc-files/Samples.MethodExampleResource.2.png" style='width:800px;'>
 		<p>
 			Notice how the conversion to POJOs is automatically done for us, even for non-standard POJOs such as UUID.
 		</p>
@@ -13498,14 +13452,14 @@
 		</p>
 		<p>
 			Much of the information populated on the OPTIONS page is determined through reflection.
-			This basic information can be augmented with information defined through:
+			<br>This basic information can be augmented with information defined through:
 		</p>
 		<ul class='spaced-list'>
 			<li>
 				Annotations - An example of this was shown in the <code>SystemPropertiesResource</code> example above.
 				<br>Localized strings can be pulled from resource bundles using the <code>$L</code> localization variable.
 			<li>
-				Resource bundle properties - Described in detail in this section.
+				Resource bundle properties - See <code>MethodExampleResource.properties</code> in the source.
 			<li>
 				Swagger JSON files with the same name and location as the resource class (e.g. 
 				<code>MethodExampleResource.json</code>).
@@ -13514,7 +13468,7 @@
 		</ul>
 		<p>
 			OPTIONS pages are simply serialized {@link org.apache.juneau.dto.swagger.Swagger} DTO beans.
-			Localized versions of these beans are retrieved using the 
+			<br>Localized versions of these beans are retrieved using the 
 			{@link org.apache.juneau.rest.RestRequest#getSwagger()} method.
 		</p>
 		<p>
@@ -13532,8 +13486,8 @@
 		</p>
 		<p>
 			The <l>OPTIONS</l> link that you see on the HTML version of the page is created 
-				through a property defined by the {@link org.apache.juneau.html.HtmlDocSerializer} class
-				and specified on the resource class annotation:
+			through a property defined by the {@link org.apache.juneau.html.HtmlDocSerializer} class
+			and specified on the resource class annotation:
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -13546,48 +13500,13 @@
 		</p>
 		<p>
 			This simply creates a link that's the same URL as the resource URL appended with <l>"?method=OPTIONS"</l>, 
-				which is a shorthand way that the framework provides of defining overloaded GET requests.
-			Links using relative or absolute URLs can be defined this way.
-		</p>
-		<p>
-			Metadata about the servlet class is combined with localized strings from a properties file associated 
-				through a <code><ja>@RestResource</ja>(messages=<js>"nls/MethodExampleResources"</js>)</code> annotation.  
-			The properties file contains localized descriptions for the resource, resource methods, and method
-				parameters.
-		</p> 	
-			
-		<h5 class='figure'>MethodExampleResource.properties</h5>
-		<p class='bcode'>
-	<cc>#--------------------------------------------------------------------------------
-	# MethodExampleResource labels
-	#--------------------------------------------------------------------------------</cc>
-	<ck>title = <cv>A simple REST method example resource</cv>
-	
-	<ck>doGetExample.summary</ck> = <cv>Sample GET method</cv>
-	<ck>doGetExample1.summary</ck> = <cv>Sample GET using annotations</cv>
-	<ck>doGetExample1.req.path.a1.description</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample1.req.path.a2.description</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample1.req.path.a3.description</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample1.req.query.p1.description</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample1.req.query.p2.description</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample1.req.query.p3.description</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample1.req.header.Accept-Language.description</ck> = <cv>Sample header</cv>
-	<ck>doGetExample1.req.header.DNT.description</ck> = <cv>Sample header</cv>
-	<ck>doGetExample2.summary</ck> = <cv>Sample GET using Java APIs</cv>
-	<ck>doGetExample2.req.path.a1.description</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample2.req.path.a2.description</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample2.req.path.a3.description</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample2.req.query.p1.description</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample2.req.query.p2.description</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample2.req.query.p3.description</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample2.req.header.Accept-Language.description</ck> = <cv>Sample header</cv>
-	<ck>doGetExample2.req.header.DNT.description</ck> = <cv>Sample header</cv>
-	<ck>getOptions.summary</ck> = <cv>View these options</cv>
+			which is a shorthand way that the framework provides of defining overloaded GET requests.
+			<br>Links using relative or absolute URLs can be defined this way.
 		</p>
 		<p>
 			Clicking the <l>options</l> link on the page presents you with information about how to use this resource:
 		</p>
-		<img class='bordered' src="doc-files/Samples.MethodExampleResource.2.png">
+		<img class='bordered' src="doc-files/Samples.MethodExampleResource.3.png" style='width:800px;'>
 		<p>
 			This page (like any other) can also be rendered in JSON or XML by using the <l>&amp;Accept</l> URL parameter.
 		</p>
@@ -13619,87 +13538,87 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/urlEncodedForm"</js>, 
 		messages=<js>"nls/UrlEncodedFormResource"</js>
+		title=<js>"URL-Encoded form example"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={ 
+				StyleMenuItem.<jk>class</jk> 
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows how to process a FORM POST body into a bean using the &lt;code&gt;@Body&lt;/code&gt; annotation.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Submitting the form post will simply echo the bean back on the response.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			}
+		)
 	) 
 	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> BasicRestServlet { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
-		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
-			<jk>return</jk> req.getClasspathReaderResource(<js>"UrlEncodedForm.html"</js>, <jk>true</jk>); 
-		} 
-		
-		<jd>/** POST request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception { 
-			<jc>// Just mirror back the request</jc> 
-			<jk>return</jk> input; 
-		} 
-		
-		<jk>public static class</jk> FormInputBean { 
-			<jk>public</jk> String aString; 
-			<jk>public int</jk> aNumber; 
-			<ja>@BeanProperty</ja>(pojoSwaps=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
-			<jk>public</jk> Calendar aDate; 
-		} 
-	}		
+		<jd>/** GET request handler */</jd>
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, 
+			path=<js>"/"</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				script={
+					<js>"// Load results from IFrame into this document."</js>,
+					<js>"function loadResults(buff) {"</js>,
+					<js>"	var doc = buff.contentDocument || buff.contentWindow.document;"</js>,
+					<js>"	var buffBody = doc.getElementById('data');"</js>,
+					<js>"	document.getElementById('results').innerHTML = buffBody.innerHTML;"</js>,
+					<js>"}"</js>
+				}
+			)
+		)
+		<jk>public</jk> Div doGet(RestRequest req) {
+			<jk>return</jk> <jsm>div</jsm>(
+				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<jsf>POST</jsf>).target(<js>"buff"</js>).children(
+					<jsm>table</jsm>(
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(req.getMessage(<js>"aString"</js>)),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aString"</js>).type(<js>"text"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(req.getMessage(<js>"aNumber"</js>)),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aNumber"</js>).type(<js>"number"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(req.getMessage(<js>"aDate"</js>)),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aDate"</js>).type(<js>"datetime"</js>), <js>" (ISO8601, e.g. "</js>, <jsm>code</jsm>(<js>"2001-07-04T15:30:45Z"</js>), <js>" )"</js>)
+						),
+						<jsm>tr</jsm>(
+							<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
+								<jsm>button</jsm>(<js>"submit"</js>, req.getMessage(<js>"submit"</js>))
+							)
+						)
+					)
+				),
+				<jsm>br</jsm>(),
+				<jsm>div</jsm>().id(<js>"results"</js>),
+				<jsm>iframe</jsm>().name(<js>"buff"</js>).style(<js>"display:none"</js>).onload(<js>"parent.loadResults(this)"</js>)
+			);
+		}
+	
+		<jd>/** POST request handler */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path="/")
+		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception {
+			<jc>// Just mirror back the request</jc>
+			<jk>return</jk> input;
+		}
+	
+		<jk>public static class</jk> FormInputBean {
+			<jk>public</jk> String <jf>aString</jf>;
+			<jk>public int</jk> <jf>aNumber</jf>;
+			<ja>@Swap</ja>(CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
+			<jk>public</jk> Calendar <jf>aDate</jf>;
+		}
+	}
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean)} method pulls in the following
-				file located in the same package as the class:
-		</p>
-		
-		<h5 class='figure'>UrlEncodedForm.html</h5>
-		<b>TODO - Needs update</b>
-		<p class='bcode'>
-	<xt>&lt;html&gt;</xt> 
-	<xt>&lt;head&gt;</xt> 
-		<xt>&lt;meta</xt> <xa>http-equiv</xa>=<xs>"Content-Type"</xs> <xa>content</xa>=<xs>"text/html;charset=UTF-8"</xs><xt>&gt;</xt> 
-		<xt>&lt;style</xt> <xa>type</xa>=<xs>'text/css'</xs><xt>&gt;</xt> 
-			<xt>@import</xt> <xs>'$R{servletURI}/style.css'</xs>; 
-		<xt>&lt;/style&gt;</xt> 
-		<xt>&lt;script</xt> <xa>type</xa>=<xs>"text/javascript"</xs><xt>&gt;</xt> 
-			<jc>// Load results from IFrame into this document.</jc> 
-			<jk>function</jk> loadResults(buff) { 
-				<jk>var</jk> doc = buff.contentDocument || buff.contentWindow.document; 
-				<jk>var</jk> buffBody = doc.getElementById(<js>'data'</js>); 
-				document.getElementById(<js>'results'</js>).innerHTML = buffBody.innerHTML; 
-			} 
-		<xt>&lt;/script&gt;</xt> 
-	<xt>&lt;/head&gt;</xt> 
-	<xt>&lt;body&gt;</xt> 
-		<xt>&lt;h1&gt;</xt>$R{resourceTitle}<xt>&lt;/h1&gt;</xt> 
-		<xt>&lt;h2&gt;</xt>$R{resourceDescription}<xt>&lt;/h2&gt;</xt> 
-		<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt> 
-			<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>target</xa>=<xs>'buff'</xs><xt>&gt;</xt> 
-				<xt>&lt;table&gt;</xt> 
-					<xt>&lt;tr&gt;</xt> 
-						<xt>&lt;th&gt;</xt>$L{aString}<xt>&lt;/th&gt;</xt> 
-						<xt>&lt;td&gt;</xt><xt>&lt;input</xt> <xa>name</xa>=<xs>"aString"</xs> <xa>type</xa>=<xs>"text"</xs><xt>&gt;</xt><xt>&lt;/td&gt;</xt> 
-					<xt>&lt;/tr&gt;</xt> 
-					<xt>&lt;tr&gt;</xt> 
-						<xt>&lt;th&gt;</xt>$L{aNumber}<xt>&lt;/th&gt;</xt> 
-						<xt>&lt;td&gt;</xt><xt>&lt;input</xt> <xa>name</xa>=<xs>"aNumber"</xs> <xa>type</xa>=<xs>"number"</xs><xt>&gt;</xt><xt>&lt;/td&gt;</xt> 
-					<xt>&lt;/tr&gt;</xt> 
-					<xt>&lt;tr&gt;</xt> 
-						<xt>&lt;th&gt;</xt>$L{aDate}<xt>&lt;/th&gt;</xt> 
-						<xt>&lt;td&gt;</xt><xt>&lt;input</xt> <xa>name</xa>=<xs>"aDate"</xs> <xa>type</xa>=<xs>"datetime"</xs><xt>&gt;</xt> (ISO8601, e.g. "<xt>&lt;code&gt;</xt>2001-07-04T15:30:45Z<xt>&lt;/code&gt;</xt>")<xt>&lt;/td&gt;</xt> 
-					<xt>&lt;/tr&gt;</xt> 
-						<xt>&lt;tr&gt;</xt> 
-						<xt>&lt;td</xt> <xa>colspan</xa>=<xs>'2'</xs> <xa>align</xa>=<xs>'right'</xs><xt>&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>"submit"</xs><xt>&gt;</xt>$L{submit}<xt>&lt;/button&gt;</xt><xt>&lt;/td&gt;</xt> 
-					<xt>&lt;/tr&gt;</xt> 
-				<xt>&lt;/table&gt;</xt> 
-			<xt>&lt;/form&gt;</xt> 
-			<xt>&lt;br&gt;</xt> 
-			<xt>&lt;div</xt> <xa>id</xa>=<xs>'results'</xs><xt>&gt;</xt> 
-			<xt>&lt;/div&gt;</xt> 
-		<xt>&lt;/div&gt;</xt> 
-		<xt>&lt;iframe</xt> <xa>name</xa>=<xs>'buff'</xs> <xa>style</xa>=<xs>'display:none'</xs> <xa>onload</xa>=<xs>"parent.loadResults(this)"</xs><xt>&gt;</xt><xt>&lt;/iframe&gt;</xt> 
-	<xt>&lt;/body&gt;</xt> 
-	<xt>&lt;/html&gt;</xt> 		
-		</p>
-		<p>
-			The <l>$L</l> variables are string variable that pull in localized values from the resource bundle:
+			The localized messages are pulled from the resource bundle:
 		</p>
 		
 		<h5 class='figure'>UrlEncodedFormResource.properties</h5>
@@ -13707,8 +13626,6 @@
 	<cc>#--------------------------------------------------------------------------------
 	# UrlEncodedFormResource labels
 	#--------------------------------------------------------------------------------</cc>
-	<ck>title</ck> = <cv>URL-Encoded Form Post Example</cv>
-	<ck>description</ck> = <cv>Shows how URL-Encoded form input can be loaded into POJOs.  POJO is simply echoed back.</cv>
 	<ck>aString</ck> = <cv>A String:</cv>
 	<ck>aNumber</ck> = <cv>A Number:</cv>
 	<ck>aDate</ck> = <cv>A Date:</cv>
@@ -13716,68 +13633,20 @@
 		</p>
 		<p>
 			The <l>$R</l> variables are request string variables.  
-			In this case, <l>$R{resourceTitle}</l> and <l>$R{resourceDescription}</l> resolve to the values returned by 
+			<br>In this case, <l>$R{resourceTitle}</l> and <l>$R{resourceDescription}</l> resolve to the values returned by 
 			{@link org.apache.juneau.rest.RestRequest#getResourceTitle()} and 
 			{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}.
 		</p>
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/Samples.UrlEncodedFormResource.1.png'>
+		<img class='bordered' src='doc-files/Samples.UrlEncodedFormResource.1.png' style='width:800px;'>
 		<p>
 			Entering some values and clicking <l>submit</l> causes the form bean to be populated
-				and returned back as a POJO response:
+			and returned back as a POJO response:
 		</p>
-		<img class='bordered' src='doc-files/Samples.UrlEncodedFormResource.2.png'>
-		<p>
-			Another option is to construct the HTML form in Java using <a class='doclink' 
-			href='org/apache/juneau/dto/html5/package-summary.html#TOC'>HTML5 beans</a>.
-			This is arguably a better approach since it's typically cleaner with less code, and the headers/links
-			are already part of the page.
-		</p>
-		<p class='bcode'>
-	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		<img class='bordered' src='doc-files/Samples.UrlEncodedFormResource.2.png' style='width:800px;'>
 
-	<jd>/** GET request handler */</jd>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
-	<jk>public</jk> Div doGet(RestRequest req) {
-		<jk>return</jk> div(
-			script(<js>"text/javascript"</js>,
-				<js>"\n	// Load results from IFrame into this document."</js>
-				+<js>"\n	function loadResults(buff) {"</js>
-				+<js>"\n		var doc = buff.contentDocument || buff.contentWindow.document;"</js>
-				+<js>"\n		var buffBody = doc.getElementById('data');"</js>
-				+<js>"\n		document.getElementById('results').innerHTML = buffBody.innerHTML;"</js>
-				+<js>"\n	}"</js>
-			),
-			<jsf>form</jsf>().id(<js>"form"</js>).action(req.getServletURI()).method(<jsf>POST</jsf>).target(<js>"buff"</js>).children(
-				<jsf>table</jsf>(
-					<jsf>tr</jsf>(
-						<jsf>th</jsf>(req.getMessage(<js>"aString"</js>)),
-						<jsf>td</jsf>(<jsf>input</jsf>().name(<js>"aString"</js>).type(<js>"text"</js>))
-					),
-					<jsf>tr</jsf>(
-						<jsf>th</jsf>(req.getMessage(<js>"aNumber"</js>)),
-						<jsf>td</jsf>(<jsf>input</jsf>().name(<js>"aNumber"</js>).type(<js>"number"</js>))
-					),
-					<jsf>tr</jsf>(
-						<jsf>th</jsf>(req.getMessage(<js>"aDate"</js>)),
-						<jsf>td</jsf>(<jsf>input</jsf>().name(<js>"aDate"</js>).type(<js>"datetime"</js>), <js>" (ISO8601, e.g. "</js>, code(<js>"2001-07-04T15:30:45Z"</js>), <js>\" )"</js>)
-					),
-					<jsf>tr</jsf>(
-						<jsf>td</jsf>().colspan(2).style(<js>"text-align:right"</js>).children(
-							<jsf>button</jsf>(<js>"submit"</js>, req.getMessage(<js>"submit"</js>))
-						)
-					)
-				)
-			),
-			<jsf>br</jsf>(),
-			<jsf>div</jsf>().id(<js>"results"</js>),
-			<jsf>iframe</jsf>().name(<js>"buff"</js>).style(<js>"display:none"</js>).onload(<js>"parent.loadResults(this)"</js>)
-		);
-	}
-		</p>
-		
 		<h5 class='toc'>Additional Information</h5>
 		<ul class='toc'>
 			<li class='jm'>
@@ -16490,6 +16359,8 @@
 				Fixed bug in <code>UriResolver</code> when request path info had special characters.
 			<li>
 				{@link org.apache.juneau.rest.remoteable.RemoteableServlet} now provides a form page for invoking remoteable methods in a browser.
+			<li>
+				Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
 		</ul>
 	</div>
 	

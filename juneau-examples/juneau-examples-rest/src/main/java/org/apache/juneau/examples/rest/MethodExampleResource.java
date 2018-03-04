@@ -52,9 +52,18 @@ public class MethodExampleResource extends BasicRestServlet {
 	@RestMethod(name=GET, path="/")
 	public ResourceDescription[] doExample() throws Exception {
 		return new ResourceDescription[] {
-			new ResourceDescription("example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", "Example 1 - Annotated method attributes."),
-			new ResourceDescription("example2/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", "Example 2 - Low-level RestRequest/RestResponse objects."),
-			new ResourceDescription("example3/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", "Example 3 - Intermediate-level APIs.")
+			new ResourceDescription(
+				"example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
+				"Example 1 - Annotated method attributes."
+			),
+			new ResourceDescription(
+				"example2/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
+				"Example 2 - Low-level RestRequest/RestResponse objects."
+			),
+			new ResourceDescription(
+				"example3/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
+				"Example 3 - Intermediate-level APIs."
+			)
 		};
 	}
 
@@ -138,7 +147,7 @@ public class MethodExampleResource extends BasicRestServlet {
 			.append("header-lang", lang)
 			.append("header-accept", accept)
 			.append("header-doNotTrack", doNotTrack);
-		res.setOutput(m);
+		res.setOutput(m);  // Use setOutput(Object) just to be different.
 	}
 
 	/**

@@ -81,14 +81,14 @@ public class UrlEncodedFormResource extends BasicRestServlet {
 					),
 					tr(
 						th(req.getMessage("aDate")),
-						td(input().name("aDate").type("datetime"), " (ISO8601, e.g. ", code("2001-07-04T15:30:45Z"), " )")
+						td(input().name("aDate").type("datetime"), br(), "ISO8601", br(), code("2001-07-04T15:30:45Z"))
 					),
 					tr(
 						td().colspan(2).style("text-align:right").children(
 							button("submit", req.getMessage("submit"))
 						)
 					)
-				)
+				).style("min-width:250px;")
 			),
 			br(),
 			div().id("results"),

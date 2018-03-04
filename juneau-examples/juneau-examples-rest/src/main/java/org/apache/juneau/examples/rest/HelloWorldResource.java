@@ -20,16 +20,11 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
  */
-@SuppressWarnings("serial")
 @RestResource(
 	title="Hello World",
 	description="An example of the simplest-possible resource",
 	path="/helloWorld",
 	htmldoc=@HtmlDoc(
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS"
-		},
 		aside={
 			"<div style='max-width:400px' class='text'>",
 			"	<p>This page shows a resource that simply response with a 'Hello world!' message</p>",
@@ -38,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
 		}
 	)
 )
-public class HelloWorldResource extends BasicRestServlet {
+public class HelloWorldResource implements BasicRestConfig {
 
 	/** GET request handler */
 	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")

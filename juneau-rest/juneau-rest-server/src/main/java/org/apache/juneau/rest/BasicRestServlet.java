@@ -13,13 +13,11 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.serializer.Serializer.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.msgpack.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.soap.*;
@@ -164,59 +162,15 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @RestResource(
-	serializers={
-		HtmlDocSerializer.class, // HTML must be listed first because Internet Explore does not include text/html in their Accept header.
-		HtmlStrippedDocSerializer.class,
-		HtmlSchemaDocSerializer.class,
-		JsonSerializer.class,
-		JsonSerializer.Simple.class,
-		JsonSchemaSerializer.class,
-		XmlDocSerializer.class,
-		XmlSchemaDocSerializer.class,
-		UonSerializer.class,
-		UrlEncodingSerializer.class,
-		MsgPackSerializer.class,
-		SoapXmlSerializer.class,
-		PlainTextSerializer.class
-	},
-	parsers={
-		JsonParser.class,
-		XmlParser.class,
-		HtmlParser.class,
-		UonParser.class,
-		UrlEncodingParser.class,
-		MsgPackParser.class,
-		PlainTextParser.class
-	},
-	properties={
-		// URI-resolution is disabled by default.  Need to enable it.
-		@Property(name=SERIALIZER_uriResolution, value="ROOT_RELATIVE")
-	},
 	allowedMethodParams="OPTIONS",
 	htmldoc=@HtmlDoc(
-		header={
-			"<h1>$R{resourceTitle}</h1>",
-			"<h2>$R{methodSummary,resourceDescription}</h2>",
-			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
-		},
 		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
-		},
-		stylesheet="$C{REST/stylesheet,servlet:/styles/devops.css}",
-		head={
-			"<link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/>"
 		}
-	),
-	
-	// Optional external configuration file.
-	config="$S{juneau.configFile}",
-
-	// These are static files that are served up by the servlet under the specified sub-paths.
-	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
-	staticFiles={"htdocs:htdocs","styles:styles"}
+	)
 )
-public abstract class BasicRestServlet extends RestServlet {
+public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig {
 	private static final long serialVersionUID = 1L;
 
 	/**

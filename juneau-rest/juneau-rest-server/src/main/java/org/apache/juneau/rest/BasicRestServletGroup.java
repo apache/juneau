@@ -33,7 +33,7 @@ import org.apache.juneau.rest.labels.*;
  * </ul>
  */
 @RestResource
-public class BasicRestServletGroup extends BasicRestServlet {
+public abstract class BasicRestServletGroup extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
