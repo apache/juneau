@@ -136,7 +136,9 @@
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.Serializers'>Serializers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.Parsers'>Parsers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.ConfigurableProperties'>Configurable Properties</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlAnnotation'>@Xml Annotation</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.BeanTypeNameAnnotation'>@Bean(typeName) Annotation</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlChildNameAnnotation'>@Xml(childName) Annotation</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlFormatAnnotation'>@Xml(format) Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.Namespaces'>Namespaces</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlSchema'>XML-Schema Support</a></p>
 		</ol>
@@ -3901,18 +3903,106 @@
 			<br>Likewise, the JSON parser creates POJOs directly from JSON without the need for intermediate DOM objects. 
 		</p>
 		
-		<h5 class='toc'>Additional Information - org.apache.juneau.json</h5>
-		<ol class='toc'>
-			<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Overview'>JSON support overview</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#OverviewExample'>Example</a></p>
-			</ol>
-			<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonSerializer'>JsonSerializer class</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonSchemaSupport'>JSON-Schema support</a></p>
-			</ol>
-			<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonParser'>JsonParser class</a></p> 
-		</ol>
+		<p>
+			The example shown here is from the Address Book resource located in the 
+			<code>org.apache.juneau.sample.war</code> application.
+			<br>The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
+			containing zero or more <code>Address</code> beans.
+		</p>
+		<p>
+			When you point a browser at <code>/sample/addressBook</code>, the POJO is rendered as HTML:
+		</p>
+		<img class='bordered' src="doc-files/Example_HTML.png">
+		<p>
+			By appending <code>?Accept=<i>mediaType</i>&amp;plainText=true</code> to the URL, you can view the data in 
+			the various supported JSON formats:
+		</p>
+		
+		<h5 class='figure'>Normal JSON</h5>
+		<img class='bordered' src="doc-files/Example_JSON.png">
+		
+		<h5 class='figure'>Simple JSON</h5>
+		<img class='bordered' src="doc-files/Example_JSONSimple.png">
+
+		<p>
+			In addition to serializing POJOs to JSON, Juneau includes support for serializing POJO metamodels to 
+			JSON Schema.
+		</p>
+		
+		<h5 class='figure'>JSON Schema</h5>
+		<img class='bordered' src="doc-files/Example_JSONSchema.png">
+		
+		<p>
+			The JSON data type produced depends on the Java object type being serialized.
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				Primitives and primitive objects are converted to JSON primitives.
+			<li>
+				Beans and Maps are converted to JSON objects.
+			<li>
+				Collections and arrays are converted to JSON arrays.
+			<li>
+				Anything else is converted to JSON strings.
+		</ul>
+			
+		<h5 class='topic'>Examples:</h5>
+		<table class='styled'>
+			<tr>
+				<th>POJO type</th>
+				<th>Example</th>
+				<th>Serialized form</th>
+			</tr>
+			<tr>
+				<td>String</td>
+				<td><code>serializer.serialize(<js>"foobar"</js>);</code></td>
+				<td><code><js>'foobar'</js></code>
+			</tr>
+			<tr>
+				<td>Number</td>
+				<td><code>serializer.serialize(123);</code></td>
+				<td><code><jk>123</jk></code>
+			</tr>
+			<tr>
+				<td>Boolean</td>
+				<td><code>serializer.serialize(<jk>true</jk>);</code></td>
+				<td><code><jk>true</jk></code>
+			</tr>
+			<tr>
+				<td>Null</td>
+				<td><code>serializer.serialize(<jk>null</jk>);</code></td>
+				<td><code><jk>null</jk></code>
+			</tr>
+			<tr>
+				<td>Beans with properties of any type on this list</td>
+				<td><code>serializer.serialize(<jk>new</jk> MyBean());</code></td>
+				<td><code>{p1:<js>'val1'</js>,p2:<jk>true</jk>}</code>
+			</tr>
+			<tr>
+				<td>Maps with values of any type on this list</td>
+				<td><code>serializer.serialize(<jk>new</jk> TreeMap());</code></td>
+				<td><code>{key1:<js>'val1'</js>,key2:<jk>true</jk>}</code>
+			</tr>
+			<tr>
+				<td>Collections and arrays of any type on this list</td>
+				<td><code>serializer.serialize(<jk>new</jk> Object[]{1,<js>"foo"</js>,<jk>true</jk>});</code></td>
+				<td><code>[1,'foo',true]</code>
+			</tr>
+		</table>
+		<p>
+			In addition, swaps can be used to convert non-serializable POJOs into serializable forms, such as converting 
+			<code>Calendar</code> object to ISO8601 strings, or <code><jk>byte</jk>[]</code> arrays to Base-64 
+			encoded strings.
+			<br>These swaps can be associated at various levels:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				On serializer and parser instances to handle all objects of the class type globally.
+			<li>
+				On classes through the <code><ja>@Bean</ja></code> annotation.
+			<li>
+				On bean properties through the <code><ja>@BeanProperty</ja></code> annotations.
+		</ul>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JsonDetails.Methodology"></a>
@@ -3986,12 +4076,191 @@
 		<a id="juneau-marshall.JsonDetails.Serializers"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.16.2 - Serializers</h4>
 		<div class='topic'>
+			<p>
+				{@link org.apache.juneau.json.JsonSerializer} is the class used to convert POJOs to JSON.
+				<br>{@link org.apache.juneau.json.JsonSchemaSerializer} is the class used to generate JSON-Schema from POJOs.
+			</p>	
+			<p>
+				The JSON serializer includes several configurable settings.
+				<br>Static reusable instances of Json serializers are provided with commonly-used settings:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					{@link org.apache.juneau.json.JsonSerializer#DEFAULT} - All default settings
+				<li>
+					{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX} - Single quotes, only quote attributes when 
+					necessary.
+				<li>
+					{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE} - Readable output.
+			</ul>
+			
+			<h5 class='topic'>Notes about examples</h5>
+			<p>
+				The examples shown in this document will use single-quote, readable settings.
+				<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
+				<br>In the real world, you'll typically want to use standard bean getters and setters.
+			</p>
+			<p>
+				To start off simple, we'll begin with the following simplified bean and build upon it.
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name) {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+		}
+	}
+			</p>
+			<p>
+				The following code shows how to convert this to simple JSON:
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output, simple mode.</jc>
+	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
+
+	<jc>// Serialize the bean to JSON.</jc>
+	String json = s.serialize(p);
+			</p>
+			<p>
+				We could have also created a new serializer with the same settings using the following code:
+			</p>
+			<p class='bcode'>
+	JsonSerializer s = JsonSerializer.<jsm>create</jsm>().simple().ws().sq().build();
+			</p>
+			
+			<p>
+				The code above produces the following output:
+			</p>
+			<p class='bcode'>
+	{
+		id: <jk>1</jk>, 
+		name: <js>'John Smith'</js>
+	}
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JsonDetails.Parsers"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.16.3 - Parsers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.json.JsonParser} class is the class used to parse JSON back into POJOs.
+			</p>	
+			<p>
+				The JSON parser supports ALL valid JSON, including:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					Javascript comments.
+				<li>
+					Single or double quoted values.
+				<li>
+					Quoted (strict) or unquoted (non-strict) attributes.
+				<li>
+					JSON fragments (such as string, numeric, or boolean primitive values).
+				<li>
+					Concatenated strings. 
+			</ul>	
+			<p>
+				A static reusable instance of <code>JsonParser</code> is also provided for convenience:
+			</p>
+			<ul>
+				<li>{@link org.apache.juneau.json.JsonParser#DEFAULT}
+			</ul>
+			<p>
+				Let's build upon the previous example and parse the generated JSON back into the original bean.
+				<br>We start with the JSON that was generated.
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output, simple mode.</jc>
+	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+	Address a = <jk>new</jk> Address();
+	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+	a.<jf>id</jf> = 1;
+	a.<jf>street</jf> = <js>"100 Main Street"</js>;
+	a.<jf>city</jf> = <js>"Anywhereville"</js>;
+	a.<jf>state</jf> = <js>"NY"</js>;
+	a.<jf>zip</jf> = 12345;
+	a.<jf>isCurrent</jf> = <jk>true</jk>;
+	p.<jf>addresses</jf>.add(a);	
+
+	<jc>// Serialize the bean to JSON.</jc>
+	String json = s.serialize(p);
+			</p>
+			<p>
+				This code produced the following:
+			</p>
+			<p class='bcode'>
+	{
+		id: <jk>1</jk>, 
+		name: <js>'John Smith'</js>, 
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: <jk>1</jk>, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: <jk>12345</jk>, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}
+			</p>
+			<p>
+				The code to convert this back into a bean is:
+			</p>
+			<p class='bcode'>
+			<jc>// Parse it back into a bean using the reusable JSON parser.</jc>
+			Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json, Person.<jk>class</jk>);
+		
+			<jc>// Render it back as JSON.</jc>
+			json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
+			</p>
+			<p>
+				We print it back out to JSON to show that all the data has been preserved:
+			</p>
+			<p class='bcode'>
+	{
+		id: <jk>1</jk>, 
+		name: <js>'John Smith'</js>, 
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: <jk>1</jk>, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: <jk>12345</jk>, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}	
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
@@ -4010,6 +4279,150 @@
 		<a id="juneau-marshall.JsonDetails.JsonSchema"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.16.6 - JSON-Schema Support</h4>
 		<div class='topic'>
+			<p>
+				Juneau provides the {@link org.apache.juneau.json.JsonSchemaSerializer} class for generating JSON-Schema 
+				documents that describe the output generated by the {@link org.apache.juneau.json.JsonSerializer} class.
+				<br>This class shares the same properties as <code>JsonSerializer</code>.
+				<br>For convenience the {@link org.apache.juneau.json.JsonSerializer#getSchemaSerializer()} method has been 
+				added for creating instances of schema serializers from the regular serializer instance.
+			</p>
+			<p>
+				<i>Note:</i> As of this writing, JSON-Schema has not been standardized, so the output generated by the 
+				schema serializer may be subject to future modifications.
+			</p>
+			<p>
+				Lets start with the classes from the previous examples:
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+		<jk>public</jk> URI <jf>uri</jf>;
+		<jk>public</jk> URI <jf>addressBookUri</jf>;
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri, String birthDate) <jk>throws</jk> Exception {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+			<jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(uri);
+			<jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(addressBookUri);
+			<jk>this</jk>.<jf>birthDate</jf> = <jk>new</jk> GregorianCalendar();
+			<jk>this</jk>.<jf>birthDate</jf>.setTime(DateFormat.getDateInstance(DateFormat.<jsf>MEDIUM</jsf>).parse(birthDate));
+		}
+	}
+
+	<jk>public class</jk> Address {
+		<jc>// Bean properties</jc>
+		<jk>public</jk> URI <jf>uri</jf>;
+		<jk>public</jk> URI <jf>personUri</jf>;
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
+		<jk>public int</jk> <jf>zip</jf>;
+		<jk>public boolean</jk> <jf>isCurrent</jf>;
+	}
+			</p>
+			<p>
+				The code for creating our POJO model and generating JSON-Schema is shown below:
+			</p>
+			<p class='bcode'>
+	<jc>// Get the schema serializer for one of the default JSON serializers.</jc>
+	JsonSchemaSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.getSchemaSerializer();
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+	Address a = <jk>new</jk> Address();
+	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+	a.<jf>id</jf> = 1;
+	a.<jf>street</jf> = <js>"100 Main Street"</js>;
+	a.<jf>city</jf> = <js>"Anywhereville"</js>;
+	a.<jf>state</jf> = <js>"NY"</js>;
+	a.<jf>zip</jf> = 12345;
+	a.<jf>isCurrent</jf> = <jk>true</jk>;
+	p.<jf>addresses</jf>.add(a);
+
+	<jc>// Get the JSON Schema corresponding to the JSON generated above.</jc>
+	String jsonSchema = s.serialize(p);
+			</p>
+			
+			<h5 class='figure'>Results</h5>
+			<p class='bcode'>
+	{
+		type: <js>'object'</js>, 
+		description: <js>'org.apache.juneau.sample.Person'</js>, 
+		properties: {
+			id: {
+				type: <js>'number'</js>, 
+				description: <js>'int'</js>
+			}, 
+			name: {
+				type: <js>'string'</js>, 
+				description: <js>'java.lang.String'</js>
+			}, 
+			uri: {
+				type: <js>'any'</js>, 
+				description: <js>'java.net.URI'</js>
+			}, 
+			addressBookUri: {
+				type: <js>'any'</js>, 
+				description: <js>'java.net.URI'</js>
+			}, 
+			birthDate: {
+				type: <js>'any'</js>, 
+				description: <js>'java.util.Calendar'</js>
+			}, 
+			addresses: {
+				type: <js>'array'</js>, 
+				description: <js>'java.util.LinkedList&lt;org.apache.juneau.sample.Address&gt;'</js>, 
+				items: {
+					type: <js>'object'</js>, 
+					description: <js>'org.apache.juneau.sample.Address'</js>, 
+					properties: {
+						uri: {
+							type: <js>'any'</js>, 
+							description: <js>'java.net.URI'</js>
+						}, 
+						personUri: {
+							type: <js>'any'</js>, 
+							description: <js>'java.net.URI'</js>
+						}, 
+						id: {
+							type: <js>'number'</js>, 
+							description: <js>'int'</js>
+						}, 
+						street: {
+							type: <js>'string'</js>, 
+							description: <js>'java.lang.String'</js>
+						}, 
+						city: {
+							type: <js>'string'</js>, 
+							description: <js>'java.lang.String'</js>
+						}, 
+						state: {
+							type: <js>'string'</js>, 
+							description: <js>'java.lang.String'</js>
+						}, 
+						zip: {
+							type: <js>'number'</js>, 
+							description: <js>'int'</js>
+						}, 
+						isCurrent: {
+							type: <js>'boolean'</js>, 
+							description: <js>'boolean'</js>
+						}
+					}
+				}
+			}
+		}
+	}
+			</p>
 		</div>		
 	</div>
 
@@ -4028,34 +4441,560 @@
 			<br>However, several XML annotations are provided for handling namespaces and fine-tuning the format of the XML produced.
 		</p>
 
-		<h5 class='toc'>Additional Information - org.apache.juneau.xml</h5>
-		<ol class='toc'>
-			<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Overview'>XML support overview</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#OverviewExample'>XML support overview - example</a></p>
-			</ol>
-			<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlSerializer'>XmlSerializer class</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Methodology'>XML support methodology</a></p>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlAnnotation'>@Xml annotations</a></p>
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlName'>@Bean.typeName()</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlChildName'>@Xml.childName()</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlFormat'>@Xml.format()</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Namespaces'>Namespaces</a></p>
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#AutoDetectNamespaces'>Auto-detection of namespaces</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlSchemaSupport'>XML-Schema support</a></p>
-			</ol>
-			<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlParser'>XmlParser class</a></p> 
-		</ol>
+		<p>
+			The example shown here is from the Address Book resource located in the <code>juneau-examples-rest</code> 
+			microservice project.
+			<br>The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
+			containing zero or more <code>Address</code> beans.
+		</p>
+		<p>
+			When you point a browser at <code>/sample/addressBook</code>, the POJO is rendered as HTML:
+		</p>
+		<img class='bordered' src="doc-files/Example_HTML.png">
+		<p>
+			By appending <code>?Accept=<i>mediaType</i>&amp;plainText=true</code> to the URL, you can view the data 
+			in the various supported XML formats:
+		</p>
+		
+		<h5 class='figure'>Normal XML</h5>
+		<img class='bordered' src="doc-files/Example_XML.png">
+		
+		<h5 class='figure'>Simplified XML</h5>
+		<img class='bordered' src="doc-files/Example_XMLSimple.png">
+
+		<p>
+			In addition to serializing POJOs to XML, Juneau includes support for serializing the POJO metamodel to 
+			XML Schema, with support for multiple namespaces.
+		</p>
+		
+		<h5 class='figure'>XML Schema</h5>
+		<img class='bordered' src="doc-files/Example_XMLSchema.png">
+
+		<p>
+			{@link org.apache.juneau.xml.XmlSerializer} is the class used to convert POJOs to XML.
+			<br>{@link org.apache.juneau.xml.XmlDocSerializer} is a subclass that adds an XML declaration element to the output 
+			before the POJO is serialized.
+		</p>	
+		<p>
+			The XML serializer includes many configurable settings.
+			<br>Static reusable instances of XML serializers are provided with commonly-used settings:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				{@link org.apache.juneau.xml.XmlSerializer#DEFAULT} 
+				- All default settings.
+			<li>
+				{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ} 
+				- Use single quotes on attributes.  Typically useful for testing since it makes string comparison simpler.
+			<li>
+				{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ_READABLE} 
+				- Use single quotes on attributes and add whitespace for readability.
+			<li>
+				{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS} 
+				- Same as DEFAULT but with namespaces enabled.
+			<li>
+				{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ} 
+				- Same as DEFAULT_SQ but with namespaces enabled.
+			<li>
+				{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ_READABLE} 
+				- Same as DEFAULT_SQ_READABLE but with namespaces enabled.
+		</ul>
+		<p>
+			In addition, DTO beans are provided that use the XML serializer and parser for the following languages:
+		</p>
+		<ul>
+			<li class='jp'><a class='doclink' href='../dto/atom/package-summary.html#TOC'>org.apache.juneau.dto.atom</a> - ATOM beans.
+			<li class='jp'><a class='doclink' href='../dto/cognos/package-summary.html#TOC'>org.apache.juneau.dto.cognos</a> - Cognos beans.
+			<li class='jp'><a class='doclink' href='../dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.html5</a> - HTML5 beans.
+		</ul>
+		<p>
+			Refer to the package-level Javadocs for more information about those formats.
+		</p>
+		
+		<h5 class='topic'>Notes about examples</h5>
+		<p>
+			The examples shown in this document will use single-quote, readable settings.
+			<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
+			<br>In the real world, you'll typically want to use standard bean getters and setters.
+		</p>
+		<p>
+			To start off simple, we'll begin with the following simplified bean and build upon it.
+		</p>
+		<p class='bcode'>
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name) {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+		}
+	}
+		</p>
+		<p>
+			The following code shows how to convert this to simple XML (no namespaces):
+		</p>
+		<p class='bcode'>
+		<jc>// Create a new serializer with readable output, no namespaces yet.</jc>
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
+		.ws()  <jc>// or .useWhitespace(true)</jc>  
+		.sq()  <jc>// or .quoteChar('\'')</jc>
+		.ns()  <jc>// or .enableNamespaces(false)</jc>
+		.build();
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
+
+	<jc>// Serialize the bean to XML.</jc>
+	String xml = s.serialize(p);
+		</p>
+		<p>
+			<i>Side note:</i>  Serializers can also be created by cloning existing serializers:
+		</p>
+		<p class='bcode'>
+	<jc>// Create a new serializer with readable output, no namespaces yet, but use cloning method.</jc>
+	XmlSerializer s = XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>
+		.builder()
+		.ns()
+		.build();
+		</p>
+		<p>
+			The code above produces the following output:
+		</p>
+		<p class='bcode'><xt>
+	&lt;object&gt;
+		&lt;id&gt;<xv>1</xv>&lt;/id&gt;
+		&lt;name&gt;<xv>John Smith</xv>&lt;/name&gt;
+	&lt;/object&gt;
+	</xt></p>
+		<p>
+			The first thing you may notice is how the bean instance is represented by the element <xt>&lt;object&gt;</xt>.
+			<br>When objects have no name associated with them, Juneau provides a default generalized name that maps to the 
+			equivalent JSON data type.
+			<br>Some cases when objects do not have names:
+		</p>
+		<ul>
+			<li>Root element
+			<li>Object in an array, collection, or map.
+		</ul>
+		<p>
+			The generalized name reflects the JSON-equivalent data type.
+			<br>Juneau produces JSON-equivalent XML, meaning any valid JSON document can be losslessly converted into an XML 
+			equivalent.
+			<br>In fact, all of the Juneau serializers and parsers are built upon this JSON-equivalence.
+		</p>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.Methodology"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.17.1 - XML Methodology</h4>
 		<div class='topic'>
+
+			<p>
+				The following examples show how different data types are represented in XML.
+				They mirror how the data structures are represented in JSON.
+			</p>
+			
+			<h5 class='topic'>Simple types</h5>
+			<p>
+				The representation of loose (not a direct bean property value) simple types are shown below:
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td>string</td>
+					<td class='code'><js>'foo'</js></td>
+					<td class='code'><xt>&lt;string&gt;</xt>foo<xt>&lt;/string&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>boolean</td>
+					<td class='code'><jk>true</jk></td>
+					<td class='code'><xt>&lt;boolean&gt;</xt>true<xt>&lt;/boolean&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>integer</td>
+					<td class='code'>123</td>
+					<td class='code'><xt>&lt;number&gt;</xt>123<xt>&lt;/number&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>float</td>
+					<td class='code'>1.23</td>
+					<td class='code'><xt>&lt;number&gt;</xt>1.23<xt>&lt;/number&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>null</td>
+					<td class='code'><jk>null</jk></td>
+					<td class='code'><xt>&lt;null/&gt;</xt></td>
+				</tr>
+			</table>
+			
+			<h5 class='topic'>Maps</h5>
+			<p>
+				Loose maps and beans use the element <xt>&lt;object&gt;</xt> for encapsulation.
+			</p>
+			<p>
+				<xa>_type</xa> attributes are added to bean properties or map entries if the type cannot be inferred 
+				through reflection (e.g. an <code>Object</code> or superclass/interface value type).
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	Map&lt;String,String&gt;
+					</td>
+					<td class='code'>
+	{
+		k1: <js>'v1'</js>
+		k2: <jk>null</jk>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;k1&gt;<xv>v1</xv>&lt;/k1&gt;
+		&lt;k2 <xa>_type</xa>=<xs>'null'</xs>/&gt;
+	&lt;/object&gt;
+				</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Map&lt;String,Number&gt;
+					</td>
+					<td class='code'>
+	{
+		k1: 123,
+		k2: 1.23,
+		k3: <jk>null</jk>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;k1&gt;<xv>123</xv>&lt;/k1&gt;
+		&lt;k2&gt;<xv>1.23</xv>&lt;/k2&gt;
+		&lt;k3 <xa>_type</xa>=<xs>'null'</xs>/&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Map&lt;String,Object&gt;
+					</td>
+					<td class='code'>
+	{
+		k1: <js>'v1'</js>
+		k2: 123,
+		k3: 1.23,
+		k4: <jk>true</jk>,
+		k5: <jk>null</jk>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;k1&gt;<xv>v1</xv>&lt;/k1&gt;
+		&lt;k2 <xa>_type</xa>=<xs>'number'</xs>&gt;<xv>123</xv>&lt;/k2&gt;
+		&lt;k3 <xa>_type</xa>=<xs>'number'</xs>&gt;<xv>1.23</xv>&lt;/k3&gt;
+		&lt;k4 <xa>_type</xa>=<xs>'boolean'</xs>&gt;<xv>true</xv>&lt;/k4&gt;
+		&lt;k5 <xa>_type</xa>=<xs>'null'</xs>/&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			
+			<h5 class='topic'>Arrays</h5>
+			<p>
+				Loose collections and arrays use the element <xt>&lt;array&gt;</xt> for encapsulation.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	String[]
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+		&lt;null/&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Number[]
+					</td>
+					<td class='code'>
+	[
+		123,
+		1.23,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+		&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;
+		&lt;null/&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Object[]
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>,
+		123,
+		1.23,
+		<jk>true</jk>,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+		&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+		&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;
+		&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;
+		&lt;null/&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	String[][]
+					</td>
+					<td class='code'>
+	[
+		[<js>'foo'</js>, <jk>null</jk>],
+		<jk>null</jk>,
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;array&gt;
+			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+			&lt;null/&gt;
+		&lt;/array&gt;
+		&lt;null/&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>int</jk>[]
+					</td>
+					<td class='code'>
+	[
+		123
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>boolean</jk>[]
+					</td>
+					<td class='code'>
+	[
+		<jk>true</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	List&lt;String&gt;
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+		&lt;null/&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	List&lt;Number&gt;
+					</td>
+					<td class='code'>
+	[
+		123,
+		1.23,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+		&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;
+		&lt;null/&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	List&lt;Object&gt;
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>,
+		123,
+		1.23,
+		<jk>true</jk>,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;array&gt;
+		&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+		&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+		&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;
+		&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;
+		&lt;null/&gt;
+	&lt;/array&gt;
+					</xt></td>
+				</tr>
+			</table>
+	
+			<h5 class='topic'>Beans</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<jk>public</jk> String a;
+		<jk>public</jk> <jk>int</jk> b;
+		<jk>public</jk> Object c;  <jc>// String value</jc>
+		<jk>public</jk> Object d;  <jc>// Integer value</jc>  	
+		<jk>public</jk> MyBean2 e;  
+		<jk>public</jk> String[] f;  
+	 	<jk>public</jk> <jk>int</jk>[] g;  	
+	}
+	<jk>class</jk> MyBean2 {
+		String h;  
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>,
+		b: 123,
+		c: <js>'bar'</js>,
+		d: 456,
+		e: {
+			h: <js>'baz'</js>
+		}
+		f: [<js>'qux'</js>]
+		g: [789]
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+		&lt;b&gt;<xv>123</xv>&lt;/b&gt;
+		&lt;c&gt;<xv>bar</xv>&lt;/c&gt;
+		&lt;d <xa>_type</xa>=<xs>'number'</xs>&gt;<xv>456</xv>&lt;/d&gt;
+		&lt;e&gt;
+			&lt;h&gt;<xv>baz</xv>&lt;/h&gt;
+		&lt;/e&gt;
+		&lt;f&gt;
+			&lt;string&gt;<xv>qux</xv>&lt;/string&gt;
+		&lt;/f&gt;
+		&lt;g&gt;
+			&lt;number&gt;<xv>789</xv>&lt;/number&gt;
+		&lt;/g&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			
+			<h5 class='topic'>Beans with Map properties</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<jk>public</jk> Map&lt;String,String&gt; a;
+		<jk>public</jk> Map&lt;String,Number&gt; b;
+		<jk>public</jk> Map&lt;String,Object&gt; c; 
+	}
+					</td>
+					<td class='code'>
+	{
+		a: {
+			k1: <js>'foo'</js>
+		},
+		b: {
+			k2: 123
+		},
+		c: {
+			k3: <js>'bar'</js>,
+			k4: 456,
+			k5: <jk>true</jk>,
+			k6: <jk>null</jk>
+		}
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;k1&gt;<xv>foo</xv>&lt;/k1&gt;
+		&lt;/a&gt;
+		&lt;b&gt;
+			&lt;k2&gt;<xv>123</xv>&lt;/k2&gt;
+		&lt;/b&gt;
+		&lt;c&gt;
+			&lt;k3&gt;<xv>bar</xv>&lt;/k3&gt;
+			&lt;k4 <xa>_type</xa>=<xs>'number'</xs>&gt;<xv>456</xv>&lt;/k4&gt;
+			&lt;k5 <xa>_type</xa>=<xs>'boolean'</xs>&gt;<xv>true</xv>&lt;/k5&gt;
+			&lt;k6 <xa>_type</xa>=<xs>'null'</xs>/&gt;
+		&lt;/c&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
 		</div>
 		
 		<!-- ======================================================================================================= -->
@@ -4068,6 +5007,102 @@
 		<a id="juneau-marshall.XmlDetails.Parsers"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.17.3 - Parsers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.xml.XmlParser} class is the class used to parse Juneau-generated XML back into 
+				POJOs.
+			</p>	
+			<p>
+				A static reusable instance of <code>XmlParser</code> is also provided for convenience:
+			</p>
+			<ul>
+				<li>{@link org.apache.juneau.xml.XmlParser#DEFAULT}
+			</ul>
+			<p>
+				Let's build upon the previous example and parse the generated XML back into the original bean.
+				<br>We start with the XML that was generated.
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output.</jc>
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ws().sq().ns().build();
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+	Address a = <jk>new</jk> Address();
+	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+	a.<jf>id</jf> = 1;
+	a.<jf>street</jf> = <js>"100 Main Street"</js>;
+	a.<jf>city</jf> = <js>"Anywhereville"</js>;
+	a.<jf>state</jf> = <js>"NY"</js>;
+	a.<jf>zip</jf> = 12345;
+	a.<jf>isCurrent</jf> = <jk>true</jk>;
+	p.<jf>addresses</jf>.add(a);	
+
+	<jc>// Serialize the bean to XML.</jc>
+	String xml = s.serialize(p);
+			</p>
+			<p>
+				This code produced the following:
+			</p>
+			<p class='bcode'>
+	<xt>&lt;per:person</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
+			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
+		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+		<xt>&lt;per:addressBookUri&gt;</xt>http://sample/addressBook<xt>&lt;/per:addressBookUri&gt;</xt>
+		<xt>&lt;per:birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
+		<xt>&lt;per:addresses&gt;</xt>
+			<xt>&lt;addr:address</xt> <xa>uri</xa>=<xs>'http://sample/addressBook/address/1'</xs><xt>&gt;</xt>
+				<xt>&lt;addr:personUri&gt;</xt>http://sample/addressBook/person/1<xt>&lt;/addr:personUri&gt;</xt>
+				<xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+				<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+				<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+				<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+				<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+				<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+			<xt>&lt;/addr:address&gt;</xt>
+		<xt>&lt;/per:addresses&gt;</xt>
+	<xt>&lt;/per:person&gt;</xt>
+	</p>
+			<p>
+				The code to convert this back into a bean is:
+			</p>
+			<p class='bcode'>
+	<jc>// Parse it back into a bean using the reusable XML parser.</jc>
+	Person p = XmlParser.<jsf>DEFAULT</jsf>.parse(xml, Person.<jk>class</jk>);
+
+	<jc>// Render it as JSON.</jc>
+	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
+			</p>
+			<p>
+				We print it out to JSON to show that all the data has been preserved:
+			</p>
+			<p class='bcode'>
+	{
+		id: 1, 
+		name: <js>'John Smith'</js>, 
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: 1, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: 12345, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}	
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
@@ -4077,21 +5112,1788 @@
 		</div>		
 
 		<!-- ======================================================================================================= -->
-		<a id="juneau-marshall.XmlDetails.XmlAnnotation"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.5 - @Xml Annotation</h4>
+		<a id="juneau-marshall.XmlDetails.BeanTypeNameAnnotation"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.17.5 - @Bean(typeName) Annotation</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()} annotation can be used to 
+				override the Juneau default name on bean elements. 
+				Types names serve two distinct purposes:
+			</p>
+			<ol>
+				<li>To override the element name.
+				<li>To serve as a class identifier so that the bean class can be inferred during parsing if it
+					cannot automatically be inferred through reflection.
+			</ol>
+			
+			<h5 class='figure'>Example</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)
+	<jk>class</jk> MyBean {
+		<jk>public</jk> String a;
+		<jk>public int</jk> b;
+	}	
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>,
+		b: 123
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;<xv>foo</xv>&lt;/id&gt;
+		&lt;b&gt;<xv>123</xv>&lt;/name&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;X&gt;
+		&lt;a&gt;<xv>foo</xv>&lt;/id&gt;
+		&lt;b&gt;<xv>123</xv>&lt;/name&gt;
+	&lt;/X&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				On bean properties, a <xa>_type</xa> attribute will be added if a type name is present and the bean 
+				class cannot be inferred through reflection.
+			</p>
+			<p>
+				In the following example, a type attribute is used on property 'b' but not property 'a' since
+				'b' is of type <code>Object</code> and therefore the bean class cannot be inferred.
+			</p>
+			
+			<h5 class='figure'>Example</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Java</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<jk>public</jk> BeanX a = <jk>new</jk> BeanX();
+		<jk>public</jk> Object b = <jk>new</jk> BeanX();
+	}
+	
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)
+	<jk>class</jk> BeanX {
+		<jk>public</jk> String fx = <js>"foo"</js>;
+	}
+		
+					</td>
+					<td class='code'><xt>
+&lt;object&gt;
+	&lt;a&gt;
+		&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+	&lt;/a&gt;
+	&lt;b&gt;
+		&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+	&lt;/b&gt;
+&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+&lt;object&gt;
+	&lt;a&gt;
+		&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+	&lt;/a&gt;
+	&lt;b <xa>_type</xa>=<xs>'X'</xs>&gt;
+		&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+	&lt;/b&gt;
+&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<ul class='doctree'>
+				<li class='info'>
+					<code>string</code>, <code>number</code>, <code>boolean</code>, <code>object</code>, 
+					<code>array</code>, and <code>null</code> are reserved keywords that cannot be used as type names.
+			</ul>
+			<p>
+				Beans with type names are often used in conjunction with the 
+				{@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean.beanDictionary()} and 
+				{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} 
+				annotations so that the beans can be resolved at parse time.  
+				These annotations are not necessary during serialization, but are needed during parsing in order to 
+				resolve the bean types.
+			</p>
+			<p>
+				The following examples show how type names are used under various circumstances.  
+			</p>
+			<p>
+				Pay special attention to when <xa>_type</xa> attributes are and are not used.
+			</p>
+			
+			<h5 class='figure'>Examples</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Java</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(beanDictionary={BeanX.<jk>class</jk>})
+	<jk>class</jk> BeanWithArrayPropertiesWithTypeNames {
+		<jk>public</jk> BeanX[] b1 = <jk>new</jk> BeanX[]{ 
+			<jk>new</jk> BeanX() 
+		};
+		<jk>public</jk> Object[] b2 = <jk>new</jk> BeanX[]{ 
+			<jk>new</jk> BeanX() 
+		};
+		<jk>public</jk> Object[] b3 = <jk>new</jk> Object[]{ 
+			<jk>new</jk> BeanX() 
+		};
+	}
+					</td>				
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;b1&gt;
+			&lt;X&gt;
+				&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+			&lt;/X&gt;
+		&lt;/b1&gt;
+		&lt;b2&gt;
+			&lt;X&gt;
+				&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+			&lt;/X&gt;
+		&lt;/b2&gt;
+		&lt;b3&gt;
+			&lt;X&gt;
+				&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+			&lt;/X&gt;
+		&lt;/b3&gt;
+	&lt;/object&gt;
+					</xt></td>				
+				</tr>				
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(beanDictionary={BeanX.<jk>class</jk>})
+	<jk>class</jk> BeanWith2dArrayPropertiesWithTypeNames {
+		<jk>public</jk> BeanX[][] b1 = <jk>new</jk> BeanX[][]{{
+			<jk>new</jk> BeanX()
+		}};
+		<jk>public</jk> Object[][] b2 = <jk>new</jk> BeanX[][]{{
+			<jk>new</jk> BeanX()
+		}};
+		<jk>public</jk> Object[][] b3 = <jk>new</jk> Object[][]{{
+			<jk>new</jk> BeanX()
+		}};
+	}
+					</td>				
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;b1&gt;
+			&lt;array&gt;
+				&lt;X&gt;
+					&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+				&lt;/X&gt;
+			&lt;/array&gt;
+		&lt;/b1&gt;
+		&lt;b2&gt;
+			&lt;array&gt;
+				&lt;X&gt;
+					&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+				&lt;/X&gt;
+			&lt;/array&gt;
+		&lt;/b2&gt;
+		&lt;b3&gt;
+			&lt;array&gt;
+				&lt;X&gt;
+					&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+				&lt;/X&gt;
+			&lt;/array&gt;
+		&lt;/b3&gt;
+	&lt;/object&gt;
+					</xt></td>				
+				</tr>		
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(beanDictionary={BeanX.<jk>class</jk>})
+	<jk>class</jk> BeanWithMapPropertiesWithTypeNames {
+		<jk>public</jk> Map&lt;String,BeanX&gt; b1 = <jk>new</jk> HashMap&lt;&gt;() {{ 
+			put(<js>"k1"</js>, <jk>new</jk> BeanX()); 
+		}};
+		<jk>public</jk> Map&lt;String,Object&gt; b2 = <jk>new</jk> HashMap&lt;&gt;() {{
+			put(<js>"k2"</js>, <jk>new</jk> BeanX());
+		}}
+	}
+					</td>				
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;b1&gt;
+			&lt;k1&gt;
+				&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+			&lt;/k1&gt;
+		&lt;/b1&gt;
+		&lt;b2&gt;
+			&lt;k2 <xa>_type</xa>=<xs>'X'</xs>&gt;
+				&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
+			&lt;/k2&gt;
+		&lt;/b2&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				Bean type names are also used for resolution when abstract fields are used.
+				The following examples show how they are used in a variety of circumstances.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Java</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<jk>class</jk> BeanWithAbstractFields {
+		<jk>public</jk> A a = <jk>new</jk> A();
+		<jk>public</jk> IA ia = <jk>new</jk> A();
+		<jk>public</jk> AA aa = <jk>new</jk> A();
+		<jk>public</jk> Object o = <jk>new</jk> A();
+	}
+	
+	<jk>interface</jk> IA {}
+	
+	<jk>abstract class</jk> AA <jk>implements</jk> IA {}
+
+	<ja>@Bean</ja>(typeName=<js>"A"</js>)
+	<jk>class</jk> A <jk>extends</jk> AA {
+		<jk>public</jk> String fa = <js>"foo"</js>;
+	}
+					</td>				
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+		&lt;/a&gt;
+		&lt;ia <xa>_type</xa>=<xs>'A'</xs>&gt;
+			&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+		&lt;/ia&gt;
+		&lt;aa <xa>_type</xa>=<xs>'A'</xs>&gt;
+			&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+		&lt;/aa&gt;
+		&lt;o <xa>_type</xa>=<xs>'A'</xs>&gt;
+			&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+		&lt;/o&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<jk>class</jk> BeanWithAbstractArrayFields {
+		<jk>public</jk> A[] a = <jk>new</jk> A[]{<jk>new</jk> A()};
+		<jk>public</jk> IA[] ia1 = <jk>new</jk> A[]{<jk>new</jk> A()};
+		<jk>public</jk> IA[] ia2 = <jk>new</jk> IA[]{<jk>new</jk> A()};
+		<jk>public</jk> AA[] aa1 = <jk>new</jk> A[]{<jk>new</jk> A()};
+		<jk>public</jk> AA[] aa2 = <jk>new</jk> AA[]{<jk>new</jk> A()};
+		<jk>public</jk> Object[] o1 = <jk>new</jk> A[]{<jk>new</jk> A()};
+		<jk>public</jk> Object[] o2 = <jk>new</jk> Object[]{<jk>new</jk> A()};
+	}
+					</td>				
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;A&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/A&gt;
+		&lt;/a&gt;
+		&lt;ia1&gt;
+			&lt;A&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/A&gt;
+		&lt;/ia1&gt;
+		&lt;ia2&gt;
+			&lt;A&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/A&gt;
+		&lt;/ia2&gt;
+		&lt;aa1&gt;
+			&lt;A&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/A&gt;
+		&lt;/aa1&gt;
+		&lt;aa2&gt;
+			&lt;A&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/A&gt;
+		&lt;/aa2&gt;
+		&lt;o1&gt;
+			&lt;A&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/A&gt;
+		&lt;/o1&gt;
+		&lt;o2&gt;
+			&lt;A&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/A&gt;
+		&lt;/o2&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<jk>class</jk> BeanWithAbstractMapFields {
+		<jk>public</jk> Map&lt;String,A&gt; a = <jk>new</jk> HashMap&lt;&gt;() {{
+			put(<js>"k1"</js>, <jk>new</jk> A());
+		}};
+		<jk>public</jk> Map&lt;String,AA&gt; b = <jk>new</jk> HashMap&lt;&gt;() {{
+			put(<js>"k2"</js>, <jk>new</jk> A());
+		}};
+		<jk>public</jk> Map&lt;String,Object&gt; c = <jk>new</jk> HashMap&lt;&gt;() {{
+			put(<js>"k3"</js>, <jk>new</jk> A());
+		}};
+	}
+					</td>				
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;k1&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/k1&gt;
+		&lt;/a&gt;
+		&lt;b&gt;
+			&lt;k2 <xa>_type</xa>=<xs>'A'</xs>&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/k2&gt;
+		&lt;/b&gt;
+		&lt;c&gt;
+			&lt;k3 <xa>_type</xa>=<xs>'A'</xs>&gt;
+				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+			&lt;/k3&gt;
+		&lt;/c&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<jk>class</jk> BeanWithAbstractMapArrayFields {
+		<jk>public</jk> Map&lt;String,A[]&gt; a = <jk>new</jk> LinkedHashMap&lt;&gt;() {{
+			put(<js>"a1"</js>, <jk>new</jk> A[]{<jk>new</jk> A()});
+		}};
+		<jk>public</jk> Map&lt;String,IA[]&gt; ia = <jk>new</jk> LinkedHashMap&lt;&gt;() {{
+			put(<js>"ia1"</js>, <jk>new</jk> A[]{<jk>new</jk> A()});
+			put(<js>"ia2"</js>, <jk>new</jk> IA[]{<jk>new</jk> A()});
+		}};
+		<jk>public</jk> Map&lt;String,AA[]&gt; aa = <jk>new</jk> LinkedHashMap&lt;&gt;() {{
+			put(<js>"aa1"</js>, <jk>new</jk> A[]{<jk>new</jk> A()});
+			put(<js>"aa2"</js>, <jk>new</jk> AA[]{<jk>new</jk> A()});
+		}};
+		<jk>public</jk> Map&lt;String,Object[]&gt; o = <jk>new</jk>LinkedHashMap&lt;&gt;() {{
+			put(<js>"o1"</js>, <jk>new</jk> A[]{<jk>new</jk> A()});
+			put(<js>"o2"</js>, <jk>new</jk> AA[]{<jk>new</jk> A()});
+		}};
+	}
+					</td>				
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;a1&gt;
+				&lt;A&gt;
+					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+				&lt;/A&gt;
+			&lt;/a1&gt;
+		&lt;/a&gt;
+		&lt;ia&gt;
+			&lt;ia1&gt;
+				&lt;A&gt;
+					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+				&lt;/A&gt;
+			&lt;/ia1&gt;
+			&lt;ia2&gt;
+				&lt;A&gt;
+					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+				&lt;/A&gt;
+			&lt;/ia2&gt;
+		&lt;/ia&gt;
+		&lt;aa&gt;
+			&lt;aa1&gt;
+				&lt;A&gt;
+					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+				&lt;/A&gt;
+			&lt;/aa1&gt;
+			&lt;aa2&gt;
+				&lt;A&gt;
+					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+				&lt;/A&gt;
+			&lt;/aa2&gt;
+		&lt;/aa&gt;
+		&lt;o&gt;
+			&lt;o1&gt;
+				&lt;A&gt;
+					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+				&lt;/A&gt;
+			&lt;/o1&gt;
+			&lt;o2&gt;
+				&lt;A&gt;
+					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
+				&lt;/A&gt;
+			&lt;/o2&gt;
+		&lt;/o&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				On a side note, characters that cannot be represented in XML 1.0 are encoded using a simple encoding.
+				Note in the examples below, some characters such as <js>'\n'</js>, <js>'\t</js>', and <js>'\r'</js>
+				can be represented as XML entities when used in text but not in element names.  Other characters such as
+				<js>'\b'</js> and <js>'\f'</js> cannot be encoded in XML 1.0 at all without inventing our own notation.
+				Whitespace characters in element names are encoded as well as whitespace end characters in text.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Java</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> BeanWithSpecialCharacters {
+		<jk>public</jk> String a = <js>"  \b\f\n\t\r  "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;<xv>_x0020_ _x0008__x000C_&amp;#x000a;&amp;#x0009;&amp;#x000d; _x0020_</xv>&lt;/a&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"  \b\f\n\t\r  "</js>)
+	<jk>class</jk> BeanWithNamesWithSpecialCharacters {
+		<ja>@BeanProperty</ja>(name=<js>"  \b\f\n\t\r  "</js>)
+		<jk>public</jk> String a = <js>"  \b\f\n\t\r  "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
+		&lt;_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;<xv>_x0020_ _x0008__x000C_&amp;#x000a;&amp;#x0009;&amp;#x000d; _x0020_</xv>&lt;/_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
+	&lt;/_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				While it's true that these characters CAN be represented in XML 1.1, it's impossible to parse XML 1.1 
+				text in Java without the XML containing an XML declaration.
+				Unfortunately, this, and the uselessness of the 
+				{@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting in Java
+				forced us to make some hard design decisions that may not be the most elegant.
+			</p>
+		</div>
+		
+		<!-- ======================================================================================================= -->
+		<a id="juneau-marshall.XmlDetails.XmlChildNameAnnotation"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.17.6 - @Xml(childName) Annotation</h4>
+		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml.childName()} annotation can be used to 
+				specify the name of XML child elements for bean properties of type collection or array.
+			</p>
+			
+			<h5 class='figure'>Example</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(childName=<js>"X"</js>)
+		<jk>public</jk> String[] a;
+		<ja>@Xml</ja>(childName=<js>"Y"</js>)
+		<jk>public</jk> int[] b;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: [<js>'foo'</js>,<js>'bar'</js>],
+		b: [123,456]
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+			&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+		&lt;/a&gt;
+		&lt;b&gt;
+			&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+			&lt;number&gt;<xv>456</xv>&lt;/number&gt;
+		&lt;/b&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;X&gt;<xv>foo</xv>&lt;/X&gt;
+			&lt;X&gt;<xv>bar</xv>&lt;/X&gt;
+		&lt;/a&gt;
+		&lt;b&gt;
+			&lt;Y&gt;<xv>123</xv>&lt;/Y&gt;
+			&lt;Y&gt;<xv>456</xv>&lt;/Y&gt;
+		&lt;/b&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(childName=<js>"child"</js>)
+		<jk>public</jk> int[] a;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: [123,456]
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+			&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+		&lt;/a&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;child&gt;<xv>foo</xv>&lt;/child&gt;
+			&lt;child&gt;<xv>bar</xv>&lt;/child&gt;
+		&lt;/a&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- ======================================================================================================= -->
+		<a id="juneau-marshall.XmlDetails.XmlFormatAnnotation"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.17.7 - @Xml(format) Annotation</h4>
+		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.Xml#format() @Xml.format()} annotation can be used to tweak 
+				the XML format of a POJO.
+				<br>The value is set to an enum value of type {@link org.apache.juneau.xml.annotation.XmlFormat}.
+				<br>This annotation can be applied to both classes and bean properties.
+			</p>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} format can be applied to bean properties to 
+				serialize them as XML attributes instead of elements.
+				<br>Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
+			</p>
+			
+			<h5 class='figure'>Example</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+		<jk>public</jk> String a;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object <xa>a</xa>=<xs>'foo'</xs>/&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can be applied to bean classes to 
+				force all bean properties to be serialized as XML attributes instead of child elements.
+			</p>
+			
+			<h5 class='figure'>Example</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTRS</jsf>)
+	<jk>class</jk> MyBean {
+		<jk>public</jk> String a;
+		<jk>public int</jk> b;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>,
+		b: 123
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+		&lt;b&gt;<xv>123</xv>&lt;/b&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object <xa>a</xa>=<xs>'foo'</xs> <xa>b</xa>=<xs>'123'</xs>/&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENT} format can be applied to bean properties 
+				to override the {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format applied on the bean 
+				class.
+			</p>
+			
+			<h5 class='figure'>Example</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTRS</jsf>)
+	<jk>class</jk> MyBean {
+		<jk>public</jk> String a;
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENT</jsf>)
+		<jk>public int</jk> b;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>,
+		b: 123
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+		&lt;b&gt;<xv>123</xv>&lt;/b&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object <xa>a</xa>=<xs>'foo'</xs></xs>&gt;
+		&lt;b&gt;<xv>123</xv>&lt;/b&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can be applied to a single bean 
+				property of type <code>Map&lt;String,Object&gt;</code> to denote arbitrary XML attribute values on the 
+				element.
+				<br>These can be mixed with other {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} annotated 
+				properties, but there must not be an overlap in bean property names and map keys. 
+			</p>
+			
+			<h5 class='figure'>Example</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTRS</jsf>)
+		<jk>public</jk> Map&lt;String,Object&gt; a;
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+		<jk>public int</jk> b;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: {
+			k1: <js>'foo'</js>, 
+			k2: 123, 
+		},
+		b: 456
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;k1&gt;<xv>foo</xv>&lt;/k1&gt;
+			&lt;k2 <xa>_type</xa>=<xs>'number'</xs>&gt;<xv>123</xv>&lt;/k2&gt;
+		&lt;/a&gt;
+		&lt;b&gt;<xv>456</xv>&lt;/b&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object <xa>k1</xa>=<xs>'foo'</xs> <xa>k2</xa>=<xs>'123'</xs> <xa>b</xa>=<xs>'456'</xs>/&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
+				of type array/Collection.
+				<br>This causes the child objects to be serialized directly inside the bean element.
+				<br>This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml.childName()}
+				to differentiate which collection the values came from if you plan on parsing the output back into beans.
+				<br>Note that child names must not conflict with other property names.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotation</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(childName=<js>"A"</js>,format=XmlFormat.<jsf>COLLAPSED</jsf>)
+		<jk>public</jk> String[] a;
+		<ja>@Xml</ja>(childName=<js>"B"</js>,format=XmlFormat.<jsf>COLLAPSED</jsf>)
+		<jk>public int</jk>[] b;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: [<js>'foo'</js>,<js>'bar'</js>],
+		b: [123,456]
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+			&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+		&lt;/a&gt;
+		&lt;b&gt;
+			&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+			&lt;number&gt;<xv>456</xv>&lt;/number&gt;
+		&lt;/b&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;A&gt;<xv>foo</xv>&lt;/A&gt;
+		&lt;A&gt;<xv>bar</xv>&lt;/A&gt;
+		&lt;B&gt;<xv>123</xv>&lt;/B&gt;
+		&lt;B&gt;<xv>456</xv>&lt;/B&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a single bean 
+				property of either a simple type or array/Collection.
+				<br>It allows free-form child elements to be formed.
+				<br>All other properties on the bean MUST be serialized as attributes.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>With annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+		<jk>public</jk> String a;
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENTS</jsf>)
+		<jk>public</jk> String b;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>,
+		b: <js>'bar'</js>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object <xa>a</xa>=<xs>'foo'</xs>&gt;
+		&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+		<jk>public</jk> String a;
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENTS</jsf>)
+		<jk>public</jk> Object[] b;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>,
+		b: [
+			<js>'bar'</js>, 
+			<js>'baz'</js>, 
+			123, 
+			<jk>true</jk>,
+			<jk>null</jk>
+		]
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object <xa>a</xa>=<xs>'foo'</xs>&gt;
+		&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+		&lt;string&gt;<xv>baz</xv>&lt;/string&gt;
+		&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+		&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;
+		&lt;null/&gt;
+	&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} format is similar to 
+				{@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
+				(string/number/boolean/null) are stripped from the output.
+				This format particularly useful when combined with bean dictionaries to produce mixed content.  
+				<br>The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
+				types.
+			</p>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED_PWS} format identical to 
+				{@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} except whitespace characters are preserved in 
+				the output.  
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotations</th>
+					<th>With annotations</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+		<ja>@BeanProperty</ja>(beanDictionary={MyBeanX.<jk>class</jk>, MyBeanY.<jk>class</jk>})	
+		<jk>public</jk> Object[] a;
+	}
+	
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBeanX {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+		<jk>public</jk> String b;
+	}
+	
+	<ja>@Bean</ja>(typeName=<js>"Y"</js>)	
+	<jk>class</jk> MyBeanY {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+		<jk>public</jk> String c;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: [
+			<js>'foo'</js>,
+			{ _type:<js>'X'</js>, b:<js>'bar'</js> }
+			<js>'baz'</js>,
+			{ _type:<js>'Y'</js>, b:<js>'qux'</js> },
+			<js>'quux'</js>
+		]
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;
+			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+			&lt;object&gt;
+				&lt;b&gt;<xv>bar</xv>&lt;/b&gt;
+			&lt;/object&gt;
+			&lt;string&gt;<xv>baz</xv>&lt;/string&gt;
+			&lt;object&gt;
+				&lt;b&gt;<xv>qux</xv>&lt;/b&gt;
+			&lt;/object&gt;
+			&lt;string&gt;<xv>quux</xv>&lt;/string&gt;
+		&lt;/a&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object&gt;<xv>foo</xv>&lt;X <xa>b</xa>=<xs>'bar'</xs>/&gt;<xv>baz</xv>&lt;Y <xa>c</xa>=<xs>'qux'</xs>/&gt;<xv>quux</xv>&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				Whitespace (tabs and newlines) are not added to MIXED child nodes in readable-output mode. 
+				This helps ensures strings in the serialized output can be losslessly parsed back into their original 
+				forms when they contain whitespace characters.
+				If the {@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting was not useless 
+				in Java, we could support lossless readable XML for MIXED content.  
+				But as of Java 8, it still does not work. 
+			</p>
+			<p>
+				XML suffers from other deficiencies as well that affect MIXED content.  
+				For example, <xt>&lt;X&gt;&lt;/X&gt;</xt> and <xt>&lt;X/&gt;</xt> are equivalent in XML and 
+				indistinguishable by the Java XML parsers.  
+				This makes it impossible to differentiate between an empty element and an element containing an empty 
+				string.  
+				This causes empty strings to get lost in translation. 
+				To alleviate this, we use the constructs <js>"_xE000_"</js> to represent an empty string, and 
+				<js>"_x0020_"</js> to represent leading and trailing spaces.
+			</p>
+			<p>
+				The examples below show how whitespace is handled under various circumstances:
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>XML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+		<jk>public</jk> String a = <jk>null</jk>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X/&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+		<jk>public</jk> String a = <js>""</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+		<jk>public</jk> String a = <js>" "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_x0020_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+		<jk>public</jk> String a = <js>"  "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_x0020__x0020_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+		<jk>public</jk> String a = <js>"  foobar  "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_x0020_ foobar _x0020_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+		<jk>public</jk> String a = <jk>null</jk>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X/&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+		<jk>public</jk> String a = <js>""</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+		<jk>public</jk> String a = <js>" "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv> </xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+		<jk>public</jk> String a = <js>"  "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>  </xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+		<jk>public</jk> String a = <js>"  foobar  "</js>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>  foobar  </xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+		<jk>public</jk> String[] a = <jk>null</jk>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X/&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{<js>""</js>};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{<js>" "</js>};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_x0020_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{<js>"  "</js>};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_x0020__x0020_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{
+			<js>"  foobar  "</js>
+		};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_x0020_ foobar _x0020_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+		<jk>public</jk> String[] a = <jk>null</jk>;
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X/&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{<js>""</js>};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{<js>" "</js>};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv> </xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{<js>"  "</js>};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>  </xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+		<jk>public</jk> String a[] = <jk>new</jk> String[]{
+			<js>"  foobar  "</js>
+		};
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;X&gt;<xv>  foobar  </xv>&lt;/X&gt;
+					</xt></td>
+				</tr>
+			</table>
+			
+			<p>
+				It should be noted that when using <jsf>MIXED</jsf>, you are not guaranteed to parse back the exact 
+				same content since side-by-side strings in the content will end up concatenated when parsed.
+			</p>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} format is similar to 
+				{@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} except it's meant for solitary objects that 
+				get serialized as simple child text nodes.
+				<br>Any object that can be serialize to a <code>String</code> can be used.
+				<br>The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
+				preserved in the output.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>Without annotations</th>
+					<th>With annotations</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+		<jk>public</jk> String a;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;
+		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+	&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object&gt;<xv>foo</xv>&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
+			<p>
+				The {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format is similar to 
+				{@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except it's meant for strings containing XML 
+				that should be serialized as-is to the document.
+				<br>Any object that can be serialize to a <code>String</code> can be used.
+				<br>During parsing, the element content gets parsed with the rest of the document and then re-serialized to 
+				XML before being set as the property value.  
+				This process may not be perfect (e.g. double quotes may be replaced by single quotes, etc...).
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>With TEXT annotation</th>
+					<th>With XMLTEXT annotation</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<ja>@Xml</ja>(format=XmlFormat.<jsf>XMLTEXT</jsf>)
+		<jk>public</jk> String a;
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'Some &lt;b&gt;XML&lt;/b&gt; text'</js>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;object&gt;<xv>Some &amp;lt;b&amp;gt;XML&amp;lt;/b&amp;gt; text</xv>&lt;/object&gt;
+					</xt></td>
+					<td class='code'><xt>
+	&lt;object&gt;<xv>Some <xt>&lt;b&gt;</xt>XML<xt>&lt;/b&gt;</xt> text</xv>&lt;/object&gt;
+					</xt></td>
+				</tr>
+			</table>
 		</div>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.Namespaces"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.6- Namespaces</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.17.8- Namespaces</h4>
 		<div class='topic'>
+			<p>
+				Let's go back to the example of our original <code>Person</code> bean class:
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name) {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+		}
+	}
+			</p>
+			<p>
+				However, this time we'll leave namespaces enabled on the serializer:
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
+	<jc>// Note that this is identical to XmlSerializer.DEFAULT_NS_SQ_READABLE.</jc>
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ns().ws().sq().build();
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
+
+	<jc>// Serialize the bean to XML.</jc>
+	String xml = s.serialize(p);
+			</p>
+			<p>
+				Now when we run this code, we'll see namespaces added to our output:
+			</p>
+			<p class='bcode'>
+	<xt>&lt;object</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs><xt>&gt;</xt>
+		<xt>&lt;id&gt;</xt>1<xt>&lt;/id&gt;</xt>
+		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+	<xt>&lt;/object&gt;</xt>
+			</p>
+			<p>
+				This isn't too exciting yet since we haven't specified any namespaces yet.
+				<br>Therefore, everything is defined under the default <code>Juneau</code> namespace.
+			</p>
+			<p>
+				Namespaces can be defined at the following levels:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					At the package level by using the {@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema} 
+					annotation.
+				<li>
+					At the class level by using the {@link org.apache.juneau.xml.annotation.Xml @Xml} annotation.
+				<li>
+					At the bean property level by using the {@link org.apache.juneau.xml.annotation.Xml @Xml} annotation.
+			</ul>
+			<p>
+				It's typically best to specify the namespaces used at the package level.
+				<br>We'll do that here for the package containing our test code.
+			</p>
+			<p class='bcode'>
+	<jc>// XML namespaces used in this package</jc>
+	<ja>@XmlSchema</ja>(
+		prefix=<js>"ab"</js>,
+		xmlNs={
+			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
+		}
+	)
+	<jk>package</jk> org.apache.juneau.examples.addressbook;
+	<jk>import</jk> org.apache.juneau.xml.annotation.*;
+			</p>
+			<p>
+				We're defining four namespaces in this package and designating <js>"http://www.apache.org/addressBook/"</js> 
+				as the default namespace for all classes and properties within this package.
+			</p>
+			<p>
+				Take special note that the <ja>@XmlSchema</ja> is modeled after the equivalent JAXB annotation, but is
+				defined in the {@link org.apache.juneau.xml.annotation} package.
+				<br>Other XML annotations are also modeled after JAXB. 
+				However, since many of the features of JAXB are already implemented for all serializers and parsers
+				at a higher level through various general annotations such as {@link org.apache.juneau.annotation.Bean @Bean} 
+				and {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} it was decided to maintain separate Juneau XML 
+				annotations instead of reusing JAXB annotations.
+				<br>This may change in some future implementation, but for now it was decided that having separate Juneau XML 
+				annotations was less confusing.
+			</p>
+			<p>
+				On our bean class, we'll specify to use the <js>"http://www.apache.org/person/"</js> namespace:
+			</p>
+			<p class='bcode'>
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
+	<jk>public class</jk> Person {
+		...
+			</p>
+			<p>
+				Now when we serialize the bean, we get the following:
+			</p>
+			<p class='bcode'>
+	<xt>&lt;per:person</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs><xt>&gt;</xt>
+		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+	<xt>&lt;/per:person&gt;</xt>
+			</p>
+			<p>
+				We can simplify the output by setting the default namespace on the serializer so that all the elements do 
+				not need to be prefixed:
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
+		.ws()
+		.sq()
+		.ns()
+		.defaultNamespaceUri(<js>"http://www.apache.org/person/"</js>)
+		.build();
+			</p>
+			<p>
+				This produces the following equivalent where the elements don't need prefixes since they're already in the 
+				default document namespace:
+			</p>
+			<p class='bcode'>
+	<xt>&lt;person</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/person/'</xs>
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs><xt>&gt;</xt>
+		<xt>&lt;id&gt;</xt>1<xt>&lt;/id&gt;</xt>
+		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+	<xt>&lt;/person&gt;</xt>		
+			</p>
+			<p>
+				One important property on the XML serializer class is 
+				{@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}.
+				<br>This property tells the serializer to make a first-pass over the data structure to look for namespaces 
+				defined on classes and bean properties.
+				<br>In high-performance environments, you may want to consider disabling auto-detection and providing your 
+				own explicit list of namespaces to the serializer to avoid this scanning step.
+			</p>
+			<p>
+				The following code will produce the same output as before, but will perform slightly better since it 
+				avoids this pre-scan step.
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
+		.ws()
+		.sq()
+		.autoDetectNamespaces(<jk>false</jk>)
+		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
+		.build();
+			</p>
 		</div>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.XmlSchema"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.7 - XML-Schema Support</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.17.9 - XML-Schema Support</h4>
 		<div class='topic'>
+			<p>
+				Juneau provides the {@link org.apache.juneau.xml.XmlSchemaSerializer} class for generating XML-Schema 
+				documents that describe the output generated by the {@link org.apache.juneau.xml.XmlSerializer} class.
+				<br>This class shares the same properties as <code>XmlSerializer</code>.
+				<br>Since the XML output differs based on settings on the XML serializer class, the XML-Schema serializer
+				class must have the same property values as the XML serializer class it's describes.
+				<br>To help facilitate creating an XML Schema serializer with the same properties as the corresponding 
+				XML serializer, the {@link org.apache.juneau.xml.XmlSerializer#getSchemaSerializer()} method 
+				has been added.
+			</p>
+			<p>
+				XML-Schema requires a separate file for each namespace.
+				<br>Unfortunately, does not mesh well with the Juneau serializer architecture which serializes to single writers.
+				<br>To get around this limitation, the schema serializer will produce a single output, but with multiple
+				schema documents separated by the null character (<js>'\u0000'</js>) to make it simple to split apart.
+			</p>
+			<p>
+				Lets start with an example where everything is in the same namespace.
+				<br>We'll use the classes from before, but remove the references to namespaces.
+				<br>Since we have not defined a default namespace, everything is defined under the default Juneau namespace.
+			</p>
+			<p class='bcode'>
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+		<ja>@Xml</ja>(format=<jsf>ATTR</jsf>) <jk>public</jk> URI <jf>uri</jf>;
+		<jk>public</jk> URI <jf>addressBookUri</jf>;
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri, String birthDate) 
+				<jk>throws</jk> Exception {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+			<jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(uri);
+			<jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(addressBookUri);
+			<jk>this</jk>.<jf>birthDate</jf> = <jk>new</jk> GregorianCalendar();
+			<jk>this</jk>.<jf>birthDate</jf>.setTime(DateFormat.getDateInstance(DateFormat.<jsf>MEDIUM</jsf>).parse(birthDate));
+		}
+	}
+
+	<ja>@Bean</ja>(typeName=<js>"address"</js>)
+	<jk>public class</jk> Address {
+		<jc>// Bean properties</jc>
+		<ja>@Xml</ja>(format=<jsf>ATTR</jsf>) <jk>public</jk> URI <jf>uri</jf>;
+		<jk>public</jk> URI <jf>personUri</jf>;
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
+		<jk>public int</jk> <jf>zip</jf>;
+		<jk>public boolean</jk> <jf>isCurrent</jf>;
+	}
+			</p>
+			<p>
+				The code for creating our POJO model and generating XML Schema is shown below:
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output.</jc>
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
+		.ws()
+		.ns()
+		.sq()
+		.addNamespaceUrisToRoot(<jk>true</jk>)
+		.build();
+
+	<jc>// Create the equivalent schema serializer.</jc>
+	XmlSchemaSerializer ss = s.getSchemaSerializer();
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+	Address a = <jk>new</jk> Address();
+	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+	a.<jf>id</jf> = 1;
+	a.<jf>street</jf> = <js>"100 Main Street"</js>;
+	a.<jf>city</jf> = <js>"Anywhereville"</js>;
+	a.<jf>state</jf> = <js>"NY"</js>;
+	a.<jf>zip</jf> = 12345;
+	a.<jf>isCurrent</jf> = <jk>true</jk>;
+	p.<jf>addresses</jf>.add(a);
+
+	<jc>// Serialize the bean to XML.</jc>
+	String xml = s.serialize(p);
+	
+	<jc>// Get the XML Schema corresponding to the XML generated above.</jc>
+	String xmlSchema = ss.serialize(p);
+			</p>
+			
+			<h5 class='figure'>XML results</h5>
+			<p class='bcode'>
+	<xt>&lt;person</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
+		<xt>&lt;id&gt;</xt>1<xt>&lt;/id&gt;</xt>
+		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+		<xt>&lt;addressBookUri&gt;</xt>http://sample/addressBook<xt>&lt;/addressBookUri&gt;</xt>
+		<xt>&lt;birthDate&gt;</xt>1946-08-12T00:00:00Z<xt>&lt;/birthDate&gt;</xt>
+		<xt>&lt;addresses&gt;</xt>
+			<xt>&lt;address</xt> <xa>uri</xa>=<xs>'http://sample/addressBook/address/1'</xs><xt>&gt;</xt>
+				<xt>&lt;personUri&gt;</xt>http://sample/addressBook/person/1<xt>&lt;/personUri&gt;</xt>
+				<xt>&lt;id&gt;</xt>1<xt>&lt;/id&gt;</xt>
+				<xt>&lt;street&gt;</xt>100 Main Street<xt>&lt;/street&gt;</xt>
+				<xt>&lt;city&gt;</xt>Anywhereville<xt>&lt;/city&gt;</xt>
+				<xt>&lt;state&gt;</xt>NY<xt>&lt;/state&gt;</xt>
+				<xt>&lt;zip&gt;</xt>12345<xt>&lt;/zip&gt;</xt>
+				<xt>&lt;isCurrent&gt;</xt>true<xt>&lt;/isCurrent&gt;</xt>
+			<xt>&lt;/address&gt;</xt>
+		<xt>&lt;/addresses&gt;</xt>
+	<xt>&lt;/person&gt;</xt>				
+			</p>
+			
+			<h5 class='figure'>XML-Schema results</h5>
+			<p class='bcode'>
+	<xt>&lt;schema</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs><xt>&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'person'</xs> <xa>_type</xa>=<xs>'juneau:org.apache.juneau.examples.addressbook.Person'</xs><xt>/&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.examples.addressbook.Person'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'id'</xs> <xa>_type</xa>=<xs>'integer'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'name'</xs> <xa>_type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'addressBookUri'</xs> <xa>_type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'birthDate'</xs> <xa>_type</xa>=<xs>'juneau:java.util.Calendar'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'addresses'</xs> <xa>_type</xa>=<xs>'juneau:java.util.LinkedList_x003C_org.apache.juneau.examples.addressbook.Address_x003E_'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+			<xt>&lt;attribute</xt> <xa>name</xa>=<xs>'uri'</xs> <xa>_type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.Calendar'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;any</xt> <xa>processContents</xa>=<xs>'skip'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.LinkedList_x003C_org.apache.juneau.examples.addressbook.Address_x003E_'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;choice</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>&gt;</xt>
+					<xt>&lt;element</xt> <xa>name</xa>=<xs>'address'</xs> <xa>_type</xa>=<xs>'juneau:org.apache.juneau.examples.addressbook.Address'</xs><xt>/&gt;</xt>
+					<xt>&lt;element</xt> <xa>name</xa>=<xs>'null'</xs> <xa>_type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+				<xt>&lt;/choice&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.examples.addressbook.Address'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'personUri'</xs> <xa>_type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'id'</xs> <xa>_type</xa>=<xs>'integer'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'street'</xs> <xa>_type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'city'</xs> <xa>_type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'state'</xs> <xa>_type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'zip'</xs> <xa>_type</xa>=<xs>'integer'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'isCurrent'</xs> <xa>_type</xa>=<xs>'boolean'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+			<xt>&lt;attribute</xt> <xa>name</xa>=<xs>'uri'</xs> <xa>_type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+	<xt>&lt;/schema&gt;</xt>
+			</p>
+			<p>
+				Now if we add in some namespaces, we'll see how multiple namespaces are handled.
+			</p>
+			<p class='bcode'>
+	<ja>@Xml</ja></ja>(prefix=<js>"per"</js>)
+	<ja>@Bean</ja></ja>(typeName=<js>"person"</js>)
+	<jk>public class</jk> Person {
+	...
+	}
+
+	<ja>@Xml</ja>(prefix=<js>"addr"</js>)
+	<ja>@Bean</ja>(typeName=<js>"address"</js>)
+	<jk>public class</jk> Address {
+		...
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public int</jk> <jf>zip</jf>;
+		...
+	}
+			</p>
+			
+			<h5 class='figure'>XML results</h5>
+			<p class='bcode'>
+	<xt>&lt;per:person</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
+			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
+		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+		<xt>&lt;per:addressBookUri&gt;</xt>http://sample/addressBook<xt>&lt;/per:addressBookUri&gt;</xt>
+		<xt>&lt;per:birthDate&gt;</xt>1946-08-12T00:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
+		<xt>&lt;per:addresses&gt;</xt>
+			<xt>&lt;addr:address</xt> <xa>uri</xa>=<xs>'http://sample/addressBook/address/1'</xs><xt>&gt;</xt>
+				<xt>&lt;addr:personUri&gt;</xt>http://sample/addressBook/person/1<xt>&lt;/addr:personUri&gt;</xt>
+				<xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+				<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+				<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+				<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+				<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+				<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+			<xt>&lt;/addr:address&gt;</xt>
+		<xt>&lt;/per:addresses&gt;</xt>
+	<xt>&lt;/per:person&gt;</xt>
+			</p>
+			<p>
+				The schema consists of 4 documents separated by a <js>'\u0000'</js> character.
+			</p>
+			
+			<h5 class='figure'>XML-Schema results</h5>
+			<p class='bcode'>
+	<xt>&lt;schema</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'int'</xs><xt>&gt;</xt>
+			<xt>&lt;simpleContent&gt;</xt>
+				<xt>&lt;extension</xt> <xa>base</xa>=<xs>'integer'</xs><xt>/&gt;</xt>
+			<xt>&lt;/simpleContent&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.lang.String'</xs><xt>&gt;</xt>
+			<xt>&lt;simpleContent&gt;</xt>
+				<xt>&lt;extension</xt> <xa>base</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+			<xt>&lt;/simpleContent&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.net.URI'</xs><xt>&gt;</xt>
+			<xt>&lt;simpleContent&gt;</xt>
+				<xt>&lt;extension</xt> <xa>base</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+			<xt>&lt;/simpleContent&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.Calendar'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;any</xt> <xa>processContents</xa>=<xs>'skip'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.LinkedList_x003C_org.apache.juneau.examples.addressbook.Address_x003E_'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;choice</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>&gt;</xt>
+					<xt>&lt;element</xt> <xa>name</xa>=<xs>'address'</xs> <xa>_type</xa>=<xs>'addr:org.apache.juneau.examples.addressbook.Address'</xs><xt>/&gt;</xt>
+					<xt>&lt;element</xt> <xa>name</xa>=<xs>'null'</xs> <xa>_type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+				<xt>&lt;/choice&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'boolean'</xs><xt>&gt;</xt>
+			<xt>&lt;simpleContent&gt;</xt>
+				<xt>&lt;extension</xt> <xa>base</xa>=<xs>'boolean'</xs><xt>/&gt;</xt>
+			<xt>&lt;/simpleContent&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+	<xt>&lt;/schema&gt;</xt>
+	[\u0000]
+	<xt>&lt;schema</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>attributeFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;impor</xt>t <xa>namespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'person'</xs> <xa>_type</xa>=<xs>'per:org.apache.juneau.examples.addressbook.Person'</xs><xt>/&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.examples.addressbook.Person'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;any</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>/&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+			<xt>&lt;attribute</xt> <xa>name</xa>=<xs>'uri'</xs> <xa>_type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'id'</xs> <xa>_type</xa>=<xs>'juneau:int'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'name'</xs> <xa>_type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'addressBookUri'</xs> <xa>_type</xa>=<xs>'juneau:java.net.URI'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'birthDate'</xs> <xa>_type</xa>=<xs>'juneau:java.util.Calendar'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'addresses'</xs> <xa>_type</xa>=<xs>'juneau:java.util.LinkedList_x003C_org.apache.juneau.examples.addressbook.Address_x003E_'</xs><xt>/&gt;</xt>
+	<xt>&lt;/schema&gt;</xt>
+	[\u0000]
+	<xt>&lt;schema</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>attributeFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.examples.addressbook.Address'</xs><xt>&gt;</xt>
+			<xt>&lt;sequence&gt;</xt>
+				<xt>&lt;any</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>/&gt;</xt>
+			<xt>&lt;/sequence&gt;</xt>
+			<xt>&lt;attribute</xt> <xa>name</xa>=<xs>'uri'</xs> <xa>_type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
+		<xt>&lt;/complexType&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'personUri'</xs> <xa>_type</xa>=<xs>'juneau:java.net.URI'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'id'</xs> <xa>_type</xa>=<xs>'juneau:int'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'isCurrent'</xs> <xa>_type</xa>=<xs>'juneau:boolean'</xs><xt>/&gt;</xt>
+	<xt>&lt;/schema&gt;</xt>
+	[\u0000]
+	<xt>&lt;schema</xt> 
+			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/mail/'</xs> 
+			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>attributeFormDefault</xa>=<xs>'qualified'</xs> 
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'street'</xs> <xa>_type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'city'</xs> <xa>_type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'state'</xs> <xa>_type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'zip'</xs> <xa>_type</xa>=<xs>'juneau:int'</xs><xt>/&gt;</xt>
+	<xt>&lt;/schema&gt;</xt>	
+			</p>
+			<p>
+				For convenience, the {@link org.apache.juneau.xml.XmlSchemaSerializer
+				#getValidator(SerializerSession,Object)} method is provided to create a 
+				{@link javax.xml.validation.Validator} using the input from the serialize method.
+			</p>
 		</div>		
 	</div>
 
@@ -4099,16 +6901,524 @@
 	<a id="juneau-marshall.HtmlDetails"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.18 - HTML Details</h3>
 	<div class='topic'>
-		<h5 class='toc'>Additional Information - org.apache.juneau.html</h5>
-		<ol class='toc'>
-			<li><p><a class='doclink' href='org/apache/juneau/html/package-summary.html#HtmlSerializer'>HTML serialization support</a></p> 
-			<li><p><a class='doclink' href='org/apache/juneau/html/package-summary.html#HtmlParser'>HTML parsing support</a></p> 
-		</ol>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.HtmlDetails.Methodology"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.18.1 - HTML Methodology</h4>
 		<div class='topic'>
+
+			<p>
+				The following examples show how different data types are represented in HTML.
+				They mirror how the data structures are represented in JSON.
+			</p>
+			
+			<h5 class='topic'>Simple types</h5>
+			<p>
+				The representation for simple types mirror those produced by the XML serializer.
+				Tags are added to help differentiate data types when they cannot be inferred through reflection.
+				These tags are ignored by browsers and treated as plain text.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>HTML</th>
+				</tr>
+				<tr>
+					<td>string</td>
+					<td class='code'><js>'foo'</js></td>
+					<td class='code'><xt>&lt;string&gt;</xt>foo<xt>&lt;/string&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>boolean</td>
+					<td class='code'><jk>true</jk></td>
+					<td class='code'><xt>&lt;boolean&gt;</xt>true<xt>&lt;/boolean&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>integer</td>
+					<td class='code'>123</td>
+					<td class='code'><xt>&lt;number&gt;</xt>123<xt>&lt;/number&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>float</td>
+					<td class='code'>1.23</td>
+					<td class='code'><xt>&lt;number&gt;</xt>1.23<xt>&lt;/number&gt;</xt></td>
+				</tr>
+				<tr>
+					<td>null</td>
+					<td class='code'><jk>null</jk></td>
+					<td class='code'><xt>&lt;null/&gt;</xt></td>
+				</tr>
+			</table>
+			
+			<h5 class='topic'>Maps</h5>
+			<p>
+				Maps and beans are represented as tables.
+			</p>
+			<p>
+				The <xa>_type</xa> attribute is added to differentiate between objects (maps/beans) and arrays 
+				(arrays/collections).
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>HTML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	Map&lt;String,String&gt;
+					</td>
+					<td class='code'>
+	{
+		k1: <js>'v1'</js>
+		k2: <jk>null</jk>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+			&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+				</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Map&lt;String,Number&gt;
+					</td>
+					<td class='code'>
+	{
+		k1: 123,
+		k2: 1.23,
+		k3: <jk>null</jk>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>123</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>1.23</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k3</xv>&lt;/td&gt;
+			&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Map&lt;String,Object&gt;
+					</td>
+					<td class='code'>
+	{
+		k1: <js>'v1'</js>
+		k2: 123,
+		k3: 1.23,
+		k4: <jk>true</jk>,
+		k5: <jk>null</jk>
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+			&lt;td&gt;&lt;number&gt;<xv>123</xv>&lt;/number&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k3</xv>&lt;/td&gt;
+			&lt;td&gt;&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k4</xv>&lt;/td&gt;
+			&lt;td&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>k5</xv>&lt;/td&gt;
+			&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+					</xt></td>
+				</tr>
+			</table>
+			
+			<h5 class='topic'>Arrays</h5>
+			<p>
+				Collections and arrays are represented as ordered lists.
+			</p>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>HTML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	String[]
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Number[]
+					</td>
+					<td class='code'>
+	[
+		123,
+		1.23,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>123</xv>&lt;/li&gt;
+		&lt;li&gt;<xv>1.23</xv>&lt;/li&gt;
+		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	Object[]
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>,
+		123,
+		1.23,
+		<jk>true</jk>,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+		&lt;li&gt;&lt;number&gt;<xv>123</xv>&lt;/number&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	String[][]
+					</td>
+					<td class='code'>
+	[
+		[<js>'foo'</js>, <jk>null</jk>],
+		<jk>null</jk>,
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;
+			&lt;ul&gt;
+				&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+				&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>int</jk>[]
+					</td>
+					<td class='code'>
+	[
+		123
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>123</xv>&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>boolean</jk>[]
+					</td>
+					<td class='code'>
+	[
+		<jk>true</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>true</xv>&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+			</table>
+			
+			<h5 class='topic'>Collections</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>HTML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	List&lt;String&gt;
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	List&lt;Number&gt;
+					</td>
+					<td class='code'>
+	[
+		123,
+		1.23,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>123</xv>&lt;/li&gt;
+		&lt;li&gt;<xv>1.23</xv>&lt;/li&gt;
+		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+				<tr>
+					<td class='code'>
+	List&lt;Object&gt;
+					</td>
+					<td class='code'>
+	[
+		<js>'foo'</js>,
+		123,
+		1.23,
+		<jk>true</jk>,
+		<jk>null</jk>
+	]
+					</td>
+					<td class='code'><xt>
+	&lt;ul&gt;
+		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+		&lt;li&gt;&lt;number&gt;<xv>123</xv>&lt;/number&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+					</xt></td>
+				</tr>
+			</table>
+	
+			<h5 class='topic'>Beans</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>HTML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<jk>public</jk> String a;
+		<jk>public</jk> <jk>int</jk> b;
+		<jk>public</jk> Object c;  <jc>// String value</jc>
+		<jk>public</jk> Object d;  <jc>// Integer value</jc>  	
+		<jk>public</jk> MyBean2 e;  
+		<jk>public</jk> String[] f;  
+	 	<jk>public</jk> <jk>int</jk>[] g;  	
+	}
+	<jk>class</jk> MyBean2 {
+		String h;  
+	}
+					</td>
+					<td class='code'>
+	{
+		a: <js>'foo'</js>,
+		b: 123,
+		c: <js>'bar'</js>,
+		d: 456,
+		e: {
+			h: <js>'baz'</js>
+		}
+		f: [<js>'qux'</js>]
+		g: [789]
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>a</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>foo</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>b</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>123</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>c</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>bar</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>d</xv>&lt;/td&gt;
+			&lt;td&gt;&lt;number&gt;<xv>456</xv>&lt;/number&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>e</xv>&lt;/td&gt;
+			&lt;td&gt;
+				&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+					&lt;tr&gt;
+						&lt;td&gt;<xv>h</xv>&lt;/td&gt;
+						&lt;td&gt;<xv>qux</xv>&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/table&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>f</xv>&lt;/td&gt;
+			&lt;td&gt;
+				&lt;ul&gt;
+					&lt;li&gt;<xv>baz</xv>&lt;/li&gt;
+				&lt;/ul&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>g</xv>&lt;/td&gt;
+			&lt;td&gt;
+				&lt;ul&gt;
+					&lt;li&gt;<xv>789</xv>&lt;/li&gt;
+				&lt;/ul&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+					</xt></td>
+				</tr>
+			</table>
+			
+			<h5 class='topic'>Beans with Map properties</h5>
+			<table class='styled' style='width:auto'>
+				<tr>
+					<th>Data type</th>
+					<th>JSON example</th>
+					<th>HTML</th>
+				</tr>
+				<tr>
+					<td class='code'>
+	<jk>class</jk> MyBean {
+		<jk>public</jk> Map&lt;String,String&gt; a;
+		<jk>public</jk> Map&lt;String,Number&gt; b;
+		<jk>public</jk> Map&lt;String,Object&gt; c; 
+	}
+					</td>
+					<td class='code'>
+	{
+		a: {
+			k1: <js>'foo'</js>
+		},
+		b: {
+			k2: 123
+		},
+		c: {
+			k3: <js>'bar'</js>,
+			k4: 456,
+			k5: <jk>true</jk>,
+			k6: <jk>null</jk>
+		}
+	}
+					</td>
+					<td class='code'><xt>
+	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>a</xv>&lt;/td&gt;
+			&lt;td&gt;
+				&lt;table _type='object'&gt;
+					&lt;tr&gt;
+						&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+						&lt;td&gt;<xv>foo</xv>&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/table&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>b</xv>&lt;/td&gt;
+			&lt;td&gt;
+				&lt;table _type='object'&gt;
+					&lt;tr&gt;
+						&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+						&lt;td&gt;<xv>123</xv>&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/table&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>c</xv>&lt;/td&gt;
+			&lt;td&gt;
+				&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+					&lt;tr&gt;
+						&lt;td&gt;<xv>k3</xv>&lt;/td&gt;
+						&lt;td&gt;<xv>bar</xv>&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;
+						&lt;td&gt;<xv>k4</xv>&lt;/td&gt;
+						&lt;td&gt;&lt;number&gt;<xv>456</xv>&lt;/number&gt;&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;
+						&lt;td&gt;<xv>k5</xv>&lt;/td&gt;
+						&lt;td&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;
+						&lt;td&gt;<xv>k6</xv>&lt;/td&gt;
+						&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/table&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+					</xt></td>
+				</tr>
+			</table>
+			
+			TODO - Special characters - \n\t\b\f
+			TODO BeanWithPropertiesWithTypeNames...
+			TODO 
+		
 		</div>
 		
 		<!-- ======================================================================================================= -->
@@ -4160,15 +7470,185 @@
 			The UON specification can be found <a href='doc-files/rfc_uon.txt'>here</a>.
 		</p>
 
-		<h5 class='toc'>Additional Information - org.apache.juneau.uon</h5>
-		<ol class='toc'>
-			<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Overview'>UON support overview</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#OverviewExample'>Example</a></p>
-			</ol>
-			<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#UrlEncodingSerializer'>UrlEncodingSerializer and UonSerializer classes</a></p> 
-			<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#UrlEncodingParser'>UrlEncodingParser and UonParser classes</a></p> 
-		</ol>
+		<p>
+			The example shown here is from the Address Book resource located in the 
+			<code>org.apache.juneau.sample.war</code> application.
+			<br>The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
+			containing zero or more <code>Address</code> beans.
+		</p>
+		<p>
+			When you point a browser at <code>/sample/addressBook/people/1</code>, the POJO is rendered as HTML:
+		</p>
+		<img class='bordered' src="doc-files/Example_HTML.png">
+		<p>
+			By appending <code>?Accept=application/x-www-form-urlencoded&amp;plainText=true</code> to the URL, you can 
+			view the data as a URL-encoded string:
+		</p>
+		<p class='bcode'>
+	<un>0</un>=(
+		<ua>uri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+		<ua>addressBookUri</ua>=<us>http://localhost:10000/addressBook/</us>,
+		<ua>id</ua>=<un>1</un>,
+		<ua>name</ua>=<us>'Barack+Obama'</us>,
+		<ua>birthDate</ua>=<us>'Aug+4,+1961'</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/1</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+				<ua>id</ua>=<un>1</un>,
+				<ua>street</ua>=<us>'1600+Pennsylvania+Ave'</us>,
+				<ua>city</ua>=<us>Washington</us>,
+				<ua>state</ua>=<us>DC</us>,
+				<ua>zip</ua>=<un>20500</un>,
+				<ua>isCurrent</ua>=<uk>true</uk>
+			),
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/2</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+				<ua>id</ua>=<un>2</un>,
+				<ua>street</ua>=<us>'5046+S+Greenwood+Ave'</us>,
+				<ua>city</ua>=<us>Chicago</us>,
+				<ua>state</ua>=<us>IL</us>,
+				<ua>zip</ua>=<un>60615</un>,
+				<ua>isCurrent</ua>=<uk>false</uk>
+			)
+		),
+		<ua>age</ua>=<un>56</un>
+	)
+	&amp;<un>1</un>=(
+		<ua>uri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+		<ua>addressBookUri</ua>=<us>http://localhost:10000/addressBook/</us>,
+		<ua>id</ua>=<un>2</un>,
+		<ua>name</ua>=<us>'George+Walker+Bush'</us>,
+		<ua>birthDate</ua>=<us>'Jul+6,+1946'</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/3</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+				<ua>id</ua>=<un>3</un>,
+				<ua>street</ua>=<us>'43+Prairie+Chapel+Rd'</us>,
+				<ua>city</ua>=<us>Crawford</us>,
+				<ua>state</ua>=<us>TX</us>,
+				<ua>zip</ua>=<un>76638</un>,
+				<ua>isCurrent</ua>=<uk>true</uk>
+			),
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/4</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+				<ua>id</ua>=<un>4</un>,
+				<ua>street</ua>=<us>'1600+Pennsylvania+Ave'</us>,
+				<ua>city</ua>=<us>Washington</us>,
+				<ua>state</ua>=<us>DC</us>,
+				<ua>zip</ua>=<un><us>20500</un>,
+				<ua>isCurrent</ua>=<uk>false</uk>
+			)
+		),
+		<ua>age</ua>=<un>71</un>
+	)		
+		</p>
+		
+		<p>
+			Juneau supports two kinds of serialization:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				Construction of full URL query parameter strings (e.g. <code>&amp;key=value</code> pairs) from beans 
+				and maps.
+			<li>
+				Construction of URL query parameter value strings (e.g. just the <code>value</code> portion of 
+				<code>&amp;key=value</code> pairs) from any POJO.  
+		</ul>
+		<p>
+			Top-level beans and maps can serialized as key/value pairs as shown below:
+		</p>
+		
+		<h5 class='figure'>Example:  A bean with 2 string properties, 'foo' and 'baz', serialized to a query string</h5>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>foo</ua>=<us>bar</us>&amp;<ua>baz</ua>=<us>bing</us>
+		</p>
+		<p>
+			Lower-level beans and maps are also serialized as key/value pairs, but are surrounded with a 
+			<js>"(...)"</js> construct to denote an object mapping, and uses a comma as the parameter delimiter instead 
+			of <js>"&amp;"</js>.
+		</p>
+		
+		<h5 class='figure'>Example:  A bean serialized as a query parameter value.</h5>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>a1</ua>=(<ua>foo</ua>=<us>bar</us>,<ua>baz</ua>=<us>bing</us>)
+		</p>
+		
+		<h5 class='figure'>General methodology:</h5>
+		<table class='styled' style='border-collapse: collapse;'>
+			<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
+			<tr>
+				<td>Maps/beans</td>
+				<td>OBJECT</td>
+				<td class='code'>
+	<ua>a1</ua>=(<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>)
+	<ua>a1</ua>=(<ua>b1</ua>=(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+				</td>
+			</tr>
+			<tr>
+				<td>Collections/arrays</td>
+				<td>ARRAY</td>
+				<td class='code'>
+	<ua>a1</ua>=@(<us>x1</us>,<us>x2</us>)
+	<ua>a1</ua>=@(@(<us>x1</us>,<us>x2</us>),@(<us>x3</us>,<us>x4</us>))
+	<ua>a1</ua>=@((<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>),(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+				</td>
+			</tr>
+			<tr>
+				<td>Booleans</td>
+				<td>BOOLEAN</td>
+				<td class='code'>
+	<ua>a1</ua>=<uk>true</uk>&amp;<ua>a2</ua>=<uk>false</uk>
+				</td>
+			</tr>
+			<tr>
+				<td>int/float/double/...</td>
+				<td>NUMBER</td>
+				<td class='code'>
+	<ua>a1</ua>=<un>123</un>&amp;<ua>a2</ua>=<un>1.23e1</un>
+				</td>
+			</tr>
+			<tr>
+				<td>null</td>
+				<td>NULL</td>
+				<td class='code'>
+	<ua>a1</ua>=<uk>null</uk>
+				</td>
+			</tr>
+			<tr>
+				<td>String</td>
+				<td>STRING</td>
+				<td class='code'>
+	<ua>a1</ua>=<us>foobar</us>
+	<ua>a1</ua>=<us>'true'</us>
+	<ua>a1</ua>=<us>'null'</us>
+	<ua>a1</ua>=<us>'123'</us>
+	<ua>a1</ua>=<us>' string with whitespace '</us>
+	<ua>a1</ua>=<us>'string with ~'escaped~' quotes'</us>
+				</td>
+			</tr>
+		</table>
+		<p>
+			Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
+		<p>
+			<code>PojoSwaps</code> can be used to convert non-serializable POJOs into serializable forms, such as 
+			converting <code>Calendar</code> object to ISO8601 strings, or <code><uk>byte</uk>[]</code> arrays to 
+			Base-64 encoded strings.
+			<br>These transforms can be associated at various levels:
+		</p>
+		<ul>
+			<li>On serializer and parser instances to handle all objects of the class type globally.
+			<li>On classes through the <code><ja>@Bean</ja></code> annotation.
+			<li>On bean properties through the <code><ja>@BeanProperty</ja></code> annotations.
+		</ul>
+		
+		<h5 class='figure'>Example:  A serialized Calendar object using <code>CalendarSwap.RFC2822DTZ</code> transform.</h5>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>a1=<us>'Sun,+03+Mar+1901+09:05:06+GMT'</us>
+		</p>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UonDetails.Methodology"></a>
@@ -4180,12 +7660,238 @@
 		<a id="juneau-marshall.UonDetails.Serializers"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.19.2 - Serializers</h4>
 		<div class='topic'>
+			<p>
+				{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.uon.UonSerializer} 
+				classes are used to convert POJOs to URL-encoded strings.
+				<br>The <code>UonSerializer</code> class converts parameter values to UON notation. 
+				The <code>UrlEncodingSerializer</code> class converts a POJO to key/value URL-Encoded pairs using 
+				<code>UonSerializer</code> to serialize the values.
+				If you're trying to construct complete URL-Encoded entities, use <code>UrlEncodingSerializer</code>. 
+				If you're constructing your own key/value pairs, use <code>UonSerializer</code>.
+			</p>	
+			<p>
+				The serializers include several configurable settings.
+				<br>Static reusable instances of serializers are provided with commonly-used settings:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} - All default settings, strict mode.
+				<li>
+					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} - Use whitespace and 
+					indentation for readability.
+				<li>
+					{@link org.apache.juneau.uon.UonSerializer#DEFAULT} - All default settings, strict mode.
+				<li>
+					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE} - Use whitespace and indentation for 
+					readability.
+				<li>
+					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING} - Same as DEFAULT, but use URL-Encoding on 
+					special characters.
+			</ul>
+			<p>
+				The general guidelines on which serializer to use is:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					Use encoding serializers when you're using the results to construct a URI yourself, and therefore 
+					need invalid URI characters to be encoded.
+				<li>
+					Use un-encoding serializers when you're creating parameter values and passing them off to some other
+					utility class that will itself encode invalid URI characters.
+				<li>
+					Use the readable serializer for debugging purposes.
+			</ul>
+		
+			<h5 class='topic'>Notes about examples</h5>
+			<p>
+				The examples shown in this document will use default strict settings.
+				<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the 
+				examples.
+				<br>In the real world, you'll typically want to use standard bean getters and setters.
+			</p>
+			<p>
+				To start off simple, we'll begin with the following simplified bean and build upon it.
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name) {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+		}
+	}
+			</p>
+			<p>
+				The following code shows how to convert this to a URL-encoded value:
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output, simple mode.</jc>
+	UonSerializer s = UonSerializer.<jsf>DEFAULT</jsf>;
+
+	<jc>// Create our bean.</jc>
+	Person p = <uk>new</uk> Person(1, <js>"John Smith"</js>);
+
+	<jc>// Serialize the bean to URL-encoded parameter value.</jc>
+	String urlencoded = s.serialize(p);
+			</p>
+			<p>
+				The code above produces the following output:
+			</p>
+			<p class='bcode'>
+	(<ua>id</ua>=<un>1</un>,<ua>name</ua>=<us>'John+Smith'</us>)
+			</p>
+			<p>
+				The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class converts
+				maps and beans into top-level query parameter strings.
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output, simple mode.</jc>
+	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Serialize the bean to URL-encoded query string.</jc>
+	String urlencoded = s.serialize(p);
+			</p>
+			<p>
+				The code above produces the following output:
+			</p>
+			<p class='bcode'>
+	<ua>id</ua>=<un>1</un>&amp;<ua>name</ua>=<us>'John+Smith'</us>
+			</p>
+			<p>
+				By default, the <code>UrlEncodingSerializer</code> class will URL-Encode special characters, and the 
+				<code>UonSerializer</code> will NOT URL-encode special characters.  
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UonDetails.Parsers"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.19.3 - Parsers</h4>
 		<div class='topic'>
+			<p>
+				{@link org.apache.juneau.urlencoding.UrlEncodingParser} and {@link org.apache.juneau.uon.UonParser} classes are 
+				used to convert URL-encoded strings back into POJOs.
+				<br>The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
+				The <code>UrlEncodingParser</code> class converts entire URL-Encoded strings to POJOs using 
+				<code>UonSerializer</code> to serialize individual values.
+				If you're trying to parse an entire URL-Encoded string, use <code>UrlEncodingParser</code>. 
+				If you're trying to parse an individual value (such as that returned by 
+				<code>RestServlet.getQueryParameter(name)</code>), use <code>UonParser</code>.
+			</p>	
+			<p>
+				The following static reusable instances of <code>UrlEncodingParser</code> are provided for convenience:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} 
+					- Default parser for entire URL-encoded strings, decode <code>%xx</code> sequences.
+				<li>
+					{@link org.apache.juneau.uon.UonParser#DEFAULT} 
+					- Default parser for URL-encoded parameter values, don't decode <code>%xx</code> sequences.
+				<li>
+					{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING} 
+					- Default parser for URL-encoded parameter values, decode <code>%xx</code> sequences.
+			</ul>
+			<p>
+				The general guidelines on which parser to use is:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					Use the <code>DEFAULT</code> parser for parameter values that have already had <code>%xx</code> sequences 
+					decoded, such as when using <code>HttpServletRequest.getQueryParameter(name)</code>.
+				<li>
+					Use the <code>DEFAULT_ENCODED</code> parser if the input has not already had <code>%xx</code> sequences 
+					decoded.
+			</ul>
+			<p>
+				Let's build upon the previous example and parse the generated URL-encoded string back into the original bean.
+				<br>We start with the URL-encoded string that was generated.
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output.</jc>
+	UonSerializer s = UonSerializer.<jsf>DEFAULT_READABLE</jsf>;
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+	Address a = <jk>new</jk> Address();
+	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+	a.<jf>id</jf> = 1;
+	a.<jf>street</jf> = <js>"100 Main Street"</js>;
+	a.<jf>city</jf> = <js>"Anywhereville"</js>;
+	a.<jf>state</jf> = <js>"NY"</js>;
+	a.<jf>zip</jf> = 12345;
+	a.<jf>isCurrent</jf> = <jk>true</jk>;
+	p.<jf>addresses</jf>.add(a);	
+
+	<jc>// Serialize the bean.</jc>
+	String urlencoded = s.serialize(p);
+			</p>
+			<p>
+				This code produced the following:
+			</p>
+			<p class='bcode'>
+	(
+		<ua>id</ua>=<un>1</un>, 
+		<ua>name</ua>=<us>'John+Smith'</us>, 
+		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>, 
+		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
+		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
+				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
+				<ua>id</ua>=<un>1</un>, 
+				<ua>street</ua>=<us>'100+Main+Street'</us>, 
+				<ua>city</ua>=<us>Anywhereville</us>, 
+				<ua>state</ua>=<us>NY</us>, 
+				<ua>zip</ua>=<un>12345</un>, 
+				<ua>isCurrent</ua>=<uk>true</uk>
+			)
+		)
+	)
+			</p>
+			<p>
+				The code to convert this back into a bean is:
+			</p>
+			<p class='bcode'>
+	<jc>// Parse it back into a bean using the reusable JSON parser.</jc>
+	Person p = UonParser.<jsf>DEFAULT</jsf>.parse(urlencoded, Person.<jk>class</jk>);
+
+	<jc>// Render it back as JSON.</jc>
+	json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
+			</p>
+			<p>
+				We print it back out to JSON to show that all the data has been preserved:
+			</p>
+			<p class='bcode'>
+	{
+		id: <un>1</un>, 
+		name: <js>'John Smith'</js>, 
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: <un>1</un>, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: <un>12345</un>, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}	
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
@@ -4212,15 +7918,185 @@
 			The UON specification can be found <a href='doc-files/rfc_uon.txt'>here</a>.
 		</p>
 
-		<h5 class='toc'>Additional Information - org.apache.juneau.urlencoding</h5>
-		<ol class='toc'>
-			<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Overview'>URL encoding support overview</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#OverviewExample'>Example</a></p>
-			</ol>
-			<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#UrlEncodingSerializer'>UrlEncodingSerializer and UonSerializer classes</a></p> 
-			<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#UrlEncodingParser'>UrlEncodingParser and UonParser classes</a></p> 
-		</ol>
+		<p>
+			The example shown here is from the Address Book resource located in the 
+			<code>org.apache.juneau.sample.war</code> application
+			<br>The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
+			containing zero or more <code>Address</code> beans.
+		</p>
+		<p>
+			When you point a browser at <code>/sample/addressBook/people/1</code>, the POJO is rendered as HTML:
+		</p>
+		<img class='bordered' src="doc-files/Example_HTML.png">
+		<p>
+			By appending <code>?Accept=application/x-www-form-urlencoded&amp;plainText=true</code> to the URL, you can 
+			view the data as a URL-encoded string:
+		</p>
+		<p class='bcode'>
+	<un>0</un>=(
+		<ua>uri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+		<ua>addressBookUri</ua>=<us>http://localhost:10000/addressBook/</us>,
+		<ua>id</ua>=<un>1</un>,
+		<ua>name</ua>=<us>'Barack+Obama'</us>,
+		<ua>birthDate</ua>=<us>'Aug+4,+1961'</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/1</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+				<ua>id</ua>=<un>1</un>,
+				<ua>street</ua>=<us>'1600+Pennsylvania+Ave'</us>,
+				<ua>city</ua>=<us>Washington</us>,
+				<ua>state</ua>=<us>DC</us>,
+				<ua>zip</ua>=<un>20500</un>,
+				<ua>isCurrent</ua>=<uk>true</uk>
+			),
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/2</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+				<ua>id</ua>=<un>2</un>,
+				<ua>street</ua>=<us>'5046+S+Greenwood+Ave'</us>,
+				<ua>city</ua>=<us>Chicago</us>,
+				<ua>state</ua>=<us>IL</us>,
+				<ua>zip</ua>=<un>60615</un>,
+				<ua>isCurrent</ua>=<uk>false</uk>
+			)
+		),
+		<ua>age</ua>=<un>56</un>
+	)
+	&amp;<un>1</un>=(
+		<ua>uri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+		<ua>addressBookUri</ua>=<us>http://localhost:10000/addressBook/</us>,
+		<ua>id</ua>=<un>2</un>,
+		<ua>name</ua>=<us>'George+Walker+Bush'</us>,
+		<ua>birthDate</ua>=<us>'Jul+6,+1946'</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/3</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+				<ua>id</ua>=<un>3</un>,
+				<ua>street</ua>=<us>'43+Prairie+Chapel+Rd'</us>,
+				<ua>city</ua>=<us>Crawford</us>,
+				<ua>state</ua>=<us>TX</us>,
+				<ua>zip</ua>=<un>76638</un>,
+				<ua>isCurrent</ua>=<uk>true</uk>
+			),
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/4</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+				<ua>id</ua>=<un>4</un>,
+				<ua>street</ua>=<us>'1600+Pennsylvania+Ave'</us>,
+				<ua>city</ua>=<us>Washington</us>,
+				<ua>state</ua>=<us>DC</us>,
+				<ua>zip</ua>=<un><us>20500</un>,
+				<ua>isCurrent</ua>=<uk>false</uk>
+			)
+		),
+		<ua>age</ua>=<un>71</un>
+	)		
+		</p>
+		
+		<p>
+			Juneau supports two kinds of serialization:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				Construction of full URL query parameter strings (e.g. <code>&amp;key=value</code> pairs) from beans 
+				and maps.
+			<li>
+				Construction of URL query parameter value strings (e.g. just the <code>value</code> portion of 
+				<code>&amp;key=value</code> pairs) from any POJO.  
+		</ul>
+		<p>
+			Top-level beans and maps can serialized as key/value pairs as shown below:
+		</p>
+		
+		<h5 class='figure'>Example:  A bean with 2 string properties, 'foo' and 'baz', serialized to a query string</h5>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>foo</ua>=<us>bar</us>&amp;<ua>baz</ua>=<us>bing</us>
+		</p>
+		<p>
+			Lower-level beans and maps are also serialized as key/value pairs, but are surrounded with a 
+			<js>"(...)"</js> construct to denote an object mapping,  and uses a comma as the parameter delimiter 
+			instead of <js>"&amp;"</js>.
+		</p>
+		
+		<h5 class='figure'>Example:  A bean serialized as a query parameter value.</h5>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>a1</ua>=(<ua>foo</ua>=<us>bar</us>,<ua>baz</ua>=<us>bing</us>)
+		</p>
+		
+		<h5 class='figure'>General methodology:</h5>
+		<table class='styled' style='border-collapse: collapse;'>
+			<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
+			<tr>
+				<td>Maps/beans</td>
+				<td>OBJECT</td>
+				<td class='code'>
+	<ua>a1</ua>=(<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>)
+	<ua>a1</ua>=(<ua>b1</ua>=(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+				</td>
+			</tr>
+			<tr>
+				<td>Collections/arrays</td>
+				<td>ARRAY</td>
+				<td class='code'>
+	<ua>a1</ua>=@(<us>x1</us>,<us>x2</us>)
+	<ua>a1</ua>=@(@(<us>x1</us>,<us>x2</us>),@(<us>x3</us>,<us>x4</us>))
+	<ua>a1</ua>=@((<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>),(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+				</td>
+			</tr>
+			<tr>
+				<td>Booleans</td>
+				<td>BOOLEAN</td>
+				<td class='code'>
+	<ua>a1</ua>=<uk>true</uk>&amp;<ua>a2</ua>=<uk>false</uk>
+				</td>
+			</tr>
+			<tr>
+				<td>int/float/double/...</td>
+				<td>NUMBER</td>
+				<td class='code'>
+	<ua>a1</ua>=<un>123</un>&amp;<ua>a2</ua>=<un>1.23e1</un>
+				</td>
+			</tr>
+			<tr>
+				<td>null</td>
+				<td>NULL</td>
+				<td class='code'>
+	<ua>a1</ua>=<uk>null</uk>
+				</td>
+			</tr>
+			<tr>
+				<td>String</td>
+				<td>STRING</td>
+				<td class='code'>
+	<ua>a1</ua>=<us>foobar</us>
+	<ua>a1</ua>=<us>'true'</us>
+	<ua>a1</ua>=<us>'null'</us>
+	<ua>a1</ua>=<us>'123'</us>
+	<ua>a1</ua>=<us>' string with whitespace '</us>
+	<ua>a1</ua>=<us>'string with ~'escaped~' quotes'</us>
+				</td>
+			</tr>
+		</table>
+		<p>
+			Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
+		<p>
+			<code>PojoSwaps</code> can be used to convert non-serializable POJOs into serializable forms, such as 
+			converting <code>Calendar</code> object to ISO8601 strings, or <code><uk>byte</uk>[]</code> arrays to 
+			Base-64 encoded strings.
+			<br>These transforms can be associated at various levels:
+		</p>
+		<ul>
+			<li>On serializer and parser instances to handle all objects of the class type globally.
+			<li>On classes through the <code><ja>@Bean</ja></code> annotation.
+			<li>On bean properties through the <code><ja>@BeanProperty</ja></code> annotations.
+		</ul>
+		
+		<h5 class='figure'>Example:  A serialized Calendar object using <code>CalendarSwap.RFC2822DTZ</code> transform.</h5>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>a1=<us>'Sun,+03+Mar+1901+09:05:06+GMT'</us>
+		</p>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UrlEncodingDetails.Methodology"></a>
@@ -4232,17 +8108,250 @@
 		<a id="juneau-marshall.UrlEncodingDetails.Serializers"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.20.2 - Serializers</h4>
 		<div class='topic'>
+			<p>
+				{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.uon.UonSerializer} 
+				classes are used to convert POJOs to URL-encoded strings.
+				<br>The <code>UonSerializer</code> class converts parameter values to UON notation. 
+				The <code>UrlEncodingSerializer</code> class converts a POJO to key/value URL-Encoded pairs using 
+				<code>UonSerializer</code> to serialize the values.
+				If you're trying to construct complete URL-Encoded entities, use <code>UrlEncodingSerializer</code>. 
+				If you're constructing your own key/value pairs, use <code>UonSerializer</code>.
+			</p>	
+			<p>
+				The serializers include several configurable settings.
+				<br>Static reusable instances of serializers are provided with commonly-used settings:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} 
+					- All default settings, strict mode.
+				<li>
+					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} 
+					- Use whitespace and indentation for readability.
+				<li>
+					{@link org.apache.juneau.uon.UonSerializer#DEFAULT} 
+					- All default settings, strict mode.
+				<li>
+					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE} 
+					- Use whitespace and indentation for readability.
+				<li>
+					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING} 
+					- Same as DEFAULT, but use URL-Encoding on special characters.
+			</ul>
+			<p>
+				The general guidelines on which serializer to use is:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					Use encoding serializers when you're using the results to construct a URI yourself, and therefore 
+					need invalid URI characters to be encoded.
+				<li>
+					Use un-encoding serializers when you're creating parameter values and passing them off to some other
+					utility class that will itself encode invalid URI characters.
+				<li>
+					Use the readable serializer for debugging purposes.
+			</ul>
+		
+			<h5 class='topic'>Notes about examples</h5>
+			<p>
+				The examples shown in this document will use default strict settings.
+				<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
+				<br>In the real world, you'll typically want to use standard bean getters and setters.
+			</p>
+			<p>
+				To start off simple, we'll begin with the following simplified bean and build upon it.
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name) {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+		}
+	}
+			</p>
+			<p>
+				The following code shows how to convert this to a URL-encoded value:
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output, simple mode.</jc>
+	UonSerializer s = UonSerializer.<jsf>DEFAULT</jsf>;
+
+	<jc>// Create our bean.</jc>
+	Person p = <uk>new</uk> Person(1, <js>"John Smith"</js>);
+
+	<jc>// Serialize the bean to URL-encoded parameter value.</jc>
+	String urlencoded = s.serialize(p);
+			</p>
+			<p>
+				The code above produces the following output:
+			</p>
+			<p class='bcode'>
+	(<ua>id</ua>=<un>1</un>,<ua>name</ua>=<us>'John+Smith'</us>)
+			</p>
+			<p>
+				The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class converts
+				maps and beans into top-level query parameter strings.
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output, simple mode.</jc>
+	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Serialize the bean to URL-encoded query string.</jc>
+	String urlencoded = s.serialize(p);
+			</p>
+			<p>
+				The code above produces the following output:
+			</p>
+			<p class='bcode'>
+	<ua>id</ua>=<un>1</un>&amp;<ua>name</ua>=<us>'John+Smith'</us>
+			</p>
+			<p>
+				By default, the <code>UrlEncodingSerializer</code> class will URL-Encode special characters, and the 
+				<code>UonSerializer</code> will NOT URL-encode special characters.  
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UrlEncodingDetails.Parsers"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.20.3 - Parsers</h4>
 		<div class='topic'>
+			<p>
+				{@link org.apache.juneau.urlencoding.UrlEncodingParser} and {@link org.apache.juneau.uon.UonParser} classes 
+				are used to convert URL-encoded strings back into POJOs.
+				<br>The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
+				The <code>UrlEncodingParser</code> class converts entire URL-Encoded strings to POJOs using 
+				<code>UonSerializer</code> to serialize individual values.
+				If you're trying to parse an entire URL-Encoded string, use <code>UrlEncodingParser</code>. 
+				If you're trying to parse an individual value (such as that returned by 
+				<code>RestServlet.getQueryParameter(name)</code>), use <code>UonParser</code>.
+			</p>	
+			<p>
+				The following static reusable instances of <code>UrlEncodingParser</code> are provided for convenience:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} 
+					- Default parser for entire URL-encoded strings, decode <code>%xx</code> sequences.
+				<li>
+					{@link org.apache.juneau.uon.UonParser#DEFAULT} 
+					- Default parser for URL-encoded parameter values, don't decode <code>%xx</code> sequences.
+				<li>
+					{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING} 
+					- Default parser for URL-encoded parameter values, decode <code>%xx</code> sequences.
+			</ul>
+			<p>
+				The general guidelines on which parser to use is:
+			</p>
+			<ul class='spaced-list'>
+				<li>
+					Use the <code>DEFAULT</code> parser for parameter values that have already had <code>%xx</code> sequences 
+					decoded, such as when using <code>HttpServletRequest.getQueryParameter(name)</code>.
+				<li>
+					Use the <code>DEFAULT_ENCODED</code> parser if the input has not already had <code>%xx</code> sequences 
+					decoded.
+			</ul>
+			<p>
+				Let's build upon the previous example and parse the generated URL-encoded string back into the original bean.
+				<br>We start with the URL-encoded string that was generated.
+			</p>
+			<p class='bcode'>
+	<jc>// Use serializer with readable output.</jc>
+	UonSerializer s = UonSerializer.<jsf>DEFAULT_READABLE</jsf>;
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>,
+		 <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+	Address a = <jk>new</jk> Address();
+	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+	a.<jf>id</jf> = 1;
+	a.<jf>street</jf> = <js>"100 Main Street"</js>;
+	a.<jf>city</jf> = <js>"Anywhereville"</js>;
+	a.<jf>state</jf> = <js>"NY"</js>;
+	a.<jf>zip</jf> = 12345;
+	a.<jf>isCurrent</jf> = <jk>true</jk>;
+	p.<jf>addresses</jf>.add(a);	
+
+	<jc>// Serialize the bean.</jc>
+	String urlencoded = s.serialize(p);
+			</p>
+			<p>
+				This code produced the following:
+			</p>
+			<p class='bcode'>
+	(
+		<ua>id</ua>=<un>1</un>, 
+		<ua>name</ua>=<us>'John+Smith'</us>, 
+		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>, 
+		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
+		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
+				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
+				<ua>id</ua>=<un>1</un>, 
+				<ua>street</ua>=<us>'100+Main+Street'</us>, 
+				<ua>city</ua>=<us>Anywhereville</us>, 
+				<ua>state</ua>=<us>NY</us>, 
+				<ua>zip</ua>=<un>12345</un>, 
+				<ua>isCurrent</ua>=<uk>true</uk>
+			)
+		)
+	)
+			</p>
+			<p>
+				The code to convert this back into a bean is:
+			</p>
+			<p class='bcode'>
+	<jc>// Parse it back into a bean using the reusable JSON parser.</jc>
+	Person p = UonParser.<jsf>DEFAULT</jsf>.parse(urlencoded, Person.<jk>class</jk>);
+
+	<jc>// Render it back as JSON.</jc>
+	json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
+			</p>
+			<p>
+				We print it back out to JSON to show that all the data has been preserved:
+			</p>
+			<p class='bcode'>
+	{
+		id: <un>1</un>, 
+		name: <js>'John Smith'</js>, 
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: <un>1</un>, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: <un>12345</un>, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}	
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UrlEncodingDetails.ConfigurableProperties"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.20.4 - Configurable Properties</h4>
+		<div class='topic'>
+		</div>
+
+		<!-- ======================================================================================================= -->
+		<a id="juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.20.5 - @UrlEncoding Annotation</h4>
 		<div class='topic'>
 		</div>
 	</div>
@@ -4338,20 +8447,37 @@
 			<li>N3
 		</ul>
 
-		<h5 class='toc'>Additional Information - org.apache.juneau.jena</h5>
-		<ol class='toc'>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfOverview'>RDF support overview</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfOverviewExample'>Example</a></p>
-			</ol>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfSerializer'>RdfSerializer class</a></p> 
-			<ol>
-				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#Namespaces'>Namespaces</a></p>
-				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#UriProperties'>URI properties</a></p>
-				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RootProperty'>Root property</a></p>
-				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#TypedLiterals'>Typed literals</a></p>
-			</ol>	
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfParser'>RdfParser class</a></p> 
+		<p>
+			The example shown here is from the Address Book resource located in the 
+			<code>org.apache.juneau.sample.war</code> application.
+		</p>
+		<p>
+			The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
+			containing zero or more <code>Address</code> beans.
+		</p>
+		<p>
+			When you point a browser at <code>/sample/addressBook</code>, the POJO is rendered as HTML:
+		</p>
+		<img class='bordered' src="doc-files/Example_HTML.png">
+		<p>
+			By appending <code>?Accept=<i>mediaType</i>&amp;plainText=true</code> to the URL, you can view the data 
+			in the various RDF supported formats.
+		</p>
+		
+		<h5 class='figure'>RDF/XML</h5>
+		<img class='bordered' src="doc-files/Example_RDFXML.png">
+		
+		<h5 class='figure'>Abbreviated RDF/XML</h5>
+		<img class='bordered' src="doc-files/Example_RDFXMLABBREV.png">
+
+		<h5 class='figure'>N-Triple</h5>
+		<img class='bordered' src="doc-files/Example_NTriple.png">
+
+		<h5 class='figure'>Turtle</h5>
+		<img class='bordered' src="doc-files/Example_Turtle.png">
+		
+		<h5 class='figure'>N3</h5>
+		<img class='bordered' src="doc-files/Example_N3.png">
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall-rdf.RdfDetails.Methodology"></a>
@@ -4363,12 +8489,183 @@
 		<a id="juneau-marshall-rdf.RdfDetails.Serializers"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.2 - Serializers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
+				<br>Language-specific serializers are defined as inner subclasses of the <code>RdfSerializer</code> class:
+			</p>	
+			<ul>
+				<li>{@link org.apache.juneau.jena.RdfSerializer.Xml}
+				<li>{@link org.apache.juneau.jena.RdfSerializer.XmlAbbrev}
+				<li>{@link org.apache.juneau.jena.RdfSerializer.NTriple}
+				<li>{@link org.apache.juneau.jena.RdfSerializer.Turtle}
+				<li>{@link org.apache.juneau.jena.RdfSerializer.N3}
+			</ul>
+			<p>
+				Static reusable instances of serializers are also provided with default settings:
+			</p>
+			<ul>
+				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XML}
+				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XMLABBREV}
+				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_TURTLE}
+				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_NTRIPLE}
+				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_N3}
+			</ul>
+			<p>
+				Abbreviated RDF/XML is currently the most widely accepted and readable RDF syntax, so the examples shown here 
+				will use that format.
+			</p>
+			<p>
+				For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
+				<br>In the real world, you'll typically want to use standard bean getters and setters.
+			</p>
+			<p>
+				To start off simple, we'll begin with the following simplified bean and build it up.
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> Person {
+		<jc>// Bean properties</jc>
+		<jk>public int</jk> <jf>id</jf>;
+		<jk>public</jk> String <jf>name</jf>;
+
+		<jc>// Bean constructor (needed by parser)</jc>
+		<jk>public</jk> Person() {}
+
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name) {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+		}
+	}
+			</p>
+			<p>
+				The following code shows how to convert this to abbreviated RDF/XML:
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output.</jc>
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev()
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
+
+	<jc>// Serialize the bean to RDF/XML.</jc>
+	String rdfXml = s.serialize(p);
+			</p>
+			<p>
+				It should be noted that serializers can also be created by cloning existing serializers:
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output by cloning an existing serializer.</jc>
+	RdfSerializer s = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.builder()
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
+			</p>
+			<p>
+				This code produces the following output:
+			</p>
+			<p class='bcode'>
+	<xt>&lt;rdf:RDF</xt>
+	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs><xt>&gt;</xt>
+	   <xt>&lt;rdf:Description&gt;</xt>
+	      <xt>&lt;jp:id&gt;</xt>1<xt>&lt;/jp:id&gt;</xt>
+	      <xt>&lt;jp:name&gt;</xt>John Smith<xt>&lt;/jp:name&gt;</xt>
+	   <xt>&lt;/rdf:Description&gt;</xt>
+	<xt>&lt;/rdf:RDF&gt;</xt>
+			</p>
+			<p>
+				Notice that we've taken an arbitrary POJO and converted it to RDF.
+				<br>The Juneau serializers and parsers are designed to work with arbitrary POJOs without requiring any annotations.
+				<br>That being said, several annotations are provided to customize how POJOs are handled to produce usable RDF.
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall-rdf.RdfDetails.Parsers"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.3 - Parsers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.jena.RdfParser} class is the top-level class for all Jena-based parsers.
+				<br>Language-specific parsers are defined as inner subclasses of the <code>RdfParser</code> class:
+			</p>	
+			<ul>
+				<li>{@link org.apache.juneau.jena.RdfParser.Xml}
+				<li>{@link org.apache.juneau.jena.RdfParser.NTriple}
+				<li>{@link org.apache.juneau.jena.RdfParser.Turtle}
+				<li>{@link org.apache.juneau.jena.RdfParser.N3}
+			</ul>
+			<p>
+				The <code>RdfParser.Xml</code> parser handles both regular and abbreviated RDF/XML.
+			</p>
+			<p>
+				Static reusable instances of parsers are also provided with default settings:
+			</p>
+			<ul>
+				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_XML}
+				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_TURTLE}
+				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_NTRIPLE}
+				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_N3}
+			</ul>
+			<p>
+				For an example, we will build upon the previous example and parse the generated RDF/XML back into the original 
+				bean.
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output.</jc>
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
+		.xmlabbrev()
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+		.addRootProperty(<jk>true</jk>)
+		.build();
+
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+	Address a = <jk>new</jk> Address();
+	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+	a.<jf>id</jf> = 1;
+	a.<jf>street</jf> = <js>"100 Main Street"</js>;
+	a.<jf>city</jf> = <js>"Anywhereville"</js>;
+	a.<jf>state</jf> = <js>"NY"</js>;
+	a.<jf>zip</jf> = 12345;
+	a.<jf>isCurrent</jf> = <jk>true</jk>;
+	p.<jf>addresses</jf>.add(a);	
+
+	<jc>// Serialize the bean to RDF/XML.</jc>
+	String rdfXml = s.serialize(p);
+	
+	<jc>// Parse it back into a bean using the reusable XML parser.</jc>
+	p = RdfParser.<jsf>DEFAULT_XML</jsf>.parse(rdfXml, Person.<jk>class</jk>);
+
+	<jc>// Render it as JSON.</jc>
+	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
+	System.<jsm>err</jsm>.println(json);
+			</p>
+			<p>
+				We print it out to JSON to show that all the data has been preserved:
+			</p>
+			<p class='bcode'>
+	{
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		id: 1, 
+		name: <js>'John Smith'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: 1, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: 12345, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}	
+			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
@@ -4387,24 +8684,317 @@
 		<a id="juneau-marshall-rdf.RdfDetails.Namespaces"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.6 - Namespaces</h4>
 		<div class='topic'>
+			<p>
+				You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
+				<br>These are used by default when namespaces are not explicitly specified.
+			</p>
+			<p>
+				The <code>juneau</code> namespace is used for generic names for objects that don't have namespaces 
+				associated with them.
+			</p>
+			<p>
+				The <code>juneaubp</code> namespace is used on bean properties that don't have namespaces associated with 
+				them.
+			</p>
+			<p>
+				The easiest way to specify namespaces is through annotations.
+				<br>In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all properties 
+				of this class.
+				<br>We do this by adding the following annotation to our class:
+			</p>
+			<p class='bcode'>
+	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
+	<jk>public class</jk> Person {
+			</p>
+			<p>
+				In general, the best approach is to define the namespace URIs at the package level using a 
+				<code>package-info.java</code> class, like so:
+			</p>
+			<p class='bcode'>
+	<jc>// RDF namespaces used in this package</jc>
+	<ja>@RdfSchema</ja>(
+		prefix=<js>"ab"</js>,
+		rdfNs={
+			<ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+			<ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
+		}
+	)
+	<jk>package</jk> org.apache.juneau.sample.addressbook;
+	<jk>import</jk> org.apache.juneau.xml.annotation.*;
+			</p>
+			<p>
+				This assigns a default prefix of <js>"ab"</js> for all classes and properties within the project, and 
+				specifies various other prefixes used within this project.
+			</p>
+			<p>
+				Now when we rerun the sample code, we'll get the following:
+			</p>
+			<p class='bcode'>
+	<xt>&lt;rdf:RDF</xt>
+	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
+	   <xt>&lt;rdf:Description&gt;</xt>
+	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+	   <xt>&lt;/rdf:Description&gt;</xt>
+	<xt>&lt;/rdf:RDF&gt;</xt>
+			</p>
+			<p>
+				Namespace auto-detection ({@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces}) is 
+				enabled on serializers by default.
+				<br>This causes the serializer to make a first-pass over the data structure to look for namespaces.
+				<br>In high-performance environments, you may want to consider disabling auto-detection and providing an 
+				explicit list of namespaces to the serializer to avoid this scanning step.
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
+		.xmlabbrev()
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+		.autoDetectNamespaces(<jk>false</jk>)
+		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
+		.build();
+			</p>
+			<p>
+				This code change will produce the same output as before, but will perform slightly better since it doesn't 
+				have to crawl the POJO tree before serializing the result.
+			</p>
 		</div>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall-rdf.RdfDetails.UriProperties"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.7 - URI Properties</h4>
 		<div class='topic'>
+			<p>
+				Bean properties of type <code>java.net.URI</code> or <code>java.net.URL</code> have special meaning to the 
+				RDF serializer.
+				<br>They are interpreted as resource identifiers.
+			</p>
+			<p>
+				In the following code, we're adding 2 new properties.
+				<br>The first property is annotated with <ja>@BeanProperty</ja> to identify that this property is the resource 
+				identifier for this bean.
+				<br>The second un-annotated property is interpreted as a reference to another resource.
+			</p>
+			<p class='bcode'>	
+	<jk>public class</jk> Person {
+		
+		<jc>// Bean properties</jc>
+		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) 
+		<jk>public</jk> URI <jf>uri</jf>;
+		
+		<jk>public</jk> URI <jf>addressBookUri</jf>;
+	
+		...
+		
+		<jc>// Normal constructor</jc>
+		<jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri) <jk>throws</jk> URISyntaxException {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>this</jk>.<jf>name</jf> = name;
+			<jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(uri);
+			<jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(addressBookUri);
+		}
+	}
+			</p>
+			<p>
+				We alter our code to pass in values for these new properties.
+			</p>
+			<p class='bcode'>
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		<js>"http://sample/addressBook"</js>);
+			</p>
+			<p>
+				Now when we run the sample code, we get the following:
+			</p>
+			<p class='bcode'>
+	<xt>&lt;rdf:RDF</xt>
+	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
+	   <xt>&lt;rdf:Description <b><xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs></b>&gt;</xt>
+	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+	   <xt>&lt;/rdf:Description&gt;</xt>
+	<xt>&lt;/rdf:RDF&gt;</xt>
+			</p>
+			<p>
+				The {@link org.apache.juneau.annotation.URI @URI} annotation can also be used on classes and properties 
+				to identify them as URLs when they're not instances of <code>java.net.URI</code> or <code>java.net.URL</code> 
+				(not needed if <code><ja>@Rdf</ja>(beanUri=<jk>true</jk>)</code> is already specified).
+			</p>
+			<p>
+				The following properties would have produced the same output as before.  
+				Note that the <ja>@URI</ja> annotation is only needed on the second property.
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> Person {
+		
+		<jc>// Bean properties</jc>
+		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) <jk>public</jk> String <jf>uri</jf>;
+		
+		<ja>@URI</ja> <jk>public</jk> String <jf>addressBookUri</jf>;
+			</p>
+			<p>
+				Also take note of the {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution},
+				{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}, and 
+				and {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
+				settings that can be specified on the serializer to resolve relative and context-root-relative URIs to 
+				fully-qualified URIs.
+			</p>
+			<p>
+				This can be useful if you want to keep the URI authority and context root information out of the bean logic 
+				layer.
+			</p>
+			<p>
+				The following code produces the same output as before, but the URIs on the beans are relative.
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer with readable output.</jc>
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
+		.xmlabbrev()
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+		.relativeUriBase(<js>"http://myhost/sample"</js>);
+		.absolutePathUriBase(<js>"http://myhost"</js>)
+		.build();
+		
+	<jc>// Create our bean.</jc>
+	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"person/1"</js>, <js>"/"</js>);
+
+	<jc>// Serialize the bean to RDF/XML.</jc>
+	String rdfXml = s.serialize(p);
+			</p>		
 		</div>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall-rdf.RdfDetails.RootProperty"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.8 - Root Property</h4>
 		<div class='topic'>
+			<p>
+				For all RDF languages, the POJO objects get broken down into simple triplets.
+				<br>Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
+				to become lost.
+				<br>There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
+				form, and in some cases it's impossible.
+			</p>
+			<p>
+				By default, the {@link org.apache.juneau.jena.RdfParser} class handles this by scanning all the nodes and 
+				identifying the nodes without incoming references.
+				<br>However, this is inefficient, especially for large models.
+				<br>And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
+				locate the root at all.
+			</p>
+			<p>
+				To resolve this issue, the property {@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty} 
+				was introduced.
+				<br>When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
+				by the parser.
+			</p>
+			<p>
+				To enable, set the <jsf>RDF_addRootProperty</jsf> property to <jk>true</jk> on the serializer:
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer.</jc>
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
+		.xmlabbrev()
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+		.addRootProperty(<jk>true</jk>)
+		.build();
+			</p>	
+			<p>
+				Now when we rerun the sample code, we'll see the added <code>root</code> attribute on the root resource.
+			</p>
+			<p class='bcode'>
+	<xt>&lt;rdf:RDF</xt>
+	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs>
+	    <xa>xmlns:mail</xa>=<xs>"http://www.apache.org/mail/"</xs>
+	    <xa>xmlns:addr</xa>=<xs>"http://www.apache.org/address/"</xs><xt>&gt;</xt>
+	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
+  	      <b><xt>&lt;j:root&gt;</xt>true<xt>&lt;/j:root&gt;</xt></b>
+  	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+	      <xt>&lt;per:addresses&gt;</xt>
+	         <xt>&lt;rdf:Seq&gt;</xt>
+	            <xt>&lt;rdf:li&gt;</xt>
+	               <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/address/1"</xs>&gt;</xt>
+	                  <xt>&lt;addr:personUri <xa>rdf:resource</xa>=<xs>"http://sample/addressBook/person/1"</xs>/&gt;</xt>
+	                  <xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+	                  <xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+	                  <xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+	                  <xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+	                  <xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+	                  <xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+	               <xt>&lt;/rdf:Description&gt;</xt>
+	            <xt>&lt;/rdf:li&gt;</xt>
+	         <xt>&lt;/rdf:Seq&gt;</xt>
+	      <xt>&lt;/per:addresses&gt;</xt>
+	   <xt>&lt;/rdf:Description&gt;</xt>
+	<xt>&lt;/rdf:RDF&gt;</xt>
+			</p>
 		</div>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall-rdf.RdfDetails.TypedLiterals"></a>
 		<h4 class='topic' onclick='toggle(this)'>3.1.9 - Typed Literals</h4>
 		<div class='topic'>
+			<p>
+				XML-Schema data-types can be added to non-<code>String</code> literals through the 
+				{@link org.apache.juneau.jena.RdfSerializer#RDF_addLiteralTypes} setting.
+			</p>
+			<p>
+				To enable, set the <jsf>RDF_addLiteralTypes</jsf> property to <jk>true</jk> on the serializer:
+			</p>
+			<p class='bcode'>
+	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
+		.xmlabbrev()
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+		.addLiteralTypes(<jk>true</jk>)
+		.build();
+			</p>	
+			<p>
+				Now when we rerun the sample code, we'll see the added <code>root</code> attribute on the root resource.
+			</p>
+			<p class='bcode'>
+	<xt>&lt;rdf:RDF</xt>
+	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs>
+	    <xa>xmlns:mail</xa>=<xs>"http://www.apache.org/mail/"</xs>
+	    <xa>xmlns:addr</xa>=<xs>"http://www.apache.org/address/"</xs><xt>&gt;</xt>
+	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
+  	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+	      <xt>&lt;per:id</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#int"</xs></b><xt>&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+	      <xt>&lt;per:addresses&gt;</xt>
+	         <xt>&lt;rdf:Seq&gt;</xt>
+	            <xt>&lt;rdf:li&gt;</xt>
+	               <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/address/1"</xs>&gt;</xt>
+	                  <xt>&lt;addr:personUri <xa>rdf:resource</xa>=<xs>"http://sample/addressBook/person/1"</xs>/&gt;</xt>
+	                  <xt>&lt;addr:id</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#int"</xs></b>&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+	                  <xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+	                  <xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+	                  <xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+	                  <xt>&lt;mail:zip</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#int"</xs></b>&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+	                  <xt>&lt;addr:isCurrent</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#boolean"</xs></b>&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+	               <xt>&lt;/rdf:Description&gt;</xt>
+	            <xt>&lt;/rdf:li&gt;</xt>
+	         <xt>&lt;/rdf:Seq&gt;</xt>
+	      <xt>&lt;/per:addresses&gt;</xt>
+	   <xt>&lt;/rdf:Description&gt;</xt>
+	<xt>&lt;/rdf:RDF&gt;</xt>
+			</p>
 		</div>
 	</div>
 	
