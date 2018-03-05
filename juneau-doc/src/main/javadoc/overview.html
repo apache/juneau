@@ -3901,12 +3901,6 @@
 			<br>Likewise, the JSON parser creates POJOs directly from JSON without the need for intermediate DOM objects. 
 		</p>
 		
-		<h5 class='topic'>Prerequisites</h5>
-		<p>
-			The Juneau JSON serialization and parsing support does not require any external prerequisites.  
-			<br>It only requires Java 1.6 or above.
-		</p>
-		
 		<h5 class='toc'>Additional Information - org.apache.juneau.json</h5>
 		<ol class='toc'>
 			<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Overview'>JSON support overview</a></p> 
@@ -4023,6 +4017,17 @@
 	<a id="juneau-marshall.XmlDetails"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.17 - XML Details</h3>
 	<div class='topic'>
+		<p>
+			Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
+			<br>The XML serializer converts POJOs directly to XML without the need for intermediate DOM objects.
+			<br>Likewise, the XML parser uses a STaX parser and creates POJOs directly without intermediate DOM objects. 
+		</p>
+		<p>
+			Unlike frameworks such as JAXB, Juneau does not require POJO classes to be annotated to produce and consume 
+			XML.
+			<br>However, several XML annotations are provided for handling namespaces and fine-tuning the format of the XML produced.
+		</p>
+
 		<h5 class='toc'>Additional Information - org.apache.juneau.xml</h5>
 		<ol class='toc'>
 			<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Overview'>XML support overview</a></p> 
@@ -4141,6 +4146,20 @@
 	<a id="juneau-marshall.UonDetails"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.19 - UON Details</h3>
 	<div class='topic'>
+
+		<p>
+			Juneau supports converting arbitrary POJOs to and from UON strings using ultra-efficient serializers 
+			and parsers.
+			<br>The serializer converts POJOs directly to UON strings without the need for intermediate DOM objects 
+			using a highly-efficient state machine.
+			<br>Likewise, the parser creates POJOs directly from UON strings without the need for intermediate DOM 
+			objects. 
+		</p>
+		<p>
+			Juneau uses UON (URL-Encoded Object Notation) for representing POJOs.  
+			The UON specification can be found <a href='doc-files/rfc_uon.txt'>here</a>.
+		</p>
+
 		<h5 class='toc'>Additional Information - org.apache.juneau.uon</h5>
 		<ol class='toc'>
 			<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Overview'>UON support overview</a></p> 
@@ -4180,6 +4199,19 @@
 	<a id="juneau-marshall.UrlEncodingDetails"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.20 - URL-Encoding Details</h3>
 	<div class='topic'>
+		<p>
+			Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
+			and parsers.
+			<br>The serializer converts POJOs directly to URL-encoded strings without the need for intermediate DOM objects 
+			using a highly-efficient state machine.
+			<br>Likewise, the parser creates POJOs directly from URL-encoded strings without the need for intermediate DOM 
+			objects. 
+		</p>
+		<p>
+			Juneau uses UON (URL-Encoded Object Notation) for representing POJOs.  
+			The UON specification can be found <a href='doc-files/rfc_uon.txt'>here</a>.
+		</p>
+
 		<h5 class='toc'>Additional Information - org.apache.juneau.urlencoding</h5>
 		<ol class='toc'>
 			<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Overview'>URL encoding support overview</a></p> 
@@ -4295,6 +4327,17 @@
 	<a id="juneau-marshall-rdf.RdfDetails"></a>
 	<h3 class='topic' onclick='toggle(this)'>3.1 - RDF Details</h3>
 	<div class='topic'>
+		<p>
+			Juneau supports serializing and parsing arbitrary POJOs to and from the following RDF formats:
+		</p>
+		<ul>
+			<li>RDF/XML
+			<li>Abbreviated RDF/XML
+			<li>N-Triple
+			<li>Turtle
+			<li>N3
+		</ul>
+
 		<h5 class='toc'>Additional Information - org.apache.juneau.jena</h5>
 		<ol class='toc'>
 			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfOverview'>RDF support overview</a></p> 

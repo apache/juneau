@@ -69,50 +69,6 @@
 <a id="Overview"></a>
 <h2 class='topic' onclick='toggle(this)'>1 - URL encoding support overview</h2>
 <div class='topic'>
-	<p>
-		Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
-		and parsers.
-		<br>The serializer converts POJOs directly to URL-encoded strings without the need for intermediate DOM objects 
-		using a highly-efficient state machine.
-		<br>Likewise, the parser creates POJOs directly from URL-encoded strings without the need for intermediate DOM 
-		objects. 
-	</p>
-	<p>
-		Juneau uses UON (URL-Encoded Object Notation) for representing POJOs.  
-		The UON specification can be found <a href='doc-files/rfc_uon.txt'>here</a>.
-	</p>
-	<p>
-		Juneau can serialize and parse instances of any of the following POJO types:
-	</p>
-	<ul class='spaced-list'>
-		<li>
-			Java primitives and primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
-			<code>Float</code>).
-		<li>
-			Java Collections Framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything 
-			on this list.
-		<li>
-			Multi-dimensional arrays of any type on this list.
-		<li>
-			Java Beans with properties of any type on this list.
-		<li>
-			Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
-			<code>toString()</code>, <code>fromString()</code>, <code>valueOf()</code>, 
-			<code>constructor(String)</code>).
-		<li>
-			Non-serializable classes and properties with associated <code>PojoSwaps</code> that convert them to 
-			serializable forms.
-	</ul>
-	<p>
-		Refer to <a href='../../../../overview-summary.html#juneau-marshall.PojoCategories' class='doclink'>POJO Categories</a> 
-		for a complete definition of supported POJOs.
-	</p>
-	
-	<h5 class='topic'>Prerequisites</h5>
-	<p>
-		The Juneau URL-encoding serialization and parsing support does not require any external prerequisites.  
-		It only requires Java 1.6 or above.
-	</p>
 
 	<!-- ======================================================================================================== -->
 	<a id="OverviewExample"></a>

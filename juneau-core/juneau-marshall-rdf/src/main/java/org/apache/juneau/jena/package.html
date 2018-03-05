@@ -75,65 +75,6 @@
 <a id="RdfOverview"></a>
 <h2 class='topic' onclick='toggle(this)'>1 - RDF support overview</h2>
 <div class='topic'>
-	<p>
-		Juneau supports serializing and parsing arbitrary POJOs to and from the following RDF formats:
-	</p>
-	<ul>
-		<li>RDF/XML
-		<li>Abbreviated RDF/XML
-		<li>N-Triple
-		<li>Turtle
-		<li>N3
-	</ul>
-	<p>
-		Juneau can serialize and parse instances of any of the following POJO types:
-	</p>
-	<ul class='spaced-list'>
-		<li>
-			Java primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
-			<code>Float</code>).
-		<li>
-			Java collections framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything on 
-				this list.
-		<li>
-			Multi-dimensional arrays of any type on this list.
-		<li>
-			Java Beans with properties of any type on this list.
-		<li>
-			Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
-			<code>toString()</code>, <code>fromString()</code>, <code>valueOf()</code>, <code>constructor(String)</code>).
-	</ul>
-	<p>
-		In addition to the types shown above, Juneau includes the ability to define 'swaps' to transform non-standard 
-		object and property types to serializable forms (e.g. to transform <code>Calendars</code> to and from 
-		<code>ISO8601</code> strings, or <code>byte[]</code> arrays to and from base-64 encoded strings).
-		<br>These  can be associated with serializers/parsers, or can be associated with classes or bean properties through 
-		type and method annotations.
-	</p>
-	<p>
-		Refer to <a href='../../../../overview-summary.html#juneau-marshall.PojoCategories' class='doclink'>POJO Categories</a> 
-		for a complete definition of supported POJOs.
-	</p>
-	
-	<h5 class='topic'>Prerequisites</h5>
-	<p>
-		Juneau uses the Jena library for these formats.  
-		<br>The predefined serializers and parsers convert POJOs to and from RDF models and then uses Jena to convert 
-		them to and from the various RDF languages.	
-	</p>
-	<p>
-		Jena libraries must be provided on the classpath separately if you plan on making use of the RDF support.
-	</p>
-	<p>
-		The minimum list of required jars are:
-	</p>
-	<ul>
-		<li><code>jena-core-2.7.1.jar</code> 	
-		<li><code>jena-iri-0.9.2.jar</code> 	
-		<li><code>log4j-1.2.16.jar</code> 	
-		<li><code>slf4j-api-1.6.4.jar</code> 	
-		<li><code>slf4j-log4j12-1.6.4.jar</code> 	
-	</ul>
 
 	<!-- ======================================================================================================== -->
 	<a id="RdfOverviewExample"></a>
