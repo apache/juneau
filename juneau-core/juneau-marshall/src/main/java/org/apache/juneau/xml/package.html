@@ -74,16 +74,9 @@
 		<ol>
 			<li><p><a class='doclink' href='#AutoDetectNamespaces'>Auto-detection of namespaces</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#Collections'>Collections</a></p>
 		<li><p><a class='doclink' href='#XmlSchemaSupport'>XML-Schema support</a></p>
-		<li><p><a class='doclink' href='#SerializerConfigurableProperties'>Configurable properties</a></p>
-		<li><p><a class='doclink' href='#SerializerOtherNotes'>Other notes</a></p>
 	</ol>
 	<li><p><a class='doclink' href='#XmlParser'>XmlParser class</a></p> 
-	<ol>
-		<li><p><a class='doclink' href='#ParserConfigurableProperties'>Configurable properties</a></p>
-		<li><p><a class='doclink' href='#ParserOtherNotes'>Other notes</a></p>
-	</ol>
 </ol>
 
 
@@ -2177,89 +2170,6 @@
 		
 	</div>
 	
-		
-	<!-- ======================================================================================================== -->
-	<a id="Collections"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.5 - Collections</h3>
-	<div class='topic'>
-		<p>
-			In our example, let's add a list-of-beans property to our sample class:
-		</p>
-		<p class='bcode'>
-	<jk>public class</jk> Person {
-		
-		<jc>// Bean properties</jc>
-		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
-		...
-	}
-		</p>
-		<p>
-			The <code>Address</code> class has the following properties defined:
-		</p>
-		<p class='bcode'>
-	<ja>@Xml</ja>(prefix=<js>"addr"</js>)
-	<ja>@Bean</ja>(typeName=<js>"address"</js>)
-	<jk>public class</jk> Address {
-
-		<jc>// Bean properties</jc>
-		<ja>@Xml</ja>(format=<jsf>ATTR</jsf>) <jk>public</jk> URI <jf>uri</jf>;
-		<jk>public</jk> URI <jf>personUri</jf>;
-		<jk>public int</jk> <jf>id</jf>;
-		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
-		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public int</jk> <jf>zip</jf>;
-		<jk>public boolean</jk> <jf>isCurrent</jf>;
-	}
-		</p>
-		<p>
-			Next, add some quick-and-dirty code to add an address to our person bean:
-		</p>
-		<p class='bcode'>
-	<jc>// Create a new serializer with readable output.</jc>
-	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ws().sq().build();
-
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-	Address a = <jk>new</jk> Address();
-	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
-	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
-	a.<jf>id</jf> = 1;
-	a.<jf>street</jf> = <js>"100 Main Street"</js>;
-	a.<jf>city</jf> = <js>"Anywhereville"</js>;
-	a.<jf>state</jf> = <js>"NY"</js>;
-	a.<jf>zip</jf> = 12345;
-	a.<jf>isCurrent</jf> = <jk>true</jk>;
-	p.<jf>addresses</jf>.add(a);	
-		</p>
-		<p>
-			Now when we run the sample code, we get the following:
-		</p>
-		<p class='bcode'>
-	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
-			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
-		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-		<xt>&lt;per:addressBookUri&gt;</xt>http://sample/addressBook<xt>&lt;/per:addressBookUri&gt;</xt>
-		<xt>&lt;per:birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
-		<xt>&lt;per:addresses&gt;</xt>
-			<xt>&lt;addr:address</xt> <xa>uri</xa>=<xs>'http://sample/addressBook/address/1'</xs><xt>&gt;</xt>
-				<xt>&lt;addr:personUri&gt;</xt>http://sample/addressBook/person/1<xt>&lt;/addr:personUri&gt;</xt>
-				<xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
-				<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
-				<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
-				<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
-				<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
-				<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
-			<xt>&lt;/addr:address&gt;</xt>
-		<xt>&lt;/per:addresses&gt;</xt>
-	<xt>&lt;/per:person&gt;</xt>
-		</p>
-	</div>
-	
 
 	<!-- ======================================================================================================== -->
 	<a id="XmlSchemaSupport"></a>
@@ -2597,34 +2507,6 @@
 			{@link javax.xml.validation.Validator} using the input from the serialize method.
 		</p>
 	</div>
-
-
-	<!-- ======================================================================================================== -->
-	<a id="SerializerConfigurableProperties"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.8 - Configurable properties</h3>
-	<div class='topic'>
-		<p>
-			See the following classes for all configurable properties that can be used on this serializer:
-		</p>
-		<ul>
-			<li>{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>{@link org.apache.juneau.xml.XmlSerializer} - Serializer context properties.
-		</ul>
-	</div>		
-
-
-	<!-- ======================================================================================================== -->
-	<a id="SerializerOtherNotes"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.9 - Other notes</h3>
-	<div class='topic'>
-		<ul class='spaced-list'>
-			<li>
-				Like all other Juneau serializers, the XML serializer is thread safe and maintains an internal cache of 
-				bean classes encountered.
-				<br>For performance reasons, it's recommended that serializers be reused whenever possible instead of 
-				always creating new instances.
-		</ul>
-	</div>
 </div>
 
 
@@ -2728,35 +2610,7 @@
 		]
 	}	
 	</p>
-	
 
-	<!-- ======================================================================================================== -->
-	<a id="ParserConfigurableProperties"></a>
-	<h3 class='topic' onclick='toggle(this)'>3.2 - Configurable properties</h3>
-	<div class='topic'>
-		<p>
-			See the following classes for all configurable properties that can be used on this parser:
-		</p>
-		<ul>
-			<li>{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>{@link org.apache.juneau.xml.XmlParser} - Parser context properties.
-		</ul>
-	</div>		
-
-
-	<!-- ======================================================================================================== -->
-	<a id="ParserOtherNotes"></a>
-	<h3 class='topic' onclick='toggle(this)'>3.3 - Other notes</h3>
-	<div class='topic'>
-		<ul class='spaced-list'>
-			<li>
-				Like all other Juneau parsers, the XML parser is thread safe and maintains an internal cache of bean 
-				classes encountered.
-				<br>For performance reasons, it's recommended that parser be reused whenever possible instead of always 
-				creating new instances.
-		</ul>
-	</div>
-	
 </div>
 
 <p align="center"><i><b>*** fín ***</b></i></p>

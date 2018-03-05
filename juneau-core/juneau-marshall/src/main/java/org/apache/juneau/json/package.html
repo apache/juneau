@@ -63,16 +63,10 @@
 	</ol>
 	<li><p><a class='doclink' href='#JsonSerializer'>JsonSerializer class</a></p> 
 	<ol>
-		<li><p><a class='doclink' href='#Collections'>Collections</a></p>
 		<li><p><a class='doclink' href='#JsonSchemaSupport'>JSON-Schema support</a></p>
-		<li><p><a class='doclink' href='#SerializerConfigurableProperties'>Configurable properties</a></p>
 		<li><p><a class='doclink' href='#SerializerOtherNotes'>Other notes</a></p>
 	</ol>
 	<li><p><a class='doclink' href='#JsonParser'>JsonParser class</a></p> 
-	<ol>
-		<li><p><a class='doclink' href='#ParserConfigurableProperties'>Configurable properties</a></p>
-		<li><p><a class='doclink' href='#ParserOtherNotes'>Other notes</a></p>
-	</ol>
 </ol>
 
 <!-- ======================================================================================================== -->
@@ -303,84 +297,6 @@
 	
 
 	<!-- ======================================================================================================== -->
-	<a id="Collections"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.2 - Collections</h3>
-	<div class='topic'>
-		<p>
-			In our example, let's add a list-of-beans property to our sample class:
-		</p>
-		<p class='bcode'>
-	<jk>public class</jk> Person {
-		
-		<jc>// Bean properties</jc>
-		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
-		...
-	}
-		</p>
-		<p>
-			The <code>Address</code> class has the following properties defined:
-		</p>
-		<p class='bcode'>
-	<jk>public class</jk> Address {
-
-		<jc>// Bean properties</jc>
-		<jk>public</jk> URI <jf>uri</jf>;
-		<jk>public</jk> URI <jf>personUri</jf>;
-		<jk>public int</jk> <jf>id</jf>;
-		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
-		<jk>public int</jk> <jf>zip</jf>;
-		<jk>public boolean</jk> <jf>isCurrent</jf>;
-	}
-		</p>
-		<p>
-			Next, add some quick-and-dirty code to add an address to our person bean:
-		</p>
-		<p class='bcode'>
-	<jc>// Use serializer with readable output, simple mode.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
-
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-	Address a = <jk>new</jk> Address();
-	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
-	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
-	a.<jf>id</jf> = 1;
-	a.<jf>street</jf> = <js>"100 Main Street"</js>;
-	a.<jf>city</jf> = <js>"Anywhereville"</js>;
-	a.<jf>state</jf> = <js>"NY"</js>;
-	a.<jf>zip</jf> = 12345;
-	a.<jf>isCurrent</jf> = <jk>true</jk>;
-	p.<jf>addresses</jf>.add(a);	
-		</p>
-		<p>
-			Now when we run the sample code, we get the following:
-		</p>
-		<p class='bcode'>
-	{
-		id: <jk>1</jk>, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: <jk>1</jk>, 
-				street: <js>'100 Main Street'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				state: <js>'NY'</js>, 
-				zip: <jk>12345</jk>, 
-				isCurrent: <jk>true</jk>
-			}
-		]
-	}
-		</p>
-	</div>
-	
-
-	<!-- ======================================================================================================== -->
 	<a id="JsonSchemaSupport"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.3 - JSON-Schema support</h3>
 	<div class='topic'>
@@ -530,34 +446,6 @@
 		</p>
 	</div>
 
-	<!-- ======================================================================================================== -->
-	<a id="SerializerConfigurableProperties"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.5 - Configurable properties</h3>
-	<div class='topic'>
-		<p>
-			See the following classes for all configurable properties that can be used on this serializer:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>
-				{@link org.apache.juneau.json.JsonSerializer} - Serializer context properties.
-		</ul>
-	</div>		
-
-
-	<!-- ======================================================================================================== -->
-	<a id="SerializerOtherNotes"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.6 - Other notes</h3>
-	<div class='topic'>
-		<ul class='spaced-list'>
-			<li>
-				Like all other Juneau serializers, the JSON serializer is thread safe and maintains an internal cache 
-				of bean classes encountered.
-				<br>For performance reasons, it's recommended that serializers be reused whenever possible instead of 
-				always creating new instances.
-		</ul>
-	</div>
 </div>
 
 
@@ -672,37 +560,6 @@
 		]
 	}	
 	</p>
-	
-
-	<!-- ======================================================================================================== -->
-	<a id="ParserConfigurableProperties"></a>
-	<h3 class='topic' onclick='toggle(this)'>3.2 - Configurable properties</h3>
-	<div class='topic'>
-		<p>
-			See the following classes for all configurable properties that can be used on this parser:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>
-				{@link org.apache.juneau.json.JsonParser} - Serializer context properties.
-		</ul>
-	</div>		
-
-
-	<!-- ======================================================================================================== -->
-	<a id="ParserOtherNotes"></a>
-	<h3 class='topic' onclick='toggle(this)'>3.3 - Other notes</h3>
-	<div class='topic'>
-		<ul class='spaced-list'>
-			<li>
-				Like all other Juneau parsers, the JSON parser is thread safe and maintains an internal cache of bean 
-				classes encountered.
-				<br>For performance reasons, it's recommended that parser be reused whenever possible instead of always 
-				creating new instances.
-		</ul>
-	</div>
-	
 </div>
 <p align="center"><i><b>*** fín ***</b></i></p>
 
