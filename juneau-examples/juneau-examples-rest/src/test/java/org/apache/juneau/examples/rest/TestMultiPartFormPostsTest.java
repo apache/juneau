@@ -33,7 +33,7 @@ public class TestMultiPartFormPostsTest extends RestTestcase {
 	@Test
 	public void testUpload() throws Exception {
 		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
-		File f = new File("tmp/testMultiPartFormPosts.txt");
+		File f = new File(new File(System.getProperty("java.io.tmpdir")), "testMultiPartFormPosts.txt");
 		f.deleteOnExit();
 		try (FileWriter fw = new FileWriter(f)) {
 			IOPipe.create(new StringReader("test!"), fw).run();
