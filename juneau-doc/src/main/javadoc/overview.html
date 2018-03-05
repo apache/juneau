@@ -106,7 +106,7 @@
 			<li><p><a class='doclink' href='#juneau-marshall.PojoBuilders'>POJO Builders</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.URIs'>URIs</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.BeanFilters'>BeanFilters</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.InterfaceFilters'>Interface filters</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.InterfaceFilters'>Interface Filters</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.StopClasses'>Stop Classes</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.BypassSerialization'>Bypass Serialization using Readers and InputStreams</a></p>
 		</ol>
@@ -119,16 +119,16 @@
 		<li><p><a class='doclink' href='#juneau-marshall.JacksonComparison'>Comparison with Jackson</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.BestPractices'>Best Practices</a></p>
-		<li><p><a class='doclink' href='#juneau-marshall.AdditionalInfo'>Additional Information</a></p>
-		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.AdditionalInfo.JSON'>JSON</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.AdditionalInfo.XML'>XML</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.AdditionalInfo.HTML'>HTML</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.AdditionalInfo.UON'>UON</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.AdditionalInfo.URLEncoding'>URL-Encoding</a></p>
-		</ol>
+		<li><p><a class='doclink' href='#juneau-marshall.JsonDetails'>JSON Details</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.XmlDetails'>XML Details</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails'>HTML Details</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.UonDetails'>UON Details</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails'>URL-Encoding Details</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall-rdf'><i>juneau-marshall-rdf</i></a></p>
+	<ol>
+		<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails'>RDF Details</a></p>
+	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-dto'><i>juneau-dto</i></a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-dto.HTML5'>HTML5</a></p>
@@ -3656,145 +3656,135 @@
 	</div>
 
 	<!-- ======================================================================================================= -->
-	<a id="juneau-marshall.AdditionalInfo"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.14 - Additional Information</h3>
+	<a id="juneau-marshall.JsonDetails"></a>
+	<h3 class='topic' onclick='toggle(this)'>2.14 - JSON Details</h3>
 	<div class='topic'>
-		<p>
-			Extensive javadocs exist for individual language support.
-			Refer to these docs for language-specific information.
-		</p>
+		<h5 class='toc'>Additional Information - org.apache.juneau.json</h5>
+		<ol class='toc'>
+			<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Overview'>JSON support overview</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#OverviewExample'>Example</a></p>
+			</ol>
+			<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonSerializer'>JsonSerializer class</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Collections'>Collections</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonSchemaSupport'>JSON-Schema support</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
+			</ol>
+			<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonParser'>JsonParser class</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#ParserOtherNotes'>Other notes</a></p>
+			</ol>
+		</ol>
+	</div>
 
-		<!-- =================================================================================================== -->
-		<a id="juneau-marshall.AdditionalInfo.JSON"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.13.1 - JSON</h4>
-		<div class='topic'>
-			<h5 class='toc'>Additional Information - org.apache.juneau.json</h5>
-			<ol class='toc'>
-				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Overview'>JSON support overview</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#OverviewExample'>Example</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonSerializer'>JsonSerializer class</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Collections'>Collections</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonSchemaSupport'>JSON-Schema support</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#JsonParser'>JsonParser class</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/json/package-summary.html#ParserOtherNotes'>Other notes</a></p>
-				</ol>
+	<!-- ======================================================================================================= -->
+	<a id="juneau-marshall.XmlDetails"></a>
+	<h3 class='topic' onclick='toggle(this)'>2.15 - XML Details</h3>
+	<div class='topic'>
+		<h5 class='toc'>Additional Information - org.apache.juneau.xml</h5>
+		<ol class='toc'>
+			<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Overview'>XML support overview</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#OverviewExample'>XML support overview - example</a></p>
 			</ol>
-		</div>
+			<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlSerializer'>XmlSerializer class</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Methodology'>XML support methodology</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlAnnotation'>@Xml annotations</a></p>
+				<ol>
+					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlName'>@Bean.typeName()</a></p>
+					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlChildName'>@Xml.childName()</a></p>
+					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlFormat'>@Xml.format()</a></p>
+				</ol>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Namespaces'>Namespaces</a></p>
+				<ol>
+					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#AutoDetectNamespaces'>Auto-detection of namespaces</a></p>
+				</ol>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Collections'>Collections</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlSchemaSupport'>XML-Schema support</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
+			</ol>
+			<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlParser'>XmlParser class</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#ParserOtherNotes'>Other notes</a></p>
+			</ol>
+		</ol>
+	</div>
 
-		<!-- =================================================================================================== -->
-		<a id="juneau-marshall.AdditionalInfo.XML"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.13.2 - XML</h4>
-		<div class='topic'>
-			<h5 class='toc'>Additional Information - org.apache.juneau.xml</h5>
-			<ol class='toc'>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Overview'>XML support overview</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#OverviewExample'>XML support overview - example</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlSerializer'>XmlSerializer class</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Methodology'>XML support methodology</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlAnnotation'>@Xml annotations</a></p>
-					<ol>
-						<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlName'>@Bean.typeName()</a></p>
-						<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlChildName'>@Xml.childName()</a></p>
-						<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlFormat'>@Xml.format()</a></p>
-					</ol>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Namespaces'>Namespaces</a></p>
-					<ol>
-						<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#AutoDetectNamespaces'>Auto-detection of namespaces</a></p>
-					</ol>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Collections'>Collections</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlSchemaSupport'>XML-Schema support</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#XmlParser'>XmlParser class</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/xml/package-summary.html#ParserOtherNotes'>Other notes</a></p>
-				</ol>
+	<!-- ======================================================================================================= -->
+	<a id="juneau-marshall.HtmlDetails"></a>
+	<h3 class='topic' onclick='toggle(this)'>2.16 - HTML Details</h3>
+	<div class='topic'>
+		<h5 class='toc'>Additional Information - org.apache.juneau.html</h5>
+		<ol class='toc'>
+			<li><p><a class='doclink' href='org/apache/juneau/html/package-summary.html#HtmlSerializer'>HTML serialization support</a></p> 
+			<li><p><a class='doclink' href='org/apache/juneau/html/package-summary.html#HtmlParser'>HTML parsing support</a></p> 
+		</ol>
+	</div>
+
+	<!-- ======================================================================================================= -->
+	<a id="juneau-marshall.UonDetails"></a>
+	<h3 class='topic' onclick='toggle(this)'>2.17 - UON Details</h3>
+	<div class='topic'>
+		<h5 class='toc'>Additional Information - org.apache.juneau.uon</h5>
+		<ol class='toc'>
+			<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Overview'>UON support overview</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#OverviewExample'>Example</a></p>
 			</ol>
-		</div>
-		
-		<!-- =================================================================================================== -->
-		<a id="juneau-marshall.AdditionalInfo.HTML"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.13.3 - HTML</h4>
-		<div class='topic'>
-			<h5 class='toc'>Additional Information - org.apache.juneau.html</h5>
-			<ol class='toc'>
-				<li><p><a class='doclink' href='org/apache/juneau/html/package-summary.html#HtmlSerializer'>HTML serialization support</a></p> 
-				<li><p><a class='doclink' href='org/apache/juneau/html/package-summary.html#HtmlParser'>HTML parsing support</a></p> 
+			<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#UrlEncodingSerializer'>UrlEncodingSerializer and UonSerializer classes</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Collections'>Collections</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
 			</ol>
-		</div>
-		
-		<!-- =================================================================================================== -->
-		<a id="juneau-marshall.AdditionalInfo.UON"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.13.4 - UON</h4>
-		<div class='topic'>
-			<h5 class='toc'>Additional Information - org.apache.juneau.uon</h5>
-			<ol class='toc'>
-				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Overview'>UON support overview</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#OverviewExample'>Example</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#UrlEncodingSerializer'>UrlEncodingSerializer and UonSerializer classes</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Collections'>Collections</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#UrlEncodingParser'>UrlEncodingParser and UonParser classes</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#ParserOtherNotes'>Other notes</a></p>
-				</ol>
+			<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#UrlEncodingParser'>UrlEncodingParser and UonParser classes</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/uon/package-summary.html#ParserOtherNotes'>Other notes</a></p>
 			</ol>
-		</div>
-					
-		<!-- =================================================================================================== -->
-		<a id="juneau-marshall.AdditionalInfo.URLEncoding"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.13.5 - URL-Encoding</h4>
-		<div class='topic'>
-			<h5 class='toc'>Additional Information - org.apache.juneau.urlencoding</h5>
-			<ol class='toc'>
-				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Overview'>URL encoding support overview</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#OverviewExample'>Example</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#UrlEncodingSerializer'>UrlEncodingSerializer and UonSerializer classes</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Collections'>Collections</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
-				</ol>
-				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#UrlEncodingParser'>UrlEncodingParser and UonParser classes</a></p> 
-				<ol>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
-					<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#ParserOtherNotes'>Other notes</a></p>
-				</ol>
+		</ol>
+	</div>
+	
+	<!-- ======================================================================================================= -->
+	<a id="juneau-marshall.UrlEncodingDetails"></a>
+	<h3 class='topic' onclick='toggle(this)'>2.18 - URL-Encoding Details</h3>
+	<div class='topic'>
+		<h5 class='toc'>Additional Information - org.apache.juneau.urlencoding</h5>
+		<ol class='toc'>
+			<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Overview'>URL encoding support overview</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#OverviewExample'>Example</a></p>
 			</ol>
-		</div>
+			<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#UrlEncodingSerializer'>UrlEncodingSerializer and UonSerializer classes</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Collections'>Collections</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#Recursion'> Non-tree models and recursion detection</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
+			</ol>
+			<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#UrlEncodingParser'>UrlEncodingParser and UonParser classes</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#ParserOtherNotes'>Other notes</a></p>
+			</ol>
+		</ol>
 	</div>
 </div>
 
@@ -3873,31 +3863,37 @@
 	String rdfNTriple = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(p);
 	</p>
 
-	<h5 class='toc'>Additional Information - org.apache.juneau.jena</h5>
-	<ol class='toc'>
-		<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfOverview'>RDF support overview</a></p> 
-		<ol>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfOverviewExample'>Example</a></p>
+	<!-- ======================================================================================================= -->
+	<a id="juneau-marshall-rdf.RdfDetails"></a>
+	<h3 class='topic' onclick='toggle(this)'>3.1 - RDF Details</h3>
+	<div class='topic'>
+		<h5 class='toc'>Additional Information - org.apache.juneau.jena</h5>
+		<ol class='toc'>
+			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfOverview'>RDF support overview</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfOverviewExample'>Example</a></p>
+			</ol>
+			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfSerializer'>RdfSerializer class</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#Namespaces'>Namespaces</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#UriProperties'>URI properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#Collections'>Collections</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RootProperty'>Root property</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#TypedLiterals'>Typed literals</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#Recursion'>Non-tree models and recursion detection</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
+			</ol>	
+			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfParser'>RdfParser class</a></p> 
+			<ol>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
+				<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#ParserOtherNotes'>Other notes</a></p>
+			</ol>	
 		</ol>
-		<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfSerializer'>RdfSerializer class</a></p> 
-		<ol>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#Namespaces'>Namespaces</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#UriProperties'>URI properties</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#Collections'>Collections</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RootProperty'>Root property</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#TypedLiterals'>Typed literals</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#Recursion'>Non-tree models and recursion detection</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#SerializerConfigurableProperties'>Configurable properties</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#SerializerOtherNotes'>Other notes</a></p>
-		</ol>	
-		<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#RdfParser'>RdfParser class</a></p> 
-		<ol>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#GenericParsing'>Parsing into generic POJO models</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#ParserConfigurableProperties'>Configurable properties</a></p>
-			<li><p><a class='doclink' href='org/apache/juneau/jena/package-summary.html#ParserOtherNotes'>Other notes</a></p>
-		</ol>	
-	</ol>
+	</div>
+	
 </div>
 	
 <!-- =========================================================================================================== -->
