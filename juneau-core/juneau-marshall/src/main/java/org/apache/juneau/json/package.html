@@ -63,16 +63,13 @@
 	</ol>
 	<li><p><a class='doclink' href='#JsonSerializer'>JsonSerializer class</a></p> 
 	<ol>
-		<li><p><a class='doclink' href='#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
 		<li><p><a class='doclink' href='#Collections'>Collections</a></p>
 		<li><p><a class='doclink' href='#JsonSchemaSupport'>JSON-Schema support</a></p>
-		<li><p><a class='doclink' href='#Recursion'> Non-tree models and recursion detection</a></p>
 		<li><p><a class='doclink' href='#SerializerConfigurableProperties'>Configurable properties</a></p>
 		<li><p><a class='doclink' href='#SerializerOtherNotes'>Other notes</a></p>
 	</ol>
 	<li><p><a class='doclink' href='#JsonParser'>JsonParser class</a></p> 
 	<ol>
-		<li><p><a class='doclink' href='#GenericParsing'>Parsing into generic POJO models</a></p>
 		<li><p><a class='doclink' href='#ParserConfigurableProperties'>Configurable properties</a></p>
 		<li><p><a class='doclink' href='#ParserOtherNotes'>Other notes</a></p>
 	</ol>
@@ -306,107 +303,6 @@
 	
 
 	<!-- ======================================================================================================== -->
-	<a id="BeanAnnotations"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.1 - @Bean and @BeanProperty annotations</h3>
-	<div class='topic'>
-		<p>
-			The {@link org.apache.juneau.annotation.Bean @Bean} and 
-			{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotations are used to customize the 
-			behavior of beans across the entire framework.
-			<br>They have various uses:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				Hiding bean properties.
-			<li>
-				Specifying the ordering of bean properties.
-			<li>
-				Overriding the names of bean properties.
-			<li>
-				Associating swaps at both the class and property level (to convert non-serializable POJOs to 
-				serializable forms).
-		</ul>
-		<p>
-			For example, we now add a <code>birthDate</code> property, and associate a swap with it to transform it to 
-			an ISO8601 date-time string in GMT time.
-			<br>We'll also add a couple of <code>URI</code> properties.
-			<br>By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you 
-			want them serialized.
-			<br>Using swaps, we can convert them to standardized string forms.
-		</p>
-		<p class='bcode'>	
-	<jk>public class</jk> Person {
-		<jc>// Bean properties</jc>
-		<jk>public int</jk> <jf>id</jf>;
-		<jk>public</jk> String <jf>name</jf>;
-		<jk>public</jk> URI <jf>uri</jf>;
-		<jk>public</jk> URI <jf>addressBookUri</jf>;
-
-		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
-
-
-		<jc>// Bean constructor (needed by parser)</jc>
-		<jk>public</jk> Person() {}
-
-		<jc>// Normal constructor</jc>
-		<jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri, String birthDate) <jk>throws</jk> Exception {
-			<jk>this</jk>.<jf>id</jf> = id;
-			<jk>this</jk>.<jf>name</jf> = name;
-			<jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(uri);
-			<jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(addressBookUri);
-			<jk>this</jk>.<jf>birthDate</jf> = <jk>new</jk> GregorianCalendar();
-			<jk>this</jk>.<jf>birthDate</jf>.setTime(DateFormat.<jsm>getDateInstance</jsm>(DateFormat.<jsf>MEDIUM</jsf>).parse(birthDate));
-		}
-	}
-		</p>
-		<p>
-			Next, we alter our code to pass in the birthdate:
-		</p>
-		<p class='bcode'>
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-		</p>
-		<p>
-			Now when we rerun the sample code, we'll get the following:
-		</p>
-		<p class='bcode'>
-	{
-		id: <jk>1</jk>, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>
-	}
-		</p>
-		<p>
-			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer() @Bean.propertyNamer()} 
-			annotation that allows you to plug in your own logic for determining bean property names.
-			<br>The {@link org.apache.juneau.PropertyNamerDLC} is an example of an alternate property namer.
-			It converts bean property names to lowercase-dashed format.
-		</p>
-		
-		<h5 class='topic'>Example:</h5>
-		<p class='bcode'>	
-	<ja>@Bean</ja>(propertyNamer=PropertyNamerDLC.<jk>class</jk>)
-	<jk>public class</jk> Person {
-		...
-		</p>
-		
-		<h5 class='figure'>Results</h5>
-		<p class='bcode'>
-	{
-		id: <jk>1</jk>, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		<js>'address-book-uri'</js>: <js>'http://sample/addressBook'</js>, 
-		<js>'birth-date'</js>: <js>'1946-08-12T00:00:00Z'</js>
-	}
-		</p>
-	</div>
-	
-		
-	<!-- ======================================================================================================== -->
 	<a id="Collections"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.2 - Collections</h3>
 	<div class='topic'>
@@ -634,77 +530,6 @@
 		</p>
 	</div>
 
-
-	<!-- ======================================================================================================== -->
-	<a id="Recursion"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.4 - Non-tree models and recursion detection</h3>
-	<div class='topic'>
-		<p>
-			The JSON serializer is designed to be used against POJO tree structures. 
-			<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
-			<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
-			be thrown (if {@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth} is not reached 
-			first).
-		</p>
-		<p>
-			If you still want to use the JSON serializer on such models, Juneau provides the 
-			{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions} setting.
-			<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
-			serialization when a duplicate is encountered.
-		</p>
-		<p>
-			For example, let's make a POJO model out of the following classes:
-		</p>
-		<p class='bcode'>
-	<jk>public class</jk> A {
-		<jk>public</jk> B b;
-	}
-	
-	<jk>public class</jk> B {
-		<jk>public</jk> C c;
-	}
-	
-	<jk>public class</jk> C {
-		<jk>public</jk> A a;
-	}
-		</p>
-		<p>
-			Now we create a model with a loop and serialize the results.
-		</p>
-		<p class='bcode'>
-	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
-
-	<jc>// Create a recursive loop.</jc>
-	A a = <jk>new</jk> A();
-	a.<jf>b</jf> = <jk>new</jk> B();
-	a.<jf>b</jf>.<jf>c</jf> = <jk>new</jk> C();
-	a.<jf>b</jf>.<jf>c</jf>.<jf>a</jf> = a;
-	
-	<jc>// Serialize to JSON.</jc>
-	String json = s.serialize(a);
-		</p>
-		<p>
-			What we end up with is the following, which does not serialize the contents of the <code>c</code> field:
-		</p>
-		<p class='bcode'>
-	{
-		b: {
-			c: {
-			}
-		}
-	}
-		</p>
-		<p>
-			Without recursion detection enabled, this would cause a stack-overflow error.
-		</p>
-		<p>
-			Recursion detection introduces a performance penalty of around 20%.
-			<br>For this reason the setting is disabled by default.
-		</p>
-	</div>
-
-
 	<!-- ======================================================================================================== -->
 	<a id="SerializerConfigurableProperties"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.5 - Configurable properties</h3>
@@ -848,122 +673,6 @@
 	}	
 	</p>
 	
-
-	<!-- ======================================================================================================== -->
-	<a id="GenericParsing"></a>
-	<h3 class='topic' onclick='toggle(this)'>3.1 - Parsing into generic POJO models</h3>
-	<div class='topic'>
-		<p>
-			The JSON parser is not limited to parsing back into the original bean classes.
-			<br>If the bean classes are not available on the parsing side, the parser can also be used to 
-			parse into a generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive
-			objects.
-		</p>
-		<p>
-			You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
-			using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
-			for converting values to various types.
-			<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
-			<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
-			<code>String[][]</code>), but using {@link org.apache.juneau.ObjectList} is recommended.
-		</p>
-		<p>
-			When the map or list type is not specified, or is the abstract <code>Map</code>, <code>Collection</code>, 
-			or <code>List</code> types, the parser will use <code>ObjectMap</code> and <code>ObjectList</code> by 
-			default.
-		</p>
-		<p>
-			Starting back with our original JSON:
-		</p>
-		<p class='bcode'>
-	{
-		id: <jk>1</jk>, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: <jk>1</jk>, 
-				street: <js>'100 Main Street'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				state: <js>'NY'</js>, 
-				zip: <jk>12345</jk>, 
-				isCurrent: <jk>true</jk>
-			}
-		]
-	}
-		</p>
-		<p>
-			We can parse this into a generic <code>ObjectMap</code>:
-		</p>
-		<p class='bcode'>	
-	<jc>// Parse JSON into a generic POJO model.</jc>
-	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
-
-	<jc>// Convert it back to JSON.</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(m);
-		</p>
-		<p>
-			What we end up with is the exact same output.
-			<br>Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
-			<code>Boolean</code> objects when parsing into generic models.
-		</p>
-		<p class='bcode'>
-	{
-		id: <jk>1</jk>, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: <jk>1</jk>, 
-				street: <js>'100 Main Street'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				state: <js>'NY'</js>, 
-				zip: <jk>12345</jk>, 
-				isCurrent: <jk>true</jk>
-			}
-		]
-	}
-		</p>
-		<p>
-			Once parsed into a generic model, various convenience methods are provided on the <code>ObjectMap</code>
-				and <code>ObjectList</code> classes to retrieve values:
-		</p>
-		<p class='bcode'>
-	<jc>// Parse JSON into a generic POJO model.</jc>
-	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
-
-	<jc>// Get some simple values.</jc>
-	String name = m.getString(<js>"name"</js>);
-	<jk>int</jk> id = m.getInt(<js>"id"</js>);
-
-	<jc>// Get a value convertable from a String.</jc>
-	URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
-
-	<jc>// Get a value using a swap.</jc>
-	CalendarSwap swap = <jk>new</jk> CalendarSwap.ISO8601DTZ();
-	Calendar birthDate = m.get(swap, <js>"birthDate"</js>);
-
-	<jc>// Get the addresses.</jc>
-	ObjectList addresses = m.getObjectList(<js>"addresses"</js>);
-
-	<jc>// Get the first address and convert it to a bean.</jc>
-	Address address = addresses.get(Address.<jk>class</jk>, 0);
-		</p>
-
-		<p>
-			As a general rule, parsing into beans is often more efficient than parsing into generic models.
-			<br>And working with beans is often less error prone than working with generic models.
-		</p>		
-	</div>
-
 
 	<!-- ======================================================================================================== -->
 	<a id="ParserConfigurableProperties"></a>

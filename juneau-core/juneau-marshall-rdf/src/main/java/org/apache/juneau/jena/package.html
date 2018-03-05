@@ -65,17 +65,14 @@
 	<ol>
 		<li><p><a class='doclink' href='#Namespaces'>Namespaces</a></p>
 		<li><p><a class='doclink' href='#UriProperties'>URI properties</a></p>
-		<li><p><a class='doclink' href='#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
 		<li><p><a class='doclink' href='#Collections'>Collections</a></p>
 		<li><p><a class='doclink' href='#RootProperty'>Root property</a></p>
 		<li><p><a class='doclink' href='#TypedLiterals'>Typed literals</a></p>
-		<li><p><a class='doclink' href='#Recursion'>Non-tree models and recursion detection</a></p>
 		<li><p><a class='doclink' href='#SerializerConfigurableProperties'>Configurable properties</a></p>
 		<li><p><a class='doclink' href='#SerializerOtherNotes'>Other notes</a></p>
 	</ol>	
 	<li><p><a class='doclink' href='#RdfParser'>RdfParser class</a></p> 
 	<ol>
-		<li><p><a class='doclink' href='#GenericParsing'>Parsing into generic POJO models</a></p>
 		<li><p><a class='doclink' href='#ParserConfigurableProperties'>Configurable properties</a></p>
 		<li><p><a class='doclink' href='#ParserOtherNotes'>Other notes</a></p>
 	</ol>	
@@ -470,78 +467,6 @@
 		</p>		
 	</div>
 	
-	<!-- ======================================================================================================== -->
-	<a id="BeanAnnotations"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.3 - @Bean and @BeanProperty annotations</h3>
-	<div class='topic'>
-		<p>
-			The {@link org.apache.juneau.annotation.Bean @Bean} and {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} 
-			annotations are used to customize the behavior of beans across the entire framework.
-			<br>In addition to using them to identify the resource URI for the bean shown above, they have various other 
-			uses:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				Hiding bean properties.
-			<li>
-				Specifying the ordering of bean properties.
-			<li>
-				Overriding the names of bean properties.
-			<li>
-				Associating transforms at both the class and property level (to convert non-serializable POJOs to 
-				serializable forms).
-		</ul>
-		<p>
-			For example, we now add a <code>birthDate</code> property, and associate a swap with it to transform
-			it to an ISO8601 date-time string in GMT time.
-			<br>By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want 
-			them serialized.
-			<br>Using swaps, we can convert them to standardized string forms.
-		</p>
-		<p class='bcode'>	
-	<jk>public class</jk> Person {
-		
-		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
-		...
-		
-		<jc>// Normal constructor</jc>
-		<jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri, String birthDate) 
-				<jk>throws</jk> Exception {
-			...
-			<jk>this</jk>.<jf>birthDate</jf> = <jk>new</jk> GregorianCalendar();
-			<jk>this</jk>.<jf>birthDate</jf>.setTime(
-				DateFormat.<jsm>getDateInstance</jsm>(DateFormat.<jsf>MEDIUM</jsf>).parse(birthDate));
-		}
-	}
-		</p>
-		<p>
-			And we alter our code to pass in the birthdate.
-		</p>
-		<p class='bcode'>
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-		</p>
-		<p>
-			Now when we rerun the sample code, we'll get the following:
-		</p>
-		<p class='bcode'>
-	<xt>&lt;rdf:RDF</xt>
-	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
-	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
-	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
-	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-	      <xt>&lt;per:birthDate&gt;</xt>1946-08-12T00:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
-	   <xt>&lt;/rdf:Description&gt;</xt>
-	<xt>&lt;/rdf:RDF&gt;</xt>
-		</p>
-	</div>
-	
 		
 	<!-- ======================================================================================================== -->
 	<a id="Collections"></a>
@@ -766,30 +691,6 @@
 
 
 	<!-- ======================================================================================================== -->
-	<a id="Recursion"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.7 - Non-tree models and recursion detection</h3>
-	<div class='topic'>
-		<p>
-			The RDF serializer is designed to be used against tree structures.
-			<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
-			<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
-			be thrown (if {@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth} is not reached 
-			first).
-		</p>
-		<p>
-			If you still want to use the XML serializer on such models, Juneau provides the 
-			{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions} setting.
-			<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
-			serialization when a duplicate is encountered.
-		</p>
-		<p>
-			Recursion detection introduces a performance penalty of around 20%.
-			<br>For this reason the setting is disabled by default.
-		</p>
-	</div>
-
-
-	<!-- ======================================================================================================== -->
 	<a id="SerializerConfigurableProperties"></a>
 	<h3 class='topic' onclick='toggle(this)'>2.8 - Configurable properties</h3>
 	<div class='topic'>
@@ -907,116 +808,6 @@
 	}	
 	</p>
 	
-
-	<!-- ======================================================================================================== -->
-	<a id="GenericParsing"></a>
-	<h3 class='topic' onclick='toggle(this)'>3.1 - Parsing into generic POJO models</h3>
-	<div class='topic'>
-		<p>
-			The RDF parser is not limited to parsing back into the original bean classes.
-			<br>If the bean classes are not available on the parsing side, the parser can also be used to parse into a 
-			generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive objects.
-		</p>
-		<p>
-			You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
-			using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
-			for converting values to various types. 
-			<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
-			<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
-			<code>String[][]</code>), but using {@link org.apache.juneau.ObjectList} is recommended.
-		</p>
-		<p>
-			When the map or list type is not specified, or is the abstract <code>Map</code>, <code>Collection</code>, 
-			or <code>List</code> types, the parser will use <code>ObjectMap</code> and <code>ObjectList</code> by 
-			default.
-		</p>
-		<p>
-			In the following example, we parse into an <code>ObjectMap</code> and use the convenience methods for 
-			performing data conversion on values in the map.
-		</p>
-		<p class='bcode'>	
-	<jc>// Parse RDF into a generic POJO model.</jc>
-	ObjectMap m = RdfParser.<jsf>DEFAULT_XML</jsf>.parse(rdfXml, ObjectMap.<jk>class</jk>);
-
-	<jc>// Get some simple values.</jc>
-	String name = m.getString(<js>"name"</js>);
-	<jk>int</jk> id = m.getInt(<js>"id"</js>);
-
-	<jc>// Get a value convertable from a String.</jc>
-	URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
-
-	<jc>// Get a value using a swap.</jc>
-	CalendarSwap swap = <jk>new</jk> CalendarSwap.ISO8601DTZ();
-	Calendar birthDate = m.get(swap, <js>"birthDate"</js>);
-
-	<jc>// Get the addresses.</jc>
-	ObjectList addresses = m.getObjectList(<js>"addresses"</js>);
-
-	<jc>// Get the first address and convert it to a bean.</jc>
-	Address address = addresses.get(Address.<jk>class</jk>, 0);
-		</p>
-		
-		<p>
-			However, there are caveats when parsing into generic models due to the nature of RDF.
-			<br>Watch out for the following:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				The ordering of entries are going to be inconsistent.
-			<li>
-				Bean URIs are always going to be denoted with the key <js>"uri"</js>.
-				<br>Therefore, you cannot have a bean with a URI property and a separate property named <js>"uri"</js>.
-				<br>The latter will overwrite the former.
-				<br>This isn't a problem when parsing into beans instead of generic POJO models.
-			<li>
-				All values are strings.
-				<br>This normally isn't a problem when using <code>ObjectMap</code> and <code>ObjectList</code> since 
-				various methods are provided for converting to the correct type anyway.
-			<li>
-				The results may not be what is expected if there are lots of URL reference loops in the RDF model.
-				<br>As nodes are processed from the root node down through the child nodes, the parser keeps
-				track of previously processed parent URIs and handles them accordingly.
-				<br>If it finds that the URI has previously been processed, it handles it as a normal URI string and doesn't 
-				process further.
-				<br>However, depending on how complex the reference loops are, the parsed data may end up having the
-				same data in it, but structured differently from the original POJO.
-		</ul>
-		<p>
-			We can see some of these when we render the <code>ObjectMap</code> back to JSON.
-		</p>
-		<p class='bcode'>
-	System.<jsm>err</jsm>.println(JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(m));
-		</p>
-		<p>
-			This is what's produced:
-		</p>
-		<p class='bcode'>
-	{
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				isCurrent: <js>'true'</js>, 
-				zip: <js>'12345'</js>, 
-				state: <js>'NY'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				street: <js>'100 Main Street'</js>, 
-				id: <js>'1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>
-			}
-		], 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		name: <js>'John Smith'</js>, 
-		id: <js>'1'</js>, 
-		root: <js>'true'</js>
-	}		
-		</p>
-		<p>
-			As a general rule, parsing into beans is often more efficient than parsing into generic models.
-			<br>And working with beans is often less error prone than working with generic models.
-		</p>
-	</div>
 
 	<!-- ======================================================================================================== -->
 	<a id="ParserConfigurableProperties"></a>
