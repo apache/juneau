@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <!--
 /***************************************************************************************************************************
@@ -16003,18 +16004,24 @@
 	<a id="juneau-examples-rest.ConfigResource"></a>
 	<h4 class='topic' onclick='toggle(this)'>12.15 - ConfigResource</h4>
 	<div class='topic'>
-		<!--p>
+		<p>
 			The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
 			<br>It provides a REST interface for reading and altering the microservice config file.
 		</p>
 		<p>
 			Pointing a browser to the resource shows the following:
 		</p>
-		<img class='bordered' src='doc-files/juneau-examples-rest.ConfigResource.1.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/config
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.ConfigResource.1.png' style='width:800px'>
 		<p>
 			An edit page is provided for altering the raw config file:
 		</p>
-		<img class='bordered' src='doc-files/juneau-examples-rest.ConfigResource.3.png'>
+		<p class='bcode' style='width:800px;'>
+	http://localhost:10000/config/edit
+		</p>			
+		<img class='bordered' src='doc-files/juneau-examples-rest.ConfigResource.2.png' style='width:800px'>
 		<p>
 			The {@link org.apache.juneau.config.Config} class is a serializable POJO, which makes the resource
 				relatively straightforward to implement.
@@ -16038,7 +16045,6 @@
 		)
 	) 
 	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
 		<jd>/** 
 		* [GET /] - Show contents of config file. 
@@ -16047,9 +16053,9 @@
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
-		<jk>public</jk> Config getConfigContents() <jk>throws</jk> Exception { 
-			<jk>return</jk> getConfig(); 
-		} 
+		<jk>public</jk> ObjectMap getConfig() <jk>throws</jk> Exception {
+			<jk>return</jk> getServletConfig().getConfig().asMap();
+		}
 		
 		<jd>/** 
 		* [GET /edit] - Show config file edit page. 
@@ -16058,13 +16064,21 @@
 		* <ja>@return</ja> The config file as a reader resource. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/edit"</js>, description=<js>"Show config file edit page."</js>) 
-		<jk>public</jk> ReaderResource getConfigEditPage(RestRequest req) <jk>throws</jk> Exception { 
-			<jc>// Note that you don't want variables in the config file to be resolved,</jc> 
-			<jc>// so you need to escape any $ characters that you see.</jc> 
-			req.setAttribute(<js>"contents"</js>, getConfig().toString().replaceAll(<js>"\\$"</js>, <js>"\\\\\\$"</js>)); 
-			<jk>return</jk> req.getClasspathReaderResource(<js>"ConfigEdit.html"</js>, <jk>true</jk>); 
-		} 
+		<ja>@RestMethod</ja>(name=<jsf>GET></jsf>, path="/edit", description="Edit config file.")
+		<jk>public</jk> Form getConfigEditForm(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<js>"POST"</js>).enctype(<js>"application/x-www-form-urlencoded"</js>).children(
+				<jsm>div</jsm>()._class(<js>"data"</js>).children(
+					<jsm>table</jsm>(
+						<jsm>tr</jsm>(<jsm>td</jsm>().style(<js>"text-align:right"</js>).children(<jsm>button</jsm>(<js>"submit"</js>,<js>"Submit"</js>),<jsm>button</jsm>(<js>"reset"</js>,<js>"Reset"</js>))),
+						<jsm>tr</jsm>(<jsm>th</jsm>().child(<js>"Contents"</js>)),
+						<jsm>tr</jsm>(<jsm>th</jsm>().child(
+							<jsm>textarea</jsm>().name(<js>"contents"</js>).rows(40).cols(120).style(<js>"white-space:pre;word-wrap:normal;overflow-x:scroll;font-family:monospace;"</js>)
+								.text(getServletConfig().getConfig().toString()))
+						)
+					)
+				)
+			);
+		}
 		
 		<jd>/** 
 		* [GET /{section}] - Show config file section. 
@@ -16075,9 +16089,11 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
-			parameters={ 
-				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>) 
-			} 
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>)
+				}
+			)
 		) 
 		<jk>public</jk> ObjectMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section); 
@@ -16093,10 +16109,12 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
-			parameters={ 
-				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>) 
-			} 
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={ 
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>) 
+				} 
+			)
 		) 
 		<jk>public</jk> String getConfigEntry(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section).getString(key); 
@@ -16111,9 +16129,11 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
-			parameters={ 
-				<ja>@Parameter</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
-			} 
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={ 
+					<ja>@Parameter</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
+				}
+			) 
 		) 
 		<jk>public</jk> Config setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
 			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(contents)); 
@@ -16128,13 +16148,14 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
-			parameters={ 
-				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
-			} 
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={ 
+					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
+				} 
+			)
 		) 
 		<jk>public</jk> Config setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
-			Config cf2 = Config.<jsm>create</jsm>().build().load(contents); 
-			<jk>return</jk> getConfig().merge(cf2).save(); 
+			<jk>return</jk> getServletConfig().getConfig().load(contents, <jk>true</jk>).asMap();
 		} 
 		
 		<jd>/** 
@@ -16147,13 +16168,15 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
-			parameters={ 
-				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents for section as a simple map with string keys and values."</js>) 
-			} 
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={ 
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents for section as a simple map with string keys and values."</js>) 
+				} 
+			)
 		) 
 		<jk>public</jk> ObjectMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
-			getConfig().setSection(section, contents); 
+			getServletConfig().getConfig().setSection(section, contents); 
 			<jk>return</jk> getSection(section); 
 		} 
 		
@@ -16168,52 +16191,27 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
-			parameters={ 
-				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>), 
-				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New value as a string."</js>) 
-			} 
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={ 
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>), 
+					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New value as a string."</js>) 
+				} 
+			)
 		) 
 		<jk>public</jk> String setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key, <ja>@Body</ja> String value) <jk>throws</jk> Exception { 
-			getConfig().put(section, key, value, <jk>false</jk>); 
+			getServletConfig().getConfig().put(section, key, value, <jk>false</jk>); 
 			<jk>return</jk> getSection(section).getString(key); 
 		} 
 		
 		<jk>private</jk> ObjectMap getSection(String name) { 
-			ObjectMap m = getConfig().getSectionMap(name); 
+			ObjectMap m = getServletConfig().getConfig().getSectionMap(name); 
 			<jk>if</jk> (m == <jk>null</jk>) 
-				<jk>throw new</jk> RestException(SC_NOT_FOUND, <js>"Section not found."</js>); 
+				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Section not found."</js>); 
 			<jk>return</jk> m; 
 		} 
 	} 		
 		</p>
-		
-		<h5 class='figure'>ConfigEdit.html</h5>
-		<b>TODO - Needs update</b>
-		<p class='bcode'>
-	<xt>&lt;html&gt;</xt> 
-	<xt>&lt;head&gt;</xt> 
-		<xt>&lt;meta</xt> <xa>http-equiv</xa>=<xs>'Content-Type'</xs> <xa>content</xa>=<xs>'text/html; <xa>charset</xa>=UTF-8'</xs><xt>&gt;</xt> 
-		<xt>&lt;style</xt> <xa>type</xa>=<xs>'text/css'</xs><xt>&gt;</xt> 
-			<xt>@import</xt> <xs>'$R{servletURI}/style.css'</xs>; 
-		<xt>&lt;/style&gt;</xt> 
-	<xt>&lt;/head&gt;</xt> 
-	<xt>&lt;body&gt;</xt> 
-		<xt>&lt;h1&gt;</xt>$R{resourceTitle}<xt>&lt;/h1&gt;</xt> 
-		<xt>&lt;h2&gt;</xt>Edit config file<xt>&lt;/h2&gt;</xt> 
-		<xt>&lt;p</xt> <xa>class</xa>=<xs>'links'</xs><xt>&gt;</xt><xt>&lt;a</xt> <xa>href</xa>=<xs>'$R{requestParentURI}'</xs><xt>&gt;</xt>up<xt>&lt;/a&gt;</xt> - <xt>&lt;a</xt> <xa>href=<xs>'$R{servletURI}?method</xa>=OPTIONS'</xs><xt>&gt;</xt>options<xt>&lt;/a&gt;</xt><xt>&lt;/p&gt;</xt> 
-		<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>enctype</xa>=<xs>'application/x-www-form-urlencoded'</xs><xt>&gt;</xt> 
-			<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt> 
-				<xt>&lt;table&gt;</xt> 
-					<xt>&lt;tr&gt;</xt><xt>&lt;td</xt> <xa>colspan</xa>=<xs>'2'</xs> <xa>align</xa>=<xs>'right'</xs><xt>&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>'submit'</xs><xt>&gt;</xt>Submit<xt>&lt;/button&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>'reset'</xs><xt>&gt;</xt>Reset<xt>&lt;/button&gt;</xt><xt>&lt;/td&gt;</xt><xt>&lt;/tr&gt;</xt> 
-					<xt>&lt;tr&gt;</xt><xt>&lt;th</xt> <xa>colspan</xa>=<xs>'2'</xs><xt>&gt;</xt>Contents<xt>&lt;/th&gt;</xt><xt>&lt;/tr&gt;</xt> 
-					<xt>&lt;tr&gt;</xt><xt>&lt;td</xt> <xa>colspan</xa>=<xs>'2'</xs><xt>&gt;</xt><xt>&lt;textarea</xt> <xa>name</xa>=<xs>'contents'</xs> <xa>rows</xa>=<xs>'40'</xs> <xa>cols</xa>=<xs>'120'</xs> <xa>style</xa>=<xs>'white-space: pre; word-wrap: normal; overflow-x: scroll;'</xs><xt>&gt;</xt>$SA{contents}<xt>&lt;/textarea&gt;</xt><xt>&lt;/td&gt;</xt><xt>&lt;/tr&gt;</xt> 
-				<xt>&lt;/table&gt;</xt> 
-			<xt>&lt;/div&gt;</xt> 
-		<xt>&lt;/form&gt;</xt> 
-	<xt>&lt;/body&gt;</xt> 
-	<xt>&lt;/html&gt;</xt> 		
-		</p-->
 	</div>
 
 	<!-- ======================================================================================================= -->
