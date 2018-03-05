@@ -16046,25 +16046,12 @@
 	) 
 	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet { 
 		
-		<jd>/** 
-		* [GET /] - Show contents of config file. 
-		* 
-		* <ja>@return</ja> The config file. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
 		<jk>public</jk> ObjectMap getConfig() <jk>throws</jk> Exception {
 			<jk>return</jk> getServletConfig().getConfig().asMap();
 		}
 		
-		<jd>/** 
-		* [GET /edit] - Show config file edit page. 
-		* 
-		* <ja>@param</ja> req The HTTP request. 
-		* <ja>@return</ja> The config file as a reader resource. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET></jsf>, path="/edit", description="Edit config file.")
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/edit"</js>, description=<js>"Edit config file."</js>)
 		<jk>public</jk> Form getConfigEditForm(RestRequest req) <jk>throws</jk> Exception {
 			<jk>return</jk> <jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<js>"POST"</js>).enctype(<js>"application/x-www-form-urlencoded"</js>).children(
 				<jsm>div</jsm>()._class(<js>"data"</js>).children(
@@ -16080,13 +16067,6 @@
 			);
 		}
 		
-		<jd>/** 
-		* [GET /{section}] - Show config file section. 
-		* 
-		* <ja>@param</ja> section The section name. 
-		* <ja>@return</ja> The config file section. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
 			swagger=<ja>@MethodSwagger</ja>(
@@ -16099,14 +16079,6 @@
 			<jk>return</jk> getSection(section); 
 		} 
 		
-		<jd>/** 
-		* [GET /{section}/{key}] - Show config file entry. 
-		* 
-		* <ja>@param</ja> section The section name. 
-		* <ja>@param</ja> key The section key. 
-		* <ja>@return</ja> The value of the config file entry. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
 			swagger=<ja>@MethodSwagger</ja>(
@@ -16120,13 +16092,6 @@
 			<jk>return</jk> getSection(section).getString(key); 
 		} 
 		
-		<jd>/** 
-		* [POST /] - Sets contents of config file from a FORM post. 
-		* 
-		* <ja>@param</ja> contents The new contents of the config file. 
-		* <ja>@return</ja> The new config file contents. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
 			swagger=<ja>@MethodSwagger</ja>(
@@ -16139,13 +16104,6 @@
 			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(contents)); 
 		} 
 		
-		<jd>/** 
-		* [PUT /] - Sets contents of config file. 
-		* 
-		* <ja>@param</ja> contents The new contents of the config file. 
-		* <ja>@return</ja> The new config file contents. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
 			swagger=<ja>@MethodSwagger</ja>(
@@ -16158,14 +16116,6 @@
 			<jk>return</jk> getServletConfig().getConfig().load(contents, <jk>true</jk>).asMap();
 		} 
 		
-		<jd>/** 
-		* [PUT /{section}] - Add or overwrite a config file section. 
-		* 
-		* <ja>@param</ja> section The section name. 
-		* <ja>@param</ja> contents The new contents of the config file section. 
-		* <ja>@return</ja> The new section. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
 			swagger=<ja>@MethodSwagger</ja>(
@@ -16180,15 +16130,6 @@
 			<jk>return</jk> getSection(section); 
 		} 
 		
-		<jd>/** 
-		* [PUT /{section}/{key}] - Add or overwrite a config file entry. 
-		* 
-		* <ja>@param</ja> section The section name. 
-		* <ja>@param</ja> key The section key. 
-		* <ja>@param</ja> value The new value. 
-		* <ja>@return</ja> The new value. 
-		* <ja>@throws</ja> Exception 
-		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
 			swagger=<ja>@MethodSwagger</ja>(
