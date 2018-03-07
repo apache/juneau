@@ -78,16 +78,6 @@ p.bcode {
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
 
-.w400 {
-	width:400px !important;
-}
-.w500 {
-	width:500px !important;
-}
-.w800 {
-	width:800px !important;
-}
-
 /*--- Bordered code in a section of a method doc ---*/
 dd p.bcode {
 	margin-left:0px;

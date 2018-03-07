@@ -208,11 +208,10 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class,
 		htmldoc=@HtmlDoc(
 			aside={
-				"<div style='max-width:400px' class='text'>",
+				"<div class='text'>",
 				"	<p>Shows how HTML5 beans can be used to quickly create arbitrary HTML.</p>",
 				"</div>"
-			},
-			style="aside {display:table-cell;}"
+			}
 		)
 	)
 	public Form getFormPage() {

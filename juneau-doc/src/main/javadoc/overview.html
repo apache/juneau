@@ -382,6 +382,7 @@
 	<ol>
 		<li><p><a class='doclink' href='#juneau-examples-rest.RootResources'>RootResources</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.HelloWorldResource'>HelloWorldResource</a></p>
+		<li><p><a class='doclink' href='#juneau-examples-rest.SystemPropertiesResource'>SystemPropertiesResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.MethodExampleResource'>MethodExampleResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.UrlEncodedFormResource'>UrlEncodedFormResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.RequestEchoResource'>RequestEchoResource</a></p>
@@ -405,6 +406,7 @@
 		<li><p><a class='doclink' href='#juneau-examples-rest.SqlQueryResource'>SqlQueryResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
+		<li><p><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStoreResource</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#Security'>Security Best-Practices</a></p>
 	<li><p class='toc2'><a class='doclink' href='#ReleaseNotes'>Release Notes</a></p>
@@ -438,7 +440,7 @@
 		Not only can we help you with feedback, but it helps us understand usage patterns to further improve the product.
 	</p>
 
-	<h5 class='topic'>History</h5>
+	<h5 class='topic w800'>History</h5>
 	<p>
 		Juneau started off as a popular internal IBM toolkit called Juno.
 		Originally used for serializing POJOs to and from JSON, it later expanded in scope to include a variety of 
@@ -3508,7 +3510,7 @@
 			The following charts describe equivalent features between the two libraries:
 		</p>
 	
-		<h5 class='topic'>Annotations</h5>
+		<h5 class='topic w800'>Annotations</h5>
 		<table class='styled w800'>
 			<tr><th>Jackson</th><th>Juneau</th></tr>
 			<tr>
@@ -4343,7 +4345,7 @@
 				They mirror how the data structures are represented in JSON.
 			</p>
 			
-			<h5 class='topic'>Simple types</h5>
+			<h5 class='topic w800'>Simple types</h5>
 			<p>
 				The representation of loose (not a direct bean property value) simple types are shown below:
 			</p>
@@ -4380,7 +4382,7 @@
 				</tr>
 			</table>
 			
-			<h5 class='topic'>Maps</h5>
+			<h5 class='topic w800'>Maps</h5>
 			<p>
 				Loose maps and beans use the element <xt>&lt;object&gt;</xt> for encapsulation.
 			</p>
@@ -4455,7 +4457,7 @@
 				</tr>
 			</table>
 			
-			<h5 class='topic'>Arrays</h5>
+			<h5 class='topic w800'>Arrays</h5>
 			<p>
 				Loose collections and arrays use the element <xt>&lt;array&gt;</xt> for encapsulation.
 			</p>
@@ -4635,7 +4637,7 @@
 				</tr>
 			</table>
 	
-			<h5 class='topic'>Beans</h5>
+			<h5 class='topic w800'>Beans</h5>
 			<table class='styled w800'>
 				<tr>
 					<th>Data type</th>
@@ -4690,7 +4692,7 @@
 				</tr>
 			</table>
 			
-			<h5 class='topic'>Beans with Map properties</h5>
+			<h5 class='topic w800'>Beans with Map properties</h5>
 			<table class='styled w800'>
 				<tr>
 					<th>Data type</th>
@@ -6560,7 +6562,7 @@
 				They mirror how the data structures are represented in JSON.
 			</p>
 			
-			<h5 class='topic'>Simple types</h5>
+			<h5 class='topic w800'>Simple types</h5>
 			<p>
 				The representation for simple types mirror those produced by the XML serializer.
 				Tags are added to help differentiate data types when they cannot be inferred through reflection.
@@ -6599,7 +6601,7 @@
 				</tr>
 			</table>
 			
-			<h5 class='topic'>Maps</h5>
+			<h5 class='topic w800'>Maps</h5>
 			<p>
 				Maps and beans are represented as tables.
 			</p>
@@ -6704,7 +6706,7 @@
 				</tr>
 			</table>
 			
-			<h5 class='topic'>Arrays</h5>
+			<h5 class='topic w800'>Arrays</h5>
 			<p>
 				Collections and arrays are represented as ordered lists.
 			</p>
@@ -6827,7 +6829,7 @@
 				</tr>
 			</table>
 			
-			<h5 class='topic'>Collections</h5>
+			<h5 class='topic w800'>Collections</h5>
 			<table class='styled w800'>
 				<tr>
 					<th>Data type</th>
@@ -6895,7 +6897,7 @@
 				</tr>
 			</table>
 	
-			<h5 class='topic'>Beans</h5>
+			<h5 class='topic w800'>Beans</h5>
 			<table class='styled w800'>
 				<tr>
 					<th>Data type</th>
@@ -6980,7 +6982,7 @@
 				</tr>
 			</table>
 			
-			<h5 class='topic'>Beans with Map properties</h5>
+			<h5 class='topic w800'>Beans with Map properties</h5>
 			<table class='styled w800'>
 				<tr>
 					<th>Data type</th>
@@ -8590,7 +8592,7 @@
 		<p>
 			The Juneau Swagger DTOs are simply beans with fluent-style setters that allow you to quickly construct 
 			Swagger documents as Java objects.  
-			These object can then be serialized to JSON using one of the existing JSON serializers, or to other 
+			<br>These object can then be serialized to JSON using one of the existing JSON serializers, or to other 
 			languages such as XML or HTML using the other serializers.
 		</p>
 		<p>
@@ -10664,7 +10666,7 @@
 		<br>It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
 	</p>
 	
-	<h5 class='topic'>Features</h5>
+	<h5 class='topic w800'>Features</h5>
 	<ul class='spaced-list'>
 		<li>
 			Serializes POJOs to JSON, XML, HTML, URL-Encoding, UON, RDF/XML, N-Triple, Turtle, N3, SOAP, or 
@@ -13140,7 +13142,7 @@
 			Variables take the form <l>$X{contents}</l> where <l>X</l> can consist of zero or more ASCII characters and <l>contents</l> can be virtually anything.
 			<br>This is called Simple Variable Language, or SVL, and is defined here: <a class='doclink' href='#juneau-svl'>juneau-svl</a>.
 		</p>
-		<h5 class='topic'>Features</h5>
+		<h5 class='topic w800'>Features</h5>
 		<ul class='spaced-list'>
 			<li>
 				Variables can be nested arbitrarily deep (e.g. <l>"$X{$Y{foo}}"</l>).
@@ -15640,7 +15642,7 @@
 		seemlessly send and receive serialized POJOs in requests and responses.  
 	</p>
 	
-	<h5 class='topic'>Features</h5>
+	<h5 class='topic w800'>Features</h5>
 	<ul class='spaced-list'>
 		<li>
 			Converts POJOs directly to HTTP request message bodies using {@link org.apache.juneau.serializer.Serializer} 
@@ -17351,7 +17353,7 @@
 		<code>juneau-examples-core-7.1.0.zip</code> file. 
 	</p>
 	
-	<h5 class='topic'>juneau-examples-core install instructions</h5>
+	<h5 class='topic w800'>juneau-examples-core install instructions</h5>
 	<p>
 		Download the <code>juneau-examples-core-7.1.0.zip</code> file from the downloads page
 		(located in the binaries) and import it into your workspace as an existing project:
@@ -17391,7 +17393,7 @@
 		using embedded Jetty.
 	</p>	
 	
-	<h5 class='topic'>juneau-examples-rest install instructions</h5>
+	<h5 class='topic w800'>juneau-examples-rest install instructions</h5>
 	<p>
 		Download the <code>juneau-examples-rest-7.1.0.zip</code> file from the downloads page
 		(located in the binaries) and import it into your workspace as an existing project:
@@ -17636,8 +17638,267 @@
 	</div>	
 
 	<!-- ======================================================================================================= -->
+	<a id='juneau-examples-rest.SystemPropertiesResource'></a>
+	<h4 class='topic' onclick='toggle(this)'>12.3 - SystemPropertiesResource</h4>
+	<div class='topic'>
+		<p>
+			The <l>SystemProperties</l> class is a resource that shows off a typical REST design pattern
+			of GET/PUT/POST/DELETE commands for modifying the JVM system properties.
+			<br>It demonstrates several capabilities including:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				Using the {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc} annotation to customize the HTML view.
+			<li>
+				Defining Swagger documentation through annotations.
+			<li>
+				Using Guards to limit access to certain methods.
+			<li>
+				Creating form entry pages using HTML5 beans.
+		</ul>
+	
+		<h5 class='figure'>SystemPropertiesResource.java</h5>
+		<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/systemProperties"</js>,
+	
+		<jc>// Title and description that show up on HTML rendition page.</jc>
+		<jc>// Also used in Swagger doc.</jc>
+		title=<js>"System properties resource"</js>,
+		description=<js>"REST interface for performing CRUD operations on system properties."</js>,
+	
+		htmldoc=<ja>@HtmlDoc</ja>(
+			
+			<jc>// Widget used for content-type and styles pull-down menus.	</jc>	
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+	
+			<jc>// Links on the HTML rendition page.</jc>
+			<jc>// "request:/..." URIs are relative to the request URI.</jc>
+			<jc>// "servlet:/..." URIs are relative to the servlet URI.</jc>
+			<jc>// "$C{...}" variables are pulled from the config file.</jc>
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"form: servlet:/formPage"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+	
+			<jc>// Custom page text in aside section.</jc>
+			aside={
+				<js>"&lt;div style='max-width:800px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+				
+			<jc>// Custom CSS styles applied to HTML view.</jc>
+			style={
+				<js>"aside {display:table-caption} "</js>,
+				<js>"aside p {margin: 0px 20px;}"</js>
+			}
+		),
+			
+		<jc>// Properties that get applied to all serializers and parsers.</jc>
+		properties={
+			<jc>// Use single quotes.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+		},
+	
+		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
+		encoders=GzipEncoder.<jk>class</jk>,
+	
+		swagger=<ja>@ResourceSwagger</ja>(
+			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+			version=<js>"2.0"</js>,
+			termsOfService=<js>"You're on your own."</js>,
+			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		) 
+	)
+	<jk>public class</jk> SystemPropertiesResource <jk>extends</jk> BasicRestServlet {
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, path=<js>"/"</js>,
+			summary=<js>"Show all system properties"</js>,
+			description=<js>"Returns all system properties defined in the JVM."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={
+					<ja>@Parameter</ja>(in=<js>"query"</js>, name=<js>"sort"</js>, description=<js>"Sort results alphabetically."</js>, _default=<js>"false"</js>)
+				},
+				responses={
+					<ja>@Response</ja>(value=200, description=<js>"Returns a map of key/value pairs."</js>)
+				}
+			)
+		)
+		<jk>public</jk> Map getSystemProperties(<ja>@Query</ja>(<js>"sort"</js>) <jk>boolean</jk> sort) <jk>throws</jk> Throwable {
+			<jk>if</jk> (sort)
+				<jk>return new</jk> TreeMap(System.<jsm>getProperties</jsm>());
+			<jk>return</jk> System.<jsm>getProperties</jsm>();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, path=<js>"/{propertyName}"</js>,
+			summary=<js>"Get system property"</js>,
+			description=<js>"Returns the value of the specified system property."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>)
+				},
+				responses={
+					<ja>@Response</ja>(value=200, description=<js>"The system property value, or null if not found."</js>)
+				}
+			)
+		)
+		<jk>public</jk> String getSystemProperty(<ja>@Path</ja> String propertyName) <jk>throws</jk> Throwable {
+			<jk>return</jk> System.<jsm>getProperty</jsm>(propertyName);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>,
+			summary=<js>"Replace system property"</js>,
+			description=<js>"Sets a new value for the specified system property."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>),
+					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The new system property value."</js>),
+				},
+				responses={
+					<ja>@Response</ja>(value=302,
+						headers={
+							<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
+						}
+					),
+					<ja>@Response</ja>(value=403, description=<js>"User is not an admin."</js>)
+				}
+			)
+		)
+		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja> String propertyName, <ja>@Body</ja> String value) {
+			System.<jsm>setProperty</jsm>(propertyName, value);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>, path=<js>"/"</js>,
+			summary=<js>"Add an entire set of system properties"</js>,
+			description=<js>"Takes in a map of key/value pairs and creates a set of new system properties."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property key."</js>),
+					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The new system property values."</js>, schema=<js>"{example:{key1:'val1',key2:123}}"</js>),
+				},
+				responses={
+					<ja>@Response</ja>(value=302,
+						headers={
+							<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
+						}
+					),
+					<ja>@Response</ja>(value=403, description=<js>"Unauthorized:  User is not an admin."</js>)
+				}
+			)
+		)
+		<jk>public</jk> Redirect setSystemProperties(<ja>@Body</ja> java.util.Properties newProperties) {
+			System.<jsm>setProperties</jsm>(newProperties);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>DELETE</jsf>, path=<js>"/{propertyName}"</js>,
+			summary=<js>"Delete system property"</js>,
+			description=<js>"Deletes the specified system property."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			swagger=<ja>@MethodSwagger</ja>(
+				parameters={
+					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>),
+				},
+				responses={
+					<ja>@Response</ja>(value=302,
+						headers={
+							<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
+						}
+					),
+					<ja>@Response</ja>(value=403, description=<js>"Unauthorized:  User is not an admin"</js>)
+				}
+			)
+		)
+		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja> String propertyName) {
+			System.<jsm>clearProperty</jsm>(propertyName);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, path=<js>"/formPage"</js>,
+			summary=<js>"Form entry page"</js>,
+			description=<js>"A form post page for setting a single system property value"</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				aside={
+					<js>"&lt;div class='text'&gt;"</js>,
+					<js>"	&lt;p&gt;Shows how HTML5 beans can be used to quickly create arbitrary HTML.&lt;/p&gt;"</js>,
+					<js>"&lt;/div&gt;"</js>
+				}
+			)
+		)
+		<jk>public</jk> Form getFormPage() {
+			<jk>return</jk> <jsm>form</jsm>().method(<jsf>POST</jsf>).action(<js>"servlet:/formPagePost"</js>).children(
+				<jsm>table</jsm>(
+					<jsm>tr</jsm>(
+						<jsm>th</jsm>(<js>"Set system property"</js>).colspan(2)
+					),
+					<jsm>tr</jsm>(
+						<jsm>td</jsm>(<js>"Name: "</js>), <jsm>td</jsm>(<jsm>input</jsm>(<js>"text"</js>).name(<js>"name"</js>))
+					),
+					<jsm>tr</jsm>(
+						<jsm>td</jsm>(<js>"Value: "</js>), <jsm>td</jsm>(<jsm>input</jsm>(<js>"text"</js>).name(<js>"value"</js>))
+					)
+				),
+				<jsm>button</jsm>(<js>"submit"</js>,<js>"Click me!"</js>).style(<js>"float:right"</js>)
+			);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>, path=<js>"/formPagePost"</js>,
+			description=<js>"Accepts a simple form post of a system property name/value pair."</js>,
+			guards=AdminGuard.<jk>class</jk>
+		)
+		<jk>public</jk> Redirect formPagePost(<ja>@FormData</ja>(<js>"name"</js>) String name, <ja>@FormData</ja>(<js>"value"</js>) String value) {
+			System.<jsm>setProperty</jsm>(name, value);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	}
+		</p>
+		<p>
+			Pointing a browser to the resource shows the following:
+		</p>
+		<p class='bcode w800'>
+	http://localhost:10000/systemProperties
+		</p>			
+		<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.1.png'>
+		<p>
+			Clicking the <code>OPTIONS</code> link shows you the generated Swagger:
+		</p>
+		<p class='bcode w800'>
+	http://localhost:10000/systemProperties?method=OPTIONS
+		</p>			
+		<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.2.png'>
+		<p>
+			Clicking the <code>FORM</code> link shows you the generated form entry page:
+		</p>
+		<p class='bcode w800'>
+	http://localhost:10000/systemProperties/formPage
+		</p>			
+		<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.3.png'>
+	</div>
+
+	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.MethodExampleResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.3 - MethodExampleResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.4 - MethodExampleResource</h4>
 	<div class='topic'>
 		<p>
 			The <l>MethodExampleResource</l> class provides examples of the following:
@@ -17904,7 +18165,7 @@
 			Notice how the conversion to POJOs is automatically done for us, even for non-standard POJOs such as UUID.
 		</p>
 		
-		<h5 class='topic'>Self-documenting design through Swagger OPTIONS pages</h5>
+		<h5 class='topic w800'>Self-documenting design through Swagger OPTIONS pages</h5>
 		<p>
 			One of the main features of Juneau is that it produces OPTIONS pages for self-documenting design (i.e. REST 
 			interfaces that document themselves).
@@ -17976,7 +18237,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.UrlEncodedFormResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.4 - UrlEncodedFormResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.5 - UrlEncodedFormResource</h4>
 	<div class='topic'>
 		<p>
 			The <l>UrlEncodedFormResource</l> class provides examples of the following:
@@ -18128,7 +18389,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.RequestEchoResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.5 - RequestEchoResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.6 - RequestEchoResource</h4>
 	<div class='topic'>
 		<p>
 			The <l>RequestEchoResource</l> class shows how existing complex POJOs can be serialized to a variety of 
@@ -18264,7 +18525,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.AddressBookResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.6 - AddressBookResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.7 - AddressBookResource</h4>
 	<div class='topic'>
 		<p>
 			The <l>AddressBookResource</l> class is a proof-of-concept class that shows a true RESTful API using the 
@@ -18315,7 +18576,7 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id='juneau-examples-rest.AddressBookResource.Classes'></a>
-		<h4 class='topic' onclick='toggle(this)'>12.6.1 - Classes</h4>
+		<h4 class='topic' onclick='toggle(this)'>12.7.1 - Classes</h4>
 		<div class='topic'>
 			<p>
 				The code is straightforward, consisting of the following classes:
@@ -19087,7 +19348,7 @@
 	
 		<!-- ======================================================================================================= -->
 		<a id='juneau-examples-rest.AddressBookResource.Demo'></a>
-		<h4 class='topic' onclick='toggle(this)'>12.6.2 - Demo</h4>
+		<h4 class='topic' onclick='toggle(this)'>12.7.2 - Demo</h4>
 		<div class='topic'>
 			<p>
 				Pointing a browser to the resource shows the results of running the <l>getRoot()</l> method:
@@ -19197,7 +19458,7 @@
 	
 		<!-- ======================================================================================================= -->
 		<a id='juneau-examples-rest.AddressBookResource.Traversable'></a>
-		<h4 class='topic' onclick='toggle(this)'>12.6.3 - Traversable</h4>
+		<h4 class='topic' onclick='toggle(this)'>12.7.3 - Traversable</h4>
 		<div class='topic'>
 			<p>
 				Because you added the <l>Traversable</l> converter to the <l>getPerson</l> method, you can also address 
@@ -19216,7 +19477,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id='juneau-examples-rest.AddressBookResource.Queryable'></a>
-		<h4 class='topic' onclick='toggle(this)'>12.6.4 - Queryable</h4>
+		<h4 class='topic' onclick='toggle(this)'>12.7.4 - Queryable</h4>
 		<div class='topic'>
 			<p>
 				The <l>Queryable</l> converter on the <l>getAllPeople()</l> method allows us to perform search/view/sort 
@@ -19244,7 +19505,7 @@
 	
 		<!-- ======================================================================================================= -->
 		<a id='juneau-examples-rest.AddressBookResource.Introspectable'></a>
-		<h4 class='topic' onclick='toggle(this)'>12.6.5 - Introspectable</h4>
+		<h4 class='topic' onclick='toggle(this)'>12.7.5 - Introspectable</h4>
 		<div class='topic'>
 			<p>
 				The <l>Introspectable</l> converter on the <l>getPerson</l> method allows us to invoke public methods 
@@ -19258,7 +19519,7 @@
 	
 		<!-- ======================================================================================================= -->
 		<a id='juneau-examples-rest.AddressBookResource.RestClient'></a>
-		<h4 class='topic' onclick='toggle(this)'>12.6.6 - ClientTest</h4>
+		<h4 class='topic' onclick='toggle(this)'>12.7.6 - ClientTest</h4>
 		<div class='topic'>
 			<p>
 				The <l>ClientTest</l> class is provided to demonstrate how POJOs can be serialized and parsed 
@@ -19373,7 +19634,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id='juneau-examples-rest.AddressBookResource.Browser'></a>
-		<h4 class='topic' onclick='toggle(this)'>12.6.7 - Browser Tips</h4>
+		<h4 class='topic' onclick='toggle(this)'>12.7.7 - Browser Tips</h4>
 		<div class='topic'>
 			<p>
 				The Juneau architecture is designed to make it easy to debug REST resources using nothing more than a 
@@ -19406,7 +19667,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.SampleRemoteableServlet'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.7 - SampleRemoteableServlet</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.8 - SampleRemoteableServlet</h4>
 	<div class='topic'>
 		<p>	
 			The <l>SampleRemoteableServlet</l> class shows examples of the following:
@@ -19426,7 +19687,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.TempDirResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.8 - TempDirResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.9 - TempDirResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>TempDirResource</l> class shows examples of the following:
@@ -19566,7 +19827,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.AtomFeedResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.9 - AtomFeedResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.10 - AtomFeedResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>AtomFeedResource</l> class shows examples of the following:
@@ -19691,7 +19952,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.DockerRegistryResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.10 - DockerRegistryResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.11 - DockerRegistryResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>DockerRegistryResource</l> class shows examples of the following:
@@ -19815,7 +20076,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.TumblrParserResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.11 - TumblrParserResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.12 - TumblrParserResource</h4>
 	<div class='topic'>
 		<p>
 			<b>Note:</b>  As of March 2018, this resource is known to not work against the Tumblr API.
@@ -19913,7 +20174,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.PhotosResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.12 - PhotosResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.13 - PhotosResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>PhotosResource</l> class shows examples of the following:
@@ -20090,7 +20351,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.JsonSchemaResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.13 - JsonSchemaResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.14 - JsonSchemaResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>JsonSchemaResource</l> class shows examples of the following:
@@ -20193,7 +20454,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.SqlQueryResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.14 - SqlQueryResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.15 - SqlQueryResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>SqlQueryResource</l> class shows examples of the following:
@@ -20403,7 +20664,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.ConfigResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.15 - ConfigResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.16 - ConfigResource</h4>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
@@ -20558,7 +20819,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.LogsResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.16 - LogsResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.17 - LogsResource</h4>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
@@ -20573,6 +20834,243 @@
 		<img class='bordered w800' src='doc-files/juneau-examples-rest.LogsResource.1.png'>
 	</div>
 
+	<!-- ======================================================================================================= -->
+	<a id='juneau-examples-rest.PetStoreResource'></a>
+	<h4 class='topic' onclick='toggle(this)'>12.18 - PetStoreResource</h4>
+	<div class='topic'>
+		<p>
+			The <code>PetStoreResource</code> class provides examples of the following: 
+		</p>
+		<ul	class='spaced-list'>
+			<li>
+				Summary and detail views of the same beans providing different levels of information.
+			<li>
+				The use of the {@link org.apache.juneau.html.annotation.HtmlRender @HtmlRender} annotation.
+			<li>
+				The use of the {@link org.apache.juneau.annotation.BeanProperty#format @BeanProperty(format)} annotation.
+			<li>
+				The use of the {@link org.apache.juneau.rest.converters.Querable} interface.
+		</ul>
+		
+		<h5 class='figure'>PetStoreResource.java</h5>
+		<p class='bcode'>
+	<ja>@RestResource</ja>(
+		title=<js>"Pet Store"</js>,
+		description=<js>"An example of a typical REST resource where beans are rendered in summary and details views."</js>,
+		path=<js>"/petstore"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>,
+				PetStoreResource.AddPet.<jk>class</jk>
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>,
+				<js>"$W{AddPet}"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;This page shows a standard REST resource that renders bean summaries and details.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;It shows how different properties can be rendered on the same bean in different views.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;It also shows how the Queryable converter and query widget can be used to create searchable interfaces.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+			head={
+				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/cat.png}'/&gt;"</js>
+			}
+		),
+		staticFiles={<js>"htdocs:htdocs"</js>}
+	)
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {
+	
+		<jc>// Our database.</jc>
+		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
+	
+		<ja>@RestHook</ja>(INIT) 
+		<jk>public void</jk> initDatabase(RestContextBuilder builder) <jk>throws</jk> Exception {
+			<jc>// Load our database from a local JSON file.</jc>
+			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(
+				getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>
+			);
+		}
+	
+		<jc>// Exclude the 'breed' and 'getsAlongWith' properties from the beans.</jc>
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/"</js>,
+			summary=<js>"The complete list of pets in the store"</js>,
+			bpx=<js>"Pet: breed,getsAlongWith"</js>,
+			
+			<jc>// Add our converter for POJO query support.</jc>
+			converters=Queryable.<jk>class</jk>,
+			
+			<jc>// Add our menu items in the nav links.</jc>
+			htmldoc=<ja>@HtmlDoc</ja>(
+				
+				widgets={
+					QueryMenuItem.<jk>class</jk>,
+					ContentTypeMenuItem.<jk>class</jk>,
+					StyleMenuItem.<jk>class</jk>
+				},
+	
+				navlinks={
+					<js>"INHERIT"</js>,  <jc>// Inherit links from class.</jc>
+					<js>"[2]:$W{QueryMenuItem}"</js>  <jc>// Insert QUERY link in position 2.</jc>
+				}
+			)
+		)
+		<jk>public</jk> Collection&lt;Pet&gt; getPets() {
+			<jk>return</jk> <jf>petDB</jf>.values();
+		}
+	
+		<jc>// Shows all bean properties.</jc>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, summary=<js>"Pet details"</js>)
+		<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"id"</js>) Integer id) {
+			<jk>return</jk> <jf>petDB</jf>.get(id);
+		}
+	
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> Redirect addPet(<ja>@Body</ja> Pet pet) <jk>throws</jk> Exception {
+			<jk>this</jk>.<jf>petDB</jf>.put(pet.<jf>id</jf>, pet);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+		
+		<jc>// Our bean class.</jc>
+		<jk>public static class</jk> Pet {
+	
+			<ja>@Html</ja>(link=<js>"servlet:/{id}"</js>)  <jc>// Creates a hyperlink in HTML view.</jc>
+			<ja>@NameProperty</ja>                <jc>// Links the parent key to this bean.</jc>
+			<jk>public int</jk> <jf>id</jf>;
+	
+			<jk>public</jk> String <jf>name</jf>;
+			<jk>public</jk> Kind <jf>kind</jf>;
+			<jk>public</jk> String <jf>breed</jf>;
+			<jk>public</jk> List&lt;Kind&gt; <jf>getsAlongWith</jf>;
+	
+			<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)  <jc>// Renders price in dollars.</jc>
+			<jk>public float</jk> <jf>price</jf>;
+	
+			<ja>@Swap</ja>(DateSwap.ISO8601D.<jk>class</jk>)  <jc>// Renders dates in ISO8601 format.</jc>
+			<jk>public</jk> Date <jf>birthDate</jf>;
+	
+			<jk>public int</jk> getAge() {
+				Calendar c = <jk>new</jk> GregorianCalendar();
+				c.setTime(<jf>birthDate</jf>);
+				<jk>return new</jk> GregorianCalendar().get(Calendar.<jsf>YEAR</jsf>) - c.get(Calendar.<jsf>YEAR</jsf>);
+			}</jk>
+		}
+	
+		<ja>@Html</ja>(render=KindRender.<jk>class</jk>)  <jc>// Render as an icon in HTML.</jc>
+		<jk>public static enum</jk> Kind {
+			<jsf>CAT</jsf>, <jsf>DOG</jsf>, <jsf>BIRD</jsf>, <jsf>FISH</jsf>, <jsf>MOUSE</jsf>, <jsf>RABBIT</jsf>, <jsf>SNAKE</jsf>
+		}
+	
+		<jk>public static class</jk> KindRender <jk>extends</jk> HtmlRender<Kind> {
+			<ja>@Override</ja>
+			<jk>public</jk> Object getContent(SerializerSession session, Kind value) {
+				<jk>return new</jk> Img().src(<js>"servlet:/htdocs/"</js>+value.toString().toLowerCase()+"<js>.png"</js>);
+			}
+			<ja>@Override</ja>
+			<jk>public</jk> String getStyle(SerializerSession session, Kind value) {
+				<jk>return</jk> <js>"background-color:#FDF2E9</js>";
+			}
+		}
+		
+		<jc>// Renders the "ADD" menu item.</jc>
+		<jk>public class</jk> AddPet <jk>extends</jk> MenuItemWidget {
+	
+			<ja>@Override</ja>
+			<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
+				<jk>return</jk> <js>"add"</js>;
+			}
+	
+			<ja>@Override</ja>
+			<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
+				<jk>return</jk> <jsm>div</jsm>(
+					<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<jsf>POST</jsf>).children(
+						<jsm>table</jsm>(
+							<jsm>tr</jsm>(
+								<jsm>th</jsm>(<js>"ID:"</js>),
+								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"id"</js>).type(<js>"number"</js>).value(<jsm>getNextAvailableId</jsm>())),
+								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"A unique identifer for the pet."</js>, <jsm>br</jsm>(), <js>"Must not conflict with existing IDs"</js>))
+							),
+							<jsm>tr</jsm>(
+								<jsm>th</jsm>(<js>"Name:"</js>),
+								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"name"</js>).type(<js>"text"</js>)),
+								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The name of the pet."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>)) 
+							),
+							<jsm>tr</jsm>(
+								<jsm>th</jsm>(<js>"Kind:"</js>),
+								<jsm>td</jsm>(
+									<jsm>select</jsm>().name(<js>"kind"</js>).children(
+										<jsm>option</jsm>(<js>"CAT"</js>), 
+										<jsm>option</jsm>(<js>"DOG"</js>), 
+										<jsm>option</jsm>(<js>"BIRD"</js>), 
+										<jsm>option</jsm>(<js>"FISH"</js>), 
+										<jsm>option</jsm>(<js>"MOUSE"</js>), 
+										<jsm>option</jsm>(<js>"RABBIT"</js>), 
+										<jsm>option</jsm>(<js>"SNAKE"</js>)
+									)
+								),
+								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The kind of animal."</js>)) 
+							),
+							<jsm>tr</jsm>(
+								<jsm>th</jsm>(<js>"Breed:"</js>),
+								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"breed"</js>).type(<js>"text"</js>)),
+								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The breed of animal."</js>, <jsm>br</jsm>(), <js>"Can be any arbitrary text"</js>)) 
+							),
+							<jsm>tr</jsm>(
+								<jsm>th</jsm>(<js>"Gets along with:"</js>),
+								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"getsAlongWith"</js>).type(<js>"text"</js>)),
+								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"A comma-delimited list of other animal types that this animal gets along with."</js>)) 
+							),
+							<jsm>tr</jsm>(
+								<jsm>th</jsm>(<js>"Price:"</js>),
+								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"price"</js>).type(<js>"number"</js>).placeholder(<js>"1.0"</js>).step(<js>"0.01"</js>).min(1).max(100)),
+								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The price to charge for this pet."</js>)) 
+							),
+							<jsm>tr</jsm>(
+								<jsm>th</jsm>(<js>"Birthdate:"</js>),
+								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"birthDate"</js>).type(<js>"date"</js>)),
+								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The pets birthday."</js>)) 
+							),
+							<jsm>tr</jsm>(
+								<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
+									<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>),
+									<jsm>button</jsm>(<js>""button"</js>, <js>"Cancel"</js>).onclick(<js>"window.location.href='/'"</js>),
+									<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>)
+								)
+							)
+						).style(<js>"white-space:nowrap"</js>)
+					)
+				);
+			}
+		}
+	}
+		<p>
+			Pointing a browser to the resource shows the following:
+		</p>
+		<p class='bcode w800'>
+	http://localhost:10000/petstore
+		</p>			
+		<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.1.png'>
+		<p>
+			Clicking the <code>QUERY</code> link renders the following menu pop-up complete with tooltips:
+		</p>
+		<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.2.png'>
+		<p>
+			The <code>STYLES</code> menu item allows you to try out the other default look-and-feels:
+		</p>
+		<h5 class='figure'>Light look-and-feel</h5>
+		<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.3.png'>
+		<h5 class='figure'>Dark look-and-feel</h5>
+		<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4.png'>
+	</div>
 </div>
 
 <!-- =============================================================================================================== -->
@@ -20592,7 +21090,7 @@
 	<h3 class='topic' onclick='toggle(this)'>13.1 - juneau-marshall</h3>
 	<div class='topic'>
 
-		<h5 class='topic'>Demarshalling vulnerabilities</h5>
+		<h5 class='topic w800'>Demarshalling vulnerabilities</h5>
 		<p>
 			One common security vulnerability is the ability to create arbitrary Java object instances through crafted
 			user input.  For example, support for constructing POJOs based on an input attribute defining a 
@@ -20652,7 +21150,7 @@
 			should be safe from demarshalling vulnerabilities.  
 		</p>
 		
-		<h5 class='topic'>Dependent libraries</h5>
+		<h5 class='topic w800'>Dependent libraries</h5>
 		<p>
 			When accessing security vulnerabilities of any library, dependent libraries must also be taken into account:
 		</p>
@@ -20822,7 +21320,7 @@
 			TBD
 		</p>
 		
-		<h5 class='topic'>juneau-marshall</h5>
+		<h5 class='topic w800'>juneau-marshall</h5>
 		<ul class='spaced-list'>
 			<li>
 				Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
@@ -20830,7 +21328,7 @@
 				Fixed bug where HTML-Schema was not being rendered correctly.
 		</ul>
 		
-		<h5 class='topic'>juneau-server</h5>
+		<h5 class='topic w800'>juneau-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				Fixed bug in <code>UriResolver</code> when request path info had special characters.
@@ -20851,7 +21349,7 @@
 			Version 7.1.0 is a major update with major implementation refactoring across all aspects of the product.
 		</p>
 	
-		<h5 class='topic'>juneau-marshall</h5>
+		<h5 class='topic w800'>juneau-marshall</h5>
 		<ul class='spaced-list'>
 			<li>
 				Significant improvements made to the internals of the Serializer and Parser classes.
@@ -20990,7 +21488,7 @@
 				New support for <a class='doclink' href='#juneau-marshall.PojoBuilders'>POJO Builders</a>.	
 		</ul>
 
-		<h5 class='topic'>juneau-svl</h5>
+		<h5 class='topic w800'>juneau-svl</h5>
 		<ul class='spaced-list'>
 			<li>
 				New variables:
@@ -21009,7 +21507,7 @@
 				</ul>
 		</ul>
 		
-		<h5 class='topic'>juneau-config</h5>
+		<h5 class='topic w800'>juneau-config</h5>
 		<ul class='spaced-list'>
 			<li>
 				The Config API has been completely revamped.
@@ -21023,7 +21521,7 @@
 				</ul>
 		</ul>
 		
-		<h5 class='topic'>juneau-dto</h5>
+		<h5 class='topic w800'>juneau-dto</h5>
 		<ul class='spaced-list'>
 			<li>
 				Enhancements to Swagger DTO:
@@ -21042,7 +21540,7 @@
 				</ul>
 		</ul>
 		
-		<h5 class='topic'>juneau-rest-server</h5>
+		<h5 class='topic w800'>juneau-rest-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				<code>RestServletDefault</code> renamed to {@link org.apache.juneau.rest.BasicRestServlet}.
@@ -21258,7 +21756,7 @@
 				</p>
 		</ul>
 
-		<h5 class='topic'>juneau-rest-client</h5>
+		<h5 class='topic w800'>juneau-rest-client</h5>
 		<ul class='spaced-list'>
 			<li>
 				New configuration property {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query} and
@@ -21279,7 +21777,7 @@
 				now implement the <code>Closeable</code> interface.
 		</ul>
 		
-		<h5 class='topic'>juneau-microservice</h5>
+		<h5 class='topic w800'>juneau-microservice</h5>
 		<ul class='spaced-list'>
 			<li>
 				<code>Resource</code> and <code>ResourceGroup</code> classes removed.
@@ -21303,7 +21801,7 @@
 			<li>Eclipse Jetty:  9.4.6.v20170531 to 9.4.8.v20171121
 		</ul>
 	
-		<h5 class='topic'>juneau-marshall</h5>
+		<h5 class='topic w800'>juneau-marshall</h5>
 		<ul class='spaced-list'>
 			<li>New static <code>create()</code> methods for builders on serializers and parsers.
 				<br>This simplifies the syntax of creation of serializers and parsers by scratch.
@@ -21329,7 +21827,7 @@
 				Fixed some bugs in the XML parser related to whitespace and comments.
 		</ul>
 
-		<h5 class='topic'>juneau-svl</h5>
+		<h5 class='topic w800'>juneau-svl</h5>
 		<ul class='spaced-list'>
 			<li>New methods on {@link org.apache.juneau.svl.Var} class to restrict when nested and embedded variables
 			are resolved.
@@ -21339,7 +21837,7 @@
 				</ul>
 		</ul>
 
-		<h5 class='topic'>juneau-rest-server</h5>
+		<h5 class='topic w800'>juneau-rest-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				New {@link org.apache.juneau.rest.annotation.RestResource#maxInput() @RestResource.maxInput()} and 
@@ -21347,7 +21845,7 @@
 				potential DoS attacks.
 		</ul>
 
-		<h5 class='topic'>juneau-microservice-server</h5>
+		<h5 class='topic w800'>juneau-microservice-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				New pluggable console commands.
@@ -21433,20 +21931,20 @@
 			This release ups the Java prerequisite to Java 7.
 		</p>
 		
-		<h5 class='topic'>juneau-marshall</h5>
+		<h5 class='topic w800'>juneau-marshall</h5>
 		<ul class='spaced-list'>
 			<li>
 				New class {@link org.apache.juneau.http.HttpMethodName} with valid static string HTTP method names.
 		</ul>
 		
-		<h5 class='topic'>juneau-dto</h5>
+		<h5 class='topic w800'>juneau-dto</h5>
 		<ul class='spaced-list'>
 			<li>
 				Class <code>org.apache.juneau.dto.Link</code> renamed to {@link org.apache.juneau.dto.LinkString}.
 				Helps avoid confusion since there are other Link classes in the library.
 		</ul>
 
-		<h5 class='topic'>juneau-rest-server</h5>
+		<h5 class='topic w800'>juneau-rest-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				Annotation <code><ja>@HtmlDoc</ja>(links)</code> renamed to {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks}.
@@ -21654,7 +22152,7 @@
 			</tr>
 		</table>
 
-		<h5 class='topic'>juneau-marshall</h5>
+		<h5 class='topic w800'>juneau-marshall</h5>
 		<ul class='spaced-list'>
 			<li>
 				Improvements to swap support.
@@ -21820,7 +22318,7 @@
 				New doc: <del>2.6.5 - Serializing Readers and InputStreams</del>
 		</ul>
 		
-		<h5 class='topic'>juneau-dto</h5>
+		<h5 class='topic w800'>juneau-dto</h5>
 		<ul class='spaced-list'>
 			<li>
 				{@link org.apache.juneau.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
@@ -21832,7 +22330,7 @@
 		</ul>
 
 
-		<h5 class='topic'>juneau-rest-server</h5>
+		<h5 class='topic w800'>juneau-rest-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				Revamped and simplified servlet and REST-call lifecycle handling through new
@@ -21921,7 +22419,7 @@
 				parsers.
 		</ul>
 
-		<h5 class='topic'>juneau-microservice</h5>
+		<h5 class='topic w800'>juneau-microservice</h5>
 		<ul class='spaced-list'>
 			<li>
 				The microservice has been significantly modified to be configured via a <code>jetty.xml</code> file
@@ -21952,7 +22450,7 @@
 				Jetty thread dumps through REST calls.
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.rest.examples</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest.examples</h5>
 		<ul class='spaced-list'>
 			<li>
 				New example of adding a menu-item widget to the Pet Store resource (including tooltips):
@@ -21969,7 +22467,7 @@
 			Juneau 6.3.1 is a minor release.
 		</p>
 
-		<h5 class='topic'>org.apache.juneau</h5>
+		<h5 class='topic w800'>org.apache.juneau</h5>
 		<ul class='spaced-list'>
 			<li>
 				{@link org.apache.juneau.utils.PojoQuery} improvements.
@@ -21998,7 +22496,7 @@
 				<js>""{exceptionMessage}"</js> values.
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.rest</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest</h5>
 		<ul class='spaced-list'>
 			<li>
 				New 'light' stylesheet:
@@ -22166,7 +22664,7 @@
 				Two new variables added to <code>$R</code> variable: <js>"$R{servletClass}"</js>, <js>"$R{servletClassSimple}"</js>
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.rest.examples</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest.examples</h5>
 		<ul class='spaced-list'>
 			<li>
 				Added CONTENT-TYPE and STYLES menu items to most pages.
@@ -22184,7 +22682,7 @@
 			arbitrary 3rd-party REST interfaces.
 		</p>
 
-		<h5 class='topic'>org.apache.juneau</h5>
+		<h5 class='topic w800'>org.apache.juneau</h5>
 		<ul class='spaced-list'>
 			<li>
 				New package:  {@link org.apache.juneau.http}.
@@ -22338,7 +22836,7 @@
 			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty.format()}.
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.rest</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest</h5>
 		<ul class='spaced-list'>
 			<li>
 				MAJOR enhancements made to the REST API.
@@ -22557,7 +23055,7 @@
 			</li>
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.rest.client</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 		<ul class='spaced-list'>
 			<li>
 				New {@link org.apache.juneau.remoteable.Path @Path} annotation for specifying path variables on remoteable interfaces.
@@ -22572,11 +23070,11 @@
 				{@link org.apache.juneau.remoteable.Header @Header},{@link org.apache.juneau.remoteable.HeaderIfNE @HeaderIfNE}, 
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.microservice</h5>
+		<h5 class='topic w800'>org.apache.juneau.microservice</h5>
 		<ul class='spaced-list'>
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.examples.rest</h5>
+		<h5 class='topic w800'>org.apache.juneau.examples.rest</h5>
 		<ul class='spaced-list'>
 			<li>
 				Many code enhancements make to examples to reflect new functionality.
@@ -22595,7 +23093,7 @@
 			Juneau 6.2.0 is a major update.
 		</p>
 
-		<h5 class='topic'>org.apache.juneau</h5>
+		<h5 class='topic w800'>org.apache.juneau</h5>
 		<ul class='spaced-list'>
 			<li>
 				Revamped the serializer, parser classes to use builders for creation.
@@ -22685,7 +23183,7 @@
 			</ul> 		
 		</ul>
 		
-		<h5 class='topic'>org.apache.juneau.rest</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest</h5>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.rest.annotation.RestResource @RestResource} annotation can now be applied to 
 				any class!  You're no longer restricted to subclassing your resources from {@link org.apache.juneau.rest.RestServlet}.
@@ -22798,7 +23296,7 @@
 			<li>{@link org.apache.juneau.rest.annotation.RestMethod#name() @RestMethod.name()} annotation is now optional.  Defaults to <js>"GET"</js>.
 		</ul>
 
-		<h5 class='topic'>org.apache.juneau.rest.client</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 		<ul class='spaced-list'>
 			<li>Revamped the client API to use builders.
 			<li>New doc: <del>1.5 - Debugging</del>
@@ -22873,7 +23371,7 @@
 				</ul>			
 		</ul>
 		
-		<h5 class='topic'>org.apache.juneau.microservice</h5>
+		<h5 class='topic w800'>org.apache.juneau.microservice</h5>
 		<ul class='spaced-list'>
 			<li><js>"REST/port"</js> configuration setting can now be a comma-limited list of port numbers to try.
 				<br>You can also specify one or more <code>0</code>s to try a random port.
@@ -22900,7 +23398,7 @@
 			It also makes several improvements to the HTML and XML serialization support and introduces HTML5 DTO beans.
 		</p>
 
-		<h5 class='topic'>org.apache.juneau</h5>
+		<h5 class='topic w800'>org.apache.juneau</h5>
 		<ul class='spaced-list'>
 			<li>Improvements to XML serialization support.
 				<ul>
@@ -23088,7 +23586,7 @@
 				properties into a single <code><del>SerializerContext.SERIALIZER_useWhitespace</del></code> setting.
 		</ul>
 		
-		<h5 class='topic'>org.apache.juneau.rest</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest</h5>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.rest.RestRequest} now passes locale and timezone to serializers/parsers/transforms.
 			<li><code><del>RestRequest.getTimeZone()</del></code> method.
@@ -23128,7 +23626,7 @@
 			Juneau 6.0.1 is a minor update.
 		</p>
 
-		<h5 class='topic'>org.apache.juneau</h5>
+		<h5 class='topic w800'>org.apache.juneau</h5>
 		<ul class='spaced-list'>
 			<li>General improvements to JSON parser.
 				<ul>
@@ -23157,7 +23655,7 @@
 			The major change is rebranding from "Juno" to "Juneau" in preparation for donation to the Apache Foundation.
 		</p>
 
-		<h5 class='topic'>org.apache.juneau</h5>
+		<h5 class='topic w800'>org.apache.juneau</h5>
 		<ul class='spaced-list'>
 			<li>Major changes around how serializer and parser class properties are defined to improve performance
 				and concurrency.
@@ -23248,7 +23746,7 @@
 			<li>Introduced {@link org.apache.juneau.dto.swagger Swagger DTOs}.
 		</ul>		
 
-		<h5 class='topic'>org.apache.juneau.rest</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest</h5>
 		<ul class='spaced-list'>
 			<li>OPTIONS pages replaced with Swagger documents.
 				Lots of changes related to supporting Swagger.
@@ -23302,7 +23800,7 @@
 			</li>
 		</ul>
 		
-		<h5 class='topic'>org.apache.juneau.rest.client</h5>
+		<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 		<ul class='spaced-list'>
 			<li>Removed the <code>JazzRestClient</code> class.
 			<li>New method <code><del>RestClient.setClientVersion(String)</del></code>.
@@ -23317,7 +23815,7 @@
 			Juno 5.2.0.1 is a moderate update.
 		</p>
 
-		<h5 class='topic'>com.ibm.team.juno</h5>
+		<h5 class='topic w800'>com.ibm.team.juno</h5>
 		<ul class='spaced-list'>
 			<li>Improved support for multi-line values in config files.
 				Any line that begins with whitespace is interpreted as a continuation of the previous line.
@@ -23352,7 +23850,7 @@
 			<li>Default value for <code><del>XmlParserContext.XML_trimWhitespace</del></code> changed to <jk>true</jk>.			
 		</ul>
 
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>New methods on {@link org.apache.juneau.rest.RestContext}:
 				<ul>
@@ -23360,7 +23858,7 @@
 				</ul>
 		</ul>
 
-		<h5 class='topic'>Client</h5>
+		<h5 class='topic w800'>Client</h5>
 		<ul class='spaced-list'>
 			<li>Fixed potential issue in {@link org.apache.juneau.rest.client.RestClient} where the HTTP connection pool could end up exhausted if an error occurred.
 			<li>Improved thread safety on {@link org.apache.juneau.rest.client.RestClient}.
@@ -23378,7 +23876,7 @@
 			Major changes have been made to the microservice architecture and config INI file APIs.
 		</p>
 		
-		<h5 class='topic'>Core</h5>
+		<h5 class='topic w800'>Core</h5>
 		<ul class='spaced-list'>
 			<li>Significant changes and enhancements to the <code>org.apache.juneau.config</code> API.
 				<ul>
@@ -23565,7 +24063,7 @@
 			<li>New {@link org.apache.juneau.utils.PojoQuery} modified to handle bean getters that throw exceptions.
 		</ul>
 
-		<h5 class='topic'>Client</h5>
+		<h5 class='topic w800'>Client</h5>
 		<ul class='spaced-list'>
 			<li>Upgraded to use Apache HttpClient 4.5.
 			<li>New classes:
@@ -23677,7 +24175,7 @@
 				</ul>
 		</ul>
 
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.rest.ReaderResource} class.   
 				Represents the contents of a text file with convenience methods for resolving
@@ -23737,7 +24235,7 @@
 			<li>New {@link org.apache.juneau.rest.RestUtils#trimPathInfo(StringBuffer,String,String)} method.
 		</ul>
 
-		<h5 class='topic'>Microservice</h5>
+		<h5 class='topic w800'>Microservice</h5>
 		<ul class='spaced-list'>
 			<li>Completely revamped API.
 			<li>New {@link org.apache.juneau.microservice.Microservice} class that serves as a generic
@@ -23776,13 +24274,13 @@
 				</ul>
 		</ul>
 		
-		<h5 class='topic'>Samples</h5>
+		<h5 class='topic w800'>Samples</h5>
 		<ul class='spaced-list'>
 			<li>Converted to a REST microservice.
 			<li>Look-and-feel changed to IBM DevOps.
 		</ul>
 		
-		<h5 class='topic'>Documentation Updates</h5>
+		<h5 class='topic w800'>Documentation Updates</h5>
 		<ul class='spaced-list'>
 			<li><del>org.apache.juneau.microservice</del> - New package-level javadoc.
 			<li><del>org.apache.juneau.config</del> - New package-level javadoc.
@@ -23803,7 +24301,7 @@
 			The biggest improvement is the ability to associate external INI config files with REST servlets using the <code><del>ConfigFile</del></code> functionality.
 		</p>
 		
-		<h5 class='topic'>Core</h5>
+		<h5 class='topic w800'>Core</h5>
 		<ul class='spaced-list'>
 			<li>Significant API changes to <code>org.apache.juneau.config</code> API.
 				<ul>
@@ -23832,7 +24330,7 @@
 				This affects the way most parsers handle blank values.
 		</ul>
 		
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>You can now parse into non-static inner classes of a servlet for parameters/attributes/content.
 				Useful if you like to define your marshaller beans inside your servlet.
@@ -23878,7 +24376,7 @@
 				</ul>
 		</ul>
 				
-		<h5 class='topic'>Microservice</h5>
+		<h5 class='topic w800'>Microservice</h5>
 		<ul class='spaced-list'>
 			<li>New juneau-microservice.jar file that encapsulates all 3 juneau jars with code necessary for creating fast and efficent jetty-powered REST microservices.<br>
 				Contains the following:
@@ -23900,7 +24398,7 @@
 			But it introduces a <code><del>Microservices</del></code> project for building REST microservices and docker containers.
 		</p>
 
-		<h5 class='topic'>Core</h5>
+		<h5 class='topic w800'>Core</h5>
 		<ul class='spaced-list'>
 			<li>Beans can now be serialized to and parsed from {@link org.apache.juneau.ObjectMap ObjectMaps}.
 				See <del>Serializing to ObjectMaps</del> for details.
@@ -23910,12 +24408,12 @@
 			<li>Behavior change on <del><code>StringVarResolver</code></del>.  <jk>null</jk> input now results in blank strings instead of <jk>null</jk>.
 		</ul>
 		
-		<h5 class='topic'>Client</h5>
+		<h5 class='topic w800'>Client</h5>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.rest.client.RestClient#doCallback(String)} method.
 		</ul>
 		
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.rest.RestRequest#getHeaders()} method.
 			<li>New <code>RestResponse.getUnbufferedWriter()</code> method.
@@ -23937,7 +24435,7 @@
 			Juno 5.1.0.18 is a minor update affecting the server component only.
 		</p>
 
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 			<li>Servlet and method labels and descriptions can now contain embedded string variables.
@@ -23965,7 +24463,7 @@
 			Juno 5.1.0.17 is a major update.
 		</p>
 
-		<h5 class='topic'>Core</h5>
+		<h5 class='topic w800'>Core</h5>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.BeanMap#get(Object)} and {@link org.apache.juneau.BeanMap#put(String,Object)} now
 				automatically performs filtering if filters are defined on the bean property or bean property class.
@@ -23996,7 +24494,7 @@
 		</ul>
 		
 
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.rest.response.ZipFileListResponseHandler} class.
 			<li>Simplified labels in servlet resource bundles:
@@ -24067,7 +24565,7 @@
 			<li>Support for sorting resources by name in {@link org.apache.juneau.rest.labels.ChildResourceDescriptions}.
 		</ul>
 		
-		<h5 class='topic'>Samples</h5>
+		<h5 class='topic w800'>Samples</h5>
 		<ul class='spaced-list'>
 			<li>Added <code>/tempDir/upload</code> showing how to use <code>ServletFileUpload</code> with multipart form posts.
 		</ul>
@@ -24082,7 +24580,7 @@
 			Juno 5.1.0.16 is a moderate update.
 		</p>
 		
-		<h5 class='topic'>Core</h5>
+		<h5 class='topic w800'>Core</h5>
 		<ul class='spaced-list'>
 			<li>New methods on {@link org.apache.juneau.ClassMeta} that eliminates language-specific code in 
 				the general class metadata.
@@ -24109,14 +24607,14 @@
 			<li>FindBug fixes.
 		</ul>
 
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>New <code><del>RestRequest.getServletParentURI()</del></code> method.
 			<li>New <code>$R{servletParentURI}</code> variable.
 			<li>Removed final modifier from {@link org.apache.juneau.rest.labels.ChildResourceDescriptions}.
 		</ul>
 		
-		<h5 class='topic'>Samples</h5>
+		<h5 class='topic w800'>Samples</h5>
 		<ul class='spaced-list'>
 			<li>Added source code links to examples.
 		</ul>
@@ -24130,7 +24628,7 @@
 			Juno 5.1.0.15 is a minor update.
 		</p>
 		
-		<h5 class='topic'>Core</h5>
+		<h5 class='topic w800'>Core</h5>
 		<ul class='spaced-list'>
 			<li>New properties in <code><del>SerializerContext</del></code>:
 				<ol>
@@ -24142,7 +24640,7 @@
 			<li>Improvements in {@link org.apache.juneau.csv.CsvSerializer}.
 		</ul>
 	
-		<h5 class='topic'>Server</h5>
+		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
 			<li>New properties in <code>RestServletProperties</code>:
 				<ol>
@@ -24153,7 +24651,7 @@
 			<li>Improvements involving path calculations when servlets deployed outside of a war file with a context root.
 		</ul>
 		
-		<h5 class='topic'>Client</h5>
+		<h5 class='topic w800'>Client</h5>
 		<ul class='spaced-list'>
 			<li>New methods in {@link org.apache.juneau.rest.client.RestCall}:
 				<ol>
@@ -24192,13 +24690,13 @@
 				to invoke server-side POJO methods through client-side proxy interfaces.
 		</p>
 		
-		<h5 class='topic'>Core</h5>		
+		<h5 class='topic w800'>Core</h5>		
 		<ul class='spaced-list'>
 			<li>Simplified {@link org.apache.juneau.utils.PojoIntrospector} class.
 			<li>New {@link org.apache.juneau.internal.ClassUtils#getMethodSignature(Method)} method.
 		</ul>
 		
-		<h5 class='topic'>Client</h5>		
+		<h5 class='topic w800'>Client</h5>		
 		<ul class='spaced-list'>
 			<li>New methods in {@link org.apache.juneau.rest.client.RestClient} for working with remoteable services:
 			<ul>
@@ -24207,7 +24705,7 @@
 			</ul>
 		</ul>
 
-		<h5 class='topic'>Server</h5>		
+		<h5 class='topic w800'>Server</h5>		
 		<ul class='spaced-list'>
 			<li>Added a default OPTIONS page to {@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
 			<li><code>RestServletProperties.REST_allowMethodParam</code> has been enhanced to allow you to
@@ -24228,7 +24726,7 @@
 			Juno 5.1.0.13 is a minor update.
 		</p>
 
-		<h5 class='topic'>Core</h5>		
+		<h5 class='topic w800'>Core</h5>		
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.ClassMeta#newInstance()} method can now create new instances of arrays.
 			<li>Arguments passed to <code><del>Link</del></code> are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
@@ -24240,7 +24738,7 @@
 			<li>Improved implementation of <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
 		</ul>
 
-		<h5 class='topic'>Server</h5>		
+		<h5 class='topic w800'>Server</h5>		
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.rest.RestConverter} API fixed to handle the existence of POJO filters.
 				{@link org.apache.juneau.rest.converters.Introspectable}/{@link org.apache.juneau.rest.converters.Queryable}/{@link org.apache.juneau.rest.converters.Traversable} classes can now work with filtered POJOs.  
@@ -24249,7 +24747,7 @@
 			<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
 		</ul>
 		
-		<h5 class='topic'>Client</h5>		
+		<h5 class='topic w800'>Client</h5>		
 		<ul class='spaced-list'>	
 			<li>New <code><del>RestCall.setRedirectMaxAttempts(int)</del></code> method to prevent endless redirection loops.
 			<li>New <code><del>RestCall#setRetryable(int,long,RetryOn)</del></code> method to automatically retry on failed connection attempts.
@@ -24265,14 +24763,14 @@
 			Juno 5.1.0.12 is a minor update.
 		</p>
 
-		<h5 class='topic'>Core</h5>		
+		<h5 class='topic w800'>Core</h5>		
 		<ul class='spaced-list'>
 			<li>Fixed <code><del>ConfigFile.isEmpty()</del></code> method.
 			<li>Changed behavior on {@link org.apache.juneau.uon.UonParser} to not treat <js>'~'</js> characters as escapes
 				unless followed by one of the following characters:  <code>( ) , $ = ~</code>.
 		</ul>
 
-		<h5 class='topic'>Client</h5>		
+		<h5 class='topic w800'>Client</h5>		
 		<ul class='spaced-list'>
 			<li>New class {@link org.apache.juneau.rest.client.RestCallInterceptor}.  
 				Allows responses to be inspected and modified before being processed.  
@@ -24289,7 +24787,7 @@
 			Juno 5.1.0.11 is a moderate update.
 		</p>
 
-		<h5 class='topic'>Core</h5>		
+		<h5 class='topic w800'>Core</h5>		
 		<ul class='spaced-list'>
 			<li>Additions to {@link org.apache.juneau.html.annotation.Html @Html} bean annotation.
 				<ul>
@@ -24318,7 +24816,7 @@
 			<li>Config INI files now support keys with name <js>"*"</js>.
 		</ul>
 
-		<h5 class='topic'>Server</h5>		
+		<h5 class='topic w800'>Server</h5>		
 		<ul class='spaced-list'>
 			<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</del>).
 				This applies to headers, attributes, and parameters.
@@ -24350,7 +24848,7 @@
 				of {@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
 		</ul>
 				
-		<h5 class='topic'>Client</h5>		
+		<h5 class='topic w800'>Client</h5>		
 		<ul class='spaced-list'>
 			<li>New method {@link org.apache.juneau.rest.client.RestCall#allowRedirectsOnPosts(boolean)}.
 			<li>New method <code>RestCall.peekInputStream()</code> allows you to read response bodies without interrupting execution flow.
@@ -24362,7 +24860,7 @@
 			<li>TLS support in <code>JazzRestClient</code>.
 		</ul>
 
-		<h5 class='topic'>Other changes</h5>	
+		<h5 class='topic w800'>Other changes</h5>	
 		<ul class='spaced-list'>
 			<li><code>samples.ear</code> and <code>samples.war</code> projects
 				have been replaced with an OSGi bundle with activated servlets in <code>juno.samples</code>.
@@ -24377,7 +24875,7 @@
 			Juno 5.1.0.10 is a moderate update.
 		</p>
 
-		<h5 class='topic'>Core</h5>		
+		<h5 class='topic w800'>Core</h5>		
 		<ul class='spaced-list'>
 			<li>Major changes to URL-Encoded serializer and parser.
 				<ul>
@@ -24394,7 +24892,7 @@
 			<li>New {@link org.apache.juneau.serializer.WriterSerializer#toString(Object)} method that's identical to the serialize method but throws <code>RuntimeExceptions</code> to make the serializer easier to use for debugging.
 		</ul>
 
-		<h5 class='topic'>Server</h5>		
+		<h5 class='topic w800'>Server</h5>		
 		<ul class='spaced-list'>
 			<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
 				Calling <del><code>HttpServlet.getParameter(String)</code></del> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
@@ -24409,7 +24907,7 @@
 				{@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
 		</ul>
 		
-		<h5 class='topic'>Client</h5>		
+		<h5 class='topic w800'>Client</h5>		
 		<ul class='spaced-list'>
 			<li>Moved to Apache HttpClient 4.3 to match Jazz 6.0.
 			<li>Renamed <code>RestResponseEntity</code> to {@link org.apache.juneau.rest.client.RestRequestEntity}.
@@ -24425,7 +24923,7 @@
 			<li>Renamed <code>RestClient.shutdown()</code> to {@link org.apache.juneau.rest.client.RestClient#close()} to mirror change in Apache API.		
 		</ul>
 
-		<h5 class='topic'>Samples</h5>		
+		<h5 class='topic w800'>Samples</h5>		
 		<ul class='spaced-list'>
 			<li>New <code>CodeFormatterResource</code> for quickly formatting Java and XML code samples in Javadocs.
 			<li>New <code>UrlEncodedFormResource</code> for showing how to work with URL-Encoded form posts.
@@ -24607,7 +25105,7 @@
 			Juno 5.1.0.3 is a moderate update.
 		</p>
 		
-		<h5 class='topic'>Core API updates</h5>
+		<h5 class='topic w800'>Core API updates</h5>
 		<ul class='spaced-list'>
 			<li>Ability to detect and use non-public bean classes, getters/setters, and fields using the following new properties:
 				<ul>
@@ -24640,7 +25138,7 @@
 			<li>{@link org.apache.juneau.html.HtmlDocSerializer} will now embed the data portion of the output in a <code><xt>&lt;div</xt> <xa>id</xa>=<xs>'data'</xs><xt>&gt;</xt></code> element to make it easier to extract the data portion of the page in Javascript in browsers.
 		</ul>
 
-		<h5 class='topic'>REST Server API updates</h5>
+		<h5 class='topic w800'>REST Server API updates</h5>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.rest.RestRequest#getJavaMethod()} method for getting access to the method used to handle a request.
 				Useful for accessing the method name or annotations during requests, such as in calls to {@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)}.
@@ -24693,7 +25191,7 @@
 		<p>
 			Juno 5.1.0.0 is a major update.
 		</p>
-		<h5 class='topic'>Major changes</h5>
+		<h5 class='topic w800'>Major changes</h5>
 		<ul class='spaced-list'>
 			<li>Brand new REST client API that uses Apache HttpClient for HTTP communication.<br>
 				The new client API is simply a thin layer on top of <code>HttpClient</code> that performs 
@@ -24719,7 +25217,7 @@
 				<li>New <code>org.apache.juneau.parser.Parser.parse(Object,int,ClassMeta)</code> convenience method added.
 			</ul>
 		</ul>	
-		<h5 class='topic'>Other changes</h5>
+		<h5 class='topic w800'>Other changes</h5>
 		<ul class='spaced-list'>
 			<li>Various new methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
 			<li>Improved support on <code><del>BeanContext.getClassMetaFromString(String)</del></code>.<br>
@@ -25137,7 +25635,7 @@
 		<p>
 			Juno 5.0.0.25 is a minor update.
 		</p>
-		<h5 class='topic'>Core API updates</h5>
+		<h5 class='topic w800'>Core API updates</h5>
 		<ul class='spaced-list'>
 			<li>
 				New {@link org.apache.juneau.dto.ResultSetList} DTO for serializing SQL result sets to JSON/XML/HTML and so forth.
@@ -25146,7 +25644,7 @@
 				New <code>SqlQueryResource</code> class in the sample war for demonstrating the <code>ResultSetList</code> DTO.
 			</li>
 		</ul>
-		<h5 class='topic'>Server API updates</h5>
+		<h5 class='topic w800'>Server API updates</h5>
 		<ul class='spaced-list'>
 			<li>
 				Fixed issue with media type for CSS files being reported as <js>"text/plain"</js> instead of <js>"text/css"</js>.
@@ -25167,7 +25665,7 @@
 		<p>
 			Juno 5.0.0.24 is a major update.
 		</p>
-		<h5 class='topic'>Core API updates</h5>
+		<h5 class='topic w800'>Core API updates</h5>
 		<ul class='spaced-list'>
 			<li>
 				New support for {@link org.apache.juneau.dto.atom ATOM}.
@@ -25203,7 +25701,7 @@
 				Eliminated old RDF/XML serializer.
 			</li>
 		</ul>	
-		<h5 class='topic'>Documentation updates</h5>
+		<h5 class='topic w800'>Documentation updates</h5>
 		<ul>
 			<li>New {@link org.apache.juneau.json JSON Support Overview} document.</li>
 			<li>New {@link org.apache.juneau.xml XML Support Overview} document.</li>
@@ -25239,7 +25737,7 @@
 		<p>
 			Juno 5.0.0.22 is a minor update.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 		    	New <code><ja>@Property</ja>.nls()</code> annotation for specifying localized property values.<br>
@@ -25247,7 +25745,7 @@
 		    	See the <code>AddressBookResource</code> class for an example.
 		    </li>
 		</ul>
-		<h5 class='topic'>REST Servlet API changes</h5>
+		<h5 class='topic w800'>REST Servlet API changes</h5>
 		<ul class='spaced-list'>
 			<li>Fix a bug where the <code>&amp;Content</code> query parameter was not always parsed correctly.</li>
 		</ul>
@@ -25260,7 +25758,7 @@
 		<p>
 			Juno 5.0.0.21 is a minor update.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				New <code><del>HtmlDocSerializerContext.HTMLDOC_navlinks</del></code> annotation for addint links to HTML page views.
@@ -25269,7 +25767,7 @@
 				Renamed the properties in <code><del>HtmlDocSerializerContext</del></code> for clarity.
 			</li>
 		</ul>		
-		<h5 class='topic'>Servlet API changes</h5>
+		<h5 class='topic w800'>Servlet API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				Added new <code>RestServlet.addDefaultProperties(ObjectMap,RestRequest)</code> method for programatically adding properties to the property map per request.
@@ -25296,7 +25794,7 @@
 		<p>
 			Juno 5.0.0.20 is a major update.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				New Jena-based {@link org.apache.juneau.jena.RdfSerializer} for serializing POJOs to RDF/XML, RDF/XML-ABBREV, N-Triple, Turtle, and N3.<br>
@@ -25312,7 +25810,7 @@
 				For developers concerned about performance, they can always change it back to false and specify the namespaces themselves.	
 			</li>
 		</ul>
-		<h5 class='topic'>REST server API changes</h5>
+		<h5 class='topic w800'>REST server API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				Allow inheritance of {@link org.apache.juneau.rest.annotation.RestResource @RestResource} annotation.<br>
@@ -25349,7 +25847,7 @@
 				These augment the existing <code>getBeanContext()</code> / <code>getSerializers()</code> / <code>getParsers()</code> methods.		
 			</li>
 		</ul>
-		<h5 class='topic'>REST client API changes</h5>
+		<h5 class='topic w800'>REST client API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				New <code>RestCall.setDateHeader(String,Object)</code> method for setting ISO8601 datetime headers.
@@ -25399,7 +25897,7 @@
 			However, I'm keeping it around, since it's considerably faster and uses far less memory than the Jena-based serializer since it serializes directly from POJOs to RDF/XML.<br> 
 			It may or may not be removed in the future depending on demand.
 		</p>
-		<h5 class='topic'>Other changes</h5>
+		<h5 class='topic w800'>Other changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				New {@link org.apache.juneau.jso.JsoParser} class.  
@@ -25472,7 +25970,7 @@
 		<p>
 			Adoptions will be required if you have previously used these classes.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				New <code>org.apache.juneau.serializer</code> package.
@@ -25541,7 +26039,7 @@
 				Renamed <code>PojoSwap</code> to {@link org.apache.juneau.utils.PojoQuery} to not confuse it with the new Filter API.
 			</li>
 		</ul>
-		<h5 class='topic'>REST server API changes</h5>
+		<h5 class='topic w800'>REST server API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				Eliminated <code>org.apache.juneau.rest.serializers</code> and <code>org.apache.juneau.rest.parsers</code> packages.
@@ -25550,7 +26048,7 @@
 				</ul>
 			</li>
 		</ul>
-		<h5 class='topic'>REST client API changes</h5>
+		<h5 class='topic w800'>REST client API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				Simplified {@link org.apache.juneau.rest.client.RestClient} API.
@@ -25572,7 +26070,7 @@
 		<p>
 			Juno 5.0.0.13 is a minor update.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>		
 				New support for relative URIs.
@@ -25597,7 +26095,7 @@
 				Removed <code>BeanProperty#id</code> annotation.
 			</li>
 		</ul>
-		<h5 class='topic'>REST server API changes</h5>
+		<h5 class='topic w800'>REST server API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				Improvements to {@link org.apache.juneau.rest.RestServlet} to automatically handle relative URIs in POJOs.
@@ -25620,7 +26118,7 @@
 		<p>
 			Juno 5.0.0.12 is a minor update.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				Relaxed method naming conventions when using {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation.<br>
@@ -25628,7 +26126,7 @@
 				Eliminated the <code>BeanProperty.method</code> annotation, since it's now unnecessary.
   			</li>
 		</ul>		
-		<h5 class='topic'>REST server API changes</h5>
+		<h5 class='topic w800'>REST server API changes</h5>
 		<ul class='spaced-list'>
 			<li>		
 				Significantly improved response error messages.<br> 
@@ -25656,7 +26154,7 @@
 		<p>
 			Juno 5.0.0.11 is a moderate update.
 		</p>
-		<h5 class='topic'>REST server API changes</h5>
+		<h5 class='topic w800'>REST server API changes</h5>
 		<ul class='spaced-list'>
 			<li>	
 				New <code>UrlEncodingRestSerializer</code> and <code>UrlEncodingRestParser</code> classes.<br>
@@ -25678,12 +26176,12 @@
 		<p>
 			Juno 5.0.0.10 is a minor update.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.ObjectMap#findKeyIgnoreCase(String)} method.
 			<li>HtmlSerializer will now create 2-dimensional tables for collections of mixed beans/maps if all object have the same set of property names/keys.</li>
 		</ul>
-		<h5 class='topic'>REST server API changes</h5>
+		<h5 class='topic w800'>REST server API changes</h5>
 		<ul class='spaced-list'>
 			<li>New <code>RestServletProperties</code> class that defines all the class-level properties that can be set on the servlet.</li>
 			<li>Properties can be set through {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties} annotation, or new <code><del>RestServlet.setProperty(String,Object)</del></code> method.</li>
@@ -25703,7 +26201,7 @@
 		<p>
 			Juno 5.0.0.9 is a moderate update.
 		</p>
-		<h5 class='topic'>Core API changes</h5>
+		<h5 class='topic w800'>Core API changes</h5>
 		<ul class='spaced-list'>
 			<li>
 				{@link org.apache.juneau.config INI config file support}:
@@ -25718,7 +26216,7 @@
 			<li>Ability to use {@link org.apache.juneau.annotation.Bean @Bean} annotation to override bean identification settings.</li>
 			<li>New {@link org.apache.juneau.ObjectMap#cast(Class)} method to convert <code>ObjectMaps</code> directly to beans.</li>
 		</ul>
-		<h5 class='topic'>REST server API changes</h5>
+		<h5 class='topic w800'>REST server API changes</h5>
 		<ul class='spaced-list'>
 			<li>Build-in default <code>OPTIONS</code> pages.</li>
 			<li>New {@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders} and {@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders} annotations.</li>
@@ -25730,7 +26228,7 @@
 			<li>New <del><code>@HasParam</code></del> annotation.</li>
 			<li>Full RFC2616 support for matching <code>Accept</code> headers to serializers.</li>		
 		</ul>
-		<h5 class='topic'>Other notes</h5>
+		<h5 class='topic w800'>Other notes</h5>
 		<ul class='spaced-list'>
 			<li>Smaller library size (460kB).</li>
 		</ul>
@@ -25762,7 +26260,7 @@
 		<p>
 			Juno 5.0.0.7 is a major update.
 		</p>
-		<h5 class='topic'>Core API updates</h5>
+		<h5 class='topic w800'>Core API updates</h5>
 		<ul class='spaced-list'>
 			<li>Combined previous 3 libraries into a single library.</li>
 			<li>
@@ -25858,12 +26356,12 @@
 				Improved {@link org.apache.juneau.utils.PojoQuery} support.
 			</li>
 		</ul>
-		<h5 class='topic'>REST client updates</h5>
+		<h5 class='topic w800'>REST client updates</h5>
 		<ul class='spaced-list'>
 			<li>GZIP compression support.</li>
 			<li>Bug fixes.</li>
 		</ul>
-		<h5 class='topic'>REST server updates</h5>
+		<h5 class='topic w800'>REST server updates</h5>
 		<ul class='spaced-list'>
  			<li>
 				Support for overriding bean context and serializer properties in a REST method call through new <code><del>RestResponse.setProperty(String,Object)</del></code> method.<br>
