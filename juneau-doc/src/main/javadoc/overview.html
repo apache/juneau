@@ -7729,12 +7729,28 @@
 		<li>Turtle
 		<li>N3
 	</ul>				
-	<p>
-		The serializers and parsers work identically to those in <code>juneau-marshall</code>, but are
-		packaged separately so that you don't need to pull in the Jena dependency unless you need it.
-	</p>
 
-	<p class='bcode w800'>
+	<!-- ======================================================================================================= -->
+	<a id='juneau-marshall-rdf.RdfDetails'></a>
+	<h3 class='topic' onclick='toggle(this)'>3.1 - RDF Details</h3>
+	<div class='topic'>
+		<p>
+			Juneau supports serializing and parsing arbitrary POJOs to and from the following RDF formats:
+		</p>
+		<ul>
+			<li>RDF/XML
+			<li>Abbreviated RDF/XML
+			<li>N-Triple
+			<li>Turtle
+			<li>N3
+		</ul>
+
+		<p>
+			The serializers and parsers work identically to those in <code>juneau-marshall</code>, but are
+			packaged separately so that you don't need to pull in the Jena dependency unless you need it.
+		</p>
+	
+		<p class='bcode w800'>
 	<jc>// A simple bean</jc>
 	<jk>public class</jk> Person {
 		<jk>public</jk> String name = <js>"John Smith"</js>;
@@ -7767,54 +7783,7 @@
 	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/name&gt; "John Smith" .
 	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/age&gt; "21" .</jc>
 	String rdfNTriple = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(p);
-	</p>
-
-	<!-- ======================================================================================================= -->
-	<a id='juneau-marshall-rdf.RdfDetails'></a>
-	<h3 class='topic' onclick='toggle(this)'>3.1 - RDF Details</h3>
-	<div class='topic'>
-		<p>
-			Juneau supports serializing and parsing arbitrary POJOs to and from the following RDF formats:
 		</p>
-		<ul>
-			<li>RDF/XML
-			<li>Abbreviated RDF/XML
-			<li>N-Triple
-			<li>Turtle
-			<li>N3
-		</ul>
-
-		<p>
-			The example shown here is from the Address Book resource located in the 
-			<code>org.apache.juneau.sample.war</code> application.
-		</p>
-		<p>
-			The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
-			containing zero or more <code>Address</code> beans.
-		</p>
-		<p>
-			When you point a browser at <code>/sample/addressBook</code>, the POJO is rendered as HTML:
-		</p>
-		<img class='bordered' src='doc-files/Example_HTML.png'>
-		<p>
-			By appending <code>?Accept=<i>mediaType</i>&amp;plainText=true</code> to the URL, you can view the data 
-			in the various RDF supported formats.
-		</p>
-		
-		<h5 class='figure'>RDF/XML</h5>
-		<img class='bordered' src='doc-files/Example_RDFXML.png'>
-		
-		<h5 class='figure'>Abbreviated RDF/XML</h5>
-		<img class='bordered' src='doc-files/Example_RDFXMLABBREV.png'>
-
-		<h5 class='figure'>N-Triple</h5>
-		<img class='bordered' src='doc-files/Example_NTriple.png'>
-
-		<h5 class='figure'>Turtle</h5>
-		<img class='bordered' src='doc-files/Example_Turtle.png'>
-		
-		<h5 class='figure'>N3</h5>
-		<img class='bordered' src='doc-files/Example_N3.png'>
 
 		<!-- ======================================================================================================= -->
 		<a id='juneau-marshall-rdf.RdfDetails.RdfMethodology'></a>
@@ -20853,7 +20822,7 @@
 		</ul>
 		
 		<h5 class='figure'>PetStoreResource.java</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<ja>@RestResource</ja>(
 		title=<js>"Pet Store"</js>,
 		description=<js>"An example of a typical REST resource where beans are rendered in summary and details views."</js>,
