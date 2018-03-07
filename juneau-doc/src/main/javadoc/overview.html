@@ -87,6 +87,11 @@
 		<li><p><a class='doclink' href='#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ObjectMap'>ObjectMap and ObjectList</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a></p>
+		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.ContextsBuildersSessionsPropertyStores'>Contexts, Builders, Sessions, and PropertyStores</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Transforms'>Transforms</a></p>
 		<ol>
@@ -120,7 +125,6 @@
 		<li><p><a class='doclink' href='#juneau-marshall.ReadingContinuousStreams'>Reading Continuous Streams</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.JacksonComparison'>Comparison with Jackson</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a></p>
-		<li><p><a class='doclink' href='#juneau-marshall.BestPractices'>Best Practices</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.JsonDetails'>JSON Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonMethodology'>JSON Methodology</a></p>
@@ -171,6 +175,7 @@
 		<li><p><a class='doclink' href='#juneau-marshall.SoapDetails'>SOAP Details</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.CsvDetails'>CSV Details</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.JsoDetails'>Java Serialized Object Details</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.BestPractices'>Best Practices</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall-rdf'><i>juneau-marshall-rdf</i></a></p>
 	<ol>
@@ -1064,87 +1069,107 @@
 		.quoteChar(<js>'"'</js>)  <jc>// Use a different quote character.</jc>
 		.build();
 		</p>
-		<p>
-			The following properties are common to all serializers and parsers:
-		</p>
-		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.BeanContext}
-			<ul>
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary BEAN_beanDictionary}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanMapPutReturnsOldValue BEAN_beanMapPutReturnsOldValue}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireDefaultConstructor BEAN_beansRequireDefaultConstructor}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSerializable BEAN_beansRequireSerializable}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSettersForGetters BEAN_beansRequireSettersForGetters}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName BEAN_beanTypePropertyName}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters BEAN_ignoreInvocationExceptionsOnGetters}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters BEAN_ignoreInvocationExceptionsOnSetters}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignorePropertiesWithoutSetters BEAN_ignorePropertiesWithoutSetters}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties BEAN_ignoreUnknownBeanProperties}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownNullBeanProperties BEAN_ignoreUnknownNullBeanProperties}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_implClasses BEAN_implClasses}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_includeProperties BEAN_includeProperties}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_locale BEAN_locale}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_mediaType BEAN_mediaType}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages BEAN_notBeanPackages}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_timeZone BEAN_timeZone}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_useInterfaceProxies BEAN_useInterfaceProxies}
-				<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_useJavaBeanIntrospector BEAN_useJavaBeanIntrospector}
+
+		<!-- ======================================================================================================= -->
+		<a id="juneau-marshall.ConfigurableProperties.Common"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.5.1 - Common Properties</h4>
+		<div class='topic'>
+			<p>
+				All serializers and parsers extend from the {@link org.apache.juneau.BeanContext} class.
+				<br>Therefore, the following properties are common to all serializers and parsers:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.BeanContext}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary BEAN_beanDictionary}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanMapPutReturnsOldValue BEAN_beanMapPutReturnsOldValue}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireDefaultConstructor BEAN_beansRequireDefaultConstructor}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSerializable BEAN_beansRequireSerializable}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSettersForGetters BEAN_beansRequireSettersForGetters}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName BEAN_beanTypePropertyName}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters BEAN_ignoreInvocationExceptionsOnGetters}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters BEAN_ignoreInvocationExceptionsOnSetters}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignorePropertiesWithoutSetters BEAN_ignorePropertiesWithoutSetters}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties BEAN_ignoreUnknownBeanProperties}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownNullBeanProperties BEAN_ignoreUnknownNullBeanProperties}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_implClasses BEAN_implClasses}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_includeProperties BEAN_includeProperties}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_locale BEAN_locale}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_mediaType BEAN_mediaType}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages BEAN_notBeanPackages}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_timeZone BEAN_timeZone}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_useInterfaceProxies BEAN_useInterfaceProxies}
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_useJavaBeanIntrospector BEAN_useJavaBeanIntrospector}
+				</ul>
 			</ul>
-		</ul>
-		<p>
-			The following properties are also common to all serializers:
-		</p>
-		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
-			<ul>
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_abridged SERIALIZER_abridged}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypeProperties SERIALIZER_addBeanTypeProperties}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions SERIALIZER_ignoreRecursions}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_initialDepth SERIALIZER_initialDepth}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth SERIALIZER_maxDepth}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxIndent SERIALIZER_maxIndent}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_quoteChar SERIALIZER_quoteChar}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
-				<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace}
+		</div>
+		
+		<!-- ======================================================================================================= -->
+		<a id="juneau-marshall.ConfigurableProperties.CommonSerializer"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.5.2 - Common Serializer Properties</h4>
+		<div class='topic'>
+			<p>
+				In addition to the common properties above, the following properties are common to all serializers:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_abridged SERIALIZER_abridged}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypeProperties SERIALIZER_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions SERIALIZER_ignoreRecursions}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_initialDepth SERIALIZER_initialDepth}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth SERIALIZER_maxDepth}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxIndent SERIALIZER_maxIndent}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_quoteChar SERIALIZER_quoteChar}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace}
+				</ul>
 			</ul>
-		</ul>
-		<p>
-			The following properties are also common to all parsers:
-		</p>
-		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.parser.Parser}
-			<ul>
-				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
-				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_fileCharset PARSER_fileCharset}
-				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_inputStreamCharset PARSER_inputStreamCharset}
-				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}
-				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}
-				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}
-				<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
+		</div>
+
+		<!-- ======================================================================================================= -->
+		<a id="juneau-marshall.ConfigurableProperties.CommonParser"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.5.3 - Common Parser Properties</h4>
+		<div class='topic'>
+			<p>
+				In addition to the common properties above, the following properties are common to all parsers:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.parser.Parser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_fileCharset PARSER_fileCharset}
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_inputStreamCharset PARSER_inputStreamCharset}
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
+				</ul>
 			</ul>
-		</ul>
+		</div>
+		
 	</div>
 	
 	<!-- ======================================================================================================= -->
@@ -3850,37 +3875,8 @@
 	</div>
 
 	<!-- ======================================================================================================= -->
-	<a id="juneau-marshall.BestPractices"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.15 - Best Practices</h3>
-	<div class='topic'>
-		<ol class='spaced-list'>
-			<li>
-				Reuse instances of serializers and parsers whenever possible.
-				<br>They are designed to be thread safe and maintain internal caches of bean metadata to increase performance.
-			<li>
-				The {@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions} 
-				option on the {@link org.apache.juneau.serializer.Serializer} class can cause a performance penalty of 
-				around 20%.  
-				<br>Therefore, it's recommended that this option be used only when necessary. 
-			<li>
-				In general, JSON serialization and parsing is about 20% faster than XML.  
-				JSON is also more compact than XML.
-				<br>MessagePack is fastest and most compact of all.
-			<li>
-				The RDF parsers are SLOW.
-				<br>RDF simply isn't efficient with node traversal, so creating tree structures out of RDF models
-				is highly inefficient.  	
-			<li>
-				The {@link org.apache.juneau.parser.Parser} methods that take in {@link org.apache.juneau.ClassMeta} 
-				parameters are slightly faster than methods that 
-				take in {@link java.lang.Class} or {@link java.lang.Object} parameters, since the latter methods involve 
-				hash lookups to resolve to {@link org.apache.juneau.ClassMeta} parameters.
-		</ol>
-	</div>
-
-	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.JsonDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.16 - JSON Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.15 - JSON Details</h3>
 	<div class='topic'>
 		<p>
 			Juneau supports converting arbitrary POJOs to and from JSON using ultra-efficient serializers and parsers.
@@ -3963,7 +3959,7 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JsonDetails.JsonMethodology"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.16.1 - JSON Methodology</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.15.1 - JSON Methodology</h4>
 		<div class='topic'>
 			<p>
 				The JSON data type produced depends on the Java object type being serialized.
@@ -4039,25 +4035,26 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JsonDetails.JsonSerializers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.16.2 - JSON Serializers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.15.2 - JSON Serializers</h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.json.JsonSerializer} class is used to serialize POJOs into JSON.
 			</p>	
 			<p>
-				In addition to the common <a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a>, 
-				the JSON serializer provides the following settings:
+				The JSON serializer provides the following settings:
 			</p>
 			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
 				<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 				<ul>
-					<li>{@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypeProperties JSON_addBeanTypeProperties}
-					<li>{@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypeProperties JSON_addBeanTypeProperties}
-					<li>{@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}
+					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypeProperties JSON_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_escapeSolidus JSON_escapeSolidus}
+					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}
 				</ul>
 			</ul>
 			<p>
-				The following predefined serializers are provided for convenience:
+				The following pre-configured serializers are provided for convenience:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
@@ -4073,23 +4070,24 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JsonDetails.JsonParsers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.16.3 - JSON Parsers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.15.3 - JSON Parsers</h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.json.JsonParser} class is used to parse JSON into POJOs.
 			</p>	
 			<p>
-				In addition to the common <a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a>, 
-				the JSON parser provides the following settings:
+				The JSON parser provides the following settings:
 			</p>
 			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a>
 				<li class='jc'>{@link org.apache.juneau.json.JsonParser}
 				<ul>
-					<li>{@link org.apache.juneau.json.JsonParser#JSON_validateEnd JSON_validateEnd}
+					<li class='jf'>{@link org.apache.juneau.json.JsonParser#JSON_validateEnd JSON_validateEnd}
 				</ul>
 			</ul>
 			<p>
-				The following predefined parsers are provided for convenience:
+				The following pre-configured parsers are provided for convenience:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.json.JsonParser}
@@ -4117,7 +4115,7 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JsonDetails.JsonAnnotation"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.16.4 - @Json Annotation</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.15.4 - @Json Annotation</h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
@@ -4160,7 +4158,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.JsonDetails.JsonSchema"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.16.5 - JSON-Schema Support</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.15.5 - JSON-Schema Support</h4>
 		<div class='topic'>
 			<p>
 				Juneau provides the {@link org.apache.juneau.json.JsonSchemaSerializer} class for generating JSON-Schema 
@@ -4259,7 +4257,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.XmlDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.17 - XML Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.16 - XML Details</h3>
 	<div class='topic'>
 		<p>
 			Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
@@ -4337,7 +4335,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.XmlMethodology"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.1 - XML Methodology</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.1 - XML Methodology</h4>
 		<div class='topic'>
 
 			<p>
@@ -4745,115 +4743,86 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.XmlSerializers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.2 - XML Serializers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.2 - XML Serializers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.xml.XmlSerializer} class is used to serialize POJOs into XML.
+			</p>	
+			<p>
+				The {@link org.apache.juneau.xml.XmlDocSerializer} class is the same, but serializes a <xt>&lt;?xml?&gt;</xt> header 
+				at the top of the file.
+			</p>
+			<p>
+				The XML serializers provide the following settings:
+			</p>
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
+				<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypeProperties XML_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot XML_addNamespaceUrisToRoot}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_defaultNamespace XML_defaultNamespace}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces XML_enableNamespaces}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_namespaces XML_namespaces}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_xsNamespace XML_xsNamespace}
+				</ul>
+			</ul>
+			<p>
+				The following pre-configured serializers are provided for convenience:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT DEFAULT}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_JUNEAU_NAMESPACE DEFAULT_JUNEAU_NAMESPACE}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS DEFAULT_NS}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ DEFAULT_NS_SQ}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ_READABLE DEFAULT_NS_SQ_READABLE}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ DEFAULT_SQ}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ_READABLE DEFAULT_SQ_READABLE}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_XS_NAMESPACE DEFAULT_XS_NAMESPACE}				
+				</ul>
+			</ul>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.XmlParsers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.3 - XML Parsers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.3 - XML Parsers</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.xml.XmlParser} class is the class used to parse Juneau-generated XML back into 
-				POJOs.
+				The {@link org.apache.juneau.xml.XmlParser} class is used to parse XML into POJOs.
 			</p>	
 			<p>
-				A static reusable instance of <code>XmlParser</code> is also provided for convenience:
+				The XML parser provides the following settings:
 			</p>
-			<ul>
-				<li>{@link org.apache.juneau.xml.XmlParser#DEFAULT}
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a>
+				<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.xml.XmlParser#XML_eventAllocator XML_eventAllocator}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlParser#XML_preserveRootElement XML_preserveRootElement}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlParser#XML_reporter XML_reporter}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlParser#XML_resolver XML_resolver}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlParser#XML_validating XML_validating}				
+				</ul>
 			</ul>
 			<p>
-				Let's build upon the previous example and parse the generated XML back into the original bean.
-				<br>We start with the XML that was generated.
+				The following pre-configured parsers are provided for convenience:
 			</p>
-			<p class='bcode'>
-	<jc>// Create a new serializer with readable output.</jc>
-	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ws().sq().ns().build();
-
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-	Address a = <jk>new</jk> Address();
-	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
-	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
-	a.<jf>id</jf> = 1;
-	a.<jf>street</jf> = <js>"100 Main Street"</js>;
-	a.<jf>city</jf> = <js>"Anywhereville"</js>;
-	a.<jf>state</jf> = <js>"NY"</js>;
-	a.<jf>zip</jf> = 12345;
-	a.<jf>isCurrent</jf> = <jk>true</jk>;
-	p.<jf>addresses</jf>.add(a);	
-
-	<jc>// Serialize the bean to XML.</jc>
-	String xml = s.serialize(p);
-			</p>
-			<p>
-				This code produced the following:
-			</p>
-			<p class='bcode'>
-	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
-			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
-		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-		<xt>&lt;per:addressBookUri&gt;</xt>http://sample/addressBook<xt>&lt;/per:addressBookUri&gt;</xt>
-		<xt>&lt;per:birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
-		<xt>&lt;per:addresses&gt;</xt>
-			<xt>&lt;addr:address</xt> <xa>uri</xa>=<xs>'http://sample/addressBook/address/1'</xs><xt>&gt;</xt>
-				<xt>&lt;addr:personUri&gt;</xt>http://sample/addressBook/person/1<xt>&lt;/addr:personUri&gt;</xt>
-				<xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
-				<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
-				<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
-				<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
-				<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
-				<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
-			<xt>&lt;/addr:address&gt;</xt>
-		<xt>&lt;/per:addresses&gt;</xt>
-	<xt>&lt;/per:person&gt;</xt>
-	</p>
-			<p>
-				The code to convert this back into a bean is:
-			</p>
-			<p class='bcode'>
-	<jc>// Parse it back into a bean using the reusable XML parser.</jc>
-	Person p = XmlParser.<jsf>DEFAULT</jsf>.parse(xml, Person.<jk>class</jk>);
-
-	<jc>// Render it as JSON.</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
-			</p>
-			<p>
-				We print it out to JSON to show that all the data has been preserved:
-			</p>
-			<p class='bcode'>
-	{
-		id: 1, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: 1, 
-				street: <js>'100 Main Street'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				state: <js>'NY'</js>, 
-				zip: 12345, 
-				isCurrent: <jk>true</jk>
-			}
-		]
-	}	
-			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.xml.XmlParser#DEFAULT DEFAULT}
+				</ul>
+			</ul>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.BeanTypeNameAnnotation"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.4 - @Bean(typeName) Annotation</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.4 - @Bean(typeName) Annotation</h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()} annotation can be used to 
@@ -4963,7 +4932,7 @@
 				{@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean.beanDictionary()} and 
 				{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} 
 				annotations so that the beans can be resolved at parse time.  
-				These annotations are not necessary during serialization, but are needed during parsing in order to 
+				<br>These annotations are not necessary during serialization, but are needed during parsing in order to 
 				resolve the bean types.
 			</p>
 			<p>
@@ -5085,7 +5054,7 @@
 			</table>
 			<p>
 				Bean type names are also used for resolution when abstract fields are used.
-				The following examples show how they are used in a variety of circumstances.
+				<br>The following examples show how they are used in a variety of circumstances.
 			</p>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -5288,10 +5257,10 @@
 			</table>
 			<p>
 				On a side note, characters that cannot be represented in XML 1.0 are encoded using a simple encoding.
-				Note in the examples below, some characters such as <js>'\n'</js>, <js>'\t</js>', and <js>'\r'</js>
+				<br>Note in the examples below, some characters such as <js>'\n'</js>, <js>'\t</js>', and <js>'\r'</js>
 				can be represented as XML entities when used in text but not in element names.  Other characters such as
 				<js>'\b'</js> and <js>'\f'</js> cannot be encoded in XML 1.0 at all without inventing our own notation.
-				Whitespace characters in element names are encoded as well as whitespace end characters in text.
+				<br>Whitespace characters in element names are encoded as well as whitespace end characters in text.
 			</p>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -5320,7 +5289,9 @@
 					</td>
 					<td class='code'><xt>
 	&lt;_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
-		&lt;_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;<xv>_x0020_ _x0008__x000C_&amp;#x000a;&amp;#x0009;&amp;#x000d; _x0020_</xv>&lt;/_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
+		&lt;_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
+			<xv>_x0020_ _x0008__x000C_&amp;#x000a;&amp;#x0009;&amp;#x000d; _x0020_</xv>
+		&lt;/_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
 	&lt;/_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_&gt;
 					</xt></td>
 				</tr>
@@ -5328,7 +5299,7 @@
 			<p>
 				While it's true that these characters CAN be represented in XML 1.1, it's impossible to parse XML 1.1 
 				text in Java without the XML containing an XML declaration.
-				Unfortunately, this, and the uselessness of the 
+				<br>Unfortunately, this, and the uselessness of the 
 				{@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting in Java
 				forced us to make some hard design decisions that may not be the most elegant.
 			</p>
@@ -5336,7 +5307,7 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.XmlChildNameAnnotation"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.5 - @Xml(childName) Annotation</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.5 - @Xml(childName) Annotation</h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml.childName()} annotation can be used to 
@@ -5425,7 +5396,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.XmlFormatAnnotation"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.6 - @Xml(format) Annotation</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.6 - @Xml(format) Annotation</h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.xml.annotation.Xml#format() @Xml.format()} annotation can be used to tweak 
@@ -6138,7 +6109,7 @@
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.Namespaces"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.7- Namespaces</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.7- Namespaces</h4>
 		<div class='topic'>
 			<p>
 				Let's go back to the example of our original <code>Person</code> bean class:
@@ -6301,13 +6272,13 @@
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.UriProperties"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.8- URI Properties</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.8- URI Properties</h4>
 		<div class='topic'>
 		</div>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.XmlDetails.XmlSchema"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.17.9 - XML-Schema Support</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.16.9 - XML-Schema Support</h4>
 		<div class='topic'>
 			<p>
 				Juneau provides the {@link org.apache.juneau.xml.XmlSchemaSerializer} class for generating XML-Schema 
@@ -6645,12 +6616,12 @@
 
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.HtmlDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.18 - HTML Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.17 - HTML Details</h3>
 	<div class='topic'>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.HtmlDetails.HtmlMethodology"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.18.1 - HTML Methodology</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.17.1 - HTML Methodology</h4>
 		<div class='topic'>
 
 			<p>
@@ -7169,32 +7140,105 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.HtmlDetails.HtmlSerializers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.18.2 - HTML Serializers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.17.2 - HTML Serializers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.html.HtmlSerializer} class is used to serialize POJOs into HTML.
+			</p>	
+			<p>
+				The {@link org.apache.juneau.html.HtmlDocSerializer} class is the same, but wraps the serialized POJO
+				inside a document template consisting of header, nav, aside, and footer sections.
+			</p>
+			<p>
+				The HTML serializers provides the following settings:
+			</p>
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
+				<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypeProperties HTML_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_addKeyValueTableHeaders HTML_addKeyValueTableHeaders}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_labelParameter HTML_labelParameter}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_uriAnchorText HTML_uriAnchorText}
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}				
+				</ul>
+			</ul>
+			<p>
+				The following pre-configured serializers are provided for convenience:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#DEFAULT }
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#DEFAULT_SQ }
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#DEFAULT_SQ_READABLE }
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#DEFAULT }
+				</ul>
+			</ul>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.HtmlDetails.HtmlParsers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.18.3 - HTML Parsers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.17.3 - HTML Parsers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.html.HtmlParser} class is used to parse HTML into POJOs.
+				<br>They can also parse the contents produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
+			</p>	
+			<p>
+				The HTML parser provides the following settings:
+			</p>
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a>
+			</ul>
+			<p>
+				The following pre-configured parsers are provided for convenience:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.html.HtmlParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.html.HtmlParser#DEFAULT DEFAULT}
+				</ul>
+			</ul>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.HtmlDetails.HtmlAnnotation"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.18.4 - @Html Annotation</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.17.4 - @Html Annotation</h4>
 		<div class='topic'>
 		</div>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.HtmlDetails.HtmlSchema"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.18.5 - HTML-Schema Support</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.17.5 - HTML-Schema Support</h4>
 		<div class='topic'>
 		</div>		
 	</div>
 
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.UonDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.19 - UON Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.18 - UON Details</h3>
 	<div class='topic'>
 
 		<p>
@@ -7392,252 +7436,78 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UonDetails.UonMethodology"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.19.1 - UON Methodology</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.18.1 - UON Methodology</h4>
 		<div class='topic'>
 		</div>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UonDetails.UonSerializers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.19.2 - UON Serializers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.18.2 - UON Serializers</h4>
 		<div class='topic'>
 			<p>
-				{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.uon.UonSerializer} 
-				classes are used to convert POJOs to URL-encoded strings.
-				<br>The <code>UonSerializer</code> class converts parameter values to UON notation. 
-				The <code>UrlEncodingSerializer</code> class converts a POJO to key/value URL-Encoded pairs using 
-				<code>UonSerializer</code> to serialize the values.
-				If you're trying to construct complete URL-Encoded entities, use <code>UrlEncodingSerializer</code>. 
-				If you're constructing your own key/value pairs, use <code>UonSerializer</code>.
+				The {@link org.apache.juneau.uon.UonSerializer} class is used to serialize POJOs into UON.
 			</p>	
 			<p>
-				The serializers include several configurable settings.
-				<br>Static reusable instances of serializers are provided with commonly-used settings:
+				The UON serializers provides the following settings:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} - All default settings, strict mode.
-				<li>
-					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} - Use whitespace and 
-					indentation for readability.
-				<li>
-					{@link org.apache.juneau.uon.UonSerializer#DEFAULT} - All default settings, strict mode.
-				<li>
-					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE} - Use whitespace and indentation for 
-					readability.
-				<li>
-					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING} - Same as DEFAULT, but use URL-Encoding on 
-					special characters.
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
+				<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypeProperties UON_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#UON_encoding UON_encoding}
+					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#UON_paramFormat UON_paramFormat}					
+				</ul>
 			</ul>
 			<p>
-				The general guidelines on which serializer to use is:
+				The following pre-configured serializers are provided for convenience:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					Use encoding serializers when you're using the results to construct a URI yourself, and therefore 
-					need invalid URI characters to be encoded.
-				<li>
-					Use un-encoding serializers when you're creating parameter values and passing them off to some other
-					utility class that will itself encode invalid URI characters.
-				<li>
-					Use the readable serializer for debugging purposes.
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#DEFAULT DEFAULT}
+					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING DEFAULT_ENCODING}
+					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+				</ul>
 			</ul>
-		
-			<h5 class='topic'>Notes about examples</h5>
-			<p>
-				The examples shown in this document will use default strict settings.
-				<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the 
-				examples.
-				<br>In the real world, you'll typically want to use standard bean getters and setters.
-			</p>
-			<p>
-				To start off simple, we'll begin with the following simplified bean and build upon it.
-			</p>
-			<p class='bcode'>
-	<jk>public class</jk> Person {
-		<jc>// Bean properties</jc>
-		<jk>public int</jk> <jf>id</jf>;
-		<jk>public</jk> String <jf>name</jf>;
-
-		<jc>// Bean constructor (needed by parser)</jc>
-		<jk>public</jk> Person() {}
-
-		<jc>// Normal constructor</jc>
-		<jk>public</jk> Person(<jk>int</jk> id, String name) {
-			<jk>this</jk>.<jf>id</jf> = id;
-			<jk>this</jk>.<jf>name</jf> = name;
-		}
-	}
-			</p>
-			<p>
-				The following code shows how to convert this to a URL-encoded value:
-			</p>
-			<p class='bcode'>
-	<jc>// Use serializer with readable output, simple mode.</jc>
-	UonSerializer s = UonSerializer.<jsf>DEFAULT</jsf>;
-
-	<jc>// Create our bean.</jc>
-	Person p = <uk>new</uk> Person(1, <js>"John Smith"</js>);
-
-	<jc>// Serialize the bean to URL-encoded parameter value.</jc>
-	String urlencoded = s.serialize(p);
-			</p>
-			<p>
-				The code above produces the following output:
-			</p>
-			<p class='bcode'>
-	(<ua>id</ua>=<un>1</un>,<ua>name</ua>=<us>'John+Smith'</us>)
-			</p>
-			<p>
-				The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class converts
-				maps and beans into top-level query parameter strings.
-			</p>
-			<p class='bcode'>
-	<jc>// Use serializer with readable output, simple mode.</jc>
-	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-	
-	<jc>// Serialize the bean to URL-encoded query string.</jc>
-	String urlencoded = s.serialize(p);
-			</p>
-			<p>
-				The code above produces the following output:
-			</p>
-			<p class='bcode'>
-	<ua>id</ua>=<un>1</un>&amp;<ua>name</ua>=<us>'John+Smith'</us>
-			</p>
-			<p>
-				By default, the <code>UrlEncodingSerializer</code> class will URL-Encode special characters, and the 
-				<code>UonSerializer</code> will NOT URL-encode special characters.  
-			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UonDetails.UonParsers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.19.3 - UON Parsers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.18.3 - UON Parsers</h4>
 		<div class='topic'>
 			<p>
-				{@link org.apache.juneau.urlencoding.UrlEncodingParser} and {@link org.apache.juneau.uon.UonParser} classes are 
-				used to convert URL-encoded strings back into POJOs.
-				<br>The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
-				The <code>UrlEncodingParser</code> class converts entire URL-Encoded strings to POJOs using 
-				<code>UonSerializer</code> to serialize individual values.
-				If you're trying to parse an entire URL-Encoded string, use <code>UrlEncodingParser</code>. 
-				If you're trying to parse an individual value (such as that returned by 
-				<code>RestServlet.getQueryParameter(name)</code>), use <code>UonParser</code>.
+				The {@link org.apache.juneau.uon.UonParser} class is used to parse UON into POJOs.
 			</p>	
 			<p>
-				The following static reusable instances of <code>UrlEncodingParser</code> are provided for convenience:
+				The UON parser provides the following settings:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} 
-					- Default parser for entire URL-encoded strings, decode <code>%xx</code> sequences.
-				<li>
-					{@link org.apache.juneau.uon.UonParser#DEFAULT} 
-					- Default parser for URL-encoded parameter values, don't decode <code>%xx</code> sequences.
-				<li>
-					{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING} 
-					- Default parser for URL-encoded parameter values, decode <code>%xx</code> sequences.
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a>
+				<li class='jc'>{@link org.apache.juneau.uon.UonParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.uon.UonParser#UON_decoding UON_decoding}
+					<li class='jf'>{@link org.apache.juneau.uon.UonParser#UON_validateEnd UON_validateEnd}
+				</ul>
 			</ul>
 			<p>
-				The general guidelines on which parser to use is:
+				The following pre-configured parsers are provided for convenience:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					Use the <code>DEFAULT</code> parser for parameter values that have already had <code>%xx</code> sequences 
-					decoded, such as when using <code>HttpServletRequest.getQueryParameter(name)</code>.
-				<li>
-					Use the <code>DEFAULT_ENCODED</code> parser if the input has not already had <code>%xx</code> sequences 
-					decoded.
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.uon.UonParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.uon.UonParser#DEFAULT DEFAULT}
+					<li class='jf'>{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING DEFAULT_DECODING}			
+				</ul>
 			</ul>
-			<p>
-				Let's build upon the previous example and parse the generated URL-encoded string back into the original bean.
-				<br>We start with the URL-encoded string that was generated.
-			</p>
-			<p class='bcode'>
-	<jc>// Use serializer with readable output.</jc>
-	UonSerializer s = UonSerializer.<jsf>DEFAULT_READABLE</jsf>;
-
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-	Address a = <jk>new</jk> Address();
-	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
-	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
-	a.<jf>id</jf> = 1;
-	a.<jf>street</jf> = <js>"100 Main Street"</js>;
-	a.<jf>city</jf> = <js>"Anywhereville"</js>;
-	a.<jf>state</jf> = <js>"NY"</js>;
-	a.<jf>zip</jf> = 12345;
-	a.<jf>isCurrent</jf> = <jk>true</jk>;
-	p.<jf>addresses</jf>.add(a);	
-
-	<jc>// Serialize the bean.</jc>
-	String urlencoded = s.serialize(p);
-			</p>
-			<p>
-				This code produced the following:
-			</p>
-			<p class='bcode'>
-	(
-		<ua>id</ua>=<un>1</un>, 
-		<ua>name</ua>=<us>'John+Smith'</us>, 
-		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>, 
-		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
-		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
-		<ua>addresses</ua>=@(
-			(
-				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
-				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
-				<ua>id</ua>=<un>1</un>, 
-				<ua>street</ua>=<us>'100+Main+Street'</us>, 
-				<ua>city</ua>=<us>Anywhereville</us>, 
-				<ua>state</ua>=<us>NY</us>, 
-				<ua>zip</ua>=<un>12345</un>, 
-				<ua>isCurrent</ua>=<uk>true</uk>
-			)
-		)
-	)
-			</p>
-			<p>
-				The code to convert this back into a bean is:
-			</p>
-			<p class='bcode'>
-	<jc>// Parse it back into a bean using the reusable JSON parser.</jc>
-	Person p = UonParser.<jsf>DEFAULT</jsf>.parse(urlencoded, Person.<jk>class</jk>);
-
-	<jc>// Render it back as JSON.</jc>
-	json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
-			</p>
-			<p>
-				We print it back out to JSON to show that all the data has been preserved:
-			</p>
-			<p class='bcode'>
-	{
-		id: <un>1</un>, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: <un>1</un>, 
-				street: <js>'100 Main Street'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				state: <js>'NY'</js>, 
-				zip: <un>12345</un>, 
-				isCurrent: <jk>true</jk>
-			}
-		]
-	}	
-			</p>
 		</div>		
 	</div>
 	
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.UrlEncodingDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.20 - URL-Encoding Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.19 - URL-Encoding Details</h3>
 	<div class='topic'>
 		<p>
 			Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
@@ -7834,299 +7704,194 @@
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UrlEncodingDetails.UrlEncodingMethodology"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.20.1 - URL-Encoding Methodology</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.19.1 - URL-Encoding Methodology</h4>
 		<div class='topic'>
 		</div>
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UrlEncodingDetails.UrlEncodingSerializers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.20.2 - URL-Encoding Serializers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.19.2 - URL-Encoding Serializers</h4>
 		<div class='topic'>
 			<p>
-				{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.uon.UonSerializer} 
-				classes are used to convert POJOs to URL-encoded strings.
-				<br>The <code>UonSerializer</code> class converts parameter values to UON notation. 
-				The <code>UrlEncodingSerializer</code> class converts a POJO to key/value URL-Encoded pairs using 
-				<code>UonSerializer</code> to serialize the values.
-				If you're trying to construct complete URL-Encoded entities, use <code>UrlEncodingSerializer</code>. 
-				If you're constructing your own key/value pairs, use <code>UonSerializer</code>.
+				The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class is used to serialize POJOs into URL-Encoding.
 			</p>	
 			<p>
-				The serializers include several configurable settings.
-				<br>Static reusable instances of serializers are provided with commonly-used settings:
+				The URL-Encoding serializers provides the following settings:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} 
-					- All default settings, strict mode.
-				<li>
-					{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} 
-					- Use whitespace and indentation for readability.
-				<li>
-					{@link org.apache.juneau.uon.UonSerializer#DEFAULT} 
-					- All default settings, strict mode.
-				<li>
-					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE} 
-					- Use whitespace and indentation for readability.
-				<li>
-					{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING} 
-					- Same as DEFAULT, but use URL-Encoding on special characters.
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
+				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams URLENC_expandedParams}
+				</ul>
 			</ul>
 			<p>
-				The general guidelines on which serializer to use is:
+				The following pre-configured serializers are provided for convenience:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					Use encoding serializers when you're using the results to construct a URI yourself, and therefore 
-					need invalid URI characters to be encoded.
-				<li>
-					Use un-encoding serializers when you're creating parameter values and passing them off to some other
-					utility class that will itself encode invalid URI characters.
-				<li>
-					Use the readable serializer for debugging purposes.
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT DEFAULT}
+					<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_EXPANDED DEFAULT_EXPANDED}
+					<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_PLAINTEXT DEFAULT_PLAINTEXT}
+					<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE DEFAULT_READABLE}		
+					
+				</ul>
 			</ul>
-		
-			<h5 class='topic'>Notes about examples</h5>
-			<p>
-				The examples shown in this document will use default strict settings.
-				<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
-				<br>In the real world, you'll typically want to use standard bean getters and setters.
-			</p>
-			<p>
-				To start off simple, we'll begin with the following simplified bean and build upon it.
-			</p>
-			<p class='bcode'>
-	<jk>public class</jk> Person {
-		<jc>// Bean properties</jc>
-		<jk>public int</jk> <jf>id</jf>;
-		<jk>public</jk> String <jf>name</jf>;
-
-		<jc>// Bean constructor (needed by parser)</jc>
-		<jk>public</jk> Person() {}
-
-		<jc>// Normal constructor</jc>
-		<jk>public</jk> Person(<jk>int</jk> id, String name) {
-			<jk>this</jk>.<jf>id</jf> = id;
-			<jk>this</jk>.<jf>name</jf> = name;
-		}
-	}
-			</p>
-			<p>
-				The following code shows how to convert this to a URL-encoded value:
-			</p>
-			<p class='bcode'>
-	<jc>// Use serializer with readable output, simple mode.</jc>
-	UonSerializer s = UonSerializer.<jsf>DEFAULT</jsf>;
-
-	<jc>// Create our bean.</jc>
-	Person p = <uk>new</uk> Person(1, <js>"John Smith"</js>);
-
-	<jc>// Serialize the bean to URL-encoded parameter value.</jc>
-	String urlencoded = s.serialize(p);
-			</p>
-			<p>
-				The code above produces the following output:
-			</p>
-			<p class='bcode'>
-	(<ua>id</ua>=<un>1</un>,<ua>name</ua>=<us>'John+Smith'</us>)
-			</p>
-			<p>
-				The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class converts
-				maps and beans into top-level query parameter strings.
-			</p>
-			<p class='bcode'>
-	<jc>// Use serializer with readable output, simple mode.</jc>
-	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-	
-	<jc>// Serialize the bean to URL-encoded query string.</jc>
-	String urlencoded = s.serialize(p);
-			</p>
-			<p>
-				The code above produces the following output:
-			</p>
-			<p class='bcode'>
-	<ua>id</ua>=<un>1</un>&amp;<ua>name</ua>=<us>'John+Smith'</us>
-			</p>
-			<p>
-				By default, the <code>UrlEncodingSerializer</code> class will URL-Encode special characters, and the 
-				<code>UonSerializer</code> will NOT URL-encode special characters.  
-			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UrlEncodingDetails.UrlEncodingParsers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.20.3 - URL-Encoding Parsers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.19.3 - URL-Encoding Parsers</h4>
 		<div class='topic'>
 			<p>
-				{@link org.apache.juneau.urlencoding.UrlEncodingParser} and {@link org.apache.juneau.uon.UonParser} classes 
-				are used to convert URL-encoded strings back into POJOs.
-				<br>The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
-				The <code>UrlEncodingParser</code> class converts entire URL-Encoded strings to POJOs using 
-				<code>UonSerializer</code> to serialize individual values.
-				If you're trying to parse an entire URL-Encoded string, use <code>UrlEncodingParser</code>. 
-				If you're trying to parse an individual value (such as that returned by 
-				<code>RestServlet.getQueryParameter(name)</code>), use <code>UonParser</code>.
+				The {@link org.apache.juneau.urlencoding.UrlEncodingParser} class is used to parse URL-Encoding into POJOs.
 			</p>	
 			<p>
-				The following static reusable instances of <code>UrlEncodingParser</code> are provided for convenience:
+				The URL-Encoding parser provides the following settings:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} 
-					- Default parser for entire URL-encoded strings, decode <code>%xx</code> sequences.
-				<li>
-					{@link org.apache.juneau.uon.UonParser#DEFAULT} 
-					- Default parser for URL-encoded parameter values, don't decode <code>%xx</code> sequences.
-				<li>
-					{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING} 
-					- Default parser for URL-encoded parameter values, decode <code>%xx</code> sequences.
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a>
+				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams URLENC_expandedParams}
+				</ul>
 			</ul>
 			<p>
-				The general guidelines on which parser to use is:
+				The following pre-configured parsers are provided for convenience:
 			</p>
-			<ul class='spaced-list'>
-				<li>
-					Use the <code>DEFAULT</code> parser for parameter values that have already had <code>%xx</code> sequences 
-					decoded, such as when using <code>HttpServletRequest.getQueryParameter(name)</code>.
-				<li>
-					Use the <code>DEFAULT_ENCODED</code> parser if the input has not already had <code>%xx</code> sequences 
-					decoded.
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT DEFAULT}
+				</ul>
 			</ul>
-			<p>
-				Let's build upon the previous example and parse the generated URL-encoded string back into the original bean.
-				<br>We start with the URL-encoded string that was generated.
-			</p>
-			<p class='bcode'>
-	<jc>// Use serializer with readable output.</jc>
-	UonSerializer s = UonSerializer.<jsf>DEFAULT_READABLE</jsf>;
-
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>,
-		 <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-	Address a = <jk>new</jk> Address();
-	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
-	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
-	a.<jf>id</jf> = 1;
-	a.<jf>street</jf> = <js>"100 Main Street"</js>;
-	a.<jf>city</jf> = <js>"Anywhereville"</js>;
-	a.<jf>state</jf> = <js>"NY"</js>;
-	a.<jf>zip</jf> = 12345;
-	a.<jf>isCurrent</jf> = <jk>true</jk>;
-	p.<jf>addresses</jf>.add(a);	
-
-	<jc>// Serialize the bean.</jc>
-	String urlencoded = s.serialize(p);
-			</p>
-			<p>
-				This code produced the following:
-			</p>
-			<p class='bcode'>
-	(
-		<ua>id</ua>=<un>1</un>, 
-		<ua>name</ua>=<us>'John+Smith'</us>, 
-		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>, 
-		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
-		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
-		<ua>addresses</ua>=@(
-			(
-				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
-				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
-				<ua>id</ua>=<un>1</un>, 
-				<ua>street</ua>=<us>'100+Main+Street'</us>, 
-				<ua>city</ua>=<us>Anywhereville</us>, 
-				<ua>state</ua>=<us>NY</us>, 
-				<ua>zip</ua>=<un>12345</un>, 
-				<ua>isCurrent</ua>=<uk>true</uk>
-			)
-		)
-	)
-			</p>
-			<p>
-				The code to convert this back into a bean is:
-			</p>
-			<p class='bcode'>
-	<jc>// Parse it back into a bean using the reusable JSON parser.</jc>
-	Person p = UonParser.<jsf>DEFAULT</jsf>.parse(urlencoded, Person.<jk>class</jk>);
-
-	<jc>// Render it back as JSON.</jc>
-	json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
-			</p>
-			<p>
-				We print it back out to JSON to show that all the data has been preserved:
-			</p>
-			<p class='bcode'>
-	{
-		id: <un>1</un>, 
-		name: <js>'John Smith'</js>, 
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: <un>1</un>, 
-				street: <js>'100 Main Street'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				state: <js>'NY'</js>, 
-				zip: <un>12345</un>, 
-				isCurrent: <jk>true</jk>
-			}
-		]
-	}	
-			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.20.4 - @UrlEncoding Annotation</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.19.4 - @UrlEncoding Annotation</h4>
 		<div class='topic'>
 		</div>
 	</div>
 
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.MsgPackDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.21 - MessagePack Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.20 - MessagePack Details</h3>
 	<div class='topic'>
 	
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.MsgPackDetails.MsgPackMethodology"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.21.1 - MessagePack Methodology</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.20.1 - MessagePack Methodology</h4>
 		<div class='topic'>
 		</div>
 	
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.MsgPackDetails.MsgPackSerializers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.21.2 - MessagePack Serializers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.20.2 - MessagePack Serializers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.msgpack.MsgPackSerializer} class is used to serialize POJOs into MessagePack.
+			</p>	
+			<p>
+				The MessagePack serializer provides the following settings:
+			</p>
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
+				<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypeProperties MSGPACK_addBeanTypeProperties}
+				</ul>
+			</ul>
+			<p>
+				The following pre-configured serializers are provided for convenience:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackSerializer#DEFAULT DEFAULT}
+					
+				</ul>
+			</ul>
 		</div>
 
 		<!-- ======================================================================================================= -->
 		<a id="juneau-marshall.MsgPackDetails.MsgPackParsers"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.21.3 - MessagePack Parsers</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.20.3 - MessagePack Parsers</h4>
 		<div class='topic'>
+			<p>
+				The {@link org.apache.juneau.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
+			</p>	
+			<p>
+				The MessagePack parser provides the following settings:
+			</p>
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a>
+			</ul>
+			<p>
+				The following pre-configured parsers are provided for convenience:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackParser#DEFAULT DEFAULT}
+				</ul>
+			</ul>
 		</div>
 		
 	</div>
 
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.SoapDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.22 - SOAP Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.21 - SOAP Details</h3>
 	<div class='topic'>
 	</div>
 
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.SoapDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.23 - CSV Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.22 - CSV Details</h3>
 	<div class='topic'>
 	</div>
 
 	<!-- ======================================================================================================= -->
 	<a id="juneau-marshall.SoapDetails"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.24 - Java Serialized Object Details</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.23 - Java Serialized Object Details</h3>
 	<div class='topic'>
 	</div>
 	
+	<!-- ======================================================================================================= -->
+	<a id="juneau-marshall.BestPractices"></a>
+	<h3 class='topic' onclick='toggle(this)'>2.24 - Best Practices</h3>
+	<div class='topic'>
+		<ol class='spaced-list'>
+			<li>
+				Reuse instances of serializers and parsers whenever possible.
+				<br>They are designed to be thread safe and maintain internal caches of bean metadata to increase performance.
+			<li>
+				The {@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions} 
+				option on the {@link org.apache.juneau.serializer.Serializer} class can cause a performance penalty of 
+				around 20%.  
+				<br>Therefore, it's recommended that this option be used only when necessary. 
+			<li>
+				In general, JSON serialization and parsing is about 20% faster than XML.  
+				JSON is also more compact than XML.
+				<br>MessagePack is fastest and most compact of all.
+			<li>
+				The RDF parsers are SLOW.
+				<br>RDF simply isn't efficient with node traversal, so creating tree structures out of RDF models
+				is highly inefficient.  	
+			<li>
+				The {@link org.apache.juneau.parser.Parser} methods that take in {@link org.apache.juneau.ClassMeta} 
+				parameters are slightly faster than methods that 
+				take in {@link java.lang.Class} or {@link java.lang.Object} parameters, since the latter methods involve 
+				hash lookups to resolve to {@link org.apache.juneau.ClassMeta} parameters.
+		</ol>
+	</div>
+
 </div>
 
 <!-- =========================================================================================================== -->
@@ -8265,90 +8030,81 @@
 				The {@link org.apache.juneau.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
 				<br>Language-specific serializers are defined as inner subclasses of the <code>RdfSerializer</code> class:
 			</p>	
-			<ul>
-				<li>{@link org.apache.juneau.jena.RdfSerializer.Xml}
-				<li>{@link org.apache.juneau.jena.RdfSerializer.XmlAbbrev}
-				<li>{@link org.apache.juneau.jena.RdfSerializer.NTriple}
-				<li>{@link org.apache.juneau.jena.RdfSerializer.Turtle}
-				<li>{@link org.apache.juneau.jena.RdfSerializer.N3}
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.Xml}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.XmlAbbrev}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.NTriple}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.Turtle}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.N3}
+				</ul>
+			</ul>
+			
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
+				<li class='jic'>{@link org.apache.juneau.jena.RdfCommon}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_embedding RDF_arp_embedding}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_err_ RDF_arp_err_}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_errorMode RDF_arp_errorMode}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_ign_ RDF_arp_ign_}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_iriRules RDF_arp_iriRules}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_warn_ RDF_arp_warn_}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_collectionFormat RDF_collectionFormat}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauBpNs RDF_juneauBpNs}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauNs RDF_juneauNs}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_language RDF_language}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_looseCollections RDF_looseCollections}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_abbrevBaseUri RDF_n3_abbrevBaseUri}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_indentProperty RDF_n3_indentProperty}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_minGap RDF_n3_minGap}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_objectLists RDF_n3_objectLists}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_propertyColumn RDF_n3_propertyColumn}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_subjectColumn RDF_n3_subjectColumn}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useDoubles RDF_n3_useDoubles}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_usePropertySymbols RDF_n3_usePropertySymbols}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useTripleQuotedStrings RDF_n3_useTripleQuotedStrings}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_widePropertyLen RDF_n3_widePropertyLen}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_allowBadUris RDF_rdfxml_allowBadUris}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_attributeQuoteChar RDF_rdfxml_attributeQuoteChar}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_blockRules RDF_rdfxml_blockRules}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_longId RDF_rdfxml_longId}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_relativeUris RDF_rdfxml_relativeUris}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showDoctypeDeclaration RDF_rdfxml_showDoctypeDeclaration}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_useXmlNamespaces RDF_useXmlNamespaces}					
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addBeanTypeProperties RDF_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addLiteralTypes RDF_addLiteralTypes}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty RDF_addRootProperty}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_autoDetectNamespaces RDF_autoDetectNamespaces}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_namespaces RDF_namespaces}				
+				</ul>
 			</ul>
 			<p>
-				Static reusable instances of serializers are also provided with default settings:
+				The following pre-configured serializers are provided for convenience:
 			</p>
-			<ul>
-				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XML}
-				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XMLABBREV}
-				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_TURTLE}
-				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_NTRIPLE}
-				<li>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_N3}
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_JUNEAU_NS DEFAULT_JUNEAU_NS}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_JUNEAUBP_NS DEFAULT_JUNEAUBP_NS}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_N3 DEFAULT_N3}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_NTRIPLE DEFAULT_NTRIPLE}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_TURTLE DEFAULT_TURTLE}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XML DEFAULT_XML}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XMLABBREV DEFAULT_XMLABBREV}				
+				</ul>
 			</ul>
 			<p>
 				Abbreviated RDF/XML is currently the most widely accepted and readable RDF syntax, so the examples shown here 
 				will use that format.
-			</p>
-			<p>
-				For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
-				<br>In the real world, you'll typically want to use standard bean getters and setters.
-			</p>
-			<p>
-				To start off simple, we'll begin with the following simplified bean and build it up.
-			</p>
-			<p class='bcode'>
-	<jk>public class</jk> Person {
-		<jc>// Bean properties</jc>
-		<jk>public int</jk> <jf>id</jf>;
-		<jk>public</jk> String <jf>name</jf>;
-
-		<jc>// Bean constructor (needed by parser)</jc>
-		<jk>public</jk> Person() {}
-
-		<jc>// Normal constructor</jc>
-		<jk>public</jk> Person(<jk>int</jk> id, String name) {
-			<jk>this</jk>.<jf>id</jf> = id;
-			<jk>this</jk>.<jf>name</jf> = name;
-		}
-	}
-			</p>
-			<p>
-				The following code shows how to convert this to abbreviated RDF/XML:
-			</p>
-			<p class='bcode'>
-	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev()
-		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
-
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
-
-	<jc>// Serialize the bean to RDF/XML.</jc>
-	String rdfXml = s.serialize(p);
-			</p>
-			<p>
-				It should be noted that serializers can also be created by cloning existing serializers:
-			</p>
-			<p class='bcode'>
-	<jc>// Create a new serializer with readable output by cloning an existing serializer.</jc>
-	RdfSerializer s = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.builder()
-		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
-			</p>
-			<p>
-				This code produces the following output:
-			</p>
-			<p class='bcode'>
-	<xt>&lt;rdf:RDF</xt>
-	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs><xt>&gt;</xt>
-	   <xt>&lt;rdf:Description&gt;</xt>
-	      <xt>&lt;jp:id&gt;</xt>1<xt>&lt;/jp:id&gt;</xt>
-	      <xt>&lt;jp:name&gt;</xt>John Smith<xt>&lt;/jp:name&gt;</xt>
-	   <xt>&lt;/rdf:Description&gt;</xt>
-	<xt>&lt;/rdf:RDF&gt;</xt>
-			</p>
-			<p>
-				Notice that we've taken an arbitrary POJO and converted it to RDF.
-				<br>The Juneau serializers and parsers are designed to work with arbitrary POJOs without requiring any annotations.
-				<br>That being said, several annotations are provided to customize how POJOs are handled to produce usable RDF.
 			</p>
 		</div>		
 		
@@ -8360,84 +8116,63 @@
 				The {@link org.apache.juneau.jena.RdfParser} class is the top-level class for all Jena-based parsers.
 				<br>Language-specific parsers are defined as inner subclasses of the <code>RdfParser</code> class:
 			</p>	
-			<ul>
-				<li>{@link org.apache.juneau.jena.RdfParser.Xml}
-				<li>{@link org.apache.juneau.jena.RdfParser.NTriple}
-				<li>{@link org.apache.juneau.jena.RdfParser.Turtle}
-				<li>{@link org.apache.juneau.jena.RdfParser.N3}
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.Xml}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.NTriple}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.Turtle}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.N3}
+				</ul>
 			</ul>
 			<p>
 				The <code>RdfParser.Xml</code> parser handles both regular and abbreviated RDF/XML.
 			</p>
 			<p>
-				Static reusable instances of parsers are also provided with default settings:
+				The RDF parser provides the following settings:
 			</p>
-			<ul>
-				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_XML}
-				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_TURTLE}
-				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_NTRIPLE}
-				<li>{@link org.apache.juneau.jena.RdfParser#DEFAULT_N3}
+			<ul class='doctree'>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Properties</a>
+				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a>
+				<li class='jic'>{@link org.apache.juneau.jena.RdfCommon}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_embedding RDF_arp_embedding}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_err_ RDF_arp_err_}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_errorMode RDF_arp_errorMode}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_ign_ RDF_arp_ign_}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_iriRules RDF_arp_iriRules}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_warn_ RDF_arp_warn_}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_collectionFormat RDF_collectionFormat}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauBpNs RDF_juneauBpNs}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauNs RDF_juneauNs}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_language RDF_language}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_looseCollections RDF_looseCollections}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_abbrevBaseUri RDF_n3_abbrevBaseUri}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_indentProperty RDF_n3_indentProperty}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_minGap RDF_n3_minGap}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_objectLists RDF_n3_objectLists}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_propertyColumn RDF_n3_propertyColumn}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_subjectColumn RDF_n3_subjectColumn}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useDoubles RDF_n3_useDoubles}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_usePropertySymbols RDF_n3_usePropertySymbols}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useTripleQuotedStrings RDF_n3_useTripleQuotedStrings}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_widePropertyLen RDF_n3_widePropertyLen}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_allowBadUris RDF_rdfxml_allowBadUris}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_attributeQuoteChar RDF_rdfxml_attributeQuoteChar}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_blockRules RDF_rdfxml_blockRules}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_longId RDF_rdfxml_longId}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_relativeUris RDF_rdfxml_relativeUris}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showDoctypeDeclaration RDF_rdfxml_showDoctypeDeclaration}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_useXmlNamespaces RDF_useXmlNamespaces}					
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.jena.RdfParser#RDF_trimWhitespace RDF_trimWhitespace}
+				</ul>
 			</ul>
-			<p>
-				For an example, we will build upon the previous example and parse the generated RDF/XML back into the original 
-				bean.
-			</p>
-			<p class='bcode'>
-	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
-		.xmlabbrev()
-		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
-		.addRootProperty(<jk>true</jk>)
-		.build();
-
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
-	Address a = <jk>new</jk> Address();
-	a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
-	a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
-	a.<jf>id</jf> = 1;
-	a.<jf>street</jf> = <js>"100 Main Street"</js>;
-	a.<jf>city</jf> = <js>"Anywhereville"</js>;
-	a.<jf>state</jf> = <js>"NY"</js>;
-	a.<jf>zip</jf> = 12345;
-	a.<jf>isCurrent</jf> = <jk>true</jk>;
-	p.<jf>addresses</jf>.add(a);	
-
-	<jc>// Serialize the bean to RDF/XML.</jc>
-	String rdfXml = s.serialize(p);
-	
-	<jc>// Parse it back into a bean using the reusable XML parser.</jc>
-	p = RdfParser.<jsf>DEFAULT_XML</jsf>.parse(rdfXml, Person.<jk>class</jk>);
-
-	<jc>// Render it as JSON.</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
-	System.<jsm>err</jsm>.println(json);
-			</p>
-			<p>
-				We print it out to JSON to show that all the data has been preserved:
-			</p>
-			<p class='bcode'>
-	{
-		uri: <js>'http://sample/addressBook/person/1'</js>, 
-		addressBookUri: <js>'http://sample/addressBook'</js>, 
-		id: 1, 
-		name: <js>'John Smith'</js>, 
-		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
-		addresses: [
-			{
-				uri: <js>'http://sample/addressBook/address/1'</js>, 
-				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: 1, 
-				street: <js>'100 Main Street'</js>, 
-				city: <js>'Anywhereville'</js>, 
-				state: <js>'NY'</js>, 
-				zip: 12345, 
-				isCurrent: <jk>true</jk>
-			}
-		]
-	}	
-			</p>
 		</div>		
 		
 		<!-- ======================================================================================================= -->
