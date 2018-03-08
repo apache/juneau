@@ -141,7 +141,7 @@ public class Operation extends SwaggerElement {
 		produces;
 	private List<ParameterInfo> parameters;
 	private List<Map<String,List<String>>> security;
-	private Map<Integer,ResponseInfo> responses;
+	private Map<String,ResponseInfo> responses;
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
@@ -697,7 +697,7 @@ public class Operation extends SwaggerElement {
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<Integer,ResponseInfo> getResponses() {
+	public Map<String,ResponseInfo> getResponses() {
 		return responses;
 	}
 
@@ -712,7 +712,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Operation setResponses(Map<Integer,ResponseInfo> value) {
+	public Operation setResponses(Map<String,ResponseInfo> value) {
 		responses = newMap(value);
 		return this;
 	}
@@ -728,7 +728,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Operation addResponses(Map<Integer,ResponseInfo> values) {
+	public Operation addResponses(Map<String,ResponseInfo> values) {
 		responses = addToMap(responses, values);
 		return this;
 	}
@@ -740,7 +740,7 @@ public class Operation extends SwaggerElement {
 	 * @param response The response description.
 	 * @return This object (for method chaining).
 	 */
-	public Operation response(Integer statusCode, ResponseInfo response) {
+	public Operation response(String statusCode, ResponseInfo response) {
 		return addResponses(Collections.singletonMap(statusCode, response));
 	}
 
@@ -761,7 +761,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation responses(Object...value) {
-		responses = addToMap(responses, value, Integer.class, ResponseInfo.class);
+		responses = addToMap(responses, value, String.class, ResponseInfo.class);
 		return this;
 	}
 

@@ -13723,31 +13723,6 @@
 				certain aspects.
 			</p>
 			<p>
-				In addition to the methods defined on the <l>RestInfoProvider</l> interface, it also includes the following methods:
-			</p>
-			<ul class='doctree'>
-				<li class='jc'><code>{@link org.apache.juneau.rest.BasicRestInfoProvider} <jk>implements</jk> {@link org.apache.juneau.rest.RestInfoProvider}</code>
-				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getVersion(RestRequest) getVersion(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getContact(RestRequest) getContact(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getConsumes(RestRequest) getConsumes(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getProduces(RestRequest) getProduces(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getLicense(RestRequest) getLicense(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getTags(RestRequest) getTags(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getTermsOfService(RestRequest) getTermsOfService(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getExternalDocs(RestRequest) getExternalDocs(RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodOperationId(Method,RestRequest) getMethodOperationId(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodConsumes(Method,RestRequest) getMethodConsumes(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodProduces(Method,RestRequest) getMethodProduces(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodParameters(Method,RestRequest) getMethodParameters(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodResponses(Method,RestRequest) getMethodResponses(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getMethodTags(Method,RestRequest) getMethodTags(Method,RestRequest)}
-					<li class='jm'>{@link org.apache.juneau.rest.BasicRestInfoProvider#getSwaggerFromFile(RestRequest) getSwaggerFromFile(RestRequest)}
-				</ul>
-			</ul>
-			<p>
 				The default provider provides several options for defining Swagger documentation on your resource:
 			</p>
 			<ul class='spaced-list'>
@@ -13761,12 +13736,12 @@
 	MyResource_ja_JP.json
 					</p>
 				<li>
-					Use {@link org.apache.juneau.rest.annotation.ResourceSwagger @ResourceSwagger} and {@link org.apache.juneau.rest.annotation.MethodSwagger @MethodSwagger}
+					Use {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)} and {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)}
 					annotations on your resource classes and methods.
 					<br><h5 class='figure'>Example:</h5>
 					<p class='bcode w800'>
 	<ja>@RestMethod</ja>(
-		swagger=<ja>@MethodSwagger</ja>(tags=<js>"foo,bar,baz"</js>)
+		swagger=<js>"{tags:'foo,bar,baz'}</js>
 	)
 	<jk>public</jk> Object myMethod() {...}
 					</p>
@@ -17680,14 +17655,14 @@
 		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
 		encoders=GzipEncoder.<jk>class</jk>,
 	
-		swagger=<ja>@ResourceSwagger</ja>(
-			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
-			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
-			version=<js>"2.0"</js>,
-			termsOfService=<js>"You're on your own."</js>,
-			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
-			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
-		) 
+		swagger={
+			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
+			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
+			<js>"version:'2.0',"</js>,
+			<js>"termsOfService:'You are on your own.',"</js>,
+			<js>"tags:[{name:'Java',description:'Java utility'}],"</js>,
+			<js>"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		}
 	)
 	<jk>public class</jk> SystemPropertiesResource <jk>extends</jk> BasicRestServlet {
 	
@@ -17695,14 +17670,14 @@
 			name=<jsf>GET</jsf>, path=<js>"/"</js>,
 			summary=<js>"Show all system properties"</js>,
 			description=<js>"Returns all system properties defined in the JVM."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={
-					<ja>@Parameter</ja>(in=<js>"query"</js>, name=<js>"sort"</js>, description=<js>"Sort results alphabetically."</js>, _default=<js>"false"</js>)
-				},
-				responses={
-					<ja>@Response</ja>(value=200, description=<js>"Returns a map of key/value pairs."</js>)
-				}
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'sort',in:'query',description:'Sort results alphabetically',default:'false'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"200: {description:'Returns a map of key/value pairs.'}"</js>,
+				<js>"}"</js>
+			}
 		)
 		<jk>public</jk> Map getSystemProperties(<ja>@Query</ja>(<js>"sort"</js>) <jk>boolean</jk> sort) <jk>throws</jk> Throwable {
 			<jk>if</jk> (sort)
@@ -17714,14 +17689,14 @@
 			name=<jsf>GET</jsf>, path=<js>"/{propertyName}"</js>,
 			summary=<js>"Get system property"</js>,
 			description=<js>"Returns the value of the specified system property."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>)
-				},
-				responses={
-					<ja>@Response</ja>(value=200, description=<js>"The system property value, or null if not found."</js>)
-				}
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"200: {description:'The system property value, or null if not found.'}"</js>,
+				<js>"}"</js>
+			}
 		)
 		<jk>public</jk> String getSystemProperty(<ja>@Path</ja> String propertyName) <jk>throws</jk> Throwable {
 			<jk>return</jk> System.<jsm>getProperty</jsm>(propertyName);
@@ -17732,20 +17707,16 @@
 			summary=<js>"Replace system property"</js>,
 			description=<js>"Sets a new value for the specified system property."</js>,
 			guards=AdminGuard.<jk>class</jk>,
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>),
-					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The new system property value."</js>),
-				},
-				responses={
-					<ja>@Response</ja>(value=302,
-						headers={
-							<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
-						}
-					),
-					<ja>@Response</ja>(value=403, description=<js>"User is not an admin."</js>)
-				}
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'},"</js>,
+					<js>"{in:'body',description:'The new system property value.'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
+					<js>"403: {description:'User is not an admin.'}"</js>,
+				<js>"}"</js>
+			}
 		)
 		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja> String propertyName, <ja>@Body</ja> String value) {
 			System.<jsm>setProperty</jsm>(propertyName, value);
@@ -17757,20 +17728,16 @@
 			summary=<js>"Add an entire set of system properties"</js>,
 			description=<js>"Takes in a map of key/value pairs and creates a set of new system properties."</js>,
 			guards=AdminGuard.<jk>class</jk>,
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property key."</js>),
-					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The new system property values."</js>, schema=<js>"{example:{key1:'val1',key2:123}}"</js>),
-				},
-				responses={
-					<ja>@Response</ja>(value=302,
-						headers={
-							<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
-						}
-					),
-					<ja>@Response</ja>(value=403, description=<js>"Unauthorized:  User is not an admin."</js>)
-				}
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'},"</js>,
+					<js>"{in:'body',description:'The new system property values.',schema:{example:{key1:'val1',key2:123}}}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
+					<js>"403: {description:'User is not an admin.'}"</js>,
+				<js>"}"</js>
+			}
 		)
 		<jk>public</jk> Redirect setSystemProperties(<ja>@Body</ja> java.util.Properties newProperties) {
 			System.<jsm>setProperties</jsm>(newProperties);
@@ -17782,19 +17749,15 @@
 			summary=<js>"Delete system property"</js>,
 			description=<js>"Deletes the specified system property."</js>,
 			guards=AdminGuard.<jk>class</jk>,
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>),
-				},
-				responses={
-					<ja>@Response</ja>(value=302,
-						headers={
-							<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
-						}
-					),
-					<ja>@Response</ja>(value=403, description=<js>"Unauthorized:  User is not an admin"</js>)
-				}
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
+					<js>"403: {description:'User is not an admin.'}"</js>,
+				<js>"}"</js>
+			}
 		)
 		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja> String propertyName) {
 			System.<jsm>clearProperty</jsm>(propertyName);
@@ -18944,14 +18907,14 @@
 		encoders=GzipEncoder.<jk>class</jk>,
 	
 		<jc>// Swagger info.</jc>
-		swagger=<ja>@ResourceSwagger</ja>(
-			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
-			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
-			version=<js>"2.0"</js>,
-			termsOfService=<js>"You're on your own."</js>,
-			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
-			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
-		)
+		swagger= {
+			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
+			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
+			<js>"version:'2.0',"</js>,
+			<js>"termsOfService:'You're on your own.',"</js>,
+			<js>"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}],"</js>,
+			<js>"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		}
 	) 
 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena { 
 		
@@ -20700,11 +20663,11 @@
 		
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>)
-				}
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'section',in:'path',description:'Section name.'}"</js>,
+				<js>"]"</js>
+			}
 		) 
 		<jk>public</jk> ObjectMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section); 
@@ -20712,12 +20675,12 @@
 		
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={ 
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>) 
-				} 
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'section',in:'path',description:'Section name.'},"</js>,
+					<js>"{name:'key',in:'path',description:'Entry name.'}"</js>,
+				<js>"]"</js>
+			}
 		) 
 		<jk>public</jk> String getConfigEntry(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section).getString(key); 
@@ -20725,11 +20688,11 @@
 		
 		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={ 
-					<ja>@Parameter</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
-				}
-			) 
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'contents',in:'formData',description:'New contents in INI file format.'}"</js>,
+				<js>"]"</js>
+			}
 		) 
 		<jk>public</jk> Config setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
 			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(contents)); 
@@ -20737,11 +20700,11 @@
 		
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={ 
-					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
-				} 
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{in:'body',description:'New contents in INI file format.'}"</js>,
+				<js>"]"</js>
+			}
 		) 
 		<jk>public</jk> Config setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
 			<jk>return</jk> getServletConfig().getConfig().load(contents, <jk>true</jk>).asMap();
@@ -20749,12 +20712,12 @@
 		
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={ 
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents for section as a simple map with string keys and values."</js>) 
-				} 
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'section',in:'path',description:'Section name.'}"</js>,
+					<js>"{in:'body',description:'New contents for section as a simple map with string keys and values.'}"</js>,
+				<js>"]"</js>
+			}
 		) 
 		<jk>public</jk> ObjectMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
 			getServletConfig().getConfig().setSection(section, contents); 
@@ -20763,13 +20726,13 @@
 		
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
-			swagger=<ja>@MethodSwagger</ja>(
-				parameters={ 
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-					<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>), 
-					<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New value as a string."</js>) 
-				} 
-			)
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'section',in:'path',description:'Section name.'}"</js>,
+					<js>"{name:'key',in:'path',description:'Entry name.'}"</js>,
+					<js>"{in:'body',description:'New value as a string.'}"</js>,
+				<js>"]"</js>
+			}
 		) 
 		<jk>public</jk> String setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key, <ja>@Body</ja> String value) <jk>throws</jk> Exception { 
 			getServletConfig().getConfig().put(section, key, value, <jk>false</jk>); 
@@ -20814,11 +20777,11 @@
 			<li>
 				Summary and detail views of the same beans providing different levels of information.
 			<li>
-				The use of the {@link org.apache.juneau.html.annotation.HtmlRender @HtmlRender} annotation.
+				The use of the {@link org.apache.juneau.html.HtmlRender} class.
 			<li>
 				The use of the {@link org.apache.juneau.annotation.BeanProperty#format @BeanProperty(format)} annotation.
 			<li>
-				The use of the {@link org.apache.juneau.rest.converters.Querable} interface.
+				The use of the {@link org.apache.juneau.rest.converters.Queryable} interface.
 		</ul>
 		
 		<h5 class='figure'>PetStoreResource.java</h5>
@@ -21299,6 +21262,9 @@
 		
 		<h5 class='topic w800'>juneau-server</h5>
 		<ul class='spaced-list'>
+			<li>
+				Simplified {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)}
+				and {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
 			<li>
 				Fixed bug in <code>UriResolver</code> when request path info had special characters.
 			<li>

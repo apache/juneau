@@ -22,7 +22,8 @@ import org.apache.juneau.rest.annotation.*;
  * JUnit automated testcase resource.
  */
 @RestResource(
-	path="/testOptionsWithoutNls"
+	path="/testOptionsWithoutNls",
+	title="test"
 )
 public class OptionsWithoutNlsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public class OptionsWithoutNlsResource extends BasicRestServlet {
 	//====================================================================================================
 	// Should get to the options page without errors
 	//====================================================================================================
-	@RestMethod(name=OPTIONS, path="/testOptions/*")
+	@RestMethod(name=OPTIONS, path="/testOptions/*", description="test")
 	public Swagger testOptions(RestRequest req) {
 		return req.getSwagger();
 	}
@@ -42,5 +43,4 @@ public class OptionsWithoutNlsResource extends BasicRestServlet {
 	public String test(RestRequest req) {
 		return req.getMessage("bad", 1, 2, 3);
 	}
-
 }

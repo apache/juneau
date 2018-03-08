@@ -352,11 +352,11 @@ public class OperationTest {
 	public void testSetResponses() {
 		Operation t = new Operation();
 		
-		t.setResponses(new AMap<Integer,ResponseInfo>().append(123,responseInfo("bar")));
+		t.setResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
 		assertType(Map.class, t.getResponses());
 		
-		t.setResponses(new AMap<Integer,ResponseInfo>());
+		t.setResponses(new AMap<String,ResponseInfo>());
 		assertObjectEquals("{}", t.getResponses());
 		assertType(Map.class, t.getResponses());
 
@@ -371,11 +371,11 @@ public class OperationTest {
 	public void testAddResponses() {
 		Operation t = new Operation();
 
-		t.addResponses(new AMap<Integer,ResponseInfo>().append(123,responseInfo("bar")));
+		t.addResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
 		assertType(Map.class, t.getResponses());
 		
-		t.addResponses(new AMap<Integer,ResponseInfo>());
+		t.addResponses(new AMap<String,ResponseInfo>());
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
 		assertType(Map.class, t.getResponses());
 
@@ -391,9 +391,9 @@ public class OperationTest {
 	public void testResponse() {
 		Operation t = new Operation();
 		
-		t.response(1, responseInfo("foo"));
+		t.response("1", responseInfo("foo"));
 		t.response(null, responseInfo("bar"));
-		t.response(2, null);
+		t.response("2", null);
 		assertObjectEquals("{'1':{description:'foo'},null:{description:'bar'},'2':null}", t.getResponses());
 	}
 
@@ -411,8 +411,8 @@ public class OperationTest {
 		t.responses((Object)null);
 		
 		assertObjectEquals("{'1':{description:'a'},'2':{description:'b'},'3':{description:'c'}}", t.getResponses());
-		for (Map.Entry<Integer,ResponseInfo> e : t.getResponses().entrySet()) {
-			assertType(Integer.class, e.getKey());
+		for (Map.Entry<String,ResponseInfo> e : t.getResponses().entrySet()) {
+			assertType(String.class, e.getKey());
 			assertType(ResponseInfo.class, e.getValue());
 		}
 	}
@@ -656,7 +656,7 @@ public class OperationTest {
 		assertType(List.class, t.get("produces", Object.class));
 		assertType(MediaType.class, t.get("produces", List.class).get(0));
 		assertType(Map.class, t.get("responses", Object.class));
-		assertType(Integer.class, t.get("responses", Map.class).keySet().iterator().next());
+		assertType(String.class, t.get("responses", Map.class).keySet().iterator().next());
 		assertType(ResponseInfo.class, t.get("responses", Map.class).values().iterator().next());
 		assertType(List.class, t.get("schemes", Object.class));
 		assertType(List.class, t.get("security", Object.class));

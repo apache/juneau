@@ -737,7 +737,40 @@ public @interface RestMethod {
 	String[] consumes() default {};
 
 	/**
+	/**
 	 * Provides swagger-specific metadata on this method.
+	 * 
+	 * <p>
+	 * Used to populate the auto-generated OPTIONS swagger documentation.
+	 * 
+	 * <p>
+	 * The format of this annotation is JSON when all individual parts are concatenated.
+	 * <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		name=<jsf>PUT</jsf>, 
+	 * 		path=<js>"/{propertyName}"</js>,
+	 * 
+	 * 		<jc>// Swagger info.</jc>
+	 * 		swagger={
+	 * 			<js>"parameters:["</js>,
+	 * 				<js>"{name:'propertyName',in:'path',description:'The system property name.'},"</js>,
+	 * 				<js>"{in:'body',description:'The new system property value.'}"</js>,
+	 * 			<js>"],"</js>,
+	 * 			<js>"responses:{"</js>,
+	 * 				<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
+	 * 				<js>"403: {description:'User is not an admin.'}"</js>,
+	 * 			<js>"}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
+	 * </ul>
 	 */
-	MethodSwagger swagger() default @MethodSwagger;
+	String[] swagger() default {};
 }

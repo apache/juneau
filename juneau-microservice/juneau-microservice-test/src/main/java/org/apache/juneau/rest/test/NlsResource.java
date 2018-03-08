@@ -50,26 +50,21 @@ public class NlsResource extends BasicRestServletGroup {
 		@RestMethod(
 			name=POST, path="/{a}",
 			description="Test1.c",
-			swagger=@MethodSwagger(
-				parameters={
-					@Parameter(in="path", name="a", description="Test1.d"),
-					@Parameter(in="query", name="b", description="Test1.e"),
-					@Parameter(in="body", description="Test1.f"),
-					@Parameter(in="header", name="D", description="Test1.g"),
-					@Parameter(in="path", name="a2", description="Test1.h"),
-					@Parameter(in="query", name="b2", description="Test1.i"),
-					@Parameter(in="header", name="D2", description="Test1.j"),
-				},
-				responses={
-					@Response(200),
-					@Response(value=201,
-						description="Test1.l",
-						headers={
-							@Parameter(in="foo", name="bar", description="Test1.m"),
-						}
-					)
-				}
-			)
+			swagger= {
+				"parameters:[",
+					"{name:'a',in:'path',type:'string',description:'Test1.d'},",
+					"{name:'b',in:'query',type:'string',description:'Test1.e'},",
+					"{in:'body',type:'string',description:'Test1.f'},",
+					"{name:'D',in:'header',type:'string',description:'Test1.g'},",
+					"{name:'a2',in:'path',type:'string',description:'Test1.h'},",
+					"{name:'b2',in:'query',type:'string',description:'Test1.i'},",
+					"{name:'D2',in:'header',type:'string',description:'Test1.j'}",
+				"],",
+				"responses:{",
+					"200: {description:'OK'},",
+					"201: {description:'Test1.l',headers:{bar:{description:'Test1.m',type:'string'}}}",
+				"}"
+			}
 		)
 		public String test1(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
 				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
@@ -170,26 +165,21 @@ public class NlsResource extends BasicRestServletGroup {
 		@RestMethod(
 			name=POST, path="/{a}",
 			description="$L{foo}",
-			swagger=@MethodSwagger(
-				parameters={
-					@Parameter(in="path", name="a", description="$L{foo}"),
-					@Parameter(in="query", name="b", description="$L{foo}"),
-					@Parameter(in="body", description="$L{foo}"),
-					@Parameter(in="header", name="D", description="$L{foo}"),
-					@Parameter(in="path", name="a2", description="$L{foo}"),
-					@Parameter(in="query", name="b2", description="$L{foo}"),
-					@Parameter(in="header", name="D2", description="$L{foo}")
-				},
-				responses={
-					@Response(200),
-					@Response(value=201,
-						description="$L{foo}",
-						headers={
-							@Parameter(in="foo", name="bar", description="$L{foo}"),
-						}
-					)
-				}
-			)
+			swagger= {
+				"parameters:[",
+					"{name:'a',in:'path',description:'$L{foo}'},",
+					"{name:'b',in:'query',description:'$L{foo}'},",
+					"{in:'body',description:'$L{foo}'},",
+					"{name:'D',in:'header',description:'$L{foo}'},",
+					"{name:'a2',in:'path',description:'$L{foo}'},",
+					"{name:'b2',in:'query',description:'$L{foo}'},",
+					"{name:'D2',in:'header',description:'$L{foo}'}",
+				"],",
+				"responses:{",
+					"200: {description:'OK'},",
+					"201: {description:'$L{foo}',headers:{bar:{description:'$L{foo}',type:'string'}}}",
+				"}"
+			}
 		)
 		public String test6(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
 				@Path("e") String e, @Query("f") String f, @Header("g") String g) {

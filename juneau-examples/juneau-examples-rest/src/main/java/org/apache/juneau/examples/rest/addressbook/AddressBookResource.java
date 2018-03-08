@@ -114,14 +114,14 @@ import org.apache.juneau.utils.*;
 	encoders=GzipEncoder.class,
 
 	// Swagger info.
-	swagger=@ResourceSwagger(
-		contact="{name:'John Smith',email:'john@smith.com'}",
-		license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
-		version="2.0",
-		termsOfService="You're on your own.",
-		tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
-		externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
-	)
+	swagger= {
+		"contact:{name:'John Smith',email:'john@smith.com'},",
+		"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
+		"version:'2.0',",
+		"termsOfService:'You're on your own.',",
+		"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}],",
+		"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"
+	}
 )
 public class AddressBookResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;

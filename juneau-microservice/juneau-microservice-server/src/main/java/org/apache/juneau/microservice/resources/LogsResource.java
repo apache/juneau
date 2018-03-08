@@ -91,9 +91,12 @@ public class LogsResource extends BasicRestServlet {
 	@RestMethod(
 		name=GET,
 		path="/*",
-		swagger=@MethodSwagger(
-			responses={@Response(200),@Response(404)}
-		)
+		swagger= {
+			"responses:{",
+				"200: {description:'OK'},",
+				"404: {description:'Not Found'}",
+			"}"
+		}
 	)
 	public Object getFileOrDirectory(RestRequest req, RestResponse res, RequestProperties properties, @PathRemainder String path) throws Exception {
 
@@ -132,9 +135,12 @@ public class LogsResource extends BasicRestServlet {
 	@RestMethod(
 		name="VIEW",
 		path="/*",
-		swagger=@MethodSwagger(
-			responses={@Response(200),@Response(404)}
-		)
+		swagger= {
+			"responses:{",
+				"200: {description:'OK'},",
+				"404: {description:'Not Found'}",
+			"}"
+		}
 	)
 	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, RequestProperties properties, @Query("highlight") boolean highlight, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
@@ -200,9 +206,12 @@ public class LogsResource extends BasicRestServlet {
 		name="PARSE",
 		path="/*",
 		converters=Queryable.class,
-		swagger=@MethodSwagger(
-			responses={@Response(200),@Response(404)}
-		)
+		swagger= {
+			"responses:{",
+				"200: {description:'OK'},",
+				"404: {description:'Not Found'}",
+			"}"
+		}
 	)
 	public LogParser viewParsedEntries(RestRequest req, @PathRemainder String path, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
@@ -226,9 +235,12 @@ public class LogsResource extends BasicRestServlet {
 	@RestMethod(
 		name="DOWNLOAD",
 		path="/*",
-		swagger=@MethodSwagger(
-			responses={@Response(200),@Response(404)}
-		)
+		swagger= {
+			"responses:{",
+				"200: {description:'OK'},",
+				"404: {description:'Not Found'}",
+			"}"
+		}
 	)
 	public Object downloadFile(RestResponse res, @PathRemainder String path) throws Exception {
 
@@ -252,9 +264,12 @@ public class LogsResource extends BasicRestServlet {
 	@RestMethod(
 		name=DELETE,
 		path="/*",
-		swagger=@MethodSwagger(
-			responses={@Response(200),@Response(404)}
-		)
+		swagger= {
+			"responses:{",
+				"200: {description:'OK'},",
+				"404: {description:'Not Found'}",
+			"}"
+		}
 	)
 	public Object deleteFile(@PathRemainder String path) throws Exception {
 

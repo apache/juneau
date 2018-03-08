@@ -31,7 +31,7 @@ public class NlsTest extends RestTestcase {
 
 		Swagger s = client.doOptions(URL + "/test1").getResponse(Swagger.class);
 		assertObjectEquals("{title:'Test1.a',description:'Test1.b'}", s.getInfo());
-		assertObjectEquals("[{'in':'body',description:'Test1.f'},{'in':'header',name:'D',type:'string',description:'Test1.g'},{'in':'header',name:'D2',type:'string',description:'Test1.j'},{'in':'header',name:'g'},{'in':'path',name:'a',type:'string',description:'Test1.d',required:true},{'in':'path',name:'a2',type:'string',description:'Test1.h',required:true},{'in':'path',name:'e',required:true},{'in':'query',name:'b',type:'string',description:'Test1.e'},{'in':'query',name:'b2',type:'string',description:'Test1.i'},{'in':'query',name:'f'}]", s.getPaths().get("/{a}").get("post").getParameters());
+		assertObjectEquals("[{'in':'path',name:'a',type:'string',description:'Test1.d',required:true},{'in':'query',name:'b',type:'string',description:'Test1.e'},{'in':'body',type:'string',description:'Test1.f'},{'in':'header',name:'D',type:'string',description:'Test1.g'},{'in':'path',name:'a2',type:'string',description:'Test1.h',required:true},{'in':'query',name:'b2',type:'string',description:'Test1.i'},{'in':'header',name:'D2',type:'string',description:'Test1.j'},{'in':'path',name:'e',required:true},{'in':'query',name:'f'},{'in':'header',name:'g'}]", s.getPaths().get("/{a}").get("post").getParameters());
 		assertObjectEquals("{'200':{description:'OK'},'201':{description:'Test1.l',headers:{bar:{description:'Test1.m',type:'string'}}}}", s.getPaths().get("/{a}").get("post").getResponses());
 	}
 
@@ -43,7 +43,7 @@ public class NlsTest extends RestTestcase {
 
 		Swagger s = client.doOptions(URL + "/test2").getResponse(Swagger.class);
 		assertObjectEquals("{title:'Test2.a',description:'Test2.b'}", s.getInfo());
-		assertObjectEquals("[{'in':'body',description:'Test2.f'},{'in':'header',name:'D',description:'Test2.g'},{'in':'header',name:'D2',description:'Test2.j'},{'in':'header',name:'g'},{'in':'path',name:'a',description:'Test2.d',required:true},{'in':'path',name:'a2',description:'Test2.h',required:true},{'in':'path',name:'e',required:true},{'in':'query',name:'b',description:'Test2.e'},{'in':'query',name:'b2',description:'Test2.i'},{'in':'query',name:'f'}]", s.getPaths().get("/{a}").get("post").getParameters());
+		assertObjectEquals("[{'in':'path',name:'a',description:'Test2.d',required:true},{'in':'query',name:'b',description:'Test2.e'},{'in':'body',description:'Test2.f'},{'in':'header',name:'D',description:'Test2.g'},{'in':'path',name:'a2',description:'Test2.h',required:true},{'in':'query',name:'b2',description:'Test2.i'},{'in':'header',name:'D2',description:'Test2.j'},{'in':'path',name:'e',required:true},{'in':'query',name:'f'},{'in':'header',name:'g'}]", s.getPaths().get("/{a}").get("post").getParameters());
 		assertObjectEquals("{'200':{description:'OK2'},'201':{description:'Test2.l'}}", s.getPaths().get("/{a}").get("post").getResponses());
 	}
 
@@ -55,7 +55,7 @@ public class NlsTest extends RestTestcase {
 
 		Swagger s = client.doOptions(URL + "/test3").getResponse(Swagger.class);
 		assertObjectEquals("{title:'Test3.a',description:'Test3.b'}", s.getInfo());
-		assertObjectEquals("[{'in':'body',description:'Test3.f'},{'in':'header',name:'D',description:'Test3.g'},{'in':'header',name:'D2',description:'Test3.j'},{'in':'header',name:'g'},{'in':'path',name:'a',description:'Test3.d',required:true},{'in':'path',name:'a2',description:'Test3.h',required:true},{'in':'path',name:'e',required:true},{'in':'query',name:'b',description:'Test3.e'},{'in':'query',name:'b2',description:'Test3.i'},{'in':'query',name:'f'}]", s.getPaths().get("/{a}").get("post").getParameters());
+		assertObjectEquals("[{'in':'path',name:'a',description:'Test3.d',required:true},{'in':'query',name:'b',description:'Test3.e'},{'in':'body',description:'Test3.f'},{'in':'header',name:'D',description:'Test3.g'},{'in':'path',name:'a2',description:'Test3.h',required:true},{'in':'query',name:'b2',description:'Test3.i'},{'in':'header',name:'D2',description:'Test3.j'},{'in':'path',name:'e',required:true},{'in':'query',name:'f'},{'in':'header',name:'g'}]", s.getPaths().get("/{a}").get("post").getParameters());
 		assertObjectEquals("{'200':{description:'OK3'},'201':{description:'Test3.l'}}", s.getPaths().get("/{a}").get("post").getResponses());
 	}
 
@@ -67,7 +67,7 @@ public class NlsTest extends RestTestcase {
 
 		Swagger s = client.doOptions(URL + "/test4").getResponse(Swagger.class);
 		assertObjectEquals("{title:'baz',description:'baz'}", s.getInfo());
-		assertObjectEquals("[{'in':'body',description:'baz'},{'in':'header',name:'D',description:'baz'},{'in':'header',name:'D2',description:'baz'},{'in':'header',name:'g'},{'in':'path',name:'a',description:'baz',required:true},{'in':'path',name:'a2',description:'baz',required:true},{'in':'path',name:'e',required:true},{'in':'query',name:'b',description:'baz'},{'in':'query',name:'b2',description:'baz'},{'in':'query',name:'f'}]", s.getPaths().get("/{a}").get("post").getParameters());
+		assertObjectEquals("[{'in':'path',name:'a',description:'baz',required:true},{'in':'query',name:'b',description:'baz'},{'in':'body',description:'baz'},{'in':'header',name:'D',description:'baz'},{'in':'path',name:'a2',description:'baz',required:true},{'in':'query',name:'b2',description:'baz'},{'in':'header',name:'D2',description:'baz'},{'in':'path',name:'e',required:true},{'in':'query',name:'f'},{'in':'header',name:'g'}]", s.getPaths().get("/{a}").get("post").getParameters());
 		assertObjectEquals("{'200':{description:'foobazfoobazfoo'},'201':{description:'baz'}}", s.getPaths().get("/{a}").get("post").getResponses());
 	}
 
@@ -79,7 +79,7 @@ public class NlsTest extends RestTestcase {
 
 		Swagger s = client.doOptions(URL + "/test5").getResponse(Swagger.class);
 		assertObjectEquals("{title:'baz2',description:'baz2'}", s.getInfo());
-		assertObjectEquals("[{'in':'body',description:'baz2'},{'in':'header',name:'D',description:'baz2'},{'in':'header',name:'D2',description:'baz2'},{'in':'header',name:'g'},{'in':'path',name:'a',description:'baz2',required:true},{'in':'path',name:'a2',description:'baz2',required:true},{'in':'path',name:'e',required:true},{'in':'query',name:'b',description:'baz2'},{'in':'query',name:'b2',description:'baz2'},{'in':'query',name:'f'}]", s.getPaths().get("/{a}").get("post").getParameters());
+		assertObjectEquals("[{'in':'path',name:'a',description:'baz2',required:true},{'in':'query',name:'b',description:'baz2'},{'in':'body',description:'baz2'},{'in':'header',name:'D',description:'baz2'},{'in':'path',name:'a2',description:'baz2',required:true},{'in':'query',name:'b2',description:'baz2'},{'in':'header',name:'D2',description:'baz2'},{'in':'path',name:'e',required:true},{'in':'query',name:'f'},{'in':'header',name:'g'}]", s.getPaths().get("/{a}").get("post").getParameters());
 		assertObjectEquals("{'200':{description:'foobaz2foobaz2foo'},'201':{description:'baz2'}}", s.getPaths().get("/{a}").get("post").getResponses());
 	}
 
@@ -91,7 +91,7 @@ public class NlsTest extends RestTestcase {
 
 		Swagger s = client.doOptions(URL + "/test6").getResponse(Swagger.class);
 		assertObjectEquals("{title:'baz',description:'baz'}", s.getInfo());
-		assertObjectEquals("[{'in':'body',description:'baz'},{'in':'header',name:'D',type:'string',description:'baz'},{'in':'header',name:'D2',type:'string',description:'baz'},{'in':'header',name:'g'},{'in':'path',name:'a',type:'string',description:'baz',required:true},{'in':'path',name:'a2',type:'string',description:'baz',required:true},{'in':'path',name:'e',required:true},{'in':'query',name:'b',type:'string',description:'baz'},{'in':'query',name:'b2',type:'string',description:'baz'},{'in':'query',name:'f'}]", s.getPaths().get("/{a}").get("post").getParameters());
+		assertObjectEquals("[{'in':'path',name:'a',description:'baz',required:true},{'in':'query',name:'b',description:'baz'},{'in':'body',description:'baz'},{'in':'header',name:'D',description:'baz'},{'in':'path',name:'a2',description:'baz',required:true},{'in':'query',name:'b2',description:'baz'},{'in':'header',name:'D2',description:'baz'},{'in':'path',name:'e',required:true},{'in':'query',name:'f'},{'in':'header',name:'g'}]", s.getPaths().get("/{a}").get("post").getParameters());
 		assertObjectEquals("{'200':{description:'OK'},'201':{description:'baz',headers:{bar:{description:'baz',type:'string'}}}}", s.getPaths().get("/{a}").get("post").getResponses());
 	}
 }

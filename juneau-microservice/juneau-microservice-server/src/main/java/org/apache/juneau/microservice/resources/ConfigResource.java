@@ -86,11 +86,11 @@ public class ConfigResource extends BasicRestServlet {
 	 */
 	@RestMethod(name=GET, path="/{section}",
 		description="Show config file section.",
-		swagger=@MethodSwagger(
-			parameters={
-				@Parameter(in="path", name="section", description="Section name.")
-			}
-		)
+		swagger={
+			"parameters:[",
+				"{name:'section',in:'path',description:'Section name.'}",
+			"]"
+		}
 	)
 	public ObjectMap getConfigSection(@Path("section") String section) throws Exception {
 		return getSection(section);
@@ -106,12 +106,12 @@ public class ConfigResource extends BasicRestServlet {
 	 */
 	@RestMethod(name=GET, path="/{section}/{key}",
 		description="Show config file entry.",
-		swagger=@MethodSwagger(
-			parameters={
-				@Parameter(in="path", name="section", description="Section name."),
-				@Parameter(in="path", name="key", description="Entry name.")
-			}
-		)
+		swagger={
+			"parameters:[",
+				"{name:'section',in:'path',description:'Section name.'},",
+				"{name:'key',in:'path',description:'Entry name.'}",
+			"]"
+		}
 	)
 	public String getConfigEntry(@Path("section") String section, @Path("key") String key) throws Exception {
 		return getSection(section).getString(key);
@@ -126,11 +126,11 @@ public class ConfigResource extends BasicRestServlet {
 	 */
 	@RestMethod(name=POST, path="/",
 		description="Sets contents of config file from a FORM post.",
-		swagger=@MethodSwagger(
-			parameters={
-				@Parameter(in="formData", name="contents", description="New contents in INI file format.")
-			}
-		)
+		swagger={
+			"parameters:[",
+				"{name:'contents',in:'formData',description:'New contents in INI file format.'}",
+			"]"
+		}
 	)
 	public ObjectMap setConfigContentsFormPost(@FormData("contents") String contents) throws Exception {
 		return setConfigContents(new StringReader(contents));
@@ -145,11 +145,11 @@ public class ConfigResource extends BasicRestServlet {
 	 */
 	@RestMethod(name=PUT, path="/",
 		description="Sets contents of config file.",
-		swagger=@MethodSwagger(
-			parameters={
-				@Parameter(in="body", description="New contents in INI file format.")
-			}
-		)
+		swagger={
+			"parameters:[",
+				"{in:'body',description:'New contents in INI file format.'}",
+			"]"
+		}
 	)
 	public ObjectMap setConfigContents(@Body Reader contents) throws Exception {
 		return getServletConfig().getConfig().load(contents, true).asMap();
@@ -165,12 +165,12 @@ public class ConfigResource extends BasicRestServlet {
 	 */
 	@RestMethod(name=PUT, path="/{section}",
 		description="Add or overwrite a config file section.",
-		swagger=@MethodSwagger(
-			parameters={
-				@Parameter(in="path", name="section", description="Section name."),
-				@Parameter(in="body", description="New contents for section as a simple map with string keys and values.")
-			}
-		)
+		swagger={
+			"parameters:[",
+				"{name:'section',in:'path',description:'Section name.'}",
+				"{in:'body',description:'New contents for section as a simple map with string keys and values.'}",
+			"]"
+		}
 	)
 	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,Object> contents) throws Exception {
 		getServletConfig().getConfig().setSection(section, null, contents);
@@ -188,13 +188,13 @@ public class ConfigResource extends BasicRestServlet {
 	 */
 	@RestMethod(name=PUT, path="/{section}/{key}",
 		description="Add or overwrite a config file entry.",
-		swagger=@MethodSwagger(
-			parameters={
-				@Parameter(in="path", name="section", description="Section name."),
-				@Parameter(in="path", name="key", description="Entry name."),
-				@Parameter(in="body", description="New value as a string.")
-			}
-		)
+		swagger={
+			"parameters:[",
+				"{name:'section',in:'path',description:'Section name.'}",
+				"{name:'key',in:'path',description:'Entry name.'}",
+				"{in:'body',description:'New value as a string.'}",
+			"]"
+		}
 	)
 	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws Exception {
 		getServletConfig().getConfig().set(section + '/' + key, value);
