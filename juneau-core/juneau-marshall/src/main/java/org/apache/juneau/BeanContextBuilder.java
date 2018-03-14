@@ -590,6 +590,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  POJO example.
+	 * 
+	 * <p>
+	 * Specifies an example of the specified class.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * </ul>
+	 * 
+	 * @param pojoClass The POJO class.
+	 * @param o An instance of the POJO class used for examples.
+	 * @return This object (for method chaining).
+	 */
+	public <T> BeanContextBuilder example(Class<T> pojoClass, T o) {
+		return addTo(BEAN_examples, pojoClass.getName(), o);
+	}
+
+	/**
 	 * Configuration property:  Bean property excludes.
 	 * 
 	 * <p>

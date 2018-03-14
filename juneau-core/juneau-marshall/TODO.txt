@@ -11,14 +11,12 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
-Create tests that ensure serializers don't close output but parsers do close input.
+Document properties in config file.
 
-Content tests on examples rest.
 REST example showing how to use NLS.
 REST example showing how to customize look-and-feel.
+REST example showing static resources.
+Add doc link to @Example class.
 
-Review Javadocs:
-BeanContextBuilder
-BeanFilterBuilder
-@Bean
-@BeanProperty
+
+

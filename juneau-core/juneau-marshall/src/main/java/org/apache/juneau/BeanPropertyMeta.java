@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -309,19 +308,19 @@ public final class BeanPropertyMeta {
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {
-			setAccessible(getter);
+			setAccessible(getter, false);
 			this.getter = getter;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setSetter(Method setter) {
-			setAccessible(setter);
+			setAccessible(setter, false);
 			this.setter = setter;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setField(Field field) {
-			setAccessible(field);
+			setAccessible(field, false);
 			this.field = field;
 			return this;
 		}

@@ -793,6 +793,59 @@ public class BeanContext extends Context {
 	public static final String BEAN_debug = PREFIX + "debug.b";
 
 	/**
+	 * Configuration property:  POJO examples.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.examples.smo"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Default:</b>  <code>{}</code>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Example} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#example(Class,Object)}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies an example of the specified class.
+	 * 
+	 * <p>
+	 * Examples are used in cases such as POJO examples in Swagger documents.
+	 * 
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_examples</jsf>, MyBean.<jk>class</jk>.getName(), <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
+	 * 		.build();
+	 * </p>
+	 * 
+	 * POJO examples can also be defined on classes via the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>A static field annotated with {@link Example @Example}.
+	 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+	 * 	<li>A static method with name <code>example</code> with no arguments or one {@link BeanSession} argument.
+	 * </ul>
+	 */
+	public static final String BEAN_examples = PREFIX + "examples.smo";
+
+	/**
 	 * Configuration property:  Bean property excludes.
 	 * 
 	 * <h5 class='section'>Property:</h5>
@@ -1758,6 +1811,7 @@ public class BeanContext extends Context {
 	final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	final BeanFilter[] beanFilters;
 	final PojoSwap<?,?>[] pojoSwaps;
+	final Map<String,?> examples;
 	final BeanRegistry beanRegistry;
 	final Map<String,Class<?>> implClasses;
 	final Locale locale;
@@ -1846,6 +1900,8 @@ public class BeanContext extends Context {
 		}
 		pojoSwaps = lpf.toArray(new PojoSwap[lpf.size()]);
 		
+		examples = getMapProperty(BEAN_examples, Object.class);
+		
 		implClasses = getClassMapProperty(BEAN_implClasses);
 		
 		Map<String,String[]> m2 = new HashMap<>();
@@ -1864,8 +1920,8 @@ public class BeanContext extends Context {
 		
 		if (! cmCacheCache.containsKey(beanHashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
-			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
-			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
+			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class), null));
+			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class), null));
 			cmCacheCache.putIfAbsent(beanHashCode, cm);
 		}
 		cmCache = cmCacheCache.get(beanHashCode);
@@ -2074,7 +2130,7 @@ public class BeanContext extends Context {
 		// Note that if it has a pojo swap, we still want to cache it so that
 		// we can cache something like byte[] with ByteArrayBase64Swap.
 		if (type.isArray() && findPojoSwaps(type) == null)
-			return new ClassMeta(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type));
+			return new ClassMeta(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type), findExample(type));
 
 		// This can happen if we have transforms defined against String or Object.
 		if (cmCache == null)
@@ -2087,7 +2143,7 @@ public class BeanContext extends Context {
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type));
+					cm = new ClassMeta<>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type), findExample(type));
 			}
 		}
 		if (waitForInit)
@@ -2398,6 +2454,19 @@ public class BeanContext extends Context {
 				if (isParentClass(f.getNormalClass(), c))
 					l.add(f);
 			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
+		}
+		return null;
+	}
+	
+	private final <T> T findExample(Class<T> c) {
+		if (c != null) {
+			Object o = examples.get(c.getName());
+			if (o != null)
+				return (T)o;
+			Class<T> c2 = (Class<T>)findImplClass(c);
+			if (c2 == null)
+				return null;
+			return (T)examples.get(c2.getName());
 		}
 		return null;
 	}

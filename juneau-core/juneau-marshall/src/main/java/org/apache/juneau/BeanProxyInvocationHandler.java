@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -47,7 +49,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 	@Override /* InvocationHandler */
 	public Object invoke(Object proxy, Method method, Object[] args) {
 		Class<?>[] paramTypes = method.getParameterTypes();
-		if (method.getName().equals("equals") && (paramTypes.length == 1) && (paramTypes[0] == java.lang.Object.class)) {
+		if (hasName(method, "equals") && hasArgs(method, java.lang.Object.class)) {
 			Object arg = args[0];
 			if (arg == null)
 				return false;
@@ -63,10 +65,10 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return this.beanProps.equals(bean);
 		}
 
-		if (method.getName().equals("hashCode") && (paramTypes.length == 0))
+		if (hasName(method, "hashCode") && (paramTypes.length == 0))
 			return Integer.valueOf(this.beanProps.hashCode());
 
-		if (method.getName().equals("toString") && (paramTypes.length == 0))
+		if (hasName(method, "toString") && (paramTypes.length == 0))
 			return JsonSerializer.DEFAULT_LAX.toString(this.beanProps);
 
 		String prop = this.meta.getterProps.get(method);

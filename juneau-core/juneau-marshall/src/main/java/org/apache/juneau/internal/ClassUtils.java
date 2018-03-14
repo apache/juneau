@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ClassFlags.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -271,6 +273,561 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified class.
+	 * 
+	 * @param x The class to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified class.
+	 */
+	public static boolean isAll(Class<?> x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (! isDeprecated(x))
+						return false;
+					break;
+				case NOT_DEPRECATED:
+					if (isDeprecated(x))
+						return false;
+					break;
+				case PUBLIC:
+					if (! isPublic(x))
+						return false;
+					break;
+				case NOT_PUBLIC:
+					if (isPublic(x))
+						return false;
+					break;
+				case STATIC:
+					if (! isStatic(x))
+						return false;
+					break;
+				case NOT_STATIC:
+					if (isStatic(x))
+						return false;
+					break;
+				case ABSTRACT:
+					if (! isAbstract(x))
+						return false;
+					break;
+				case NOT_ABSTRACT:
+					if (isAbstract(x))
+						return false;
+					break;
+				case HAS_ARGS:
+				case HAS_NO_ARGS:
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+				
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified method.
+	 * 
+	 * @param x The method to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified method.
+	 */
+	public static boolean isAll(Method x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (! isDeprecated(x))
+						return false;
+					break;
+				case NOT_DEPRECATED:
+					if (isDeprecated(x))
+						return false;
+					break;
+				case HAS_ARGS:
+					if (x.getParameterTypes().length == 0)
+						return false;
+					break;
+				case HAS_NO_ARGS:
+					if (x.getParameterTypes().length != 0)
+						return false;
+					break;
+				case PUBLIC:
+					if (! isPublic(x))
+						return false;
+					break;
+				case NOT_PUBLIC:
+					if (isPublic(x))
+						return false;
+					break;
+				case STATIC:
+					if (! isStatic(x))
+						return false;
+					break;
+				case NOT_STATIC:
+					if (isStatic(x))
+						return false;
+					break;
+				case ABSTRACT:
+					if (! isAbstract(x))
+						return false;
+					break;
+				case NOT_ABSTRACT:
+					if (isAbstract(x))
+						return false;
+					break;
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+				
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified constructor.
+	 * 
+	 * @param x The constructor to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified constructor.
+	 */
+	public static boolean isAll(Constructor<?> x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (! isDeprecated(x))
+						return false;
+					break;
+				case NOT_DEPRECATED:
+					if (isDeprecated(x))
+						return false;
+					break;
+				case HAS_ARGS:
+					if (x.getParameterTypes().length == 0)
+						return false;
+					break;
+				case HAS_NO_ARGS:
+					if (x.getParameterTypes().length != 0)
+						return false;
+					break;
+				case PUBLIC:
+					if (! isPublic(x))
+						return false;
+					break;
+				case NOT_PUBLIC:
+					if (isPublic(x))
+						return false;
+					break;
+				case STATIC:
+				case NOT_STATIC:
+				case ABSTRACT:
+				case NOT_ABSTRACT:
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+				
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified field.
+	 * 
+	 * @param x The field to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified field.
+	 */
+	public static boolean isAll(Field x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (! isDeprecated(x))
+						return false;
+					break;
+				case NOT_DEPRECATED:
+					if (isDeprecated(x))
+						return false;
+					break;
+				case HAS_ARGS:
+					break;
+				case HAS_NO_ARGS:
+					break;
+				case PUBLIC:
+					if (! isPublic(x))
+						return false;
+					break;
+				case NOT_PUBLIC:
+					if (isPublic(x))
+						return false;
+					break;
+				case STATIC:
+					if (! isStatic(x))
+						return false;
+					break;
+				case NOT_STATIC:
+					if (isStatic(x))
+						return false;
+					break;
+				case TRANSIENT:
+					if (! isTransient(x))
+						return false;
+					break;
+				case NOT_TRANSIENT:
+					if (isTransient(x))
+						return false;
+					break;
+				case ABSTRACT:
+				case NOT_ABSTRACT:
+				default:
+					break;
+				
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified class.
+	 * 
+	 * @param x The class to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified class.
+	 */
+	public static boolean isAny(Class<?> x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isDeprecated(x))
+						return true;
+					break;
+				case NOT_DEPRECATED:
+					if (! isDeprecated(x))
+						return true;
+					break;
+				case PUBLIC:
+					if (isPublic(x))
+						return true;
+					break;
+				case NOT_PUBLIC:
+					if (! isPublic(x))
+						return true;
+					break;
+				case STATIC:
+					if (isStatic(x))
+						return true;
+					break;
+				case NOT_STATIC:
+					if (! isStatic(x))
+						return true;
+					break;
+				case ABSTRACT:
+					if (isAbstract(x))
+						return true;
+					break;
+				case NOT_ABSTRACT:
+					if (! isAbstract(x))
+						return true;
+					break;
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				case HAS_ARGS:
+				case HAS_NO_ARGS:
+				default:
+					break;
+				
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified method.
+	 * 
+	 * @param x The method to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified method.
+	 */
+	public static boolean isAny(Method x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isDeprecated(x))
+						return true;
+					break;
+				case NOT_DEPRECATED:
+					if (! isDeprecated(x))
+						return true;
+					break;
+				case HAS_ARGS:
+					if (x.getParameterTypes().length != 0)
+						return true;
+					break;
+				case HAS_NO_ARGS:
+					if (x.getParameterTypes().length == 0)
+						return true;
+					break;
+				case PUBLIC:
+					if (isPublic(x))
+						return true;
+					break;
+				case NOT_PUBLIC:
+					if (! isPublic(x))
+						return true;
+					break;
+				case STATIC:
+					if (isStatic(x))
+						return true;
+					break;
+				case NOT_STATIC:
+					if (! isStatic(x))
+						return true;
+					break;
+				case ABSTRACT:
+					if (isAbstract(x))
+						return true;
+					break;
+				case NOT_ABSTRACT:
+					if (! isAbstract(x))
+						return true;
+					break;
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+				
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified constructor.
+	 * 
+	 * @param x The constructor to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified constructor.
+	 */
+	public static boolean isAny(Constructor<?> x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isDeprecated(x))
+						return true;
+					break;
+				case NOT_DEPRECATED:
+					if (! isDeprecated(x))
+						return true;
+					break;
+				case HAS_ARGS:
+					if (x.getParameterTypes().length != 0)
+						return true;
+					break;
+				case HAS_NO_ARGS:
+					if (x.getParameterTypes().length == 0)
+						return true;
+					break;
+				case PUBLIC:
+					if (isPublic(x))
+						return true;
+					break;
+				case NOT_PUBLIC:
+					if (! isPublic(x))
+						return true;
+					break;
+				case STATIC:
+				case NOT_STATIC:
+				case ABSTRACT:
+				case NOT_ABSTRACT:
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+				
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to the specified field.
+	 * 
+	 * @param x The field to test.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to the specified field.
+	 */
+	public static boolean isAny(Field x, ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isDeprecated(x))
+						return true;
+					break;
+				case NOT_DEPRECATED:
+					if (! isDeprecated(x))
+						return true;
+					break;
+				case PUBLIC:
+					if (isPublic(x))
+						return true;
+					break;
+				case NOT_PUBLIC:
+					if (! isPublic(x))
+						return true;
+					break;
+				case STATIC:
+					if (isStatic(x))
+						return true;
+					break;
+				case NOT_STATIC:
+					if (! isStatic(x))
+						return true;
+					break;
+				case TRANSIENT:
+					if (isTransient(x))
+						return true;
+					break;
+				case NOT_TRANSIENT:
+					if (! isTransient(x))
+						return true;
+					break;
+				case HAS_ARGS:
+				case HAS_NO_ARGS:
+				case ABSTRACT:
+				case NOT_ABSTRACT:
+				default:
+					break;
+				
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified method has the specified arguments.
+	 * 
+	 * @param x The method to test.
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if the specified method has the specified arguments in the exact order.
+	 */
+	public static boolean hasArgs(Method x, Class<?>...args) {
+		Class<?>[] pt = x.getParameterTypes();
+		if (pt.length == args.length) {
+			for (int i = 0; i < pt.length; i++)
+				if (! pt[i].equals(args[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified constructor has the specified arguments.
+	 * 
+	 * @param x The constructor to test.
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if the specified constructor has the specified arguments in the exact order.
+	 */
+	public static boolean hasArgs(Constructor<?> x, Class<?>...args) {
+		Class<?>[] pt = x.getParameterTypes();
+		if (pt.length == args.length) {
+			for (int i = 0; i < pt.length; i++)
+				if (! pt[i].equals(args[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified method has the specified number of arguments.
+	 * 
+	 * @param x The method to test.
+	 * @param number The number of expected arguments.
+	 * @return <jk>true</jk> if the specified method has the specified number of arguments.
+	 */
+	public static boolean hasNumArgs(Method x, int number) {
+		return x.getParameterTypes().length == number;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified constructor has the specified number of arguments.
+	 * 
+	 * @param x The constructor to test.
+	 * @param number The number of expected arguments.
+	 * @return <jk>true</jk> if the specified constructor has the specified number of arguments.
+	 */
+	public static boolean hasNumArgs(Constructor<?> x, int number) {
+		return x.getParameterTypes().length == number;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified method has at most only the specified arguments in any order.
+	 * 
+	 * @param x The method to test.
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if the specified method has at most only the specified arguments in any order.
+	 */
+	public static boolean hasFuzzyArgs(Method x, Class<?>...args) {
+		return fuzzyArgsMatch(x.getParameterTypes(), args) != -1;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified constructor has at most only the specified arguments in any order.
+	 * 
+	 * @param x The constructor to test.
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if the specified constructor has at most only the specified arguments in any order.
+	 */
+	public static boolean hasFuzzyArgs(Constructor<?> x, Class<?>...args) {
+		return fuzzyArgsMatch(x.getParameterTypes(), args) != -1;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 * 
+	 * @param c The class.
+	 * @return <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isDeprecated(Class<?> c) {
+		return c.isAnnotationPresent(Deprecated.class);
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 * 
+	 * @param m The method.
+	 * @return <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isDeprecated(Method m) {
+		return m.isAnnotationPresent(Deprecated.class);
+	
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 * 
+	 * @param c The constructor.
+	 * @return <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isDeprecated(Constructor<?> c) {
+		return c.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 * 
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isDeprecated(Field f) {
+		return f.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified class has the {@link Deprecated @Deprecated} annotation on it.
 	 * 
 	 * @param c The class.
@@ -332,6 +889,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified method is abstract.
+	 * 
+	 * @param m The method.
+	 * @return <jk>true</jk> if the specified method is abstract.
+	 */
+	public static boolean isAbstract(Method m) {
+		return Modifier.isAbstract(m.getModifiers());
+	}
+	
+	/**
 	 * Returns <jk>true</jk> if the specified method is public.
 	 * 
 	 * @param m The method.
@@ -339,6 +906,16 @@ public final class ClassUtils {
 	 */
 	public static boolean isPublic(Method m) {
 		return Modifier.isPublic(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified field is public.
+	 * 
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field is public.
+	 */
+	public static boolean isPublic(Field f) {
+		return Modifier.isPublic(f.getModifiers());
 	}
 
 	/**
@@ -352,6 +929,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified field is static.
+	 * 
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field is static.
+	 */
+	public static boolean isStatic(Field f) {
+		return Modifier.isStatic(f.getModifiers());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified constructor is public.
 	 * 
 	 * @param c The constructor.
@@ -360,7 +947,50 @@ public final class ClassUtils {
 	public static boolean isPublic(Constructor<?> c) {
 		return Modifier.isPublic(c.getModifiers());
 	}
-
+	
+	/**
+	 * Returns <jk>true</jk> if the specified field is transient.
+	 * 
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field is transient.
+	 */
+	public static boolean isTransient(Field f) {
+		return Modifier.isTransient(f.getModifiers());
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified method has the specified name.
+	 * 
+	 * @param m The method to test.
+	 * @param name The name to test for.
+	 * @return <jk>true</jk> if the specified method has the specified name.
+	 */
+	public static boolean hasName(Method m, String name) {
+		return m.getName().equals(name);
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified method has the specified return type.
+	 * 
+	 * @param m The method to test.
+	 * @param c The return type to test for.
+	 * @return <jk>true</jk> if the specified method has the specified return type.
+	 */
+	public static boolean hasReturnType(Method m, Class<?> c) {
+		return m.getReturnType() == c;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified method has the specified parent return type.
+	 * 
+	 * @param m The method to test.
+	 * @param c The return type to test for.
+	 * @return <jk>true</jk> if the specified method has the specified parent return type.
+	 */
+	public static boolean hasReturnTypeParent(Method m, Class<?> c) {
+		return isParentClass(c, m.getReturnType());
+	}
+	
 	/**
 	 * Returns the specified annotation on the specified method.
 	 * 
@@ -447,7 +1077,7 @@ public final class ClassUtils {
 		boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
 		for (Constructor cc : c.getConstructors()) {
 			mod = cc.getModifiers();
-			if (cc.getParameterTypes().length == (isMemberClass ? 1 : 0) && v.isVisible(mod) && isNotDeprecated(cc))
+			if (hasNumArgs(cc, isMemberClass ? 1 : 0) && v.isVisible(mod) && isNotDeprecated(cc))
 				return v.transform(cc);
 		}
 		return null;
@@ -518,6 +1148,57 @@ public final class ClassUtils {
 			throw new FormattedRuntimeException("Invalid type found in resolveParameterType: {0}", actualType);
 		}
 	}
+	
+	/**
+	 * Invokes the specified method using fuzzy-arg matching.
+	 * 
+	 * <p>
+	 * Arguments will be matched to the parameters based on the parameter types.
+	 * <br>Arguments can be in any order.
+	 * <br>Extra arguments will be ignored.
+	 * <br>Missing arguments will be left <jk>null</jk>.
+	 * 
+	 * <p>
+	 * Note that this only works for methods that have distinguishable argument types.
+	 * <br>It's not going to work on methods with generic argument types like <code>Object</code>
+	 * 
+	 * @param m The method being called.
+	 * @param pojo 
+	 * 	The POJO the method is being called on.
+	 * 	<br>Can be <jk>null</jk> for static methods. 
+	 * @param args
+	 * 	The arguments to pass to the method.
+	 * @return
+	 * 	The results of the method invocation.
+	 * @throws Exception
+	 */
+	public static Object invokeMethodFuzzy(Method m, Object pojo, Object...args) throws Exception {
+		return m.invoke(pojo, getMatchingArgs(m.getParameterTypes(), args));
+	}
+
+	/**
+	 * Invokes the specified constructor using fuzzy-arg matching.
+	 * 
+	 * <p>
+	 * Arguments will be matched to the parameters based on the parameter types.
+	 * <br>Arguments can be in any order.
+	 * <br>Extra arguments will be ignored.
+	 * <br>Missing arguments will be left <jk>null</jk>.
+	 * 
+	 * <p>
+	 * Note that this only works for constructors that have distinguishable argument types.
+	 * <br>It's not going to work on constructors with generic argument types like <code>Object</code>
+	 * 
+	 * @param c The constructor being called.
+	 * @param args
+	 * 	The arguments to pass to the constructor.
+	 * @return
+	 * 	The results of the method invocation.
+	 * @throws Exception
+	 */
+	public static <T> T invokeConstructorFuzzy(Constructor<T> c, Object...args) throws Exception {
+		return c.newInstance(getMatchingArgs(c.getParameterTypes(), args));
+	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
 		if (od instanceof Class && id instanceof Class) {
@@ -563,11 +1244,8 @@ public final class ClassUtils {
 	 */
 	public static Method findPublicMethod(Class<?> c, String name, Class<?> returnType, Class<?>...argTypes) {
 		for (Method m : c.getMethods()) {
-			if (isPublic(m) && m.getName().equals(name)) {
-				Class<?> rt = m.getReturnType();
-				if (isParentClass(returnType, rt) && argsMatch(m.getParameterTypes(), argTypes)) 
-					return m;
-			}
+			if (isPublic(m) && hasName(m, name) && hasReturnTypeParent(m, returnType) && argsMatch(m.getParameterTypes(), argTypes)) 
+				return m;
 		}
 		return null;
 	}
@@ -674,7 +1352,7 @@ public final class ClassUtils {
 	 * @param argTypes The class types of the arguments being passed to the method.
 	 * @return The number of matching arguments, or <code>-1</code> a parameter was found that isn't in the list of args.
 	 */
-	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>[] argTypes) {
+	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>... argTypes) {
 		int matches = 0;
 		outer: for (Class<?> p : paramTypes) {
 			p = getWrapperIfPrimitive(p);
@@ -876,7 +1554,7 @@ public final class ClassUtils {
 				if (fuzzyArgs) {
 					con = findPublicConstructor(c3, true, args);
 					if (con != null)
-						return (T)con.newInstance(getMatchingArgs(con, args));
+						return (T)con.newInstance(getMatchingArgs(con.getParameterTypes(), args));
 				}
 
 				throw new FormattedRuntimeException("Could not instantiate class {0}/{1}.  Constructor not found.", c.getName(), c2);
@@ -890,8 +1568,19 @@ public final class ClassUtils {
 		}
 	}
 
-	private static Object[] getMatchingArgs(Constructor<?> con, Object[] args) {
-		Class<?>[] paramTypes = con.getParameterTypes();
+	/**
+	 * Matches arguments to a list of parameter types.
+	 * 
+	 * <p>
+	 * Extra parameters are ignored.
+	 * <br>Missing parameters are left null.
+	 * 
+	 * @param paramTypes The parameter types.
+	 * @param args The arguments to match to the parameter types.
+	 * @return
+	 * 	An array of parameters.
+	 */
+	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object... args) {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
 			Class<?> pt = getWrapperIfPrimitive(paramTypes[i]);
@@ -1200,19 +1889,10 @@ public final class ClassUtils {
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
 	public static Method findPublicFromStringMethod(Class<?> c) {
-		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"}) {
-			for (Method m : c.getMethods()) {
-				if (isStatic(m) && isPublic(m) && isNotDeprecated(m)) {
-					String mName = m.getName();
-					if (mName.equals(methodName) && m.getReturnType() == c) {
-						Class<?>[] args = m.getParameterTypes();
-						if (args.length == 1 && args[0] == String.class) {
-							return m;
-						}
-					}
-				}
-			}
-		}
+		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"}) 
+			for (Method m : c.getMethods()) 
+				if (isAll(m, STATIC, PUBLIC, NOT_DEPRECATED) && hasName(m, methodName) && hasReturnType(m, c) && hasArgs(m, String.class)) 
+					return m;
 		return null;
 	}
 	
@@ -1253,6 +1933,63 @@ public final class ClassUtils {
 		if (o == null)
 			return null;
 		return getStringify(o.getClass()).toString(o);
+	}
+	
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 * 
+	 * @param x The constructor.
+	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public static boolean setAccessible(Constructor<?> x, boolean ignoreExceptions) {
+		try {
+			if (! (x == null || x.isAccessible()))
+				x.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			if (ignoreExceptions)
+				return false;
+			throw new ClassMetaRuntimeException("Could not set accessibility to true on constructor ''{0}''", x); 
+		}
+	}
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 * 
+	 * @param x The method.
+	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public static boolean setAccessible(Method x, boolean ignoreExceptions) {
+		try {
+			if (! (x == null || x.isAccessible()))
+				x.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			if (ignoreExceptions)
+				return false;
+			throw new ClassMetaRuntimeException("Could not set accessibility to true on method ''{0}''", x); 
+		}
+	}
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 * 
+	 * @param x The field.
+	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public static boolean setAccessible(Field x, boolean ignoreExceptions) {
+		try {
+			if (! (x == null || x.isAccessible()))
+				x.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			if (ignoreExceptions)
+				return false;
+			throw new ClassMetaRuntimeException("Could not set accessibility to true on field ''{0}''", x); 
+		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

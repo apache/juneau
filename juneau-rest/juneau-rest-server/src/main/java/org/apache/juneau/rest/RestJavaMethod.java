@@ -392,7 +392,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				params = context.findParams(method, pathPattern, false);
 
 				// Need this to access methods in anonymous inner classes.
-				method.setAccessible(true);
+				setAccessible(method, true);
 			} catch (RestServletException e) {
 				throw e;
 			} catch (Exception e) {

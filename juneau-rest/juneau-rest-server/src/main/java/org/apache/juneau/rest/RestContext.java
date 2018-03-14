@@ -2739,7 +2739,8 @@ public final class RestContext extends BeanContext {
 		allowHeaderParams,
 		allowBodyParam,
 		renderResponseStackTraces,
-		useStackTraceHashes;
+		useStackTraceHashes, 
+		useClasspathResourceCaching;
 	private final String
 		defaultCharset,
 		clientVersionHeader,
@@ -2897,7 +2898,7 @@ public final class RestContext extends BeanContext {
 				mimetypesFileTypeMap.addMimeTypes(mimeType);
 			
 			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class, true, this);
-			boolean useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
+			useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
 			staticResourceManager = new ClasspathResourceManager(resourceClass, rf, useClasspathResourceCaching);
 
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
@@ -2957,7 +2958,7 @@ public final class RestContext extends BeanContext {
 					RestMethod a = method.getAnnotation(RestMethod.class);
 					methodsFound.add(method.getName() + "," + a.name() + "," + a.path());
 					try {
-						if (! Modifier.isPublic(method.getModifiers()))
+						if (! isPublic(method))
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), method.getName());
 
 						RestJavaMethod sm = new RestJavaMethod(resource, method, this);
@@ -3032,7 +3033,7 @@ public final class RestContext extends BeanContext {
 					switch(he) {
 						case PRE_CALL: {
 							if (! _preCallMethods.containsKey(sig)) {
-								Visibility.setAccessible(m);
+								setAccessible(m, false);
 								_preCallMethods.put(sig, m);
 								_preCallMethodParams.add(findParams(m, null, true));
 							}
@@ -3040,7 +3041,7 @@ public final class RestContext extends BeanContext {
 						}
 						case POST_CALL: {
 							if (! _postCallMethods.containsKey(sig)) {
-								Visibility.setAccessible(m);
+								setAccessible(m, false);
 								_postCallMethods.put(sig, m);
 								_postCallMethodParams.add(findParams(m, null, true));
 							}
@@ -3048,7 +3049,7 @@ public final class RestContext extends BeanContext {
 						}
 						case START_CALL: {
 							if (! _startCallMethods.containsKey(sig)) {
-								Visibility.setAccessible(m);
+								setAccessible(m, false);
 								_startCallMethods.put(sig, m);
 								_startCallMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
@@ -3057,7 +3058,7 @@ public final class RestContext extends BeanContext {
 						}
 						case END_CALL: {
 							if (! _endCallMethods.containsKey(sig)) {
-								Visibility.setAccessible(m);
+								setAccessible(m, false);
 								_endCallMethods.put(sig, m);
 								_endCallMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
@@ -3066,7 +3067,7 @@ public final class RestContext extends BeanContext {
 						}
 						case POST_INIT: {
 							if (! _postInitMethods.containsKey(sig)) {
-								Visibility.setAccessible(m);
+								setAccessible(m, false);
 								_postInitMethods.put(sig, m);
 								_postInitMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, RestContext.class);
@@ -3075,7 +3076,7 @@ public final class RestContext extends BeanContext {
 						}
 						case POST_INIT_CHILD_FIRST: {
 							if (! _postInitChildFirstMethods.containsKey(sig)) {
-								Visibility.setAccessible(m);
+								setAccessible(m, false);
 								_postInitChildFirstMethods.put(sig, m);
 								_postInitChildFirstMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, RestContext.class);
@@ -3084,7 +3085,7 @@ public final class RestContext extends BeanContext {
 						}
 						case DESTROY: {
 							if (! _destroyMethods.containsKey(sig)) {
-								Visibility.setAccessible(m);
+								setAccessible(m, false);
 								_destroyMethods.put(sig, m);
 								_destroyMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, RestContext.class);
@@ -3302,8 +3303,10 @@ public final class RestContext extends BeanContext {
 								String name = (i == -1 ? p2 : p2.substring(i+1));
 								String mediaType = mimetypesFileTypeMap.getContentType(name);
 								Map<String,Object> responseHeaders = sfm.responseHeaders != null ? sfm.responseHeaders : staticFileResponseHeaders;
-								staticFilesCache.put(pathInfo, new StreamResource(MediaType.forString(mediaType), responseHeaders, is));
-								return staticFilesCache.get(pathInfo);
+								StreamResource sr = new StreamResource(MediaType.forString(mediaType), responseHeaders, is);
+								if (useClasspathResourceCaching)
+									staticFilesCache.put(pathInfo, sr);
+								return sr;
 							}
 						}
 					}

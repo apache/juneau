@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 
 /**
@@ -115,7 +117,7 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! setAccessible(x))
+			if (! setAccessible(x, true))
 				return null;
 		return x;
 	}
@@ -135,7 +137,7 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! setAccessible(x))
+			if (! setAccessible(x, true))
 				return null;
 		return x;
 	}
@@ -155,56 +157,9 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! setAccessible(x))
+			if (! setAccessible(x, true))
 				return null;
 		return x;
 	}
 
-	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 * 
-	 * @param x The constructor.
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public static boolean setAccessible(Constructor<?> x) {
-		try {
-			if (! (x == null || x.isAccessible()))
-				x.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 * 
-	 * @param x The method.
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public static boolean setAccessible(Method x) {
-		try {
-			if (! (x == null || x.isAccessible()))
-				x.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 * 
-	 * @param x The field.
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public static boolean setAccessible(Field x) {
-		try {
-			if (! (x == null || x.isAccessible()))
-				x.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		}
-	}
 }

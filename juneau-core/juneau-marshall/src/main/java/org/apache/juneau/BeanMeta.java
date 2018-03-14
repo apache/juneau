@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -219,8 +219,7 @@ public class BeanMeta<T> {
 						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties());
 						if (constructorArgs.length != x.getParameterTypes().length)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
-						if (! setAccessible(constructor))
-							throw new BeanRuntimeException(c, "Could not set accessibility to true on method with @BeanConstructor annotation.  Method=''{0}''", constructor.getName());
+						setAccessible(constructor, false);
 					}
 				}
 
@@ -234,8 +233,7 @@ public class BeanMeta<T> {
 				if (constructor == null && beanFilter == null && ctx.beansRequireDefaultConstructor)
 					return "Class does not have the required no-arg constructor";
 
-				if (! setAccessible(constructor))
-					throw new BeanRuntimeException(c, "Could not set accessibility to true on no-arg constructor");
+				setAccessible(constructor, false);
 
 				// Explicitly defined property names in @Bean annotation.
 				Set<String> fixedBeanProps = new LinkedHashSet<>();
@@ -559,8 +557,7 @@ public class BeanMeta<T> {
 
 		for (Class<?> c2 : findClasses(c, stopClass)) {
 			for (Method m : c2.getDeclaredMethods()) {
-				int mod = m.getModifiers();
-				if (Modifier.isStatic(mod))
+				if (isStatic(m))
 					continue;
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
 					continue;
@@ -637,8 +634,7 @@ public class BeanMeta<T> {
 		List<Field> l = new LinkedList<>();
 		for (Class<?> c2 : findClasses(c, stopClass)) {
 			for (Field f : c2.getDeclaredFields()) {
-				int m = f.getModifiers();
-				if (Modifier.isStatic(m) || Modifier.isTransient(m))
+				if (isAny(f, STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
 					continue;

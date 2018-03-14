@@ -13,6 +13,7 @@
 package org.apache.juneau.transform;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ClassFlags.*;
 
 import java.lang.reflect.*;
 
@@ -188,9 +189,9 @@ public class BuilderSwap<T,B> {
 		
 		if (builderClass == null) {
 			for (Constructor cc : pojoClass.getConstructors()) {
-				if (cVis.isVisible(cc)) {
+				if (cVis.isVisible(cc) && hasNumArgs(cc, 1)) {
 					Class<?>[] pt = cc.getParameterTypes();
-					if (pt.length == 1 && isParentClass(Builder.class, pt[0])) {
+					if (isParentClass(Builder.class, pt[0])) {
 						pojoConstructor = cc;
 						builderClass = pt[0];
 					}
@@ -217,14 +218,14 @@ public class BuilderSwap<T,B> {
 
 	private static Method findBuilderCreateMethod(Class<?> pojoClass) {
 		for (Method m : pojoClass.getDeclaredMethods()) 
-			if (isPublic(m) && isStatic(m) && m.getName().equals("create") && m.getReturnType() != Void.class)
+			if (isAll(m, PUBLIC, STATIC) && hasName(m, "create") && ! hasReturnType(m, Void.class))
 				return m;
 		return null;
 	}
 		
 	private static Method findCreatePojoMethod(Class<?> builderClass) {
 		for (Method m : builderClass.getDeclaredMethods()) 
-			if ("build".equals(m.getName()) && ! (isStatic(m) || m.getReturnType() == Void.class)) 
+			if (isAll(m, NOT_STATIC) && hasName(m, "build") && ! hasReturnType(m, Void.class)) 
 				return m;
 		return null;
 	}

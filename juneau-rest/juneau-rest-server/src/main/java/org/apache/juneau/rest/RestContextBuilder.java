@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.serializer.Serializer.*;
@@ -285,7 +286,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		Map<String,Method> map = new LinkedHashMap<>();
 		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
 			if (m.isAnnotationPresent(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
-				Visibility.setAccessible(m);
+				setAccessible(m, false);
 				String sig = ClassUtils.getMethodSignature(m);
 				if (! map.containsKey(sig))
 					map.put(sig, m);
@@ -293,10 +294,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 		for (Method m : map.values()) {
 			ClassUtils.assertArgsOfType(m, RestContextBuilder.class, ServletConfig.class);
-			Class<?>[] argTypes = m.getParameterTypes();
-			Object[] args = new Object[argTypes.length];
+			Class<?>[] pt = m.getParameterTypes();
+			Object[] args = new Object[pt.length];
 			for (int i = 0; i < args.length; i++) {
-				if (argTypes[i] == RestContextBuilder.class)
+				if (pt[i] == RestContextBuilder.class)
 					args[i] = this;
 				else
 					args[i] = this.inner;
