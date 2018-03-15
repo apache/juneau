@@ -281,7 +281,10 @@ public class ParserReader extends Reader {
 		if (iCurrent <= 0)
 			throw new IOException("Buffer underflow.");
 		iCurrent--;
-		column--;
+		if (column == 0)
+			line--;
+		else
+			column--;
 		return this;
 	}
 
