@@ -104,7 +104,7 @@ public class TestMicroservice {
 			final StatusLine[] currentResponse = new StatusLine[1];
 			return RestClient.create()
 				.rootUrl(microserviceURI)
-				.setRetryHandler(
+				.retryHandler(
 					new HttpRequestRetryHandler() {
 						@Override
 						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {

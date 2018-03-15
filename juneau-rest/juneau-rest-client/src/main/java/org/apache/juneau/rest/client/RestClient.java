@@ -152,7 +152,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#setDefaultHeaders(Collection)}
+	 * 			<li class='jm'>{@link RestClientBuilder#defaultHeaders(Collection)}
 	 * 			<li class='jm'>{@link RestClientBuilder#header(String, Object)}
 	 * 		</ul>
 	 * </ul>

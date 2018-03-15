@@ -46,6 +46,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -73,7 +74,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	private HttpClientConnectionManager httpClientConnectionManager;
 	private HttpClientBuilder httpClientBuilder;
 	private CloseableHttpClient httpClient;
-	private SSLOpts sslOpts;
+	private boolean enableSsl = false;
+	private HostnameVerifier hostnameVerifier;
+	private KeyManager[] keyManagers;
+	private TrustManager[] trustManagers;
+	private SecureRandom secureRandom;
+	private String[] sslProtocols, cipherSuites;
 	private boolean pooled;
 
 	/**
@@ -153,54 +159,56 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager}.
 	 * 
 	 * @return The HTTP client builder to use to create the HTTP client.
+	 * @throws NoSuchAlgorithmException 
+	 * @throws KeyManagementException 
 	 */
 	@SuppressWarnings("resource")
-	protected HttpClientConnectionManager createConnectionManager() {
-		if (sslOpts != null) {
-			HostnameVerifier hv = null;
-			switch (sslOpts.getHostVerify()) {
-				case LAX: hv = new NoopHostnameVerifier(); break;
-				case DEFAULT: hv = new DefaultHostnameVerifier(); break;
-				default: throw new RuntimeException("Programmer error");
-			}
+	protected HttpClientConnectionManager createConnectionManager() throws KeyManagementException, NoSuchAlgorithmException {
+		if (enableSsl) {
+			
+			HostnameVerifier hv = hostnameVerifier != null ? hostnameVerifier : new DefaultHostnameVerifier();
+			TrustManager[] tm = trustManagers;
+			String[] sslp = sslProtocols == null ? getDefaultProtocols() : sslProtocols;
+			SecureRandom sr = secureRandom;
+			KeyManager[] km = keyManagers;
+			String[] cs = cipherSuites;
 
-			for (String p : split(sslOpts.getProtocols())) {
-				try {
-					TrustManager tm = new SimpleX509TrustManager(sslOpts.getCertValidate() == SSLOpts.CertValidate.LAX);
+			RegistryBuilder<ConnectionSocketFactory> rb = RegistryBuilder.<ConnectionSocketFactory>create();
+			rb.register("http", PlainConnectionSocketFactory.getSocketFactory());
+			
+			SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom().build();
+			sslContext.init(km, tm, sr);
 
-					SSLContext ctx = SSLContext.getInstance(p);
-					ctx.init(null, new TrustManager[] { tm }, null);
-
-					// Create a socket to ensure this algorithm is acceptable.
-					// This will correctly disallow certain configurations (such as SSL_TLS under FIPS)
-					ctx.getSocketFactory().createSocket().close();
-					SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(ctx, hv);
-					setSSLSocketFactory(sf);
-
-					Registry<ConnectionSocketFactory> r = RegistryBuilder.<ConnectionSocketFactory> create().register("https", sf).build();
-
-					return (pooled ? new PoolingHttpClientConnectionManager(r) : new BasicHttpClientConnectionManager(r));
-				} catch (Throwable t) {}
-			}
-		}
-
-			// Using pooling connection so that this client is threadsafe.
+			SSLConnectionSocketFactory sslcsf = new SSLConnectionSocketFactory(sslContext, sslp, cs, hv);
+			rb.register("https", sslcsf).build();
+			
+			return (pooled ? new PoolingHttpClientConnectionManager(rb.build()) : new BasicHttpClientConnectionManager(rb.build()));
+		}			
+		
+		// Using pooling connection so that this client is threadsafe.
 		return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
 	}
-
+	
 	/**
 	 * Enable SSL support on this client.
 	 * 
-	 * @param opts
-	 * 	The SSL configuration options.
-	 * 	See {@link SSLOpts} for details.
-	 * 	This method is a no-op if <code>sslConfig</code> is <jk>null</jk>.
+	 * <p>
+	 * Used in conjunction with the following methods for setting up SSL parameters:
+	 * <ul class='doctree'>
+	 * 	<li class='jf'>{@link #sslProtocols(String...)}
+	 * 	<li class='jf'>{@link #cipherSuites(String...)}
+	 * 	<li class='jf'>{@link #hostnameVerifier(HostnameVerifier)}
+	 * 	<li class='jf'>{@link #keyManagers(KeyManager...)}
+	 * 	<li class='jf'>{@link #trustManagers(TrustManager...)}
+	 * 	<li class='jf'>{@link #secureRandom(SecureRandom)}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public RestClientBuilder enableSSL(SSLOpts opts) throws KeyStoreException, NoSuchAlgorithmException {
-		this.sslOpts = opts;
+	public RestClientBuilder enableSSL() throws KeyStoreException, NoSuchAlgorithmException {
+		this.enableSsl = true;
 		return this;
 	}
 
@@ -208,16 +216,161 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Enable LAX SSL support.
 	 * 
 	 * <p>
-	 * Certificate chain validation and hostname verification is disabled.
+	 * Same as calling the following:
+	 * <p class='bcode'>
+	 * 	builder
+	 * 		.enableSSL()
+	 * 		.hostnameVerifier(<jk>new</jk> NoopHostnameVerifier())
+	 * 		.trustManagers(<jk>new</jk> SimpleX509TrustManager(<jk>true</jk>));
+	 * </p>
 	 * 
 	 * @return This object (for method chaining).
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
 	 */
 	public RestClientBuilder enableLaxSSL() throws KeyStoreException, NoSuchAlgorithmException {
-		return enableSSL(SSLOpts.LAX);
+		this.enableSsl = true;
+		hostnameVerifier(new NoopHostnameVerifier());
+		trustManagers(new SimpleX509TrustManager(true));
+		return this;
 	}
 
+	/**
+	 * Supported SSL protocols.
+	 * 
+	 * <p>
+	 * This is the value passed to the <code>supportedProtocols</code> parameter of the 
+	 * {@link SSLConnectionSocketFactory#SSLConnectionSocketFactory(SSLContext,String[],String[],HostnameVerifier)} 
+	 * constructor.
+	 * 
+	 * <p>
+	 * The default value is taken from the system property <js>"transport.client.protocol"</js>.
+	 * <br>If system property is not defined, defaults to <code>{<js>"SSL_TLS"</js>,<js>"TLS"</js>,<js>"SSL"</js>}</code>.
+	 * 
+	 * <p>
+	 * This method is effectively ignored if {@link #enableSSL()} has not been called or the client connection manager
+	 * has been defined via {@link #httpClientConnectionManager(HttpClientConnectionManager)}.
+	 * 
+	 * @param sslProtocols The supported SSL protocols.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder sslProtocols(String...sslProtocols) {
+		this.sslProtocols = sslProtocols;
+		return this;
+	}
+	
+	/**
+	 * Supported cipher suites.
+	 * 
+	 * <p>
+	 * This is the value passed to the <code>supportedCipherSuites</code> parameter of the 
+	 * {@link SSLConnectionSocketFactory#SSLConnectionSocketFactory(SSLContext,String[],String[],HostnameVerifier)} 
+	 * constructor.
+	 * 
+	 * <p>
+	 * The default value is <jk>null</jk>.
+	 * 
+	 * <p>
+	 * This method is effectively ignored if {@link #enableSSL()} has not been called or the client connection manager
+	 * has been defined via {@link #httpClientConnectionManager(HttpClientConnectionManager)}.
+	 * 
+	 * @param cipherSuites The supported cipher suites.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder cipherSuites(String...cipherSuites) {
+		this.cipherSuites = cipherSuites;
+		return this;
+	}
+	
+	/**
+	 * Hostname verifier.
+	 * 
+	 * <p>
+	 * This is the value passed to the <code>hostnameVerifier</code> parameter of the 
+	 * {@link SSLConnectionSocketFactory#SSLConnectionSocketFactory(SSLContext,String[],String[],HostnameVerifier)} 
+	 * constructor.
+	 * 
+	 * <p>
+	 * The default value is <jk>null</jk>.
+	 * 
+	 * <p>
+	 * This method is effectively ignored if {@link #enableSSL()} has not been called or the client connection manager
+	 * has been defined via {@link #httpClientConnectionManager(HttpClientConnectionManager)}.
+	 * 
+	 * @param hostnameVerifier The hostname verifier.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder hostnameVerifier(HostnameVerifier hostnameVerifier) {
+		this.hostnameVerifier = hostnameVerifier;
+		return this;
+	}
+
+	/**
+	 * Key managers.
+	 * 
+	 * <p>
+	 * This is the value passed to the <code>keyManagers</code> parameter of the 
+	 * {@link SSLContext#init(KeyManager[],TrustManager[],SecureRandom)} method.
+	 * 
+	 * <p>
+	 * The default value is <jk>null</jk>.
+	 * 
+	 * <p>
+	 * This method is effectively ignored if {@link #enableSSL()} has not been called or the client connection manager
+	 * has been defined via {@link #httpClientConnectionManager(HttpClientConnectionManager)}.
+	 * 
+	 * @param keyManagers The key managers.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder keyManagers(KeyManager...keyManagers) {
+		this.keyManagers = keyManagers;
+		return this;
+	}
+	
+	/**
+	 * Trust managers.
+	 * 
+	 * <p>
+	 * This is the value passed to the <code>trustManagers</code> parameter of the 
+	 * {@link SSLContext#init(KeyManager[],TrustManager[],SecureRandom)} method.
+	 * 
+	 * <p>
+	 * The default value is <jk>null</jk>.
+	 * 
+	 * <p>
+	 * This method is effectively ignored if {@link #enableSSL()} has not been called or the client connection manager
+	 * has been defined via {@link #httpClientConnectionManager(HttpClientConnectionManager)}.
+	 * 
+	 * @param trustManagers The trust managers.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trustManagers(TrustManager...trustManagers) {
+		this.trustManagers = trustManagers;
+		return this;
+	}
+
+	/**
+	 * Trust managers.
+	 * 
+	 * <p>
+	 * This is the value passed to the <code>random</code> parameter of the 
+	 * {@link SSLContext#init(KeyManager[],TrustManager[],SecureRandom)} method.
+	 * 
+	 * <p>
+	 * The default value is <jk>null</jk>.
+	 * 
+	 * <p>
+	 * This method is effectively ignored if {@link #enableSSL()} has not been called or the client connection manager
+	 * has been defined via {@link #httpClientConnectionManager(HttpClientConnectionManager)}.
+	 * 
+	 * @param secureRandom The random number generator.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder secureRandom(SecureRandom secureRandom) {
+		this.secureRandom = secureRandom;
+		return this;
+	}
+	
 	/**
 	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
 	 * 
@@ -264,7 +417,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		Credentials up = new UsernamePasswordCredentials(user, pw);
 		CredentialsProvider p = new BasicCredentialsProvider();
 		p.setCredentials(scope, up);
-		setDefaultCredentialsProvider(p);
+		defaultCredentialsProvider(p);
 		return this;
 	}
 
@@ -281,6 +434,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	/**
+	 * Sets the internal {@link HttpClientConnectionManager}.
+	 * 
+	 * @param httpClientConnectionManager The HTTP client connection manager.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder httpClientConnectionManager(	HttpClientConnectionManager httpClientConnectionManager) {
+		this.httpClientConnectionManager = httpClientConnectionManager;
+		return this;
+	}
 
 	//--------------------------------------------------------------------------------
 	// HTTP headers
@@ -2160,7 +2323,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 	 */
-	public RestClientBuilder setRedirectStrategy(RedirectStrategy redirectStrategy) {
+	public RestClientBuilder redirectStrategy(RedirectStrategy redirectStrategy) {
 		httpClientBuilder.setRedirectStrategy(redirectStrategy);
 		return this;
 	}
@@ -2170,7 +2333,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 	 */
-	public RestClientBuilder setDefaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
+	public RestClientBuilder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
 		httpClientBuilder.setDefaultCookieSpecRegistry(cookieSpecRegistry);
 		return this;
 	}
@@ -2180,7 +2343,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 	 */
-	public RestClientBuilder setRequestExecutor(HttpRequestExecutor requestExec) {
+	public RestClientBuilder requestExecutor(HttpRequestExecutor requestExec) {
 		httpClientBuilder.setRequestExecutor(requestExec);
 		return this;
 	}
@@ -2190,7 +2353,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 	 */
-	public RestClientBuilder setSSLHostnameVerifier(HostnameVerifier hostnameVerifier) {
+	public RestClientBuilder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
 		httpClientBuilder.setSSLHostnameVerifier(hostnameVerifier);
 		return this;
 	}
@@ -2200,7 +2363,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 	 */
-	public RestClientBuilder setPublicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
+	public RestClientBuilder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
 		httpClientBuilder.setPublicSuffixMatcher(publicSuffixMatcher);
 		return this;
 	}
@@ -2210,7 +2373,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLContext(SSLContext)
 	 */
-	public RestClientBuilder setSSLContext(SSLContext sslContext) {
+	public RestClientBuilder sslContext(SSLContext sslContext) {
 		httpClientBuilder.setSSLContext(sslContext);
 		return this;
 	}
@@ -2220,7 +2383,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 	 */
-	public RestClientBuilder setSSLSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
+	public RestClientBuilder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
 		httpClientBuilder.setSSLSocketFactory(sslSocketFactory);
 		return this;
 	}
@@ -2230,7 +2393,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnTotal(int)
 	 */
-	public RestClientBuilder setMaxConnTotal(int maxConnTotal) {
+	public RestClientBuilder maxConnTotal(int maxConnTotal) {
 		httpClientBuilder.setMaxConnTotal(maxConnTotal);
 		return this;
 	}
@@ -2240,7 +2403,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 	 */
-	public RestClientBuilder setMaxConnPerRoute(int maxConnPerRoute) {
+	public RestClientBuilder maxConnPerRoute(int maxConnPerRoute) {
 		httpClientBuilder.setMaxConnPerRoute(maxConnPerRoute);
 		return this;
 	}
@@ -2250,7 +2413,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 	 */
-	public RestClientBuilder setDefaultSocketConfig(SocketConfig config) {
+	public RestClientBuilder defaultSocketConfig(SocketConfig config) {
 		httpClientBuilder.setDefaultSocketConfig(config);
 		return this;
 	}
@@ -2260,7 +2423,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 	 */
-	public RestClientBuilder setDefaultConnectionConfig(ConnectionConfig config) {
+	public RestClientBuilder defaultConnectionConfig(ConnectionConfig config) {
 		httpClientBuilder.setDefaultConnectionConfig(config);
 		return this;
 	}
@@ -2271,7 +2434,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 	 */
-	public RestClientBuilder setConnectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
+	public RestClientBuilder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 		httpClientBuilder.setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 		return this;
 	}
@@ -2281,7 +2444,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 	 */
-	public RestClientBuilder setConnectionManager(HttpClientConnectionManager connManager) {
+	public RestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
 		this.httpClientConnectionManager = connManager;
 		httpClientBuilder.setConnectionManager(connManager);
 		return this;
@@ -2292,7 +2455,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
 	 */
-	public RestClientBuilder setConnectionManagerShared(boolean shared) {
+	public RestClientBuilder connectionManagerShared(boolean shared) {
 		httpClientBuilder.setConnectionManagerShared(shared);
 		return this;
 	}
@@ -2302,7 +2465,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 	 */
-	public RestClientBuilder setConnectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
+	public RestClientBuilder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
 		httpClientBuilder.setConnectionReuseStrategy(reuseStrategy);
 		return this;
 	}
@@ -2312,7 +2475,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 	 */
-	public RestClientBuilder setKeepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
+	public RestClientBuilder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
 		httpClientBuilder.setKeepAliveStrategy(keepAliveStrategy);
 		return this;
 	}
@@ -2322,7 +2485,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 	 */
-	public RestClientBuilder setTargetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
+	public RestClientBuilder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 		httpClientBuilder.setTargetAuthenticationStrategy(targetAuthStrategy);
 		return this;
 	}
@@ -2332,7 +2495,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 	 */
-	public RestClientBuilder setProxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
+	public RestClientBuilder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
 		httpClientBuilder.setProxyAuthenticationStrategy(proxyAuthStrategy);
 		return this;
 	}
@@ -2342,7 +2505,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 	 */
-	public RestClientBuilder setUserTokenHandler(UserTokenHandler userTokenHandler) {
+	public RestClientBuilder userTokenHandler(UserTokenHandler userTokenHandler) {
 		httpClientBuilder.setUserTokenHandler(userTokenHandler);
 		return this;
 	}
@@ -2361,7 +2524,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 	 */
-	public RestClientBuilder setSchemePortResolver(SchemePortResolver schemePortResolver) {
+	public RestClientBuilder schemePortResolver(SchemePortResolver schemePortResolver) {
 		httpClientBuilder.setSchemePortResolver(schemePortResolver);
 		return this;
 	}
@@ -2371,7 +2534,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserAgent(String)
 	 */
-	public RestClientBuilder setUserAgent(String userAgent) {
+	public RestClientBuilder userAgent(String userAgent) {
 		httpClientBuilder.setUserAgent(userAgent);
 		return this;
 	}
@@ -2381,7 +2544,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultHeaders(Collection)
 	 */
-	public RestClientBuilder setDefaultHeaders(Collection<? extends Header> defaultHeaders) {
+	public RestClientBuilder defaultHeaders(Collection<? extends Header> defaultHeaders) {
 		httpClientBuilder.setDefaultHeaders(defaultHeaders);
 		return this;
 	}
@@ -2458,7 +2621,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 	 */
-	public RestClientBuilder setHttpProcessor(HttpProcessor httpprocessor) {
+	public RestClientBuilder httpProcessor(HttpProcessor httpprocessor) {
 		httpClientBuilder.setHttpProcessor(httpprocessor);
 		return this;
 	}
@@ -2468,7 +2631,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 	 */
-	public RestClientBuilder setRetryHandler(HttpRequestRetryHandler retryHandler) {
+	public RestClientBuilder retryHandler(HttpRequestRetryHandler retryHandler) {
 		httpClientBuilder.setRetryHandler(retryHandler);
 		return this;
 	}
@@ -2487,7 +2650,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxy(HttpHost)
 	 */
-	public RestClientBuilder setProxy(HttpHost proxy) {
+	public RestClientBuilder proxy(HttpHost proxy) {
 		httpClientBuilder.setProxy(proxy);
 		return this;
 	}
@@ -2497,7 +2660,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 	 */
-	public RestClientBuilder setRoutePlanner(HttpRoutePlanner routePlanner) {
+	public RestClientBuilder routePlanner(HttpRoutePlanner routePlanner) {
 		httpClientBuilder.setRoutePlanner(routePlanner);
 		return this;
 	}
@@ -2516,7 +2679,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 	 */
-	public RestClientBuilder setConnectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
+	public RestClientBuilder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
 		httpClientBuilder.setConnectionBackoffStrategy(connectionBackoffStrategy);
 		return this;
 	}
@@ -2526,7 +2689,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 	 */
-	public RestClientBuilder setBackoffManager(BackoffManager backoffManager) {
+	public RestClientBuilder backoffManager(BackoffManager backoffManager) {
 		httpClientBuilder.setBackoffManager(backoffManager);
 		return this;
 	}
@@ -2536,7 +2699,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 	 */
-	public RestClientBuilder setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
+	public RestClientBuilder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
 		httpClientBuilder.setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
 		return this;
 	}
@@ -2546,7 +2709,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 	 */
-	public RestClientBuilder setDefaultCookieStore(CookieStore cookieStore) {
+	public RestClientBuilder defaultCookieStore(CookieStore cookieStore) {
 		httpClientBuilder.setDefaultCookieStore(cookieStore);
 		return this;
 	}
@@ -2556,7 +2719,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 	 */
-	public RestClientBuilder setDefaultCredentialsProvider(CredentialsProvider credentialsProvider) {
+	public RestClientBuilder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
 		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
 		return this;
 	}
@@ -2566,7 +2729,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 	 */
-	public RestClientBuilder setDefaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
+	public RestClientBuilder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
 		httpClientBuilder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
 		return this;
 	}
@@ -2576,7 +2739,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 	 */
-	public RestClientBuilder setContentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
+	public RestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 		httpClientBuilder.setContentDecoderRegistry(contentDecoderMap);
 		return this;
 	}
@@ -2586,7 +2749,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 	 */
-	public RestClientBuilder setDefaultRequestConfig(RequestConfig config) {
+	public RestClientBuilder defaultRequestConfig(RequestConfig config) {
 		httpClientBuilder.setDefaultRequestConfig(config);
 		return this;
 	}
@@ -2618,5 +2781,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 		httpClientBuilder.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;
+	}
+	
+	private static String[] getDefaultProtocols() {
+		String sp = System.getProperty("transport.client.protocol");
+		if (isEmpty(sp))
+			return new String[] {"SSL_TLS","TLS","SSL"};
+		return StringUtils.split(sp, ',');
 	}
 }

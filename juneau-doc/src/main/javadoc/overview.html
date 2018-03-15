@@ -340,9 +340,6 @@
 	<ol>
 		<li><p><a class='doclink' href='#juneau-rest-client.3rdPartyProxies'>Interface Proxies Against 3rd-party REST Interfaces</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
-		<ol>
-			<li><p><a class='doclink' href='#juneau-rest-client.SSLOpts'>SSLOpts Bean</a></p>
-		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-client.BASIC'>BASIC Authentication</a></p>
@@ -15883,77 +15880,37 @@
 	<div class='topic'>
 		<p>
 			The simplest way to enable SSL support in the client is to use the 
-			{@link org.apache.juneau.rest.client.RestClientBuilder#enableSSL(SSLOpts)} method and one of the predefined 
-			{@link org.apache.juneau.rest.client.SSLOpts} instances:
+			{@link org.apache.juneau.rest.client.RestClientBuilder#enableLaxSSL()} method.
 		</p>
-		<ul class='doctree'>
-			<li class='jf'>{@link org.apache.juneau.rest.client.SSLOpts#DEFAULT} - Normal certificate and hostname validation.
-			<li class='jf'>{@link org.apache.juneau.rest.client.SSLOpts#LAX} - Allows for self-signed certificates.
-		</ul>
-		
+
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
 	<jc>// Create a client that ignores self-signed or otherwise invalid certificates.</jc>
-	RestClientBuilder builder = RestClient.<jsm>create</jsm>() 
-		.enableSSL(SSLOpts.<jsf>LAX</jsf>);
-		
-	<jc>// ...or...</jc>
-	RestClientBuilder builder = RestClient.<jsm>create</jsm>() 
-		.enableLaxSSL();
+	RestClient rc = RestClient.<jsm>create</jsm>().enableLaxSSL().build();
 		</p>
 		<p>
-			This is functionally equivalent to the following:
+			A more typical scenario using default cert and hostname verification is shown here:
 		</p>
 		<p class='bcode w800'>
-	RestClientBuilder builder = RestClient.<jsm>create</jsm>();
-	
-	HostnameVerifier hv = <jk>new</jk> NoopHostnameVerifier();
-	TrustManager tm = <jk>new</jk> SimpleX509TrustManager(<jk>true</jk>);
-
-	<jk>for</jk> (String p : <jk>new</jk> String[]{<js>"SSL"</js>,<js>"TLS"</js>,<js>"SSL_TLS"</js>}) {
-		SSLContext ctx = SSLContext.<jsm>getInstance</jsm>(p);
-		ctx.init(<jk>null</jk>, <jk>new</jk> TrustManager[] { tm }, <jk>null</jk>);
-		SSLConnectionSocketFactory sf = <jk>new</jk> SSLConnectionSocketFactory(ctx, hv);
-		builder.setSSLSocketFactory(sf);
-		Registry&lt;ConnectionSocketFactory&gt; r = RegistryBuilder.&lt;ConnectionSocketFactory&gt;<jsm>.create</jsm>()
-			.register(<js>"https"</js>, sf).build();
-		builder.setConnectionManager(<jk>new</jk> PoolingHttpClientConnectionManager(r));
-	}
+	RestClient rc = RestClient.create().enableSSL().sslProtocols(<js>"TLSv1.2"</js>).build();
 		</p>
 		<p>
-			More complex SSL support can be enabled through the various {@link org.apache.http.impl.client.HttpClientBuilder} 
-			methods defined on the class.
+			The following convenience methods are provided in the builder class for specifying SSL parameters:
 		</p>
-	
-		<!-- ======================================================================================================= -->
-		<a id='juneau-rest-client.SSLOpts'></a>
-		<h4 class='topic' onclick='toggle(this)'>9.2.1 - SSLOpts Bean</h4>
-		<div class='topic'>
-			<p>
-				The {@link org.apache.juneau.rest.client.SSLOpts} class itself is a bean that can be created by the 
-				parsers.
-				For example, SSL options can be specified in a config file and retrieved as a bean using the 
-				{@link org.apache.juneau.config.Config} class.
-			</p>
-			
-			<h5 class='figure'>Contents of <code>MyConfig.cfg</code></h5>
-			<p class='bcode w800'>
-	<cc>#================================================================================
-	# My Connection Settings
-	#================================================================================</cc>
-	<cs>[Connection]</cs>
-	<ck>url</ck> = <cv>https://myremotehost:9443</cv>
-	<ck>ssl</ck> = <cv>{certValidate:'LAX',hostVerify:'LAX'}</cv>
-			</p>
-			
-			<h5 class='figure'>Code that reads an <code>SSLOpts</code> bean from the config file</h5>
-			<p class='bcode w800'>
-	<jc>// Read config file and set SSL options based on what's in that file.</jc>
-	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	SSLOpts ssl = c.getObject(SSLOpts.<jk>class</jk>, <js>"Connection/ssl"</js>);
-	RestClient rc = RestClient.<jsm>create</jsm>().enableSSL(ssl).build();
-			</p>
-		</div>
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#trustManagers(TrustManager...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#secureRandom(SecureRandom)}
+			</ul>
+		</ul>
+		<p>
+			SSL support can also be enabled by passing in your own connection manager using {@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}.
+		</p>
 	</div>
 	
 	<!-- ======================================================================================================= -->
@@ -21290,7 +21247,7 @@
 				</ul>
 		</ul>
 		
-		<h5 class='topic w800'>juneau-server</h5>
+		<h5 class='topic w800'>juneau-rest-server</h5>
 		<ul class='spaced-list'>
 			<li>
 				Simplified {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)}
@@ -21303,6 +21260,25 @@
 				{@link org.apache.juneau.rest.remoteable.RemoteableServlet} now provides a form page for invoking remoteable methods in a browser.
 			<li>
 				Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
+		</ul>
+		
+		<h5 class='topic w800'>juneau-rest-client</h5>
+		<ul class='spaced-list'>
+			<li>
+				Made improvements to the builder API for defining SSL support.
+				<br>New methods added:
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#trustManagers(TrustManager...)}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#secureRandom(SecureRandom)}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
+				</ul>
+			</ul>
 		</ul>
 	</div>
 	
@@ -24037,7 +24013,7 @@
 					<li>{@link org.apache.juneau.rest.client.HttpMethod}
 					<li>{@link org.apache.juneau.rest.client.ResponsePattern}
 					<li>{@link org.apache.juneau.rest.client.SimpleX509TrustManager}
-					<li>{@link org.apache.juneau.rest.client.SSLOpts}
+					<li><code><del>SSLOpts</del></code>
 				</ul>
 			<li>Removed <code>org.apache.juneau.rest.client.LaxRedirectStrategy</code>.  Use HTTP Client equivalent.
 			<li>New methods on {@link org.apache.juneau.rest.client.RestCall}:
