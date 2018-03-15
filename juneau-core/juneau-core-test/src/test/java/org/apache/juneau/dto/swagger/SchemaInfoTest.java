@@ -438,19 +438,19 @@ public class SchemaInfoTest {
 	public void testRequired() {
 		SchemaInfo t = new SchemaInfo();
 		
-		t.required(true);
-		assertEquals(true, t.getRequired());
-		assertType(Boolean.class, t.getRequired());
+		t.required("['x']");
+		assertEquals("[x]", t.getRequired().toString());
+		assertType(List.class, t.getRequired());
 		
-		t.required("true");
-		assertEquals(true, t.getRequired());
-		assertType(Boolean.class, t.getRequired());
+		t.required("['x']");
+		assertEquals("[x, x]", t.getRequired().toString());
+		assertType(List.class, t.getRequired());
 
-		t.required(new StringBuilder("true"));
-		assertEquals(true, t.getRequired());
-		assertType(Boolean.class, t.getRequired());
+		t.required(new StringBuilder("['x']"));
+		assertEquals("[x, x, x]", t.getRequired().toString());
+		assertType(List.class, t.getRequired());
 		
-		t.required(null);
+		t.setRequired(null);
 		assertNull(t.getRequired());
 	}
 
@@ -861,14 +861,14 @@ public class SchemaInfoTest {
 			.set("pattern", "k")
 			.set("properties", new AMap<String,Map<String,Object>>().append("l", new AMap<String,Object>().append("l1", 1)))
 			.set("readOnly", true)
-			.set("required", true)
+			.set("required", new ASet<String>().appendAll("x"))
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
 			.set("xml", xml().name("o"))
 			.set("$ref", "ref");
 	
-		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:true,'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
+		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
 		
 		t
 			.set("default", "a")
@@ -895,14 +895,14 @@ public class SchemaInfoTest {
 			.set("pattern", "k")
 			.set("properties", "{l:{l1:1}}")
 			.set("readOnly", "true")
-			.set("required", "true")
+			.set("required", "['x']")
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", "true")
 			.set("xml", "{name:'o'}")
 			.set("$ref", "ref");
 	
-		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:true,'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
+		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
 		
 		t
 			.set("default", new StringBuilder("a"))
@@ -929,14 +929,14 @@ public class SchemaInfoTest {
 			.set("pattern", new StringBuilder("k"))
 			.set("properties", new StringBuilder("{l:{l1:1}}"))
 			.set("readOnly", new StringBuilder("true"))
-			.set("required", new StringBuilder("true"))
+			.set("required", new StringBuilder("['x']"))
 			.set("title", new StringBuilder("m"))
 			.set("type", new StringBuilder("n"))
 			.set("uniqueItems", new StringBuilder("true"))
 			.set("xml", new StringBuilder("{name:'o'}"))
 			.set("$ref", new StringBuilder("ref"));
 	
-		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:true,'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
+		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
 
 		assertEquals("a", t.get("default", String.class));
 		assertEquals("['b']", t.get("enum", String.class));
@@ -962,7 +962,7 @@ public class SchemaInfoTest {
 		assertEquals("k", t.get("pattern", String.class));
 		assertEquals("{l:{l1:1}}", t.get("properties", String.class));
 		assertEquals("true", t.get("readOnly", String.class));
-		assertEquals("true", t.get("required", String.class));
+		assertEquals("['x']", t.get("required", String.class));
 		assertEquals("m", t.get("title", String.class));
 		assertEquals("n", t.get("type", String.class));
 		assertEquals("true", t.get("uniqueItems", String.class));
@@ -993,7 +993,7 @@ public class SchemaInfoTest {
 		assertType(String.class, t.get("pattern", Object.class));
 		assertType(Map.class, t.get("properties", Object.class));
 		assertType(Boolean.class, t.get("readOnly", Object.class));
-		assertType(Boolean.class, t.get("required", Object.class));
+		assertType(List.class, t.get("required", Object.class));
 		assertType(String.class, t.get("title", Object.class));
 		assertType(String.class, t.get("type", Object.class));
 		assertType(Boolean.class, t.get("uniqueItems", Object.class));
@@ -1005,7 +1005,7 @@ public class SchemaInfoTest {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 		
-		String s = "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:true,'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}";
+		String s = "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}";
 		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, SchemaInfo.class));
 	}
 }

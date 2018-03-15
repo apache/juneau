@@ -80,7 +80,6 @@ public class SchemaInfo extends SwaggerElement {
 		exclusiveMaximum,
 		exclusiveMinimum,
 		uniqueItems,
-		required,
 		readOnly;
 	private Object 
 		_default,
@@ -91,6 +90,8 @@ public class SchemaInfo extends SwaggerElement {
 	private List<Object> 
 		_enum,
 		allOf;
+	private List<String>
+		required;
 	private Map<String,Map<String,Object>> properties;
 	private Map<String,Object> additionalProperties;
 
@@ -705,36 +706,78 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>required</property>.
 	 * 
+	 * <p>
+	 * The list of required properties.
+	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getRequired() {
+	public List<String> getRequired() {
 		return required;
 	}
 
 	/**
 	 * Bean property setter:  <property>required</property>.
 	 * 
+	 * <p>
+	 * The list of required properties.
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"http"</js>
+	 * 		<li><js>"https"</js>
+	 * 		<li><js>"ws"</js>
+	 * 		<li><js>"wss"</js>
+	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo setRequired(Boolean value) {
-		required = value;
+	public SchemaInfo setRequired(Collection<String> value) {
+		required = newList(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setRequired(Boolean)}.
+	 * Adds one or more values to the <property>required</property> property.
 	 * 
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * <p>
+	 * The list of required properties.
+	 * 
+	 * @param value 
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo required(Object value) {
-		return setRequired(toBoolean(value));
+	public SchemaInfo addRequired(Collection<String> value) {
+		required = addToList(required, value);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #addRequired(Collection)}.
+	 * 
+	 * @param values 
+	 * 	The new value for this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Collection&lt;String&gt;</code>
+	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
+	 * 			</p>
+	 * 		<li><code>String</code> - Individual values
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo required(Object...values) {
+		required = addToList(required, values, String.class);
+		return this;
 	}
 
 	/**
@@ -1323,7 +1366,7 @@ public class SchemaInfo extends SwaggerElement {
 			case "uniqueItems": return uniqueItems(value);
 			case "maxProperties": return maxProperties(value);
 			case "minProperties": return minProperties(value);
-			case "required": return required(value);
+			case "required": return setRequired(null).required(value);
 			case "enum": return setEnum(null)._enum(value);
 			case "type": return type(value);
 			case "items": return items(value);

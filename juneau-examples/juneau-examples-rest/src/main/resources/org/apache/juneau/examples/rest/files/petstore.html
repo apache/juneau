@@ -1,0 +1,522 @@
+<!--
+ ***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************
+-->
+
+<html>
+<head>
+
+<style class='text/css'>
+
+.method-button {
+  	display: inline-block;
+	font-size: 14px;
+    font-weight: 700;
+    min-width: 60px;
+    padding: 6px 15px;
+    text-align: center;
+    border-radius: 3px;
+    text-shadow: 0 1px 0 rgba(0,0,0,.1);
+    font-family: Titillium Web,sans-serif;
+    color: #fff;
+}
+	
+.get .method-button        { background: rgb(97,175,254); }
+.put .method-button        { background: rgb(252,161,48); }
+.post .method-button       { background: rgb(73,204,144); }
+.delete .method-button     { background: rgb(249,62,62); }
+.options .method-button    { background: rgb(153,102,255); }
+.deprecated .method-button { background: rgb(170,170,170); }
+.other .method-button      { background: rgb(230,230,0); }
+
+.op-block {
+	margin: 0 0 15px;
+	font-family: Open Sans,sans-serif;	
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.tag-block-summary {
+	margin: 10px 0px;
+	padding: 10px 0px;
+	font-family: Open Sans,sans-serif;	
+    align-items: center;
+    cursor: pointer;
+	border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+.tag-block-summary .name {
+	font-family: Titillium Web,sans-serif;
+	font-size: 22px;
+	padding: 0px 20px;
+}
+.tag-block-summary .description {
+	font-size: 16px;
+	font-weight: 400;
+	padding: 0px 20px;
+}
+.tag-block-summary .extdocs {
+	float: right;
+	font-size: 14px;
+	font-weight: 400;
+	padding: 0px 20px;
+}
+
+
+.op-block.get        { background: rgba(97,175,254,.1); border: 1px solid rgb(97,175,254); }
+.op-block.put        { background: rgba(252,161,48,.1); border: 1px solid rgb(252,161,48); }
+.op-block.post       { background: rgba(73,204,144,.1); border: 1px solid rgb(73,204,144); }
+.op-block.options    { background: rgba(153,102,255,.1); border: 1px solid rgb(153,102,255); }
+.op-block.delete     { background: rgba(249,62,62,.1); border: 1px solid rgb(249,62,62); }
+.op-block.deprecated { background: rgba(170,170,170,.1); border: 1px solid rgb(170,170,170); }
+.op-block.other      { background: rgba(230,230,0,0.1); border: 1px solid rgb(230,230,0); }
+
+.op-block-summary {	
+	padding:5px;
+}
+
+.op-block-summary .path {
+	font-size: 16px;
+	word-break: break-all;
+    font-family: Source Code Pro,monospace;
+    font-weight: 600;
+	color: #3b4151;
+    padding:10px;
+}
+
+.op-block.deprecated .op-block-summary .path { color: #8f9199; text-decoration: line-through;}
+.op-block.deprecated .op-block-summary .description { color: #8f9199 }
+
+.op-block-summary .description {
+    font-family: Open Sans,sans-serif;
+    color: #3b4151;
+    font-size: 13px;
+    padding:10px;
+}
+
+.op-block-section-header {
+	padding: 8px 20px;
+    background: hsla(0,0%,100%,.8);
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    font-family: Open Sans,sans-ser;
+    color: #8f9199;      
+}
+
+.op-block-section-header .title {
+    font-size: 14px;
+	font-family: Titillium Web,sans-serif;
+    color: #3b4151;
+    margin: 0px;
+}
+
+.is-tag-block-open .tag-block-contents {
+	display: block;
+}
+.is-tag-block-closed .tag-block-contents {
+	display: none;
+}
+
+.is-op-block-open .op-block-contents {
+	display: block;
+}
+.is-op-block-closed .op-block-contents {
+	display: none;
+}
+
+.parameters, .responses {
+    border-collapse: collapse;
+    margin: 20px;
+	width: 95%;
+	border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+.parameters th, .responses th {
+	font-size: 12px;
+    font-weight: 700;
+    padding: 5px 0;
+    text-align: left;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+    font-family: Open Sans,sans-serif;
+    color: #3b4151;
+}
+
+.parameters td, .responses td {
+    padding: 12px 0;
+    text-align: left;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+.parameter-key .in {
+	font-size: 12px;
+    font-family: Source Code Pro,monospace;
+    font-weight: 600;
+    font-style: italic;
+    color: gray;
+}
+
+.parameter-key .name {
+	font-size: 16px;
+    font-weight: 400;
+    font-family: Titillium Web,sans-serif;
+    color: #3b4151;
+}
+
+.parameter-key .name.required {
+    font-weight: 700;
+}
+
+.parameter-key .type {
+    font-size: 12px;
+    padding: 5px 0;
+    font-family: Source Code Pro,monospace;
+    font-weight: 600;
+    color: #3b4151;
+}
+
+.tab {
+    display: flex;
+    margin: 20px 0 10px;
+    padding: 0;
+    list-style: none;
+    cursor: pointer;
+    font-family: Titillium Web,sans-serif;
+    color: #3b4151;
+    font-size: 12px;
+}
+
+.tab li {
+	margin: 0px 2px;
+}
+
+.tab .active {
+    font-weight: 700;
+}
+
+.tab li:not(:last-child):after {
+    content: " -";
+    font-weight:400;
+    box-sizing: inherit;
+}
+
+.tab li:hover {
+    font-weight:700;
+}
+
+.example {
+    font-size: 12px;
+    margin: 0;
+    padding: 5px 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    hyphens: auto;
+    border-radius: 4px;
+    background: #41444e;
+    overflow-wrap: break-word;
+    font-family: Source Code Pro,monospace;
+    font-weight: 400;
+    color: #fff;
+	display:none;
+}
+
+.example.active {
+	display:block;
+}
+
+.section {
+	font-size: 12px;
+    font-weight: 700;
+    padding: 5px 0;
+    text-align: left;
+    font-family: Open Sans,sans-serif;
+    color: #3b4151;
+}
+
+.headers .name {
+    font-size: 12px;
+    padding: 5px 0;
+    font-family: Source Code Pro,monospace;
+    font-weight: 600;
+    color: #3b4151;
+}
+
+div.headers {
+	margin: 20px 0px;
+}
+
+.headers .type {
+    font-size: 12px;
+    padding: 5px 0;
+    font-family: Source Code Pro,monospace;
+    font-weight: 600;
+    color: #3b4151;
+}
+
+.section-name {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 20px;
+	font-size: 12px;
+    font-weight: 700;
+    padding: 5px 0;
+    text-align: left;
+    font-family: Open Sans,sans-serif;
+    color: #3b4151;
+	
+}
+
+.section-table {
+	display: inline-block;
+}
+
+.responses .section-table td {
+	padding: 5px 20px 5px 0px;
+	text-align: left;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+
+	</style>
+	<script>
+
+	function toggleOpBlock(e) {
+		e = e.parentNode;
+		var isOpen = e.classList.contains("is-op-block-open");
+		if (isOpen) {
+			e.classList.add("is-op-block-closed");
+			e.classList.remove("is-op-block-open");
+		} else {
+			e.classList.add("is-op-block-open");
+			e.classList.remove("is-op-block-closed");
+		}
+		window.getSelection().removeAllRanges();
+	}
+	
+	function toggleTagBlock(e) {
+		e = e.parentNode;
+		var isOpen = e.classList.contains("is-tag-block-open");
+		if (isOpen) {
+			e.classList.add("is-tag-block-closed");
+			e.classList.remove("is-tag-block-open");
+		} else {
+			e.classList.add("is-tag-block-open");
+			e.classList.remove("is-tag-block-closed");
+		}
+		window.getSelection().removeAllRanges();
+	}
+
+	function selectExample(e) {
+		var dataName = e.getAttribute("data-name");
+		var examplesNode = e.parentNode.parentNode;
+		var lis = examplesNode.getElementsByTagName("li");
+		var divs = examplesNode.getElementsByTagName("div");
+		
+		for (var i in lis) {
+			var li = lis[i], div = divs[i];
+			if (li.getAttribute("data-name") == dataName) {
+				li.classList.add("active");
+				div.classList.add("active");
+			} else {
+				li.classList.remove("active");
+				div.classList.remove("active");
+			}
+		}
+	}
+	</script>
+</head>
+<body>
+
+<div class='tag-block is-tag-block-open'>
+	<div class='tag-block-summary' onclick='toggleTagBlock(this)'>
+		<span class='name'>pet</span>
+		<span class='description'>Everything about your Pets</span>
+		<span class='extdocs'><a href='http://apache.org'>Find out more</a></span>
+	</div>
+	<div class='tag-block-contents'>
+		<div class='op-block get is-op-block-open'>
+			<div class='op-block-summary' onclick='toggleOpBlock(this)'>
+				<span class='method-button'>GET</span>
+				<span class='path'>/pet</span>
+				<span class='description'>Everything about your Pets</span>
+			</div>
+			<div class='op-block-contents'>
+				<div class="table-container">
+					<div class="op-block-section-header">
+						<h4 class="title">Parameters</h4>
+					</div>	
+					<table class="parameters">
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+						<tr>
+							<td class='parameter-key'>
+								<div class='name required'>body</div>
+								<div class='type'>integer</div>
+								<div class='deprecated'></div>
+								<div class='in'>(body)</div>
+							</td>
+							<td class='parameter-value'>
+								<div class='description'>Pet object that needs to be added to the store.</div>
+								<div class='examples'>
+									<ul class="tab">
+										<li class="active" data-name='model' onclick='selectExample(this)'>Model</li>
+										<li data-name='application/json' onclick='selectExample(this)'>application/json</li>
+										<li data-name='text/xml' onclick='selectExample(this)'>text/xml</li>
+										<li data-name='text/html' onclick='selectExample(this)'>text/html</li>
+										<li data-name='octal/messagepack' onclick='selectExample(this)'>octal/messagepack</li>
+									</ul>
+									<div data-name='model' class='example active'>
+		MODEL
+									</div>
+									<div data-name='application/json' class='example'>
+		APPLICATION/JSON
+									</div>
+									<div data-name='text/xml' class='example'>
+		TEXT/XML
+									</div>
+									<div data-name='text/html' class='example'>
+		TEXT/HTML
+									</div>
+									<div data-name='octal/messagepack' class='example'>
+		OCTAL/MESSAGEPACK
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<div class="op-block-section-header">
+						<h4 class="title">Responses</h4>
+					</div>	
+					<table class="responses">
+						<tr>
+							<th>Code</th>
+							<th>Description</th>
+						</tr>
+						<tr>
+							<td>200</td>
+							<td>
+								<div class='description'>Successful operation</div>
+								<div class='examples'>
+									<ul class="tab">
+										<li class="active" data-name='model' onclick='selectExample(this)'>Model</li>
+										<li data-name='application/json' onclick='selectExample(this)'>application/json</li>
+										<li data-name='text/xml' onclick='selectExample(this)'>text/xml</li>
+										<li data-name='text/html' onclick='selectExample(this)'>text/html</li>
+										<li data-name='octal/messagepack' onclick='selectExample(this)'>octal/messagepack</li>
+									</ul>
+									<div data-name='model' class='example active'>
+		MODEL
+									</div>
+									<div data-name='application/json' class='example'>
+		APPLICATION/JSON
+									</div>
+									<div data-name='text/xml' class='example'>
+		TEXT/XML
+									</div>
+									<div data-name='text/html' class='example'>
+		TEXT/HTML
+									</div>
+									<div data-name='octal/messagepack' class='example'>
+		OCTAL/MESSAGEPACK
+									</div>
+								</div>
+								<div class='headers'>
+									<div class='section-name'>Headers:</div>
+									<table class='section-table'>
+										<tr>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Type</th>
+										</tr>
+										<tr>
+											<td class='name'>X-Rate-Limit</td>
+											<td class='description'>Calls per hour allowed by the user</td>
+											<td class='type'>integer</td>
+										</tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>400</td>
+							<td>
+								<div class='description'>Bad thing happened</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class='op-block put is-closed' onclick='toggle(this)'>
+			<div class='op-block-summary'>
+				<span class='method-button'>PUT</span>
+				<span class='path'>/pet</span>
+				<span class='description'>Everything about your Pets</span>
+			</div>
+		</div>
+		
+		<div class='op-block post is-closed' onclick='toggle(this)'>
+			<div class='op-block-summary'>
+				<span class='method-button'>POST</span>
+				<span class='path'>/pet</span>
+				<span class='description'>Everything about your Pets</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class='tag-block is-tag-block-open'>
+	<div class='tag-block-summary' onclick='toggleTagBlock(this)'>
+		<span class='name'>owner</span>
+		<span class='description'>Everything about your Owner</span>
+		<span class='extdocs'><a href='http://apache.org'>Find out more</a></span>
+	</div>
+	<div class='tag-block-contents'>
+		<div class='op-block delete is-closed' onclick='toggle(this)'>
+			<div class='op-block-summary'>
+				<span class='method-button'>DELETE</span>
+				<span class='path'>/pet</span>
+				<span class='description'>Everything about your Pets</span>
+			</div>
+		</div>
+		<div class='op-block deprecated is-closed' onclick='toggle(this)'>
+			<div class='op-block-summary'>
+				<span class='method-button'>GET</span>
+				<span class='path'>/pet</span>
+				<span class='description'>Everything about your Pets</span>
+			</div>
+		</div>
+		
+		<div class='op-block other is-closed' onclick='toggle(this)'>
+			<div class='op-block-summary'>
+				<span class='method-button'>OTHER</span>
+				<span class='path'>/pet</span>
+				<span class='description'>Everything about your Pets</span>
+			</div>
+		</div>
+		
+		<div class='op-block options is-closed' onclick='toggle(this)'>
+			<div class='op-block-summary'>
+				<span class='method-button'>OPTIONS</span>
+				<span class='path'>/pet</span>
+				<span class='description'>Everything about your Pets</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+
+</html>

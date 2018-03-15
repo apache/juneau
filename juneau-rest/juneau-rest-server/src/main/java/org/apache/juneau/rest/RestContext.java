@@ -3534,7 +3534,7 @@ public final class RestContext extends BeanContext {
 						return p.parse(in, c);
 					}
 				} catch (ParseException e) {
-					throw new ServletException("Could not parse resource '' as media type '"+mediaType+"'.");
+					throw new ServletException("Could not parse resource '"+name+" as media type '"+mediaType+"'.", e);
 				}
 			}
 			throw new ServletException("Unknown media type '"+mediaType+"'");

@@ -285,9 +285,12 @@ public final class JsonParserSession extends ReaderParserSession {
 		if (c == 't') {
 			parseKeyword("true", r);
 			return Boolean.TRUE;
+		} else if (c == 'f') {
+			parseKeyword("false", r);
+			return Boolean.FALSE;
+		} else {
+			throw new ParseException(loc(r), "Unrecognized syntax.  Expected boolean value, actual=''{0}''", r.read(100));
 		}
-		parseKeyword("false", r);
-		return Boolean.FALSE;
 	}
 
 
@@ -627,9 +630,9 @@ public final class JsonParserSession extends ReaderParserSession {
 			String s = r.read(keyword.length());
 			if (s.equals(keyword))
 				return;
-			throw new ParseException(loc(r), "Unrecognized syntax.");
+			throw new ParseException(loc(r), "Unrecognized syntax.  Expected=''{0}'', Actual=''{1}''", keyword, s);
 		} catch (IndexOutOfBoundsException e) {
-			throw new ParseException(loc(r), "Unrecognized syntax.");
+			throw new ParseException(loc(r), "Unrecognized syntax.  Expected=''{0}'', found end-of-file.", keyword);
 		}
 	}
 

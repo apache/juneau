@@ -15,6 +15,8 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.dto.*;
+import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
@@ -56,4 +58,11 @@ public class StaticFilesResource extends BasicRestServletJena {
 			new LinkString("petstore.html","static/petstore.html")
 		};
 	}
+	
+	@RestMethod(name=GET, path="/swagger", summary="xxx")
+	public Swagger testSwagger() throws Exception {
+		Swagger s = getContext().getClasspathResource(Swagger.class, MediaType.JSON, "files/petstore.json", null);
+		return s;
+	}
+	
 }
