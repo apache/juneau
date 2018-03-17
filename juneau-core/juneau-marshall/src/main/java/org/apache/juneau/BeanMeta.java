@@ -240,7 +240,12 @@ public class BeanMeta<T> {
 				String[] includeProperties = ctx.getIncludeProperties(c);
 				String[] excludeProperties = ctx.getExcludeProperties(c);
 
+				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
+				
 				if (beanFilter != null) {
+					
+					if (beanFilter.getProperties() != null)
+						filterProps.addAll(Arrays.asList(beanFilter.getProperties()));
 
 					// Get the 'properties' attribute if specified.
 					if (beanFilter.getProperties() != null && includeProperties == null)
@@ -279,7 +284,7 @@ public class BeanMeta<T> {
 
 				} else /* Use 'better' introspection */ {
 
-					for (Field f : findBeanFields(c2, stopClass, fVis)) {
+					for (Field f : findBeanFields(c2, stopClass, fVis, filterProps)) {
 						String name = findPropertyName(f, fixedBeanProps);
 						if (name != null) {
 							if (! normalProps.containsKey(name))
@@ -288,7 +293,7 @@ public class BeanMeta<T> {
 						}
 					}
 
-					List<BeanMethod> bms = findBeanMethods(c2, stopClass, mVis, fixedBeanProps, propertyNamer);
+					List<BeanMethod> bms = findBeanMethods(c2, stopClass, mVis, fixedBeanProps, filterProps, propertyNamer);
 
 					// Iterate through all the getters.
 					for (BeanMethod bm : bms) {
@@ -441,7 +446,7 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
 			BeanProperty bp = f.getAnnotation(BeanProperty.class);
 			String name = bpName(bp);
-			if (name != null && ! name.isEmpty()) {
+			if (! isEmpty(name)) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
 				return null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties.
@@ -552,7 +557,7 @@ public class BeanMeta<T> {
 	 * @param fixedBeanProps Only include methods whose properties are in this list.
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
-	static final List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, PropertyNamer pn) {
+	static final List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, Set<String> filterProps, PropertyNamer pn) {
 		List<BeanMethod> l = new LinkedList<>();
 
 		for (Class<?> c2 : findClasses(c, stopClass)) {
@@ -571,10 +576,15 @@ public class BeanMeta<T> {
 					continue;
 
 				String n = m.getName();
+				
 				Class<?>[] pt = m.getParameterTypes();
 				Class<?> rt = m.getReturnType();
 				boolean isGetter = false, isSetter = false;
 				String bpName = bpName(bp);
+				
+				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName))) 
+					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
+				
 				if (pt.length == 0) {
 					if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {
 						isGetter = true;
@@ -630,7 +640,7 @@ public class BeanMeta<T> {
 		return l;
 	}
 
-	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v) {
+	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
 		List<Field> l = new LinkedList<>();
 		for (Class<?> c2 : findClasses(c, stopClass)) {
 			for (Field f : c2.getDeclaredFields()) {
@@ -638,8 +648,16 @@ public class BeanMeta<T> {
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
 					continue;
-				if (! (v.isVisible(f) || f.isAnnotationPresent(BeanProperty.class)))
+				
+				BeanProperty bp = f.getAnnotation(BeanProperty.class);
+				String bpName = bpName(bp);
+				
+				if (! (v.isVisible(f) || bp != null))
 					continue;
+				
+				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName))) 
+					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
+				
 				l.add(f);
 			}
 		}
