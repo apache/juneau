@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * The Schema Object allows the definition of input and output data types.
@@ -55,7 +57,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
  * </ul>
  */
-@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,*")
+@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,x-examples,$ref,*")
 public class SchemaInfo extends SwaggerElement {
 
 	private String 
@@ -64,7 +66,8 @@ public class SchemaInfo extends SwaggerElement {
 		description,
 		pattern,
 		type,
-		discriminator;
+		discriminator, 
+		ref;
 	private Number 
 		multipleOf,
 		maximum,
@@ -94,6 +97,7 @@ public class SchemaInfo extends SwaggerElement {
 		required;
 	private Map<String,Map<String,Object>> properties;
 	private Map<String,Object> additionalProperties;
+	private Map<String,String> examples;
 
 	/**
 	 * Bean property getter:  <property>format</property>.
@@ -1095,7 +1099,7 @@ public class SchemaInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>properties</property> property.
+	 * Adds one or more values to the <property>additionalProperties</property> property.
 	 * 
 	 * @param values
 	 * 	The values to add to this property.
@@ -1113,6 +1117,77 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	public SchemaInfo additionalProperties(Object...values) {
 		additionalProperties = addToMap(additionalProperties, values, String.class, Object.class);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>x-examples</property>.
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@BeanProperty("x-examples")
+	public Map<String,String> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty("x-examples")
+	public SchemaInfo setExamples(Map<String,String> value) {
+		examples = newMap(value);
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>examples</property> property.
+	 * 
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo addExamples(Map<String,String> values) {
+		examples = addToMap(examples, values);
+		return this;
+	}
+
+	/**
+	 * Adds a single value to the <property>examples</property> property.
+	 * 
+	 * @param name The extra property name.
+	 * @param value The extra property value.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo example(String name, String value) {
+		additionalProperties = addToMap(additionalProperties, name, value);
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>examples</property> property.
+	 * 
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Map&lt;String,String&gt;</code>
+	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	examples(<js>"{'text/json':'{foo:\\'bar\\'}'}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo examples(Object...values) {
+		examples = addToMap(examples, values, String.class, String.class);
 		return this;
 	}
 
@@ -1306,6 +1381,42 @@ public class SchemaInfo extends SwaggerElement {
 		return setExample(value);
 	}
 
+	/**
+	 * Bean property getter:  <property>$ref</property>.
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@BeanProperty("$ref")
+	public String getRef() {
+		return ref;
+	}
+
+	/**
+	 * Bean property setter:  <property>$ref</property>.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty("$ref")
+	public SchemaInfo setRef(Object value) {
+		ref = StringUtils.asString(value);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #setRef(Object)}.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo ref(Object value) {
+		return setRef(value);
+	}
+
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -1340,6 +1451,7 @@ public class SchemaInfo extends SwaggerElement {
 			case "xml": return toType(getXml(), type);
 			case "externalDocs": return toType(getExternalDocs(), type);
 			case "example": return toType(getExample(), type);
+			case "x-examples": return toType(getExamples(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1378,9 +1490,55 @@ public class SchemaInfo extends SwaggerElement {
 			case "xml": return xml(value);
 			case "externalDocs": return externalDocs(value);
 			case "example": return example(value);
+			case "x-examples": return examples(value);
 			default: 
 				super.set(property, value);
 				return this;
 		}
+	}
+	
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(format != null, "format")
+			.appendIf(title != null, "title")
+			.appendIf(description != null, "description")
+			.appendIf(_default != null, "default")
+			.appendIf(multipleOf != null, "multipleOf")
+			.appendIf(maximum != null, "maximum")
+			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.appendIf(minimum != null, "minimum")
+			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.appendIf(maxLength != null, "maxLength")
+			.appendIf(minLength != null, "minLength")
+			.appendIf(pattern != null, "pattern")
+			.appendIf(maxItems != null, "maxItems")
+			.appendIf(minItems != null, "minItems")
+			.appendIf(uniqueItems != null, "uniqueItems")
+			.appendIf(maxProperties != null, "maxProperties")
+			.appendIf(minProperties != null, "minProperties")
+			.appendIf(required != null, "required")
+			.appendIf(_enum != null, "enum")
+			.appendIf(type != null, "type")
+			.appendIf(items != null, "items")
+			.appendIf(allOf != null, "allOf")
+			.appendIf(properties != null, "properties")
+			.appendIf(additionalProperties != null, "additionalProperties")
+			.appendIf(discriminator != null, "discriminator")
+			.appendIf(readOnly != null, "readOnly")
+			.appendIf(xml != null, "xml")
+			.appendIf(externalDocs != null, "externalDocs")
+			.appendIf(example != null, "example")
+			.appendIf(examples != null, "x-examples");
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this schema info has one or more properties defined on it.
+	 * 
+	 * @return <jk>true</jk> if this schema info has one or more properties defined on it.
+	 */
+	public boolean hasProperties() {
+		return properties != null && ! properties.isEmpty();
 	}
 }

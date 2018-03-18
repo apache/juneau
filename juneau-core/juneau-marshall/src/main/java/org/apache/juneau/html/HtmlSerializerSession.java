@@ -210,18 +210,39 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return w;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* XmlSerializerSession */
 	protected ContentResult serializeAnything(
-		XmlWriter out,
-		Object o,
-		ClassMeta<?> eType,
-		String elementName,
-		Namespace elementNamespace,
-		boolean addNamespaceUris,
-		XmlFormat format,
-		boolean isMixed,
-		boolean preserveWhitespace,
-		BeanPropertyMeta pMeta) throws Exception {
+			XmlWriter out,
+			Object o,
+			ClassMeta<?> eType,
+			String elementName,
+			Namespace elementNamespace,
+			boolean addNamespaceUris,
+			XmlFormat format,
+			boolean isMixed,
+			boolean preserveWhitespace,
+			BeanPropertyMeta pMeta) throws Exception {
+		
+		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML). 
+		ClassMeta<?> type = push(elementName, o, eType);
+		pop();
+		
+		if (type == null) 
+			type = object();
+		else if (type.isDelegate()) 
+			type = ((Delegate)o).getClassMeta();
+		PojoSwap swap = type.getPojoSwap(this);
+		if (swap != null) {
+			o = swap.swap(this, o);
+			type = swap.getSwapClassMeta(this);
+			if (type.isObject())
+				type = getClassMetaForObject(o);
+		}
+
+		HtmlClassMeta html = type.getExtendedMeta(HtmlClassMeta.class);
+		if (type.isMapOrBean() && ! html.isXml()) 
+			return serializeAnything(out, o, eType, elementName, pMeta, 0, false);
 		
 		return super.serializeAnything(out, o, eType, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
 	}

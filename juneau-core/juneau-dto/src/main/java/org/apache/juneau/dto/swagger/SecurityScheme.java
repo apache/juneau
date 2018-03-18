@@ -19,6 +19,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Allows the definition of a security scheme that can be used by the operations.
@@ -511,5 +513,19 @@ public class SecurityScheme extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+	
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(type != null, "type")
+			.appendIf(description != null, "description")
+			.appendIf(name != null, "name")
+			.appendIf(in != null, "in")
+			.appendIf(flow != null, "flow")
+			.appendIf(authorizationUrl != null, "authorizationUrl")
+			.appendIf(tokenUrl != null, "tokenUrl")
+			.appendIf(scopes != null, "scopes");
+		return new MultiSet<>(s, super.keySet());
 	}
 }

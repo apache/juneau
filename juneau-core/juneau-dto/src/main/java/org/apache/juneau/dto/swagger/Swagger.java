@@ -13,11 +13,15 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.utils.*;
 
 /**
  * This is the root document object for the API specification.
@@ -1216,6 +1220,27 @@ public class Swagger extends SwaggerElement {
 		}
 	}
 
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(swagger != null, "swagger")
+			.appendIf(info != null, "info")
+			.appendIf(host != null, "host")
+			.appendIf(basePath != null, "basePath")
+			.appendIf(schemes != null, "schemes")
+			.appendIf(consumes != null, "consumes")
+			.appendIf(produces != null, "produces")
+			.appendIf(paths != null, "paths")
+			.appendIf(definitions != null, "definitions")
+			.appendIf(parameters != null, "parameters")
+			.appendIf(responses != null, "responses")
+			.appendIf(securityDefinitions != null, "securityDefinitions")
+			.appendIf(security != null, "security")
+			.appendIf(tags != null, "tags")
+			.appendIf(externalDocs != null, "externalDocs");
+		return new MultiSet<>(s, super.keySet());
+	}
+	
 //	static final class MethodSorter implements Comparator<String> {
 //		private final Map<String,Integer> methods = new AMap<String,Integer>()
 //			.append("get",7)
@@ -1241,5 +1266,20 @@ public class Swagger extends SwaggerElement {
 	@Override /* Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);
+	}
+
+	/**
+	 * Resolves a <js>"$ref"</js> tags to nodes in this swagger document.
+	 * 
+	 * @param ref The ref tag value.
+	 * @param c The class to convert the reference to.
+	 * @return The referenced node, or <jk>null</jk> if the ref was <jk>null</jk> or empty or not found.
+	 */
+	public <T> T findRef(String ref, Class<T> c) {
+		if (isEmpty(ref))
+			return null;
+		if (! ref.startsWith("#/"))
+			throw new RuntimeException("Unspported reference:  '" + ref + '"');
+		return new PojoRest(this).get(ref.substring(1), c);
 	}
 }

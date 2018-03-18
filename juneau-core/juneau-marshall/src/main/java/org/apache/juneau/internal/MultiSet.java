@@ -31,7 +31,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * 
 	 * @param c Zero or more collections to add to this set.
 	 */
-	@SuppressWarnings("unchecked")
+	@SafeVarargs
 	public MultiSet(Collection<E>...c) {
 		for (Collection<E> cc : c)
 			append(cc);

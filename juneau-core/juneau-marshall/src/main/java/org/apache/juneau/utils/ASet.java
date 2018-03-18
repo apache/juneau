@@ -50,4 +50,17 @@ public final class ASet<T> extends LinkedHashSet<T> {
 		addAll(Arrays.asList(t));
 		return this;
 	}
+	
+	/**
+	 * Adds a value to this set if the boolean value is <jk>true</jk>
+	 * 
+	 * @param b The boolean value.
+	 * @param t The value to add.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> appendIf(boolean b, T t) {
+		if (b)
+			append(t);
+		return this;
+	}
 }

@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Describes a single response from an API Operation.
@@ -378,5 +380,24 @@ public class ResponseInfo extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(description != null, "description")
+			.appendIf(schema != null, "schema")
+			.appendIf(headers != null, "headers")
+			.appendIf(examples != null, "examples");
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this response info has headers associated with it.
+	 * 
+	 * @return <jk>true</jk> if this response info has headers associated with it.
+	 */
+	public boolean hasHeaders() {
+		return headers != null && ! headers.isEmpty();
 	}
 }

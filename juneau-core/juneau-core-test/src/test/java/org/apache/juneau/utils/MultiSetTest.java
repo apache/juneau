@@ -23,7 +23,6 @@ import org.junit.*;
 public class MultiSetTest {
 
 	@Test
-	@SuppressWarnings({ "unchecked" })
 	public void doTest() throws Exception {
 		List<String> l1, l2;
 		MultiSet<String> ms;

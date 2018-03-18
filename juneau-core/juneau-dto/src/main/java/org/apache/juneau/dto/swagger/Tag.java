@@ -13,7 +13,12 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Allows adding meta data to a single tag that is used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a>.
@@ -211,5 +216,14 @@ public class Tag extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+	
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(name != null, "name")
+			.appendIf(description != null, "description")
+			.appendIf(externalDocs != null, "externalDocs");
+		return new MultiSet<>(s, super.keySet());
 	}
 }

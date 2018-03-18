@@ -21253,6 +21253,10 @@
 			<li>
 				<code><ja>@Html</ja>(asXml)</code> and <code><ja>@Html</ja>(asPlainText)</code> replaced with
 				{@link org.apache.juneau.html.annotation.Html#format() @Html(format)}.
+			<li>
+				HTML serializer will now serializers beans and maps as HTML even when those objects are embedded
+				within an object with <code><ja>@Html</ja>(format=<jsf>XML</jsf>)</code>.
+				<br>The previous behavior was to serialize it as XML.
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>
@@ -24548,7 +24552,7 @@
 					<li><del><code>ClassMeta.getRdfMeta()</code></del>
 				</ul>
 			<li>New {@link org.apache.juneau.dto.jsonschema.JsonType#ANY} enum.
-			<li>New {@link org.apache.juneau.html.annotation.Html#asPlainText @Html.asPlainText()} annotation.
+			<li>New <code><del>@Html.asPlainText()</del></code> annotation.
 			<li>New <code><del>HtmlDocSerializerContext.HTMLDOC_cssImports</del></code> property.
 			<li>Significant changes to RDF support.
 				<ul>

@@ -18,19 +18,21 @@
 
 <style class='text/css'>
 
+/*-----------------------------------------------------------------------------------------------------------
+ - Method buttons (e.g GET/PUT/... buttons)                                                                
+ ----------------------------------------------------------------------------------------------------------*/
 .method-button {
   	display: inline-block;
 	font-size: 14px;
-    font-weight: 700;
+    font-weight: bold;
     min-width: 60px;
     padding: 6px 15px;
     text-align: center;
     border-radius: 3px;
     text-shadow: 0 1px 0 rgba(0,0,0,.1);
-    font-family: Titillium Web,sans-serif;
+    font-family: sans-serif;
     color: #fff;
 }
-	
 .get .method-button        { background: rgb(97,175,254); }
 .put .method-button        { background: rgb(252,161,48); }
 .post .method-button       { background: rgb(73,204,144); }
@@ -39,40 +41,48 @@
 .deprecated .method-button { background: rgb(170,170,170); }
 .other .method-button      { background: rgb(230,230,0); }
 
-.op-block {
-	margin: 0 0 15px;
-	font-family: Open Sans,sans-serif;	
-    align-items: center;
-    cursor: pointer;
-    border-radius: 4px;
-}
+/*-----------------------------------------------------------------------------------------------------------
+ - Tag block                                                                                                -
+ - Encapsulates one or more op-blocks.
+ ----------------------------------------------------------------------------------------------------------*/
 
 .tag-block-summary {
 	margin: 10px 0px;
 	padding: 10px 0px;
-	font-family: Open Sans,sans-serif;	
+	font-family: sans-serif;	
     align-items: center;
     cursor: pointer;
 	border-bottom: 1px solid rgba(59,65,81,.2);
 }
-
 .tag-block-summary .name {
-	font-family: Titillium Web,sans-serif;
+	font-family: sans-serif;
 	font-size: 22px;
 	padding: 0px 20px;
 }
 .tag-block-summary .description {
 	font-size: 16px;
-	font-weight: 400;
 	padding: 0px 20px;
 }
 .tag-block-summary .extdocs {
 	float: right;
 	font-size: 14px;
-	font-weight: 400;
 	padding: 0px 20px;
 }
 
+.is-tag-block-open .tag-block-contents { display: block; }
+.is-tag-block-closed .tag-block-contents { display: none; }
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Op block                                                                                          
+ - Encapsulates a single http-method + http-path
+ ----------------------------------------------------------------------------------------------------------*/
+
+.op-block {
+	margin-bottom: 10px;
+	font-family: sans-serif;	
+    align-items: center;
+    border-radius: 4px;
+}
 
 .op-block.get        { background: rgba(97,175,254,.1); border: 1px solid rgb(97,175,254); }
 .op-block.put        { background: rgba(252,161,48,.1); border: 1px solid rgb(252,161,48); }
@@ -83,14 +93,15 @@
 .op-block.other      { background: rgba(230,230,0,0.1); border: 1px solid rgb(230,230,0); }
 
 .op-block-summary {	
-	padding:5px;
+	padding: 5px;
+    cursor: pointer;
 }
 
 .op-block-summary .path {
 	font-size: 16px;
 	word-break: break-all;
-    font-family: Source Code Pro,monospace;
-    font-weight: 600;
+    font-family: monospace;
+    font-weight: bold;
 	color: #3b4151;
     padding:10px;
 }
@@ -99,40 +110,38 @@
 .op-block.deprecated .op-block-summary .description { color: #8f9199 }
 
 .op-block-summary .description {
-    font-family: Open Sans,sans-serif;
+    font-family: sans-serif;
     color: #3b4151;
-    font-size: 13px;
-    padding:10px;
+    font-size: 14px;
+    padding: 10px;
 }
+
+.is-op-block-open .op-block-contents { display: block; }
+.is-op-block-closed .op-block-contents { display: none; }
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Op block section header                                                                                               -
+ - 'Parameters' and 'Responses' subsections in an op-block
+ ----------------------------------------------------------------------------------------------------------*/
 
 .op-block-section-header {
 	padding: 8px 20px;
     background: hsla(0,0%,100%,.8);
     box-shadow: 0 1px 2px rgba(0,0,0,.1);
-    font-family: Open Sans,sans-ser;
+    font-family: sans-serif;
     color: #8f9199;      
 }
 
 .op-block-section-header .title {
     font-size: 14px;
-	font-family: Titillium Web,sans-serif;
+	font-family: sans-serif;
     color: #3b4151;
     margin: 0px;
 }
 
-.is-tag-block-open .tag-block-contents {
-	display: block;
-}
-.is-tag-block-closed .tag-block-contents {
-	display: none;
-}
-
-.is-op-block-open .op-block-contents {
-	display: block;
-}
-.is-op-block-closed .op-block-contents {
-	display: none;
-}
+/*-----------------------------------------------------------------------------------------------------------
+ - Parameters and Respones sections
+ ----------------------------------------------------------------------------------------------------------*/
 
 .parameters, .responses {
     border-collapse: collapse;
@@ -143,11 +152,11 @@
 
 .parameters th, .responses th {
 	font-size: 12px;
-    font-weight: 700;
+    font-weight: bold;
     padding: 5px 0;
     text-align: left;
     border-bottom: 1px solid rgba(59,65,81,.2);
-    font-family: Open Sans,sans-serif;
+    font-family: sans-serif;
     color: #3b4151;
 }
 
@@ -157,40 +166,47 @@
     border-bottom: 1px solid rgba(59,65,81,.2);
 }
 
+/*-----------------------------------------------------------------------------------------------------------
+ - Parameter name
+ ----------------------------------------------------------------------------------------------------------*/
+
 .parameter-key .in {
 	font-size: 12px;
-    font-family: Source Code Pro,monospace;
-    font-weight: 600;
+    font-family: monospace;
+    font-weight: bold;
     font-style: italic;
     color: gray;
 }
 
 .parameter-key .name {
 	font-size: 16px;
-    font-weight: 400;
-    font-family: Titillium Web,sans-serif;
+    font-family: sans-serif;
     color: #3b4151;
 }
 
 .parameter-key .name.required {
-    font-weight: 700;
+    font-weight: bold;
 }
 
 .parameter-key .type {
     font-size: 12px;
     padding: 5px 0;
-    font-family: Source Code Pro,monospace;
-    font-weight: 600;
+    font-family: monospace;
+    font-weight: bold;
     color: #3b4151;
 }
 
+/*-----------------------------------------------------------------------------------------------------------
+ - Examples
+ ----------------------------------------------------------------------------------------------------------*/
+ 
 .tab {
     display: flex;
     margin: 20px 0 10px;
     padding: 0;
     list-style: none;
     cursor: pointer;
-    font-family: Titillium Web,sans-serif;
+    font-family: sans-serif;
     color: #3b4151;
     font-size: 12px;
 }
@@ -200,17 +216,18 @@
 }
 
 .tab .active {
-    font-weight: 700;
+    font-weight: bold;
+    cursor: auto;
 }
 
 .tab li:not(:last-child):after {
     content: " -";
-    font-weight:400;
+    font-weight: normal;
     box-sizing: inherit;
 }
 
 .tab li:hover {
-    font-weight:700;
+    font-weight: bold;
 }
 
 .example {
@@ -223,30 +240,34 @@
     border-radius: 4px;
     background: #41444e;
     overflow-wrap: break-word;
-    font-family: Source Code Pro,monospace;
+    font-family: monospace;
     font-weight: 400;
     color: #fff;
-	display:none;
+	display: none;
 }
 
 .example.active {
 	display:block;
 }
 
+/*-----------------------------------------------------------------------------------------------------------
+ - Headers
+ ----------------------------------------------------------------------------------------------------------*/
+
 .section {
 	font-size: 12px;
-    font-weight: 700;
+    font-weight: bold;
     padding: 5px 0;
     text-align: left;
-    font-family: Open Sans,sans-serif;
+    font-family: sans-serif;
     color: #3b4151;
 }
 
 .headers .name {
     font-size: 12px;
     padding: 5px 0;
-    font-family: Source Code Pro,monospace;
-    font-weight: 600;
+    font-family: monospace;
+    font-weight: bold;
     color: #3b4151;
 }
 
@@ -257,8 +278,8 @@ div.headers {
 .headers .type {
     font-size: 12px;
     padding: 5px 0;
-    font-family: Source Code Pro,monospace;
-    font-weight: 600;
+    font-family: monospace;
+    font-weight: bold;
     color: #3b4151;
 }
 
@@ -267,10 +288,10 @@ div.headers {
 	vertical-align: top;
 	margin-right: 20px;
 	font-size: 12px;
-    font-weight: 700;
+    font-weight: bold;
     padding: 5px 0;
     text-align: left;
-    font-family: Open Sans,sans-serif;
+    font-family: sans-serif;
     color: #3b4151;
 	
 }
@@ -284,7 +305,6 @@ div.headers {
 	text-align: left;
     border-bottom: 1px solid rgba(59,65,81,.2);
 }
-
 
 	</style>
 	<script>
@@ -351,6 +371,9 @@ div.headers {
 			</div>
 			<div class='op-block-contents'>
 				<div class="table-container">
+					<div class='op-block-description'>
+					</div>			
+				
 					<div class="op-block-section-header">
 						<h4 class="title">Parameters</h4>
 					</div>	

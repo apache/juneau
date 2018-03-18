@@ -1,0 +1,316 @@
+/*
+ ***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************
+*/
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Method buttons (e.g GET/PUT/... buttons)                                                                
+ ----------------------------------------------------------------------------------------------------------*/
+.method-button {
+  	display: inline-block;
+	font-size: 14px;
+    font-weight: bold;
+    min-width: 60px;
+    padding: 6px 15px;
+    text-align: center;
+    border-radius: 3px;
+    text-shadow: 0 1px 0 rgba(0,0,0,.1);
+    font-family: sans-serif;
+    color: #fff;
+}
+.get .method-button        { background: rgb(97,175,254); }
+.put .method-button        { background: rgb(252,161,48); }
+.post .method-button       { background: rgb(73,204,144); }
+.delete .method-button     { background: rgb(249,62,62); }
+.options .method-button    { background: rgb(153,102,255); }
+.deprecated .method-button { background: rgb(170,170,170); }
+.other .method-button      { background: rgb(230,230,0); }
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Tag block                                                                                                -
+ - Encapsulates one or more op-blocks.
+ ----------------------------------------------------------------------------------------------------------*/
+
+.tag-block-summary {
+	margin: 10px 0px;
+	padding: 10px 0px;
+	font-family: sans-serif;	
+    align-items: center;
+    cursor: pointer;
+	border-bottom: 1px solid rgba(59,65,81,.2);
+	user-select: none;
+}
+.tag-block-summary .name {
+	font-family: sans-serif;
+	font-size: 22px;
+	padding: 0px 20px;
+}
+.tag-block-summary .description {
+	font-size: 16px;
+	padding: 0px 20px;
+}
+.tag-block-summary .extdocs {
+	float: right;
+	font-size: 14px;
+	padding: 0px 20px;
+}
+
+.tag-block-open .tag-block-contents { display: block; }
+.tag-block-closed .tag-block-contents { display: none; }
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Op block                                                                                          
+ - Encapsulates a single http-method + http-path
+ ----------------------------------------------------------------------------------------------------------*/
+
+.op-block {
+	margin-bottom: 10px;
+	font-family: sans-serif;	
+    align-items: center;
+    border-radius: 4px;
+}
+
+.op-block.get        { background: rgba(97,175,254,.1); border: 1px solid rgb(97,175,254); }
+.op-block.put        { background: rgba(252,161,48,.1); border: 1px solid rgb(252,161,48); }
+.op-block.post       { background: rgba(73,204,144,.1); border: 1px solid rgb(73,204,144); }
+.op-block.options    { background: rgba(153,102,255,.1); border: 1px solid rgb(153,102,255); }
+.op-block.delete     { background: rgba(249,62,62,.1); border: 1px solid rgb(249,62,62); }
+.op-block.deprecated { background: rgba(170,170,170,.1); border: 1px solid rgb(170,170,170); }
+.op-block.other      { background: rgba(230,230,0,0.1); border: 1px solid rgb(230,230,0); }
+
+.op-block-summary {	
+	padding: 5px;
+    cursor: pointer;
+	user-select: none;
+}
+
+.op-block-summary .path {
+	font-size: 16px;
+	word-break: break-all;
+    font-family: monospace;
+    font-weight: bold;
+    padding:10px;
+}
+
+.op-block.deprecated .op-block-summary .path { color: #8f9199; text-decoration: line-through;}
+.op-block.deprecated .op-block-summary .description { color: #8f9199 }
+
+.op-block-summary .summary {
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.op-block-description {
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 10px;
+}
+
+
+.op-block-open .op-block-contents { display: block; }
+.op-block-closed .op-block-contents { display: none; }
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Op block section header                                                                                               -
+ - 'Parameters' and 'Responses' subsections in an op-block
+ ----------------------------------------------------------------------------------------------------------*/
+
+.op-block-section-header {
+	padding: 8px 20px;
+    background: hsla(0,0%,100%,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    font-family: sans-serif;
+}
+
+.op-block-section-header .title {
+    font-size: 14px;
+	font-family: sans-serif;
+    margin: 0px;
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Parameters and Responses sections
+ ----------------------------------------------------------------------------------------------------------*/
+
+table.parameters, table.responses {
+    border-collapse: collapse;
+    margin: 20px;
+	width: 95%;
+	border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+th.parameter-key, th.response-key {
+	font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+	border: none;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+    font-family: sans-serif;
+	background-color: inherit;
+}
+
+td.parameter-value, td.response-value {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Parameter name
+ ----------------------------------------------------------------------------------------------------------*/
+
+.parameter-key .in {
+	font-size: 12px;
+    font-family: monospace;
+    font-weight: bold;
+    font-style: italic;
+    color: gray;
+}
+
+.parameter-key .name {
+	font-size: 16px;
+    font-family: sans-serif;
+}
+
+.parameter-key .name.required {
+    font-weight: bold;
+}
+
+.parameter-key .type {
+    font-size: 12px;
+    padding: 5px 0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Examples
+ ----------------------------------------------------------------------------------------------------------*/
+ 
+.op-block-contents .tab {
+    display: flex;
+    margin: 20px 0 10px;
+    padding: 0;
+    list-style: none;
+}
+
+.op-block-contents .tab li {
+    font-family: sans-serif;
+    font-weight: bold;
+    opacity: 0.5;
+    font-size: 12px;
+	margin: 0px 2px;
+    cursor: pointer;
+}
+
+.op-block-contents .tab li.active {
+    opacity: 1.0;
+	cursor: auto;
+}
+
+.op-block-contents .tab li:not(:last-child):after {
+    content: " -";
+    box-sizing: inherit;
+}
+
+.op-block-contents .tab li:hover {
+    opacity: 1.0;
+}
+
+.op-block-contents .example {
+    font-size: 12px;
+    margin: 0;
+    padding: 5px 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    hyphens: auto;
+    border-radius: 4px;
+    background: #41444e;
+    overflow-wrap: break-word;
+    font-family: monospace;
+    font-weight: 400;
+    color: #fff;
+	display: none;
+}
+
+.op-block-contents .example.active {
+	display:block;
+}
+
+.op-block-contents .model {
+	display: none;
+}
+
+.op-block-contents .model th, 
+.op-block-contents .model td {
+    padding: 0px;
+}
+
+.op-block-contents .model.active {
+	display:block;
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Headers
+ ----------------------------------------------------------------------------------------------------------*/
+
+.section {
+	font-size: 12px;
+    font-weight: bold;
+    padding: 5px 0;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+.headers .name {
+    font-size: 12px;
+    padding: 5px 0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+div.headers {
+	margin: 20px 0px;
+}
+
+.headers .type {
+    font-size: 12px;
+    padding: 5px 0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.section-name {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 20px;
+	font-size: 12px;
+    font-weight: bold;
+    padding: 5px 0;
+    text-align: left;
+    font-family: sans-serif;
+	
+}
+
+.section-table {
+	display: inline-block;
+}
+
+.responses .section-table td {
+	padding: 5px 20px 5px 0px;
+	text-align: left;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+}
+

@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.ui.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
@@ -26,7 +27,7 @@ import org.apache.juneau.rest.widget.*;
  */
 @RestResource(
 	path="/staticFiles",
-	title="Sample static files resource",
+	title="SwaggerUI testbed",
 	description="Sample resource that shows how to use static files.",
 	htmldoc=@HtmlDoc(
 		widgets={
@@ -59,10 +60,15 @@ public class StaticFilesResource extends BasicRestServletJena {
 		};
 	}
 	
-	@RestMethod(name=GET, path="/swagger", summary="xxx")
+	@RestMethod(name=GET, path="/swagger", summary="Normal")
 	public Swagger testSwagger() throws Exception {
 		Swagger s = getContext().getClasspathResource(Swagger.class, MediaType.JSON, "files/petstore.json", null);
 		return s;
 	}
 	
+	@RestMethod(name=GET, path="/swagger2", summary="SwaggerUI", pojoSwaps=SwaggerUI.class)
+	public Swagger testSwagger2() throws Exception {
+		Swagger s = getContext().getClasspathResource(Swagger.class, MediaType.JSON, "files/petstore.json", null);
+		return s;
+	}
 }

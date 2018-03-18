@@ -53,7 +53,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	static final class Builder {
 		boolean noTables, noTableHeaders;
-		HtmlFormat format = HtmlFormat.DEFAULT;
+		HtmlFormat format = HtmlFormat.HTML;
 		Class<? extends HtmlRender> render = HtmlRender.class;
 		String link, anchorText;
 

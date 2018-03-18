@@ -19,6 +19,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Describes a single operation parameter.
@@ -1418,5 +1420,34 @@ public class ParameterInfo extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+	
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(name != null, "name")
+			.appendIf(in != null, "in")
+			.appendIf(description != null, "description")
+			.appendIf(required != null, "required")
+			.appendIf(schema != null, "schema")
+			.appendIf(type != null, "type")
+			.appendIf(format != null, "format")
+			.appendIf(allowEmptyValue != null, "allowEmptyValue")
+			.appendIf(items != null, "items")
+			.appendIf(collectionFormat != null, "collectionFormat")
+			.appendIf(_default != null, "default")
+			.appendIf(maximum != null, "maximum")
+			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.appendIf(minimum != null, "minimum")
+			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.appendIf(maxLength != null, "maxLength")
+			.appendIf(minLength != null, "minLength")
+			.appendIf(pattern != null, "pattern")
+			.appendIf(maxItems != null, "maxItems")
+			.appendIf(minItems != null, "minItems")
+			.appendIf(uniqueItems != null, "uniqueItems")
+			.appendIf(_enum != null, "enum")
+			.appendIf(multipleOf != null, "multipleOf");
+		return new MultiSet<>(s, super.keySet());
 	}
 }

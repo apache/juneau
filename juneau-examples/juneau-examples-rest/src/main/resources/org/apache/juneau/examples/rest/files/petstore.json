@@ -906,6 +906,12 @@
 			},
 			"xml": {
 				"name": "Order"
+			},
+			"x-examples": {
+				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
+				"text/xml": "<foo>bar</foo>",
+				"text/html": "<table>foo</table>",
+				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
 		"User": {
@@ -941,6 +947,12 @@
 			},
 			"xml": {
 				"name": "User"
+			},
+			"x-examples": {
+				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
+				"text/xml": "<foo>bar</foo>",
+				"text/html": "<table>foo</table>",
+				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
 		"Category": {
@@ -956,6 +968,12 @@
 			},
 			"xml": {
 				"name": "Category"
+			},
+			"x-examples": {
+				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123,\n\tflags:[\n\t\t'f1',\n\t\t'f1',\n\t\t'f3'\n\t]\n}",
+				"text/xml": "<foo>bar</foo>",
+				"text/html": "<table>foo</table>",
+				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
 		"Tag": {
@@ -971,6 +989,12 @@
 			},
 			"xml": {
 				"name": "Tag"
+			},
+			"x-examples": {
+				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
+				"text/xml": "<foo>bar</foo>",
+				"text/html": "<table>foo</table>",
+				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
 		"Pet": {
@@ -1025,11 +1049,10 @@
 				"name": "Pet"
 			},
 			"x-examples": {
-				"model": "{foo:}",
-				"application/json": "{foo:'bar'}",
+				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123,\n\tflags:[\n\t\t'f1',\n\t\t'f1',\n\t\t'f3'\n\t]\n}",
 				"text/xml": "<foo>bar</foo>",
 				"text/html": "<table>foo</table>",
-				"octal-messagepack": "123456ABCDEF"
+				"octal-messagepack": "12 34 56 AB CD EF"
 			},
 		},
 		"ApiResponse": {
@@ -1045,6 +1068,12 @@
 				"message": {
 					"type": "string"
 				}
+			},
+			"x-examples": {
+				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
+				"text/xml": "<foo>bar</foo>",
+				"text/html": "<table>foo</table>",
+				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		}
 	},

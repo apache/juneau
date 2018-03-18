@@ -25,8 +25,7 @@ public enum HtmlFormat {
 	
 	/**
 	 * Object is serialized to HTML.
-	 * <br>Useful if you want to switch back to serializing POJOs as HTML within elements
-	 * marked for XML serialization.
+	 * <br>This is the default value for serialization.
 	 */
 	HTML,
 	
@@ -34,10 +33,5 @@ public enum HtmlFormat {
 	 * Object is serialized to XML.
 	 * <br>Useful when creating beans that model HTML elements.
 	 */
-	XML,
-	
-	/**
-	 * Object is serialized using whatever the current context is.
-	 */
-	DEFAULT
+	XML
 }

@@ -17,6 +17,8 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Describes a single API operation on a path.
@@ -1028,5 +1030,60 @@ public class Operation extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(tags != null, "tags")
+			.appendIf(summary != null, "summary")
+			.appendIf(description != null, "description")
+			.appendIf(externalDocs != null, "externalDocs")
+			.appendIf(operationId != null, "operationId")
+			.appendIf(consumes != null, "consumes")
+			.appendIf(produces != null, "produces")
+			.appendIf(parameters != null, "parameters")
+			.appendIf(responses != null, "responses")
+			.appendIf(schemes != null, "schemes")
+			.appendIf(deprecated != null, "deprecated")
+			.appendIf(security != null, "security");
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this operation has the specified tag associated with it.
+	 * 
+	 * @param name The tag name.
+	 * @return <jk>true</jk> if this operation has the specified tag associated with it.
+	 */
+	public boolean hasTag(String name) {
+		return tags != null && tags.contains(name);
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if this operation has no tags associated with it.
+	 * 
+	 * @return <jk>true</jk> if this operation has no tags associated with it.
+	 */
+	public boolean hasNoTags() {
+		return tags == null || tags.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this operation has parameters associated with it.
+	 * 
+	 * @return <jk>true</jk> if this operation has parameters associated with it.
+	 */
+	public boolean hasParameters() {
+		return parameters != null && ! parameters.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this operation has responses associated with it.
+	 * 
+	 * @return <jk>true</jk> if this operation has responses associated with it.
+	 */
+	public boolean hasResponses() {
+		return responses != null && ! responses.isEmpty();
 	}
 }

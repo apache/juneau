@@ -127,6 +127,15 @@ public abstract class SwaggerElement {
 		}
 	}
 	
+	/**
+	 * Returns all the keys on this element.
+	 * 
+	 * @return All the keys on this element.
+	 */
+	public Set<String> keySet() {
+		return extra == null ? Collections.EMPTY_SET : extra.keySet();
+	}
+	
 	@Override /* Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);

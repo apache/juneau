@@ -13,7 +13,12 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented
@@ -367,5 +372,17 @@ public class Info extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+	
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(title != null, "title")
+			.appendIf(description != null, "description")
+			.appendIf(termsOfService != null, "termsOfService")
+			.appendIf(contact != null, "contact")
+			.appendIf(license != null, "license")
+			.appendIf(version != null, "version");
+		return new MultiSet<>(s, super.keySet());
 	}
 }

@@ -13,7 +13,12 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A metadata object that allows for more fine-tuned XML model definitions.
@@ -322,5 +327,16 @@ public class Xml extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+	
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(name != null, "name")
+			.appendIf(namespace != null, "namespace")
+			.appendIf(prefix != null, "prefix")
+			.appendIf(attribute != null, "attribute")
+			.appendIf(wrapped != null, "wrapped");
+		return new MultiSet<>(s, super.keySet());
 	}
 }

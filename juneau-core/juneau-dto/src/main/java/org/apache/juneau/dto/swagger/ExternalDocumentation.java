@@ -16,9 +16,12 @@ import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 import java.net.*;
 import java.net.URI;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
@@ -167,5 +170,13 @@ public class ExternalDocumentation extends SwaggerElement {
 				super.set(property, value);
 				return this;
 		}
+	}
+	
+	@Override /* SwaggerElement */
+	public Set<String> keySet() {
+		ASet<String> s = new ASet<String>()
+			.appendIf(description != null, "description")
+			.appendIf(url != null, "url");
+		return new MultiSet<>(s, super.keySet());
 	}
 }

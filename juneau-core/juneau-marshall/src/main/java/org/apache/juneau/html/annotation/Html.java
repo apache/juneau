@@ -51,7 +51,7 @@ public @interface Html {
 	 * Specifies what format to use for the HTML element.
 	 * 
 	 */
-	HtmlFormat format() default HtmlFormat.DEFAULT;
+	HtmlFormat format() default HtmlFormat.HTML;
 
 	/**
 	 * Adds a hyperlink to a bean property when rendered as HTML.
