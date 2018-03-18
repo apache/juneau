@@ -13,7 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializer.*;
-import static org.apache.juneau.html.HtmlSerializerSession.ContentResult.*;
+import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -206,10 +206,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
 	private XmlWriter doSerialize(Object o, XmlWriter w) throws Exception {
-		serializeAnything(w, o, getExpectedRootType(o), null, getInitialDepth()-1, null, true);
+		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth()-1, true);
 		return w;
 	}
-
+	
 	/**
 	 * Serialize the specified object to the specified writer.
 	 * 
@@ -219,15 +219,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param name
 	 * 	The attribute name of this object if this object was a field in a JSON object (i.e. key of a
 	 * 	{@link java.util.Map.Entry} or property name of a bean).
-	 * @param xIndent The current indentation value.
 	 * @param pMeta The bean property being serialized, or <jk>null</jk> if we're not serializing a bean property.
+	 * @param xIndent The current indentation value.
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.
 	 * @return The type of content encountered.  Either simple (no whitespace) or normal (elements with whitespace).
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o,
-			ClassMeta<?> eType, String name, int xIndent, BeanPropertyMeta pMeta, boolean isRoot) throws Exception {
+			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot) throws Exception {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
@@ -246,12 +246,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		indent += xIndent;
 
-		ContentResult cr = CR_NORMAL;
+		ContentResult cr = CR_ELEMENTS;
 
 		// Determine the type.
 		if (o == null || (aType.isChar() && ((Character)o).charValue() == 0)) {
 			out.tag("null");
-			cr = ContentResult.CR_SIMPLE;
+			cr = ContentResult.CR_MIXED;
 
 		} else {
 
@@ -283,7 +283,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				pop();
 				indent -= xIndent;
 				IOUtils.pipe(o, out);
-				return ContentResult.CR_SIMPLE;
+				return ContentResult.CR_MIXED;
 			}
 
 			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
@@ -297,7 +297,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					indent -= xIndent;
 					pop();
 					out.nl(indent);
-					return serializeAnything(out, o2, null, typeName, xIndent, null, false);
+					return serializeAnything(out, o2, null, typeName, null, xIndent, false);
 				}
 			}
 
@@ -310,25 +310,25 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			} else if (html.isAsPlainText() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsPlainText())) {
 				out.write(o == null ? "null" : o.toString());
-				cr = CR_SIMPLE;
+				cr = CR_MIXED;
 
 			} else if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
 				out.tag("null");
-				cr = CR_SIMPLE;
+				cr = CR_MIXED;
 
 			} else if (sType.isNumber()) {
 				if (eType.isNumber() && ! isRoot)
 					out.append(o);
 				else
 					out.sTag("number").append(o).eTag("number");
-				cr = CR_SIMPLE;
+				cr = CR_MIXED;
 
 			} else if (sType.isBoolean()) {
 				if (eType.isBoolean() && ! isRoot)
 					out.append(o);
 				else
 					out.sTag("boolean").append(o).eTag("boolean");
-				cr = CR_SIMPLE;
+				cr = CR_MIXED;
 
 			} else if (sType.isMap() || (wType != null && wType.isMap())) {
 				out.nlIf(! isRoot, xIndent+1);
@@ -345,7 +345,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					Object urlProp = m.get(h.hrefProperty());
 					Object nameProp = m.get(h.nameProperty());
 					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");
-					cr = CR_SIMPLE;
+					cr = CR_MIXED;
 				} else {
 					out.nlIf(! isRoot, xIndent+2);
 					serializeBeanMap(out, m, eType, pMeta);
@@ -360,27 +360,19 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				out.oTag("a").attrUri("href", o).append('>');
 				out.text(label);
 				out.eTag("a");
-				cr = CR_SIMPLE;
+				cr = CR_MIXED;
 
 			} else {
 				if (isRoot)
 					out.sTag("string").text(toString(o)).eTag("string");
 				else
 					out.text(toString(o));
-				cr = CR_SIMPLE;
+				cr = CR_MIXED;
 			}
 		}
 		pop();
 		indent -= xIndent;
 		return cr;
-	}
-
-	/**
-	 * Identifies what the contents were of a serialized bean.
-	 */
-	static enum ContentResult {
-		CR_SIMPLE,    // Simple content.  Shouldn't use whitespace.
-		CR_NORMAL     // Normal content.  Use whitespace.
 	}
 
 	@SuppressWarnings({ "rawtypes" })
@@ -428,15 +420,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.cTag();
 			if (link != null)
 				out.oTag(i+3, "a").attrUri("href", link.replace("{#}", asString(value))).cTag();
-			ContentResult cr = serializeAnything(out, key, keyType, null, 2, null, false);
+			ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false);
 			if (link != null)
 				out.eTag("a");
-			if (cr == CR_NORMAL)
+			if (cr == CR_ELEMENTS)
 				out.i(i+2);
 			out.eTag("td").nl(i+2);
 			out.sTag(i+2, "td");
-			cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), 2, null, false);
-			if (cr == CR_NORMAL)
+			cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false);
+			if (cr == CR_ELEMENTS)
 				out.ie(i+2);
 			out.eTag("td").nl(i+2);
 			out.ie(i+1).eTag("tr").nl(i+1);
@@ -496,8 +488,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			try {
 				if (link != null)
 					out.oTag(i+3, "a").attrUri("href", link).cTag();
-				ContentResult cr = serializeAnything(out, value, cMeta, key, 2, pMeta, false);
-				if (cr == CR_NORMAL)
+				ContentResult cr = serializeAnything(out, value, cMeta, key, pMeta, 2, false);
+				if (cr == CR_ELEMENTS)
 					out.i(i+2);
 				if (link != null)
 					out.eTag("a");
@@ -578,7 +570,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 				if (cm == null) {
 					out.i(i+2);
-					serializeAnything(out, o, null, null, 1, null, false);
+					serializeAnything(out, o, null, null, null, 1, false);
 					out.nl(0);
 
 				} else if (cm.isMap() && ! (cm.isBeanMap())) {
@@ -586,8 +578,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 					for (Object k : th) {
 						out.sTag(i+2, "td");
-						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), 2, null, false);
-						if (cr == CR_NORMAL)
+						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false);
+						if (cr == CR_ELEMENTS)
 							out.i(i+2);
 						out.eTag("td").nl(i+2);
 					}
@@ -620,8 +612,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							out.cTag();
 							if (link != null)
 								out.oTag("a").attrUri("href", link).cTag();
-							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
-							if (cr == CR_NORMAL)
+							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), pMeta, 2, false);
+							if (cr == CR_ELEMENTS)
 								out.i(i+2);
 							if (link != null)
 								out.eTag("a");
@@ -647,10 +639,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				out.cTag();
 				if (link != null)
 					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", asString(o))).cTag();
-				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, 1, null, false);
+				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false);
 				if (link != null)
 					out.eTag("a");
-				if (cr == CR_NORMAL)
+				if (cr == CR_ELEMENTS)
 					out.ie(i+1);
 				out.eTag("li").nl(i+1);
 			}
