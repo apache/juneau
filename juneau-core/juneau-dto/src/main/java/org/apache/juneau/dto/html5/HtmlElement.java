@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.html.annotation.HtmlFormat.*;
 
 import java.net.*;
 import java.net.URI;
@@ -36,7 +37,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
-@org.apache.juneau.html.annotation.Html(asXml=true)
+@org.apache.juneau.html.annotation.Html(format=XML)
 public abstract class HtmlElement {
 
 	private LinkedHashMap<String,Object> attrs;

@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.html.annotation.HtmlFormat.*;
 
 import static org.junit.Assert.*;
 
@@ -2970,7 +2971,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Html(asXml=true)
+	@Html(format=XML)
 	public static class BeanWithWhitespaceTextFields {
 		@Xml(format=XmlFormat.TEXT)
 		public String a;
@@ -2981,7 +2982,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Html(asXml=true)
+	@Html(format=XML)
 	public static class BeanWithWhitespaceTextPwsFields {
 		@Xml(format=XmlFormat.TEXT_PWS)
 		public String a;
@@ -2992,7 +2993,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Html(asXml=true)
+	@Html(format=XML)
 	public static class BeanWithWhitespaceMixedFields {
 		@Xml(format=XmlFormat.MIXED)
 		public String[] a;
@@ -3003,7 +3004,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Html(asXml=true)
+	@Html(format=XML)
 	public static class BeanWithWhitespaceMixedPwsFields {
 		@Xml(format=XmlFormat.MIXED_PWS)
 		public String[] a;

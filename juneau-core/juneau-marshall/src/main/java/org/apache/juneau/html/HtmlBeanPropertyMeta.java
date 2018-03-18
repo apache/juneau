@@ -22,7 +22,8 @@ import org.apache.juneau.html.annotation.*;
 @SuppressWarnings("rawtypes")
 public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
-	private final boolean asXml, noTables, noTableHeaders, asPlainText;
+	private final boolean noTables, noTableHeaders;
+	private final HtmlFormat format;
 	private final HtmlRender render;
 	private final String link, anchorText;
 
@@ -42,31 +43,28 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		if (bpm.getSetter() != null)
 			b.findHtmlInfo(bpm.getSetter().getAnnotation(Html.class));
 
-		this.asXml = b.asXml;
+		this.format = b.format;
 		this.noTables = b.noTables;
 		this.noTableHeaders = b.noTableHeaders;
-		this.asPlainText = b.asPlainText;
 		this.render = bpm.getBeanMeta().getClassMeta().getBeanContext().newInstance(HtmlRender.class, b.render);
 		this.link = b.link;
 		this.anchorText = b.anchorText;
 	}
 
 	static final class Builder {
-		boolean asXml, noTables, noTableHeaders, asPlainText;
+		boolean noTables, noTableHeaders;
+		HtmlFormat format = HtmlFormat.DEFAULT;
 		Class<? extends HtmlRender> render = HtmlRender.class;
 		String link, anchorText;
 
 		void findHtmlInfo(Html html) {
 			if (html == null)
 				return;
-			if (html.asXml())
-				asXml = html.asXml();
+			format = html.format();
 			if (html.noTables())
 				noTables = html.noTables();
 			if (html.noTableHeaders())
 				noTableHeaders = html.noTableHeaders();
-			if (html.asPlainText())
-				asPlainText = html.asPlainText();
 			if (html.render() != HtmlRender.class)
 				render = html.render();
 			if (! html.link().isEmpty())
@@ -77,23 +75,39 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns whether this bean property should be serialized as XML instead of HTML.
+	 * Returns the format of this bean property
 	 * 
-	 * @return <jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#asXml() @Html.asXml()} is <jk>true</jk>.
+	 * @return The value of the {@link Html#format()} annotation.
 	 */
-	protected boolean isAsXml() {
-		return asXml;
+	protected HtmlFormat getFormat() {
+		return format;
 	}
 
 	/**
-	 * Returns whether this bean property should be serialized as plain text instead of HTML.
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 * 
-	 * @return
-	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#asPlainText() @Html.asPlainText()} is
-	 * 	<jk>true</jk>.
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 */
-	protected boolean isAsPlainText() {
-		return asPlainText;
+	protected boolean isXml() {
+		return format == HtmlFormat.XML;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
+	 */
+	protected boolean isPlainText() {
+		return format == HtmlFormat.PLAIN_TEXT;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
+	 */
+	protected boolean isHtml() {
+		return format == HtmlFormat.HTML;
 	}
 
 	/**

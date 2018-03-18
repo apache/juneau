@@ -23,7 +23,8 @@ import org.apache.juneau.internal.*;
 public class HtmlClassMeta extends ClassMetaExtended {
 
 	private final Html html;
-	private final boolean asXml, noTables, noTableHeaders, asPlainText;
+	private final boolean noTables, noTableHeaders;
+	private final HtmlFormat format;
 	private final HtmlRender<?> render;
 
 	/**
@@ -35,16 +36,14 @@ public class HtmlClassMeta extends ClassMetaExtended {
 		super(cm);
 		this.html = ReflectionUtils.getAnnotation(Html.class, getInnerClass());
 		if (html != null) {
-			asXml = html.asXml();
+			format = html.format();
 			noTables = html.noTables();
 			noTableHeaders = html.noTableHeaders();
-			asPlainText = html.asPlainText();
 			render = cm.getBeanContext().newInstance(HtmlRender.class, html.render());
 		} else {
-			asXml = false;
+			format = HtmlFormat.HTML;
 			noTables = false;
 			noTableHeaders = false;
-			asPlainText = false;
 			render = null;
 		}
 	}
@@ -59,21 +58,39 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Html#asXml() @Html.asXml()} annotation defined on the class.
+	 * Returns the {@link Html#format() @Html.format()} annotation defined on the class.
 	 * 
 	 * @return The value of the annotation.
 	 */
-	protected boolean isAsXml() {
-		return asXml;
+	protected HtmlFormat getFormat() {
+		return format;
 	}
 
 	/**
-	 * Returns the {@link Html#asPlainText() @Html.asPlainText()} annotation defined on the class.
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 * 
-	 * @return The value of the annotation.
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 */
-	protected boolean isAsPlainText() {
-		return asPlainText;
+	protected boolean isXml() {
+		return format == HtmlFormat.XML;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
+	 */
+	protected boolean isPlainText() {
+		return format == HtmlFormat.PLAIN_TEXT;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
+	 */
+	protected boolean isHtml() {
+		return format == HtmlFormat.HTML;
 	}
 
 	/**

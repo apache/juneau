@@ -21250,6 +21250,9 @@
 			<li>
 				A runtime exception is now thrown if you define a <code><ja>@BeanProperty</ja>(name)</code> but forget to
 				add it to your <code><ja>@Bean</ja>(properties)</code> annotation.
+			<li>
+				<code><ja>@Html</ja>(asXml)</code> and <code><ja>@Html</ja>(asPlainText)</code> replaced with
+				{@link org.apache.juneau.html.annotation.Html#format() @Html(format)}.
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>

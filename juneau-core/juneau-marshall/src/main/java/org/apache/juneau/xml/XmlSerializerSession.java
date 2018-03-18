@@ -271,7 +271,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
-	protected XmlWriter serializeAnything(
+	protected ContentResult serializeAnything(
 			XmlWriter out,
 			Object o,
 			ClassMeta<?> eType,
@@ -504,7 +504,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				out.nl(i);
 		}
 
-		return out;
+		return rc;
 	}
 
 	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,

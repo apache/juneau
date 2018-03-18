@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.html.annotation.HtmlFormat.*;
 
 import java.util.*;
 
@@ -222,7 +223,7 @@ public class HtmlTest {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
-	@Html(asPlainText=true)
+	@Html(format=PLAIN_TEXT)
 	public static class B1 {
 		public String f1 = "<f1>";
 		@Override /* Object */
@@ -232,7 +233,7 @@ public class HtmlTest {
 	}
 
 	public static class B2 {
-		@Html(asPlainText=true)
+		@Html(format=PLAIN_TEXT)
 		public String f1 = "<f1>";
 	}
 
@@ -254,13 +255,13 @@ public class HtmlTest {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
-	@Html(asXml=true)
+	@Html(format=XML)
 	public static class C1 {
 		public String f1 = "<f1>";
 	}
 
 	public static class C2 {
-		@Html(asXml=true)
+		@Html(format=XML)
 		public String f1 = "<f1>";
 	}
 

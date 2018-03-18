@@ -210,6 +210,21 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return w;
 	}
 	
+	@Override /* XmlSerializerSession */
+	protected ContentResult serializeAnything(
+		XmlWriter out,
+		Object o,
+		ClassMeta<?> eType,
+		String elementName,
+		Namespace elementNamespace,
+		boolean addNamespaceUris,
+		XmlFormat format,
+		boolean isMixed,
+		boolean preserveWhitespace,
+		BeanPropertyMeta pMeta) throws Exception {
+		
+		return super.serializeAnything(out, o, eType, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
+	}
 	/**
 	 * Serialize the specified object to the specified writer.
 	 * 
@@ -301,14 +316,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				}
 			}
 
-			if (html.isAsXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsXml())) {
+			if (html.isXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isXml())) {
 				pop();
 				indent++;
 				super.serializeAnything(out, o, null, null, null, false, XmlFormat.MIXED, false, false, null);
 				indent -= xIndent+1;
 				return cr;
 
-			} else if (html.isAsPlainText() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsPlainText())) {
+			} else if (html.isPlainText() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isPlainText())) {
 				out.write(o == null ? "null" : o.toString());
 				cr = CR_MIXED;
 

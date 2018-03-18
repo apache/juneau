@@ -112,7 +112,7 @@ public final class HtmlParserSession extends XmlParserSession {
 
 		// Handle @Html(asXml=true) beans.
 		HtmlClassMeta hcm = sType.getExtendedMeta(HtmlClassMeta.class);
-		if (hcm.isAsXml())
+		if (hcm.getFormat() == HtmlFormat.XML)
 			return super.parseAnything(eType, null, r, outer, false, pMeta);
 
 		Object o = null;

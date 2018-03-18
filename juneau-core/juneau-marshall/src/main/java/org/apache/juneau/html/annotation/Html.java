@@ -48,21 +48,10 @@ public @interface Html {
 	String anchorText() default "";
 
 	/**
-	 * Treat as plain text.
+	 * Specifies what format to use for the HTML element.
 	 * 
-	 * <p>
-	 * Object is serialized to a String using the <code>toString()</code> method and written directly to output.
-	 * Useful when you want to serialize custom HTML.
 	 */
-	boolean asPlainText() default false;
-
-	/**
-	 * Treat as XML.
-	 * 
-	 * <p>
-	 * Useful when creating beans that model HTML elements.
-	 */
-	boolean asXml() default false;
+	HtmlFormat format() default HtmlFormat.DEFAULT;
 
 	/**
 	 * Adds a hyperlink to a bean property when rendered as HTML.
