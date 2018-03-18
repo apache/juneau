@@ -130,6 +130,7 @@ article * {
 
 article table {
 	border: none;
+	width: 100%;
 }
 
 article td {
