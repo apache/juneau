@@ -43,6 +43,9 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			script("text/javascript", RM.getString("SwaggerUI.js"))
 		);
 		
+		// Operations without tags are rendered first.
+		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
+
 		for (Tag t : s.getTags()) {
 			Div tagBlock = div()._class("tag-block tag-block-open").children(
 				tagBlockSummary(t),
@@ -54,17 +57,20 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return outer;
 	}
 	
-	private Div tagBlockSummary(Tag t) {
+	// Creates the "pet  Everything about your Pets  ext-link" header.
+	private HtmlElement tagBlockSummary(Tag t) {
 		ExternalDocumentation ed = t.getExternalDocs();
 		String edd = ed == null ? null : ed.getDescription();
+		Object extDocText = ed == null ? null : (edd != null ? edd : ed.getUrl());
 		
-		return (Div)div()._class("tag-block-summary").children(
+		return div()._class("tag-block-summary").children(
 			span(t.getName())._class("name"),
 			span(t.getDescription())._class("description"),
-			ed == null ? null : span(a(ed.getUrl(), edd == null ? ed.getUrl() : edd))._class("extdocs")
+			ed == null ? null : span(a(ed.getUrl(), extDocText))._class("extdocs")
 		).onclick("toggleTagBlock(this)");
 	}
 	
+	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
 	private Div tagBlockContents(Swagger s, Tag t) {
 		Div tagBlockContents = div()._class("tag-block-contents");
 		
@@ -73,10 +79,11 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			for (Map.Entry<String,Operation> e2 : e.getValue().entrySet()) {
 				String opName = e2.getKey();
 				Operation op = e2.getValue();
-				if (op.hasTag(t.getName())) 
+				if ((t == null && op.hasNoTags()) || (t != null && op.hasTag(t.getName())))
 					tagBlockContents.child(opBlock(s, path, opName, op));
 			}
 		}
+		
 		return tagBlockContents;
 	}
 	
@@ -89,17 +96,23 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		);
 	}
 
+	private HtmlElement opBlockSummary(String path, String opName, Operation op) {
+		return div()._class("op-block-summary").children(
+			span(opName.toUpperCase())._class("method-button"),
+			span(path)._class("path"),
+			span(op.getSummary())._class("summary")
+		).onclick("toggleOpBlock(this)");
+	}
+
 	private Div tableContainer(Swagger s, Operation op) {
 		Div tableContainer = div()._class("table-container");
 		
-		String description = op.getDescription();
-		if (! StringUtils.isEmpty(description)) 
-			tableContainer.child(div(description)._class("op-block-description"));
+		String d = op.getDescription();
+		if (! StringUtils.isEmpty(d)) 
+			tableContainer.child(div(d)._class("op-block-description"));
 			
 		if (op.hasParameters()) {
-			tableContainer.child(
-				div(h4("Parameters")._class("title"))._class("op-block-section-header")
-			);
+			tableContainer.child(div(h4("Parameters")._class("title"))._class("op-block-section-header"));
 			
 			Table parameters = table(tr(th("Name")._class("parameter-key"), th("Description")._class("parameter-key")))._class("parameters");
 			
@@ -113,9 +126,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				)._class("parameter-key");
 				
 				Td parameterValue = td(
-					div(
-						pi.getDescription()
-					)._class("description"),
+					div(pi.getDescription())._class("description"),
 					examples(s, pi)
 				)._class("parameter-value");
 				
@@ -126,9 +137,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		}
 		
 		if (op.hasResponses()) {
-			tableContainer.child(
-				div(h4("Responses")._class("title"))._class("op-block-section-header")
-			);
+			tableContainer.child(div(h4("Responses")._class("title"))._class("op-block-section-header"));
 			
 			Table responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
 			tableContainer.child(responses);
@@ -139,9 +148,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				Td code = td(e3.getKey())._class("response-key");
 
 				Td codeValue = td(
-					div(
-						ri.getDescription()
-					)._class("description"),
+					div(ri.getDescription())._class("description"),
 					examples(s, ri),
 					headers(s, ri)
 				)._class("response-value");
@@ -153,13 +160,11 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return tableContainer;
 	}
 	
-	private Object headers(Swagger s, ResponseInfo ri) {
+	private Div headers(Swagger s, ResponseInfo ri) {
 		if (! ri.hasHeaders())
 			return null;
 		
-		Table sectionTable = table(
-			tr(th("Name"),th("Description"),th("Type"))
-		)._class("section-table");
+		Table sectionTable = table(tr(th("Name"),th("Description"),th("Type")))._class("section-table");
 		
 		Div headers = div(
 			div("Headers:")._class("section-name"),
@@ -189,6 +194,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return examples(s, ri.getSchema());
 	}
 	
+	// If SchemaInfo is a "$ref", resolve it, otherwise a no-op.
 	private SchemaInfo resolve(Swagger s, SchemaInfo si) {
 		String ref = si.getRef();
 		if (ref != null) 
@@ -223,6 +229,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return div;
 	}
 	
+	// Generates the model contents.
 	@SuppressWarnings("rawtypes")
 	private ObjectMap getSchemaModel(Swagger s, SchemaInfo si) {
 
@@ -252,13 +259,5 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		}
 		
 		return m;
-	}
-
-	private Div opBlockSummary(String path, String opName, Operation op) {
-		return (Div)div()._class("op-block-summary").children(
-			span(opName.toUpperCase())._class("method-button"),
-			span(path)._class("path"),
-			span(op.getSummary())._class("summary")
-		).onclick("toggleOpBlock(this)");
 	}
 }
