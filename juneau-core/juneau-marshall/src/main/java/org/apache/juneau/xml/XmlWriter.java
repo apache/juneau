@@ -524,6 +524,18 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
+	 * Append an attribute with a URI value.
+	 * 
+	 * @param name The attribute name.
+	 * @param value The attribute value.  Can be any object whose <code>toString()</code> method returns a URI.
+	 * @return This object (for method chaining);
+	 * @throws IOException If a problem occurred.
+	 */
+	public XmlWriter attrUri(String name, Object value) throws IOException {
+		return attrUri((String)null, name, value);
+	}
+
+	/**
 	 * Shortcut for calling <code>text(o, <jk>false</jk>);</code>
 	 * 
 	 * @param o The object being serialized.

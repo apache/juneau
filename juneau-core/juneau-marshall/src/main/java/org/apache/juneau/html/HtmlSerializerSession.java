@@ -205,7 +205,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The same writer passed in.
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
-	private HtmlWriter doSerialize(Object o, HtmlWriter w) throws Exception {
+	private XmlWriter doSerialize(Object o, XmlWriter w) throws Exception {
 		serializeAnything(w, o, getExpectedRootType(o), null, getInitialDepth()-1, null, true);
 		return w;
 	}
@@ -226,7 +226,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected ContentResult serializeAnything(HtmlWriter out, Object o,
+	protected ContentResult serializeAnything(XmlWriter out, Object o,
 			ClassMeta<?> eType, String name, int xIndent, BeanPropertyMeta pMeta, boolean isRoot) throws Exception {
 
 		ClassMeta<?> aType = null;       // The actual type
@@ -384,7 +384,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private void serializeMap(HtmlWriter out, Map m, ClassMeta<?> sType,
+	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
 			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws Exception {
 
 		ClassMeta<?> keyType = eKeyType == null ? string() : eKeyType;
@@ -444,7 +444,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	private void serializeBeanMap(HtmlWriter out, BeanMap<?> m, ClassMeta<?> eType,
+	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType,
 			BeanPropertyMeta ppMeta) throws Exception {
 		int i = indent;
 
@@ -516,7 +516,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeCollection(HtmlWriter out, Object in, ClassMeta<?> sType,
+	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,
 			ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
 
 		ClassMeta<?> seType = sType.getElementType();

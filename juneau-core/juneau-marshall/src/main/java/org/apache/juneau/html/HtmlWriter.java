@@ -39,19 +39,6 @@ public class HtmlWriter extends XmlWriter {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver, false, null);
 	}
 
-	/**
-	 * Append an attribute with a URI value.
-	 * 
-	 * @param name The attribute name.
-	 * @param value The attribute value.  Can be any object whose <code>toString()</code> method returns a URI.
-	 * @return This object (for method chaining);
-	 * @throws IOException If a problem occurred.
-	 */
-	public HtmlWriter attrUri(String name, Object value) throws IOException {
-		super.attrUri((String)null, name, value);
-		return this;
-	}
-
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
