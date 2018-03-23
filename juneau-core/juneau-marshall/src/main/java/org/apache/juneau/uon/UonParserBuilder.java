@@ -24,7 +24,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Builder class for building instances of UON parsers.
  */
-public class UonParserBuilder extends ParserBuilder {
+public class UonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -128,6 +128,18 @@ public class UonParserBuilder extends ParserBuilder {
 		return set(UON_validateEnd, true);
 	}
 
+	@Override /* ReaderParserBuilder */
+	public UonParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ReaderParserBuilder */
+	public UonParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public UonParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -137,18 +149,6 @@ public class UonParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public UonParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UonParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UonParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

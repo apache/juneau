@@ -541,7 +541,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger setPaths(Map<String,Map<String,Operation>> value) {
-		paths = newMap(value);
+		paths = newSortedMap(value, null);
 		return this;
 	}
 
@@ -560,7 +560,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addPaths(Map<String,Map<String,Operation>> values) {
-		paths = addToMap(paths, values);
+		paths = addToSortedMap(paths, values, null);
 		return this;
 	}
 	
@@ -574,10 +574,10 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger path(String path, String methodName, Operation operation) {
 		if (paths == null)
-			paths = new LinkedHashMap<>();
+			paths = new TreeMap<>();
 		Map<String,Operation> p = paths.get(path);
 		if (p == null) {
-			p = new LinkedHashMap<>();
+			p = new TreeMap<>(OP_SORTER);
 			paths.put(path, p);
 		}
 		p.put(methodName, operation);
@@ -603,6 +603,8 @@ public class Swagger extends SwaggerElement {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger paths(Object...values) {
+		if (paths == null)
+			paths = new TreeMap<>();
 		paths = addToMap((Map)paths, values, String.class, Map.class, String.class, Operation.class);
 		return this;
 	}
@@ -1241,27 +1243,27 @@ public class Swagger extends SwaggerElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 	
-//	static final class MethodSorter implements Comparator<String> {
-//		private final Map<String,Integer> methods = new AMap<String,Integer>()
-//			.append("get",7)
-//			.append("put",6)
-//			.append("post",5)
-//			.append("delete",4)
-//			.append("options",3)
-//			.append("head",2)
-//			.append("patch",1);
-//
-//		@Override
-//		public int compare(String o1, String o2) {
-//			Integer i1 = methods.get(o1);
-//			Integer i2 = methods.get(o2);
-//			if (i1 == null)
-//				i1 = 0;
-//			if (i2 == null)
-//				i2 = 0;
-//			return i2.compareTo(i1);
-//		}
-//	}
+	private static final Comparator<String> OP_SORTER = new Comparator<String>() {
+		private final Map<String,Integer> methods = new AMap<String,Integer>()
+			.append("get",7)
+			.append("put",6)
+			.append("post",5)
+			.append("delete",4)
+			.append("options",3)
+			.append("head",2)
+			.append("patch",1);
+
+		@Override
+		public int compare(String o1, String o2) {
+			Integer i1 = methods.get(o1);
+			Integer i2 = methods.get(o2);
+			if (i1 == null)
+				i1 = 0;
+			if (i2 == null)
+				i2 = 0;
+			return i2.compareTo(i1);
+		}
+	};
 
 	@Override /* Object */
 	public String toString() {

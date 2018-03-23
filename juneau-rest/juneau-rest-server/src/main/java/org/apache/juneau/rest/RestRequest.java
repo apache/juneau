@@ -193,7 +193,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		}
 
 		if (isPlainText())
-			this.properties.put(SERIALIZER_useWhitespace, true);
+			this.properties.put(WSERIALIZER_useWhitespace, true);
 	}
 
 	/**

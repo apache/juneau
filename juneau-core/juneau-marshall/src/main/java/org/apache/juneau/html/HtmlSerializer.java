@@ -598,7 +598,7 @@ public class HtmlSerializer extends XmlSerializer {
 		public Sq(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(SERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_quoteChar, '\'')
 					.build()
 			);
 		}
@@ -615,8 +615,8 @@ public class HtmlSerializer extends XmlSerializer {
 		public SqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(SERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}

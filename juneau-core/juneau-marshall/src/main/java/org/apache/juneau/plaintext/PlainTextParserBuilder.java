@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder class for building instances of plain-text parsers.
  */
-public class PlainTextParserBuilder extends ParserBuilder {
+public class PlainTextParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -49,6 +49,18 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
+	@Override /* ReaderParserBuilder */
+	public PlainTextParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ReaderParserBuilder */
+	public PlainTextParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public PlainTextParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -58,18 +70,6 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public PlainTextParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public PlainTextParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public PlainTextParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

@@ -125,9 +125,11 @@
  ----------------------------------------------------------------------------------------------------------*/
 
 .op-block-section-header {
-	padding: 8px 20px;
-    background: hsla(0,0%,100%,.2);
-    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    padding: 8px 20px;
+    background: hsla(0,0%,100%,.3);
+    box-shadow: 1px 2px 3px rgba(0,0,0,.3);
+    margin: 10px;
+    border-radius: 4px;
 }
 
 .op-block-section-header .title {
@@ -202,33 +204,16 @@ td.parameter-value, td.response-value {
  - Examples
  ----------------------------------------------------------------------------------------------------------*/
  
-.op-block-contents .tab {
-    display: flex;
-    margin: 20px 0 10px;
-    padding: 0;
-    list-style: none;
-}
-
-.op-block-contents .tab li {
-    font-weight: bold;
-    opacity: 0.5;
-    font-size: 12px;
-	margin: 0px 2px;
-    cursor: pointer;
-}
-
-.op-block-contents .tab li.active {
-    opacity: 1.0;
-	cursor: auto;
-}
-
-.op-block-contents .tab li:not(:last-child):after {
-    content: " -";
-    box-sizing: inherit;
-}
-
-.op-block-contents .tab li:hover {
-    opacity: 1.0;
+.op-block-contents .example-select {
+    margin: 20px 0 10px 0;
+	border-width: 1px;
+	font-weight:bold;
+	font-size: 14px;
+    padding: 5px 40px 5px 10px;
+    border: 1px solid #41444e;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.25);
+    background: hsla(0,0%,100%,.3);
 }
 
 .op-block-contents .example {
@@ -256,11 +241,6 @@ td.parameter-value, td.response-value {
 
 .op-block-contents .model {
 	display: none;
-}
-
-.op-block-contents .model th, 
-.op-block-contents .model td {
-    padding: 0px;
 }
 
 .op-block-contents .model.active {

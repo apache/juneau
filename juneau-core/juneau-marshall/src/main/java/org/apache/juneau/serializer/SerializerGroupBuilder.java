@@ -13,7 +13,8 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.serializer.OutputStreamSerializer.*;
+import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import java.util.*;
 
@@ -338,46 +339,6 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Maximum indentation.
-	 * 
-	 * <p>
-	 * Specifies the maximum indentation level in the serialized document.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder maxIndent(int value) {
-		return set(SERIALIZER_maxIndent, value);
-	}
-
-	/**
-	 * Configuration property:  Quote character.
-	 * 
-	 * <p>
-	 * This is the character used for quoting attributes and values.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <js>'"'</js>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder quoteChar(char value) {
-		return set(SERIALIZER_quoteChar, value);
-	}
-
-	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -443,23 +404,6 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 */
 	public SerializerGroupBuilder sortMaps() {
 		return set(SERIALIZER_sortMaps, true);
-	}
-
-	/**
-	 * Configuration property:  Sort maps alphabetically.
-	 * 
-	 * <p>
-	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
-	 * </ul>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder sq() {
-		return quoteChar('\'');
 	}
 
 	/**
@@ -651,6 +595,65 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 		return set(SERIALIZER_uriResolution, value);
 	}
 
+	//--- WriterSerializer ---
+	
+	/**
+	 * Configuration property:  Maximum indentation.
+	 * 
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder maxIndent(int value) {
+		return set(WSERIALIZER_maxIndent, value);
+	}
+
+	/**
+	 * Configuration property:  Quote character.
+	 * 
+	 * <p>
+	 * This is the character used for quoting attributes and values.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>'"'</js>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder quoteChar(char value) {
+		return set(WSERIALIZER_quoteChar, value);
+	}
+
+	/**
+	 * Configuration property:  Use single quotes.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder sq() {
+		return quoteChar('\'');
+	}
+
 	/**
 	 * Configuration property:  Use whitespace.
 	 * 
@@ -659,7 +662,7 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -668,7 +671,7 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
+		return set(WSERIALIZER_useWhitespace, value);
 	}
 
 	/**
@@ -679,12 +682,12 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder useWhitespace() {
-		return set(SERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -695,7 +698,7 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
@@ -704,7 +707,28 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 		return useWhitespace();
 	}
 
+	//--- OutputStreamSerializer ---
 
+	/**
+	 * Configuration property:  Binary string format.
+	 * 
+	 * <p>
+	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * when converting the resulting byte array to a string.
+	 * 
+	 * <ul>
+	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link BinaryFormat#HEX}.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder binaryOutputFormat(BinaryFormat value) {
+		return set(OSSERIALIZER_binaryFormat, value);
+	}
+	
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

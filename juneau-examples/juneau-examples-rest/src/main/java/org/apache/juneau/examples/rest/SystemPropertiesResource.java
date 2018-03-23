@@ -14,7 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import java.util.*;
 import java.util.Map;
@@ -72,7 +72,7 @@ import org.apache.juneau.rest.widget.*;
 	// Properties that get applied to all serializers and parsers.
 	properties={
 		// Use single quotes.
-		@Property(name=SERIALIZER_quoteChar, value="'")
+		@Property(name=WSERIALIZER_quoteChar, value="'")
 	},
 
 	// Support GZIP encoding on Accept-Encoding header.

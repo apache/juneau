@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder class for building instances of CSV parsers.
  */
-public class CsvParserBuilder extends ParserBuilder {
+public class CsvParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -48,6 +48,18 @@ public class CsvParserBuilder extends ParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
+	@Override /* ReaderParserBuilder */
+	public CsvParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ReaderParserBuilder */
+	public CsvParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public CsvParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -57,18 +69,6 @@ public class CsvParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public CsvParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public CsvParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public CsvParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

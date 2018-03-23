@@ -154,7 +154,7 @@ public abstract class ComboRoundTripTest {
 				return;
 			}
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.getInput()) : ((OutputStreamSerializer)s).serializeToHex(comboInput.getInput());
+			String r = s.serializeToString(comboInput.getInput());
 
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.
@@ -194,9 +194,9 @@ public abstract class ComboRoundTripTest {
 				return;
 			}
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.getInput()) : ((OutputStreamSerializer)s).serializeToHex(comboInput.getInput());
+			String r = s.serializeToString(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);
-			r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(o) : ((OutputStreamSerializer)s).serializeToHex(o);
+			r = s.serializeToString(o);
 
 			if (isRdf)
 				r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
@@ -218,7 +218,7 @@ public abstract class ComboRoundTripTest {
 			s = getSerializer(s);
 			p = getParser(p);
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.getInput()) : ((OutputStreamSerializer)s).serializeToHex(comboInput.getInput());
+			String r = s.serializeToString(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);
 
 			comboInput.verify(o);
@@ -236,7 +236,7 @@ public abstract class ComboRoundTripTest {
 			p = (InputStreamParser)getParser(p);
 			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
 
-			String r = s.serializeToHex(comboInput.getInput());
+			String r = s.serializeToString(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);
 			r = sJson.serialize(o);
 			assertEquals(comboInput.label + "/" + testName + " parse-normal failed on JSON equivalency", expected, r);
@@ -594,8 +594,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// MsgPack
 	//--------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPack = MsgPackSerializer.DEFAULT;
-	InputStreamParser pMsgPack = MsgPackParser.DEFAULT;
+	OutputStreamSerializer sMsgPack = MsgPackSerializer.DEFAULT_SPACED_HEX;
+	InputStreamParser pMsgPack = MsgPackParser.DEFAULT_SPACED_HEX;
 
 	@Test
 	public void f11_serializeMsgPack() throws Exception {

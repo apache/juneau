@@ -89,7 +89,7 @@ import org.apache.juneau.utils.*;
 	properties={
 
 		// Use single quotes.
-		@Property(name=SERIALIZER_quoteChar, value="'"),
+		@Property(name=WSERIALIZER_quoteChar, value="'"),
 
 		// Enable XML namespaces.
 		@Property(name=XML_enableNamespaces, value="true"),
@@ -118,7 +118,7 @@ import org.apache.juneau.utils.*;
 		"contact:{name:'John Smith',email:'john@smith.com'},",
 		"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
 		"version:'2.0',",
-		"termsOfService:'You're on your own.',",
+		"termsOfService:'You\\'re on your own.',",
 		"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}],",
 		"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"
 	}

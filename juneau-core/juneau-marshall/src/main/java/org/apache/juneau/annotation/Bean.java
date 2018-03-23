@@ -69,6 +69,40 @@ public @interface Bean {
 	String excludeProperties() default "";
 
 	/**
+	 * Find fluent setters.
+	 * 
+	 * <p>
+	 * When <jk>true</jk>, fluent setters will be detected on beans.
+	 * 
+	 * <p>
+	 * Fluent setters 
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@Bean</ja>(fluentSetters=<jk>true</jk>)
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public int</jk> getId() {...}
+	 * 		<jk>public</jk> MyBean id(<jk>int</jk> id) {...}
+	 * 	}
+	 * </p>
+	 * 
+	 * <p>
+	 * Fluent setters must have the following attributes:
+	 * <ul>
+	 * 	<li>Public.
+	 * 	<li>Not static.
+	 * 	<li>Take in one parameter.
+	 * 	<li>Return the bean itself.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * </ul>
+	 */
+	boolean fluentSetters() default false;
+
+	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.
 	 * 
 	 * <p>

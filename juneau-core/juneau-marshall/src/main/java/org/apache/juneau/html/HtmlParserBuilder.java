@@ -83,13 +83,13 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 		return this;
 	}
 
-	@Override /* ParserBuilder */
+	@Override /* ReaderParserBuilder */
 	public HtmlParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
 	}
 
-	@Override /* ParserBuilder */
+	@Override /* ReaderParserBuilder */
 	public HtmlParserBuilder inputStreamCharset(String value) {
 		super.inputStreamCharset(value);
 		return this;

@@ -33,8 +33,7 @@ import org.apache.juneau.utils.*;
  */
 public abstract class ParserSession extends BeanSession {
 
-	private final boolean trimStrings, strict, autoCloseStreams, unbuffered;
-	private final String inputStreamCharset, fileCharset;
+	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
 	private final Method javaMethod;
 	private final Object outer;
 
@@ -58,8 +57,6 @@ public abstract class ParserSession extends BeanSession {
 		strict = getProperty(PARSER_strict, boolean.class, ctx.strict);
 		autoCloseStreams = getProperty(PARSER_autoCloseStreams, boolean.class, ctx.autoCloseStreams);
 		unbuffered = getProperty(PARSER_unbuffered, boolean.class, ctx.unbuffered);
-		inputStreamCharset = getProperty(PARSER_inputStreamCharset, String.class, ctx.inputStreamCharset);
-		fileCharset = getProperty(PARSER_fileCharset, String.class, ctx.fileCharset);
 		javaMethod = args.javaMethod;
 		outer = args.outer;
 		listener = getInstanceProperty(PARSER_listener, ParserListener.class, ctx.listener);
@@ -79,8 +76,6 @@ public abstract class ParserSession extends BeanSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("ParserSession", new ObjectMap()
-				.append("fileCharset", fileCharset)
-				.append("inputStreamCharset", inputStreamCharset)
 				.append("javaMethod", javaMethod)
 				.append("listener", listener)
 				.append("outer", outer)
@@ -132,11 +127,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link Parser#PARSER_inputStreamCharset}).
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link Parser#PARSER_inputStreamCharset}).
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link Parser#PARSER_fileCharset}).
+	 * 			{@link ReaderParser#RPARSER_fileCharset}).
 	 * 	</ul>
 	 * 	<br>For byte-based parsers, this can be any of the following types:
 	 * 	<ul>
@@ -144,13 +139,12 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
-	public final ParserPipe createPipe(Object input) {
-		return new ParserPipe(input, isDebug(), strict, autoCloseStreams, unbuffered, fileCharset, inputStreamCharset);
-	}
+	public abstract ParserPipe createPipe(Object input);
 
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.
@@ -398,11 +392,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link Parser#PARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link Parser#PARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link Parser#PARSER_fileCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>

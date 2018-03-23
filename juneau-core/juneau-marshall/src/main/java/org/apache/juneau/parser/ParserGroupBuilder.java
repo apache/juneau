@@ -13,7 +13,8 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.parser.Parser.*;
+import static org.apache.juneau.parser.InputStreamParser.*;
+import static org.apache.juneau.parser.ReaderParser.*;
 
 import java.util.*;
 
@@ -168,46 +169,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  File charset.
-	 * 
-	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-	 * @return This object (for method chaining).
-	 */
-	public ParserGroupBuilder fileCharset(String value) {
-		return set(PARSER_fileCharset, value);
-	}
-
-	/**
-	 * Configuration property:  Input stream charset.
-	 * 
-	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"UTF-8"</js>.
-	 * @return This object (for method chaining).
-	 */
-	public ParserGroupBuilder inputStreamCharset(String value) {
-		return set(PARSER_inputStreamCharset, value);
-	}
-
-	/**
 	 * Configuration property:  Parser listener.
 	 * 
 	 * <p>
@@ -335,6 +296,67 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 */
 	public ParserGroupBuilder unbuffered() {
 		return set(PARSER_unbuffered, true);
+	}
+
+	/**
+	 * Configuration property:  File charset.
+	 * 
+	 * <p>
+	 * The character set to use for reading <code>Files</code> from the file system.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroupBuilder fileCharset(String value) {
+		return set(RPARSER_fileCharset, value);
+	}
+
+	/**
+	 * Configuration property:  Input stream charset.
+	 * 
+	 * <p>
+	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"UTF-8"</js>.
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroupBuilder inputStreamCharset(String value) {
+		return set(RPARSER_inputStreamCharset, value);
+	}
+
+	/**
+	 * Configuration property:  Binary input format.
+	 * 
+	 * <p>
+	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
+	 * when converting the string into a byte array.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is {@link BinaryFormat#HEX}.
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroupBuilder binaryFormat(BinaryFormat value) {
+		return set(ISPARSER_binaryFormat, value);
 	}
 
 	@Override /* BeanContextBuilder */

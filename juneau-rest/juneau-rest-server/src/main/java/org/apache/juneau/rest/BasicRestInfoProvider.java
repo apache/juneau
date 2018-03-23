@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -101,6 +103,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public Swagger getSwagger(RestRequest req) throws Exception {
 		
 		Locale locale = req.getLocale();
+		BeanSession bs = req.getBeanSession();
 		
 		Swagger s = swaggers.get(locale);
 		if (s != null)
@@ -120,7 +123,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			if (r.swagger().length > 0) {
 				try {
 					String json = vr.resolve(StringUtils.join(r.swagger(), '\n').trim());
-					if (! (json.startsWith("{") && json.endsWith("}")))
+					if (! StringUtils.isObjectMap(json, true))
 						json = "{\n" + json + "\n}";
 					om.putAll(new ObjectMap(json));
 				} catch (ParseException e) {
@@ -177,6 +180,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (externalDocs != null)
 			om.put("externalDocs", jp.parse(vr.resolve(externalDocs), ObjectMap.class));
 		
+		ObjectMap definitions = om.getObjectMap("definitions", new ObjectMap());
+		
 		for (RestJavaMethod sm : context.getCallMethods().values()) {
 			if (sm.isRequestAllowed(req)) {
 				Method m = sm.method;
@@ -207,7 +212,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				String mTags = mb.findFirstString(locale, mn + ".tags");
 				if (mTags != null) {
 					mTags = vr.resolve(mTags);
-					if (StringUtils.isObjectList(mTags)) 
+					if (StringUtils.isObjectList(mTags, true)) 
 						mom.put("tags", jp.parse(mTags, ArrayList.class, String.class));
 					else
 						mom.put("tags", Arrays.asList(StringUtils.split(mTags)));
@@ -248,13 +253,45 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					RestParamType in = mp.getParamType();
 					if (in != RestParamType.OTHER) {
 						String key = in.toString() + '.' + (in == RestParamType.BODY ? null : mp.getName());
-						ObjectMap param = new ObjectMap().append("in", in);
+						
+						if (! paramMap.containsKey(key))
+							paramMap.put(key, new ObjectMap());
+						ObjectMap param = paramMap.get(key);
+							
+						param.append("in", in);
+						
 						if (in != RestParamType.BODY)
 							param.append("name", mp.name);
-						if (paramMap.containsKey(key)) {
-							paramMap.get(key).putAll(param);
-						} else {
-							paramMap.put(key, param);
+						
+						if (! param.containsKey("schema")) {
+							ClassMeta<?> cm = bs.getClassMeta(mp.getType());
+							
+							if (cm.isBean()) {
+								String name = mp.forClass().getSimpleName();
+								if (! definitions.containsKey(name)) {
+									ObjectMap definition = JsonSchemaUtils.getSchema(bs, cm);
+									
+									Object example = cm.getExample(bs);
+									if (example != null) {
+										ObjectMap examples = new ObjectMap();
+										ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true);
+										for (MediaType mt : req.getParsers().getSupportedMediaTypes()) {
+											if (mt != MediaType.HTML) {
+												Serializer s2 = req.getSerializers().getSerializer(mt);
+												if (s2 != null) {
+													SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
+													String eVal = s2.createSession(args).serializeToString(example);
+													examples.put(s2.getMediaTypes()[0].toString(), eVal);
+												}
+											}
+										}
+										definition.put("x-examples", examples);
+									}
+									
+									definitions.put(name, definition);
+								}
+								param.put("schema", new ObjectMap().append("$ref", "#/definitions/" + mp.forClass().getSimpleName()));
+							}
 						}
 					}
 				}
@@ -280,7 +317,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		}
 		
-		s = jp.parse(vr.resolve(om.toString()), Swagger.class);
+		if (! definitions.isEmpty())
+			om.put("definitions", definitions);		
+		
+		String swaggerJson = om.toString(JsonSerializer.DEFAULT_LAX_READABLE);
+		try {
+			s = jp.parse(swaggerJson, Swagger.class);
+		} catch (Exception e) {
+			throw new RestServletException("Error detected in swagger: \n{0}", StringUtils.addLineNumbers(swaggerJson)).initCause(e);
+		}
 		swaggers.put(locale, s);
 		
 		return s;

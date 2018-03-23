@@ -46,7 +46,7 @@ import org.apache.juneau.rest.widget.*;
 		}
 	),
 	properties={
-		@Property(name=SERIALIZER_quoteChar, value="'"),
+		@Property(name=WSERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
 		@Property(name=RDF_addRootProperty, value="true")
 	},

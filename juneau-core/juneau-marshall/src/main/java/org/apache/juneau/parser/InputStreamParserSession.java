@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.parser.InputStreamParser.*;
+
+import java.io.*;
+
+import org.apache.juneau.*;
+
 /**
  * Subclass of parser session objects for byte-based parsers.
  * 
@@ -20,6 +26,8 @@ package org.apache.juneau.parser;
  */
 public abstract class InputStreamParserSession extends ParserSession {
 
+	private final BinaryFormat binaryFormat;
+	
 	/**
 	 * Create a new session using properties specified in the context.
 	 * 
@@ -29,8 +37,10 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected InputStreamParserSession(Parser ctx, ParserSessionArgs args) {
+	protected InputStreamParserSession(InputStreamParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
+		
+		binaryFormat = getProperty(ISPARSER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 	/**
@@ -40,11 +50,42 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 * 	Runtime session arguments.
 	 */
 	protected InputStreamParserSession(ParserSessionArgs args) {
-		super(args);
+		this(InputStreamParser.DEFAULT, args);
 	}
 
 	@Override /* ParserSession */
 	public final boolean isReaderParser() {
 		return false;
+	}
+	
+	/**
+	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
+	 * a stream or reader.
+	 * 
+	 * @param input
+	 * 	The input.
+	 * 	</ul>
+	 * 	<br>This can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
+	 * 	</ul>
+	 * @return
+	 * 	A new {@link ParserPipe} wrapper around the specified input object.
+	 */
+	@Override /* ParserSession */
+	public final ParserPipe createPipe(Object input) {
+		return new ParserPipe(input, isDebug(), strict, autoCloseStreams, unbuffered, null, null, binaryFormat);
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("InputStreamParserSession", new ObjectMap()
+				.append("binaryFormat", binaryFormat)
+			);
 	}
 }

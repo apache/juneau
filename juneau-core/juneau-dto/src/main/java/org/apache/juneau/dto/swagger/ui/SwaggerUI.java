@@ -46,12 +46,14 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		// Operations without tags are rendered first.
 		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
 
-		for (Tag t : s.getTags()) {
-			Div tagBlock = div()._class("tag-block tag-block-open").children(
-				tagBlockSummary(t),
-				tagBlockContents(s, t)
-			);
-			outer.child(tagBlock);
+		if (s.getTags() != null) {
+			for (Tag t : s.getTags()) {
+				Div tagBlock = div()._class("tag-block tag-block-open").children(
+					tagBlockSummary(t),
+					tagBlockContents(s, t)
+				);
+				outer.child(tagBlock);
+			}
 		}
 		
 		return outer;
@@ -118,9 +120,10 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			
 			for (ParameterInfo pi : op.getParameters()) {
 				String piName = "body".equals(pi.getIn()) ? "body" : pi.getName();
+				boolean required = pi.getRequired() == null ? false : pi.getRequired();
 				
 				Td parameterKey = td(
-					div(piName)._class("name" + (pi.getRequired() ? " required" : "")),
+					div(piName)._class("name" + (required ? " required" : "")),
 					div(pi.getType())._class("type"),
 					div('(' + pi.getIn() + ')')._class("in")
 				)._class("parameter-key");
@@ -199,6 +202,8 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		String ref = si.getRef();
 		if (ref != null) 
 			si = s.findRef(ref, SchemaInfo.class);
+		if (si == null)
+			throw new BeanRuntimeException("Reference not found in swagger document: {0}", ref); 
 		return si;
 	}
 	
@@ -212,17 +217,16 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		if (examples == null)
 			return null;
 		
-		Ul ul = ul()._class("tab");
-		Div div = div(ul)._class("examples");
+		Select select = (Select)select().onchange("selectExample(this)")._class("example-select");
+		select.child(option("model","model"));
+		Div div = div(select)._class("examples");
 		
-		ul.child(li("model").onclick("selectExample(this)").attr("data-name", "model")._class("active"));
 		div.child(div(getSchemaModel(s, si))._class("model active").attr("data-name", "model"));
 
 		for (Map.Entry<String,String> e : examples.entrySet()) {
 			String name = e.getKey();
 			String value = e.getValue();
-			
-			ul.child(li(name).onclick("selectExample(this)").attr("data-name", name));
+			select.child(option(name, name));
 			div.child(div(value.replaceAll("\\n", "\n"))._class("example").attr("data-name", name));
 		}
 		

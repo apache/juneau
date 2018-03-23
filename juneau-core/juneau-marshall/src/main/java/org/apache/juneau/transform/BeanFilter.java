@@ -39,7 +39,7 @@ public final class BeanFilter {
 	private final String[] properties, excludeProperties;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
-	private final boolean sortProperties;
+	private final boolean sortProperties, fluentSetters;
 	private final String typeName;
 	private final Class<?>[] beanDictionary;
 	private final PropertyFilter propertyFilter;
@@ -55,6 +55,7 @@ public final class BeanFilter {
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
+		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = ClassUtils.newInstance(PropertyNamer.class, builder.propertyNamer);
 		this.beanDictionary =
 			builder.beanDictionary == null
@@ -115,6 +116,15 @@ public final class BeanFilter {
 	 */
 	public boolean isSortProperties() {
 		return sortProperties;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if we should find fluent setters.
+	 * 
+	 * @return <jk>true</jk> if fluent setters should be found.
+	 */
+	public boolean isFluentSetters() {
+		return fluentSetters;
 	}
 
 	/**

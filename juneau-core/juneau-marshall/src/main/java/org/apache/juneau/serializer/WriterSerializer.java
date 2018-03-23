@@ -20,6 +20,147 @@ import org.apache.juneau.utils.*;
  */
 public abstract class WriterSerializer extends Serializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "WriterSerializer.";
+
+	/**
+	 * Configuration property:  Maximum indentation.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"WriterSerializer.maxIndent.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>100</code>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#maxIndent(int)}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
+	 * 
+	 * <p>
+	 * This setting does not apply to the RDF serializers.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.maxIndent(20)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>SERIALIZER_maxIndent</jsf>, 20)
+	 * 		.build();
+	 * </p>
+	 */
+	public static final String WSERIALIZER_maxIndent = PREFIX + "maxIndent.i";
+
+	/**
+	 * Configuration property:  Quote character.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"WriterSerializer.quoteChar.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"\""</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#sq()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * This is the character used for quoting attributes and values.
+	 * 
+	 * <p>
+	 * This setting does not apply to the RDF serializers.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer that uses single quotes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sq()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
+	 * 		.build();
+	 * </p>
+	 */
+	public static final String WSERIALIZER_quoteChar = PREFIX + "quoteChar.s";
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace(boolean)}
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#ws()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.ws()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Produces "\{\n\t'foo': 'bar'\n\}\n"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 */
+	public static final String WSERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
+
+	static final WriterSerializer DEFAULT = new WriterSerializer(PropertyStore.create().build(), "") {
+		@Override
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			throw new NoSuchMethodError();
+		}
+	};
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+	
+	final int maxIndent;
+	final boolean useWhitespace;
+	final char quoteChar;
+
 	/**
 	 * Constructor.
 	 * 
@@ -47,6 +188,10 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	protected WriterSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
+		
+		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace, false);
+		maxIndent = getIntegerProperty(WSERIALIZER_maxIndent, 100);
+		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "\"").charAt(0);
 	}
 
 
@@ -115,5 +260,15 @@ public abstract class WriterSerializer extends Serializer {
 	public final WriterSerializer println(Object o) {
 		System.out.println(toString(o));  // NOT DEBUG
 		return this;
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("WriterSerializer", new ObjectMap()
+				.append("useWhitespace", useWhitespace)
+				.append("maxIndent", maxIndent)
+				.append("quoteChar", quoteChar)
+			);
 	}
 }

@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of JSON serializers.
  */
-public class JsonSerializerBuilder extends SerializerBuilder {
+public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -135,7 +135,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
-	 * 	<li class='jf'>{@link JsonSerializer#SERIALIZER_quoteChar}
+	 * 	<li class='jf'>{@link JsonSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
@@ -144,6 +144,42 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 		return simple().sq();
 	}
 	
+	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
@@ -204,18 +240,6 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -236,12 +260,6 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -302,24 +320,6 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

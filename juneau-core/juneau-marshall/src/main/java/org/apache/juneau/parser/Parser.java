@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -167,95 +166,6 @@ public abstract class Parser extends BeanContext {
 	 * </p>
 	 */
 	public static final String PARSER_autoCloseStreams = PREFIX + "autoCloseStreams.b";
-
-	/**
-	 * Configuration property:  File charset.
-	 * 
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Parser.fileCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#fileCharset(String)}
-	 * 			<li class='jm'>{@link ParserBuilder#fileCharset(Charset)}
-	 * 		</ul>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
-	 * 
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 * 
-	 * <p>
-	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.fileCharset(<js>"UTF-8"</js>)
-	 * 		.build();
-	 * 	
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_fileCharset</jsf>, <js>"UTF-8"</js>)
-	 * 		.build();
-	 * 
-	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-	 * 	MyBean myBean = p.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String PARSER_fileCharset = PREFIX + "fileCharset.s";
-
-	/**
-	 * Configuration property:  Input stream charset.
-	 * 
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Parser.inputStreamCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#inputStreamCharset(String)}
-	 * 			<li class='jm'>{@link ParserBuilder#inputStreamCharset(Charset)}
-	 * 		</ul>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 * 
-	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.inputStreamCharset(<js>"UTF-8"</js>)
-	 * 		.build();
-	 * 	
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_inputStreamCharset</jsf>, <js>"UTF-8"</js>)
-	 * 		.build();
-	 * 
-	 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
-	 * 	MyBean myBean = p.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
 
 	/**
 	 * Configuration property:  Parser listener.
@@ -517,7 +427,6 @@ public abstract class Parser extends BeanContext {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
-	final String inputStreamCharset, fileCharset;
 	final Class<? extends ParserListener> listener;
 
 	/** General parser properties currently set on this parser. */
@@ -531,8 +440,6 @@ public abstract class Parser extends BeanContext {
 		strict = getBooleanProperty(PARSER_strict, false);
 		autoCloseStreams = getBooleanProperty(PARSER_autoCloseStreams, false);
 		unbuffered = getBooleanProperty(PARSER_unbuffered, false);
-		inputStreamCharset = getStringProperty(PARSER_inputStreamCharset, "UTF-8");
-		fileCharset = getStringProperty(PARSER_fileCharset, "DEFAULT");
 		listener = getClassProperty(PARSER_listener, ParserListener.class, null);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
@@ -643,11 +550,11 @@ public abstract class Parser extends BeanContext {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link #PARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link #PARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link #PARSER_fileCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -655,6 +562,7 @@ public abstract class Parser extends BeanContext {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
 	 * 	</ul>
 	 * @param type
 	 * 	The object type to create.
@@ -853,8 +761,6 @@ public abstract class Parser extends BeanContext {
 			.append("Parser", new ObjectMap()
 				.append("trimStrings", trimStrings)
 				.append("strict", strict)
-				.append("inputStreamCharset", inputStreamCharset)
-				.append("fileCharset", fileCharset)
 				.append("listener", listener)
 			);
 	}

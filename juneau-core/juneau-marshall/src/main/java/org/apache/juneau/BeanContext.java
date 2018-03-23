@@ -907,6 +907,58 @@ public class BeanContext extends Context {
 	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.sms";
 
 	/**
+	 * Configuration property:  Find fluent setters.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.fluentSetters.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#fluentSetters()} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#fluentSetters(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#fluentSetters()}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#fluentSetters(boolean)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#fluentSetters()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When enabled, fluent setters are detected on beans.
+	 * 
+	 * <p>
+	 * Fluent setters must have the following attributes:
+	 * <ul>
+	 * 	<li>Public.
+	 * 	<li>Not static.
+	 * 	<li>Take in one parameter.
+	 * 	<li>Return the bean itself.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer that finds fluent setters.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.fluentSetters()
+	 * 		.build();
+	 * 
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_fluentSetters</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * </p>
+	 */
+	public static final String BEAN_fluentSetters = PREFIX + "fluentSetters.b";
+
+	/**
 	 * Configuration property:  Ignore invocation errors on getters.
 	 * 
 	 * <h5 class='section'>Property:</h5>
@@ -1799,6 +1851,7 @@ public class BeanContext extends Context {
 		ignoreInvocationExceptionsOnSetters,
 		useJavaBeanIntrospector,
 		sortProperties,
+		fluentSetters,
 		debug;
 
 	final Visibility
@@ -1855,6 +1908,7 @@ public class BeanContext extends Context {
 		ignoreInvocationExceptionsOnSetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnSetters, false);
 		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector, false);
 		sortProperties = getBooleanProperty(BEAN_sortProperties, false);
+		fluentSetters = getBooleanProperty(BEAN_fluentSetters, false);
 		beanTypePropertyName = getStringProperty(BEAN_beanTypePropertyName, "_type");
 		debug = getBooleanProperty(BEAN_debug, false);
 

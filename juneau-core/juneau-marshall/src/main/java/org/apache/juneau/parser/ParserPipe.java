@@ -60,6 +60,7 @@ public final class ParserPipe implements Closeable {
 	private Reader reader;
 	private ParserReader parserReader;
 	private boolean doClose;
+	private BinaryFormat binaryFormat;
 
 	/**
 	 * Constructor.
@@ -85,8 +86,9 @@ public final class ParserPipe implements Closeable {
 	 * @param inputStreamCharset
 	 * 	The charset to expect when reading from {@link InputStream InputStreams}.
 	 * 	Use <js>"default"</js> to specify {@link Charset#defaultCharset()}.
+	 * @param binaryFormat The binary format of input strings when converted to bytes.
 	 */
-	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, String fileCharset, String inputStreamCharset) {
+	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, String fileCharset, String inputStreamCharset, BinaryFormat binaryFormat) {
 		this.input = input;
 		this.debug = debug;
 		this.strict = strict;
@@ -96,6 +98,7 @@ public final class ParserPipe implements Closeable {
 		this.inputStreamCharset = inputStreamCharset;
 		if (input instanceof CharSequence)
 			this.inputString = input.toString();
+		this.binaryFormat = binaryFormat;
 	}
 
 	/**
@@ -107,7 +110,7 @@ public final class ParserPipe implements Closeable {
 	 * @param input The input object.
 	 */
 	public ParserPipe(Object input) {
-		this(input, false, false, false, false, null, null);
+		this(input, false, false, false, false, null, null, null);
 	}
 
 	/**
@@ -139,7 +142,7 @@ public final class ParserPipe implements Closeable {
 			doClose = false;
 		} else if (input instanceof String) {
 			inputString = (String)input;
-			inputStream = new ByteArrayInputStream(fromHex((String)input));
+			inputStream = new ByteArrayInputStream(convertFromString((String)input));
 			doClose = false;
 		} else if (input instanceof File) {
 			if (debug) {
@@ -156,7 +159,15 @@ public final class ParserPipe implements Closeable {
 
 		return inputStream;
 	}
-
+	
+	private byte[] convertFromString(String in) {
+		switch(binaryFormat) {
+			case BASE64: return base64Decode(in);
+			case HEX: return fromHex(in);
+			case SPACED_HEX: return fromSpacedHex(in);
+			default:	return new byte[0];
+		}
+	}
 
 	/**
 	 * Wraps the specified input object inside a reader.

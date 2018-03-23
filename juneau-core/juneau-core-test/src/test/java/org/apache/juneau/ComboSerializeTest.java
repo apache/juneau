@@ -120,7 +120,7 @@ public abstract class ComboSerializeTest {
 				return;
 			}
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.getInput()) : ((OutputStreamSerializer)s).serializeToHex(comboInput.getInput());
+			String r = s.serializeToString(comboInput.getInput());
 
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.

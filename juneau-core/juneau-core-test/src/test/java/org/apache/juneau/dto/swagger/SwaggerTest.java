@@ -330,9 +330,8 @@ public class SwaggerTest {
 		
 		t.path("a", "a1", operation().description("a2"));
 		t.path("b", null, null);
-		t.path(null, "c1", operation().description("c2"));
 		
-		assertObjectEquals("{a:{a1:{description:'a2'}},b:{null:null},null:{c1:{description:'c2'}}}", t.getPaths());
+		assertObjectEquals("{a:{a1:{description:'a2'}},b:{null:null}}", t.getPaths());
 	}
 
 	/**

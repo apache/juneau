@@ -62,7 +62,7 @@ public class BeanFilterBuilder<T> {
 	String typeName;
 	String[] includeProperties, excludeProperties;
 	Class<?> interfaceClass, stopClass;
-	boolean sortProperties;
+	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
 	List<Class<?>> beanDictionary;
 	Object propertyFilter;
@@ -379,6 +379,66 @@ public class BeanFilterBuilder<T> {
 	 */
 	public BeanFilterBuilder<T> sortProperties() {
 		this.sortProperties = true;
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Find fluent setters.
+	 * 
+	 * <p>
+	 * When enabled, fluent setters are detected on beans.
+	 * 
+	 * <p>
+	 * Fluent setters must have the following attributes:
+	 * <ul>
+	 * 	<li>Public.
+	 * 	<li>Not static.
+	 * 	<li>Take in one parameter.
+	 * 	<li>Return the bean itself.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Define our filter.</jc>
+	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
+	 * 		<jk>public</jk> MyFilter() {
+	 * 			fluentSetters();
+	 * 		}
+	 * 	}	
+	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='ja'>{@link Bean#fluentSetters()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder<T> fluentSetters(boolean value) {
+		this.fluentSetters = value;
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Find fluent setters.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>fluentSetters(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='ja'>{@link Bean#fluentSetters()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder<T> fluentSetters() {
+		this.fluentSetters = true;
 		return this;
 	}
 

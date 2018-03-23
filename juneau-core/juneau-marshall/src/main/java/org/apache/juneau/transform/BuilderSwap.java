@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ClassFlags.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 

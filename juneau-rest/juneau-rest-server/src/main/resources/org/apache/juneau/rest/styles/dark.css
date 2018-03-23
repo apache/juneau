@@ -158,6 +158,10 @@ article td {
 	padding: 2px 5px;
 }
 
+article td:last-child {
+    width: 100%;
+}
+
 article ul {
 	margin: 0px;
 	padding-left: 20px;

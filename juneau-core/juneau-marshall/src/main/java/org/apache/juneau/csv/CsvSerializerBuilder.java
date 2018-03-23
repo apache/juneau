@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of CSV serializers.
  */
-public class CsvSerializerBuilder extends SerializerBuilder {
+public class CsvSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -48,6 +48,42 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
+
+	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
 
 	@Override /* SerializerBuilder */
 	public CsvSerializerBuilder abridged(boolean value) {
@@ -109,18 +145,6 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public CsvSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -141,12 +165,6 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public CsvSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -207,24 +225,6 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public CsvSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

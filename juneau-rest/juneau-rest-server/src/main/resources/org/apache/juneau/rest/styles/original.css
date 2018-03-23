@@ -116,6 +116,7 @@ article table {
 	border:1px solid #CCCC99;
 	border-collapse: collapse;
 	margin: 5px 0px;
+	width: 100%;
 }
 
 article th {
@@ -132,6 +133,10 @@ article td {
 	padding: 2px 5px;
 	color: #005C87;
 	vertical-align: top;
+}
+
+article td:last-child {
+    width: 100%;
 }
 
 article ul {

@@ -26,7 +26,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder class for building XML parsers.
  */
-public class XmlParserBuilder extends ParserBuilder {
+public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -183,6 +183,18 @@ public class XmlParserBuilder extends ParserBuilder {
 		return set(XML_validating, true);
 	}
 
+	@Override /* ReaderParserBuilder */
+	public XmlParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ReaderParserBuilder */
+	public XmlParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public XmlParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -192,18 +204,6 @@ public class XmlParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public XmlParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public XmlParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public XmlParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

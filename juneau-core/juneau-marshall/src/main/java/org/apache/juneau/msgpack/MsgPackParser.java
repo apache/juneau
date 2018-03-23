@@ -31,6 +31,45 @@ public class MsgPackParser extends InputStreamParser {
 	/** Default parser, all default settings.*/
 	public static final MsgPackParser DEFAULT = new MsgPackParser(PropertyStore.DEFAULT);
 
+	/** Default parser, all default settings, string input encoded as spaced-hex.*/
+	public static final MsgPackParser DEFAULT_SPACED_HEX = new SpacedHex(PropertyStore.DEFAULT);
+
+	/** Default parser, all default settings, string input encoded as BASE64.*/
+	public static final MsgPackParser DEFAULT_BASE64 = new Base64(PropertyStore.DEFAULT);
+	
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/** Default parser, string input encoded as spaced-hex. */
+	public static class SpacedHex extends MsgPackParser {
+
+		/**
+		 * Constructor.
+		 * 
+		 * @param ps The property store containing all the settings for this object.
+		 */
+		public SpacedHex(PropertyStore ps) {
+			super(
+				ps.builder().set(ISPARSER_binaryFormat, BinaryFormat.SPACED_HEX).build()
+			);
+		}
+	}
+
+	/** Default parser, string input encoded as BASE64. */
+	public static class Base64 extends MsgPackParser {
+
+		/**
+		 * Constructor.
+		 * 
+		 * @param ps The property store containing all the settings for this object.
+		 */
+		public Base64(PropertyStore ps) {
+			super(
+				ps.builder().set(ISPARSER_binaryFormat, BinaryFormat.BASE64).build()
+			);
+		}
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

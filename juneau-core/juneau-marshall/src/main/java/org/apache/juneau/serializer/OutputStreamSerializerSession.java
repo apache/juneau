@@ -12,7 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.serializer.OutputStreamSerializer.*;
+
 import java.io.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Subclass of {@link SerializerSession} for stream-based serializers.
@@ -27,6 +32,8 @@ import java.io.*;
  */
 public abstract class OutputStreamSerializerSession extends SerializerSession {
 
+	private final BinaryFormat binaryFormat;
+
 	/**
 	 * Create a new session using properties specified in the context.
 	 * 
@@ -39,8 +46,10 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected OutputStreamSerializerSession(Serializer ctx, SerializerSessionArgs args) {
+	protected OutputStreamSerializerSession(OutputStreamSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
+		
+		binaryFormat = getProperty(OSSERIALIZER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 	/**
@@ -50,7 +59,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	 * 	Runtime session arguments.
 	 */
 	protected OutputStreamSerializerSession(SerializerSessionArgs args) {
-		super(args);
+		this(OutputStreamSerializer.DEFAULT, args);
 	}
 
 	@Override /* SerializerSession */
@@ -70,5 +79,16 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		serialize(o, baos);
 		return baos.toByteArray();
+	}
+	
+	@Override /* SerializerSession */
+	public final String serializeToString(Object o) throws SerializeException {
+		byte[] b = serialize(o);
+		switch(binaryFormat) {
+			case SPACED_HEX:  return StringUtils.toSpacedHex(b);
+			case HEX:  return StringUtils.toHex(b);
+			case BASE64:  return StringUtils.base64Encode(b);
+			default: return null;
+		}
 	}
 }

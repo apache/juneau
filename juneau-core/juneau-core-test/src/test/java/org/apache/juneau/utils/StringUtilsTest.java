@@ -840,4 +840,39 @@ public class StringUtilsTest {
 		assertEquals("abc", join(splitEqually("abc", 3), '|'));
 		assertEquals("abc|d", join(splitEqually("abcd", 3), '|'));
 	}
+	
+	//====================================================================================================
+	// testIsObjectMap(Object)
+	//====================================================================================================
+	@Test
+	public void testIsObjectMap() {
+		assertTrue(isObjectMap("{foo:'bar'}", true));
+		assertTrue(isObjectMap(" { foo:'bar' } ", true));
+		assertFalse(isObjectMap(" { foo:'bar'  ", true));
+		assertFalse(isObjectMap("  foo:'bar' } ", true));
+		assertTrue(isObjectMap("/*foo*/ { foo:'bar' } /*foo*/", true));
+	}
+	
+	//====================================================================================================
+	// testIsObjectMap(Object)
+	//====================================================================================================
+	@Test
+	public void testIsObjectList() {
+		assertTrue(isObjectList("[123,'bar']", true));
+		assertTrue(isObjectList(" [ 123,'bar' ] ", true));
+		assertFalse(isObjectList(" [ 123,'bar'  ", true));
+		assertFalse(isObjectList("  123,'bar' ] ", true));
+		assertTrue(isObjectList("/*foo*/ [ 123,'bar' ] /*foo*/", true));
+	}
+
+	//====================================================================================================
+	// addLineNumbers(String)
+	//====================================================================================================
+	@Test
+	public void testAddLineNumbers() {
+		assertNull(addLineNumbers(null));
+		assertEquals("1: \n", addLineNumbers(""));
+		assertEquals("1: foo\n", addLineNumbers("foo"));
+		assertEquals("1: foo\n2: bar\n", addLineNumbers("foo\nbar"));
+	}
 }

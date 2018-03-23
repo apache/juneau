@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.ui.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
@@ -168,7 +169,10 @@ import org.apache.juneau.xml.*;
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
 		}
-	)
+	),
+	pojoSwaps={
+		SwaggerUI.class
+	}
 )
 public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig {
 	private static final long serialVersionUID = 1L;

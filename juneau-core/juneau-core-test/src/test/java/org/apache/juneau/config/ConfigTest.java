@@ -1357,7 +1357,7 @@ public class ConfigTest {
 	//====================================================================================================
 	@Test
 	public void testHex() throws Exception {
-		Config cf = init().builder().binaryFormat("HEX").build();
+		Config cf = init().builder().binaryFormat(BinaryFormat.HEX).build();
 	
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("626172", cf.get("foo"));
@@ -1369,7 +1369,7 @@ public class ConfigTest {
 	//====================================================================================================
 	@Test
 	public void testSpacedHex() throws Exception {
-		Config cf = init().builder().binaryFormat("SPACED_HEX").build();
+		Config cf = init().builder().binaryFormat(BinaryFormat.SPACED_HEX).build();
 	
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("62 61 72", cf.get("foo"));

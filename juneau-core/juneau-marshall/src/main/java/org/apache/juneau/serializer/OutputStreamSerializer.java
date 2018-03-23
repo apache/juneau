@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import org.apache.juneau.*;
 
 /**
@@ -21,6 +19,69 @@ import org.apache.juneau.*;
  */
 public abstract class OutputStreamSerializer extends Serializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "OutputStreamSerializer.";
+
+	/**
+	 * Configuration property:  Binary output format.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"OutputStreamSerializer.binaryFormat.s"</js>
+	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
+	 * 	<li><b>Default:</b>  {@link BinaryFormat#HEX}
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When using the {@link #serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * when converting the resulting byte array to a string.
+	 * 
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer that serializes to BASE64.</jc>
+	 * 	OutputStreamSerializer s = MsgPackSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.binaryFormat(<jsf>BASE64</jsf>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	OutputStreamSerializer s = MsgPackSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>SERIALIZER_binaryOutputFormat</jsf>, <js>"BASE64"</js>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<jk>public class</jk> MyBean {...}
+	 * 
+	 * 	<jc>// MessagePack will generate BASE64-encoded string.</jc>
+	 * 	String msgPack = s.serializeToString(<jk>new</jk> MyBean());
+	 * </p>
+	 */
+	public static final String OSSERIALIZER_binaryFormat = PREFIX + "binaryFormat.s";
+
+	static final OutputStreamSerializer DEFAULT = new OutputStreamSerializer(PropertyStore.create().build(), "") {
+		@Override
+		public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+			throw new NoSuchMethodError();
+		}
+	};
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	final BinaryFormat binaryFormat;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -48,6 +109,8 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 */
 	protected OutputStreamSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
+	
+		binaryFormat = getProperty(OSSERIALIZER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 
@@ -79,15 +142,12 @@ public abstract class OutputStreamSerializer extends Serializer {
 	public final byte[] serialize(Object o) throws SerializeException {
 		return createSession(createDefaultSessionArgs()).serialize(o);
 	}
-
-	/**
-	 * Convenience method for serializing an object to a hex-encoded String.
-	 * 
-	 * @param o The object to serialize.
-	 * @return The output serialized to a hex-encoded string.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	public final String serializeToHex(Object o) throws SerializeException {
-		return toHex(serialize(o));
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("OutputStreamSerializer", new ObjectMap()
+				.append("binaryFormat", binaryFormat)
+			);
 	}
 }

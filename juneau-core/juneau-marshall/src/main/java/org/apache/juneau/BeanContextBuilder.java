@@ -665,6 +665,52 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Find fluent setters.
+	 * 
+	 * <p>
+	 * When enabled, fluent setters are detected on beans.
+	 * 
+	 * <p>
+	 * Fluent setters must have the following attributes:
+	 * <ul>
+	 * 	<li>Public.
+	 * 	<li>Not static.
+	 * 	<li>Take in one parameter.
+	 * 	<li>Return the bean itself.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder fluentSetters(boolean value) {
+		return set(BEAN_fluentSetters, value);
+	}
+
+	/**
+	 * Configuration property:  Find fluent setters.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>fluentSetters(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder fluentSetters() {
+		return set(BEAN_fluentSetters, true);
+	}
+
+	/**
 	 * Configuration property:  Ignore invocation errors on getters.
 	 * 
 	 * <p>

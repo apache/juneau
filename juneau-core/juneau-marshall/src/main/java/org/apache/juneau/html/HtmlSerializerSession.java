@@ -13,8 +13,8 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializer.*;
-import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 
 import java.io.*;
 import java.util.*;

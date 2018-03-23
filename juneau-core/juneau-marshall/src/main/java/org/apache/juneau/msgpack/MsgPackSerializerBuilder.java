@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of MessagePack serializers.
  */
-public class MsgPackSerializerBuilder extends SerializerBuilder {
+public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -48,6 +48,12 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
+
+	@Override /* OutputStreamSerializerBuilder */
+	public MsgPackSerializerBuilder binaryFormat(BinaryFormat value) {
+		super.binaryFormat(value);
+		return this;
+	}
 
 	@Override /* SerializerBuilder */
 	public MsgPackSerializerBuilder abridged(boolean value) {
@@ -109,18 +115,6 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public MsgPackSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -141,12 +135,6 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public MsgPackSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -207,24 +195,6 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public MsgPackSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

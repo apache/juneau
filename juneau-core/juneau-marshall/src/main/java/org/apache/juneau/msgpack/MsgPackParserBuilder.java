@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder class for building instances of MessagePack parsers.
  */
-public class MsgPackParserBuilder extends ParserBuilder {
+public class MsgPackParserBuilder extends InputStreamParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -49,6 +49,12 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
+	@Override /* InputStreamParserBuilder */
+	public MsgPackParserBuilder binaryFormat(BinaryFormat value) {
+		super.binaryFormat(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public MsgPackParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -58,18 +64,6 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public MsgPackParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public MsgPackParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public MsgPackParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

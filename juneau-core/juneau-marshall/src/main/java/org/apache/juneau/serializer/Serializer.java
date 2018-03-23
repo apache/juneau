@@ -406,85 +406,6 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth.i";
 
 	/**
-	 * Configuration property:  Maximum indentation.
-	 * 
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.maxIndent.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>100</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#maxIndent(int)}
-	 * 		</ul>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the maximum indentation level in the serialized document.
-	 * 
-	 * <p>
-	 * This setting does not apply to the MessagePack or RDF serializers.
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.maxIndent(20)
-	 * 		.build();
-	 * 	
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_maxIndent</jsf>, 20)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String SERIALIZER_maxIndent = PREFIX + "maxIndent.i";
-
-	/**
-	 * Configuration property:  Quote character.
-	 * 
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.quoteChar.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"\""</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#quoteChar(char)}
-	 * 			<li class='jm'>{@link SerializerBuilder#sq()}
-	 * 		</ul>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * This is the character used for quoting attributes and values.
-	 * 
-	 * <p>
-	 * This setting does not apply to the MessagePack or RDF serializers.
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Create a serializer that uses single quotes.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sq()
-	 * 		.build();
-	 * 	
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String SERIALIZER_quoteChar = PREFIX + "quoteChar.s";
-
-	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 * 
 	 * <h5 class='section'>Property:</h5>
@@ -912,50 +833,6 @@ public abstract class Serializer extends BeanContext {
 	 */
 	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";
 
-	/**
-	 * Configuration property:  Use whitespace.
-	 * 
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.useWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#useWhitespace(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#useWhitespace()}
-	 * 			<li class='jm'>{@link SerializerBuilder#ws()}
-	 * 		</ul>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 * 
-	 * <p>
-	 * This setting does not apply to the MessagePack serializer.
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ws()
-	 * 		.build();
-	 * 	
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 * 
-	 * 	<jc>// Produces "\{\n\t'foo': 'bar'\n\}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 */
-	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
-
 	
 	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "") {
 		@Override
@@ -968,11 +845,10 @@ public abstract class Serializer extends BeanContext {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final int maxDepth, initialDepth, maxIndent;
+	final int initialDepth, maxDepth;
 	final boolean
 		detectRecursions,
 		ignoreRecursions,
-		useWhitespace,
 		addBeanTypeProperties,
 		trimNulls,
 		trimEmptyCollections,
@@ -981,7 +857,6 @@ public abstract class Serializer extends BeanContext {
 		sortCollections,
 		sortMaps,
 		abridged;
-	final char quoteChar;
 	final UriContext uriContext;
 	final UriResolution uriResolution;
 	final UriRelativity uriRelativity;
@@ -998,8 +873,6 @@ public abstract class Serializer extends BeanContext {
 		initialDepth = getIntegerProperty(SERIALIZER_initialDepth, 0);
 		detectRecursions = getBooleanProperty(SERIALIZER_detectRecursions, false);
 		ignoreRecursions = getBooleanProperty(SERIALIZER_ignoreRecursions, false);
-		useWhitespace = getBooleanProperty(SERIALIZER_useWhitespace, false);
-		maxIndent = getIntegerProperty(SERIALIZER_maxIndent, 100);
 		addBeanTypeProperties = getBooleanProperty(SERIALIZER_addBeanTypeProperties, true);
 		trimNulls = getBooleanProperty(SERIALIZER_trimNullProperties, true);
 		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections, false);
@@ -1008,7 +881,6 @@ public abstract class Serializer extends BeanContext {
 		sortCollections = getBooleanProperty(SERIALIZER_sortCollections, false);
 		sortMaps = getBooleanProperty(SERIALIZER_sortMaps, false);
 		abridged = getBooleanProperty(SERIALIZER_abridged, false);
-		quoteChar = getStringProperty(SERIALIZER_quoteChar, "\"").charAt(0);
 		uriContext = getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
 		uriResolution = getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
 		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
@@ -1113,6 +985,22 @@ public abstract class Serializer extends BeanContext {
 		return createSession().serialize(o);
 	}
 
+	/**
+	 * Convenience method for serializing an object to a String.
+	 * 
+	 * <p>
+	 * For writer-based serializers, this is identical to calling {@link #serialize(Object)}.
+	 * <br>For stream-based serializers, this converts the returned byte array to a string based on 
+	 * the {@link OutputStreamSerializer#OSSERIALIZER_binaryFormat} setting.
+	 * 
+	 * @param o The object to serialize.
+	 * @return The output serialized to a string.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public final String serializeToString(Object o) throws SerializeException {
+		return createSession().serializeToString(o);
+	}
+
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
@@ -1154,8 +1042,6 @@ public abstract class Serializer extends BeanContext {
 				.append("initialDepth", initialDepth)
 				.append("detectRecursions", detectRecursions)
 				.append("ignoreRecursions", ignoreRecursions)
-				.append("useWhitespace", useWhitespace)
-				.append("maxIndent", maxIndent)
 				.append("addBeanTypeProperties", addBeanTypeProperties)
 				.append("trimNulls", trimNulls)
 				.append("trimEmptyCollections", trimEmptyCollections)
@@ -1164,7 +1050,6 @@ public abstract class Serializer extends BeanContext {
 				.append("sortCollections", sortCollections)
 				.append("sortMaps", sortMaps)
 				.append("parserKnowsRootTypes", abridged)
-				.append("quoteChar", quoteChar)
 				.append("uriContext", uriContext)
 				.append("uriResolution", uriResolution)
 				.append("uriRelativity", uriRelativity)

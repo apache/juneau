@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of plain-text serializers.
  */
-public class PlainTextSerializerBuilder extends SerializerBuilder {
+public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -48,6 +48,42 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
+
+	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
 
 	@Override /* SerializerBuilder */
 	public PlainTextSerializerBuilder abridged(boolean value) {
@@ -109,18 +145,6 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public PlainTextSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -141,12 +165,6 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public PlainTextSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -207,24 +225,6 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public PlainTextSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

@@ -66,6 +66,45 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	/** Default serializer, all default settings.*/
 	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(PropertyStore.DEFAULT);
 
+	/** Default serializer, all default settings, spaced-hex string output.*/
+	public static final MsgPackSerializer DEFAULT_SPACED_HEX = new SpacedHex(PropertyStore.DEFAULT);
+
+	/** Default serializer, all default settings, spaced-hex string output.*/
+	public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(PropertyStore.DEFAULT);
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/** Default serializer, spaced-hex string output. */
+	public static class SpacedHex extends MsgPackSerializer {
+
+		/**
+		 * Constructor.
+		 * 
+		 * @param ps The property store containing all the settings for this object.
+		 */
+		public SpacedHex(PropertyStore ps) {
+			super(
+				ps.builder().set(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX).build()
+			);
+		}
+	}
+
+	/** Default serializer, BASE64 string output. */
+	public static class Base64 extends MsgPackSerializer {
+
+		/**
+		 * Constructor.
+		 * 
+		 * @param ps The property store containing all the settings for this object.
+		 */
+		public Base64(PropertyStore ps) {
+			super(
+				ps.builder().set(OSSERIALIZER_binaryFormat, BinaryFormat.BASE64).build()
+			);
+		}
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

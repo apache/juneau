@@ -253,46 +253,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Maximum indentation.
-	 * 
-	 * <p>
-	 * Specifies the maximum indentation level in the serialized document.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerBuilder maxIndent(int value) {
-		return set(SERIALIZER_maxIndent, value);
-	}
-
-	/**
-	 * Configuration property:  Quote character.
-	 * 
-	 * <p>
-	 * This is the character used for quoting attributes and values.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <js>'"'</js>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerBuilder quoteChar(char value) {
-		return set(SERIALIZER_quoteChar, value);
-	}
-
-	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 * 
 	 * <p>
@@ -364,23 +324,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 */
 	public SerializerBuilder sortMaps() {
 		return set(SERIALIZER_sortMaps, true);
-	}
-
-	/**
-	 * Configuration property:  Quote character.
-	 * 
-	 * <p>
-	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
-	 * </ul>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public SerializerBuilder sq() {
-		return quoteChar('\'');
 	}
 
 	/**
@@ -652,59 +595,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 */
 	public SerializerBuilder uriResolution(String value) {
 		return set(SERIALIZER_uriResolution, value);
-	}
-
-	/**
-	 * Configuration property:  Use whitespace.
-	 * 
-	 * <p>
-	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
-	}
-
-	/**
-	 * Configuration property:  Use whitespace.
-	 * 
-	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
-	 * </ul>
-	 * @return This object (for method chaining).
-	 */
-	public SerializerBuilder useWhitespace() {
-		return set(SERIALIZER_useWhitespace, true);
-	}
-
-	/**
-	 * Configuration property:  Use whitespace.
-	 * 
-	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
-	 * </ul>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public SerializerBuilder ws() {
-		return useWhitespace();
 	}
 
 	@Override /* BeanContextBuilder */

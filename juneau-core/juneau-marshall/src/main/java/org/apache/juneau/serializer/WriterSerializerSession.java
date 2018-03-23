@@ -12,7 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.serializer.WriterSerializer.*;
+
 import java.io.*;
+
+import org.apache.juneau.*;
 
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
@@ -32,6 +36,10 @@ import java.io.*;
  */
 public abstract class WriterSerializerSession extends SerializerSession {
 
+	private final int maxIndent;
+	private final boolean useWhitespace;
+	private final char quoteChar;
+
 	/**
 	 * Create a new session using properties specified in the context.
 	 * 
@@ -44,8 +52,12 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected WriterSerializerSession(Serializer ctx, SerializerSessionArgs args) {
+	protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
+		
+		useWhitespace = getProperty(WSERIALIZER_useWhitespace, boolean.class, ctx.useWhitespace);
+		maxIndent = getProperty(WSERIALIZER_maxIndent, int.class, ctx.maxIndent);
+		quoteChar = getProperty(WSERIALIZER_quoteChar, String.class, ""+ctx.quoteChar).charAt(0);
 	}
 
 	/**
@@ -55,7 +67,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 * 	Runtime session arguments.
 	 */
 	protected WriterSerializerSession(SerializerSessionArgs args) {
-		super(args);
+		this(WriterSerializer.DEFAULT, args);
 	}
 
 	@Override /* SerializerSession */
@@ -75,5 +87,47 @@ public abstract class WriterSerializerSession extends SerializerSession {
 		StringWriter w = new StringWriter();
 		serialize(o, w);
 		return w.toString();
+	}
+	
+	@Override /* SerializerSession */
+	public final String serializeToString(Object o) throws SerializeException {
+		return serialize(o);
+	}
+	
+	/**
+	 * Returns the {@link WriterSerializer#WSERIALIZER_useWhitespace} setting value for this session.
+	 * 
+	 * @return The {@link WriterSerializer#WSERIALIZER_useWhitespace} setting value for this session.
+	 */
+	protected boolean isUseWhitespace() {
+		return useWhitespace;
+	}
+
+	/**
+	 * Returns the {@link WriterSerializer#WSERIALIZER_maxIndent} setting value for this session.
+	 * 
+	 * @return The {@link WriterSerializer#WSERIALIZER_maxIndent} setting value for this session.
+	 */
+	protected int getMaxIndent() {
+		return maxIndent;
+	}
+
+	/**
+	 * Returns the {@link WriterSerializer#WSERIALIZER_quoteChar} setting value for this session.
+	 * 
+	 * @return The {@link WriterSerializer#WSERIALIZER_quoteChar} setting value for this session.
+	 */
+	protected char getQuoteChar() {
+		return quoteChar;
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("WriterSerializerSession", new ObjectMap()
+				.append("maxIndent", maxIndent)
+				.append("useWhitespace", useWhitespace)
+				.append("quoteChar", quoteChar)
+			);
 	}
 }

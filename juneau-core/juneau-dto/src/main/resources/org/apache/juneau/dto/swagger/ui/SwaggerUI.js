@@ -41,18 +41,15 @@ function toggleOpBlock(e) {
 
 /* Shows an example */
 function selectExample(e) {
-	var dataName = e.getAttribute("data-name");
+	var dataName = e.value;
 	var examplesNode = e.parentNode.parentNode;
-	var lis = examplesNode.getElementsByTagName("li");
 	var divs = examplesNode.getElementsByTagName("div");
 	
-	for (var i in lis) {
-		var li = lis[i], div = divs[i];
-		if (li.getAttribute("data-name") == dataName) {
-			li.classList.add("active");
+	for (var i in divs) {
+		var div = divs[i];
+		if (div.getAttribute("data-name") == dataName) {
 			div.classList.add("active");
 		} else {
-			li.classList.remove("active");
 			div.classList.remove("active");
 		}
 	}

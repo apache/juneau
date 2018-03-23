@@ -27,7 +27,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Builder class for building instances of RDF parsers.
  */
-public class RdfParserBuilder extends ParserBuilder {
+public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -337,6 +337,18 @@ public class RdfParserBuilder extends ParserBuilder {
 		return language(Constants.LANG_RDF_XML_ABBREV);
 	}
 
+	@Override /* ReaderParserBuilder */
+	public RdfParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ReaderParserBuilder */
+	public RdfParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public RdfParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -346,18 +358,6 @@ public class RdfParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public RdfParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

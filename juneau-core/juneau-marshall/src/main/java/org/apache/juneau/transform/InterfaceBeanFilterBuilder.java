@@ -69,6 +69,9 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 			if (b.sort())
 				sortProperties(true);
 
+			if (b.fluentSetters())
+				fluentSetters(true);
+
 			if (! b.excludeProperties().isEmpty())
 				excludeProperties(split(b.excludeProperties()));
 

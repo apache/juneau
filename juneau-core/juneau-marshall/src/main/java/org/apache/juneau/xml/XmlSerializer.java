@@ -361,7 +361,7 @@ public class XmlSerializer extends WriterSerializer {
 		public Sq(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(SERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
 		}
@@ -378,8 +378,8 @@ public class XmlSerializer extends WriterSerializer {
 		public SqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(SERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 				);
 		}
@@ -416,7 +416,7 @@ public class XmlSerializer extends WriterSerializer {
 			super(
 				ps.builder()
 					.set(XML_enableNamespaces, true)
-					.set(SERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
 		}
@@ -434,8 +434,8 @@ public class XmlSerializer extends WriterSerializer {
 			super(
 				ps.builder()
 					.set(XML_enableNamespaces, true)
-					.set(SERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 				);
 		}

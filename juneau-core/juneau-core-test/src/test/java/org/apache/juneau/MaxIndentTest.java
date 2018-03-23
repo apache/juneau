@@ -291,7 +291,7 @@ public class MaxIndentTest {
 
 	private void testSerialize(String testName, Serializer s, String expected) throws Exception {
 		try {
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(input.in) : ((OutputStreamSerializer)s).serializeToHex(input.in);
+			String r = s.serializeToString(input.in);
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {

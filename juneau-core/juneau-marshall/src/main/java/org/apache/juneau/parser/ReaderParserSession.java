@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.parser.ReaderParser.*;
+
+import java.io.*;
+
+import org.apache.juneau.*;
+
 /**
  * Subclass of parser session objects for character-based parsers.
  * 
@@ -19,6 +25,8 @@ package org.apache.juneau.parser;
  * This class is NOT thread safe.  It is typically discarded after one-time use.
  */
 public abstract class ReaderParserSession extends ParserSession {
+
+	private final String inputStreamCharset, fileCharset;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -29,8 +37,11 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected ReaderParserSession(Parser ctx, ParserSessionArgs args) {
+	protected ReaderParserSession(ReaderParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
+
+		inputStreamCharset = getProperty(RPARSER_inputStreamCharset, String.class, ctx.inputStreamCharset);
+		fileCharset = getProperty(RPARSER_fileCharset, String.class, ctx.fileCharset);
 	}
 
 	/**
@@ -40,12 +51,47 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * 	Runtime session arguments.
 	 */
 	protected ReaderParserSession(ParserSessionArgs args) {
-		super(args);
+		this(ReaderParser.DEFAULT, args);
 	}
 
 
 	@Override /* ParserSession */
 	public final boolean isReaderParser() {
 		return true;
+	}
+	
+	/**
+	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
+	 * a stream or reader.
+	 * 
+	 * @param input
+	 * 	The input.
+	 * 	<br>This can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
+	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
+	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
+	 * 			{@link ReaderParser#RPARSER_fileCharset}).
+	 * 	</ul>
+	 * @return
+	 * 	A new {@link ParserPipe} wrapper around the specified input object.
+	 */
+	@Override /* ParserSesson */
+	public final ParserPipe createPipe(Object input) {
+		return new ParserPipe(input, isDebug(), strict, autoCloseStreams, unbuffered, fileCharset, inputStreamCharset, null);
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ReaderParserSession", new ObjectMap()
+				.append("fileCharset", fileCharset)
+				.append("inputStreamCharset", inputStreamCharset)
+			);
 	}
 }

@@ -93,7 +93,7 @@ public final class BeanPropertyUtils {
 			List<T> l = appendTo == null ? new ArrayList<T>() : appendTo;
 			for (Object o : values) {
 				if (o != null) {
-					if (isObjectList(o)) {
+					if (isObjectList(o, false)) {
 						for (Object o2 : new ObjectList(o.toString())) 
 							l.add(toType(o2, type, args));
 					} else if (o instanceof Collection) {
@@ -133,7 +133,7 @@ public final class BeanPropertyUtils {
 			Map<K,V> m = appendTo == null ? new LinkedHashMap<K,V>() : appendTo;
 			for (Object o : values) {
 				if (o != null) {
-					if (isObjectMap(o)) {
+					if (isObjectMap(o, false)) {
 						for (Map.Entry<String,Object> e : new ObjectMap(o.toString()).entrySet()) 
 							m.put(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
 					} else if (o instanceof Map) {
@@ -237,6 +237,61 @@ public final class BeanPropertyUtils {
 	public static <K,V> Map<K,V> addToMap(Map<K,V> m, K key, V value) {
 		if (m == null)
 			m = new LinkedHashMap<>();
+		m.put(key, value);
+		return m;
+	}
+
+	/**
+	 * Creates a new map from the specified map.
+	 * 
+	 * @param val The value to copy from.
+	 * @param comparator The key comparator to use, or <jk>null</jk> to use natural ordering.
+	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
+	 */
+	public static <K,V> Map<K,V> newSortedMap(Map<K,V> val, Comparator<K> comparator) {
+		if (val == null)
+			return null;
+		Map<K,V> m = new TreeMap<>(comparator);
+		m.putAll(val);
+		return m;
+	}
+	
+	/**
+	 * Copies the specified values into an existing map.
+	 * 
+	 * @param m 
+	 * 	The map to add to.
+	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashMap} will be created.
+	 * @param val The values to add.
+	 * @param comparator The key comparator to use, or <jk>null</jk> to use natural ordering.
+	 * @return The list with values copied into it.
+	 */
+	public static <K,V> Map<K,V> addToSortedMap(Map<K,V> m, Map<K,V> val, Comparator<K> comparator) {
+		if (val != null) {
+			if (m == null) {
+				m = new TreeMap<>(comparator);
+				m.putAll(val);
+			} else {
+				m.putAll(val);
+			}
+		}
+		return m;
+	}
+
+	/**
+	 * Adds a single entry into an existing map.
+	 * 
+	 * @param m 
+	 * 	The map to add to.
+	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashMap} will be created.
+	 * @param key The entry key.
+	 * @param value The entry value.
+	 * @param comparator The key comparator to use, or <jk>null</jk> to use natural ordering.
+	 * @return The list with values copied into it.
+	 */
+	public static <K,V> Map<K,V> addToSortedMap(Map<K,V> m, K key, V value, Comparator<K> comparator) {
+		if (m == null) 
+			m = new TreeMap<>(comparator);
 		m.put(key, value);
 		return m;
 	}

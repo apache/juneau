@@ -167,7 +167,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Add or overwrite a config file section.",
 		swagger={
 			"parameters:[",
-				"{name:'section',in:'path',description:'Section name.'}",
+				"{name:'section',in:'path',description:'Section name.'},",
 				"{in:'body',description:'New contents for section as a simple map with string keys and values.'}",
 			"]"
 		}

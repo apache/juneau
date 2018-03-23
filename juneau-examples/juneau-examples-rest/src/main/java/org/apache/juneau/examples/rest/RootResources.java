@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import org.apache.juneau.examples.rest.addressbook.*;
 import org.apache.juneau.microservice.*;
@@ -55,11 +55,12 @@ import org.apache.juneau.rest.widget.*;
 		// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
 		// String comparisons.
 		// You can apply any of the Serializer/Parser/BeanContext settings this way.
-		@Property(name=SERIALIZER_quoteChar, value="'")
+		@Property(name=WSERIALIZER_quoteChar, value="'")
 	},
 	children={
 		HelloWorldResource.class,
 		PetStoreResource.class,
+		org.apache.juneau.examples.petstore.PetStoreResource.class,
 		SystemPropertiesResource.class,
 		MethodExampleResource.class,
 		RequestEchoResource.class,

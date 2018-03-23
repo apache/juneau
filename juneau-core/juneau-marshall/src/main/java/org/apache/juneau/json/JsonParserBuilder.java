@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder class for building instances of JSON parsers.
  */
-public class JsonParserBuilder extends ParserBuilder {
+public class JsonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -89,6 +89,18 @@ public class JsonParserBuilder extends ParserBuilder {
 		return set(JSON_validateEnd, true);
 	}
 
+	@Override /* ReaderParserBuilder */
+	public JsonParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ReaderParserBuilder */
+	public JsonParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public JsonParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -98,18 +110,6 @@ public class JsonParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public JsonParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

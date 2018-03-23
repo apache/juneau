@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of JSON serializers.
  */
-public class YamlSerializerBuilder extends SerializerBuilder {
+public class YamlSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -105,6 +105,42 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 		return simple(true).sq();
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public YamlSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public YamlSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public YamlSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public YamlSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public YamlSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public YamlSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
@@ -165,18 +201,6 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -197,12 +221,6 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -263,24 +281,6 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

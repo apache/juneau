@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of XML serializers.
  */
-public class XmlSerializerBuilder extends SerializerBuilder {
+public class XmlSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -221,6 +221,42 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 		return set(XML_xsNamespace, value);
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
@@ -281,18 +317,6 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -313,12 +337,6 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -379,24 +397,6 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

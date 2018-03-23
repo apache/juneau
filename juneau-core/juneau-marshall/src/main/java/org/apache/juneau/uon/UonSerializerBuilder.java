@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of UON serializers.
  */
-public class UonSerializerBuilder extends SerializerBuilder {
+public class UonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -125,6 +125,42 @@ public class UonSerializerBuilder extends SerializerBuilder {
 		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public UonSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
@@ -185,18 +221,6 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UonSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public UonSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -217,12 +241,6 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public UonSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -283,24 +301,6 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public UonSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder class for building instances of Java Serialized Object parsers.
  */
-public class JsoParserBuilder extends ParserBuilder {
+public class JsoParserBuilder extends InputStreamParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -49,6 +49,12 @@ public class JsoParserBuilder extends ParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
+	@Override /* InputStreamParserBuilder */
+	public JsoParserBuilder binaryFormat(BinaryFormat value) {
+		super.binaryFormat(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public JsoParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -58,18 +64,6 @@ public class JsoParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public JsoParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsoParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsoParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 

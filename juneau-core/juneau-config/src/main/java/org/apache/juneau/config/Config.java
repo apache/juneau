@@ -204,11 +204,11 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.binaryFormat.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"BASE64"</js>
+	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
+	 * 	<li><b>Default:</b>  {@link BinaryFormat#BASE64}
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#binaryFormat(String)}
+	 * 			<li class='jm'>{@link ConfigBuilder#binaryFormat(BinaryFormat)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -219,9 +219,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * Possible values:
 	 * <ul>
-	 * 	<li><js>"BASE64"</js> - BASE64-encoded string.
-	 * 	<li><js>"HEX"</js> - Hexadecimal.
-	 * 	<li><js>"SPACED_HEX"</js> - Hexadecimal with spaces between bytes.
+	 * 	<li>{@link BinaryFormat#BASE64} - BASE64-encoded string.
+	 * 	<li>{@link BinaryFormat#HEX} - Hexadecimal.
+	 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
 	 * </ul>
 	 */
 	public static final String CONFIG_binaryFormat = PREFIX + "binaryFormat.s";
@@ -277,7 +277,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	private final ConfigEncoder encoder;
 	private final VarResolverSession varSession;
 	private final int binaryLineLength;
-	private final String binaryFormat;
+	private final BinaryFormat binaryFormat;
 	private final boolean multiLineValuesOnSeparateLines, readOnly;
 	private final ConfigMap configMap;
 	private final BeanSession beanSession;
@@ -339,7 +339,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			.build()
 			.createSession();
 		binaryLineLength = getIntegerProperty(CONFIG_binaryLineLength, -1);
-		binaryFormat = getStringProperty(CONFIG_binaryFormat, "BASE64").toUpperCase();
+		binaryFormat = getProperty(CONFIG_binaryFormat, BinaryFormat.class, BinaryFormat.BASE64);
 		multiLineValuesOnSeparateLines = getBooleanProperty(CONFIG_multiLineValuesOnSeparateLines, false);
 		readOnly = getBooleanProperty(CONFIG_readOnly, false);
 	}
@@ -1626,9 +1626,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		if (value instanceof byte[]) {
 			String s = null;
 			byte[] b = (byte[])value;
-			if ("HEX".equals(binaryFormat))
+			if (binaryFormat == BinaryFormat.HEX)
 				s = toHex(b);
-			else if ("SPACED_HEX".equals(binaryFormat))
+			else if (binaryFormat == BinaryFormat.SPACED_HEX)
 				s = toSpacedHex(b);
 			else
 				s = base64Encode(b);
@@ -1673,8 +1673,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 				s = s.replaceAll("\n", "");
 			try {
 				switch (binaryFormat) {
-					case "HEX": return (T)fromHex(s);
-					case "SPACED_HEX": return (T)fromSpacedHex(s);
+					case HEX: return (T)fromHex(s);
+					case SPACED_HEX: return (T)fromSpacedHex(s);
 					default: return (T)base64Decode(s);
 				}
 			} catch (Exception e) {

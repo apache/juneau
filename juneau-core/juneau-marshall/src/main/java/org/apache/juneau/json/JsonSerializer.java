@@ -286,7 +286,7 @@ public class JsonSerializer extends WriterSerializer {
 		 */
 		public Readable(PropertyStore ps) {
 			super(
-				ps.builder().set(SERIALIZER_useWhitespace, true).build()
+				ps.builder().set(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -303,7 +303,7 @@ public class JsonSerializer extends WriterSerializer {
 			super(
 				ps.builder()
 					.set(JSON_simpleMode, true)
-					.set(SERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_quoteChar, '\'')
 					.build(),
 				"application/json",
 				"application/json+simple", "text/json+simple"
@@ -323,8 +323,8 @@ public class JsonSerializer extends WriterSerializer {
 			super(
 				ps.builder()
 					.set(JSON_simpleMode, true)
-					.set(SERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}
@@ -345,8 +345,8 @@ public class JsonSerializer extends WriterSerializer {
 			super(
 				ps.builder()
 					.set(JSON_simpleMode, true)
-					.set(SERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_quoteChar, '\'')
+					.set(WSERIALIZER_useWhitespace, true)
 					.set(SERIALIZER_detectRecursions, true)
 					.build()
 			);

@@ -546,7 +546,7 @@ public class UriResolutionTest {
 		try {
 			boolean isRdf = s instanceof RdfSerializer;
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(new TestURI()) : ((OutputStreamSerializer)s).serializeToHex(new TestURI());
+			String r = s.serializeToString(new TestURI());
 
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.
@@ -576,7 +576,7 @@ public class UriResolutionTest {
 
 	private void testParse(Serializer s, Parser p) throws Exception {
 		try {
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(new TestURI()) : ((OutputStreamSerializer)s).serializeToHex(new TestURI());
+			String r = s.serializeToString(new TestURI());
 
 			TreeMap<String,String> m = p.parse(r, TreeMap.class, String.class, String.class);
 

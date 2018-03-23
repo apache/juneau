@@ -27,7 +27,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Builder class for building instances of RDF serializers.
  */
-public class RdfSerializerBuilder extends SerializerBuilder {
+public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -423,6 +423,42 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 		return language(Constants.LANG_RDF_XML_ABBREV);
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
@@ -483,18 +519,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -515,12 +539,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -581,24 +599,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

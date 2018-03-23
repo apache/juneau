@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Stores a set of ASCII characters for quick lookup.

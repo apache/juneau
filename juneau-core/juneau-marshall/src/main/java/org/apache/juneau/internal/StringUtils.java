@@ -2033,12 +2033,23 @@ public final class StringUtils {
 	 * Returns <jk>true</jk> if the specified string appears to be an JSON array.
 	 * 
 	 * @param o The object to test.
+	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON array.
 	 */
-	public static boolean isObjectList(Object o) {
+	public static boolean isObjectList(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
-			return (s.startsWith("[") && s.endsWith("]") && BeanContext.DEFAULT != null);
+			if (! ignoreWhitespaceAndComments)
+				return (s.startsWith("[") && s.endsWith("]"));
+			if (firstRealCharacter(s) != '[')
+				return false;
+			int i = s.lastIndexOf(']');
+			if (i == -1)
+				return false;
+			s = s.substring(i+1);
+			if (firstRealCharacter(s) != -1)
+				return false;
+			return true;
 		}
 		return false;
 	}
@@ -2047,13 +2058,77 @@ public final class StringUtils {
 	 * Returns <jk>true</jk> if the specified string appears to be a JSON object.
 	 * 
 	 * @param o The object to test.
+	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON object.
 	 */
-	public static boolean isObjectMap(Object o) {
+	public static boolean isObjectMap(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
-			return (s.startsWith("{") && s.endsWith("}") && BeanContext.DEFAULT != null);
+			if (! ignoreWhitespaceAndComments)
+				return (s.startsWith("{") && s.endsWith("}"));
+			if (firstRealCharacter(s) != '{')
+				return false;
+			int i = s.lastIndexOf('}');
+			if (i == -1)
+				return false;
+			s = s.substring(i+1);
+			if (firstRealCharacter(s) != -1)
+				return false;
+			return true;
 		}
 		return false;
+	}
+	
+	private static int firstRealCharacter(String s) {
+		try (StringReader r = new StringReader(s)) {
+			int c = 0;
+			while ((c = r.read()) != -1) {
+				if (! Character.isWhitespace(c)) {
+					if (c == '/') {
+						skipComments(r);
+					} else {
+						return c;
+					}
+				}
+			}
+			return -1;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	private static void skipComments(StringReader r) throws IOException {
+		int c = r.read();
+		//  "/* */" style comments
+		if (c == '*') {
+			while (c != -1)
+				if ((c = r.read()) == '*')
+					if ((c = r.read()) == '/')
+						return;
+		//  "//" style comments
+		} else if (c == '/') {
+			while (c != -1) {
+				c = r.read();
+				if (c == -1 || c == '\n')
+					return;
+			}
+		}
+	}
+
+	/**
+	 * Takes in a string, splits it by lines, and then prepends each line with line numbers.
+	 * 
+	 * @param s The string.
+	 * @return The string with line numbers added.
+	 */
+	public static String addLineNumbers(String s) {
+		if (s == null)
+			return null;
+		String[] lines = s.split("[\r\n]+");
+		final int digits = String.valueOf(lines.length).length();
+		StringBuilder sb = new StringBuilder();
+		int i = 1;
+		for (String l : lines) 
+			sb.append(String.format("%0"+digits+"d", i++)).append(": ").append(l).append("\n");
+		return sb.toString();
 	}
 }

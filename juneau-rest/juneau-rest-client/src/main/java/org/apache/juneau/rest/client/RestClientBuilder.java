@@ -13,9 +13,10 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.parser.Parser.*;
+import static org.apache.juneau.parser.InputStreamParser.*;
+import static org.apache.juneau.parser.ReaderParser.*;
 import static org.apache.juneau.rest.client.RestClient.*;
-import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.uon.UonSerializer.*;
 
 import java.lang.reflect.*;
@@ -1340,63 +1341,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Maximum indentation.
-	 * 
-	 * <p>
-	 * Specifies the maximum indentation level in the serialized document.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder maxIndent(boolean value) {
-		return set(SERIALIZER_maxIndent, value);
-	}
-
-	/**
-	 * Configuration property:  Quote character.
-	 * 
-	 * <p>
-	 * This is the character used for quoting attributes and values.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <js>'"'</js>.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder quoteChar(char value) {
-		return set(SERIALIZER_quoteChar, value);
-	}
-
-	/**
-	 * Configuration property:  Quote character.
-	 * 
-	 * <p>
-	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
-	 * </ul>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder sq() {
-		return set(SERIALIZER_quoteChar, '\'');
-	}
-
-	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 * 
 	 * <p>
@@ -1658,6 +1602,63 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Maximum indentation.
+	 * 
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder maxIndent(int value) {
+		return set(WSERIALIZER_maxIndent, value);
+	}
+
+	/**
+	 * Configuration property:  Quote character.
+	 * 
+	 * <p>
+	 * This is the character used for quoting attributes and values.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>'"'</js>.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder quoteChar(char value) {
+		return set(WSERIALIZER_quoteChar, value);
+	}
+
+	/**
+	 * Configuration property:  Quote character.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder sq() {
+		return set(WSERIALIZER_quoteChar, '\'');
+	}
+
+	/**
 	 * Configuration property:  Use whitespace.
 	 * 
 	 * <p>
@@ -1665,7 +1666,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -1674,7 +1675,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
+		return set(WSERIALIZER_useWhitespace, value);
 	}
 	
 	/**
@@ -1685,12 +1686,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder useWhitespace() {
-		return set(SERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -1701,15 +1702,35 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder ws() {
-		return set(SERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace, true);
 	}
 
+	/**
+	 * Configuration property:  Binary string format.
+	 * 
+	 * <p>
+	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * when converting the resulting byte array to a string.
+	 * 
+	 * <ul>
+	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link BinaryFormat#HEX}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder binaryOutputFormat(BinaryFormat value) {
+		return set(OSSERIALIZER_binaryFormat, value);
+	}
+	
 	/**
 	 * Configuration property:  Auto-close streams.
 	 * 
@@ -1745,46 +1766,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder autoCloseStreams() {
 		return set(PARSER_autoCloseStreams, true);
-	}
-
-	/**
-	 * Configuration property:  File charset.
-	 * 
-	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder fileCharset(String value) {
-		return set(PARSER_fileCharset, value);
-	}
-
-	/**
-	 * Configuration property:  Input stream charset.
-	 * 
-	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"UTF-8"</js>.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder inputStreamCharset(String value) {
-		return set(PARSER_inputStreamCharset, value);
 	}
 
 	/**
@@ -1914,6 +1895,67 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder unbuffered() {
 		return set(PARSER_unbuffered, true);
+	}
+
+	/**
+	 * Configuration property:  File charset.
+	 * 
+	 * <p>
+	 * The character set to use for reading <code>Files</code> from the file system.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder fileCharset(String value) {
+		return set(RPARSER_fileCharset, value);
+	}
+
+	/**
+	 * Configuration property:  Input stream charset.
+	 * 
+	 * <p>
+	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"UTF-8"</js>.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder inputStreamCharset(String value) {
+		return set(RPARSER_inputStreamCharset, value);
+	}
+
+	/**
+	 * Configuration property:  Binary input format.
+	 * 
+	 * <p>
+	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
+	 * when converting the string into a byte array.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is {@link BinaryFormat#HEX}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder binaryInputFormat(BinaryFormat value) {
+		return set(ISPARSER_binaryFormat, value);
 	}
 
 	/**

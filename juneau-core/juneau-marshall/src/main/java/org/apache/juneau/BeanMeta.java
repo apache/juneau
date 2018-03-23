@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ClassFlags.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -100,6 +100,7 @@ public class BeanMeta<T> {
 	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
 	final BeanRegistry beanRegistry;
 	final boolean sortProperties;
+	final boolean fluentSetters;
 
 	/**
 	 * Constructor.
@@ -131,6 +132,7 @@ public class BeanMeta<T> {
 		this.typePropertyName = b.typePropertyName;
 		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
 		this.sortProperties = b.sortProperties;
+		this.fluentSetters = b.fluentSetters;
 	}
 
 	private static final class Builder<T> {
@@ -150,7 +152,7 @@ public class BeanMeta<T> {
 		PropertyNamer propertyNamer;
 		BeanRegistry beanRegistry;
 		String dictionaryName, typePropertyName;
-		boolean sortProperties;
+		boolean sortProperties, fluentSetters;
 
 		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
@@ -185,6 +187,8 @@ public class BeanMeta<T> {
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)
 					typePropertyName = ctx.getBeanTypePropertyName();
+
+				fluentSetters = (ctx.fluentSetters || (beanFilter != null && beanFilter.isFluentSetters()));
 
 				// If @Bean.interfaceClass is specified on the parent class, then we want
 				// to use the properties defined on that class, not the subclass.
@@ -293,7 +297,7 @@ public class BeanMeta<T> {
 						}
 					}
 
-					List<BeanMethod> bms = findBeanMethods(c2, stopClass, mVis, fixedBeanProps, filterProps, propertyNamer);
+					List<BeanMethod> bms = findBeanMethods(c2, stopClass, mVis, fixedBeanProps, filterProps, propertyNamer, fluentSetters);
 
 					// Iterate through all the getters.
 					for (BeanMethod bm : bms) {
@@ -557,7 +561,7 @@ public class BeanMeta<T> {
 	 * @param fixedBeanProps Only include methods whose properties are in this list.
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
-	static final List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, Set<String> filterProps, PropertyNamer pn) {
+	static final List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, Set<String> filterProps, PropertyNamer pn, boolean fluentSetters) {
 		List<BeanMethod> l = new LinkedList<>();
 
 		for (Class<?> c2 : findClasses(c, stopClass)) {
@@ -617,6 +621,8 @@ public class BeanMeta<T> {
 						} else {
 							n = bpName;
 						}
+					} else if (fluentSetters && isParentClass(rt, c)) {
+						isSetter = true;
 					}
 				} else if (pt.length == 2) {
 					if ("*".equals(bpName)) {

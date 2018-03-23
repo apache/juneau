@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Builder class for building instances of Java Serialized Object serializers.
  */
-public class JsoSerializerBuilder extends SerializerBuilder {
+public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -48,6 +48,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
+
+	@Override /* OutputStreamSerializerBuilder */
+	public JsoSerializerBuilder binaryFormat(BinaryFormat value) {
+		super.binaryFormat(value);
+		return this;
+	}
 
 	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder abridged(boolean value) {
@@ -109,18 +115,6 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -141,12 +135,6 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -207,24 +195,6 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

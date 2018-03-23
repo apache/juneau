@@ -255,17 +255,17 @@ public class ConfigBuilder extends ContextBuilder {
 	 * <p>
 	 * Possible values:
 	 * <ul>
-	 * 	<li><js>"BASE64"</js> - BASE64-encoded string.
-	 * 	<li><js>"HEX"</js> - Hexadecimal.
-	 * 	<li><js>"SPACED_HEX"</js> - Hexadecimal with spaces between bytes.
+	 * 	<li>{@link BinaryFormat#BASE64} - BASE64-encoded string.
+	 * 	<li>{@link BinaryFormat#HEX} - Hexadecimal.
+	 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
 	 * </ul>
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
-	 * 	<br>The default is <js>"BASE64"</js>.
+	 * 	<br>The default is {@link BinaryFormat#BASE64}.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigBuilder binaryFormat(String value) {
+	public ConfigBuilder binaryFormat(BinaryFormat value) {
 		return set(CONFIG_binaryFormat, value);
 	}
 

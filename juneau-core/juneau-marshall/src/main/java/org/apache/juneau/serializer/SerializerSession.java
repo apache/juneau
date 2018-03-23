@@ -49,11 +49,10 @@ import org.apache.juneau.transform.*;
  */
 public abstract class SerializerSession extends BeanSession {
 
-	private final int maxDepth, initialDepth, maxIndent;
+	private final int maxDepth, initialDepth;
 	private final boolean
 		detectRecursions,
 		ignoreRecursions,
-		useWhitespace,
 		addBeanTypeProperties,
 		trimNulls,
 		trimEmptyCollections,
@@ -62,7 +61,6 @@ public abstract class SerializerSession extends BeanSession {
 		sortCollections,
 		sortMaps,
 		abridged;
-	private final char quoteChar;
 	private final UriResolver uriResolver;
 
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
@@ -103,14 +101,11 @@ public abstract class SerializerSession extends BeanSession {
 		initialDepth = getProperty(SERIALIZER_initialDepth, int.class, ctx.initialDepth);
 		detectRecursions = getProperty(SERIALIZER_detectRecursions, boolean.class, ctx.detectRecursions);
 		ignoreRecursions = getProperty(SERIALIZER_ignoreRecursions, boolean.class, ctx.ignoreRecursions);
-		useWhitespace = getProperty(SERIALIZER_useWhitespace, boolean.class, ctx.useWhitespace);
-		maxIndent = getProperty(SERIALIZER_maxIndent, int.class, ctx.maxIndent);
 		addBeanTypeProperties = getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
 		trimNulls = getProperty(SERIALIZER_trimNullProperties, boolean.class, ctx.trimNulls);
 		trimEmptyCollections = getProperty(SERIALIZER_trimEmptyCollections, boolean.class, ctx.trimEmptyCollections);
 		trimEmptyMaps = getProperty(SERIALIZER_trimEmptyMaps, boolean.class, ctx.trimEmptyMaps);
 		trimStrings = getProperty(SERIALIZER_trimStrings, boolean.class, ctx.trimStrings);
-		quoteChar = getProperty(SERIALIZER_quoteChar, String.class, ""+ctx.quoteChar).charAt(0);
 		sortCollections = getProperty(SERIALIZER_sortCollections, boolean.class, ctx.sortMaps);
 		sortMaps = getProperty(SERIALIZER_sortMaps, boolean.class, ctx.sortMaps);
 		abridged = getProperty(SERIALIZER_abridged, boolean.class, ctx.abridged);
@@ -149,10 +144,8 @@ public abstract class SerializerSession extends BeanSession {
 			.append("SerializerSession", new ObjectMap()
 				.append("maxDepth", maxDepth)
 				.append("initialDepth", initialDepth)
-				.append("maxIndent", maxIndent)
 				.append("detectRecursions", detectRecursions)
 				.append("ignoreRecursions", ignoreRecursions)
-				.append("useWhitespace", useWhitespace)
 				.append("addBeanTypeProperties", addBeanTypeProperties)
 				.append("trimNulls", trimNulls)
 				.append("trimEmptyCollections", trimEmptyCollections)
@@ -161,7 +154,6 @@ public abstract class SerializerSession extends BeanSession {
 				.append("sortCollections", sortCollections)
 				.append("sortMaps", sortMaps)
 				.append("abridged", abridged)
-				.append("quoteChar", quoteChar)
 				.append("uriResolver", uriResolver)
 			);
 	}
@@ -215,11 +207,23 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
-	 * 	<br>Character-based serializers will return a <code>String</code>
-	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
+	 * 	<br>Character-based serializers will return a <code>String</code>.
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public abstract Object serialize(Object o) throws SerializeException;
+
+	/**
+	 * Shortcut method for serializing an object to a String.
+	 * 
+	 * @param o The object to serialize.
+	 * @return
+	 * 	The serialized object.
+	 * 	<br>Character-based serializers will return a <code>String</code>
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializer#OSSERIALIZER_binaryFormat} setting.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public abstract String serializeToString(Object o) throws SerializeException;
 
 	/**
 	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
@@ -332,39 +336,12 @@ public abstract class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the {@link Serializer#SERIALIZER_useWhitespace} setting value for this session.
-	 * 
-	 * @return The {@link Serializer#SERIALIZER_useWhitespace} setting value for this session.
-	 */
-	protected boolean isUseWhitespace() {
-		return useWhitespace;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_maxIndent} setting value for this session.
-	 * 
-	 * @return The {@link Serializer#SERIALIZER_maxIndent} setting value for this session.
-	 */
-	protected int getMaxIndent() {
-		return maxIndent;
-	}
-
-	/**
 	 * Returns the {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 * 
 	 * @return The {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 */
 	protected boolean isAddBeanTypeProperties() {
 		return addBeanTypeProperties;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_quoteChar} setting value for this session.
-	 * 
-	 * @return The {@link Serializer#SERIALIZER_quoteChar} setting value for this session.
-	 */
-	protected char getQuoteChar() {
-		return quoteChar;
 	}
 
 	/**

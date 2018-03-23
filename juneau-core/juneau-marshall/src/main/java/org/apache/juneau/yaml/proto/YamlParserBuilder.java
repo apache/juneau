@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder class for building instances of JSON parsers.
  */
-public class YamlParserBuilder extends ParserBuilder {
+public class YamlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor, default settings.
@@ -49,6 +49,18 @@ public class YamlParserBuilder extends ParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
+	@Override /* ReaderParserBuilder */
+	public YamlParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ReaderParserBuilder */
+	public YamlParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
 	@Override /* ParserBuilder */
 	public YamlParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
@@ -58,18 +70,6 @@ public class YamlParserBuilder extends ParserBuilder {
 	@Override /* ParserBuilder */
 	public YamlParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public YamlParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public YamlParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 
