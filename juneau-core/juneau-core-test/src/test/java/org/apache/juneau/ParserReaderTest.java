@@ -180,6 +180,6 @@ public class ParserReaderTest {
 	}
 
 	private ParserReader createParserReader(Object in) throws Exception {
-		return new ParserReader(new ParserPipe(in, false, false, false, false, null, null, null));
+		return new ParserReader(new ParserPipe(in));
 	}
 }

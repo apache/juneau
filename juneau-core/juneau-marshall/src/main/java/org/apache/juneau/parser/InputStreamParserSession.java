@@ -78,7 +78,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 */
 	@Override /* ParserSession */
 	public final ParserPipe createPipe(Object input) {
-		return new ParserPipe(input, isDebug(), strict, autoCloseStreams, unbuffered, null, null, binaryFormat);
+		return new ParserPipe(input, isDebug(), autoCloseStreams, unbuffered, binaryFormat);
 	}
 
 	@Override /* Session */

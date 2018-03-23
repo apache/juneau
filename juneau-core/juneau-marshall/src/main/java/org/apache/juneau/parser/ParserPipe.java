@@ -63,7 +63,7 @@ public final class ParserPipe implements Closeable {
 	private BinaryFormat binaryFormat;
 
 	/**
-	 * Constructor.
+	 * Constructor for reader-based parsers.
 	 * 
 	 * @param input The parser input object.
 	 * @param debug
@@ -86,9 +86,8 @@ public final class ParserPipe implements Closeable {
 	 * @param inputStreamCharset
 	 * 	The charset to expect when reading from {@link InputStream InputStreams}.
 	 * 	Use <js>"default"</js> to specify {@link Charset#defaultCharset()}.
-	 * @param binaryFormat The binary format of input strings when converted to bytes.
 	 */
-	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, String fileCharset, String inputStreamCharset, BinaryFormat binaryFormat) {
+	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, String fileCharset, String inputStreamCharset) {
 		this.input = input;
 		this.debug = debug;
 		this.strict = strict;
@@ -96,6 +95,35 @@ public final class ParserPipe implements Closeable {
 		this.unbuffered = unbuffered;
 		this.fileCharset = fileCharset;
 		this.inputStreamCharset = inputStreamCharset;
+		if (input instanceof CharSequence)
+			this.inputString = input.toString();
+		this.binaryFormat = null;
+	}
+
+	/**
+	 * Constructor for stream-based parsers.
+	 * 
+	 * @param input The parser input object.
+	 * @param debug
+	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
+	 * 	method.
+	 * 	This allows the contents of the pipe to be accessed when a problem occurs.
+	 * @param autoCloseStreams 
+	 * 	Automatically close {@link InputStream InputStreams} and {@link Reader Readers} when passed in as input.
+	 * @param unbuffered 
+	 * 	If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
+	 * 	multiple times.
+	 * 	<br>Otherwise, we read character data into a reusable buffer.
+	 * @param binaryFormat The binary format of input strings when converted to bytes.
+	 */
+	public ParserPipe(Object input, boolean debug, boolean autoCloseStreams, boolean unbuffered, BinaryFormat binaryFormat) {
+		this.input = input;
+		this.debug = debug;
+		this.strict = false;
+		this.autoCloseStreams = autoCloseStreams;
+		this.unbuffered = unbuffered;
+		this.fileCharset = null;
+		this.inputStreamCharset = null;
 		if (input instanceof CharSequence)
 			this.inputString = input.toString();
 		this.binaryFormat = binaryFormat;
@@ -110,7 +138,7 @@ public final class ParserPipe implements Closeable {
 	 * @param input The input object.
 	 */
 	public ParserPipe(Object input) {
-		this(input, false, false, false, false, null, null, null);
+		this(input, false, false, false, false, null, null);
 	}
 
 	/**
