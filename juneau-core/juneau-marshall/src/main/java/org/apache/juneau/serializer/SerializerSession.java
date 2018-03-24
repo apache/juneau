@@ -60,7 +60,7 @@ public abstract class SerializerSession extends BeanSession {
 		trimStrings,
 		sortCollections,
 		sortMaps,
-		abridged;
+		addRootType;
 	private final UriResolver uriResolver;
 
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
@@ -108,7 +108,7 @@ public abstract class SerializerSession extends BeanSession {
 		trimStrings = getProperty(SERIALIZER_trimStrings, boolean.class, ctx.trimStrings);
 		sortCollections = getProperty(SERIALIZER_sortCollections, boolean.class, ctx.sortMaps);
 		sortMaps = getProperty(SERIALIZER_sortMaps, boolean.class, ctx.sortMaps);
-		abridged = getProperty(SERIALIZER_abridged, boolean.class, ctx.abridged);
+		addRootType = getProperty(SERIALIZER_addRootType, boolean.class, ctx.addRootType);
 		uriResolution = getInstanceProperty(SERIALIZER_uriResolution, UriResolution.class, ctx.uriResolution);
 		uriRelativity = getInstanceProperty(SERIALIZER_uriRelativity, UriRelativity.class, ctx.uriRelativity);
 		listenerClass = getProperty(SERIALIZER_listener, Class.class, ctx.listener);
@@ -153,7 +153,7 @@ public abstract class SerializerSession extends BeanSession {
 				.append("trimStrings", trimStrings)
 				.append("sortCollections", sortCollections)
 				.append("sortMaps", sortMaps)
-				.append("abridged", abridged)
+				.append("addRootType", addRootType)
 				.append("uriResolver", uriResolver)
 			);
 	}
@@ -846,15 +846,15 @@ public abstract class SerializerSession extends BeanSession {
 	 * Returns the parser-side expected type for the object.
 	 * 
 	 * <p>
-	 * The return value depends on the {@link Serializer#SERIALIZER_abridged} setting.
-	 * When enabled, the parser already knows the Java POJO type being parsed, so there is
+	 * The return value depends on the {@link Serializer#SERIALIZER_addRootType} setting.
+	 * When disabled, the parser already knows the Java POJO type being parsed, so there is
 	 * no reason to add <js>"_type"</js> attributes to the root-level object.
 	 * 
 	 * @param o The object to get the expected type on.
 	 * @return The expected type.
 	 */
 	protected final ClassMeta<?> getExpectedRootType(Object o) {
-		return abridged ? getClassMetaForObject(o) : object();
+		return addRootType ? object() : getClassMetaForObject(o);
 	}
 
 	/**

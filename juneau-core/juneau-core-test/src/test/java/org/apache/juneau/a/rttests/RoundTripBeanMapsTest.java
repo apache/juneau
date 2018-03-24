@@ -216,7 +216,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingAnnotation() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		JsonSerializer js = JsonSerializer.create().ssq().pojoSwaps(XMLGregorianCalendarSwap.class).addRootType().build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())

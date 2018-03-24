@@ -51,20 +51,20 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder abridged() {
-		super.abridged();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public UonPartSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder addRootType(boolean value) {
+		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder addRootType() {
+		super.addRootType();
 		return this;
 	}
 

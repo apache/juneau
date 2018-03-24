@@ -56,20 +56,20 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder abridged() {
-		super.abridged();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder addRootType(boolean value) {
+		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder addRootType() {
+		super.addRootType();
 		return this;
 	}
 

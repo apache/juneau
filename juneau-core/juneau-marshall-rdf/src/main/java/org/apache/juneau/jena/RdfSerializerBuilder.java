@@ -460,20 +460,20 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder abridged() {
-		super.abridged();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder addRootType(boolean value) {
+		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder addRootType() {
+		super.addRootType();
 		return this;
 	}
 

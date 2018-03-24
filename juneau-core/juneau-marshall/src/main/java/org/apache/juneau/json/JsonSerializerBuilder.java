@@ -181,20 +181,20 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder abridged() {
-		super.abridged();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder addRootType(boolean value) {
+		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder addRootType() {
+		super.addRootType();
 		return this;
 	}
 

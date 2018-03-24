@@ -19,18 +19,19 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.test.pojos.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
-import org.junit.*;
 
 /**
- * Tests inteface proxies exposed through <code>@RestMethod(name=PROXY)</code>
+ * Tests interface proxies exposed through <code>@RestMethod(name=PROXY)</code>
  */
 @RestResource(
-	path="/testInterfaceProxyResource")
+	path="/testInterfaceProxyResource",
+	flags={Serializer.SERIALIZER_addRootType}
+)
 public class InterfaceProxyResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 
@@ -731,9 +732,5 @@ public class InterfaceProxyResource extends BasicRestServletJena {
 				assertNull(x5n);
 			}
 		};
-	}
-
-	private static void assertObjectEquals(String e, Object o) {
-		Assert.assertEquals(e, JsonSerializer.DEFAULT_LAX.toString(o));
 	}
 }

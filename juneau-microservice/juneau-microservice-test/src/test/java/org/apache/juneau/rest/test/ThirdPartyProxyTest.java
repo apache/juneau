@@ -46,14 +46,14 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
-			{ /* 0 */ "Json", JsonSerializer.DEFAULT, JsonParser.DEFAULT },
-			{ /* 1 */ "Xml", XmlSerializer.DEFAULT, XmlParser.DEFAULT },
-			{ /* 2 */ "Mixed", JsonSerializer.DEFAULT, XmlParser.DEFAULT },
-			{ /* 3 */ "Html", HtmlSerializer.DEFAULT, HtmlParser.DEFAULT },
-			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT },
-			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT },
-			{ /* 6 */ "Uon", UonSerializer.DEFAULT, UonParser.DEFAULT },
-			{ /* 7 */ "RdfXml", RdfSerializer.DEFAULT_XMLABBREV, RdfParser.DEFAULT_XML },
+			{ /* 0 */ "Json", JsonSerializer.DEFAULT.builder().addRootType().build(), JsonParser.DEFAULT },
+			{ /* 1 */ "Xml", XmlSerializer.DEFAULT.builder().addRootType().build(), XmlParser.DEFAULT },
+			{ /* 2 */ "Mixed", JsonSerializer.DEFAULT.builder().addRootType().build(), XmlParser.DEFAULT },
+			{ /* 3 */ "Html", HtmlSerializer.DEFAULT.builder().addRootType().build(), HtmlParser.DEFAULT },
+			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT.builder().addRootType().build(), MsgPackParser.DEFAULT },
+			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT.builder().addRootType().build(), UrlEncodingParser.DEFAULT },
+			{ /* 6 */ "Uon", UonSerializer.DEFAULT.builder().addRootType().build(), UonParser.DEFAULT },
+			{ /* 7 */ "RdfXml", RdfSerializer.DEFAULT_XMLABBREV.builder().addRootType().build(), RdfParser.DEFAULT_XML },
 		});
 	}
 
@@ -62,7 +62,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = getCached(label, ThirdPartyProxy.class);
 		if (proxy == null) {
-			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonPartSerializer.class).build().getRemoteableProxy(ThirdPartyProxy.class, null, serializer, parser);
+			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonPartSerializer.DEFAULT.builder().addRootType().build()).build().getRemoteableProxy(ThirdPartyProxy.class, null, serializer, parser);
 			cache(label, proxy);
 		}
 	}

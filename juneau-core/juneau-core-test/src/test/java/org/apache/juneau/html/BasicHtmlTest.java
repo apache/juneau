@@ -33,9 +33,9 @@ import org.junit.runners.*;
 public class BasicHtmlTest {
 
 	private static final HtmlSerializer
-		s1 = HtmlSerializer.DEFAULT_SQ,
-		s2 = HtmlSerializer.DEFAULT_SQ_READABLE,
-		s3 = HtmlSerializer.DEFAULT_SQ.builder().abridged().build();
+		s1 = HtmlSerializer.DEFAULT_SQ.builder().addRootType().build(),
+		s2 = HtmlSerializer.DEFAULT_SQ_READABLE.builder().addRootType().build(),
+		s3 = HtmlSerializer.DEFAULT_SQ.builder().build();
 	private static final HtmlParser parser = HtmlParser.DEFAULT;
 
 	@Parameterized.Parameters
@@ -2630,7 +2630,7 @@ public class BasicHtmlTest {
 	public void c1_serializeAbridged() {
 		try {
 			String r = s3.serialize(input.in);
-			assertEquals(input.label + " serialize-abridged failed", input.e3, r);
+			assertEquals(input.label + " serialize-addRootType failed", input.e3, r);
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2644,7 +2644,7 @@ public class BasicHtmlTest {
 			String r = s3.serialize(input.in);
 			Object o = parser.parse(r, input.type);
 			r = s3.serialize(o);
-			assertEquals(input.label + " parse-abridged failed", input.e3, r);
+			assertEquals(input.label + " parse-addRootType failed", input.e3, r);
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {

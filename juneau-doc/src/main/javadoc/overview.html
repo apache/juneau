@@ -1128,8 +1128,8 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_abridged SERIALIZER_abridged}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypeProperties SERIALIZER_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions SERIALIZER_ignoreRecursions}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_initialDepth SERIALIZER_initialDepth}
@@ -21286,6 +21286,8 @@
 					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_fluentSetters}
 					<li class='ja'>{@link org.apache.juneau.annotation.Bean#fluentSetters()}
 				</ul>
+			<li>
+				The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>

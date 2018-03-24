@@ -17,6 +17,7 @@ import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.json.*;
 import org.apache.juneau.test.pojos.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -27,8 +28,7 @@ public class ConfigInterfaceTest {
 	ConfigInterface proxy;
 
 	public ConfigInterfaceTest() throws Exception {
-		ConfigBuilder configFileBuilder = new ConfigBuilder();
-		cf = configFileBuilder.build();
+		cf = Config.create().serializer(JsonSerializer.DEFAULT_LAX.builder().addRootType().build()).build();
 		proxy = cf.getSectionAsInterface("A", ConfigInterface.class);
 	}
 

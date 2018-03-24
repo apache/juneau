@@ -27,7 +27,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypes() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = JsonSerializer.DEFAULT_LAX.builder().addRootType().build();
 		JsonParser p = JsonParser.DEFAULT;
 
 		A1 a1 = new A1();

@@ -27,13 +27,15 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.test.pojos.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
  * JUnit automated testcase resource.
  */
 @RestResource(
-	path="/testThirdPartyProxy"
+	path="/testThirdPartyProxy",
+	flags={Serializer.SERIALIZER_addRootType}
 )
 @SuppressWarnings("serial")
 public class ThirdPartyProxyResource extends BasicRestServletJena {

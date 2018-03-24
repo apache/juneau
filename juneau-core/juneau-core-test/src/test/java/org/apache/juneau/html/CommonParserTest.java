@@ -63,7 +63,7 @@ public class CommonParserTest {
 		t2.add(new A3("name0","value0"));
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
-		in = HtmlSerializer.create().addBeanTypeProperties(true).build().serialize(t1);
+		in = HtmlSerializer.create().addBeanTypeProperties(true).addRootType().build().serialize(t1);
 		t1 = (A1)p.parse(in, Object.class);
 		assertEquals("value1", t1.list.get(1).value);
 

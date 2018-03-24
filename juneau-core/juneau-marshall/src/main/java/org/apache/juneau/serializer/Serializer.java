@@ -47,65 +47,6 @@ public abstract class Serializer extends BeanContext {
 	private static final String PREFIX = "Serializer.";
 
 	/**
-	 * Configuration property:  Abridged output.
-	 * 
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.abridged.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#abridged(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#abridged()}
-	 * 		</ul>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-	 * type information that might normally be included to determine the data type will not be serialized.
-	 * 
-	 * <p>
-	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean.typeName()} value, a 
-	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
-	 * 
-	 * <p>
-	 * Note the differences between the following settings:
-	 * <ul>
-	 * 	<li class='jf'>{@link #SERIALIZER_abridged} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypeProperties} - Affects whether <js>'_type'</js> is added to any nodes.
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Create a serializer that doesn't add _type to root node.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.abridged()
-	 * 		.build();
-	 * 	
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_abridged</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 * 
-	 * 	<jc>// The bean we want to serialize.</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
-	 * 
-	 * 	<jc>// Will not contain '_type' attribute even though there's a type name on the bean.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * 	
-	 * 	<jc>// '_type' wasn't needed on the parse side because we know the type being parsed.</jc>
-	 * 	MyBean myBean = JsonParser.<jsf>DEFAULT</jsf>.parse(json, MyBean.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String SERIALIZER_abridged = PREFIX + "abridged.b";
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 * 
 	 * <h5 class='section'>Property:</h5>
@@ -133,7 +74,7 @@ public abstract class Serializer extends BeanContext {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jf'>{@link #SERIALIZER_abridged} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
 	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypeProperties} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 * 
@@ -164,6 +105,62 @@ public abstract class Serializer extends BeanContext {
 	 * </p>
 	 */
 	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+
+	/**
+	 * Configuration property:  Add type attribute to root nodes.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Serializer.addRootType.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#addRootType(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#addRootType()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
+	 * 
+	 * <p>
+	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean.typeName()} value, a 
+	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
+	 * 
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul>
+	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypeProperties} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addRootType()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>SERIALIZER_addRootType</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * 
+	 * 	<jc>// Will contain '_type' attribute.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 */
+	public static final String SERIALIZER_addRootType = PREFIX + "addRootType.b";
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
@@ -856,7 +853,7 @@ public abstract class Serializer extends BeanContext {
 		trimStrings,
 		sortCollections,
 		sortMaps,
-		abridged;
+		addRootType;
 	final UriContext uriContext;
 	final UriResolution uriResolution;
 	final UriRelativity uriRelativity;
@@ -880,7 +877,7 @@ public abstract class Serializer extends BeanContext {
 		trimStrings = getBooleanProperty(SERIALIZER_trimStrings, false);
 		sortCollections = getBooleanProperty(SERIALIZER_sortCollections, false);
 		sortMaps = getBooleanProperty(SERIALIZER_sortMaps, false);
-		abridged = getBooleanProperty(SERIALIZER_abridged, false);
+		addRootType = getBooleanProperty(SERIALIZER_addRootType, false);
 		uriContext = getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
 		uriResolution = getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
 		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
@@ -1049,7 +1046,7 @@ public abstract class Serializer extends BeanContext {
 				.append("trimStrings", trimStrings)
 				.append("sortCollections", sortCollections)
 				.append("sortMaps", sortMaps)
-				.append("parserKnowsRootTypes", abridged)
+				.append("addRootType", addRootType)
 				.append("uriContext", uriContext)
 				.append("uriResolution", uriResolution)
 				.append("uriRelativity", uriRelativity)

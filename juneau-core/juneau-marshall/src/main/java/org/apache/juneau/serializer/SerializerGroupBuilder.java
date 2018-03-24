@@ -132,44 +132,6 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Abridged output.
-	 * 
-	 * <p>
-	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-	 * type information that might normally be included to determine the data type will not be serialized.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
-	 * </ul>
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder abridged(boolean value) {
-		return set(SERIALIZER_abridged, value);
-	}
-
-	/**
-	 * Configuration property:  Abridged output.
-	 * 
-	 * <p>
-	 * Shortcut for calling <code>abridged(<jk>true</jk>)</code>.
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
-	 * </ul>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder abridged() {
-		return set(SERIALIZER_abridged, true);
-	}
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 * 
 	 * <p>
@@ -188,6 +150,44 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 */
 	public SerializerGroupBuilder addBeanTypeProperties(boolean value) {
 		return set(SERIALIZER_addBeanTypeProperties, value);
+	}
+
+	/**
+	 * Configuration property:  Add type attribute to root nodes.
+	 * 
+	 * <p>
+	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder addRootType(boolean value) {
+		return set(SERIALIZER_addRootType, value);
+	}
+
+	/**
+	 * Configuration property:  Add type attribute to root nodes.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>addRootType(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder addRootType() {
+		return set(SERIALIZER_addRootType, true);
 	}
 
 	/**
