@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
+import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -23,6 +24,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -50,7 +52,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		siteName,
 		title,
 		description;
-	private final ConcurrentHashMap<Locale,Swagger> swaggers = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Locale,ConcurrentHashMap<Integer,Swagger>> swaggers = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -99,244 +101,385 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@Override /* RestInfoProvider */
 	public Swagger getSwagger(RestRequest req) throws Exception {
 		
 		Locale locale = req.getLocale();
 		BeanSession bs = req.getBeanSession();
 		
-		Swagger s = swaggers.get(locale);
-		if (s != null)
-			return s;
+		// Find it in the cache.
+		// Swaggers are cached by user locale and an int hash of the @RestMethods they have access to.
+		HashCode userHash = HashCode.create();
+		for (RestJavaMethod sm : context.getCallMethods().values())
+			if (sm.isRequestAllowed(req))
+				userHash.add(sm.hashCode());
+		int hashCode = userHash.get();
+		
+		if (! swaggers.containsKey(locale))
+			swaggers.putIfAbsent(locale, new ConcurrentHashMap<Integer,Swagger>());
+		
+		Swagger swagger = swaggers.get(locale).get(hashCode);
+		if (swagger != null)
+			return swagger;
 
+		// Wasn't cached...need to create one.
+		
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
 		MessageBundle mb = context.getMessages();
+		Class<?> c = context.getResource().getClass();
 		
-		ObjectMap om = context.getClasspathResource(ObjectMap.class, MediaType.JSON, getClass().getSimpleName() + ".json", locale);
-		if (om == null)
-			om = new ObjectMap();
+		// Load swagger JSON from classpath.
+		ObjectMap omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, getClass().getSimpleName() + ".json", locale);
+		if (omSwagger == null)
+			omSwagger = new ObjectMap();
 		
-		LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
-
-		for (RestResource r : restResourceAnnotationsParentFirst.values()) {
+		// Combine it with @RestResource(swagger)
+		for (Map.Entry<Class<?>,RestResource> e : findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass()).entrySet()) {
+			RestResource r = e.getValue();
 			if (r.swagger().length > 0) {
 				try {
-					String json = vr.resolve(StringUtils.join(r.swagger(), '\n').trim());
-					if (! StringUtils.isObjectMap(json, true))
+					String json = vr.resolve(join(r.swagger(), '\n').trim());
+					if (! isObjectMap(json, true))
 						json = "{\n" + json + "\n}";
-					om.putAll(new ObjectMap(json));
-				} catch (ParseException e) {
-					throw new ParseException("Malformed swagger JSON encountered in @RestResource(swagger) on class "+context.getResource().getClass().getName()+".").initCause(e);
+					omSwagger.putAll(new ObjectMap(json));
+				} catch (ParseException x) {
+					throw new SwaggerException(x, e.getKey(), "Malformed swagger JSON encountered in @RestResource(swagger).");
 				}
 			}
 		}
+		
+//		System.out.println("==============================================================================================");
+//		System.out.println("omSwagger=");
+//		JsonSerializer.DEFAULT_LAX_READABLE.println(omSwagger);
+		
+		ObjectMap 
+			info = omSwagger.getObjectMap("info", true),
+			externalDocs = omSwagger.getObjectMap("externalDocs", true),
+			definitions = omSwagger.getObjectMap("definitions", true);
+		ObjectList
+			produces = omSwagger.getObjectList("produces", true),
+			consumes = omSwagger.getObjectList("consumes", true);
+		
+		String s = this.title;
+		if (s == null)
+			s = mb.findFirstString(locale, "title");
+		if (s != null) 
+			info.put("title", vr.resolve(s));
 
-		String title = this.title;
-		if (title == null)
-			title = mb.findFirstString(locale, "title");
-		if (title != null) 
-			getInfo(om).put("title", vr.resolve(title));
+		s = this.description;
+		if (s == null)
+			s = mb.findFirstString(locale, "description");
+		if (s != null) 
+			info.put("description", vr.resolve(s));
+		
+		s = mb.findFirstString(locale, "version");
+		if (s != null) 
+			info.put("version", vr.resolve(s));
+		
+		s = mb.findFirstString(locale, "contact");
+		if (s != null) 
+			info.put("contact", jp.parse(vr.resolve(s), ObjectMap.class));
+		
+		s = mb.findFirstString(locale, "license");
+		if (s != null) 
+			info.put("license", jp.parse(vr.resolve(s), ObjectMap.class));
+		
+		s = mb.findFirstString(locale, "termsOfService");
+		if (s != null) 
+			info.put("termsOfService", vr.resolve(s));
+		
+		if (consumes.isEmpty()) 
+			consumes.addAll(req.getContext().getConsumes());
 
-		String description = this.description;
-		if (description == null)
-			description = mb.findFirstString(locale, "description");
-		if (description != null) 
-			getInfo(om).put("description", vr.resolve(description));
+		if (produces.isEmpty()) 
+			produces.addAll(req.getContext().getProduces());
 		
-		String version = mb.findFirstString(locale, "version");
-		if (version != null) 
-			getInfo(om).put("version", vr.resolve(version));
+		Map<String,ObjectMap> tagMap = new LinkedHashMap<>();
+		if (omSwagger.containsKey("tags")) {
+			for (ObjectMap om : omSwagger.getObjectList("tags").elements(ObjectMap.class)) {
+				String name = om.getString("name");
+				if (name == null)
+					throw new SwaggerException(c, "Tag definition found without name in swagger JSON.");
+				tagMap.put(name, om);
+			}
+		}
 		
-		String contact = mb.findFirstString(locale, "contact");
-		if (contact != null) 
-			getInfo(om).put("contact", jp.parse(vr.resolve(contact), ObjectMap.class));
-		
-		String license = mb.findFirstString(locale, "license");
-		if (license != null) 
-			getInfo(om).put("license", jp.parse(vr.resolve(license), ObjectMap.class));
-		
-		String termsOfService = mb.findFirstString(locale, "termsOfService");
-		if (termsOfService != null) 
-			getInfo(om).put("termsOfService", vr.resolve(termsOfService));
-		
-		if (! om.containsKey("consumes")) {
-			List<MediaType> consumes = req.getContext().getConsumes();
-			if (! consumes.isEmpty())
-				om.put("consumes", consumes);
+		s = mb.findFirstString(locale, "tags");
+		if (s != null) {
+			for (ObjectMap m : jp.parse(vr.resolve(s), ObjectList.class).elements(ObjectMap.class)) {
+				String name = m.getString("name");
+				if (name == null)
+					throw new SwaggerException(c, "Tag definition found without name in resource bundle.");
+				if (tagMap.containsKey(name))
+					tagMap.get(name).putAll(m);
+				else
+					tagMap.put(name, m);
+			}
 		}
 
-		if (! om.containsKey("produces")) {
-			List<MediaType> produces = req.getContext().getProduces();
-			if (! produces.isEmpty())
-				om.put("produces", produces);
-		}
-			
-		String tags = mb.findFirstString(locale, "tags");
-		if (tags != null)
-			om.put("tags", jp.parse(vr.resolve(tags), ObjectList.class));
-
-		String externalDocs = mb.findFirstString(locale, "externalDocs");
-		if (externalDocs != null)
-			om.put("externalDocs", jp.parse(vr.resolve(externalDocs), ObjectMap.class));
+		s = mb.findFirstString(locale, "externalDocs");
+		if (s != null) 
+			externalDocs.putAll(jp.parse(vr.resolve(s), ObjectMap.class));
 		
-		ObjectMap definitions = om.getObjectMap("definitions", new ObjectMap());
-		
+		// Iterate through all the @RestMethod methods.
 		for (RestJavaMethod sm : context.getCallMethods().values()) {
-			if (sm.isRequestAllowed(req)) {
-				Method m = sm.method;
-				RestMethod rm = m.getAnnotation(RestMethod.class);
-				String mn = m.getName(), cn = m.getClass().getName();
-				
-				ObjectMap mom = getOperation(om, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
-				
-				if (rm.swagger().length > 0) {
-					try {
-						String json = vr.resolve(StringUtils.join(rm.swagger(), '\n').trim());
-						if (! (json.startsWith("{") && json.endsWith("}")))
-							json = "{\n" + json + "\n}";
-						mom.putAll(new ObjectMap(json));
-					} catch (ParseException e) {
-						throw new ParseException("Malformed swagger JSON encountered in @RestMethod(swagger) on method "+mn+" on class "+cn+".").initCause(e);
-					}
-				}
-
-				mom.put("operationId", mn);
-				
-				String mDescription = rm.description();
-				if (mDescription.isEmpty())
-					mDescription = mb.findFirstString(locale, mn + ".description");
-				if (mDescription != null)
-					mom.put("description", vr.resolve(mDescription));
-				
-				String mTags = mb.findFirstString(locale, mn + ".tags");
-				if (mTags != null) {
-					mTags = vr.resolve(mTags);
-					if (StringUtils.isObjectList(mTags, true)) 
-						mom.put("tags", jp.parse(mTags, ArrayList.class, String.class));
-					else
-						mom.put("tags", Arrays.asList(StringUtils.split(mTags)));
-				}
-				
-				String mSummary = mb.findFirstString(locale, mn + ".summary");
-				if (mSummary != null)
-					mom.put("summary", vr.resolve(mSummary));
-
-				String mExternalDocs = mb.findFirstString(locale, mn + ".externalDocs");
-				if (mExternalDocs != null) 
-					mom.put("externalDocs", jp.parse(vr.resolve(s), ObjectMap.class));
-				
-				Map<String,ObjectMap> paramMap = new LinkedHashMap<>();
-
-				ObjectList parameters = mom.getObjectList("parameters");
-				if (parameters != null) {
-					for (ObjectMap param : parameters.elements(ObjectMap.class)) {
-						String key = param.getString("in") + '.' + param.getString("name");
-						paramMap.put(key, param);
-					}
-				}
 			
-				String mParameters = mb.findFirstString(locale, mn + ".parameters");
-				if (mParameters != null) {
-					ObjectList ol = jp.parse(vr.resolve(mParameters), ObjectList.class);
-					for (ObjectMap param : ol.elements(ObjectMap.class)) {
-						String key = param.getString("in") + '.' + param.getString("name");
-						if (paramMap.containsKey(key))
-							paramMap.get(key).putAll(param);
-						else
-							paramMap.put(key, param);
-					}
+			// Skip it if user doesn't have access.
+			if (! sm.isRequestAllowed(req))
+				continue;
+			
+			Method m = sm.method;
+			RestMethod rm = m.getAnnotation(RestMethod.class);
+			String mn = m.getName();
+			
+			// Get the operation from the existing swagger so far.
+			ObjectMap op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
+			
+			// Add @RestMethod(swagger)
+			if (rm.swagger().length > 0) {
+				try {
+					String json = vr.resolve(join(rm.swagger(), '\n').trim());
+					if (! isObjectMap(json, true))
+						json = "{\n" + json + "\n}";
+					op.putAll(new ObjectMap(json));
+				} catch (ParseException e) {
+					throw new SwaggerException(e, m, "Malformed swagger JSON encountered in @RestMethod(swagger).");
 				}
+			}
+
+			op.putIfNotExists("operationId", mn);
+			
+			s = rm.description();
+			if (s.isEmpty())
+				s = mb.findFirstString(locale, mn + ".description");
+			if (s != null)
+				op.put("description", vr.resolve(s));
+
+			Set<String> tags = new LinkedHashSet<>();
+			if (op.containsKey("tags"))
+				for (String tag : op.getObjectList("tags").elements(String.class)) 
+					tags.add(tag);
+			
+			s = mb.findFirstString(locale, mn + ".tags");
+			if (s != null) {
+				s = vr.resolve(s);
+				if (isObjectList(s, true))
+					tags.addAll((List<String>)jp.parse(s, ArrayList.class, String.class));
+				else
+					tags.addAll(Arrays.asList(StringUtils.split(s)));
+			}
+			
+			for (String tag : tags) 
+				if (! tagMap.containsKey(tag))
+					tagMap.put(tag, new ObjectMap().append("name", tag));
+			
+			op.put("tags", tags);
+			
+			s = mb.findFirstString(locale, mn + ".summary");
+			if (s != null)
+				op.put("summary", vr.resolve(s));
+
+			s = mb.findFirstString(locale, mn + ".externalDocs");
+			if (s != null) {
+				ObjectMap eom = jp.parse(vr.resolve(s), ObjectMap.class);
+				if (op.containsKey("externalDocs"))
+					op.getObjectMap("externalDocs").putAll(eom);
+				else
+					op.put("externalDocs", eom);
+			}
+			
+			ObjectMap paramMap = new ObjectMap();
+
+			ObjectList ol = op.getObjectList("parameters");
+			if (ol != null) 
+				for (ObjectMap param : ol.elements(ObjectMap.class)) 
+					paramMap.put(param.getString("in") + '.' + param.getString("name"), param);
+		
+			s = mb.findFirstString(locale, mn + ".parameters");
+			if (s != null) {
+				ol = jp.parse(vr.resolve(s), ObjectList.class);
+				for (ObjectMap param : ol.elements(ObjectMap.class)) {
+					String key = param.getString("in") + '.' + param.getString("name");
+					if (paramMap.containsKey(key))
+						paramMap.getObjectMap(key).putAll(param);
+					else
+						paramMap.put(key, param);
+				}
+			}
+			
+			// Finally, look for parameters defined on method.
+			for (RestParam mp : context.getRestParams(m)) {
 				
-				// Finally, look for parameters defined on method.
-				for (RestParam mp : context.getRestParams(m)) {
-					RestParamType in = mp.getParamType();
-					if (in != RestParamType.OTHER) {
-						String key = in.toString() + '.' + (in == RestParamType.BODY ? null : mp.getName());
+				RestParamType in = mp.getParamType();
+				
+				if (in == RestParamType.OTHER)
+					continue;
+				
+				String key = in.toString() + '.' + (in == RestParamType.BODY ? null : mp.getName());
+				
+				ObjectMap param = paramMap.getObjectMap(key, true);
+					
+				param.append("in", in);
+				
+				if (in != RestParamType.BODY)
+					param.append("name", mp.name);
+				
+				if (! param.containsKey("schema")) {
+					
+					ClassMeta<?> cm = bs.getClassMeta(mp.getType());
+					
+					if (cm.isMapOrBean() || cm.isCollectionOrArray()) {
+						String name = cm.getSimpleName();
 						
-						if (! paramMap.containsKey(key))
-							paramMap.put(key, new ObjectMap());
-						ObjectMap param = paramMap.get(key);
-							
-						param.append("in", in);
-						
-						if (in != RestParamType.BODY)
-							param.append("name", mp.name);
-						
-						if (! param.containsKey("schema")) {
-							ClassMeta<?> cm = bs.getClassMeta(mp.getType());
-							
-							if (cm.isBean()) {
-								String name = mp.forClass().getSimpleName();
-								if (! definitions.containsKey(name)) {
-									ObjectMap definition = JsonSchemaUtils.getSchema(bs, cm);
-									
-									Object example = cm.getExample(bs);
-									if (example != null) {
-										ObjectMap examples = new ObjectMap();
-										ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true);
-										for (MediaType mt : req.getParsers().getSupportedMediaTypes()) {
-											if (mt != MediaType.HTML) {
-												Serializer s2 = req.getSerializers().getSerializer(mt);
-												if (s2 != null) {
-													SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
-													String eVal = s2.createSession(args).serializeToString(example);
-													examples.put(s2.getMediaTypes()[0].toString(), eVal);
-												}
+						if (! definitions.containsKey(name)) {
+							ObjectMap definition = JsonSchemaUtils.getSchema(bs, cm);
+							Object example = cm.getExample(bs);
+
+							if (example != null) {
+								ObjectMap examples = new ObjectMap();
+								ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
+								
+								if (in == RestParamType.BODY) {
+									for (MediaType mt : req.getParsers().getSupportedMediaTypes()) {
+										if (mt != MediaType.HTML) {
+											Serializer s2 = req.getSerializers().getSerializer(mt);
+											if (s2 != null) {
+												SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
+												String eVal = s2.createSession(args).serializeToString(example);
+												examples.put(s2.getMediaTypes()[0].toString(), eVal);
 											}
 										}
-										definition.put("x-examples", examples);
 									}
-									
-									definitions.put(name, definition);
+								} else {
+									examples.put("example", req.getPartSerializer().serialize(HttpPartType.valueOf(in.name()), example));
 								}
-								param.put("schema", new ObjectMap().append("$ref", "#/definitions/" + mp.forClass().getSimpleName()));
+								
+								definition.put("x-examples", examples);
 							}
+							
+							definitions.put(name, definition);
 						}
+						param.put("schema", new ObjectMap().append("$ref", "#/definitions/" + name));
 					}
 				}
-				
-				if (! paramMap.isEmpty())
-					mom.put("parameters", paramMap.values());
-				
-				String mResponses = mb.findFirstString(locale, mn + ".responses");
-				if (mResponses != null) 
-					mom.put("responses", jp.parse(vr.resolve(mResponses), ObjectMap.class));
+			}
+			
+			if (! paramMap.isEmpty())
+				op.put("parameters", paramMap.values());
 
-				if (! mom.containsKey("consumes")) {
-					List<MediaType> mConsumes = req.getParsers().getSupportedMediaTypes();
-					if (! mConsumes.equals(om.get("consumes")))
-						mom.put("consumes", mConsumes);
+			ObjectMap responses = op.getObjectMap("responses", true);
+			
+			s = mb.findFirstString(locale, mn + ".responses");
+			if (s != null) {
+				for (Map.Entry<String,Object> e : jp.parse(vr.resolve(s), ObjectMap.class).entrySet()) {
+					String httpCode = e.getKey();
+					if (responses.containsKey(httpCode))
+						responses.getObjectMap(httpCode).putAll((ObjectMap)e.getValue());
+					else
+						responses.put(httpCode, e.getValue());
 				}
-	
-				if (! mom.containsKey("produces")) {
-					List<MediaType> mProduces = req.getSerializers().getSupportedMediaTypes();
-					if (! mProduces.equals(om.get("produces")))
-						mom.put("produces", mProduces);
+			}
+			
+			if (! responses.containsKey("200"))
+				responses.put("200", new ObjectMap().append("description", "Success"));
+			
+			ObjectMap okResponse = responses.getObjectMap("200");
+			
+			ClassMeta<?> cm = bs.getClassMeta(m.getReturnType());
+			
+			if ((cm.isMapOrBean() || cm.isCollectionOrArray()) && ! okResponse.containsKey("schema") && cm.getInnerClass() != Swagger.class) {
+				String name = cm.getSimpleName();
+				
+				if (! definitions.containsKey(name)) {
+					ObjectMap definition;
+					try {
+						definition = JsonSchemaUtils.getSchema(bs, cm);
+					} catch (Exception e1) {
+						System.err.println(cm);
+						throw e1;
+					}	
+					Object example = cm.getExample(bs);
+					
+					if (example != null) {
+						ObjectMap examples = new ObjectMap();
+						ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
+						
+						for (MediaType mt : req.getSerializers().getSupportedMediaTypes()) {
+							if (mt != MediaType.HTML) {
+								Serializer s2 = req.getSerializers().getSerializer(mt);
+								if (s2 != null) {
+									SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
+									String eVal = s2.createSession(args).serializeToString(example);
+									examples.put(s2.getMediaTypes()[0].toString(), eVal);
+								}
+							}
+						}
+						definition.put("x-examples", examples);
+					}
+					
+					definitions.put(name, definition);
 				}
+				
+				okResponse.put("schema", new ObjectMap().append("$ref", "#/definitions/" + name));
+			}			
+			
+			if (responses.isEmpty())
+				op.remove("responses");
+			else
+				op.put("responses", new TreeMap<>(responses));
+			
+			if (! op.containsKey("consumes")) {
+				List<MediaType> mConsumes = req.getParsers().getSupportedMediaTypes();
+				if (! mConsumes.equals(consumes))
+					op.put("consumes", mConsumes);
+			}
+
+			if (! op.containsKey("produces")) {
+				List<MediaType> mProduces = req.getSerializers().getSupportedMediaTypes();
+				if (! mProduces.equals(produces))
+					op.put("produces", mProduces);
 			}
 		}
 		
-		if (! definitions.isEmpty())
-			om.put("definitions", definitions);		
+		if (definitions.isEmpty())
+			omSwagger.remove("definitions");		
+		if (tagMap.isEmpty())
+			omSwagger.remove("tags");
 		
-		String swaggerJson = om.toString(JsonSerializer.DEFAULT_LAX_READABLE);
+		String swaggerJson = omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE);
 		try {
-			s = jp.parse(swaggerJson, Swagger.class);
+			swagger = jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
-			throw new RestServletException("Error detected in swagger: \n{0}", StringUtils.addLineNumbers(swaggerJson)).initCause(e);
+			throw new RestServletException("Error detected in swagger: \n{0}", addLineNumbers(swaggerJson)).initCause(e);
 		}
-		swaggers.put(locale, s);
 		
-		return s;
+		swaggers.get(locale).put(hashCode, swagger);
+		
+//		System.out.println("==============================================================================================");
+//		System.out.println("swagger=");
+//		JsonSerializer.DEFAULT_LAX_READABLE.println(swagger);
+		
+		return swagger;
 	}
 	
-	private ObjectMap getInfo(ObjectMap om) {
-		if (! om.containsKey("info"))
-			om.put("info", new ObjectMap());
-		return om.getObjectMap("info");
+	private static class SwaggerException extends ParseException {
+		private static final long serialVersionUID = 1L;
+		
+		SwaggerException(Class<?> c, String message, Object...args) {
+			this(null, c, message, args);
+		}
+		SwaggerException(Exception e, Class<?> c, String message, Object...args) {
+			super("Swagger exception on class " + c.getName() + ".  " + message, args);
+			initCause(e);
+		}
+		SwaggerException(Exception e, Method m, String message, Object...args) {
+			super("Swagger exception on class " + m.getDeclaringClass().getName() + " method "+m.getName()+".  " + message, args);
+			initCause(e);
+		}
 	}
-
+	
 	private ObjectMap getOperation(ObjectMap om, String path, String httpMethod) {
 		if (! om.containsKey("paths"))
 			om.put("paths", new ObjectMap());

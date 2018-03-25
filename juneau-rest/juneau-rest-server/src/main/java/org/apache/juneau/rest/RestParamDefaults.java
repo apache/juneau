@@ -598,7 +598,7 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 
 		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps) throws ServletException {
-			super(FORMDATA, firstNonEmpty(a.name(), a.value()), type);
+			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type);
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
@@ -636,7 +636,7 @@ class RestParamDefaults {
 	static final class HasFormDataObject extends RestParam {
 
 		protected HasFormDataObject(Method method, HasFormData a, Type type) throws ServletException {
-			super(FORMDATA, firstNonEmpty(a.name(), a.value()), type);
+			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type);
 			if (type != Boolean.class && type != boolean.class)
 				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", method);
 	}

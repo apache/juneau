@@ -34,6 +34,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -1048,6 +1049,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return restJavaMethod.parsers;
 	}
 
+	/**
+	 * Returns the part serializer associated with this request.
+	 * 
+	 * @return The part serializer associated with this request.
+	 */
+	public HttpPartSerializer getPartSerializer() {
+		return restJavaMethod.partSerializer;
+	}
 
 	/**
 	 * Returns the method of this request.

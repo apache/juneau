@@ -577,7 +577,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 	@Override /* Object */
 	public int hashCode() {
-		return super.hashCode();
+		return method.hashCode();
 	}
 	
 	static String[] resolveVars(VarResolver vr, String[] in) {

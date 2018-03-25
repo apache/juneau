@@ -10,30 +10,40 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.petstore;
+package org.apache.juneau.examples.rest.petstore;
 
 import org.apache.juneau.annotation.*;
 
-@Bean(typeName="Tag", fluentSetters=true)
-public class Tag {
-	private long id;
-	private String name;
+@Bean(fluentSetters=true)
+public class ApiResponse {
+	private int code;
+	private String type;
+	private String message;
 
-	public long getId() {
-		return id;
+	public int getCode() {
+		return code;
 	}
-
-	public Tag id(long id) {
-		this.id = id;
+	
+	public ApiResponse code(int code) {
+		this.code = code;
 		return this;
 	}
 
-	public String getName() {
-		return name;
+	public String getType() {
+		return type;
 	}
 
-	public Tag name(String name) {
-		this.name = name;
+	public ApiResponse type(String type) {
+		this.type = type;
+		return this;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public ApiResponse message(String message) {
+		this.message = message;
 		return this;
 	}
 }

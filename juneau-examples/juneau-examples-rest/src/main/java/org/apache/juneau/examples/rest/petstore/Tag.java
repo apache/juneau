@@ -10,29 +10,29 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.petstore;
+package org.apache.juneau.examples.rest.petstore;
 
 import org.apache.juneau.annotation.*;
 
-@Bean(typeName="Category", fluentSetters=true)
-public class Category {
+@Bean(typeName="Tag", fluentSetters=true)
+public class Tag {
 	private long id;
 	private String name;
-	
+
 	public long getId() {
 		return id;
 	}
-	
-	public Category id(long id) {
+
+	public Tag id(long id) {
 		this.id = id;
 		return this;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
-	public Category name(String name) {
+
+	public Tag name(String name) {
 		this.name = name;
 		return this;
 	}

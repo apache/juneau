@@ -60,7 +60,7 @@ import org.apache.juneau.rest.widget.*;
 	children={
 		HelloWorldResource.class,
 		PetStoreResource.class,
-		org.apache.juneau.examples.petstore.PetStoreResource.class,
+		org.apache.juneau.examples.rest.petstore.PetStoreResource.class,
 		SystemPropertiesResource.class,
 		MethodExampleResource.class,
 		RequestEchoResource.class,

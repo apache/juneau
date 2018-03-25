@@ -27,5 +27,8 @@ public enum HttpPartType {
 	FORM_DATA,
 
 	/** An HTTP header */
-	HEADER
+	HEADER,
+	
+	/** A non-standard field */
+	OTHER;
 }

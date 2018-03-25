@@ -1782,6 +1782,15 @@ public final class ClassMeta<T> implements Type {
 		return getReadableClassName(this.innerClass);
 	}
 
+	/**
+	 * Shortcut for calling {@link Class#getSimpleName()} on the inner class of this metadata.
+	 * 
+	 * @return The simple name of the inner class.
+	 */
+	public String getSimpleName() {
+		return innerClass.getSimpleName();
+	}
+	
 	private static class LocaleAsString {
 		private static Method forLanguageTagMethod;
 		static {

@@ -10,8 +10,85 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.petstore;
+package org.apache.juneau.examples.rest.petstore;
 
-public enum OrderStatus {
-	PLACED, APPROVED, DELIVERED;
+import org.apache.juneau.annotation.*;
+
+@Bean(typeName="User", fluentSetters=true)
+public class User {
+	private long id;
+	private String username, firstName, lastName, email, password, phone;
+	private int userStatus;
+	
+	public long getId() {
+		return id;
+	}
+
+	public User id(long id) {
+		this.id = id;
+		return this;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public User username(String username) {
+		this.username = username;
+		return this;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public User firstName(String firstName) {
+		this.firstName = firstName;
+		return this;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public User lastName(String lastName) {
+		this.lastName = lastName;
+		return this;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public User email(String email) {
+		this.email = email;
+		return this;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public User password(String password) {
+		this.password = password;
+		return this;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public User phone(String phone) {
+		this.phone = phone;
+		return this;
+	}
+
+	public int getUserStatus() {
+		return userStatus;
+	}
+
+	public User userStatus(int userStatus) {
+		this.userStatus = userStatus;
+		return this;
+	}
 }

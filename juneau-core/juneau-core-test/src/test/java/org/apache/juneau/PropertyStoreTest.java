@@ -1584,13 +1584,13 @@ public class PropertyStoreTest {
 			b.removeFrom("A.foo.ss", "[xxx]");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).  Invalid input for JsonParser parser."));
+			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).  Invalid input for Simple parser."));
 		}
 		try {
 			b.removeFrom("A.foo.ls", "[xxx]");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).  Invalid input for JsonParser parser."));
+			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).  Invalid input for Simple parser."));
 		}
 	}
 
@@ -1601,7 +1601,8 @@ public class PropertyStoreTest {
 			b.addTo("A.foo.sms", "{xxx}");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertTrue(e.getMessage().startsWith("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>) .  Invalid input for JsonParser parser."));
+			System.err.println(e.getMessage());
+			assertTrue(e.getMessage().startsWith("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>) .  Invalid input for Simple parser."));
 		}
 		try {
 			b.addTo("A.foo.sms", "xxx");

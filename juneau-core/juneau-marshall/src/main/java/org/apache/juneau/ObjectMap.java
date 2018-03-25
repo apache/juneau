@@ -948,6 +948,23 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Same as {@link #getObjectMap(String)} but creates a new empty {@link ObjectMap} if it doesn't already exist.
+	 * 
+	 * @param key The key.
+	 * @param createIfNotExists If mapping doesn't already exist, create one with an empty {@link ObjectMap}.
+	 * @return The converted value, or an empty value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public ObjectMap getObjectMap(String key, boolean createIfNotExists) {
+		ObjectMap m = getWithDefault(key, null, ObjectMap.class);
+		if (m == null && createIfNotExists) {
+			m = new ObjectMap();
+			put(key, m);
+		}
+		return m;
+	}
+
+	/**
 	 * Returns the specified entry value converted to a {@link ObjectList}.
 	 * 
 	 * <p>
@@ -974,6 +991,23 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public ObjectList getObjectList(String key, ObjectList defVal) {
 		return getWithDefault(key, defVal, ObjectList.class);
+	}
+
+	/**
+	 * Same as {@link #getObjectList(String)} but creates a new empty {@link ObjectList} if it doesn't already exist.
+	 * 
+	 * @param key The key.
+	 * @param createIfNotExists If mapping doesn't already exist, create one with an empty {@link ObjectList}.
+	 * @return The converted value, or an empty value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public ObjectList getObjectList(String key, boolean createIfNotExists) {
+		ObjectList m = getWithDefault(key, null, ObjectList.class);
+		if (m == null && createIfNotExists) {
+			m = new ObjectList();
+			put(key, m);
+		}
+		return m;
 	}
 
 	/**
@@ -1237,6 +1271,19 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	public ObjectMap putIfEmpty(String key, Object val) {
 		Object o = get(key);
 		if (o == null || o.toString().isEmpty())
+			put(key, val);
+		return this;
+	}
+
+	/**
+	 * Adds a mapping if the specified key doesn't exist.
+	 * 
+	 * @param key The map key.
+	 * @param val The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap putIfNotExists(String key, Object val) {
+		if (! containsKey(key))
 			put(key, val);
 		return this;
 	}

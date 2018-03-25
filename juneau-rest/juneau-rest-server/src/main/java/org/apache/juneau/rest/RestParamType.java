@@ -29,7 +29,7 @@ public enum RestParamType {
 	HEADER("header"),
 
 	/** Form data entry */
-	FORMDATA("formData"),
+	FORM_DATA("formData"),
 
 	/** Query parameter */
 	QUERY("query"),

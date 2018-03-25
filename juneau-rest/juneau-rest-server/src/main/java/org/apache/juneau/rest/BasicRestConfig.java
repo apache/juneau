@@ -49,6 +49,7 @@ import org.apache.juneau.xml.*;
 	},
 	parsers={
 		JsonParser.class,
+		JsonParser.Simple.class,
 		XmlParser.class,
 		HtmlParser.class,
 		UonParser.class,
