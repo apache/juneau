@@ -26,9 +26,8 @@ import org.apache.juneau.rest.widget.*;
 	path="/petstore2",
 	title="Swagger Petstore",
 	description=
-		"This is a sample server Petstore server."
-		+ "<br>You can find out more about Swagger at <a class='link' href='http://swagger.io'>http://swagger.io</a> or on <a class='link' href='http://swagger.io/irc'>irc.freenode.net#swagger</a>."
-		+ "<br>For this sample, you can use the api key `special-key` to test the authorization filters.",
+		"This is a sample server Petstore server based on the Petstore sample at Swagger.io."
+		+ "<br>You can find out more about Swagger at <a class='link' href='http://swagger.io'>http://swagger.io</a>.",
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
@@ -50,7 +49,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	@RestMethod(
 		name="GET", 
 		path="/",
-		summary="Top-level page"
+		summary="Navigation page"
 	) 
 	public ResourceDescription[] getTopPage() {
 		return new ResourceDescription[] {
@@ -123,7 +122,6 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:['pet'],",
 			"parameters:[",
-//				"{ in:'body', description:'Pet object that needs to be added to the store', required:true, schema:{ $ref:'#/definitions/Pet'} }",
 				"{ in:'body', description:'Pet object that needs to be added to the store', required:true }",
 			"],",
 			"responses:{",

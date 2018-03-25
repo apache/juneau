@@ -14,29 +14,31 @@
 {
 	"swagger": "2.0",
 	"info": {
-		"description": "This is a sample server Petstore server. You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/). For this sample, you can use the api key `special-key` to test the authorization filters.",
+		"description": "This is a sample server Petstore server. You can find out more about Swagger at [http://swagger.io](http://swagger.io).",
 		"version": "1.0.0",
 		"title": "Swagger Petstore",
-		"termsOfService": "http://swagger.io/terms/",
+		"termsOfService": "You are on your own.",
 		"contact": {
-			"name": "John Smith",
-			"email": "johnsmith@swagger.io",
-			"url": "http://swagger.io"
+			"name": "Juneau Development Team",
+			"email": "dev@juneau.apache.org",
+			"url": "http://juneau.apache.org"
 		},
 		"license": {
 			"name": "Apache 2.0",
 			"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
 		}
 	},
-	"host": "petstore.swagger.io",
-	"basePath": "/v2",
+	"externalDocs": {
+		"description": "Find out more about Juneau",
+		"url": "http://juneau.apache.org"
+	},
 	"tags": [
 		{
 			"name": "pet",
 			"description": "Everything about your Pets",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "http://swagger.io"
+				"url": "http://juneau.apache.org"
 			}
 		},
 		{
@@ -48,7 +50,7 @@
 			"description": "Operations about user",
 			"externalDocs": {
 				"description": "Find out more about our store",
-				"url": "http://swagger.io"
+				"url": "http://juneau.apache.org"
 			}
 		}
 	],
@@ -107,12 +109,6 @@
 			},
 			"xml": {
 				"name": "Order"
-			},
-			"x-examples": {
-				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
-				"text/xml": "<foo>bar</foo>",
-				"text/html": "<table>foo</table>",
-				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
 		"User": {
@@ -148,12 +144,6 @@
 			},
 			"xml": {
 				"name": "User"
-			},
-			"x-examples": {
-				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
-				"text/xml": "<foo>bar</foo>",
-				"text/html": "<table>foo</table>",
-				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
 		"Category": {
@@ -169,12 +159,6 @@
 			},
 			"xml": {
 				"name": "Category"
-			},
-			"x-examples": {
-				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123,\n\tflags:[\n\t\t'f1',\n\t\t'f1',\n\t\t'f3'\n\t]\n}",
-				"text/xml": "<foo>bar</foo>",
-				"text/html": "<table>foo</table>",
-				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
 		"Tag": {
@@ -190,73 +174,8 @@
 			},
 			"xml": {
 				"name": "Tag"
-			},
-			"x-examples": {
-				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
-				"text/xml": "<foo>bar</foo>",
-				"text/html": "<table>foo</table>",
-				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		},
-/*		"Pet": {
-			"type": "object",
-			"required": [
-				"name",
-				"photoUrls"
-			],
-			"properties": {
-				"id": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"category": {
-					"$ref": "#/definitions/Category"
-				},
-				"name": {
-					"type": "string",
-					"example": "doggie"
-				},
-				"photoUrls": {
-					"type": "array",
-					"xml": {
-						"name": "photoUrl",
-						"wrapped": true
-					},
-					"items": {
-						"type": "string"
-					}
-				},
-				"tags": {
-					"type": "array",
-					"xml": {
-						"name": "tag",
-						"wrapped": true
-					},
-					"items": {
-						"$ref": "#/definitions/Tag"
-					}
-				},
-				"status": {
-					"type": "string",
-					"description": "pet status in the store",
-					"enum": [
-						"available",
-						"pending",
-						"sold"
-					]
-				}
-			},
-			"xml": {
-				"name": "Pet"
-			},
-			"x-examples": {
-				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123,\n\tflags:[\n\t\t'f1',\n\t\t'f1',\n\t\t'f3'\n\t]\n}",
-				"text/xml": "<foo>bar</foo>",
-				"text/html": "<table>foo</table>",
-				"octal-messagepack": "12 34 56 AB CD EF"
-			}
-		},
-*/
 		"ApiResponse": {
 			"type": "object",
 			"properties": {
@@ -270,17 +189,7 @@
 				"message": {
 					"type": "string"
 				}
-			},
-			"x-examples": {
-				"application/json": "{\n\tfoo: 'bar',\n\tbaz: 123\n}",
-				"text/xml": "<foo>bar</foo>",
-				"text/html": "<table>foo</table>",
-				"octal-messagepack": "12 34 56 AB CD EF"
 			}
 		}
-	},
-	"externalDocs": {
-		"description": "Find out more about Swagger",
-		"url": "http://swagger.io"
 	}
 }

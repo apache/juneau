@@ -84,7 +84,7 @@ public abstract class MenuItemWidget extends Widget {
 		StringBuilder sb = new StringBuilder();
 		sb.append(""
 			+ "<div class='menu-item'>"
-			+ "\n\t<a class='link' onclick='menuClick(this)'>"+getLabel(req)+"</a>"
+			+ "\n\t<a onclick='menuClick(this)'>"+getLabel(req)+"</a>"
 			+ "\n\t<div class='popup-content'>\n"
 		);
 		Object o = getContent(req);

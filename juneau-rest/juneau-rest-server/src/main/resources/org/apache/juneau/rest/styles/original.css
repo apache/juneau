@@ -112,6 +112,13 @@ aside {
 	padding: 20px 20px;
 }
 
+article div.data {
+	padding: 0px;
+	margin: 0px;
+	display: inline-block;
+	font-family: sans-serif;
+}
+
 article table {
 	border:1px solid #CCCC99;
 	border-collapse: collapse;

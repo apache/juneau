@@ -20,6 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -69,8 +70,11 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			if (info.hasVersion())
 				table.child(tr(th("Version:"),td(info.getVersion())));
 
-			if (info.hasTermsOfService())
-				table.child(tr(th("Terms of Service:"),td(a(info.getTermsOfService(), info.getTermsOfService()))));
+			if (info.hasTermsOfService()) {
+				String tos = info.getTermsOfService();
+				Object child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
+				table.child(tr(th("Terms of Service:"),td(child)));
+			}
 			
 			Contact c = info.getContact();
 			if (c != null) {
