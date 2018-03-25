@@ -1601,7 +1601,6 @@ public class PropertyStoreTest {
 			b.addTo("A.foo.sms", "{xxx}");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			System.err.println(e.getMessage());
 			assertTrue(e.getMessage().startsWith("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>) .  Invalid input for Simple parser."));
 		}
 		try {
