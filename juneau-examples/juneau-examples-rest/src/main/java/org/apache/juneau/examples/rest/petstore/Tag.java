@@ -36,4 +36,11 @@ public class Tag {
 		this.name = name;
 		return this;
 	}
+	
+	@Example
+	public static Tag example() {
+		return new Tag()
+			.id(123)
+			.name("MyTag");
+	}
 }

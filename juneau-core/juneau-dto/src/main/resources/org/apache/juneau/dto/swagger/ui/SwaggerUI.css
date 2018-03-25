@@ -193,6 +193,12 @@ td.parameter-value, td.response-value {
     font-weight: bold;
 }
 
+.parameter-key .requiredlabel {
+	font-size: 10px;
+    color: rgba(255,0,0,.6);    
+    font-weight: bold;
+}
+
 .parameter-key .type {
     font-size: 12px;
     padding: 5px 0;

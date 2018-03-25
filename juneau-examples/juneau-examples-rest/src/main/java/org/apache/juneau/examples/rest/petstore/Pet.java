@@ -32,7 +32,11 @@ public class Pet {
 	@Example
 	public static Pet example() {
 		return new Pet()
-			.id(123);
+			.id(123)
+			.category(Category.example())
+			.name("Doggie")
+			.tags(Tag.example())
+			.status(PetStatus.AVAILABLE);
 	}
 
 	public long getId() {
@@ -82,6 +86,11 @@ public class Pet {
 		return this;
 	}
 	
+	public Pet tags(Tag...tags) {
+		this.tags = Arrays.asList(tags);
+		return this;
+	}
+
 	public PetStatus getStatus() {
 		return status;
 	}

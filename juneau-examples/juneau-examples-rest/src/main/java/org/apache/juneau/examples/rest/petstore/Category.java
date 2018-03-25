@@ -36,4 +36,11 @@ public class Category {
 		this.name = name;
 		return this;
 	}
+	
+	@Example
+	public static Category example() {
+		return new Category()
+			.id(123)
+			.name("Dog");
+	}
 }

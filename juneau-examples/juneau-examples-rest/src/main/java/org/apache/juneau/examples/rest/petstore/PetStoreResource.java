@@ -51,6 +51,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	@RestMethod(
 		name="POST", 
 		path="/pet",
+		summary="Add a new pet to the store",
 		swagger={
 			"tags:['pet'],",
 			"parameters:[",

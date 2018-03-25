@@ -251,6 +251,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 			op.putIfNotExists("operationId", mn);
 			
+			s = rm.summary();
+			if (s.isEmpty())
+				s = mb.findFirstString(locale, mn + ".summary");
+			if (s != null)
+				op.put("summary", vr.resolve(s));
+
 			s = rm.description();
 			if (s.isEmpty())
 				s = mb.findFirstString(locale, mn + ".description");
@@ -277,10 +283,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			
 			op.put("tags", tags);
 			
-			s = mb.findFirstString(locale, mn + ".summary");
-			if (s != null)
-				op.put("summary", vr.resolve(s));
-
 			s = mb.findFirstString(locale, mn + ".externalDocs");
 			if (s != null) {
 				ObjectMap eom = jp.parse(vr.resolve(s), ObjectMap.class);

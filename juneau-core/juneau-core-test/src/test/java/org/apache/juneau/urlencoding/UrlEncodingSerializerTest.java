@@ -24,8 +24,8 @@ import org.junit.*;
 
 public class UrlEncodingSerializerTest {
 
-	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
-	static UrlEncodingSerializer sr = UrlEncodingSerializer.DEFAULT_READABLE;
+	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.builder().addRootType().build();
+	static UrlEncodingSerializer sr = UrlEncodingSerializer.DEFAULT_READABLE.builder().addRootType().build();
 
 
 	//====================================================================================================

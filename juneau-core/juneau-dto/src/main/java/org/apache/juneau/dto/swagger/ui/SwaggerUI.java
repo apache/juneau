@@ -124,6 +124,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				
 				Td parameterKey = td(
 					div(piName)._class("name" + (required ? " required" : "")),
+					required ? div("required")._class("requiredlabel") : null,
 					div(pi.getType())._class("type"),
 					div('(' + pi.getIn() + ')')._class("in")
 				)._class("parameter-key");

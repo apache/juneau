@@ -103,13 +103,14 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
-		aType = push("root", o, object());
+		ClassMeta<?> eType = getExpectedRootType(o);
+		aType = push("root", o, eType);
 		indent--;
 		if (aType == null)
 			aType = object();
 
 		sType = aType;
-		String typeName = getBeanTypeName(object(), aType, null);
+		String typeName = getBeanTypeName(eType, aType, null);
 
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap(this);

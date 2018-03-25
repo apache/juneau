@@ -345,6 +345,15 @@ public abstract class SerializerSession extends BeanSession {
 	}
 
 	/**
+	 * Returns the {@link Serializer#SERIALIZER_addRootType} setting value for this session.
+	 * 
+	 * @return The {@link Serializer#SERIALIZER_addRootType} setting value for this session.
+	 */
+	protected boolean isAddRootType() {
+		return addRootType;
+	}
+
+	/**
 	 * Returns the {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
 	 * 
 	 * @return The {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
