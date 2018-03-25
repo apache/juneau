@@ -184,15 +184,19 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
 	@RestMethod(name=OPTIONS, path="/*",
+		summary="Swagger documentation",
+		description="Swagger documentation for this resource.",
 		htmldoc=@HtmlDoc(
+			header={
+				"<h1>$R{resourceTitle}</h1>",
+				"<h2>$R{resourceDescription}</h2>"
+			},
 			navlinks={
 				"back: servlet:/",
 				"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
 			},
 			aside="NONE"
-		),
-		summary="Swagger documentation",
-		description="Auto-generated swagger documentation for this resource"
+		)
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();

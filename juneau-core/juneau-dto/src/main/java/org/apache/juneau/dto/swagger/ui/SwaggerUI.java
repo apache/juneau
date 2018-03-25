@@ -20,7 +20,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -40,8 +39,9 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	public Div swap(BeanSession session, Swagger s) throws Exception {
 		Div outer = div(
 			style(RM.getString("SwaggerUI.css")),
-			script("text/javascript", RM.getString("SwaggerUI.js"))
-		);
+			script("text/javascript", RM.getString("SwaggerUI.js")),
+			header(s)
+		)._class("swagger-ui");
 		
 		// Operations without tags are rendered first.
 		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
@@ -59,16 +59,57 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return outer;
 	}
 	
+	// Creates the informational summary before the ops.
+	private Table header(Swagger s) {
+		Table table = table()._class("header");
+		
+		Info info = s.getInfo();
+		if (info != null) {
+			
+			if (info.hasVersion())
+				table.child(tr(th("Version:"),td(info.getVersion())));
+
+			if (info.hasTermsOfService())
+				table.child(tr(th("Terms of Service:"),td(a(info.getTermsOfService(), info.getTermsOfService()))));
+			
+			Contact c = info.getContact();
+			if (c != null) {
+				Table t2 = table();
+
+				if (c.hasName())
+					t2.child(tr(th("Name:"),td(c.getName())));
+				if (c.hasUrl())
+					t2.child(tr(th("URL:"),td(a(c.getUrl(), c.getUrl()))));
+				if (c.hasEmail())
+					t2.child(tr(th("Email:"),td(a("mailto:"+ c.getEmail(), c.getEmail()))));
+					
+				table.child(tr(th("Contact:"),td(t2)));
+			}
+			
+			License l = info.getLicense();
+			if (l != null) {
+				Object child = l.hasUrl() ? a(l.getUrl(), l.hasName() ? l.getName() : l.getUrl()) : l.getName();
+				table.child(tr(th("License:"),td(child)));
+			}
+			
+			ExternalDocumentation ed = s.getExternalDocs();
+			if (ed != null) {
+				Object child = ed.hasUrl() ? a(ed.getUrl(), ed.hasDescription() ? ed.getDescription() : ed.getUrl()) : ed.getDescription();
+				table.child(tr(th("Docs:"),td(child)));
+			}
+		}
+		
+		return table;
+	}
+	
 	// Creates the "pet  Everything about your Pets  ext-link" header.
 	private HtmlElement tagBlockSummary(Tag t) {
 		ExternalDocumentation ed = t.getExternalDocs();
-		String edd = ed == null ? null : ed.getDescription();
-		Object extDocText = ed == null ? null : (edd != null ? edd : ed.getUrl());
 		
 		return div()._class("tag-block-summary").children(
 			span(t.getName())._class("name"),
 			span(t.getDescription())._class("description"),
-			ed == null ? null : span(a(ed.getUrl(), extDocText))._class("extdocs")
+			ed == null ? null : span(a(ed.getUrl(), ed.hasDescription() ? ed.getDescription() : ed.getUrl()))._class("extdocs")
 		).onclick("toggleTagBlock(this)");
 	}
 	
@@ -102,16 +143,15 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return div()._class("op-block-summary").children(
 			span(opName.toUpperCase())._class("method-button"),
 			span(path)._class("path"),
-			span(op.getSummary())._class("summary")
+			op.hasSummary() ? span(op.getSummary())._class("summary") : null
 		).onclick("toggleOpBlock(this)");
 	}
 
 	private Div tableContainer(Swagger s, Operation op) {
 		Div tableContainer = div()._class("table-container");
 		
-		String d = op.getDescription();
-		if (! StringUtils.isEmpty(d)) 
-			tableContainer.child(div(d)._class("op-block-description"));
+		if (op.hasDescription()) 
+			tableContainer.child(div(op.getDescription())._class("op-block-description"));
 			
 		if (op.hasParameters()) {
 			tableContainer.child(div(h4("Parameters")._class("title"))._class("op-block-section-header"));

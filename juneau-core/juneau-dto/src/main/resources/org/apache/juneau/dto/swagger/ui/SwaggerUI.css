@@ -13,6 +13,40 @@
  ***************************************************************************************************************************
 */
 
+.swagger-ui {	
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Header key-value pairs
+ ----------------------------------------------------------------------------------------------------------*/
+
+.swagger-ui table.header {
+    margin-bottom: 20px;
+	width: 95%;
+	border: none;
+}
+
+.swagger-ui table.header * {
+	font-size: 14px;
+	vertical-align: middle;
+}
+
+.swagger-ui table.header th {
+    font-weight: bold;
+    padding: 5px 10px;
+    text-align: left;
+    white-space: nowrap;
+	border: none;
+	border-radius: 3px;
+}
+
+.swagger-ui table.header td {
+	padding: 5px 10px;
+    text-align: left;
+    vertical-align: middle;
+	border: none;
+}
+
 /*-----------------------------------------------------------------------------------------------------------
  - Method buttons (e.g GET/PUT/... buttons)                                                                
  ----------------------------------------------------------------------------------------------------------*/

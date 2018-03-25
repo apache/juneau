@@ -389,19 +389,14 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			
 			ObjectMap okResponse = responses.getObjectMap("200");
 			
-			ClassMeta<?> cm = bs.getClassMeta(m.getReturnType());
+			ClassMeta<?> cm = bs.getClassMeta(m.getGenericReturnType());
 			
 			if ((cm.isMapOrBean() || cm.isCollectionOrArray()) && ! okResponse.containsKey("schema") && cm.getInnerClass() != Swagger.class) {
 				String name = cm.getSimpleName();
 				
 				if (! definitions.containsKey(name)) {
-					ObjectMap definition;
-					try {
-						definition = JsonSchemaUtils.getSchema(bs, cm);
-					} catch (Exception e1) {
-						System.err.println(cm);
-						throw e1;
-					}	
+					ObjectMap definition = JsonSchemaUtils.getSchema(bs, cm);
+					
 					Object example = cm.getExample(bs);
 					
 					if (example != null) {
@@ -709,7 +704,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (title != null)
 			return vr.resolve(title);
 		Swagger s = getSwagger(req);
-		if (s != null && s.getInfo() != null)
+		if (s != null && s.getInfo() != null && s.getInfo().hasTitle())
 			return s.getInfo().getTitle();
 		return null;
 	}
@@ -765,7 +760,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (description != null)
 			return vr.resolve(description);
 		Swagger s = getSwagger(req);
-		if (s != null && s.getInfo() != null)
+		if (s != null && s.getInfo() != null && s.getInfo().hasDescription())
 			return s.getInfo().getDescription();
 		return null;
 	}

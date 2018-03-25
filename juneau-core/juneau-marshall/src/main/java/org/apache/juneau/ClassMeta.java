@@ -947,7 +947,23 @@ public final class ClassMeta<T> implements Type {
 				return (T)invokeMethodFuzzy(exampleMethod, null, session);
 			if (exampleField != null)
 				return (T)exampleField.get(null);
-			return example;
+			if (example != null)
+				return example;
+
+			if (isCollection()) {
+				Object element = getElementType().getExample(session);
+				if (element != null)
+					return (T)Collections.singleton(element);
+			} else if (isArray()) {
+				Object element = getElementType().getExample(session);
+				if (element != null) {
+					Object o = Array.newInstance(getElementType().innerClass, 1);
+					Array.set(o, 0, example);
+					return (T)o;
+				}
+			}
+		
+			return null;
 		} catch (Exception e) {
 			throw new ClassMetaRuntimeException(e);
 		}

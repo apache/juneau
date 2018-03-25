@@ -271,3 +271,6 @@ footer {
 .row {display:table-row;}
 .cell {display:table-cell;}
 .monospace {font-family:monospace;}
+.link { color: #94A3AB; text-decoration: none; cursor: pointer;}
+.link:hover { text-decoration: underline; }
+

@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.labels.*;
 import org.apache.juneau.rest.widget.*;
 
 /**
@@ -24,7 +25,10 @@ import org.apache.juneau.rest.widget.*;
 @RestResource(
 	path="/petstore2",
 	title="Swagger Petstore",
-	description="This is a sample server Petstore server. You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/). For this sample, you can use the api key `special-key` to test the authorization filters.",
+	description=
+		"This is a sample server Petstore server."
+		+ "<br>You can find out more about Swagger at <a class='link' href='http://swagger.io'>http://swagger.io</a> or on <a class='link' href='http://swagger.io/irc'>irc.freenode.net#swagger</a>."
+		+ "<br>For this sample, you can use the api key `special-key` to test the authorization filters.",
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
@@ -43,11 +47,55 @@ import org.apache.juneau.rest.widget.*;
 public class PetStoreResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 	
-	@RestMethod(name="GET", path="/*") 
-	public String doGet() {
-		return "Hello";
+	@RestMethod(
+		name="GET", 
+		path="/",
+		summary="Top-level page"
+	) 
+	public ResourceDescription[] getTopPage() {
+		return new ResourceDescription[] {
+			new ResourceDescription("pet", "All pets in the store"), 
+			new ResourceDescription("store", "Petstore orders"), 
+			new ResourceDescription("user", "Petstore users")
+		};
 	}
 	
+	@RestMethod(
+		name="GET",
+		path="/pet",
+		summary="All pets in the store",
+		swagger={
+			"tags:['pet']"
+		}
+	)
+	public Collection<Pet> getPets() {
+		return null;
+	}
+	
+	@RestMethod(
+		name="GET",
+		path="/store",
+		summary="Petstore orders",
+		swagger={
+			"tags:['store']"
+		}
+	)
+	public Collection<Order> getOrders() {
+		return null;
+	}
+
+	@RestMethod(
+		name="GET",
+		path="/user",
+		summary="Petstore users",
+		swagger={
+			"tags:['user']"
+		}
+	)
+	public Collection<Order> getUsers() {
+		return null;
+	}
+
 	@RestMethod(
 		name="POST", 
 		path="/pet",
@@ -55,7 +103,6 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:['pet'],",
 			"parameters:[",
-//				"{ in:'body', name:'body', description:'Pet object that needs to be added to the store', required:true, schema:{ $ref:'#/definitions/Pet' } }",
 				"{ in:'body', description:'Pet object that needs to be added to the store', required:true }",
 			"],",
 			"responses:{",

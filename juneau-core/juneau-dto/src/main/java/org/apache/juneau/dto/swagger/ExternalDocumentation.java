@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
 import java.net.URI;
@@ -145,7 +146,25 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ExternalDocumentation url(Object value) {
-		return setUrl(toURI(value));
+		return setUrl(StringUtils.toURI(value));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the url property is not null.
+	 * 
+	 * @return <jk>true</jk> if the url property is not null.
+	 */
+	public boolean hasUrl() {
+		return url != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the description property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the description property is not null or empty.
+	 */
+	public boolean hasDescription() {
+		return ! isEmpty(description);
 	}
 
 	@Override /* SwaggerElement */

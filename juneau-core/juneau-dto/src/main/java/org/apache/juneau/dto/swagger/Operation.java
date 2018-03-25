@@ -13,6 +13,8 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -988,6 +990,61 @@ public class Operation extends SwaggerElement {
 		return this;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the summary property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the summary property is not null or empty.
+	 */
+	public boolean hasSummary() {
+		return ! isEmpty(summary);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the description property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the description property is not null or empty.
+	 */
+	public boolean hasDescription() {
+		return ! isEmpty(description);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this operation has the specified tag associated with it.
+	 * 
+	 * @param name The tag name.
+	 * @return <jk>true</jk> if this operation has the specified tag associated with it.
+	 */
+	public boolean hasTag(String name) {
+		return tags != null && tags.contains(name);
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if this operation has no tags associated with it.
+	 * 
+	 * @return <jk>true</jk> if this operation has no tags associated with it.
+	 */
+	public boolean hasNoTags() {
+		return tags == null || tags.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this operation has parameters associated with it.
+	 * 
+	 * @return <jk>true</jk> if this operation has parameters associated with it.
+	 */
+	public boolean hasParameters() {
+		return parameters != null && ! parameters.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this operation has responses associated with it.
+	 * 
+	 * @return <jk>true</jk> if this operation has responses associated with it.
+	 */
+	public boolean hasResponses() {
+		return responses != null && ! responses.isEmpty();
+	}
+
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -1048,42 +1105,5 @@ public class Operation extends SwaggerElement {
 			.appendIf(deprecated != null, "deprecated")
 			.appendIf(security != null, "security");
 		return new MultiSet<>(s, super.keySet());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this operation has the specified tag associated with it.
-	 * 
-	 * @param name The tag name.
-	 * @return <jk>true</jk> if this operation has the specified tag associated with it.
-	 */
-	public boolean hasTag(String name) {
-		return tags != null && tags.contains(name);
-	}
-	
-	/**
-	 * Returns <jk>true</jk> if this operation has no tags associated with it.
-	 * 
-	 * @return <jk>true</jk> if this operation has no tags associated with it.
-	 */
-	public boolean hasNoTags() {
-		return tags == null || tags.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this operation has parameters associated with it.
-	 * 
-	 * @return <jk>true</jk> if this operation has parameters associated with it.
-	 */
-	public boolean hasParameters() {
-		return parameters != null && ! parameters.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this operation has responses associated with it.
-	 * 
-	 * @return <jk>true</jk> if this operation has responses associated with it.
-	 */
-	public boolean hasResponses() {
-		return responses != null && ! responses.isEmpty();
 	}
 }

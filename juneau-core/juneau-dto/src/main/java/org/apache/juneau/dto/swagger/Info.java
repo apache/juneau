@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -340,6 +341,43 @@ public class Info extends SwaggerElement {
 	 */
 	public Info version(Object value) {
 		return setVersion(toStringVal(value));
+	}
+
+
+	/**
+	 * Returns <jk>true</jk> if the title property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the title property is not null or empty.
+	 */
+	public boolean hasTitle() {
+		return ! isEmpty(title);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the description property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the description property is not null or empty.
+	 */
+	public boolean hasDescription() {
+		return ! isEmpty(description);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the version property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the version property is not null or empty.
+	 */
+	public boolean hasVersion() {
+		return ! isEmpty(version);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the termsOfService property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the termsOfService property is not null or empty.
+	 */
+	public boolean hasTermsOfService() {
+		return ! isEmpty(termsOfService);
 	}
 
 	@Override /* SwaggerElement */

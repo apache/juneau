@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
 import java.net.URI;
@@ -141,7 +142,7 @@ public class Contact extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Contact url(Object value) {
-		return setUrl(toURI(value));
+		return setUrl(StringUtils.toURI(value));
 	}
 
 	/**
@@ -185,6 +186,33 @@ public class Contact extends SwaggerElement {
 	 */
 	public Contact email(Object value) {
 		return setEmail(toStringVal(value));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the name property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the name property is not null or empty.
+	 */
+	public boolean hasName() {
+		return ! isEmpty(name);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the URL property is not null.
+	 * 
+	 * @return <jk>true</jk> if the URL property is not null.
+	 */
+	public boolean hasUrl() {
+		return url != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the email property is not null or empty.
+	 * 
+	 * @return <jk>true</jk> if the email property is not null or empty.
+	 */
+	public boolean hasEmail() {
+		return ! isEmpty(email);
 	}
 
 	@Override /* SwaggerElement */

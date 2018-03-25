@@ -19,7 +19,9 @@
 		"title": "Swagger Petstore",
 		"termsOfService": "http://swagger.io/terms/",
 		"contact": {
-			"email": "apiteam@swagger.io"
+			"name": "John Smith",
+			"email": "johnsmith@swagger.io",
+			"url": "http://swagger.io"
 		},
 		"license": {
 			"name": "Apache 2.0",
