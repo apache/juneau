@@ -258,7 +258,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// JSON
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJson = JsonSerializer.DEFAULT_LAX.builder().addRootType().build();
+	WriterSerializer sJson = JsonSerializer.DEFAULT_LAX.builder().addBeanTypes().addRootType().build();
 	ReaderParser pJson = JsonParser.DEFAULT;
 
 	@Test
@@ -279,7 +279,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// JSON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonT = JsonSerializer.create().ssq().beanTypePropertyName("t").addRootType().build();
+	WriterSerializer sJsonT = JsonSerializer.create().ssq().beanTypePropertyName("t").addBeanTypes().addRootType().build();
 	ReaderParser pJsonT = JsonParser.create().beanTypePropertyName("t").build();
 
 	@Test
@@ -300,7 +300,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// JSON - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonR = JsonSerializer.DEFAULT_LAX_READABLE.builder().addRootType().build();
+	WriterSerializer sJsonR = JsonSerializer.DEFAULT_LAX_READABLE.builder().addBeanTypes().addRootType().build();
 	ReaderParser pJsonR = JsonParser.DEFAULT;
 
 	@Test
@@ -321,7 +321,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// XML
 	//--------------------------------------------------------------------------------
-	WriterSerializer sXml = XmlSerializer.DEFAULT_SQ.builder().addRootType().build();
+	WriterSerializer sXml = XmlSerializer.DEFAULT_SQ.builder().addBeanTypes().addRootType().build();
 	ReaderParser pXml = XmlParser.DEFAULT;
 
 	@Test
@@ -342,7 +342,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// XML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sXmlT = XmlSerializer.create().sq().beanTypePropertyName("t").addRootType().build();
+	WriterSerializer sXmlT = XmlSerializer.create().sq().beanTypePropertyName("t").addBeanTypes().addRootType().build();
 	ReaderParser pXmlT = XmlParser.create().beanTypePropertyName("t").build();
 
 	@Test
@@ -363,7 +363,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// XML - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sXmlR = XmlSerializer.DEFAULT_SQ_READABLE.builder().addRootType().build();
+	WriterSerializer sXmlR = XmlSerializer.DEFAULT_SQ_READABLE.builder().addBeanTypes().addRootType().build();
 	ReaderParser pXmlR = XmlParser.DEFAULT;
 
 	@Test
@@ -384,7 +384,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// XML - Namespaces
 	//--------------------------------------------------------------------------------
-	WriterSerializer sXmlNs = XmlSerializer.DEFAULT_NS_SQ.builder().addRootType().build();
+	WriterSerializer sXmlNs = XmlSerializer.DEFAULT_NS_SQ.builder().addBeanTypes().addRootType().build();
 	ReaderParser pXmlNs = XmlParser.DEFAULT;
 
 	@Test
@@ -405,7 +405,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// HTML
 	//--------------------------------------------------------------------------------
-	WriterSerializer sHtml = HtmlSerializer.DEFAULT_SQ.builder().addRootType().build();
+	WriterSerializer sHtml = HtmlSerializer.DEFAULT_SQ.builder().addBeanTypes().addRootType().build();
 	ReaderParser pHtml = HtmlParser.DEFAULT;
 
 	@Test
@@ -426,7 +426,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// HTML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sHtmlT = HtmlSerializer.create().sq().beanTypePropertyName("t").addRootType().build();
+	WriterSerializer sHtmlT = HtmlSerializer.create().sq().beanTypePropertyName("t").addBeanTypes().addRootType().build();
 	ReaderParser pHtmlT =  HtmlParser.create().beanTypePropertyName("t").build();
 
 	@Test
@@ -447,7 +447,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// HTML - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sHtmlR = HtmlSerializer.DEFAULT_SQ_READABLE.builder().addRootType().build();
+	WriterSerializer sHtmlR = HtmlSerializer.DEFAULT_SQ_READABLE.builder().addBeanTypes().addRootType().build();
 	ReaderParser pHtmlR = HtmlParser.DEFAULT;
 
 	@Test
@@ -468,7 +468,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UON
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUon = UonSerializer.DEFAULT.builder().addRootType().build();
+	WriterSerializer sUon = UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
 	ReaderParser pUon = UonParser.DEFAULT;
 
 	@Test
@@ -489,7 +489,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUonT = UonSerializer.create().beanTypePropertyName("t").addRootType().build();
+	WriterSerializer sUonT = UonSerializer.create().beanTypePropertyName("t").addBeanTypes().addRootType().build();
 	ReaderParser pUonT = UonParser.create().beanTypePropertyName("t").build();
 
 	@Test
@@ -510,7 +510,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UON - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUonR = UonSerializer.DEFAULT_READABLE.builder().addRootType().build();
+	WriterSerializer sUonR = UonSerializer.DEFAULT_READABLE.builder().addBeanTypes().addRootType().build();
 	ReaderParser pUonR = UonParser.DEFAULT;
 
 	@Test
@@ -531,7 +531,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UrlEncoding
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUrlEncoding = UrlEncodingSerializer.DEFAULT.builder().addRootType().build();
+	WriterSerializer sUrlEncoding = UrlEncodingSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
 	ReaderParser pUrlEncoding = UrlEncodingParser.DEFAULT;
 
 	@Test
@@ -552,7 +552,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UrlEncoding - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUrlEncodingT = UrlEncodingSerializer.create().beanTypePropertyName("t").addRootType().build();
+	WriterSerializer sUrlEncodingT = UrlEncodingSerializer.create().beanTypePropertyName("t").addBeanTypes().addRootType().build();
 	ReaderParser pUrlEncodingT = UrlEncodingParser.create().beanTypePropertyName("t").build();
 
 	@Test
@@ -573,7 +573,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UrlEncoding - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUrlEncodingR = UrlEncodingSerializer.DEFAULT_READABLE.builder().addRootType().build();
+	WriterSerializer sUrlEncodingR = UrlEncodingSerializer.DEFAULT_READABLE.builder().addBeanTypes().addRootType().build();
 	ReaderParser pUrlEncodingR = UrlEncodingParser.DEFAULT;
 
 	@Test
@@ -594,7 +594,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// MsgPack
 	//--------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPack = MsgPackSerializer.DEFAULT_SPACED_HEX.builder().addRootType().build();
+	OutputStreamSerializer sMsgPack = MsgPackSerializer.DEFAULT_SPACED_HEX.builder().addBeanTypes().addRootType().build();
 	InputStreamParser pMsgPack = MsgPackParser.DEFAULT_SPACED_HEX;
 
 	@Test
@@ -620,7 +620,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// MsgPack - 't' property
 	//--------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPackT = MsgPackSerializer.create().beanTypePropertyName("t").addRootType().build();
+	OutputStreamSerializer sMsgPackT = MsgPackSerializer.create().beanTypePropertyName("t").addBeanTypes().addRootType().build();
 	InputStreamParser pMsgPackT = MsgPackParser.create().beanTypePropertyName("t").build();
 
 	@Test
@@ -646,7 +646,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXml = RdfSerializer.DEFAULT_XMLABBREV.builder().addRootType().build();
+	WriterSerializer sRdfXml = RdfSerializer.DEFAULT_XMLABBREV.builder().addBeanTypes().addRootType().build();
 	ReaderParser pRdfXml = RdfParser.DEFAULT_XML;
 
 	@Test
@@ -667,7 +667,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").addRootType().build();
+	WriterSerializer sRdfXmlT = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").addBeanTypes().addRootType().build();
 	ReaderParser pRdfXmlT = RdfParser.create().beanTypePropertyName("t").build();
 
 	@Test
@@ -688,7 +688,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlR = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).ws().addRootType().build();
+	WriterSerializer sRdfXmlR = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).ws().addBeanTypes().addRootType().build();
 	ReaderParser pRdfXmlR = RdfParser.DEFAULT_XML;
 
 	@Test

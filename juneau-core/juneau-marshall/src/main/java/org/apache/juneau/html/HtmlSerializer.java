@@ -135,13 +135,13 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -151,10 +151,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 * through reflection.
 	 * 
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String HTML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String HTML_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
@@ -632,7 +632,7 @@ public class HtmlSerializer extends XmlSerializer {
 		lookForLabelParameters,
 		detectLinksInStrings,
 		addKeyValueTableHeaders,
-		addBeanTypeProperties;
+		addBeanTypes;
 	final String labelParameter;
 
 	private volatile HtmlSchemaDocSerializer schemaSerializer;
@@ -679,7 +679,7 @@ public class HtmlSerializer extends XmlSerializer {
 		detectLinksInStrings = getBooleanProperty(HTML_detectLinksInStrings, true);
 		labelParameter = getStringProperty(HTML_labelParameter, "label");
 		addKeyValueTableHeaders = getBooleanProperty(HTML_addKeyValueTableHeaders, false);
-		addBeanTypeProperties = getBooleanProperty(HTML_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
+		addBeanTypes = getBooleanProperty(HTML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 	}
 
 	@Override /* Context */
@@ -724,7 +724,7 @@ public class HtmlSerializer extends XmlSerializer {
 				.append("detectLinksInStrings", detectLinksInStrings)
 				.append("labelParameter", labelParameter)
 				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 			);
 	}
 }

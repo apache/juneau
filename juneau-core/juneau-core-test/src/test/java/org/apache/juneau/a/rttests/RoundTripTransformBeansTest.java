@@ -267,7 +267,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypeWithGenerics() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT.builder().addRootType().build();
+		JsonSerializer s = JsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
 
 		C1 c1 = C3.create();
 		String r = s.serialize(c1);

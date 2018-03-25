@@ -33,7 +33,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	private final boolean
 		simpleMode,
 		escapeSolidus,
-		addBeanTypeProperties;
+		addBeanTypes;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -51,14 +51,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		super(ctx, args);
 		simpleMode = getProperty(JSON_simpleMode, boolean.class, ctx.simpleMode);
 		escapeSolidus = getProperty(JSON_escapeSolidus, boolean.class, ctx.escapeSolidus);
-		addBeanTypeProperties = getProperty(JSON_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		addBeanTypes = getProperty(JSON_addBeanTypes, boolean.class, ctx.addBeanTypes);
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("JsonSerializerSession", new ObjectMap()
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("escapeSolidus", escapeSolidus)
 				.append("simpleMode", simpleMode)
 			);
@@ -236,13 +236,13 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 
 	/**
-	 * Returns the {@link JsonSerializer#JSON_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link JsonSerializer#JSON_addBeanTypes} setting value for this session.
 	 * 
-	 * @return The {@link JsonSerializer#JSON_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link JsonSerializer#JSON_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
-	protected final boolean isAddBeanTypeProperties() {
-		return addBeanTypeProperties;
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/**

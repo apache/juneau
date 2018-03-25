@@ -56,8 +56,14 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public MsgPackSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

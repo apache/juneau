@@ -142,8 +142,14 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public YamlSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

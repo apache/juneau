@@ -91,13 +91,13 @@ public class YamlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link JsonSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -107,10 +107,10 @@ public class YamlSerializer extends WriterSerializer {
 	 * through reflection.
 	 * 
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String YAML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String YAML_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
@@ -256,7 +256,7 @@ public class YamlSerializer extends WriterSerializer {
 	final boolean
 		simpleMode,
 		escapeSolidus,
-		addBeanTypeProperties;
+		addBeanTypes;
 
 	/**
 	 * Constructor.
@@ -297,7 +297,7 @@ public class YamlSerializer extends WriterSerializer {
 		super(ps, produces, accept);
 		simpleMode = getBooleanProperty(YAML_simpleMode, false);
 		escapeSolidus = getBooleanProperty(YAML_escapeSolidus, false);
-		addBeanTypeProperties = getBooleanProperty(YAML_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
+		addBeanTypes = getBooleanProperty(YAML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 	}
 
 	@Override /* Context */
@@ -337,7 +337,7 @@ public class YamlSerializer extends WriterSerializer {
 			.append("YamlSerializer", new ObjectMap()
 				.append("simpleMode", simpleMode)
 				.append("escapeSolidus", escapeSolidus)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 			);
 	}
 }

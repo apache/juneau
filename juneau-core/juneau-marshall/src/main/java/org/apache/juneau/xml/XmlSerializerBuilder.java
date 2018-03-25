@@ -258,8 +258,14 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public XmlSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

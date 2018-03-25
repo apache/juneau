@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	path="/testInterfaceProxyResource",
-	flags={Serializer.SERIALIZER_addRootType}
+	flags={Serializer.SERIALIZER_addRootType, Serializer.SERIALIZER_addBeanTypes}
 )
 public class InterfaceProxyResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;

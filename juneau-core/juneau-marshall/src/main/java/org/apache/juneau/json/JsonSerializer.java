@@ -99,13 +99,13 @@ public class JsonSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link JsonSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -115,10 +115,10 @@ public class JsonSerializer extends WriterSerializer {
 	 * through reflection.
 	 * 
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String JSON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String JSON_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
@@ -361,7 +361,7 @@ public class JsonSerializer extends WriterSerializer {
 	final boolean
 		simpleMode,
 		escapeSolidus,
-		addBeanTypeProperties;
+		addBeanTypes;
 
 	private volatile JsonSchemaSerializer schemaSerializer;
 
@@ -405,7 +405,7 @@ public class JsonSerializer extends WriterSerializer {
 		
 		simpleMode = getBooleanProperty(JSON_simpleMode, false);
 		escapeSolidus = getBooleanProperty(JSON_escapeSolidus, false);
-		addBeanTypeProperties = getBooleanProperty(JSON_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
+		addBeanTypes = getBooleanProperty(JSON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 	}
 
 	@Override /* Context */
@@ -455,7 +455,7 @@ public class JsonSerializer extends WriterSerializer {
 			.append("JsonSerializer", new ObjectMap()
 				.append("simpleMode", simpleMode)
 				.append("escapeSolidus", escapeSolidus)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 			);
 	}
 }

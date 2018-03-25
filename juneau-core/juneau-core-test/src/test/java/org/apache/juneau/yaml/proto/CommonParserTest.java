@@ -83,7 +83,7 @@ public class CommonParserTest {
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
-		String json = YamlSerializer.create().addBeanTypeProperties(true).addRootType().beanDictionary(A1.class).build().serialize(b);
+		String json = YamlSerializer.create().addBeanTypes(true).addRootType().beanDictionary(A1.class).build().serialize(b);
 		b = (A1)p.parse(json, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 

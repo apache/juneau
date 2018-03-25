@@ -181,8 +181,14 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public JsonSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

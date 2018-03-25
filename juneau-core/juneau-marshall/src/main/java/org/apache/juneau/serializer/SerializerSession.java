@@ -53,7 +53,7 @@ public abstract class SerializerSession extends BeanSession {
 	private final boolean
 		detectRecursions,
 		ignoreRecursions,
-		addBeanTypeProperties,
+		addBeanTypes,
 		trimNulls,
 		trimEmptyCollections,
 		trimEmptyMaps,
@@ -101,7 +101,7 @@ public abstract class SerializerSession extends BeanSession {
 		initialDepth = getProperty(SERIALIZER_initialDepth, int.class, ctx.initialDepth);
 		detectRecursions = getProperty(SERIALIZER_detectRecursions, boolean.class, ctx.detectRecursions);
 		ignoreRecursions = getProperty(SERIALIZER_ignoreRecursions, boolean.class, ctx.ignoreRecursions);
-		addBeanTypeProperties = getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		addBeanTypes = getProperty(SERIALIZER_addBeanTypes, boolean.class, ctx.addBeanTypes);
 		trimNulls = getProperty(SERIALIZER_trimNullProperties, boolean.class, ctx.trimNulls);
 		trimEmptyCollections = getProperty(SERIALIZER_trimEmptyCollections, boolean.class, ctx.trimEmptyCollections);
 		trimEmptyMaps = getProperty(SERIALIZER_trimEmptyMaps, boolean.class, ctx.trimEmptyMaps);
@@ -146,7 +146,7 @@ public abstract class SerializerSession extends BeanSession {
 				.append("initialDepth", initialDepth)
 				.append("detectRecursions", detectRecursions)
 				.append("ignoreRecursions", ignoreRecursions)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("trimNulls", trimNulls)
 				.append("trimEmptyCollections", trimEmptyCollections)
 				.append("trimEmptyMaps", trimEmptyMaps)
@@ -336,12 +336,12 @@ public abstract class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
 	 * 
-	 * @return The {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
 	 */
-	protected boolean isAddBeanTypeProperties() {
-		return addBeanTypeProperties;
+	protected boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/**
@@ -812,7 +812,7 @@ public abstract class SerializerSession extends BeanSession {
 		if (eType == aType)
 			return null;
 
-		if (! isAddBeanTypeProperties())
+		if (! isAddBeanTypes())
 			return null;
 
 		String eTypeTn = eType.getDictionaryName();

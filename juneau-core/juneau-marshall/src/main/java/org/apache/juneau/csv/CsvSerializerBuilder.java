@@ -86,8 +86,14 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public CsvSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public CsvSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

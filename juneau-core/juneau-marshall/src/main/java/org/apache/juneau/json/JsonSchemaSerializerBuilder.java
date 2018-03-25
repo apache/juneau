@@ -80,8 +80,14 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public JsonSchemaSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

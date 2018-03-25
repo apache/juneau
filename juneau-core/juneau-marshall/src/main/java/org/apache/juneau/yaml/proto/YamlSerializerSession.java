@@ -31,7 +31,7 @@ import org.apache.juneau.transform.*;
 public class YamlSerializerSession extends WriterSerializerSession {
 
 	private final boolean
-		addBeanTypeProperties;
+		addBeanTypes;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -47,14 +47,14 @@ public class YamlSerializerSession extends WriterSerializerSession {
 	 */
 	protected YamlSerializerSession(YamlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		addBeanTypeProperties = getProperty(YAML_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		addBeanTypes = getProperty(YAML_addBeanTypes, boolean.class, ctx.addBeanTypes);
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("YamlSerializerSession", new ObjectMap()
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 			);
 	}
 
@@ -221,13 +221,13 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 
 	/**
-	 * Returns the {@link #YAML_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link #YAML_addBeanTypes} setting value for this session.
 	 * 
-	 * @return The {@link #YAML_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link #YAML_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
-	protected final boolean isAddBeanTypeProperties() {
-		return addBeanTypeProperties;
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/**

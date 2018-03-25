@@ -49,121 +49,121 @@ public abstract class RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json - default",
-				JsonSerializer.create().trimNullProperties(false).addRootType(),
+				JsonSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 1 */
 				"Json - lax",
-				JsonSerializer.create().ssq().trimNullProperties(false).addRootType(),
+				JsonSerializer.create().ssq().trimNullProperties(false).addBeanTypes().addRootType(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json - lax, readable",
-				JsonSerializer.create().ssq().ws().trimNullProperties(false).addRootType(),
+				JsonSerializer.create().ssq().ws().trimNullProperties(false).addBeanTypes().addRootType(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				XmlSerializer.create().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot().useWhitespace().addRootType(),
+				XmlSerializer.create().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml - no namespaces, validation",
-				XmlSerializer.create().sq().trimNullProperties(false).addRootType(),
+				XmlSerializer.create().sq().trimNullProperties(false).addBeanTypes().addRootType(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html - default",
-				HtmlSerializer.create().trimNullProperties(false).addRootType(),
+				HtmlSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"Html - readable",
-				HtmlSerializer.create().sq().ws().trimNullProperties(false).addRootType(),
+				HtmlSerializer.create().sq().ws().trimNullProperties(false).addBeanTypes().addRootType(),
 				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 7 */
 				"Html - with key/value headers",
-				HtmlSerializer.create().addKeyValueTableHeaders().addRootType(),
+				HtmlSerializer.create().addKeyValueTableHeaders().addBeanTypes().addRootType(),
 				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 8 */
 				"Uon - default",
-				UonSerializer.create().trimNullProperties(false).addRootType(),
+				UonSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				UonParser.create(),
 				0
 			},
 			{ /* 9 */
 				"Uon - readable",
-				UonSerializer.create().ws().trimNullProperties(false).addRootType(),
+				UonSerializer.create().ws().trimNullProperties(false).addBeanTypes().addRootType(),
 				UonParser.create(),
 				0
 			},
 			{ /* 10 */
 				"Uon - encoded",
-				UonSerializer.create().encoding().trimNullProperties(false).addRootType(),
+				UonSerializer.create().encoding().trimNullProperties(false).addBeanTypes().addRootType(),
 				UonParser.create().decoding(),
 				0
 			},
 			{ /* 11 */
 				"UrlEncoding - default",
-				UrlEncodingSerializer.create().trimNullProperties(false).addRootType(),
+				UrlEncodingSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				UrlEncodingParser.create(),
 				0
 			},
 			{ /* 12 */
 				"UrlEncoding - readable",
-				UrlEncodingSerializer.create().ws().trimNullProperties(false).addRootType(),
+				UrlEncodingSerializer.create().ws().trimNullProperties(false).addBeanTypes().addRootType(),
 				UrlEncodingParser.create(),
 				0
 			},
 			{ /* 13 */
 				"UrlEncoding - expanded params",
-				UrlEncodingSerializer.create().expandedParams().addRootType(),
+				UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType(),
 				UrlEncodingParser.create().expandedParams(true),
 				0
 			},
 			{ /* 14 */
 				"Rdf.Xml",
-				RdfSerializer.create().trimNullProperties(false).addLiteralTypes().addRootType(),
+				RdfSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
 				RdfParser.create().xml(),
 				0
 			},
 			{ /* 15 */
 				"Rdf.XmlAbbrev",
-				RdfSerializer.create().xmlabbrev().trimNullProperties(false).addLiteralTypes().addRootType(),
+				RdfSerializer.create().xmlabbrev().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
 				RdfParser.create().xml(),
 				0
 			},
 			{ /* 16 */
 				"Rdf.Turtle",
-				RdfSerializer.create().turtle().trimNullProperties(false).addLiteralTypes().addRootType(),
+				RdfSerializer.create().turtle().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
 				RdfParser.create().turtle(),
 				0
 			},
 			{ /* 17 */
 				"Rdf.NTriple",
-				RdfSerializer.create().ntriple().trimNullProperties(false).addLiteralTypes().addRootType(),
+				RdfSerializer.create().ntriple().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
 				RdfParser.create().ntriple(),
 				0
 			},
 			{ /* 18 */
 				"Rdf.N3",
-				RdfSerializer.create().n3().trimNullProperties(false).addLiteralTypes().addRootType(),
+				RdfSerializer.create().n3().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
 				RdfParser.create().n3(),
 				0
 			},
 			{ /* 19 */
 				"MsgPack",
-				MsgPackSerializer.create().trimNullProperties(false).addRootType(),
+				MsgPackSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				MsgPackParser.create(),
 				0
 			},
@@ -171,13 +171,13 @@ public abstract class RoundTripTest {
 			// Validation testing only
 			{ /* 20 */
 				"Json schema",
-				JsonSchemaSerializer.create().trimNullProperties(false).addRootType(),
+				JsonSchemaSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				null,
 				RETURN_ORIGINAL_OBJECT
 			},
 			{ /* 21 */
 				"Xml schema",
-				XmlSchemaSerializer.create().trimNullProperties(false).addRootType(),
+				XmlSchemaSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				XmlValidatorParser.create(),
 				RETURN_ORIGINAL_OBJECT | CHECK_XML_WHITESPACE
 			},

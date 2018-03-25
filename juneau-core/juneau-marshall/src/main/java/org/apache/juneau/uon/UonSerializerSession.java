@@ -32,7 +32,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 
 	private final boolean
 		encodeChars,
-		addBeanTypeProperties,
+		addBeanTypes,
 		plainTextParams;
 
 	/**
@@ -49,7 +49,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	public UonSerializerSession(UonSerializer ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
 		encodeChars = encode == null ? getProperty(UON_encoding, boolean.class, ctx.encodeChars) : encode;
-		addBeanTypeProperties = getProperty(UON_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		addBeanTypes = getProperty(UON_addBeanTypes, boolean.class, ctx.addBeanTypes);
 		plainTextParams = getProperty(UON_paramFormat, ParamFormat.class, ctx.paramFormat) == ParamFormat.PLAINTEXT;
 	}
 
@@ -57,20 +57,20 @@ public class UonSerializerSession extends WriterSerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UonSerializerSession", new ObjectMap()
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("encodeChars", encodeChars)
 				.append("plainTextParams", plainTextParams)
 			);
 	}
 
 	/**
-	 * Returns the {@link UonSerializer#UON_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link UonSerializer#UON_addBeanTypes} setting value for this session.
 	 * 
-	 * @return The {@link UonSerializer#UON_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link UonSerializer#UON_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
-	public final boolean isAddBeanTypeProperties() {
-		return addBeanTypeProperties;
+	public final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/**

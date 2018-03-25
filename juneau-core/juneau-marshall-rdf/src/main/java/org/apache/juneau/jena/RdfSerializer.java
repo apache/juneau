@@ -58,13 +58,13 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -74,10 +74,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * through reflection.
 	 * 
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String RDF_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String RDF_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
@@ -302,7 +302,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		useXmlNamespaces,
 		looseCollections,
 		autoDetectNamespaces,
-		addBeanTypeProperties;
+		addBeanTypes;
 	final String rdfLanguage;
 	final Namespace juneauNs;
 	final Namespace juneauBpNs;
@@ -347,7 +347,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		juneauBpNs = getProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
 		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
-		addBeanTypeProperties = getBooleanProperty(RDF_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
+		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 		
 		Map<String,Object> m = new LinkedHashMap<>();
 		for (String k : getPropertyKeys("RdfCommon")) 
@@ -407,7 +407,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 				.append("juneauBpNs", juneauBpNs)
 				.append("collectionFormat", collectionFormat)
 				.append("namespaces", namespaces)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 			);
 	}
 }

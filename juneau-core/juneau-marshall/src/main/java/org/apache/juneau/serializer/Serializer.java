@@ -51,13 +51,14 @@ public abstract class Serializer extends BeanContext {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypes()}
+	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -75,21 +76,21 @@ public abstract class Serializer extends BeanContext {
 	 * Note the differences between the following settings:
 	 * <ul>
 	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypeProperties} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.addBeanTypeProperties(<jk>false</jk>)
+	 * 		.addBeanTypes()
 	 * 		.build();
 	 * 	
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_addBeanTypeProperties</jsf>, <jk>false</jk>)
+	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 * 
 	 * 	<jc>// A map of objects we want to serialize.</jc>
@@ -99,12 +100,11 @@ public abstract class Serializer extends BeanContext {
 	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
 	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 * 
-	 * 	<jc>// Will not contain '_type' attribute even though type name is on bean and we're serializing</jc>
-	 * 	<jc>// a map of generic objects.</jc>
+	 * 	<jc>// Will contain '_type' attribute.</jc>
 	 * 	String json = s.serialize(m);
 	 * </p>
 	 */
-	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String SERIALIZER_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add type attribute to root nodes.
@@ -135,7 +135,7 @@ public abstract class Serializer extends BeanContext {
 	 * Note the differences between the following settings:
 	 * <ul>
 	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypeProperties} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>
@@ -846,7 +846,7 @@ public abstract class Serializer extends BeanContext {
 	final boolean
 		detectRecursions,
 		ignoreRecursions,
-		addBeanTypeProperties,
+		addBeanTypes,
 		trimNulls,
 		trimEmptyCollections,
 		trimEmptyMaps,
@@ -870,7 +870,7 @@ public abstract class Serializer extends BeanContext {
 		initialDepth = getIntegerProperty(SERIALIZER_initialDepth, 0);
 		detectRecursions = getBooleanProperty(SERIALIZER_detectRecursions, false);
 		ignoreRecursions = getBooleanProperty(SERIALIZER_ignoreRecursions, false);
-		addBeanTypeProperties = getBooleanProperty(SERIALIZER_addBeanTypeProperties, true);
+		addBeanTypes = getBooleanProperty(SERIALIZER_addBeanTypes, false);
 		trimNulls = getBooleanProperty(SERIALIZER_trimNullProperties, true);
 		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections, false);
 		trimEmptyMaps = getBooleanProperty(SERIALIZER_trimEmptyMaps, false);
@@ -1039,7 +1039,7 @@ public abstract class Serializer extends BeanContext {
 				.append("initialDepth", initialDepth)
 				.append("detectRecursions", detectRecursions)
 				.append("ignoreRecursions", ignoreRecursions)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("trimNulls", trimNulls)
 				.append("trimEmptyCollections", trimEmptyCollections)
 				.append("trimEmptyMaps", trimEmptyMaps)

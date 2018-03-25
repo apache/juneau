@@ -1128,7 +1128,7 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypeProperties SERIALIZER_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions SERIALIZER_ignoreRecursions}
@@ -3161,7 +3161,7 @@
 			<li class='info'>
 				Serialized type names are DISABLED by default.
 				They must be enabled on the serializer using the 
-				{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypeProperties} 
+				{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes} 
 				configuration property.
 		</ul>
 	
@@ -4067,7 +4067,7 @@
 				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
 				<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypeProperties JSON_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypes JSON_addBeanTypes}
 					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_escapeSolidus JSON_escapeSolidus}
 					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}
 				</ul>
@@ -4779,7 +4779,7 @@
 				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
 				<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypeProperties XML_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypes XML_addBeanTypes}
 					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot XML_addNamespaceUrisToRoot}
 					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}
 					<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#XML_defaultNamespace XML_defaultNamespace}
@@ -7103,7 +7103,7 @@
 				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
 				<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypeProperties HTML_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypes HTML_addBeanTypes}
 					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_addKeyValueTableHeaders HTML_addKeyValueTableHeaders}
 					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}
 					<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}
@@ -7357,7 +7357,7 @@
 				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
 				<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypeProperties UON_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypes UON_addBeanTypes}
 					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#UON_encoding UON_encoding}
 					<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#UON_paramFormat UON_paramFormat}					
 				</ul>
@@ -7638,7 +7638,7 @@
 				<li class='link'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a>
 				<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypeProperties MSGPACK_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypes MSGPACK_addBeanTypes}
 				</ul>
 			</ul>
 			<p>
@@ -7888,7 +7888,7 @@
 				</ul>
 				<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addBeanTypeProperties RDF_addBeanTypeProperties}
+					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addBeanTypes RDF_addBeanTypes}
 					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addLiteralTypes RDF_addLiteralTypes}
 					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty RDF_addRootProperty}
 					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_autoDetectNamespaces RDF_autoDetectNamespaces}
@@ -21288,6 +21288,9 @@
 				</ul>
 			<li>
 				The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
+			<li>
+				The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
+				and is disabled by default.
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>

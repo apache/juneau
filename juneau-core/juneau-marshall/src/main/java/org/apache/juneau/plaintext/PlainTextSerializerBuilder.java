@@ -86,8 +86,14 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public PlainTextSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public PlainTextSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

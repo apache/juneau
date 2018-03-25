@@ -35,7 +35,7 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	path="/testThirdPartyProxy",
-	flags={Serializer.SERIALIZER_addRootType}
+	flags={Serializer.SERIALIZER_addRootType, Serializer.SERIALIZER_addBeanTypes}
 )
 @SuppressWarnings("serial")
 public class ThirdPartyProxyResource extends BasicRestServletJena {

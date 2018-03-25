@@ -37,13 +37,13 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"MsgPackSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"MsgPackSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link MsgPackSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link MsgPackSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -53,10 +53,10 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * through reflection.
 	 * 
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String MSGPACK_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String MSGPACK_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final boolean
-		addBeanTypeProperties;
+		addBeanTypes;
 
 	/**
 	 * Constructor.
@@ -120,7 +120,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 */
 	public MsgPackSerializer(PropertyStore ps) {
 		super(ps, "octal/msgpack");
-		this.addBeanTypeProperties = getBooleanProperty(MSGPACK_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
+		this.addBeanTypes = getBooleanProperty(MSGPACK_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 	}
 
 	@Override /* Context */
@@ -153,7 +153,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("MsgPackSerializer", new ObjectMap()
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 			);
 	}
 }

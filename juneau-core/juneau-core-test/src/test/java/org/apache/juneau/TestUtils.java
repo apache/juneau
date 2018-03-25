@@ -43,7 +43,7 @@ public class TestUtils {
 	private static JsonSerializer js = JsonSerializer.create()
 		.ssq()
 		.trimNullProperties(false)
-		.addRootType()
+		.addBeanTypes().addRootType()
 		.build();
 
 	private static JsonSerializer jsSorted = JsonSerializer.create()
@@ -51,21 +51,21 @@ public class TestUtils {
 		.sortCollections()
 		.sortMaps()
 		.trimNullProperties(false)
-		.addRootType()
+		.addBeanTypes().addRootType()
 		.build();
 
 
 	private static JsonSerializer js2 = JsonSerializer.create()
 		.ssq()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
-		.addRootType()
+		.addBeanTypes().addRootType()
 		.build();
 
 	private static JsonSerializer js3 = JsonSerializer.create()
 		.ssq()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
-		.addRootType()
+		.addBeanTypes().addRootType()
 		.build();
 
 	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();

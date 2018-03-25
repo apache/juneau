@@ -121,13 +121,13 @@ public class XmlSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link XmlSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -137,10 +137,10 @@ public class XmlSerializer extends WriterSerializer {
 	 * through reflection.
 	 * 
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String XML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String XML_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
@@ -453,7 +453,7 @@ public class XmlSerializer extends WriterSerializer {
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
-		addBeanTypeProperties;
+		addBeanTypes;
 	
 	final Namespace defaultNamespace;
 	
@@ -505,7 +505,7 @@ public class XmlSerializer extends WriterSerializer {
 		enableNamespaces = getBooleanProperty(XML_enableNamespaces, false);
 		addNamespaceUrlsToRoot = getBooleanProperty(XML_addNamespaceUrisToRoot, false);
 		defaultNamespace = getInstanceProperty(XML_defaultNamespace, Namespace.class, DEFAULT_JUNEAU_NAMESPACE);
-		addBeanTypeProperties = getBooleanProperty(XML_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
+		addBeanTypes = getBooleanProperty(XML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 		xsNamespace = getInstanceProperty(XML_xsNamespace, Namespace.class, DEFAULT_XS_NAMESPACE);
 		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, new Namespace[0]);
 	}
@@ -556,7 +556,7 @@ public class XmlSerializer extends WriterSerializer {
 				.append("defaultNamespace", defaultNamespace)
 				.append("xsNamespace", xsNamespace)
 				.append("namespaces", namespaces)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 			);
 	}
 }

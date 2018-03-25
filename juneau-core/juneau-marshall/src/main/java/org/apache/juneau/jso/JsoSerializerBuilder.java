@@ -56,8 +56,14 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public JsoSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

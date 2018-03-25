@@ -31,7 +31,7 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","serial"})
 public class BeanMapTest {
 
-	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.builder().addRootType().build();
+	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.builder().addBeanTypes().addRootType().build();
 
 	BeanContext bc = BeanContext.create()
 			.beanDictionary(MyBeanDictionaryMap.class)

@@ -42,7 +42,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		detectLinksInStrings,
 		lookForLabelParameters,
 		addKeyValueTableHeaders,
-		addBeanTypeProperties;
+		addBeanTypes;
 	private final Pattern urlPattern = Pattern.compile("http[s]?\\:\\/\\/.*");
 	private final Pattern labelPattern;
 
@@ -65,7 +65,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		detectLinksInStrings = getProperty(HTML_detectLinksInStrings, boolean.class, ctx.detectLinksInStrings);
 		lookForLabelParameters = getProperty(HTML_detectLabelParameters, boolean.class, ctx.lookForLabelParameters);
 		addKeyValueTableHeaders = getProperty(HTML_addKeyValueTableHeaders, boolean.class, ctx.addKeyValueTableHeaders);
-		addBeanTypeProperties = getProperty(HTML_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		addBeanTypes = getProperty(HTML_addBeanTypes, boolean.class, ctx.addBeanTypes);
 		String labelParameter = getProperty(HTML_labelParameter, String.class, ctx.labelParameter);
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
 	}
@@ -74,7 +74,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("HtmlSerializerSession", new ObjectMap()
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
 				.append("anchorText", anchorText)
 				.append("detectLinksInStrings", detectLinksInStrings)
@@ -177,13 +177,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlSerializer#HTML_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link HtmlSerializer#HTML_addBeanTypes} setting value for this session.
 	 * 
-	 * @return The {@link HtmlSerializer#HTML_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link HtmlSerializer#HTML_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
-	public final boolean isAddBeanTypeProperties() {
-		return addBeanTypeProperties;
+	public final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	@Override /* XmlSerializer */
@@ -299,7 +299,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			sType = aType;
 
 			String typeName = null;
-			if (isAddBeanTypeProperties() && ! eType.equals(aType))
+			if (isAddBeanTypes() && ! eType.equals(aType))
 				typeName = aType.getDictionaryName();
 
 			// Swap if necessary

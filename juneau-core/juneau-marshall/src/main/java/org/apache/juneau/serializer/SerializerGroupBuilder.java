@@ -140,16 +140,33 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerGroupBuilder addBeanTypeProperties(boolean value) {
-		return set(SERIALIZER_addBeanTypeProperties, value);
+	public SerializerGroupBuilder addBeanTypes(boolean value) {
+		return set(SERIALIZER_addBeanTypes, value);
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder addBeanTypes() {
+		return set(SERIALIZER_addBeanTypes, true);
 	}
 
 	/**

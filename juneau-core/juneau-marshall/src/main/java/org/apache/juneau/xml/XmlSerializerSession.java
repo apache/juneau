@@ -41,7 +41,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
-		addBeanTypeProperties;
+		addBeanTypes;
 
 	Namespace
 		defaultNamespace;
@@ -67,7 +67,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		enableNamespaces = getProperty(XML_enableNamespaces, boolean.class, ctx.enableNamespaces);
 		autoDetectNamespaces = getProperty(XML_autoDetectNamespaces, boolean.class, ctx.autoDetectNamespaces);
 		addNamespaceUrlsToRoot = getProperty(XML_addNamespaceUrisToRoot, boolean.class, ctx.addNamespaceUrlsToRoot);
-		addBeanTypeProperties = getProperty(XML_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		addBeanTypes = getProperty(XML_addBeanTypes, boolean.class, ctx.addBeanTypes);
 		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, ctx.namespaces);
 		defaultNamespace = findDefaultNamespace(getInstanceProperty(XML_defaultNamespace, Namespace.class, ctx.defaultNamespace));
 		xsNamespace = getInstanceProperty(XML_xsNamespace, Namespace.class, ctx.xsNamespace);
@@ -95,7 +95,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("XmlSerializerSession", new ObjectMap()
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
 				.append("autoDetectNamespaces", autoDetectNamespaces)
 				.append("defaultNamespace", defaultNamespace)
@@ -125,13 +125,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link XmlSerializer#XML_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link XmlSerializer#XML_addBeanTypes} setting value for this session.
 	 * 
-	 * @return The {@link XmlSerializer#XML_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link XmlSerializer#XML_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
-	protected boolean isAddBeanTypeProperties() {
-		return addBeanTypeProperties;
+	protected boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/**

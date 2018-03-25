@@ -75,8 +75,14 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public SimpleUonPartSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public SimpleUonPartSerializerBuilder addBeanTypes(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder addBeanTypes() {
+		super.addBeanTypes();
 		return this;
 	}
 

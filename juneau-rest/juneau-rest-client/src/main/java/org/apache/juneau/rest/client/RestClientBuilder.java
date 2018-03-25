@@ -1142,16 +1142,33 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder addBeanTypeProperties(boolean value) {
-		return set(SERIALIZER_addBeanTypeProperties, value);
+	public RestClientBuilder addBeanTypes(boolean value) {
+		return set(SERIALIZER_addBeanTypes, value);
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder addBeanTypes() {
+		return set(SERIALIZER_addBeanTypes, true);
 	}
 
 	/**

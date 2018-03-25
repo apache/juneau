@@ -30,6 +30,7 @@ public class TestUtils {
 	private static JsonSerializer js2 = JsonSerializer.create()
 		.ssq()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
+		.addBeanTypes()
 		.addRootType()
 		.build();
 

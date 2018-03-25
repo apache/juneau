@@ -44,7 +44,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		useXmlNamespaces,
 		looseCollections,
 		autoDetectNamespaces,
-		addBeanTypeProperties;
+		addBeanTypes;
 	private final Property pRoot, pValue;
 	private final Model model;
 	private final RDFWriter writer;
@@ -76,7 +76,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		useXmlNamespaces = getProperty(RDF_useXmlNamespaces, boolean.class, ctx.useXmlNamespaces);
 		autoDetectNamespaces = getProperty(RDF_autoDetectNamespaces, boolean.class, ctx.autoDetectNamespaces);
 		namespaces = getInstanceArrayProperty(RDF_namespaces, Namespace.class, ctx.namespaces);
-		addBeanTypeProperties = getProperty(RDF_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		addBeanTypes = getProperty(RDF_addBeanTypes, boolean.class, ctx.addBeanTypes);
 		model = ModelFactory.createDefaultModel();
 		addModelPrefix(juneauNs);
 		addModelPrefix(juneauBpNs);
@@ -110,7 +110,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("RdfSerializerSession", new ObjectMap()
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("addLiteralTypes", addLiteralTypes)
 				.append("addRootProperty", addRootProperty)
 				.append("autoDetectNamespaces", autoDetectNamespaces)
@@ -132,13 +132,13 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
 	 * 
-	 * @return The {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
-	public final boolean isAddBeanTypeProperties() {
-		return addBeanTypeProperties;
+	public final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/*

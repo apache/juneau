@@ -126,13 +126,13 @@ public class UonSerializer extends WriterSerializer {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 			<li class='jm'>{@link UonSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -142,10 +142,10 @@ public class UonSerializer extends WriterSerializer {
 	 * through reflection.
 	 * 
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String UON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+	public static final String UON_addBeanTypes = PREFIX + "addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
@@ -305,7 +305,7 @@ public class UonSerializer extends WriterSerializer {
 
 	final boolean
 		encodeChars,
-		addBeanTypeProperties;
+		addBeanTypes;
 	
 	final ParamFormat
 		paramFormat;
@@ -348,7 +348,7 @@ public class UonSerializer extends WriterSerializer {
 	public UonSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		encodeChars = getBooleanProperty(UON_encoding, false);
-		addBeanTypeProperties = getBooleanProperty(UON_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));
+		addBeanTypes = getBooleanProperty(UON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
 	}
 
@@ -388,7 +388,7 @@ public class UonSerializer extends WriterSerializer {
 		return super.asMap()
 			.append("UonSerializer", new ObjectMap()
 				.append("encodeChars", encodeChars)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addBeanTypes", addBeanTypes)
 				.append("paramFormat", paramFormat)
 			);
 	}
