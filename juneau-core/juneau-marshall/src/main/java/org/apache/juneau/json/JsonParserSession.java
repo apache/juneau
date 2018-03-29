@@ -136,11 +136,11 @@ public final class JsonParserSession extends ReaderParserSession {
 		int c = r.peek();
 		if (c == -1) {
 			if (isStrict())
-				throw new ParseException(r.getLocation(this), "Empty input.");
+				throw new ParseException(this, "Empty input.");
 			// Let o be null.
 		} else if ((c == ',' || c == '}' || c == ']')) {
 			if (isStrict())
-				throw new ParseException(r.getLocation(this), "Missing value detected.");
+				throw new ParseException(this, "Missing value detected.");
 			// Handle bug in Cognos 10.2.1 that can product non-existent values.
 			// Let o be null;
 		} else if (c == 'n') {
@@ -210,12 +210,12 @@ public final class JsonParserSession extends ReaderParserSession {
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((ObjectMap)m, pMeta, eType);
 			else
-				throw new ParseException(r.getLocation(this), "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
 						sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && ! isStrict()) {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else {
-			throw new ParseException(r.getLocation(this), "Unrecognized syntax for class type ''{0}'', starting character ''{1}''",
+			throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''",
 				sType, (char)c);
 		}
 
@@ -247,7 +247,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			// Lax allows blank strings to represent 0.
 			// Strict does not allow blank strings.
 			if (s.length() == 0)
-				throw new ParseException(r.getLocation(this), "Invalid JSON number: ''{0}''", s);
+				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 
 			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.
 			// Don't weed out 0 or -0.
@@ -260,19 +260,19 @@ public final class JsonParserSession extends ReaderParserSession {
 
 			// JSON doesn't allow '.123' and '-.123'.
 			if (c == '.')
-				throw new ParseException(loc(r), "Invalid JSON number: ''{0}''", s);
+				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 
 			// '01' is not a valid number, but '0.1', '0e1', '0e+1' are valid.
 			if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
 				char c2 = s.charAt((isNegative ? 2 : 1));
 				if (c2 != '.' && c2 != 'e' && c2 != 'E')
-					throw new ParseException(loc(r), "Invalid JSON number: ''{0}''", s);
+					throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 			}
 
 			// JSON doesn't allow '1.' or '0.e1'.
 			int i = s.indexOf('.');
 			if (i != -1 && (s.length() == (i+1) || ! decChars.contains(s.charAt(i+1))))
-				throw new ParseException(loc(r), "Invalid JSON number: ''{0}''", s);
+				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 
 		}
 		return StringUtils.parseNumber(s, type);
@@ -289,7 +289,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			parseKeyword("false", r);
 			return Boolean.FALSE;
 		} else {
-			throw new ParseException(loc(r), "Unrecognized syntax.  Expected boolean value, actual=''{0}''", r.read(100));
+			throw new ParseException(this, "Unrecognized syntax.  Expected boolean value, actual=''{0}''", r.read(100));
 		}
 	}
 
@@ -362,17 +362,17 @@ public final class JsonParserSession extends ReaderParserSession {
 			}
 		}
 		if (state == S0)
-			throw new ParseException(loc(r), "Expected '{' at beginning of JSON object.");
+			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
 		if (state == S1)
-			throw new ParseException(loc(r), "Could not find attribute name on JSON object.");
+			throw new ParseException(this, "Could not find attribute name on JSON object.");
 		if (state == S3)
-			throw new ParseException(loc(r), "Could not find ':' following attribute name on JSON object.");
+			throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
 		if (state == S4)
-			throw new ParseException(loc(r), "Expected one of the following characters: {,[,',\",LITERAL.");
+			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
 		if (state == S5)
-			throw new ParseException(loc(r), "Could not find '}' marking end of JSON object.");
+			throw new ParseException(this, "Could not find '}' marking end of JSON object.");
 		if (state == S6)
-			throw new ParseException(loc(r), "Unexpected '}' found in JSON object.");
+			throw new ParseException(this, "Unexpected '}' found in JSON object.");
 
 		return null; // Unreachable.
 	}
@@ -386,7 +386,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		if (c == '\'' || c == '"')
 			return parseString(r);
 		if (isStrict())
-			throw new ParseException(loc(r), "Unquoted attribute detected.");
+			throw new ParseException(this, "Unquoted attribute detected.");
 		r.mark();
 		// Look for whitespace.
 		while (c != -1) {
@@ -397,7 +397,7 @@ public final class JsonParserSession extends ReaderParserSession {
 				return s.equals("null") ? null : s;
 			}
 		}
-		throw new ParseException(loc(r), "Could not find the end of the field name.");
+		throw new ParseException(this, "Could not find the end of the field name.");
 	}
 
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l,
@@ -417,6 +417,10 @@ public final class JsonParserSession extends ReaderParserSession {
 			if (state == S0) {
 				if (c == '[')
 					state = S1;
+				else if (isCommentOrWhitespace(c))
+					skipCommentsAndSpace(r.unread());
+				else 
+					break;  // Invalid character found.
 			} else if (state == S1) {
 				if (c == ']') {
 					return l;
@@ -448,13 +452,13 @@ public final class JsonParserSession extends ReaderParserSession {
 			}
 		}
 		if (state == S0)
-			throw new ParseException(loc(r), "Expected '[' at beginning of JSON array.");
+			throw new ParseException(this, "Expected '[' at beginning of JSON array.");
 		if (state == S1)
-			throw new ParseException(loc(r), "Expected one of the following characters: {,[,',\",LITERAL.");
+			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
 		if (state == S2)
-			throw new ParseException(loc(r), "Expected ',' or ']'.");
+			throw new ParseException(this, "Expected ',' or ']'.");
 		if (state == S3)
-			throw new ParseException(loc(r), "Unexpected trailing comma in array.");
+			throw new ParseException(this, "Unexpected trailing comma in array.");
 
 		return null;  // Unreachable.
 	}
@@ -470,67 +474,72 @@ public final class JsonParserSession extends ReaderParserSession {
 		int state = S0;
 		String currAttr = "";
 		int c = 0;
-		int currAttrLine = -1, currAttrCol = -1;
-		while (c != -1) {
-			c = r.read();
-			if (state == S0) {
-				if (c == '{')
-					state = S1;
-			} else if (state == S1) {
-				if (c == '}') {
-					return m;
-				} else if (isCommentOrWhitespace(c)) {
-					skipCommentsAndSpace(r.unread());
-				} else {
-					r.unread();
-					currAttrLine= r.getLine();
-					currAttrCol = r.getColumn();
-					currAttr = parseFieldName(r);
-					state = S3;
-				}
-			} else if (state == S3) {
-				if (c == ':')
-					state = S4;
-			} else if (state == S4) {
-				if (isCommentOrWhitespace(c)) {
-					skipCommentsAndSpace(r.unread());
-				} else {
-					if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-						BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
-						setCurrentProperty(pMeta);
-						if (pMeta == null) {
-							onUnknownProperty(r.getPipe(), currAttr, m, currAttrLine, currAttrCol);
-							parseAnything(object(), r.unread(), m.getBean(false), null); // Read content anyway to ignore it
-						} else {
-							ClassMeta<?> cm = pMeta.getClassMeta();
-							Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
-							setName(cm, value, currAttr);
-							pMeta.set(m, currAttr, value);
-						}
-						setCurrentProperty(null);
+		mark();
+		try {
+			while (c != -1) {
+				c = r.read();
+				if (state == S0) {
+					if (c == '{')
+						state = S1;
+				} else if (state == S1) {
+					if (c == '}') {
+						return m;
+					} else if (isCommentOrWhitespace(c)) {
+						skipCommentsAndSpace(r.unread());
+					} else {
+						r.unread();
+						mark();
+						currAttr = parseFieldName(r);
+						state = S3;
 					}
-					state = S5;
-				}
-			} else if (state == S5) {
-				if (c == ',')
-					state = S1;
-				else if (isCommentOrWhitespace(c))
-					skipCommentsAndSpace(r.unread());
-				else if (c == '}') {
-					return m;
+				} else if (state == S3) {
+					if (c == ':')
+						state = S4;
+				} else if (state == S4) {
+					if (isCommentOrWhitespace(c)) {
+						skipCommentsAndSpace(r.unread());
+					} else {
+						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+							setCurrentProperty(pMeta);
+							if (pMeta == null) {
+								onUnknownProperty(currAttr, m);
+								unmark();
+								parseAnything(object(), r.unread(), m.getBean(false), null); // Read content anyway to ignore it
+							} else {
+								unmark();
+								ClassMeta<?> cm = pMeta.getClassMeta();
+								Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
+								setName(cm, value, currAttr);
+								pMeta.set(m, currAttr, value);
+							}
+							setCurrentProperty(null);
+						}
+						state = S5;
+					}
+				} else if (state == S5) {
+					if (c == ',')
+						state = S1;
+					else if (isCommentOrWhitespace(c))
+						skipCommentsAndSpace(r.unread());
+					else if (c == '}') {
+						return m;
+					}
 				}
 			}
+			if (state == S0)
+				throw new ParseException(this, "Expected '{' at beginning of JSON object.");
+			if (state == S1)
+				throw new ParseException(this, "Could not find attribute name on JSON object.");
+			if (state == S3)
+				throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
+			if (state == S4)
+				throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
+			if (state == S5)
+				throw new ParseException(this, "Could not find '}' marking end of JSON object.");
+		} finally {
+			unmark();
 		}
-		if (state == S0)
-			throw new ParseException(loc(r), "Expected '{' at beginning of JSON object.");
-		if (state == S1)
-			throw new ParseException(loc(r), "Could not find attribute name on JSON object.");
-		if (state == S3)
-			throw new ParseException(loc(r), "Could not find ':' following attribute name on JSON object.");
-		if (state == S4)
-			throw new ParseException(loc(r), "Expected one of the following characters: {,[,',\",LITERAL.");
-		if (state == S5)
-			throw new ParseException(loc(r), "Could not find '}' marking end of JSON object.");
 
 		return null; // Unreachable.
 	}
@@ -550,7 +559,7 @@ public final class JsonParserSession extends ReaderParserSession {
 				? "Invalid quote character \"{0}\" being used."
 				: "Did not find quote character marking beginning of string.  Character=\"{0}\""
 			);
-			throw new ParseException(loc(r), msg, (char)qc);
+			throw new ParseException(this, msg, (char)qc);
 		}
 		final boolean isQuoted = (qc == '\'' || qc == '"');
 		String s = null;
@@ -560,7 +569,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			c = r.read();
 			// Strict syntax requires that all control characters be escaped.
 			if (isStrict() && c <= 0x1F)
-				throw new ParseException("Unescaped control character encountered: ''0x{0}''", String.format("%04X", c));
+				throw new ParseException(this, "Unescaped control character encountered: ''0x{0}''", String.format("%04X", c));
 			if (isInEscape) {
 				switch (c) {
 					case 'n': r.replace('\n'); break;
@@ -577,12 +586,12 @@ public final class JsonParserSession extends ReaderParserSession {
 						try {
 							r.replace(Integer.parseInt(n, 16), 6);
 						} catch (NumberFormatException e) {
-							throw new ParseException(loc(r), "Invalid Unicode escape sequence in string.");
+							throw new ParseException(this, "Invalid Unicode escape sequence in string.");
 						}
 						break;
 					}
 					default:
-						throw new ParseException(loc(r), "Invalid escape sequence in string.");
+						throw new ParseException(this, "Invalid escape sequence in string.");
 				}
 				isInEscape = false;
 			} else {
@@ -607,13 +616,13 @@ public final class JsonParserSession extends ReaderParserSession {
 			}
 		}
 		if (s == null)
-			throw new ParseException(loc(r), "Could not find expected end character ''{0}''.", (char)qc);
+			throw new ParseException(this, "Could not find expected end character ''{0}''.", (char)qc);
 
 		// Look for concatenated string (i.e. whitespace followed by +).
 		skipCommentsAndSpace(r);
 		if (r.peek() == '+') {
 			if (isStrict())
-				throw new ParseException(loc(r), "String concatenation detected.");
+				throw new ParseException(this, "String concatenation detected.");
 			r.read();	// Skip past '+'
 			skipCommentsAndSpace(r);
 			s += parseString(r);
@@ -630,9 +639,9 @@ public final class JsonParserSession extends ReaderParserSession {
 			String s = r.read(keyword.length());
 			if (s.equals(keyword))
 				return;
-			throw new ParseException(loc(r), "Unrecognized syntax.  Expected=''{0}'', Actual=''{1}''", keyword, s);
+			throw new ParseException(this, "Unrecognized syntax.  Expected=''{0}'', Actual=''{1}''", keyword, s);
 		} catch (IndexOutOfBoundsException e) {
-			throw new ParseException(loc(r), "Unrecognized syntax.  Expected=''{0}'', found end-of-file.", keyword);
+			throw new ParseException(this, "Unrecognized syntax.  Expected=''{0}'', found end-of-file.", keyword);
 		}
 	}
 
@@ -648,7 +657,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			if (! isWhitespace(c)) {
 				if (c == '/') {
 					if (isStrict())
-						throw new ParseException(loc(r), "Javascript comment detected.");
+						throw new ParseException(this, "Javascript comment detected.");
 					skipComments(r);
 				} else {
 					r.unread();
@@ -683,7 +692,7 @@ public final class JsonParserSession extends ReaderParserSession {
 				} else {
 					currAttr = parseFieldName(r.unread());
 					if (! currAttr.equals(wrapperAttr))
-						throw new ParseException(loc(r),
+						throw new ParseException(this,
 							"Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
 					state = S3;
 				}
@@ -700,13 +709,13 @@ public final class JsonParserSession extends ReaderParserSession {
 			}
 		}
 		if (state == S0)
-			throw new ParseException(loc(r), "Expected '{' at beginning of JSON object.");
+			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
 		if (state == S1)
-			throw new ParseException(loc(r), "Could not find attribute name on JSON object.");
+			throw new ParseException(this, "Could not find attribute name on JSON object.");
 		if (state == S3)
-			throw new ParseException(loc(r), "Could not find ':' following attribute name on JSON object.");
+			throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
 		if (state == S4)
-			throw new ParseException(loc(r), "Expected one of the following characters: {,[,',\",LITERAL.");
+			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
 	}
 
 	/*
@@ -719,12 +728,12 @@ public final class JsonParserSession extends ReaderParserSession {
 			if (! isWhitespace(c)) {
 				if (c == '/') {
 					if (isStrict())
-						throw new ParseException(loc(r), "Javascript comment detected.");
+						throw new ParseException(this, "Javascript comment detected.");
 					skipComments(r);
 				} else if (c == '}') {
 					return;
 				} else {
-					throw new ParseException(loc(r), "Could not find '}' at the end of JSON wrapper object.");
+					throw new ParseException(this, "Could not find '}' at the end of JSON wrapper object.");
 				}
 			}
 		}
@@ -750,7 +759,7 @@ public final class JsonParserSession extends ReaderParserSession {
 					return;
 			}
 		}
-		throw new ParseException(loc(r), "Open ended comment.");
+		throw new ParseException(this, "Open ended comment.");
 	}
 
 	/*
@@ -763,10 +772,6 @@ public final class JsonParserSession extends ReaderParserSession {
 		skipCommentsAndSpace(r);
 		int c = r.read();
 		if (c != -1 && c != ';')  // var x = {...}; expressions can end with a semicolon.
-			throw new ParseException(loc(r), "Remainder after parse: ''{0}''.", (char)c);
-	}
-
-	private ObjectMap loc(ParserReader r) {
-		return getLastLocation().append("line", r.getLine()).append("column", r.getColumn());
+			throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);
 	}
 }

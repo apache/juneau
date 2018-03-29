@@ -708,7 +708,7 @@ public class PropertyStoreBuilder {
 					try {
 						add(null, new ObjectMap(o.toString()));
 					} catch (Exception e) {
-						throw new ConfigException(e, "Cannot add {0} ({1}) to property ''{2}'' ({3}) .", string(o), className(o), name, type);
+						throw new ConfigException(e, "Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 					}
 				} else {
 					throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);

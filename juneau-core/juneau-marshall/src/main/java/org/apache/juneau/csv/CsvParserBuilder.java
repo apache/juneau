@@ -73,6 +73,12 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public CsvParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public CsvParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

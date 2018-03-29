@@ -191,15 +191,15 @@ public class CommonParserTest {
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
 		p.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());
-		assertEquals("unknownProperty,-1,-1", MyParserListener.events.get(0));
+		assertEquals("unknownProperty, line 1, column 0", MyParserListener.events.get(0));
 	}
 
 	public static class MyParserListener extends ParserListener {
 		static final List<String> events = new LinkedList<String>();
 
 		@Override /* ParserListener */
-		public <T> void onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class<T> beanClass, T bean, int line, int col) {
-			events.add(propertyName + "," + line + "," + col);
+		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {
+			events.add(propertyName + ", " + session.getPosition());
 		}
 	}
 }

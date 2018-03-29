@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              *
+// * with the License.  You may obtain a copy of the License at                                                              * 
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -10,38 +10,25 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.xml;
+package org.apache.juneau.examples.rest.petstore;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
-import java.text.*;
-
-import javax.xml.stream.*;
-
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * Exception that indicates invalid syntax encountered during XML parsing.
+ * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-public class XmlParseException extends ParseException {
+@RestStatus(value=404, description="ID not found")
+public class IdNotFoundException extends FormattedException {
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param location The location of the exception.
-	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param id The duplicate ID.
+	 * @param c The object type..
 	 */
-	public XmlParseException(Location location, String message, Object...args) {
-		super(getMessage(location, message, args));
-	}
-
-	private static String getMessage(Location location, String msg, Object... args) {
-		if (args.length != 0)
-			msg = format(msg, args);
-		if (location != null)
-			msg = "Parse exception occurred at " + location + ".  " + msg;
-		return msg;
+	public IdNotFoundException(Object id, Class<?> c) {
+		super("ID ''{0}'' not found for type ''{1}''", id, c.getSimpleName());
 	}
 }

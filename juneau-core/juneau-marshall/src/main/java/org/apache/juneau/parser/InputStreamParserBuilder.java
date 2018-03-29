@@ -78,6 +78,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public InputStreamParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public InputStreamParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

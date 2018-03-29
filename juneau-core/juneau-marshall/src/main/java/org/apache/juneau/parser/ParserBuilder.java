@@ -83,6 +83,27 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Debug output lines.
+	 * 
+	 * <p>
+	 * When parse errors occur, this specifies the number of lines of input before and after the
+	 * error location to be printed as part of the exception message.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <code>5</code>.
+	 * @return This object (for method chaining).
+	 */
+	public ParserBuilder debugOutputLines(int value) {
+		return set(PARSER_debugOutputLines, value);
+	}
+
+	/**
 	 * Configuration property:  Parser listener.
 	 * 
 	 * <p>

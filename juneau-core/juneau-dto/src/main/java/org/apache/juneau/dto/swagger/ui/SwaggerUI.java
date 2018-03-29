@@ -135,7 +135,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	}
 	
 	private Div opBlock(Swagger s, String path, String opName, Operation op) {
-		String opNameLc = opName.toLowerCase();
+		String opNameLc = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
 		
 		return div()._class("op-block op-block-closed " + opNameLc).children(
 			opBlockSummary(path, opName, op),

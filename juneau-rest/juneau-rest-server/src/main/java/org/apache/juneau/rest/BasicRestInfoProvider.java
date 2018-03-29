@@ -16,7 +16,9 @@ import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
+import static org.apache.juneau.rest.RestParamType.*;
 
+import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
@@ -150,10 +152,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		}
 		
-//		System.out.println("==============================================================================================");
-//		System.out.println("omSwagger=");
-//		JsonSerializer.DEFAULT_LAX_READABLE.println(omSwagger);
-		
 		ObjectMap 
 			info = omSwagger.getObjectMap("info", true),
 			externalDocs = omSwagger.getObjectMap("externalDocs", true),
@@ -251,6 +249,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 			op.putIfNotExists("operationId", mn);
 			
+			if (m.getAnnotation(Deprecated.class) != null)
+				op.put("deprecated", true);
+				
 			s = rm.summary();
 			if (s.isEmpty())
 				s = mb.findFirstString(locale, mn + ".summary");
@@ -316,29 +317,82 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				
 				RestParamType in = mp.getParamType();
 				
-				if (in == RestParamType.OTHER)
+				if (in == OTHER)
 					continue;
 				
-				String key = in.toString() + '.' + (in == RestParamType.BODY ? null : mp.getName());
+				String key = in.toString() + '.' + (in == BODY ? null : mp.getName());
 				
 				ObjectMap param = paramMap.getObjectMap(key, true);
 					
 				param.append("in", in);
 				
-				if (in != RestParamType.BODY)
+				if (in != BODY)
 					param.append("name", mp.name);
 				
-				if (! param.containsKey("schema")) {
+				ObjectMap pm = mp.getMetaData();
+				if (pm.containsKeyNotEmpty("required"))
+					param.put("required", vr.resolve(pm.getString("required")));
+				if (pm.containsKeyNotEmpty("description"))
+					param.put("description", vr.resolve(pm.getString("description")));
+				if (pm.containsKeyNotEmpty("type"))
+					param.put("type", vr.resolve(pm.getString("type")));
+				if (pm.containsKeyNotEmpty("format"))
+					param.put("format", vr.resolve(pm.getString("format")));
+				if (pm.containsKeyNotEmpty("pattern"))
+					param.put("pattern", vr.resolve(pm.getString("pattern")));
+				if (pm.containsKeyNotEmpty("collectionFormat"))
+					param.put("collectionFormat", vr.resolve(pm.getString("collectionFormat")));
+				if (pm.containsKeyNotEmpty("maximum"))
+					param.put("maximum", vr.resolve(pm.getString("maximum")));
+				if (pm.containsKeyNotEmpty("minimum"))
+					param.put("minimum", vr.resolve(pm.getString("minimum")));
+				if (pm.containsKeyNotEmpty("multipleOf"))
+					param.put("multipleOf", vr.resolve(pm.getString("multipleOf")));
+				if (pm.containsKeyNotEmpty("maxLength"))
+					param.put("maxLength", vr.resolve(pm.getString("maxLength")));
+				if (pm.containsKeyNotEmpty("minLength"))
+					param.put("minLength", vr.resolve(pm.getString("minLength")));
+				if (pm.containsKeyNotEmpty("maxItems"))
+					param.put("maxItems", vr.resolve(pm.getString("maxItems")));
+				if (pm.containsKeyNotEmpty("minItems"))
+					param.put("minItems", vr.resolve(pm.getString("minItems")));
+				if (pm.containsKeyNotEmpty("allowEmptyVals"))
+					param.put("allowEmptyVals", vr.resolve(pm.getString("allowEmptyVals")));
+				if (pm.containsKeyNotEmpty("exclusiveMaximum"))
+					param.put("exclusiveMaximum", vr.resolve(pm.getString("exclusiveMaximum")));
+				if (pm.containsKeyNotEmpty("exclusiveMimimum"))
+					param.put("exclusiveMimimum", vr.resolve(pm.getString("exclusiveMimimum")));
+				if (pm.containsKeyNotEmpty("uniqueItems"))
+					param.put("uniqueItems", vr.resolve(pm.getString("uniqueItems")));
+				if (pm.containsKeyNotEmpty("schema"))
+					param.put("schema", new ObjectMap(vr.resolve(pm.getString("schema"))));
+				if (pm.containsKeyNotEmpty("default"))
+					param.put("default", JsonParser.DEFAULT.parse(vr.resolve(pm.getString("default")), Object.class));
+				if (pm.containsKeyNotEmpty("enum"))
+					param.put("enum", new ObjectList(vr.resolve(pm.getString("enum"))));
+				if (pm.containsKeyNotEmpty("items"))
+					param.put("items", new ObjectMap(vr.resolve(pm.getString("items"))));
+				
+				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
+					param.put("required", true);
+				
+				ObjectMap schema = param.getObjectMap("schema", true);
+				
+				// If schema already contains 'type', then we assume it's fully defined.
+				// Otherwise, we augment it.
+				if (! (schema.containsKey("type") || schema.containsKey("$ref"))) {
 					
 					ClassMeta<?> cm = bs.getClassMeta(mp.getType());
+					schema = JsonSchemaUtils.getSchema(bs, cm);
 					
 					if (cm.isMapOrBean() || cm.isCollectionOrArray()) {
-						String name = cm.getSimpleName();
+						
+						String name = cm.getReadableName();
 						
 						if (! definitions.containsKey(name)) {
-							ObjectMap definition = JsonSchemaUtils.getSchema(bs, cm);
-							Object example = cm.getExample(bs);
 
+							Object example = getExample(req, cm, schema.get("example"));
+							
 							if (example != null) {
 								ObjectMap examples = new ObjectMap();
 								ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
@@ -358,12 +412,14 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 									examples.put("example", req.getPartSerializer().serialize(HttpPartType.valueOf(in.name()), example));
 								}
 								
-								definition.put("x-examples", examples);
+								schema.put("x-examples", examples);
 							}
 							
-							definitions.put(name, definition);
+							definitions.put(name, schema);
 						}
 						param.put("schema", new ObjectMap().append("$ref", "#/definitions/" + name));
+					} else {
+						param.put("schema", schema);
 					}
 				}
 			}
@@ -384,43 +440,64 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				}
 			}
 			
+			// Gather responses from @RestStatus-annotated exceptions.
+			for (Class<?> t : m.getExceptionTypes()) {
+				RestStatus rs = t.getAnnotation(RestStatus.class);
+				if (rs != null) {
+					String httpCode = String.valueOf(rs.value());
+					if (! responses.containsKey(httpCode))
+						responses.put(httpCode, new ObjectMap().append("description", rs.description()));
+				}
+			}
+			
 			if (! responses.containsKey("200"))
 				responses.put("200", new ObjectMap().append("description", "Success"));
 			
 			ObjectMap okResponse = responses.getObjectMap("200");
 			
-			ClassMeta<?> cm = bs.getClassMeta(m.getGenericReturnType());
+			ObjectMap okSchema = okResponse.getObjectMap("schema", true);
 			
-			if ((cm.isMapOrBean() || cm.isCollectionOrArray()) && ! okResponse.containsKey("schema") && cm.getInnerClass() != Swagger.class) {
-				String name = cm.getSimpleName();
+			if (! (okSchema.containsKey("type") || okSchema.containsKey("$ref"))) {
+			
+				ClassMeta<?> cm = bs.getClassMeta(m.getGenericReturnType());
 				
-				if (! definitions.containsKey(name)) {
-					ObjectMap definition = JsonSchemaUtils.getSchema(bs, cm);
+				if (cm.getInnerClass() == Swagger.class)
+					continue;
+				
+				okSchema = JsonSchemaUtils.getSchema(bs, cm);
+
+				if (cm.isMapOrBean() || cm.isCollectionOrArray()) {
+					String name = cm.getReadableName();
 					
-					Object example = cm.getExample(bs);
-					
-					if (example != null) {
-						ObjectMap examples = new ObjectMap();
-						ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
+					if (! definitions.containsKey(name)) {
 						
-						for (MediaType mt : req.getSerializers().getSupportedMediaTypes()) {
-							if (mt != MediaType.HTML) {
-								Serializer s2 = req.getSerializers().getSerializer(mt);
-								if (s2 != null) {
-									SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
-									String eVal = s2.createSession(args).serializeToString(example);
-									examples.put(s2.getMediaTypes()[0].toString(), eVal);
+						Object example = getExample(req, cm, okResponse.get("example"));
+						
+						if (example != null) {
+							ObjectMap examples = new ObjectMap();
+							ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
+							
+							for (MediaType mt : req.getSerializers().getSupportedMediaTypes()) {
+								if (mt != MediaType.HTML) {
+									Serializer s2 = req.getSerializers().getSerializer(mt);
+									if (s2 != null) {
+										SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
+										String eVal = s2.createSession(args).serializeToString(example);
+										examples.put(s2.getMediaTypes()[0].toString(), eVal);
+									}
 								}
 							}
+							okSchema.put("x-examples", examples);
 						}
-						definition.put("x-examples", examples);
+						
+						definitions.put(name, okSchema);
 					}
 					
-					definitions.put(name, definition);
+					okResponse.put("schema", new ObjectMap().append("$ref", "#/definitions/" + name));
+				} else {
+					okResponse.put("schema", okSchema);
 				}
-				
-				okResponse.put("schema", new ObjectMap().append("$ref", "#/definitions/" + name));
-			}			
+			}
 			
 			if (responses.isEmpty())
 				op.remove("responses");
@@ -445,20 +522,49 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (tagMap.isEmpty())
 			omSwagger.remove("tags");
 		
-		String swaggerJson = omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE);
 		try {
+			String swaggerJson = omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE);
 			swagger = jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
-			throw new RestServletException("Error detected in swagger: \n{0}", addLineNumbers(swaggerJson)).initCause(e);
+			throw new RestServletException("Error detected in swagger.").initCause(e);
 		}
 		
 		swaggers.get(locale).put(hashCode, swagger);
 		
-//		System.out.println("==============================================================================================");
-//		System.out.println("swagger=");
-//		JsonSerializer.DEFAULT_LAX_READABLE.println(swagger);
-		
 		return swagger;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Object getExample(RestRequest req, ClassMeta<?> cm, Object jsonExample) {
+		try {
+			BeanSession bs = req.getBeanSession();
+			
+			if (cm.isMapOrBean()) {
+				if (jsonExample instanceof ObjectMap)
+					return ((ObjectMap)jsonExample).cast(cm);
+				return cm.getExample(bs);
+			} else if (cm.isCollectionOrArray()) {
+				if (jsonExample instanceof ObjectList)
+					return ((ObjectList)jsonExample).cast(cm);
+				Object e = cm.getExample(bs);
+				if (e != null)
+					return e;
+				e = cm.getElementType().getExample(bs);
+				if (e != null) {
+					if (cm.isCollection()) {
+						Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
+						c.add(e);
+						return c;
+					}
+					Object array = Array.newInstance(cm.getInnerClass(), 1);
+					Array.set(array, 0, e);
+					return array;
+				}
+			} else {
+				return jsonExample;
+			}
+		} catch (Exception e) { /* Ignore */ }
+		return null;
 	}
 	
 	private static class SwaggerException extends ParseException {

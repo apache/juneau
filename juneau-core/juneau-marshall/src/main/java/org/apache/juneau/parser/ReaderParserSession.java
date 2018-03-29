@@ -81,9 +81,10 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
+	@SuppressWarnings("resource")
 	@Override /* ParserSesson */
 	public final ParserPipe createPipe(Object input) {
-		return new ParserPipe(input, isDebug(), strict, autoCloseStreams, unbuffered, fileCharset, inputStreamCharset);
+		return setPipe(new ParserPipe(input, isDebug(), strict, autoCloseStreams, unbuffered, fileCharset, inputStreamCharset));
 	}
 
 	@Override /* Session */

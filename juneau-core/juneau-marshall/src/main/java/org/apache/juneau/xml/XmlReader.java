@@ -27,7 +27,7 @@ import org.apache.juneau.parser.*;
  * The purpose is to encapsulate the reader with the {@link ParserPipe} object so that it can be retrieved for
  * debugging purposes.
  */
-public final class XmlReader implements XMLStreamReader {
+public final class XmlReader implements XMLStreamReader, Positionable {
 
 	private final ParserPipe pipe;
 	private final XMLStreamReader sr;
@@ -59,6 +59,7 @@ public final class XmlReader implements XMLStreamReader {
 				factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);
 			sr = factory.createXMLStreamReader(r);
 			sr.nextTag();
+			pipe.setPositionable(this);
 		} catch (Error e) {
 			throw new ParseException(e.getLocalizedMessage());
 		} catch (XMLStreamException e) {
@@ -298,5 +299,11 @@ public final class XmlReader implements XMLStreamReader {
 	@Override /* XMLStreamReader */
 	public boolean standaloneSet() {
 		return sr.standaloneSet();
+	}
+
+	@Override /* Positionable */
+	public Position getPosition() {
+		Location l = getLocation();
+		return new Position(l.getLineNumber(), l.getColumnNumber());
 	}
 }

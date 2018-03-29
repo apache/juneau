@@ -157,7 +157,7 @@ public class UonParserSession extends ReaderParserSession {
 		} else if (sType.isVoid()) {
 			String s = parseString(r, isUrlParamValue);
 			if (s != null)
-				throw new ParseException(loc(r), "Expected ''null'' for void value, but was ''{0}''.", s);
+				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
 				ObjectMap m = new ObjectMap(this);
@@ -256,13 +256,13 @@ public class UonParserSession extends ReaderParserSession {
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);
 			else
-				throw new ParseException(loc(r), "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
 					sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else if (c == 'n') {
 			r.read();
 			parseNull(r);
 		} else {
-			throw new ParseException(loc(r), "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
 				sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
@@ -289,7 +289,7 @@ public class UonParserSession extends ReaderParserSession {
 		if (c == 'n')
 			return (Map<K,V>)parseNull(r);
 		if (c != '(')
-			throw new ParseException(loc(r), "Expected '(' at beginning of object.");
+			throw new ParseException(this, "Expected '(' at beginning of object.");
 
 		final int S1=1; // Looking for attrName start.
 		final int S2=2; // Found attrName end, looking for =.
@@ -353,13 +353,13 @@ public class UonParserSession extends ReaderParserSession {
 			isInEscape = isInEscape(c, r, isInEscape);
 		}
 		if (state == S1)
-			throw new ParseException(loc(r), "Could not find attribute name on object.");
+			throw new ParseException(this, "Could not find attribute name on object.");
 		if (state == S2)
-			throw new ParseException(loc(r), "Could not find '=' following attribute name on object.");
+			throw new ParseException(this, "Could not find '=' following attribute name on object.");
 		if (state == S3)
-			throw new ParseException(loc(r), "Dangling '=' found in object entry");
+			throw new ParseException(this, "Dangling '=' found in object entry");
 		if (state == S4)
-			throw new ParseException(loc(r), "Could not find ')' marking end of object.");
+			throw new ParseException(this, "Could not find ')' marking end of object.");
 
 		return null; // Unreachable.
 	}
@@ -381,7 +381,7 @@ public class UonParserSession extends ReaderParserSession {
 			if (isUrlParamValue)
 				r.unread();
 			else
-				throw new ParseException(loc(r), "Could not find '(' marking beginning of collection.");
+				throw new ParseException(this, "Could not find '(' marking beginning of collection.");
 		} else {
 			r.read();
 		}
@@ -418,9 +418,9 @@ public class UonParserSession extends ReaderParserSession {
 				}
 			}
 			if (state == S1 || state == S2)
-				throw new ParseException(loc(r), "Could not find start of entry in array.");
+				throw new ParseException(this, "Could not find start of entry in array.");
 			if (state == S3)
-				throw new ParseException(loc(r), "Could not find end of entry in array.");
+				throw new ParseException(this, "Could not find end of entry in array.");
 
 		} else {
 			final int S1=1; // Looking for starting of entry.
@@ -461,7 +461,7 @@ public class UonParserSession extends ReaderParserSession {
 		if (c == 'n')
 			return (BeanMap<T>)parseNull(r);
 		if (c != '(')
-			throw new ParseException(loc(r), "Expected '(' at beginning of object.");
+			throw new ParseException(this, "Expected '(' at beginning of object.");
 
 		final int S1=1; // Looking for attrName start.
 		final int S2=2; // Found attrName end, looking for =.
@@ -471,83 +471,92 @@ public class UonParserSession extends ReaderParserSession {
 
 		int state = S1;
 		String currAttr = "";
-		int currAttrLine = -1, currAttrCol = -1;
-		while (c != -1 && c != AMP) {
-			c = r.read();
-			if (! isInEscape) {
-				if (state == S1) {
-					if (c == ')' || c == -1 || c == AMP) {
-						return m;
-					}
-					if (Character.isWhitespace(c))
-						skipSpace(r);
-					else {
-						r.unread();
-						currAttrLine= r.getLine();
-						currAttrCol = r.getColumn();
-						currAttr = parseAttrName(r, decodeChars);
-						if (currAttr == null)  // Value was '%00'
-							return null;
-						state = S2;
-					}
-				} else if (state == S2) {
-					if (c == EQ || c == '=')
-						state = S3;
-					else if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						m.put(currAttr, null);
-						if (c == ')' || c == -1 || c == AMP)
+		mark();
+		try {
+			while (c != -1 && c != AMP) {
+				c = r.read();
+				if (! isInEscape) {
+					if (state == S1) {
+						if (c == ')' || c == -1 || c == AMP) {
 							return m;
-						state = S1;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
-							if (pMeta == null) {
-								onUnknownProperty(r.getPipe(), currAttr, m, currAttrLine, currAttrCol);
-							} else {
-								Object value = convertToType("", pMeta.getClassMeta());
-								pMeta.set(m, currAttr, value);
-							}
 						}
-						if (c == -1 || c == ')' || c == AMP)
+						if (Character.isWhitespace(c))
+							skipSpace(r);
+						else {
+							r.unread();
+							mark();
+							currAttr = parseAttrName(r, decodeChars);
+							if (currAttr == null) { // Value was '%00'
+								return null;
+							}
+							state = S2;
+						}
+					} else if (state == S2) {
+						if (c == EQ || c == '=')
+							state = S3;
+						else if (c == -1 || c == ',' || c == ')' || c == AMP) {
+							m.put(currAttr, null);
+							if (c == ')' || c == -1 || c == AMP) {
+								return m;
+							}
+							state = S1;
+						}
+					} else if (state == S3) {
+						if (c == -1 || c == ',' || c == ')' || c == AMP) {
+							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								if (pMeta == null) {
+									onUnknownProperty(currAttr, m);
+									unmark();
+								} else {
+									unmark();
+									Object value = convertToType("", pMeta.getClassMeta());
+									pMeta.set(m, currAttr, value);
+								}
+							}
+							if (c == -1 || c == ')' || c == AMP)
+								return m;
+							state = S1;
+						} else {
+							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								if (pMeta == null) {
+									onUnknownProperty(currAttr, m);
+									unmark();
+									parseAnything(object(), r.unread(), m.getBean(false), false, null); // Read content anyway to ignore it
+								} else {
+									unmark();
+									setCurrentProperty(pMeta);
+									ClassMeta<?> cm = pMeta.getClassMeta();
+									Object value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
+									setName(cm, value, currAttr);
+									pMeta.set(m, currAttr, value);
+									setCurrentProperty(null);
+								}
+							}
+							state = S4;
+						}
+					} else if (state == S4) {
+						if (c == ',')
+							state = S1;
+						else if (c == ')' || c == -1 || c == AMP) {
 							return m;
-						state = S1;
-					} else {
-						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
-							if (pMeta == null) {
-								onUnknownProperty(r.getPipe(), currAttr, m, currAttrLine, currAttrCol);
-								parseAnything(object(), r.unread(), m.getBean(false), false, null); // Read content anyway to ignore it
-							} else {
-								setCurrentProperty(pMeta);
-								ClassMeta<?> cm = pMeta.getClassMeta();
-								Object value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
-								setName(cm, value, currAttr);
-								pMeta.set(m, currAttr, value);
-								setCurrentProperty(null);
-							}
 						}
-						state = S4;
-					}
-				} else if (state == S4) {
-					if (c == ',')
-						state = S1;
-					else if (c == ')' || c == -1 || c == AMP) {
-						return m;
 					}
 				}
+				isInEscape = isInEscape(c, r, isInEscape);
 			}
-			isInEscape = isInEscape(c, r, isInEscape);
+			if (state == S1)
+				throw new ParseException(this, "Could not find attribute name on object.");
+			if (state == S2)
+				throw new ParseException(this, "Could not find '=' following attribute name on object.");
+			if (state == S3)
+				throw new ParseException(this, "Could not find value following '=' on object.");
+			if (state == S4)
+				throw new ParseException(this, "Could not find ')' marking end of object.");
+		} finally {
+			unmark();
 		}
-		if (state == S1)
-			throw new ParseException(loc(r), "Could not find attribute name on object.");
-		if (state == S2)
-			throw new ParseException(loc(r), "Could not find '=' following attribute name on object.");
-		if (state == S3)
-			throw new ParseException(loc(r), "Could not find value following '=' on object.");
-		if (state == S4)
-			throw new ParseException(loc(r), "Could not find ')' marking end of object.");
 
 		return null; // Unreachable.
 	}
@@ -556,7 +565,7 @@ public class UonParserSession extends ReaderParserSession {
 		String s = parseString(r, false);
 		if ("ull".equals(s))
 			return null;
-		throw new ParseException(loc(r), "Unexpected character sequence: ''{0}''", s);
+		throw new ParseException(this, "Unexpected character sequence: ''{0}''", s);
 	}
 
 	/**
@@ -625,7 +634,7 @@ public class UonParserSession extends ReaderParserSession {
 		}
 
 		// We should never get here.
-		throw new ParseException(loc(r), "Unexpected condition.");
+		throw new ParseException(this, "Unexpected condition.");
 	}
 
 
@@ -716,7 +725,7 @@ public class UonParserSession extends ReaderParserSession {
 				r.replace('=');
 			isInEscape = isInEscape(c, r, isInEscape);
 		}
-		throw new ParseException(loc(r), "Unmatched parenthesis");
+		throw new ParseException(this, "Unmatched parenthesis");
 	}
 
 	private Boolean parseBoolean(UonReader r) throws Exception {
@@ -727,7 +736,7 @@ public class UonParserSession extends ReaderParserSession {
 			return true;
 		if (s.equals("false"))
 			return false;
-		throw new ParseException(loc(r), "Unrecognized syntax for boolean.  ''{0}''.", s);
+		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
 
 	private Number parseNumber(UonReader r, Class<? extends Number> c) throws Exception {
@@ -749,7 +758,7 @@ public class UonParserSession extends ReaderParserSession {
 			if (c == -1)
 				return;
 			if (! Character.isWhitespace(c))
-				throw new ParseException(loc(r), "Remainder after parse: ''{0}''.", (char)c);
+				throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);
 		}
 	}
 
@@ -761,16 +770,6 @@ public class UonParserSession extends ReaderParserSession {
 				return;
 			}
 		}
-	}
-
-	/**
-	 * Returns a map identifying the current parse location.
-	 * 
-	 * @param r The reader being read from.
-	 * @return A map identifying the current parse location.
-	 */
-	protected final ObjectMap loc(UonReader r) {
-		return getLastLocation().append("line", r.getLine()).append("column", r.getColumn());
 	}
 
 	/**

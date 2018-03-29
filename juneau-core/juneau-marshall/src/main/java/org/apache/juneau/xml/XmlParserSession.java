@@ -382,7 +382,7 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
 			o = sType.newInstanceFromNumber(this, outer, parseNumber(getElementText(r), sType.getNewInstanceFromNumberClass()));
 		} else {
-			throw new ParseException(loc(r),
+			throw new ParseException(this,
 				"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''",
 				sType.getInnerClass().getName(), sType.getNotABeanReason(), pMeta == null ? null : pMeta.getName());
 		}
@@ -488,8 +488,7 @@ public class XmlParserSession extends ReaderParserSession {
 				if (xmlMeta.getAttrsProperty() != null) {
 					xmlMeta.getAttrsProperty().add(m, key, key, val);
 				} else if (ns == null) {
-					Location l = r.getLocation();
-					onUnknownProperty(r.getPipe(), key, m, l.getLineNumber(), l.getColumnNumber());
+					onUnknownProperty(key, m);
 				}
 			} else {
 				bpm.set(m, key, val);
@@ -567,8 +566,7 @@ public class XmlParserSession extends ReaderParserSession {
 					currAttr = getElementName(r);
 					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
-						Location loc = r.getLocation();
-						onUnknownProperty(r.getPipe(), currAttr, m, loc.getLineNumber(), loc.getColumnNumber());
+						onUnknownProperty(currAttr, m);
 						skipCurrentTag(r);
 					} else {
 						setCurrentProperty(pMeta);
@@ -630,7 +628,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 	private Object getUnknown(XmlReader r) throws Exception {
 		if (r.getEventType() != START_ELEMENT) {
-			throw new XmlParseException(r.getLocation(), "Parser must be on START_ELEMENT to read next text.");
+			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
 		}
 		ObjectMap m = null;
 
@@ -652,7 +650,7 @@ public class XmlParserSession extends ReaderParserSession {
 			} else if (eventType == PROCESSING_INSTRUCTION || eventType == COMMENT) {
 				// skipping
 			} else if (eventType == END_DOCUMENT) {
-				throw new XmlParseException(r.getLocation(), "Unexpected end of document when reading element text content");
+				throw new ParseException(this, "Unexpected end of document when reading element text content");
 			} else if (eventType == START_ELEMENT) {
 				// Oops...this has an element in it.
 				// Parse it as a map.
@@ -685,7 +683,7 @@ public class XmlParserSession extends ReaderParserSession {
 				} while (depth > 0);
 				break;
 			} else {
-				throw new XmlParseException(r.getLocation(), "Unexpected event type ''{0}''", eventType);
+				throw new ParseException(this, "Unexpected event type ''{0}''", eventType);
 			}
 			eventType = r.next();
 		}
@@ -698,9 +696,5 @@ public class XmlParserSession extends ReaderParserSession {
 			return m;
 		}
 		return s;
-	}
-
-	private ObjectMap loc(XmlReader r) {
-		return getLastLocation().append("line", r.getLocation().getLineNumber()).append("column", r.getLocation().getColumnNumber());
 	}
 }

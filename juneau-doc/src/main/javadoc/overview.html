@@ -1169,6 +1169,7 @@
 				<li class='jc'>{@link org.apache.juneau.parser.Parser}
 				<ul>
 					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
+					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines PARSER_debugOutputLines}
 					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}
 					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}
 					<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}
@@ -21291,6 +21292,33 @@
 			<li>
 				The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
 				and is disabled by default.
+			<li>
+				Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
+				<p class='bcode' style='color:red'>
+	org.apache.juneau.parser.ParseException: Expected '[' at beginning of JSON array.
+		At line 80, column 20.
+		While parsing into: 
+			currentClass: List&lt;String&gt;
+			currentProperty: required: java.util.List, field=[null], getter=[public java.util.List org.apache.juneau.dto.swagger.SchemaInfo.getRequired()], setter=[public org.apache.juneau.dto.swagger.SchemaInfo org.apache.juneau.dto.swagger.SchemaInfo.setRequired(java.util.Collection)]
+	---start--
+	0075: 						"name": "body",
+	0076: 						"description": "Pet object that needs to be added to the store",
+	0077: 						"required": true,
+	0078: 						"schema": {
+	0079: 							"required": true,
+	0080: 						}
+	0081: 					}
+	0082: 				],
+	0083: 				"responses": {
+	0084: 					"405": {
+	0085: 						"description": "Invalid input"
+	---end---
+				</p>
+			<li>
+				New property {@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
+			<li>
+				If a bean has both a <code>getX()</code> and <code>isX()</code> method, the <code>getX()</code> method takes precedence.
+				<br>The previous behavior was arbitrary.
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>
@@ -21313,6 +21341,18 @@
 				{@link org.apache.juneau.rest.remoteable.RemoteableServlet} now provides a form page for invoking remoteable methods in a browser.
 			<li>
 				Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
+			<li>
+				New {@link org.apache.juneau.rest.annotation.RestStatus @RestStatus} annotation that can be applied to
+				throwables thrown from REST methods to specify non-200 status return codes and descriptions in Swagger documentation.
+			<li>
+				Swagger fields added to the following annotations:
+				<ul class='doctree'>
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.Body}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.FormData}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.Header}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.Path}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.Query}
+				</ul>
 		</ul>
 		
 		<h5 class='topic w800'>juneau-rest-client</h5>

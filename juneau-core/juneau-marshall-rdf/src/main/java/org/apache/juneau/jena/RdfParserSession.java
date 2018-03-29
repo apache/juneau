@@ -125,7 +125,7 @@ public class RdfParserSession extends ReaderParserSession {
 		if (roots.isEmpty())
 			return null;
 		if (roots.size() > 1)
-			throw new ParseException(loc(), "Too many root nodes found in model:  {0}", roots.size());
+			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());
 		Resource resource = roots.get(0);
 
 		return parseAnything(type, resource, getOuter(), null);
@@ -213,7 +213,7 @@ public class RdfParserSession extends ReaderParserSession {
 					pMeta.set(m, key, value);
 				}
 			} else if (! (p.equals(pRoot) || p.equals(pType))) {
-				onUnknownProperty(null, key, m, -1, -1);
+				onUnknownProperty(key, m);
 			}
 			setCurrentProperty(null);
 		}
@@ -291,7 +291,7 @@ public class RdfParserSession extends ReaderParserSession {
 					}
 				}
 			} else {
-				throw new ParseException(loc(), "Unrecognized node type ''{0}'' for object", n);
+				throw new ParseException(this, "Unrecognized node type ''{0}'' for object", n);
 			}
 		} else if (sType.isBoolean()) {
 			o = convertToType(getValue(n, outer), boolean.class);
@@ -322,7 +322,7 @@ public class RdfParserSession extends ReaderParserSession {
 			} else if (r.canAs(RDFList.class)) {
 				parseIntoCollection(r.as(RDFList.class), (Collection)o, sType, pMeta);
 			} else {
-				throw new ParseException("Unrecognized node type ''{0}'' for collection", n);
+				throw new ParseException(this, "Unrecognized node type ''{0}'' for collection", n);
 			}
 			if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, (Collection)o);
@@ -351,9 +351,9 @@ public class RdfParserSession extends ReaderParserSession {
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((ObjectMap)m, pMeta, eType);
 			else
-				throw new ParseException(loc(), "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else {
-			throw new ParseException("Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
 		if (swap != null && o != null)
@@ -363,10 +363,6 @@ public class RdfParserSession extends ReaderParserSession {
 			setParent(eType, o, outer);
 
 		return (T)o;
-	}
-
-	private ObjectMap loc() {
-		return getLastLocation();
 	}
 
 	private boolean isSeq(RDFNode n) {
@@ -399,7 +395,7 @@ public class RdfParserSession extends ReaderParserSession {
 				return parseAnything(object(), st.getObject(), outer, null);
 			}
 		}
-		throw new ParseException(loc(), "Unknown value type for node ''{0}''", n);
+		throw new ParseException(this, "Unknown value type for node ''{0}''", n);
 	}
 
 	private <K,V> Map<K,V> parseIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, 

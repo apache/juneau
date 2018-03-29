@@ -166,15 +166,15 @@ public class CommonParserTest {
 		String json = "{a:1,unknownProperty:\"/foo\",b:2}";
 		p.parse(json, B.class);
 		assertEquals(1, MyParserListener.events.size());
-		assertEquals("unknownProperty,1,5", MyParserListener.events.get(0));
+		assertEquals("unknownProperty, line 1, column 22", MyParserListener.events.get(0));
 	}
 
 	public static class MyParserListener extends ParserListener {
 		static final List<String> events = new LinkedList<String>();
 
 		@Override /* ParserListener */
-		public <T> void onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class<T> beanClass, T bean, int line, int col) {
-			events.add(propertyName + "," + line + "," + col);
+		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {
+			events.add(propertyName + ", " + session.getPosition());
 		}
 	}
 }

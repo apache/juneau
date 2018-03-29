@@ -139,6 +139,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public ReaderParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public ReaderParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

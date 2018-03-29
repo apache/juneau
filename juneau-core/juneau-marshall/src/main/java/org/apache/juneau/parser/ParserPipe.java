@@ -61,6 +61,7 @@ public final class ParserPipe implements Closeable {
 	private ParserReader parserReader;
 	private boolean doClose;
 	private BinaryFormat binaryFormat;
+	private Positionable positionable;
 
 	/**
 	 * Constructor for reader-based parsers.
@@ -321,7 +322,28 @@ public final class ParserPipe implements Closeable {
 	public boolean isString() {
 		return inputString != null;
 	}
+	
+	/**
+	 * Sets the ParserReader/ParserInputStream/XmlReader constructed from this pipe.
+	 * 
+	 * <p>
+	 * Used for gathering the failure position when {@link ParseException} is thrown.
+	 * 
+	 * @param positionable The ParserReader/ParserInputStream/XmlReader constructed from this pipe.
+	 */
+	public void setPositionable(Positionable positionable) {
+		this.positionable = positionable;
+	}
 
+	Position getPosition() {
+		if (positionable == null)
+			return Position.UNKNOWN;
+		Position p = positionable.getPosition();
+		if (p == null)
+			return Position.UNKNOWN;
+		return p;
+	}
+	
 	@Override /* Closeable */
 	public void close() {
 		try {

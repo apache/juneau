@@ -28,10 +28,8 @@ import org.apache.juneau.parser.*;
  * 		This class is not intended for external use.
  * </ul>
  */
-public final class MsgPackInputStream extends InputStream {
+public final class MsgPackInputStream extends ParserInputStream {
 
-	private final ParserPipe pipe;
-	private final InputStream is;
 	private DataType currentDataType;
 	private long length;
 	private int lastByte;
@@ -65,16 +63,7 @@ public final class MsgPackInputStream extends InputStream {
 	 * @throws Exception
 	 */
 	protected MsgPackInputStream(ParserPipe pipe) throws Exception {
-		this.pipe = pipe;
-		this.is = pipe.getInputStream();
-	}
-
-	@Override /* InputStream */
-	public int read() throws IOException {
-		int i = is.read();
-		if (i > 0)
-			pos++;
-		return i;
+		super(pipe);
 	}
 
 	/**
@@ -341,7 +330,7 @@ public final class MsgPackInputStream extends InputStream {
 						length = readUInt2();
 				else if (i == EXT32)
 					length = readUInt4();
-				extType = is.read();
+				extType = read();
 
 				break;
 			}
@@ -413,7 +402,7 @@ public final class MsgPackInputStream extends InputStream {
 	 */
 	byte[] readBinary() throws IOException {
 		byte[] b = new byte[(int)length];
-		is.read(b);
+		read(b);
 		return b;
 	}
 
@@ -424,10 +413,10 @@ public final class MsgPackInputStream extends InputStream {
 		if (length == 0)
 			return lastByte;
 		if (length == 1)
-			return is.read();
+			return read();
 		if (length == 2)
-			return (is.read() << 8) | is.read();
-		int i = is.read(); i <<= 8; i |= is.read(); i <<= 8; i |= is.read(); i <<= 8; i |= is.read();
+			return (read() << 8) | read();
+		int i = read(); i <<= 8; i |= read(); i <<= 8; i |= read(); i <<= 8; i |= read();
 		return i;
 	}
 
@@ -451,7 +440,7 @@ public final class MsgPackInputStream extends InputStream {
 	long readLong() throws IOException {
 		if (length == 4)
 			return readUInt4();
-		long l = is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read();
+		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
 		return l;
 	}
 
@@ -467,37 +456,21 @@ public final class MsgPackInputStream extends InputStream {
 	 * Read one byte from the stream.
 	 */
 	private int readUInt1() throws IOException {
-		return is.read();
+		return read();
 	}
 
 	/**
 	 * Read two bytes from the stream.
 	 */
 	private int readUInt2() throws IOException {
-		return (is.read() << 8) | is.read();
+		return (read() << 8) | read();
 	}
 
 	/**
 	 * Read four bytes from the stream.
 	 */
 	private long readUInt4() throws IOException {
-		long l = is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read(); l <<= 8; l |= is.read();
+		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
 		return l;
-	}
-
-	/**
-	 * Return the current read position in the stream (i.e. number of bytes we've read so far).
-	 */
-	int getPosition() {
-		return pos;
-	}
-
-	/**
-	 * Returns the pipe that was passed into the constructor.
-	 * 
-	 * @return The pipe that was passed into the constructor.
-	 */
-	public ParserPipe getPipe() {
-		return pipe;
 	}
 }

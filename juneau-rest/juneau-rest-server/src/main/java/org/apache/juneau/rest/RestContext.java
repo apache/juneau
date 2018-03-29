@@ -4202,7 +4202,7 @@ public final class RestContext extends BeanContext {
 
 			for (Annotation a : pa[i]) {
 				if (a instanceof Header)
-					rp[i] = new RestParamDefaults.HeaderObject((Header)a, t, ps);
+					rp[i] = new RestParamDefaults.HeaderObject(method, (Header)a, t, ps);
 				else if (a instanceof FormData)
 					rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps);
 				else if (a instanceof Query)
@@ -4212,7 +4212,7 @@ public final class RestContext extends BeanContext {
 				else if (a instanceof HasQuery)
 					rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
 				else if (a instanceof Body)
-					rp[i] = new RestParamDefaults.BodyObject(t);
+					rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t);
 				else if (a instanceof org.apache.juneau.rest.annotation.Method)
 					rp[i] = new RestParamDefaults.MethodObject(method, t);
 				else if (a instanceof PathRemainder)
@@ -4246,7 +4246,7 @@ public final class RestContext extends BeanContext {
 					if (isEmpty(name))
 						name = pathPattern.getVars()[idx];
 				}
-				rp[i] = new RestParamDefaults.PathParameterObject(name, t);
+				rp[i] = new RestParamDefaults.PathParameterObject(name, p, t);
 			}
 		}
 

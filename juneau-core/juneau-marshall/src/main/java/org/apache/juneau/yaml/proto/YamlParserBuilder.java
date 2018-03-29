@@ -74,6 +74,12 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public YamlParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+	
+	@Override /* ParserBuilder */
 	public YamlParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

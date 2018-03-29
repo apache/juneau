@@ -1134,6 +1134,61 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is either {@link Float} or <jk>float</jk>.
+	 * 
+	 * @return <jk>true</jk> if this class is either {@link Float} or <jk>float</jk>.
+	 */
+	public boolean isFloat() {
+		return innerClass == Float.class || innerClass == float.class;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is either {@link Double} or <jk>double</jk>.
+	 * 
+	 * @return <jk>true</jk> if this class is either {@link Double} or <jk>double</jk>.
+	 */
+	public boolean isDouble() {
+		return innerClass == Double.class || innerClass == double.class;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is either {@link Short} or <jk>short</jk>.
+	 * 
+	 * @return <jk>true</jk> if this class is either {@link Short} or <jk>short</jk>.
+	 */
+	public boolean isShort() {
+		return innerClass == Short.class || innerClass == short.class;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is either {@link Integer} or <jk>int</jk>.
+	 * 
+	 * @return <jk>true</jk> if this class is either {@link Integer} or <jk>int</jk>.
+	 */
+	public boolean isInteger() {
+		return innerClass == Integer.class || innerClass == int.class;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is either {@link Long} or <jk>long</jk>.
+	 * 
+	 * @return <jk>true</jk> if this class is either {@link Long} or <jk>long</jk>.
+	 */
+	public boolean isLong() {
+		return innerClass == Long.class || innerClass == long.class;
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if this metadata represents the specified type.
+	 * 
+	 * @param c The class to test against.
+	 * @return <jk>true</jk> if this metadata represents the specified type.
+	 */
+	public boolean isType(Class<?> c) {
+		return isParentClass(c, innerClass);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this class is a {@link Boolean}.
 	 * 
 	 * @return <jk>true</jk> if this class is a {@link Boolean}.

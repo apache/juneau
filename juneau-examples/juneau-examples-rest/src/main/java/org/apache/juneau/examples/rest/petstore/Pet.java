@@ -99,4 +99,19 @@ public class Pet {
 		this.status = status;
 		return this;
 	}
+	
+	public boolean hasStatus(PetStatus...statuses) {
+		for (PetStatus status : statuses)
+			if (this.status == status)
+				return true;
+		return false;
+	}
+
+	public boolean hasTag(String...tags) {
+		for (String tag : tags)
+			for (Tag t : this.tags)
+				if (t.getName().equals(tag))
+					return true;
+		return false;
+	}
 }

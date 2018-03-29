@@ -870,9 +870,9 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testAddLineNumbers() {
-		assertNull(addLineNumbers(null));
-		assertEquals("1: \n", addLineNumbers(""));
-		assertEquals("1: foo\n", addLineNumbers("foo"));
-		assertEquals("1: foo\n2: bar\n", addLineNumbers("foo\nbar"));
+		assertNull(getNumberedLines(null));
+		assertEquals("1: \n", getNumberedLines(""));
+		assertEquals("1: foo\n", getNumberedLines("foo"));
+		assertEquals("1: foo\n2: bar\n", getNumberedLines("foo\nbar"));
 	}
 }

@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import java.io.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -30,11 +29,10 @@ import org.apache.juneau.internal.*;
  * <p>
  * <b>Warning:</b>  Not thread safe.
  */
-public class ParserReader extends Reader {
+public class ParserReader extends Reader implements Positionable {
 
 	/** Wrapped reader */
 	protected final Reader r;
-	private final ParserPipe pipe;
 
 	private char[] buff;       // Internal character buffer
 	private int line = 1;      // Current line number
@@ -52,7 +50,6 @@ public class ParserReader extends Reader {
 	 * @throws IOException
 	 */
 	public ParserReader(ParserPipe pipe) throws IOException {
-		this.pipe = pipe;
 		this.unbuffered = pipe.unbuffered;
 		if (pipe.isString()) {
 			String in = pipe.getInputAsString();
@@ -66,25 +63,7 @@ public class ParserReader extends Reader {
 				this.r = _r;
 			this.buff = new char[1024];
 		}
-	}
-
-
-	/**
-	 * Returns the current line number position in this reader.
-	 * 
-	 * @return The current line number.
-	 */
-	public final int getLine() {
-		return line;
-	}
-
-	/**
-	 * Returns the current column number position in this reader.
-	 * 
-	 * @return The current column number.
-	 */
-	public final int getColumn() {
-		return column;
+		pipe.setPositionable(this);
 	}
 
 	/**
@@ -423,22 +402,8 @@ public class ParserReader extends Reader {
 		return unbuffered ? r.read(cbuf, off, 1) : r.read(cbuf, off, len);
 	}
 
-	/**
-	 * Returns the combined location information on both this reader and the session.
-	 * 
-	 * @param session The session object to read the last location on.
-	 * @return A new map describing the current parse location.
-	 */
-	public ObjectMap getLocation(ParserSession session) {
-		return session.getLastLocation().append("line", getLine()).append("column", getColumn());
-	}
-
-	/**
-	 * Returns the pipe that was passed into the constructor.
-	 * 
-	 * @return The pipe that was passed into the constructor.
-	 */
-	public final ParserPipe getPipe() {
-		return pipe;
+	@Override /* Positionable */
+	public Position getPosition() {
+		return new Position(line, column);
 	}
 }

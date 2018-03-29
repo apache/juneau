@@ -208,6 +208,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public XmlParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+	
+	@Override /* ParserBuilder */
 	public XmlParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

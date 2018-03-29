@@ -114,6 +114,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public JsonParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public JsonParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

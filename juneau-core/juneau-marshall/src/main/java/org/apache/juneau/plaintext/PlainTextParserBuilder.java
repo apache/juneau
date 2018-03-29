@@ -74,6 +74,12 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public PlainTextParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+	
+	@Override /* ParserBuilder */
 	public PlainTextParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

@@ -35,22 +35,14 @@ public class ParserListener {
 	 * 
 	 * @param <T> The class type of the bean.
 	 * @param session The parser session.
-	 * @param pipe
-	 * 	The parser input.
-	 * 	Note that if {@link BeanContext#BEAN_debug} is enabled on the parser, you can get the input as a string through
-	 * 	{@link ParserPipe#getInputAsString()}.
 	 * @param propertyName The property name encountered in the document.
 	 * @param beanClass The bean class.
 	 * @param bean The bean.
-	 * @param line
-	 * 	The line number where the unknown property was found (-1 if parser doesn't support line/column indicators).
-	 * @param col
-	 * 	The column number where the unknown property was found (-1 if parser doesn't support line/column indicators).
 	 */
-	public <T> void onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class<T> beanClass, T bean, int line, int col) {
-		onError(session, pipe, null,
-			format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at line {2} column {3}",
-				propertyName, beanClass, line, col)
+	public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {
+		onError(session, null,
+			format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at location {2}",
+				propertyName, beanClass, session.getPosition())
 		);
 	}
 
@@ -58,14 +50,10 @@ public class ParserListener {
 	 * Called when an error occurs during parsing but is ignored.
 	 * 
 	 * @param session The parser session.
-	 * @param pipe
-	 * 	The parser input.
-	 * 	Note that if {@link BeanContext#BEAN_debug} is enabled on the parser, you can get the input as a string through
-	 * 	{@link ParserPipe#getInputAsString()}.
 	 * @param t The throwable that was thrown by the getter method.
 	 * @param msg The error message.
 	 */
-	public void onError(ParserSession session, ParserPipe pipe, Throwable t, String msg) {
+	public void onError(ParserSession session, Throwable t, String msg) {
 		// Do something with this information.
 	}
 }

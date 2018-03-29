@@ -120,7 +120,7 @@ public class JsonParserTest {
 			p.parse(json, ObjectMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertEquals("Parse exception occurred at {currentClass:'Object',line:1,column:7}.  Missing value detected.", e.getRootCause().getMessage());
+			assertTrue(e.getRootCause().getMessage().contains("Missing value detected."));
 		}
 
 		// Single quoted values.
@@ -129,7 +129,7 @@ public class JsonParserTest {
 			p.parse(json, ObjectMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertEquals("Parse exception occurred at {currentClass:'Object',line:1,column:8}.  Invalid quote character \"'\" being used.", e.getRootCause().getMessage());
+			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
 		}
 
 		// Single quoted attribute name.
@@ -138,7 +138,7 @@ public class JsonParserTest {
 			p.parse(json, ObjectMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertEquals("Parse exception occurred at {currentClass:'ObjectMap<String,Object>',line:1,column:2}.  Invalid quote character \"'\" being used.", e.getRootCause().getMessage());
+			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
 		}
 
 		// Unquoted attribute name.
@@ -147,7 +147,7 @@ public class JsonParserTest {
 			p.parse(json, ObjectMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertEquals("Parse exception occurred at {currentClass:'ObjectMap<String,Object>',line:1,column:1}.  Unquoted attribute detected.", e.getRootCause().getMessage());
+			assertTrue(e.getRootCause().getMessage().contains("Unquoted attribute detected."));
 		}
 
 		// Concatenated string
@@ -156,7 +156,7 @@ public class JsonParserTest {
 			p.parse(json, ObjectMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertEquals("Parse exception occurred at {currentClass:'Object',line:1,column:12}.  String concatenation detected.", e.getRootCause().getMessage());
+			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
 		}
 
 		// Concatenated string 2
@@ -165,7 +165,7 @@ public class JsonParserTest {
 			p.parse(json, ObjectMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertEquals("Parse exception occurred at {currentClass:'Object',line:1,column:13}.  String concatenation detected.", e.getRootCause().getMessage());
+			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
 		}
 
 		json = "{\"foo\":/*comment*/\"bar\"}";
@@ -173,7 +173,7 @@ public class JsonParserTest {
 			p.parse(json, ObjectMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertEquals("Parse exception occurred at {currentClass:'ObjectMap<String,Object>',line:1,column:8}.  Javascript comment detected.", e.getRootCause().getMessage());
+			assertTrue(e.getRootCause().getMessage().contains("Javascript comment detected."));
 		}
 	}
 

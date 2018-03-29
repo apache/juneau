@@ -97,7 +97,7 @@ public final class HtmlParserSession extends XmlParserSession {
 
 		int event = r.getEventType();
 		if (event != START_ELEMENT)
-			throw new XmlParseException(r.getLocation(), "parseAnything must be called on outer start element.");
+			throw new ParseException(this, "parseAnything must be called on outer start element.");
 
 		if (! isRoot)
 			event = r.next();
@@ -108,7 +108,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			event = skipWs(r);
 
 		if (event == END_DOCUMENT)
-			throw new XmlParseException(r.getLocation(), "Unexpected end of stream in parseAnything for type ''{0}''", eType);
+			throw new ParseException(this, "Unexpected end of stream in parseAnything for type ''{0}''", eType);
 
 		// Handle @Html(asXml=true) beans.
 		HtmlClassMeta hcm = sType.getExtendedMeta(HtmlClassMeta.class);
@@ -265,7 +265,7 @@ public final class HtmlParserSession extends XmlParserSession {
 		}
 
 		if (! isValid)
-			throw new XmlParseException(r.getLocation(), "Unexpected tag ''{0}'' for type ''{1}''", tag, eType);
+			throw new ParseException(this, "Unexpected tag ''{0}'' for type ''{1}''", tag, eType);
 
 		if (swap != null && o != null)
 			o = swap.unswap(this, o, eType);
@@ -280,7 +280,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	/*
 	 * For parsing output from HtmlDocSerializer, this skips over the head, title, and links.
 	 */
-	private static HtmlTag skipToData(XmlReader r) throws Exception {
+	private HtmlTag skipToData(XmlReader r) throws Exception {
 		while (true) {
 			int event = r.next();
 			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
@@ -291,7 +291,7 @@ public final class HtmlParserSession extends XmlParserSession {
 				if (! isEmpty)
 					event = skipWs(r);
 				if (event == END_DOCUMENT)
-					throw new XmlParseException(r.getLocation(), "Unexpected end of stream looking for data.");
+					throw new ParseException(this, "Unexpected end of stream looking for data.");
 				return (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
 			}
 		}
@@ -398,7 +398,7 @@ public final class HtmlParserSession extends XmlParserSession {
 
 		while (true) {
 			r.nextTag();
-			tag = HtmlTag.forEvent(r);
+			tag = HtmlTag.forEvent(this, r);
 			if (tag == xTABLE)
 				break;
 
@@ -487,7 +487,7 @@ public final class HtmlParserSession extends XmlParserSession {
 				nextTag(r, TD);
 				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
 				if (pMeta == null) {
-					onUnknownProperty(r.getPipe(), key, m, -1, -1);
+					onUnknownProperty(key, m);
 					parseAnything(object(), r, null, false, null);
 				} else {
 					ClassMeta<?> cm = pMeta.getClassMeta();
@@ -507,23 +507,23 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing before the event we want to parse.
 	 * Postcondition:  Pointing at the tag just parsed.
 	 */
-	private static HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws Exception {
+	private HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws Exception {
 		int et = r.next();
 
 		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
 			et = r.next();
 
 		if (et == END_DOCUMENT)
-			throw new XmlParseException(r.getLocation(), "Unexpected end of document.");
+			throw new ParseException(this, "Unexpected end of document.");
 
-		HtmlTag tag = HtmlTag.forEvent(r);
+		HtmlTag tag = HtmlTag.forEvent(this, r);
 		if (expected.length == 0)
 			return tag;
 		for (HtmlTag t : expected)
 			if (t == tag)
 				return tag;
 
-		throw new XmlParseException(r.getLocation(), "Unexpected tag: ''{0}''.  Expected one of the following: {1}", tag, expected);
+		throw new ParseException(this, "Unexpected tag: ''{0}''.  Expected one of the following: {1}", tag, expected);
 	}
 
 	/*
@@ -535,12 +535,11 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @param r The stream being read from.
 	 * @throws XMLStreamException
 	 */
-	private static void skipTag(XmlReader r) throws Exception {
+	private void skipTag(XmlReader r) throws Exception {
 		int et = r.getEventType();
 
 		if (et != START_ELEMENT)
-			throw new XmlParseException(
-				r.getLocation(),
+			throw new ParseException(this,
 				"skipToNextTag() call on invalid event ''{0}''.  Must only be called on START_ELEMENT events.",
 				XmlUtils.toReadableEvent(r)
 			);
@@ -564,13 +563,12 @@ public final class HtmlParserSession extends XmlParserSession {
 		}
 	}
 
-	private static void skipTag(XmlReader r, HtmlTag...expected) throws Exception {
-		HtmlTag tag = HtmlTag.forEvent(r);
+	private void skipTag(XmlReader r, HtmlTag...expected) throws Exception {
+		HtmlTag tag = HtmlTag.forEvent(this, r);
 		if (tag.isOneOf(expected))
 			r.next();
 		else
-			throw new XmlParseException(
-				r.getLocation(),
+			throw new ParseException(this,
 				"Unexpected tag: ''{0}''.  Expected one of the following: {1}",
 				tag, expected);
 	}
@@ -614,7 +612,7 @@ public final class HtmlParserSession extends XmlParserSession {
 					sb.append(characters);
 					characters = null;
 				}
-				HtmlTag tag = HtmlTag.forEvent(r);
+				HtmlTag tag = HtmlTag.forEvent(this, r);
 				if (tag == BR) {
 					sb.append('\n');
 					r.nextTag();
@@ -699,7 +697,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	@Override /* XmlParserSession */
 	protected final String parseWhitespaceElement(XmlReader r) throws Exception {
 
-		HtmlTag tag = HtmlTag.forEvent(r);
+		HtmlTag tag = HtmlTag.forEvent(this, r);
 		int et = r.next();
 		if (tag == BR) {
 			return "\n";
@@ -717,7 +715,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			}
 			return "";
 		} else {
-			throw new XmlParseException(r.getLocation(), "Invalid tag found in parseWhitespaceElement(): ''{0}''", tag);
+			throw new ParseException(this, "Invalid tag found in parseWhitespaceElement(): ''{0}''", tag);
 		}
 	}
 }

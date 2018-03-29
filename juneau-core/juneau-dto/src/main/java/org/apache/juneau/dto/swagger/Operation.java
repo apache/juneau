@@ -862,6 +862,18 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 * 
+	 * <p>
+	 * Declares this operation to be deprecated.
+	 * 
+	 * @return The property value, or <jk>false</jk> if it is not set.
+	 */
+	public boolean isDeprecated() {
+		return deprecated != null && deprecated == true;
+	}
+	
+	/**
 	 * Bean property setter:  <property>deprecated</property>.
 	 * 
 	 * <p>

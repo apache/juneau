@@ -151,8 +151,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 				o = convertToType(m.get("_value"), sType);
 			} else {
 				if (sType.getNotABeanReason() != null)
-					throw new ParseException(loc(r), "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
-				throw new ParseException(loc(r), "Malformed application/x-www-form-urlencoded input for class ''{0}''.", sType);
+					throw new ParseException(this, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
+				throw new ParseException(this, "Malformed application/x-www-form-urlencoded input for class ''{0}''.", sType);
 			}
 		}
 
@@ -240,13 +240,13 @@ public class UrlEncodingParserSession extends UonParserSession {
 			isInEscape = (c == '\\' && ! isInEscape);
 		}
 		if (state == S1)
-			throw new ParseException(loc(r), "Could not find attribute name on object.");
+			throw new ParseException(this, "Could not find attribute name on object.");
 		if (state == S2)
-			throw new ParseException(loc(r), "Could not find '=' following attribute name on object.");
+			throw new ParseException(this, "Could not find '=' following attribute name on object.");
 		if (state == S3)
-			throw new ParseException(loc(r), "Dangling '=' found in object entry");
+			throw new ParseException(this, "Dangling '=' found in object entry");
 		if (state == S4)
-			throw new ParseException(loc(r), "Could not find end of object.");
+			throw new ParseException(this, "Could not find end of object.");
 
 		return null; // Unreachable.
 	}
@@ -265,92 +265,99 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		int state = S1;
 		String currAttr = "";
-		int currAttrLine = -1, currAttrCol = -1;
-		while (c != -1) {
-			c = r.read();
-			if (! isInEscape) {
-				if (state == S1) {
-					if (c == -1) {
-						return m;
-					}
-					r.unread();
-					currAttrLine= r.getLine();
-					currAttrCol = r.getColumn();
-					currAttr = parseAttrName(r, true);
-					if (currAttr == null)  // Value was '%00'
-						return null;
-					state = S2;
-				} else if (state == S2) {
-					if (c == '\u0002')
-						state = S3;
-					else if (c == -1 || c == '\u0001') {
-						m.put(currAttr, null);
-						if (c == -1)
+		mark();
+		try {
+			while (c != -1) {
+				c = r.read();
+				if (! isInEscape) {
+					if (state == S1) {
+						if (c == -1) {
 							return m;
-						state = S1;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == '\u0001') {
-						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
-							if (pMeta == null) {
-								onUnknownProperty(r.getPipe(), currAttr, m, currAttrLine, currAttrCol);
-							} else {
-								setCurrentProperty(pMeta);
-								// In cases of "&foo=", create an empty instance of the value if createable.
-								// Otherwise, leave it null.
-								ClassMeta<?> cm = pMeta.getClassMeta();
-								if (cm.canCreateNewInstance())
-									pMeta.set(m, currAttr, cm.newInstance());
-								setCurrentProperty(null);
-							}
 						}
-						if (c == -1)
-							return m;
-						state = S1;
-					} else {
-						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
-							if (pMeta == null) {
-								onUnknownProperty(r.getPipe(), currAttr, m, currAttrLine, currAttrCol);
-								parseAnything(object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
-							} else {
-								setCurrentProperty(pMeta);
-								if (shouldUseExpandedParams(pMeta)) {
-									ClassMeta et = pMeta.getClassMeta().getElementType();
-									Object value = parseAnything(et, r.unread(), m.getBean(false), true, pMeta);
-									setName(et, value, currAttr);
-									pMeta.add(m, currAttr, value);
+						r.unread();
+						mark();
+						currAttr = parseAttrName(r, true);
+						if (currAttr == null)  // Value was '%00'
+							return null;
+						state = S2;
+					} else if (state == S2) {
+						if (c == '\u0002')
+							state = S3;
+						else if (c == -1 || c == '\u0001') {
+							m.put(currAttr, null);
+							if (c == -1)
+								return m;
+							state = S1;
+						}
+					} else if (state == S3) {
+						if (c == -1 || c == '\u0001') {
+							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								if (pMeta == null) {
+									onUnknownProperty(currAttr, m);
+									unmark();
 								} else {
+									unmark();
+									setCurrentProperty(pMeta);
+									// In cases of "&foo=", create an empty instance of the value if createable.
+									// Otherwise, leave it null.
 									ClassMeta<?> cm = pMeta.getClassMeta();
-									Object value = parseAnything(cm, r.unread(), m.getBean(false), true, pMeta);
-									setName(cm, value, currAttr);
-									pMeta.set(m, currAttr, value);
+									if (cm.canCreateNewInstance())
+										pMeta.set(m, currAttr, cm.newInstance());
+									setCurrentProperty(null);
 								}
-								setCurrentProperty(null);
 							}
+							if (c == -1)
+								return m;
+							state = S1;
+						} else {
+							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								if (pMeta == null) {
+									onUnknownProperty(currAttr, m);
+									unmark();
+									parseAnything(object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
+								} else {
+									unmark();
+									setCurrentProperty(pMeta);
+									if (shouldUseExpandedParams(pMeta)) {
+										ClassMeta et = pMeta.getClassMeta().getElementType();
+										Object value = parseAnything(et, r.unread(), m.getBean(false), true, pMeta);
+										setName(et, value, currAttr);
+										pMeta.add(m, currAttr, value);
+									} else {
+										ClassMeta<?> cm = pMeta.getClassMeta();
+										Object value = parseAnything(cm, r.unread(), m.getBean(false), true, pMeta);
+										setName(cm, value, currAttr);
+										pMeta.set(m, currAttr, value);
+									}
+									setCurrentProperty(null);
+								}
+							}
+							state = S4;
 						}
-						state = S4;
-					}
-				} else if (state == S4) {
-					if (c == '\u0001')
-						state = S1;
-					else if (c == -1) {
-						return m;
+					} else if (state == S4) {
+						if (c == '\u0001')
+							state = S1;
+						else if (c == -1) {
+							return m;
+						}
 					}
 				}
+				isInEscape = (c == '\\' && ! isInEscape);
 			}
-			isInEscape = (c == '\\' && ! isInEscape);
+			if (state == S1)
+				throw new ParseException(this, "Could not find attribute name on object.");
+			if (state == S2)
+				throw new ParseException(this, "Could not find '=' following attribute name on object.");
+			if (state == S3)
+				throw new ParseException(this, "Could not find value following '=' on object.");
+			if (state == S4)
+				throw new ParseException(this, "Could not find end of object.");
+		} finally {
+			unmark();
 		}
-		if (state == S1)
-			throw new ParseException(loc(r), "Could not find attribute name on object.");
-		if (state == S2)
-			throw new ParseException(loc(r), "Could not find '=' following attribute name on object.");
-		if (state == S3)
-			throw new ParseException(loc(r), "Could not find value following '=' on object.");
-		if (state == S4)
-			throw new ParseException(loc(r), "Could not find end of object.");
-
+		
 		return null; // Unreachable.
 	}
 }

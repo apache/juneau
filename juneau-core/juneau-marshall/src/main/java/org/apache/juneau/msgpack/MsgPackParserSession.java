@@ -115,7 +115,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					}
 					o = m;
 				} else {
-					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (builder != null || sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
@@ -127,7 +127,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 							if (pName.equals(getBeanTypePropertyName(eType)))
 								parseAnything(string(), is, null, null);
 							else
-								onUnknownProperty(is.getPipe(), pName, m, 0, is.getPosition());
+								onUnknownProperty(pName, m);
 						} else {
 							ClassMeta<?> cm = bpm.getClassMeta();
 							Object value = parseAnything(cm, is, m.getBean(false), bpm);
@@ -137,7 +137,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					}
 					o = builder == null ? m.getBean() : builder.build(this, m.getBean(), eType);
 				} else {
-					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (sType.canCreateNewInstanceFromString(outer) && dt == STRING) {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
@@ -159,7 +159,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
 					o = l;
 				} else {
-					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
@@ -177,7 +177,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
 				} else {
-					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (dt == MAP) {
 				ObjectMap m = new ObjectMap(this);
@@ -186,10 +186,10 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);
 				else
-					throw new ParseException(loc(is), "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
 						sType.getInnerClass().getName(), sType.getNotABeanReason());
 			} else {
-				throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 			}
 		}
 
@@ -200,9 +200,5 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 			setParent(eType, o, outer);
 
 		return (T)o;
-	}
-
-	private ObjectMap loc(MsgPackInputStream is) {
-		return getLastLocation().append("position", is.getPosition());
 	}
 }

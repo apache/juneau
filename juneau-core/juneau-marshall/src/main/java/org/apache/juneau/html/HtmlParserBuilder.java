@@ -96,6 +96,24 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public HtmlParserBuilder autoCloseStreams(boolean value) {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public HtmlParserBuilder autoCloseStreams() {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public HtmlParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+	
+	@Override /* ParserBuilder */
 	public HtmlParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

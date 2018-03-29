@@ -412,7 +412,7 @@ public abstract class ComboRoundTripTest {
 	public void c11_serializeHtml() throws Exception {
 		testSerialize("serializeHtml", sHtml, comboInput.html);
 	}
-
+	
 	@Test
 	public void c12_parseHtml() throws Exception {
 		testParse("parseHtml", sHtml, pHtml, comboInput.html);
@@ -422,7 +422,7 @@ public abstract class ComboRoundTripTest {
 	public void c13_verifyHtml() throws Exception {
 		testParseVerify("verifyHtml", sHtml, pHtml);
 	}
-
+	
 	//--------------------------------------------------------------------------------
 	// HTML - 't' property
 	//--------------------------------------------------------------------------------

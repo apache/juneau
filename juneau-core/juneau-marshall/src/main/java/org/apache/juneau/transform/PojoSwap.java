@@ -240,6 +240,8 @@ public abstract class PojoSwap<T,S> {
 			return 1;
 		int i = 0;
 		MediaType mt = session.getMediaType();
+		if (mt == null)
+			return 0;
 		if (forMediaTypes != null)
 			for (MediaType mt2 : forMediaTypes)
 				i = Math.max(i, mt2.match(mt, false));

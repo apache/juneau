@@ -2120,15 +2120,33 @@ public final class StringUtils {
 	 * @param s The string.
 	 * @return The string with line numbers added.
 	 */
-	public static String addLineNumbers(String s) {
+	public static String getNumberedLines(String s) {
+		return getNumberedLines(s, 1, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Same as {@link #getNumberedLines(String)} except only returns the specified lines.
+	 * 
+	 * <p>
+	 * Out-of-bounds values are allowed and fixed.
+	 * 
+	 * @param s The string.
+	 * @param start The starting line (1-indexed).
+	 * @param end The ending line (1-indexed).
+	 * @return The string with line numbers added.
+	 */
+	public static String getNumberedLines(String s, int start, int end) {
 		if (s == null)
 			return null;
 		String[] lines = s.split("[\r\n]+");
 		final int digits = String.valueOf(lines.length).length();
+		if (start < 1)
+			start = 1;
+		if (end > lines.length)
+			end = lines.length;
 		StringBuilder sb = new StringBuilder();
-		int i = 1;
-		for (String l : lines) 
-			sb.append(String.format("%0"+digits+"d", i++)).append(": ").append(l).append("\n");
+		for (String l :  Arrays.asList(lines).subList(start-1, end)) 
+			sb.append(String.format("%0"+digits+"d", start++)).append(": ").append(l).append("\n");
 		return sb.toString();
 	}
 }

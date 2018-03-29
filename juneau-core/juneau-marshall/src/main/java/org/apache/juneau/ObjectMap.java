@@ -152,13 +152,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		try {
-			if (! StringUtils.isEmpty(s))
-				p.parseIntoMap(s, this, session.string(), session.object());
-		} catch (ParseException e) {
-			throw new ParseException("Invalid input for {0} parser.\n---start---\n{1}\n---end---",
-				p.getClass().getSimpleName(), s).initCause(e);
-		}
+		if (! StringUtils.isEmpty(s))
+			p.parseIntoMap(s, this, session.string(), session.object());
 	}
 
 	/**
@@ -299,7 +294,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Convenience method for adding multiple objects to this map.
+	 * Convenience method for adding an entry to this map.
 	 * 
 	 * <p>
 	 * Equivalent to calling {@code put(key, value)}, but returns this map so that the method can be chained.
@@ -310,6 +305,44 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public ObjectMap append(String key, Object value) {
 		put(key, value);
+		return this;
+	}
+
+	/**
+	 * Convenience method for adding an entry to this map.
+	 * 
+	 * <p>
+	 * Equivalent to calling {@code put(key, value)}, but returns this map so that the method can be chained.
+	 * 
+	 * <p>
+	 * <jk>null</jk> and empty string values are skipped.
+	 * 
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendIfNotEmpty(String key, String value) {
+		if (! StringUtils.isEmpty(value))
+			append(key, value);
+		return this;
+	}
+	
+	/**
+	 * Convenience method for adding an entry to this map.
+	 * 
+	 * <p>
+	 * Equivalent to calling {@code put(key, value)}, but returns this map so that the method can be chained.
+	 * 
+	 * <p>
+	 * <jk>null</jk> values are skipped.
+	 * 
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendIfNotNull(String key, Object value) {
+		if (value != null)
+			append(key, value);
 		return this;
 	}
 
@@ -1203,6 +1236,24 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		return false;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
+	 * 
+	 * <p>
+	 * Always returns <jk>false</jk> if the value is not a {@link CharSequence}.
+	 * 
+	 * @param key The key.
+	 * @return <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
+	 */
+	public boolean containsKeyNotEmpty(String key) {
+		Object val = get(key);
+		if (val == null)
+			return false;
+		if (val instanceof CharSequence)
+			return ! StringUtils.isEmpty(val);
+		return false;
+	}
+	
 	/**
 	 * Returns <jk>true</jk> if this map contains the specified key, ignoring the inner map if it exists.
 	 * 

@@ -18,6 +18,7 @@ import java.util.*;
 
 import javax.xml.stream.*;
 
+import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -71,13 +72,13 @@ enum HtmlTag {
 		cache.put(id, this);
 	}
 
-	static HtmlTag forEvent(XMLStreamReader r) throws Exception {
+	static HtmlTag forEvent(ParserSession session, XMLStreamReader r) throws Exception {
 		int et = r.getEventType();
 		if (et == START_ELEMENT)
 			return forString(r.getLocalName(), false);
 		else if (et == END_ELEMENT)
 			return forString(r.getLocalName(), true);
-		throw new XmlParseException(r.getLocation(), "Invalid call to HtmlTag.forEvent on event of type ''{0}''", XmlUtils.toReadableEvent(r));
+		throw new ParseException(session, "Invalid call to HtmlTag.forEvent on event of type ''{0}''", XmlUtils.toReadableEvent(r));
 	}
 
 	static HtmlTag forString(String tag, boolean end) throws Exception {

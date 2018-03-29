@@ -306,8 +306,18 @@ public class BeanMeta<T> {
 						if (! normalProps.containsKey(pn))
 							normalProps.put(pn, new BeanPropertyMeta.Builder(beanMeta, pn));
 						BeanPropertyMeta.Builder bpm = normalProps.get(pn);
-						if (! bm.isSetter)
+						if (! bm.isSetter) {
+							// Two getters.  Pick the best.
+							if (bpm.getter != null) {
+								
+								if (m.getAnnotation(BeanProperty.class) == null && bpm.getter.getAnnotation(BeanProperty.class) != null)
+									m = bpm.getter;  // @BeanProperty annotated method takes precedence.
+								
+								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
+									m = bpm.getter;  // getX() overrides isX().
+							}
 							bpm.setGetter(m);
+						}
 					}
 
 					// Now iterate through all the setters.

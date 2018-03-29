@@ -16,6 +16,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -143,13 +144,8 @@ public class ObjectList extends LinkedList<Object> {
 		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		try {
-			if (s != null)
-				p.parseIntoCollection(s, this, session.object());
-		} catch (ParseException e) {
-			throw new ParseException("Invalid input for {0} parser.\n---start---\n{1}\n---end---",
-				p.getClass().getSimpleName(), s).initCause(e);
-		}
+		if (s != null)
+			p.parseIntoCollection(s, this, session.object());
 	}
 
 	/**
@@ -258,6 +254,38 @@ public class ObjectList extends LinkedList<Object> {
 	public ObjectList append(Object...o) {
 		for (Object o2 : o)
 			add(o2);
+		return this;
+	}
+
+	/**
+	 * Convenience method for adding multiple objects to this list.
+	 * 
+	 * <p>
+	 * <jk>null</jk> and empty strings are skipped.
+	 * 
+	 * @param o The objects to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectList appendIfNotEmpty(String...o) {
+		for (String s : o)
+			if (! StringUtils.isEmpty(s))
+				add(s);
+		return this;
+	}
+	
+	/**
+	 * Convenience method for adding multiple objects to this list.
+	 * 
+	 * <p>
+	 * <jk>null</jk> values are skipped.
+	 * 
+	 * @param o The objects to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectList appendIfNotNull(Object...o) {
+		for (Object o2 : o)
+			if (o2 != null)
+				add(o2);
 		return this;
 	}
 
@@ -705,5 +733,22 @@ public class ObjectList extends LinkedList<Object> {
 	 */
 	public void serializeTo(Writer w) throws IOException, SerializeException {
 		JsonSerializer.DEFAULT.serialize(this);
+	}
+
+	/**
+	 * Converts this object into the specified class type.
+	 * 
+	 * <p>
+	 * TODO - The current implementation is very inefficient.
+	 * 
+	 * @param cm The class type to convert this object to.
+	 * @return A converted object.
+	 */
+	public Object cast(ClassMeta<?> cm) {
+		try {
+			return JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT_LAX.serialize(this), cm);
+		} catch (ParseException | SerializeException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

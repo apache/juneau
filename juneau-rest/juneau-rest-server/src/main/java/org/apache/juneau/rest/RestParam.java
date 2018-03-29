@@ -116,6 +116,7 @@ public abstract class RestParam {
 	final RestParamType paramType;
 	final String name;
 	final Type type;
+	final ObjectMap metaData;
 
 	/**
 	 * Constructor.
@@ -127,9 +128,24 @@ public abstract class RestParam {
 	 * @param type The object type to convert the parameter to.
 	 */
 	protected RestParam(RestParamType paramType, String name, Type type) {
+		this(paramType, name, type, ObjectMap.EMPTY_MAP);
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param paramType The Swagger parameter type.
+	 * @param name
+	 * 	The parameter name.
+	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
+	 * @param type The object type to convert the parameter to.
+	 * @param metaData Swagger metadata.
+	 */
+	protected RestParam(RestParamType paramType, String name, Type type, ObjectMap metaData) {
 		this.paramType = paramType;
 		this.name = name;
 		this.type = type;
+		this.metaData = metaData;
 	}
 
 	/**
@@ -141,6 +157,15 @@ public abstract class RestParam {
 	 * @throws Exception
 	 */
 	public abstract Object resolve(RestRequest req, RestResponse res) throws Exception;
+
+	/**
+	 * Returns the Swagger metadata associated with this parameter.
+	 * 
+	 * @return A map of parameter metadata, never <jk>null</jk>.
+	 */
+	protected ObjectMap getMetaData() {
+		return metaData;
+	};
 
 	/**
 	 * Returns the parameter class type that this parameter resolver is meant for.

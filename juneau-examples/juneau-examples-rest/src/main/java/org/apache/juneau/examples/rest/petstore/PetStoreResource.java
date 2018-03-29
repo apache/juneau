@@ -14,7 +14,9 @@ package org.apache.juneau.examples.rest.petstore;
 
 import java.util.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.labels.*;
 import org.apache.juneau.rest.widget.*;
@@ -46,6 +48,8 @@ import org.apache.juneau.rest.widget.*;
 public class PetStoreResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 	
+	private final PetStore db = new PetStore();
+	
 	@RestMethod(
 		name="GET", 
 		path="/",
@@ -59,6 +63,10 @@ public class PetStoreResource extends BasicRestServletJena {
 		};
 	}
 	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// Pets
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	@RestMethod(
 		name="GET",
 		path="/pet",
@@ -68,51 +76,36 @@ public class PetStoreResource extends BasicRestServletJena {
 		}
 	)
 	public Collection<Pet> getPets() {
-		return null;
+		return db.getPets();
 	}
 	
 	@RestMethod(
-		name="GET",
-		path="/store",
-		summary="Petstore orders",
+		name="GET", 
+		path="/pet/{petId}",
+		summary="Find pet by ID",
+		description="Returns a single pet",
 		swagger={
-			"tags:['store']"
+			"tags:[ 'pet' ],",
+			"security:[ { api_key:[] } ]"
 		}
 	)
-	public Collection<Order> getOrders() {
-		return null;
+	public Pet getPet(@Path(description="ID of pet to return") long petId) throws IdNotFoundException {
+		return db.getPet(petId);
 	}
-
-	@RestMethod(
-		name="GET",
-		path="/user",
-		summary="Petstore users",
-		swagger={
-			"tags:['user']"
-		}
-	)
-	public Collection<Order> getUsers() {
-		return null;
-	}
-
+	
 	@RestMethod(
 		name="POST", 
 		path="/pet",
 		summary="Add a new pet to the store",
 		swagger={
 			"tags:['pet'],",
-			"parameters:[",
-				"{ in:'body', description:'Pet object that needs to be added to the store', required:true }",
-			"],",
-			"responses:{",
-				"405: { description:'Invalid input' }",
-			"},",
-			"security:[",
-				"{ petstore_auth:['write:pets','read:pets'] }",
-			"]"
+			"security:[ { petstore_auth:['write:pets','read:pets'] } ],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void addPet(@Body Pet pet) {
+	public String addPet(@Body(description="Pet object that needs to be added to the store") Pet pet) throws IdConflictException {
+		db.add(pet);
+		return "OK";
 	}
 	
 	@RestMethod(
@@ -121,18 +114,14 @@ public class PetStoreResource extends BasicRestServletJena {
 		summary="Update an existing pet",
 		swagger={
 			"tags:['pet'],",
-			"parameters:[",
-				"{ in:'body', description:'Pet object that needs to be added to the store', required:true }",
-			"],",
-			"responses:{",
-				"400:{ description:'Invalid ID supplied' },",
-				"404:{ description:'Pet not found' },",
-				"405:{ description:'Validation exception' }",
-			"},",
-			"security:[ { petstore_auth: ['write:pets','read:pets'] } ]",
+			"security:[ { petstore_auth: ['write:pets','read:pets'] } ],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void updatePet(@Body Pet pet) {}
+	public String updatePet(@Body(description="Pet object that needs to be added to the store") Pet pet) throws IdNotFoundException {
+		db.update(pet);
+		return "OK";
+	}
 
 	@RestMethod(
 		name="GET", 
@@ -141,24 +130,11 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="Multiple status values can be provided with comma separated strings.",
 		swagger={
 			"tags:['pet'],",
-			"parameters: [",
-				"{",
-					"name:'status', in:'query', description:'Status values that need to be considered for filter', required:true, type:'array',",
-					"items:{ type:'string', enum:[ 'available','pending','sold' ], default:'available' },",
-					"collectionFormat:'multi'",
-				"}",
-			"],",
-			"responses: {",
-				"200:{ description:'successful operation', schema:{ type:'array', items:{ $ref:'#/definitions/Pet' } } },",
-				"400:{ description':'Invalid status value' }",
-			"},",
-			"security:[",
-				"{ petstore_auth:[ 'write:pets','read:pets' ] }",
-			"]"
+			"security:[{ petstore_auth:[ 'write:pets','read:pets' ] } ]"
 		}
 	)
-	public List<Pet> findByStatus(@Query("status") PetStatus[] status) {
-		return null;
+	public Collection<Pet> findPetsByStatus(@Query(name="status", description="Status values that need to be considered for filter", required="true") PetStatus[] status) {
+		return db.getPetsByStatus(status);
 	}
 	
 	@RestMethod(
@@ -168,61 +144,35 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
 		swagger={
 			"tags:['pet'],",
-			"parameters:[",
-				"{ name:'tags', in:'query', description:'Tags to filter by', required:true, type:'array', items:{ type:'string' }, collectionFormat:'multi' }",
-			"],",
-			"responses:{",
-				"200:{ description:'successful operation', schema:{ type:'array', items:{ $ref:'#/definitions/Pet' } } },",
-				"400:{ description:'Invalid tag value' }",
-			"},",
-			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ],",
-			"deprecated:true"
+			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
 		}
 	)
-	public List<Pet> findByTags(@Query("tags") String[] tags) {
-		return null;
+	@Deprecated
+	public Collection<Pet> findPetsByTags(@Query(name="tags", description="Tags to filter by", required="true") String[] tags) throws InvalidTagException {
+		return db.getPetsByTags(tags);
 	}
 
-	@RestMethod(
-		name="GET", 
-		path="/pet/{petId}",
-		summary="Find pet by ID",
-		description="Returns a single pet.",
-		swagger={
-			"tags:[ 'pet' ],",
-			"parameters:[",
-				"{ name:'petId', in:'path', description:'ID of pet to return', required:true, type:'integer', format:'int64' }",
-			"],",
-			"responses:{",
-				"200:{ description:'successful operation', schema:{ $ref:'#/definitions/Pet' } },",
-				"400:{ description:'Invalid ID supplied' },",
-				"404:{ description:'Pet not found' }",
-			"},",
-			"security:[ { api_key:[] } ]"
-		}
-	)
-	public Pet getPet(@Path long petId) {
-		return null;
-	}
-	
 	@RestMethod(
 		name="POST", 
 		path="/pet/{petId}",
 		summary="Updates a pet in the store with form data",
 		swagger={
 			"tags:[ 'pet' ],",
-			"parameters:[",
-				"{ name:'petId', in:'path', description:'ID of pet that needs to be updated', required:true, type:'integer', format:'int64' },",
-				"{ name:'name', in:'formData', description:'Updated name of the pet', required:false, type:'string'},",
-				"{ name:'status', in:'formData', description:'Updated status of the pet', required:false, type:'string' }",
-			"],",
-			"responses:{",
-				"405:{ description:'Invalid input' }",
-			"},",
-			"security:[ { petstore_auth:[ 'write:pets', 'read:pets' ] } ]"
+			"security:[ { petstore_auth:[ 'write:pets', 'read:pets' ] } ],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void updatePetForm(@Path long petId, @FormData("name") String name, @FormData("status") String status) {}
+	public String updatePetForm(
+			@Path(description="ID of pet that needs to be updated") long petId, 
+			@FormData(name="name", description="Updated name of the pet") String name, 
+			@FormData(name="status", description="Updated status of the pet") PetStatus status
+		) throws IdNotFoundException {
+		Pet pet = db.getPet(petId);
+		pet.name(name);
+		pet.status(status);
+		db.update(pet);
+		return "OK";
+	}
 
 	@RestMethod(
 		name="DELETE", 
@@ -230,18 +180,17 @@ public class PetStoreResource extends BasicRestServletJena {
 		summary="Deletes a pet",
 		swagger={
 			"tags:[ 'pet' ],",
-			"parameters:[",
-				"{ name:'api_key', in:'header', required:false, type:'string' },",
-				"{ name:'petId', in:'path', description:'Pet id to delete', required:true, type:'integer', format:'int64' }",
-			"],",
-			"responses:{",
-				"400:{ description:'Invalid ID supplied' },",
-				"404:{ description:'Pet not found' }",
-			"},",
-			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
+			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void deletePet(@Header("api_key") String apiKey, @Path long petId) {}
+	public String deletePet(
+			@Header("api_key") String apiKey, 
+			@Path(description="Pet id to delete") long petId
+		) throws IdNotFoundException {
+		db.removePet(petId);
+		return "OK";
+	}
 
 	@RestMethod(
 		name="POST", 
@@ -249,18 +198,81 @@ public class PetStoreResource extends BasicRestServletJena {
 		summary="Uploads an image",
 		swagger={
 			"tags:[ 'pet' ],",
-			"parameters:[",
-				"{ name:'petId', in:'path', description:'ID of pet to update', required:true, type:'integer', format:'int64' },",
-				"{ name:'additionalMetadata', in:'formData', description:'Additional data to pass to server', required:false, type:'string' },",
-				"{ name:'file', in:'formData', description:'file to upload', required:false, type:'file' }",
-			"],",
-			"responses:{",
-				"200:{ description:'successful operation', schema:{ $ref:'#/definitions/ApiResponse' } }",
-			"},",
-			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
+			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void uploadImage(@Path long petId, @FormData("additionalMetadata") String additionalMetadata, @FormData("file") byte[] file) {}
+	public String uploadImage(
+			@Path(description="ID of pet to update") long petId, 
+			@FormData(name="additionalMetadata", description="Additional data to pass to server") String additionalMetadata, 
+			@FormData(name="file", description="file to upload", required="true", type="file") byte[] file
+		) {
+		return "OK";
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// Orders
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	@RestMethod(
+		name="GET",
+		path="/store",
+		summary="Petstore orders",
+		swagger={
+			"tags:['store']"
+		}
+	)
+	public Collection<Order> getOrders() {
+		return db.getOrders();
+	}
+
+	@RestMethod(
+		name="GET", 
+		path="/store/order/{orderId}",
+		summary="Find purchase order by ID",
+		description="For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+		swagger={
+			"tags:[ 'store' ]",
+		}
+	)
+	public Order getOrder(
+			@Path(description="ID of order to fetch", maximum="10.0", minimum="1.0") long orderId
+		) throws InvalidIdException, IdNotFoundException {
+		if (orderId < 0 || orderId > 10)
+			throw new InvalidIdException();
+		return db.getOrder(orderId);
+	}
+	
+	@RestMethod(
+		name="POST", 
+		path="/store/order",
+		summary="Place an order for a pet",
+		swagger={
+			"tags:[ 'store' ]"
+		}
+	)
+	public Order placeOrder(@Body(description="Order placed for purchasing the pet") Order order) throws IdConflictException {
+		return db.add(order);
+	}
+
+	@RestMethod(
+		name="DELETE", 
+		path="/store/order/{orderId}",
+		summary="Delete purchase order by ID",
+		description="For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors.",
+		swagger={
+			"tags:[ 'store' ],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+		}
+	)
+	public String deletePurchaseOrder(
+			@Path(description="ID of the order that needs to be deleted", minimum="1.0") long orderId
+		) throws InvalidIdException, IdNotFoundException {
+		if (orderId < 0)
+			throw new InvalidIdException();
+		db.removeOrder(orderId);
+		return "OK";
+	}
 
 	@RestMethod(
 		name="GET", 
@@ -275,66 +287,38 @@ public class PetStoreResource extends BasicRestServletJena {
 			"security:[ { api_key:[] } ]"
 		}
 	)
-	public void getStoreInventory() {}
+	public Map<PetStatus,Integer> getStoreInventory() {
+		return db.getInventory();
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// Users
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@RestMethod(
-		name="POST", 
-		path="/store/order",
-		summary="Place an order for a pet",
+		name="GET",
+		path="/user",
+		summary="Petstore users",
 		swagger={
-			"tags:[ 'store' ],",
-			"parameters:[",
-				"{ in:'body', name:'body', description:'order placed for purchasing the pet', required:true, schema:{ $ref:'#/definitions/Order' } }",
-			"],",
-			"responses:{",
-				"200:{ description:'successful operation', schema:{ $ref:'#/definitions/Order' } },",
-				"400:{ description:'Invalid Order' }",
-			"}"
+			"tags:['user']"
 		}
 	)
-	public Order placeOrder(@Body Order order) {
-		return order;
+	public Collection<User> getUsers() {
+		return db.getUsers();
 	}
 
 	@RestMethod(
 		name="GET", 
-		path="/store/order/{orderId}",
-		summary="Find purchase order by ID",
-		description="For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+		path="/user/{username}",
+		summary="Get user by user name",
 		swagger={
-			"tags:[ 'store' ],",
-			"parameters:[",
-				"{ name:'orderId', in:'path', description:'ID of pet that needs to be fetched', required:true, type:'integer', maximum:10.0, minimum:1.0, format:'int64' }",
-			"],",
-			"responses:{",
-				"200:{ description:'successful operation', schema:{ $ref:'#/definitions/Order' } },",
-				"400:{ description:'Invalid ID supplied' },",
-				"404:{ description:'Order not found' }",
-			"}"
+			"tags:[ 'user' ]",
 		}
 	)
-	public Order findPurchaseOrder(@Path String orderId) {
-		return null;
+	public User getUser(@Path(description="The name that needs to be fetched. Use user1 for testing.") String username) throws InvalidUsernameException, IdNotFoundException {
+		return db.getUser(username);
 	}
-
-	@RestMethod(
-		name="DELETE", 
-		path="/store/order/{orderId}",
-		summary="Delete purchase order by ID",
-		description="For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors.",
-		swagger={
-			"tags:[ 'store' ],",
-			"parameters:[",
-				"{ name:'orderId', in:'path', description:'ID of the order that needs to be deleted', required:true, type:'integer', minimum:1.0, format:'int64' }",
-			"],",
-			"responses:{",
-				"400:{ description:'Invalid ID supplied' },",
-				"404:{ description:'Order not found' }",
-			"}"
-		}
-	)
-	public void deletePurchaseOrder(@Path String orderId) {}
-
+	
 	@RestMethod(
 		name="POST", 
 		path="/user",
@@ -342,15 +326,13 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="This can only be done by the logged in user.",
 		swagger={
 			"tags:[ 'user' ],",
-			"parameters:[",
-				"{ in:'body', name:'body', description:'Created user object', required:true, schema:{ $ref:'#/definitions/User' } }",
-			"],",
-			"responses:{",
-				"default:{ description:'successful operation' }",
-			"}"
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void createUser(@Body User user) {}
+	public String createUser(@Body(description="Created user object") User user) throws InvalidUsernameException, IdConflictException {
+		db.add(user);
+		return "OK";
+	}
 
 	@RestMethod(
 		name="POST", 
@@ -358,89 +340,13 @@ public class PetStoreResource extends BasicRestServletJena {
 		summary="Creates list of users with given input array",
 		swagger={
 			"tags:[ 'user' ],",
-			"parameters:[",
-				"{ in:'body', name:'body', description:'List of user object', required:true, schema:{ type:'array', items:{ $ref:'#/definitions/User' } } }",
-			"],",
-			"responses:{",
-				"default:{ description:'successful operation' }",
-			"}"
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void createUsersWithArrayInput(@Body User[] users) {}
-
-	@RestMethod(
-		name="POST", 
-		path="/user/createWithList",
-		summary="Creates list of users with given input array",
-		description="This can only be done by the logged in user.",
-		swagger={
-			"tags:[ 'user' ],",
-			"operationId:'createUsersWithListInput',",
-			"parameters:[",
-				"{ in:'body', name:'body', description:'List of user object', required:true, schema:{ type:'array', items:{ $ref:'#/definitions/User' } } }",
-			"],",
-			"responses:{",
-				"default:{ description:'successful operation' }",
-			"}"
-		}
-	)
-	public void createUsersWithListInput(@Body List<User> users) {}
-
-	@RestMethod(
-		name="GET", 
-		path="/user/login",
-		summary="Logs user into the system",
-		swagger={
-			"tags:[ 'user' ],",
-			"parameters:[",
-				"{ name:'username', in:'query', description:'The user name for login', required:true, type:'string' },",
-				"{ name:'password', in:'query', description:'The password for login in clear text', required:true, type:'string' }",
-			"],",
-			"responses:{",
-				"200:{",
-					"description:'successful operation', schema:{ type:'string' },",
-					"headers:{",
-						"X-Rate-Limit:{ type:'integer', format:'int32', description:'calls per hour allowed by the user' },",
-						"X-Expires-After:{ type:'string', format:'date-time', description:'date in UTC when token expires' }",
-					"}",
-				"},",
-				"400:{ description:'Invalid username/password supplied' }",
-			"}"
-		}
-	)
-	public void login(@Query("username") String username, @Query("password") String password) {}
-
-	@RestMethod(
-		name="GET", 
-		path="/user/logout",
-		summary="Logs out current logged in user session",
-		swagger={
-			"tags:[ 'user' ],",
-			"responses:{",
-				"default:{ description:'successful operation' }",
-			"}"
-		}
-	)
-	public void logout() {}
-
-	@RestMethod(
-		name="GET", 
-		path="/user/{username}",
-		summary="Get user by user name",
-		swagger={
-			"tags:[ 'user' ],",
-			"parameters:[",
-				"{ name:'username', in:'path', description:'The name that needs to be fetched. Use user1 for testing. ', required:true, type:'string' }",
-			"],",
-			"responses:{",
-				"200:{ description:'successful operation', schema:{ $ref:'#/definitions/User' } },",
-				"400:{ description:'Invalid username supplied' },",
-				"404:{ description:'User not found' }",
-			"}"
-		}
-	)
-	public User getUser(@Path String username) {
-		return null;
+	public String createUsers(@Body(description="List of user objects") User[] users) throws InvalidUsernameException, IdConflictException {
+		for (User user : users)
+			db.add(user);
+		return "OK";
 	}
 
 	@RestMethod(
@@ -450,17 +356,18 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="This can only be done by the logged in user.",
 		swagger={
 			"tags:[ 'user' ],",
-			"parameters:[",
-				"{ name:'username', in:'path', description:'name that need to be updated', required:true, type:'string' },",
-				"{ in:'body', name:'body', description:'Updated user object', required:true, schema:{ $ref:'#/definitions/User' } }",
-			"],",
-			"responses:{",
-				"400:{ description:'Invalid user supplied' },",
-				"404:{ description:'User not found' }",
-			"}"
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
 		}
 	)
-	public void updateUser(@Path String username, @Body User user) {}
+	public String updateUser(
+			@Path(description="Name that need to be updated") String username, 
+			@Body(description="Updated user object") User user
+		) throws InvalidUsernameException, IdNotFoundException {
+		User oldUser = db.getUser(username);
+		user.id(oldUser.getId());
+		db.update(user);
+		return "OK";
+	}
 
 	@RestMethod(
 		name="DELETE", 
@@ -469,14 +376,58 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="This can only be done by the logged in user.",
 		swagger={
 			"tags:[ 'user' ],",
-			"parameters:[",
-				"{ name:'username', in:'path', description:'The name that needs to be deleted', required:true, type:'string' }",
-			"],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+		}
+	)
+	public String deleteUser(@Path(description="The name that needs to be deleted") String username) throws InvalidUsernameException, IdNotFoundException {
+		User oldUser = db.getUser(username);
+		db.removeUser(oldUser.getId());
+		return "OK";
+	}
+	
+	@RestMethod(
+		name="GET", 
+		path="/user/login",
+		summary="Logs user into the system",
+		swagger={
+			"tags:[ 'user' ],",
 			"responses:{",
-				"400:{ description:'Invalid username supplied' },",
-				"404:{ description:'User not found' }",
+				"200:{",
+					"description: 'OK', schema:{ type:'string' },",
+					"headers:{",
+						"X-Rate-Limit:{ type:'integer', format:'int32', description:'calls per hour allowed by the user' },",
+						"X-Expires-After:{ type:'string', format:'date-time', description:'date in UTC when token expires' }",
+					"}",
+				"}",
 			"}"
 		}
 	)
-	public void deleteUser(@Path String username) {}
+	public String login(
+			@Query(name="username", description="The username for login", required="true") String username, 
+			@Query(name="password", description="The password for login in clear text", required="true") String password, 
+			RestRequest req, 
+			RestResponse res
+		) throws LoginException {
+		if (! db.isValid(username, password))
+			throw new LoginException();
+		Date d = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
+		req.getSession().setAttribute("login-expires", d);
+		res.setHeader("X-Rate-Limit", "1000");
+		res.setHeader("X-Expires-After", DateUtils.formatDate(d));
+		return "OK";
+	}
+
+	@RestMethod(
+		name="GET", 
+		path="/user/logout",
+		summary="Logs out current logged in user session",
+		swagger={
+			"tags:[ 'user' ],",
+			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+		}
+	)
+	public String logout(RestRequest req) {
+		req.getSession().removeAttribute("login-expires");
+		return "OK";
+	}
 }

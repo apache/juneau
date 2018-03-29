@@ -168,6 +168,52 @@ public abstract class Parser extends BeanContext {
 	public static final String PARSER_autoCloseStreams = PREFIX + "autoCloseStreams.b";
 
 	/**
+	 * Configuration property:  Debug output lines.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>5</code>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#debugOutputLines(int)}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When parse errors occur, this specifies the number of lines of input before and after the
+	 * error location to be printed as part of the exception message.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
+	 * 		.debugOuputLines(100)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>PARSER_debugOutputLines</jsf>, 100)
+	 * 		.build();
+	 * 
+	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
+	 * 	<jk>try</jk> {
+	 * 		p.parse(r, Object.<jk>class</jk>);
+	 * 	} <jk>catch</jk> (ParseException e) {
+	 * 		System.<jsf>err</jsf>.println(e.getMessage());  <jc>// Will display 200 lines of the output.</jc>
+	 * 	}
+	 * </p>
+	 */
+	public static final String PARSER_debugOutputLines = PREFIX + "debugOutputLines.i";
+
+	/**
 	 * Configuration property:  Parser listener.
 	 * 
 	 * <h5 class='section'>Property:</h5>
@@ -427,6 +473,7 @@ public abstract class Parser extends BeanContext {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
+	final int debugOutputLines;
 	final Class<? extends ParserListener> listener;
 
 	/** General parser properties currently set on this parser. */
@@ -439,6 +486,7 @@ public abstract class Parser extends BeanContext {
 		trimStrings = getBooleanProperty(PARSER_trimStrings, false);
 		strict = getBooleanProperty(PARSER_strict, false);
 		autoCloseStreams = getBooleanProperty(PARSER_autoCloseStreams, false);
+		debugOutputLines = getIntegerProperty(PARSER_debugOutputLines, 5);
 		unbuffered = getBooleanProperty(PARSER_unbuffered, false);
 		listener = getClassProperty(PARSER_listener, ParserListener.class, null);
 		this.consumes = new MediaType[consumes.length];

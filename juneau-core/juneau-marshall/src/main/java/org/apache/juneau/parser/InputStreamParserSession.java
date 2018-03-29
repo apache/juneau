@@ -76,9 +76,10 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
+	@SuppressWarnings("resource")
 	@Override /* ParserSession */
 	public final ParserPipe createPipe(Object input) {
-		return new ParserPipe(input, isDebug(), autoCloseStreams, unbuffered, binaryFormat);
+		return setPipe(new ParserPipe(input, isDebug(), autoCloseStreams, unbuffered, binaryFormat));
 	}
 
 	@Override /* Session */

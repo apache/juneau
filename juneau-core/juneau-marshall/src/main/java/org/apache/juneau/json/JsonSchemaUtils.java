@@ -37,6 +37,18 @@ public class JsonSchemaUtils {
 		return getSchema(bs, bs.getClassMeta(type), null, null);
 	}
 	
+	/**
+	 * Returns the JSON-schema for the specified type.
+	 * 
+	 * @param bs The current bean session.
+	 * @param cm The object type.
+	 * @return The schema for the type.
+	 * @throws Exception
+	 */
+	public static ObjectMap getSchema(BeanSession bs, ClassMeta<?> cm) throws Exception {
+		return getSchema(bs, cm, null, null);
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static ObjectMap getSchema(BeanSession bs, ClassMeta<?> eType, String attrName, String[] pNames) throws Exception {
 		ObjectMap out = new ObjectMap();
@@ -50,22 +62,41 @@ public class JsonSchemaUtils {
 		aType = eType;
 
 		sType = eType.getSerializedClassMeta(bs);
-		String type = null;
+		String type = null, format = null;
 
-		if (sType.isEnum() || sType.isCharSequence() || sType.isChar())
+		if (sType.isEnum() || sType.isCharSequence() || sType.isChar()) {
 			type = "string";
-		else if (sType.isNumber())
-			type = "number";
-		else if (sType.isBoolean())
+		} else if (sType.isNumber()) {
+			if (sType.isDecimal()) {
+				type = "number";
+				if (sType.isFloat()) {
+					format = "float";
+				} else if (sType.isDouble()) {
+					format = "double";
+				}
+			} else {
+				type = "integer";
+				if (sType.isShort()) {
+					format = "int16";
+				} else if (sType.isInteger()) {
+					format = "int32";
+				} else if (sType.isLong()) {
+					format = "int64";
+				}
+			}
+		} else if (sType.isBoolean()) {
 			type = "boolean";
-		else if (sType.isMapOrBean())
+		} else if (sType.isMapOrBean()) {
 			type = "object";
-		else if (sType.isCollectionOrArray())
+		} else if (sType.isCollectionOrArray()) {
 			type = "array";
-		else
-			type = "any";
+		} else {
+			type = "string";
+		}
 
 		out.put("type", type);
+		out.appendIfNotNull("format", format);
+		
 		out.put("description", eType.toString());
 		PojoSwap f = eType.getPojoSwap(bs);
 		if (f != null)

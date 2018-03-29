@@ -34,6 +34,7 @@ import org.apache.juneau.utils.*;
 public abstract class ParserSession extends BeanSession {
 
 	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
+	final int debugOutputLines;
 	private final Method javaMethod;
 	private final Object outer;
 
@@ -41,7 +42,11 @@ public abstract class ParserSession extends BeanSession {
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private final ParserListener listener;
+	
+	private Position mark = new Position(-1);
 
+	private ParserPipe pipe;
+	
 	/**
 	 * Create a new session using properties specified in the context.
 	 * 
@@ -56,6 +61,7 @@ public abstract class ParserSession extends BeanSession {
 		trimStrings = getProperty(PARSER_trimStrings, boolean.class, ctx.trimStrings);
 		strict = getProperty(PARSER_strict, boolean.class, ctx.strict);
 		autoCloseStreams = getProperty(PARSER_autoCloseStreams, boolean.class, ctx.autoCloseStreams);
+		debugOutputLines = getProperty(PARSER_debugOutputLines, int.class, ctx.debugOutputLines);
 		unbuffered = getProperty(PARSER_unbuffered, boolean.class, ctx.unbuffered);
 		javaMethod = args.javaMethod;
 		outer = args.outer;
@@ -320,26 +326,22 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Method that gets called when an unknown bean property name is encountered.
 	 * 
-	 * @param pipe The parser input.
 	 * @param propertyName The unknown bean property name.
 	 * @param beanMap The bean that doesn't have the expected property.
-	 * @param line The line number where the property was found.  <code>-1</code> if line numbers are not available.
-	 * @param col The column number where the property was found.  <code>-1</code> if column numbers are not available.
 	 * @throws ParseException
 	 * 	Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
-	protected final <T> void onUnknownProperty(ParserPipe pipe, String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
+	protected final <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap) throws ParseException {
 		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
 		if (! isIgnoreUnknownBeanProperties())
-			throw new ParseException(getLastLocation(),
+			throw new ParseException(this,
 				"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName,
 				beanMap.getClassMeta());
 		if (listener != null)
-			listener.onUnknownBeanProperty(this, pipe, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean(),
-				line, col);
+			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean());
 	}
 
 	/**
@@ -509,12 +511,12 @@ public abstract class ParserSession extends BeanSession {
 		} catch (ParseException e) {
 			throw e;
 		} catch (StackOverflowError e) {
-			throw new ParseException(getLastLocation(), "Depth too deep.  Stack overflow occurred.");
+			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(getLastLocation(), "I/O exception occurred.  exception={0}, message={1}.",
+			throw new ParseException(this, "I/O exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} catch (Exception e) {
-			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
+			throw new ParseException(this, "Exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} finally {
 			checkForWarnings();
@@ -551,7 +553,7 @@ public abstract class ParserSession extends BeanSession {
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ParseException(getLastLocation(), e);
+			throw new ParseException(this, e);
 		} finally {
 			checkForWarnings();
 		}
@@ -600,12 +602,12 @@ public abstract class ParserSession extends BeanSession {
 		} catch (ParseException e) {
 			throw e;
 		} catch (StackOverflowError e) {
-			throw new ParseException(getLastLocation(), "Depth too deep.  Stack overflow occurred.");
+			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(getLastLocation(), "I/O exception occurred.  exception={0}, message={1}.",
+			throw new ParseException(this, "I/O exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} catch (Exception e) {
-			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
+			throw new ParseException(this, "Exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} finally {
 			checkForWarnings();
@@ -655,12 +657,12 @@ public abstract class ParserSession extends BeanSession {
 		} catch (ParseException e) {
 			throw e;
 		} catch (StackOverflowError e) {
-			throw new ParseException(getLastLocation(), "Depth too deep.  Stack overflow occurred.");
+			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(getLastLocation(), "I/O exception occurred.  exception={0}, message={1}.",
+			throw new ParseException(this, "I/O exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} catch (Exception e) {
-			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
+			throw new ParseException(this, "Exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} finally {
 			checkForWarnings();
@@ -703,7 +705,7 @@ public abstract class ParserSession extends BeanSession {
 			if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, s);
 			else
-				throw new ParseException(getLastLocation(), "Invalid conversion from string to class ''{0}''", type);
+				throw new ParseException(this, "Invalid conversion from string to class ''{0}''", type);
 		}
 
 		if (swap != null)
@@ -761,5 +763,75 @@ public abstract class ParserSession extends BeanSession {
 	@SuppressWarnings("unchecked")
 	public <T extends ParserListener> T getListener(Class<T> c) {
 		return (T)listener;
+	}
+
+	/**
+	 * Returns the number of lines to include in exception messages before and after the error location in the input.
+	 * 
+	 * @return The number of lines before and after the error.
+	 */
+	public int getDebugOutputLines() {
+		return debugOutputLines;
+	}
+	
+	/**
+	 * The {@link #createPipe(Object)} method should call this method to set the pipe for debugging purposes.
+	 * 
+	 * @param pipe The pipe created for this session.
+	 * @return The same pipe.
+	 */
+	protected ParserPipe setPipe(ParserPipe pipe) {
+		this.pipe = pipe;
+		return pipe;
+	}
+	
+	/**
+	 * Returns the current position into the reader or input stream.
+	 * 
+	 * @return 
+	 * 	The current position into the reader or input stream.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Position getPosition() {
+		if (mark.line != -1 || mark.column != -1 || mark.position != -1)
+			return mark;
+		if (pipe == null)
+			return Position.UNKNOWN;
+		return pipe.getPosition();
+	}
+	
+	/**
+	 * Marks the current position.
+	 */
+	protected void mark() {
+		if (pipe != null) {
+			Position p = pipe.getPosition();
+			mark.line = p.line;
+			mark.column = p.column;
+			mark.position = p.position;
+		}
+	}
+
+	/**
+	 * Unmarks the current position.
+	 */
+	protected void unmark() {
+		mark.line = -1;
+		mark.column = -1;
+		mark.position = -1;
+	}
+
+	/**
+	 * Returns the input as a string.
+	 * 
+	 * <p>
+	 * This always returns a value for input of type {@link CharSequence}.
+	 * <br>For other input types, use {@link BeanContext#BEAN_debug} setting to enable caching to a string
+	 * before parsing so that this method returns the input.
+	 * 
+	 * @return The input as a string, or <jk>null</jk> if no pipe has been created or we're reading from an uncached reader or input stream source.
+	 */
+	public String getInputAsString() {
+		return pipe == null ? null : pipe.getInputAsString();
 	}
 }

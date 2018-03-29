@@ -543,39 +543,116 @@ class RestParamDefaults {
 
 	static final class PathParameterObject extends RestParam {
 
-		protected PathParameterObject(String name, Type type) {
-			super(PATH, name, type);
+		protected PathParameterObject(String name, Path a, Type type) {
+			super(PATH, name, type, getMetaData(a));
 		}
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getPathMatch().get(name, type);
 		}
+		
+		private static final ObjectMap getMetaData(Path a) {
+			if (a == null)
+				return ObjectMap.EMPTY_MAP;
+			return new ObjectMap()
+				.appendIfNotEmpty("description", a.description())
+				.appendIfNotEmpty("type", a.type())
+				.appendIfNotEmpty("format", a.format())
+				.appendIfNotEmpty("pattern", a.pattern())
+				.appendIfNotEmpty("maximum", a.maximum())
+				.appendIfNotEmpty("minimum", a.minimum())
+				.appendIfNotEmpty("multipleOf", a.multipleOf())
+				.appendIfNotEmpty("maxLength", a.maxLength())
+				.appendIfNotEmpty("minLength", a.minLength())
+				.appendIfNotEmpty("allowEmptyVals", a.allowEmptyVals())
+				.appendIfNotEmpty("exclusiveMaximum", a.exclusiveMaximum())
+				.appendIfNotEmpty("exclusiveMimimum", a.exclusiveMimimum())
+				.appendIfNotEmpty("schema", a.schema())
+				.appendIfNotEmpty("enum", a._enum())
+			;
+		}
 	}
 
 	static final class BodyObject extends RestParam {
 
-		protected BodyObject(Type type) {
-			super(BODY, null, type);
+		protected BodyObject(Method method, Body a, Type type) {
+			super(BODY, null, type, getMetaData(a));
 		}
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getBody().asType(type);
 		}
+		
+		private static final ObjectMap getMetaData(Body a) {
+			if (a == null)
+				return ObjectMap.EMPTY_MAP;
+			return new ObjectMap()
+				.appendIfNotEmpty("description", a.description())
+				.appendIfNotEmpty("required", a.required())
+				.appendIfNotEmpty("type", a.type())
+				.appendIfNotEmpty("format", a.format())
+				.appendIfNotEmpty("pattern", a.pattern())
+				.appendIfNotEmpty("collectionFormat", a.collectionFormat())
+				.appendIfNotEmpty("maximum", a.maximum())
+				.appendIfNotEmpty("minimum", a.minimum())
+				.appendIfNotEmpty("multipleOf", a.multipleOf())
+				.appendIfNotEmpty("maxLength", a.maxLength())
+				.appendIfNotEmpty("minLength", a.minLength())
+				.appendIfNotEmpty("maxItems", a.maxItems())
+				.appendIfNotEmpty("minItems", a.minItems())
+				.appendIfNotEmpty("allowEmptyVals", a.allowEmptyVals())
+				.appendIfNotEmpty("exclusiveMaximum", a.exclusiveMaximum())
+				.appendIfNotEmpty("exclusiveMimimum", a.exclusiveMimimum())
+				.appendIfNotEmpty("uniqueItems", a.uniqueItems())
+				.appendIfNotEmpty("schema", a.schema())
+				.appendIfNotEmpty("default", a._default())
+				.appendIfNotEmpty("enum", a._enum())
+				.appendIfNotEmpty("items", a.items())
+			;
+		}
 	}
 
 	static final class HeaderObject extends RestParam {
 		private final HttpPartParser partParser;
 
-		protected HeaderObject(Header a, Type type, PropertyStore ps) {
-			super(HEADER, firstNonEmpty(a.name(), a.value()), type);
+		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps) {
+			super(HEADER, firstNonEmpty(a.name(), a.value()), type, getMetaData(a));
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getHeaders().get(partParser, name, type);
+		}
+		
+		private static ObjectMap getMetaData(Header a) {
+			if (a == null)
+				return ObjectMap.EMPTY_MAP;
+			return new ObjectMap()
+				.appendIfNotEmpty("description", a.description())
+				.appendIfNotEmpty("required", a.required())
+				.appendIfNotEmpty("type", a.type())
+				.appendIfNotEmpty("format", a.format())
+				.appendIfNotEmpty("pattern", a.pattern())
+				.appendIfNotEmpty("collectionFormat", a.collectionFormat())
+				.appendIfNotEmpty("maximum", a.maximum())
+				.appendIfNotEmpty("minimum", a.minimum())
+				.appendIfNotEmpty("multipleOf", a.multipleOf())
+				.appendIfNotEmpty("maxLength", a.maxLength())
+				.appendIfNotEmpty("minLength", a.minLength())
+				.appendIfNotEmpty("maxItems", a.maxItems())
+				.appendIfNotEmpty("minItems", a.minItems())
+				.appendIfNotEmpty("allowEmptyVals", a.allowEmptyVals())
+				.appendIfNotEmpty("exclusiveMaximum", a.exclusiveMaximum())
+				.appendIfNotEmpty("exclusiveMimimum", a.exclusiveMimimum())
+				.appendIfNotEmpty("uniqueItems", a.uniqueItems())
+				.appendIfNotEmpty("schema", a.schema())
+				.appendIfNotEmpty("default", a._default())
+				.appendIfNotEmpty("enum", a._enum())
+				.appendIfNotEmpty("items", a.items())
+			;
 		}
 	}
 
@@ -598,7 +675,7 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 
 		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps) throws ServletException {
-			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type);
+			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type, getMetaData(a));
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
@@ -611,6 +688,34 @@ class RestParamDefaults {
 				return req.getFormData().getAll(partParser, name, type);
 			return req.getFormData().get(partParser, name, type);
 		}
+		
+		private static final ObjectMap getMetaData(FormData a) {
+			if (a == null)
+				return ObjectMap.EMPTY_MAP;
+			return new ObjectMap()
+				.appendIfNotEmpty("description", a.description())
+				.appendIfNotEmpty("required", a.required())
+				.appendIfNotEmpty("type", a.type())
+				.appendIfNotEmpty("format", a.format())
+				.appendIfNotEmpty("pattern", a.pattern())
+				.appendIfNotEmpty("collectionFormat", a.collectionFormat())
+				.appendIfNotEmpty("maximum", a.maximum())
+				.appendIfNotEmpty("minimum", a.minimum())
+				.appendIfNotEmpty("multipleOf", a.multipleOf())
+				.appendIfNotEmpty("maxLength", a.maxLength())
+				.appendIfNotEmpty("minLength", a.minLength())
+				.appendIfNotEmpty("maxItems", a.maxItems())
+				.appendIfNotEmpty("minItems", a.minItems())
+				.appendIfNotEmpty("allowEmptyVals", a.allowEmptyVals())
+				.appendIfNotEmpty("exclusiveMaximum", a.exclusiveMaximum())
+				.appendIfNotEmpty("exclusiveMimimum", a.exclusiveMimimum())
+				.appendIfNotEmpty("uniqueItems", a.uniqueItems())
+				.appendIfNotEmpty("schema", a.schema())
+				.appendIfNotEmpty("default", a._default())
+				.appendIfNotEmpty("enum", a._enum())
+				.appendIfNotEmpty("items", a.items())
+			;
+		}
 	}
 
 	static final class QueryObject extends RestParam {
@@ -618,7 +723,7 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 
 		protected QueryObject(Method method, Query a, Type type, PropertyStore ps) throws ServletException {
-			super(QUERY, firstNonEmpty(a.name(), a.value()), type);
+			super(QUERY, firstNonEmpty(a.name(), a.value()), type, getMetaData(a));
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
@@ -631,6 +736,35 @@ class RestParamDefaults {
 				return req.getQuery().getAll(partParser, name, type);
 			return req.getQuery().get(partParser, name, type);
 		}
+		
+		private static final ObjectMap getMetaData(Query a) {
+			if (a == null)
+				return ObjectMap.EMPTY_MAP;
+			return new ObjectMap()
+				.appendIfNotEmpty("description", a.description())
+				.appendIfNotEmpty("required", a.required())
+				.appendIfNotEmpty("type", a.type())
+				.appendIfNotEmpty("format", a.format())
+				.appendIfNotEmpty("pattern", a.pattern())
+				.appendIfNotEmpty("collectionFormat", a.collectionFormat())
+				.appendIfNotEmpty("maximum", a.maximum())
+				.appendIfNotEmpty("minimum", a.minimum())
+				.appendIfNotEmpty("multipleOf", a.multipleOf())
+				.appendIfNotEmpty("maxLength", a.maxLength())
+				.appendIfNotEmpty("minLength", a.minLength())
+				.appendIfNotEmpty("maxItems", a.maxItems())
+				.appendIfNotEmpty("minItems", a.minItems())
+				.appendIfNotEmpty("allowEmptyVals", a.allowEmptyVals())
+				.appendIfNotEmpty("exclusiveMaximum", a.exclusiveMaximum())
+				.appendIfNotEmpty("exclusiveMimimum", a.exclusiveMimimum())
+				.appendIfNotEmpty("uniqueItems", a.uniqueItems())
+				.appendIfNotEmpty("schema", a.schema())
+				.appendIfNotEmpty("default", a._default())
+				.appendIfNotEmpty("enum", a._enum())
+				.appendIfNotEmpty("items", a.items())
+			;
+		}
+
 	}
 
 	static final class HasFormDataObject extends RestParam {

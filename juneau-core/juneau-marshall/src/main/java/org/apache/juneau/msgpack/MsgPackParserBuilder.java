@@ -68,6 +68,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public MsgPackParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+	
+	@Override /* ParserBuilder */
 	public MsgPackParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

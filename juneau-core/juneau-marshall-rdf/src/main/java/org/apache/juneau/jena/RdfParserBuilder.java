@@ -362,6 +362,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public RdfParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+	
+	@Override /* ParserBuilder */
 	public RdfParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;

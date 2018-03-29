@@ -68,6 +68,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
+	public JsoParserBuilder debugOutputLines(int value) {
+		super.debugOutputLines(value);
+		return this;
+	}
+	
+	@Override /* ParserBuilder */
 	public JsoParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;
