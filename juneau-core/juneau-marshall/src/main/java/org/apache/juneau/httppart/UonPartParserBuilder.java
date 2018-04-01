@@ -190,6 +190,12 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -417,6 +423,12 @@ public class UonPartParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> UonPartParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public UonPartParserBuilder set(String name, Object value) {
 		super.set(name, value);

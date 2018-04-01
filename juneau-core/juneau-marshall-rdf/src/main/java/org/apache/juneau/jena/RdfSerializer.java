@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.jena.Constants.*;
 
 import java.util.*;
 

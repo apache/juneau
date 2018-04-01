@@ -350,6 +350,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;

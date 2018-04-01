@@ -309,6 +309,28 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Conditionally appends a value to this map.
+	 * 
+	 * @param overwrite Overwrite the previous value if there was one.
+	 * @param skipNullValue Skip adding the value if the value is <jk>null</jk>.
+	 * @param skipEmptyValue Skip adding the value if the value is an empty string.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendIf(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
+		if (value == null && skipNullValue)
+			return this;
+		if (StringUtils.isEmpty(value) && skipEmptyValue)
+			return this;
+		Object current = get(key);
+		if (current == null || overwrite) 
+			put(key, value);
+		return this;
+	}
+
+	
+	/**
 	 * Convenience method for adding an entry to this map.
 	 * 
 	 * <p>
@@ -321,7 +343,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public ObjectMap appendIfNotEmpty(String key, String value) {
+	public ObjectMap appendSkipEmpty(String key, String value) {
 		if (! StringUtils.isEmpty(value))
 			append(key, value);
 		return this;
@@ -340,7 +362,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public ObjectMap appendIfNotNull(String key, Object value) {
+	public ObjectMap appendSkipNull(String key, Object value) {
 		if (value != null)
 			append(key, value);
 		return this;

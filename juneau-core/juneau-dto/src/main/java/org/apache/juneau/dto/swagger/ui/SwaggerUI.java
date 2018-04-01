@@ -235,11 +235,11 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	}
 
 	private Div examples(Swagger s, ParameterInfo pi) {
-		return examples(s, pi.getSchema());
+		return examples(s, resolve(s, pi.getSchema()), pi.getExamples());
 	}
 	
 	private Div examples(Swagger s, ResponseInfo ri) {
-		return examples(s, ri.getSchema());
+		return examples(s, resolve(s, ri.getSchema()), ri.getExamples());
 	}
 	
 	// If SchemaInfo is a "$ref", resolve it, otherwise a no-op.
@@ -252,13 +252,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return si;
 	}
 	
-	private Div examples(Swagger s, SchemaInfo si) {
-		if (si == null)
-			return null;
-		
-		si = resolve(s, si);
-		
-		Map<String,String> examples = si.getExamples();
+	private Div examples(Swagger s, SchemaInfo si, Map<String,?> examples) {
 		if (examples == null)
 			return null;
 		
@@ -268,9 +262,9 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		
 		div.child(div(getSchemaModel(s, si))._class("model active").attr("data-name", "model"));
 
-		for (Map.Entry<String,String> e : examples.entrySet()) {
+		for (Map.Entry<String,?> e : examples.entrySet()) {
 			String name = e.getKey();
-			String value = e.getValue();
+			String value = e.getValue().toString();
 			select.child(option(name, name));
 			div.child(div(value.replaceAll("\\n", "\n"))._class("example").attr("data-name", name));
 		}

@@ -15,7 +15,9 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import org.apache.juneau.html.*;
+import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
@@ -23,6 +25,7 @@ import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.xmlschema.*;
 
 /**
  * Basic configuration for a REST resource.

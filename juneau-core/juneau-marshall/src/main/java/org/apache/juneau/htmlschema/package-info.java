@@ -10,43 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.xml;
-
-import org.apache.juneau.*;
-import org.apache.juneau.serializer.*;
 
 /**
- * Serializes POJO metadata to HTTP responses as XML.
- * 
- * <h5 class='topic'>Media types</h5>
- * 
- * Handles <code>Accept</code> types:  <code><b>text/xml+schema</b></code>
- * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/xml</b></code>
- * 
- * <h5 class='topic'>Description</h5>
- * 
- * Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
+ * HTML-Schema Marshalling Support
  */
-public class XmlSchemaSerializer extends XmlSerializer {
+package org.apache.juneau.htmlschema;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param ps Initialize with the specified config property store.
-	 */
-	public XmlSchemaSerializer(PropertyStore ps) {
-		super(
-			ps.builder()
-				.set(XML_enableNamespaces, true)
-				.build(), 
-			"text/xml", 
-			"text/xml+schema"
-		);
-	}
-
-	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new XmlSchemaSerializerSession(this, args);
-	}
-}

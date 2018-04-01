@@ -234,6 +234,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -461,6 +467,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> UrlEncodingParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public UrlEncodingParserBuilder set(String name, Object value) {
 		super.set(name, value);

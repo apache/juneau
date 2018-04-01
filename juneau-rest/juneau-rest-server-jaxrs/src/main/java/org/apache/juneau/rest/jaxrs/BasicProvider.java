@@ -18,10 +18,12 @@ import javax.ws.rs.ext.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.xmlschema.*;
 
 /**
  * JAX-RS provider for the same serialize/parse support provided by the {@link BasicRestServlet} class.

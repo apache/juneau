@@ -74,7 +74,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * 
 	 * @return The XML format, or {@link XmlFormat#DEFAULT} if annotation not specified.
 	 */
-	protected XmlFormat getXmlFormat() {
+	public XmlFormat getXmlFormat() {
 		return xmlFormat;
 	}
 
@@ -83,7 +83,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * 
 	 * @return The child element, or <jk>null</jk> if annotation not specified.
 	 */
-	protected String getChildName() {
+	public String getChildName() {
 		return childName;
 	}
 

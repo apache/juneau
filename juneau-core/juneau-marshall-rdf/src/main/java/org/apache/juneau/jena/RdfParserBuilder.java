@@ -500,6 +500,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -727,6 +733,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> RdfParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public RdfParserBuilder set(String name, Object value) {
 		super.set(name, value);

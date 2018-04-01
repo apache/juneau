@@ -10,35 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.json;
 
-import static org.junit.Assert.*;
+/**
+ * JSON-Schema Marshalling Support
+ */
+package org.apache.juneau.jsonschema;
 
-import org.junit.*;
-
-public class JsonSchemaTest {
-
-	//====================================================================================================
-	// Primitive objects
-	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
-
-		JsonSchemaSerializer s = JsonSerializer.DEFAULT_LAX.getSchemaSerializer();
-
-		Object o = new String();
-		assertEquals("{type:'string',description:'java.lang.String'}", s.serialize(o));
-
-		o = new Integer(123);
-		assertEquals("{type:'number',description:'java.lang.Integer'}", s.serialize(o));
-
-		o = new Float(123);
-		assertEquals("{type:'number',description:'java.lang.Float'}", s.serialize(o));
-
-		o = new Double(123);
-		assertEquals("{type:'number',description:'java.lang.Double'}", s.serialize(o));
-
-		o = Boolean.TRUE;
-		assertEquals("{type:'boolean',description:'java.lang.Boolean'}", s.serialize(o));
-	}
-}

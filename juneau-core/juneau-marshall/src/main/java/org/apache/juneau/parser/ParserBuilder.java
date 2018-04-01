@@ -366,6 +366,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> ParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -533,6 +539,12 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public ParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
 	@Override /* BeanContextBuilder */
 	public ParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

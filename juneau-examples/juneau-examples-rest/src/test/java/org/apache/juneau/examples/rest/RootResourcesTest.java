@@ -104,8 +104,6 @@ public class RootResourcesTest extends RestTestcase {
 			try (RestCall r = client.doGet("")) {
 				ObjectMap m = r.getResponse(ObjectMap.class);
 				if (debug) System.err.println(m);
-				assertEquals("org.apache.juneau.rest.labels.ChildResourceDescriptions<org.apache.juneau.rest.labels.ResourceDescription>", m.getString("description"));
-				assertEquals("org.apache.juneau.rest.labels.ResourceDescription", m.getObjectMap("items").getString("description"));
 				client.closeQuietly();
 			}
 		}

@@ -12,15 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.config.ConfigMod.*;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-
-import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.encode.*;

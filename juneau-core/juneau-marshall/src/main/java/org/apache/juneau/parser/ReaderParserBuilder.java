@@ -277,6 +277,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -504,6 +510,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> ReaderParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public ReaderParserBuilder set(String name, Object value) {
 		super.set(name, value);

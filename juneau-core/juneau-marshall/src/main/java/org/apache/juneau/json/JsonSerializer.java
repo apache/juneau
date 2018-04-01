@@ -15,6 +15,7 @@ package org.apache.juneau.json;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -445,7 +446,7 @@ public class JsonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public JsonSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsonSerializerSession(this, args);
 	}
 

@@ -291,6 +291,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public UonParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -518,6 +524,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> UonParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public UonParserBuilder set(String name, Object value) {
 		super.set(name, value);

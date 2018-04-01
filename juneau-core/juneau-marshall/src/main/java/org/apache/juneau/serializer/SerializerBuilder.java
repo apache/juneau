@@ -705,6 +705,12 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -909,6 +915,18 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> SerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
@@ -923,12 +941,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 

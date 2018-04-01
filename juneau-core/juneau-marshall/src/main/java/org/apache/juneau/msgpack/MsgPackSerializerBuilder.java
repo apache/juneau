@@ -295,6 +295,12 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public MsgPackSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -499,6 +505,18 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public MsgPackSerializerBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> MsgPackSerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
@@ -513,12 +531,6 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 

@@ -258,6 +258,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> InputStreamParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -425,6 +431,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public InputStreamParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
 	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

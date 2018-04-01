@@ -325,6 +325,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public CsvSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -529,6 +535,18 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public CsvSerializerBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> CsvSerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
@@ -543,12 +561,6 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public CsvSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 

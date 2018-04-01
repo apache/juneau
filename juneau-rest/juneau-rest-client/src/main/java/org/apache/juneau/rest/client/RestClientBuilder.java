@@ -2116,6 +2116,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestClientBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -2345,6 +2351,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> RestClientBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public RestClientBuilder set(String name, Object value) {
 		super.set(name, value);

@@ -212,6 +212,12 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -439,6 +445,12 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> YamlParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public YamlParserBuilder set(String name, Object value) {
 		super.set(name, value);

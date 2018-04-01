@@ -15,6 +15,7 @@ package org.apache.juneau.xml;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.xmlschema.*;
 
 /**
  * Serializes POJO models to XML.

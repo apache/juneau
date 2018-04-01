@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.junit.Assert.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 

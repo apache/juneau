@@ -57,7 +57,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
  * </ul>
  */
-@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,x-examples,$ref,*")
+@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
 public class SchemaInfo extends SwaggerElement {
 
 	private String 
@@ -97,7 +97,6 @@ public class SchemaInfo extends SwaggerElement {
 		required;
 	private Map<String,Map<String,Object>> properties;
 	private Map<String,Object> additionalProperties;
-	private Map<String,String> examples;
 
 	/**
 	 * Bean property getter:  <property>format</property>.
@@ -1121,77 +1120,6 @@ public class SchemaInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>x-examples</property>.
-	 * 
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@BeanProperty("x-examples")
-	public Map<String,String> getExamples() {
-		return examples;
-	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 * 
-	 * @param value 
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	@BeanProperty("x-examples")
-	public SchemaInfo setExamples(Map<String,String> value) {
-		examples = newMap(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>examples</property> property.
-	 * 
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo addExamples(Map<String,String> values) {
-		examples = addToMap(examples, values);
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>examples</property> property.
-	 * 
-	 * @param name The extra property name.
-	 * @param value The extra property value.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo example(String name, String value) {
-		additionalProperties = addToMap(additionalProperties, name, value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>examples</property> property.
-	 * 
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Map&lt;String,String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	examples(<js>"{'text/json':'{foo:\\'bar\\'}'}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo examples(Object...values) {
-		examples = addToMap(examples, values, String.class, String.class);
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>discriminator</property>.
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1451,7 +1379,6 @@ public class SchemaInfo extends SwaggerElement {
 			case "xml": return toType(getXml(), type);
 			case "externalDocs": return toType(getExternalDocs(), type);
 			case "example": return toType(getExample(), type);
-			case "x-examples": return toType(getExamples(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1490,7 +1417,6 @@ public class SchemaInfo extends SwaggerElement {
 			case "xml": return xml(value);
 			case "externalDocs": return externalDocs(value);
 			case "example": return example(value);
-			case "x-examples": return examples(value);
 			default: 
 				super.set(property, value);
 				return this;
@@ -1528,8 +1454,7 @@ public class SchemaInfo extends SwaggerElement {
 			.appendIf(readOnly != null, "readOnly")
 			.appendIf(xml != null, "xml")
 			.appendIf(externalDocs != null, "externalDocs")
-			.appendIf(example != null, "example")
-			.appendIf(examples != null, "x-examples");
+			.appendIf(example != null, "example");
 		return new MultiSet<>(s, super.keySet());
 	}
 

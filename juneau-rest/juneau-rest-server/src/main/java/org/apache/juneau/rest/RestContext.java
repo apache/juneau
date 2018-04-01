@@ -35,10 +35,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
@@ -54,6 +56,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.xmlschema.*;
 
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.

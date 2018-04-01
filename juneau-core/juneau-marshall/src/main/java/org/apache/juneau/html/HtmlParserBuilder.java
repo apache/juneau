@@ -234,6 +234,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -461,6 +467,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> HtmlParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public HtmlParserBuilder set(String name, Object value) {
 		super.set(name, value);

@@ -506,6 +506,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -710,6 +716,18 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> HtmlSerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
@@ -724,12 +742,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 

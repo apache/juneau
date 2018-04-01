@@ -142,7 +142,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * 
 	 * @return Map of property names to property metadata.
 	 */
-	protected Map<String,BeanPropertyMeta> getAttrProperties() {
+	public Map<String,BeanPropertyMeta> getAttrProperties() {
 		return attrs;
 	}
 
@@ -215,7 +215,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * 
 	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
 	 */
-	protected BeanPropertyMeta getContentProperty() {
+	public BeanPropertyMeta getContentProperty() {
 		return contentProperty;
 	}
 
@@ -246,7 +246,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * 
 	 * @return The format of the inner XML content of this bean.
 	 */
-	protected XmlFormat getContentFormat() {
+	public XmlFormat getContentFormat() {
 		return contentFormat;
 	}
 

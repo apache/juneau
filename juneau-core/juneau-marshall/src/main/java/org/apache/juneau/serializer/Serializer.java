@@ -931,7 +931,7 @@ public abstract class Serializer extends BeanContext {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public final SerializerSession createSession() {
+	public SerializerSession createSession() {
 		return createSession(createDefaultSessionArgs());
 	}
 

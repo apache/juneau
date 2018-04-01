@@ -326,6 +326,12 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -530,6 +536,18 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartSerializerBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> UonSerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
@@ -547,14 +565,8 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder debug() {
-		super.debug();
-		return this;
-	}
-
 	@Override /* ContextBuilder */
-	public UonPartSerializerBuilder set(String name, Object value) {
+	public UonSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}

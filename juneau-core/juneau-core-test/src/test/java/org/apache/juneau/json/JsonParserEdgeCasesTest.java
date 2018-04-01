@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.StringUtils.format;
 import static org.junit.Assert.*;
 
 import java.io.*;

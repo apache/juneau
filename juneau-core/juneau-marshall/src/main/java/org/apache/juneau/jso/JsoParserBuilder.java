@@ -206,6 +206,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -433,6 +439,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> JsoParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public JsoParserBuilder set(String name, Object value) {
 		super.set(name, value);

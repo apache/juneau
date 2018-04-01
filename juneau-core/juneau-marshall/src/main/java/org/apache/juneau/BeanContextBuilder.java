@@ -1339,6 +1339,23 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 	
 	/**
+	 * Configuration property:  Use enum names.
+	 * 
+	 * <p>
+	 * When enabled, enums are always serialized by name instead of using {@link Object#toString()}.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder useEnumNames() {
+		return set(BEAN_useEnumNames, true);
+	}
+
+	/**
 	 * Configuration property:  Use interface proxies.
 	 * 
 	 * <p>

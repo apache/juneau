@@ -199,6 +199,18 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public CsvParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public CsvParserBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public CsvParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -207,12 +219,6 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public CsvParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public CsvParserBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
 		return this;
 	}
 
@@ -438,6 +444,12 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> CsvParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public CsvParserBuilder set(String name, Object value) {
 		super.set(name, value);

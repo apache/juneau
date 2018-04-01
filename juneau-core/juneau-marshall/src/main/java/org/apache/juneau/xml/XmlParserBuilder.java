@@ -573,6 +573,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> XmlParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public XmlParserBuilder set(String name, Object value) {
 		super.set(name, value);

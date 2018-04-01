@@ -14,10 +14,12 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.json.JsonSerializer.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -69,12 +71,36 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		serializeAnything(getJsonWriter(out), o, getExpectedRootType(o), "root", null);
 	}
 
-	/*
+	/**
+	 * Method that can be called from subclasses to serialize an object to JSON.
+	 * 
+	 * <p>
+	 * Used by {@link JsonSchemaSerializerSession} for serializing examples to JSON.
+	 * 
+	 * @param o The object to serialize.
+	 * @return The serialized object.
+	 * @throws Exception
+	 */
+	protected String serializeJson(Object o) throws Exception {
+		StringWriter sw = new StringWriter();
+		serializeAnything(getJsonWriter(createPipe(sw)), o, getExpectedRootType(o), "root", null);
+		return sw.toString();
+	}
+	
+	/**
 	 * Workhorse method.
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
+	 * 
+	 * @param out The output writer.
+	 * @param o The object to serialize.
+	 * @param eType The expected type.
+	 * @param attrName The attribute name.
+	 * @param pMeta The bean property currently being parsed.
+	 * @return The same writer passed in.
+	 * @throws Exception 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	SerializerWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType,	String attrName, BeanPropertyMeta pMeta) throws Exception {
+	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
 
 		if (o == null) {
 			out.append("null");

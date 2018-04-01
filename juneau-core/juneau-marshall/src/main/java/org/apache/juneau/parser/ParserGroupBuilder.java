@@ -471,6 +471,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -698,6 +704,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> ParserGroupBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public ParserGroupBuilder set(String name, Object value) {
 		super.set(name, value);

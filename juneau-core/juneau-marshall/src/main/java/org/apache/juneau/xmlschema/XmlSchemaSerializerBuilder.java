@@ -10,23 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.json;
+package org.apache.juneau.xmlschema;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.xml.*;
 
 /**
- * Builder class for building instances of JSON Schema serializers.
+ * Builder class for building instances of XML Schema serializers.
  */
-public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
+public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public JsonSchemaSerializerBuilder() {
+	public XmlSchemaSerializerBuilder() {
 		super();
 	}
 
@@ -35,13 +36,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public JsonSchemaSerializerBuilder(PropertyStore ps) {
+	public XmlSchemaSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializer build() {
-		return build(JsonSchemaSerializer.class);
+	public XmlSchemaSerializer build() {
+		return build(XmlSchemaSerializer.class);
 	}
 
 
@@ -49,583 +50,607 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
-	@Override /* JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder escapeSolidus(boolean value) {
-		super.escapeSolidus(value);
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder addNamespaceUrisToRoot(boolean value) {
+		super.addNamespaceUrisToRoot(value);
 		return this;
 	}
 
-	@Override /* JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder escapeSolidus() {
-		super.escapeSolidus();
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder addNamespaceUrisToRoot() {
+		super.addNamespaceUrisToRoot();
 		return this;
 	}
 
-	@Override /* JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder simple(boolean value) {
-		super.simple(value);
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder autoDetectNamespaces(boolean value) {
+		super.autoDetectNamespaces(value);
 		return this;
 	}
 
-	@Override /* JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder simple() {
-		super.simple();
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder defaultNamespace(String value) {
+		super.defaultNamespace(value);
 		return this;
 	}
 
-	@Override /* JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder ssq() {
-		super.ssq();
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder enableNamespaces(boolean value) {
+		super.enableNamespaces(value);
+		return this;
+	}
+
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder namespaces(Namespace...values) {
+		super.namespaces(values);
+		return this;
+	}
+
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder xsNamespace(Namespace value) {
+		super.xsNamespace(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder addBeanTypes(boolean value) {
+	public XmlSchemaSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder addBeanTypes() {
+	public XmlSchemaSerializerBuilder addBeanTypes() {
 		super.addBeanTypes();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder addRootType(boolean value) {
+	public XmlSchemaSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder addRootType() {
+	public XmlSchemaSerializerBuilder addRootType() {
 		super.addRootType();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder detectRecursions(boolean value) {
+	public XmlSchemaSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder detectRecursions() {
+	public XmlSchemaSerializerBuilder detectRecursions() {
 		super.detectRecursions();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder ignoreRecursions(boolean value) {
+	public XmlSchemaSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder ignoreRecursions() {
+	public XmlSchemaSerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
 		return this;
 	}
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder initialDepth(int value) {
+	public XmlSchemaSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
+	public XmlSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder maxDepth(int value) {
+	public XmlSchemaSerializerBuilder maxDepth(int value) {
 		super.maxDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder maxIndent(int value) {
+	public XmlSchemaSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder quoteChar(char value) {
+	public XmlSchemaSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder sortCollections(boolean value) {
+	public XmlSchemaSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder sortCollections() {
+	public XmlSchemaSerializerBuilder sortCollections() {
 		super.sortCollections();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder sortMaps(boolean value) {
+	public XmlSchemaSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder sortMaps() {
+	public XmlSchemaSerializerBuilder sortMaps() {
 		super.sortMaps();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder sq() {
+	public XmlSchemaSerializerBuilder sq() {
 		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimEmptyCollections(boolean value) {
+	public XmlSchemaSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimEmptyCollections() {
+	public XmlSchemaSerializerBuilder trimEmptyCollections() {
 		super.trimEmptyCollections();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimEmptyMaps(boolean value) {
+	public XmlSchemaSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimEmptyMaps() {
+	public XmlSchemaSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimNullProperties(boolean value) {
+	public XmlSchemaSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimStrings(boolean value) {
+	public XmlSchemaSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimStrings() {
+	public XmlSchemaSerializerBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder uriContext(UriContext value) {
+	public XmlSchemaSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder uriRelativity(UriRelativity value) {
+	public XmlSchemaSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder uriResolution(UriResolution value) {
+	public XmlSchemaSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder useWhitespace(boolean value) {
+	public XmlSchemaSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder useWhitespace() {
+	public XmlSchemaSerializerBuilder useWhitespace() {
 		super.useWhitespace();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder ws() {
+	public XmlSchemaSerializerBuilder ws() {
 		super.ws();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireDefaultConstructor(boolean value) {
+	public XmlSchemaSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireDefaultConstructor() {
+	public XmlSchemaSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireSerializable(boolean value) {
+	public XmlSchemaSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireSerializable() {
+	public XmlSchemaSerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireSettersForGetters(boolean value) {
+	public XmlSchemaSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireSettersForGetters() {
+	public XmlSchemaSerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireSomeProperties(boolean value) {
+	public XmlSchemaSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
+	public XmlSchemaSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanMapPutReturnsOldValue() {
+	public XmlSchemaSerializerBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanConstructorVisibility(Visibility value) {
+	public XmlSchemaSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanClassVisibility(Visibility value) {
+	public XmlSchemaSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFieldVisibility(Visibility value) {
+	public XmlSchemaSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanMethodVisibility(Visibility value) {
+	public XmlSchemaSerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder useJavaBeanIntrospector(boolean value) {
+	public XmlSchemaSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder useJavaBeanIntrospector() {
+	public XmlSchemaSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder useInterfaceProxies(boolean value) {
+	public XmlSchemaSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
+	public XmlSchemaSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignoreUnknownBeanProperties() {
+	public XmlSchemaSerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
+	public XmlSchemaSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
+	public XmlSchemaSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+	public XmlSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+	public XmlSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+	public XmlSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+	public XmlSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder sortProperties(boolean value) {
+	public XmlSchemaSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder sortProperties() {
+	public XmlSchemaSerializerBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanPackages(Object...values) {
+	public XmlSchemaSerializerBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanPackages(String...values) {
+	public XmlSchemaSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanPackages(boolean append, Object...values) {
+	public XmlSchemaSerializerBuilder notBeanPackages(boolean append, Object...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanPackagesRemove(Object...values) {
+	public XmlSchemaSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanClasses(Object...values) {
+	public XmlSchemaSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanClasses(Class<?>...values) {
+	public XmlSchemaSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanClasses(boolean append, Object...values) {
+	public XmlSchemaSerializerBuilder notBeanClasses(boolean append, Object...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder notBeanClassesRemove(Object...values) {
+	public XmlSchemaSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFilters(Object...values) {
+	public XmlSchemaSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFilters(Class<?>...values) {
+	public XmlSchemaSerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFilters(boolean append, Object...values) {
+	public XmlSchemaSerializerBuilder beanFilters(boolean append, Object...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFiltersRemove(Object...values) {
+	public XmlSchemaSerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder pojoSwaps(Object...values) {
+	public XmlSchemaSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder pojoSwaps(Class<?>...values) {
+	public XmlSchemaSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder pojoSwaps(boolean append, Object...values) {
+	public XmlSchemaSerializerBuilder pojoSwaps(boolean append, Object...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder pojoSwapsRemove(Object...values) {
+	public XmlSchemaSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder implClasses(Map<String,Class<?>> values) {
+	public XmlSchemaSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> JsonSchemaSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public <T> XmlSchemaSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanDictionary(Object...values) {
+	public XmlSchemaSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanDictionary(Class<?>...values) {
+	public XmlSchemaSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanDictionary(boolean append, Object...values) {
+	public XmlSchemaSerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanDictionaryRemove(Object...values) {
+	public XmlSchemaSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanTypePropertyName(String value) {
+	public XmlSchemaSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder locale(Locale value) {
+	public XmlSchemaSerializerBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> XmlSchemaSerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder timeZone(TimeZone value) {
+	public XmlSchemaSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder mediaType(MediaType value) {
+	public XmlSchemaSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder debug() {
-		super.debug();
-		return this;
-	}
-
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder set(String name, Object value) {
+	public XmlSchemaSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder set(boolean append, String name, Object value) {
+	public XmlSchemaSerializerBuilder set(boolean append, String name, Object value) {
 		super.set(append, name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder set(Map<String,Object> properties) {
+	public XmlSchemaSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder add(Map<String,Object> properties) {
+	public XmlSchemaSerializerBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder addTo(String name, Object value) {
+	public XmlSchemaSerializerBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder addTo(String name, String key, Object value) {
+	public XmlSchemaSerializerBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder removeFrom(String name, Object value) {
+	public XmlSchemaSerializerBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder apply(PropertyStore copyFrom) {
+	public XmlSchemaSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

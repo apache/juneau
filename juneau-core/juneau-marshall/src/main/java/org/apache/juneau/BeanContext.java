@@ -1718,6 +1718,60 @@ public class BeanContext extends Context {
 	public static final String BEAN_timeZone = PREFIX + "timeZone.s";
 
 	/**
+	 * Configuration property:  Use enum names.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.useEnumNames.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#useEnumNames()}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a serializer with debug enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.useEnumNames()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_useEnumNames</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Enum with overridden toString().</jc>
+	 * 	<jc>// Will be serialized as ONE/TWO/THREE even though there's a toString() method..
+	 * 	<jk>public enum</jk> Option {
+	 * 		<jsf>ONE</jsf>(1),
+	 * 		<jsf>TWO</jsf>(2),
+	 * 		<jsf>THREE</jsf>(3);
+	 * 
+	 * 		<jk>private int</jk> <jf>i</jf>;
+	 * 		
+	 * 		Option(<jk>int</jk> i) {
+	 * 			<jk>this</jk>.<jf>i</jf> = i;
+	 * 		}
+	 * 
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> String toString() {
+	 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>i</jf>);
+	 * 		}
+	 * </p>
+	 */
+	public static final String BEAN_useEnumNames = PREFIX + "useEnumNames.b";
+
+	/**
 	 * Configuration property:  Use interface proxies.
 	 * 
 	 * <h5 class='section'>Property:</h5>
@@ -1850,6 +1904,7 @@ public class BeanContext extends Context {
 		ignoreInvocationExceptionsOnGetters,
 		ignoreInvocationExceptionsOnSetters,
 		useJavaBeanIntrospector,
+		useEnumNames,
 		sortProperties,
 		fluentSetters,
 		debug;
@@ -1900,6 +1955,7 @@ public class BeanContext extends Context {
 		beansRequireSettersForGetters = getBooleanProperty(BEAN_beansRequireSettersForGetters, false);
 		beansRequireSomeProperties = getBooleanProperty(BEAN_beansRequireSomeProperties, true);
 		beanMapPutReturnsOldValue = getBooleanProperty(BEAN_beanMapPutReturnsOldValue, false);
+		useEnumNames = getBooleanProperty(BEAN_useEnumNames, false);
 		useInterfaceProxies = getBooleanProperty(BEAN_useInterfaceProxies, true);
 		ignoreUnknownBeanProperties = getBooleanProperty(BEAN_ignoreUnknownBeanProperties, false);
 		ignoreUnknownNullBeanProperties = getBooleanProperty(BEAN_ignoreUnknownNullBeanProperties, true);
@@ -1974,8 +2030,8 @@ public class BeanContext extends Context {
 		
 		if (! cmCacheCache.containsKey(beanHashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
-			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class), null));
-			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class), null));
+			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class), findExample(String.class)));
+			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class), findExample(Object.class)));
 			cmCacheCache.putIfAbsent(beanHashCode, cm);
 		}
 		cmCache = cmCacheCache.get(beanHashCode);
@@ -2512,15 +2568,15 @@ public class BeanContext extends Context {
 		return null;
 	}
 	
-	private final <T> T findExample(Class<T> c) {
+	private final Object findExample(Class<?> c) {
 		if (c != null) {
 			Object o = examples.get(c.getName());
 			if (o != null)
-				return (T)o;
-			Class<T> c2 = (Class<T>)findImplClass(c);
+				return o;
+			Class<?> c2 = findImplClass(c);
 			if (c2 == null)
 				return null;
-			return (T)examples.get(c2.getName());
+			return examples.get(c2.getName());
 		}
 		return null;
 	}
@@ -2813,6 +2869,7 @@ public class BeanContext extends Context {
 				.append("pojoSwaps", pojoSwaps)
 				.append("sortProperties", sortProperties)
 				.append("timeZone", timeZone)
+				.append("useEnumNames", useEnumNames)
 				.append("useInterfaceProxies", useInterfaceProxies)
 				.append("useJavaBeanIntrospector", useJavaBeanIntrospector)
 			);

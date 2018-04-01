@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.xml;
+package org.apache.juneau.xmlschema;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
@@ -25,6 +25,7 @@ import javax.xml.validation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 import org.w3c.dom.bootstrap.*;
 import org.w3c.dom.ls.*;
@@ -56,13 +57,13 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		if (enableNamespaces && autoDetectNamespaces)
+		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);
 
-		Namespace xs = xsNamespace;
-		Namespace[] allNs = append(new Namespace[]{defaultNamespace}, namespaces);
+		Namespace xs = getXsNamespace();
+		Namespace[] allNs = append(new Namespace[]{getDefaultNamespace()}, getNamespaces());
 
-		Schemas schemas = new Schemas(this, xs, defaultNamespace, allNs);
+		Schemas schemas = new Schemas(this, xs, getDefaultNamespace(), allNs);
 		schemas.process(o);
 		schemas.serializeTo(out.getWriter());
 	}
@@ -268,7 +269,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			if (targetNs != defaultNs)
 				w.attr("attributeFormDefault", "qualified");
 			for (Namespace ns2 : allNs)
-				w.attr("xmlns", ns2.name, ns2.uri);
+				w.attr("xmlns", ns2.getName(), ns2.getUri());
 			w.append('>').nl(i);
 			for (Namespace ns : allNs) {
 				if (ns != targetNs) {

@@ -96,7 +96,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 * 
 	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.
 	 */
-	protected Namespace getNamespace() {
+	public Namespace getNamespace() {
 		return namespace;
 	}
 

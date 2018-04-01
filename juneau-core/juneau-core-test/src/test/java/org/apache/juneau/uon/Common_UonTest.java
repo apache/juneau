@@ -14,7 +14,6 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 import java.net.*;
 import java.net.URI;

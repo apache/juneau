@@ -10,44 +10,44 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.json;
+package org.apache.juneau.xmlschema;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.xml.*;
 
 /**
- * Serializes POJO metadata to HTTP responses as JSON.
+ * Serializes POJO metadata to HTTP responses as XML.
  * 
  * <h5 class='topic'>Media types</h5>
  * 
- * Handles <code>Accept</code> types:  <code><b>application/json+schema, text/json+schema</b></code>
+ * Handles <code>Accept</code> types:  <code><b>text/xml+schema</b></code>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>application/json</b></code>
+ * Produces <code>Content-Type</code> types:  <code><b>text/xml</b></code>
  * 
  * <h5 class='topic'>Description</h5>
  * 
- * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
+ * Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
  */
-public final class JsonSchemaSerializer extends JsonSerializer {
+public class XmlSchemaSerializer extends XmlSerializer {
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param ps Initialize with the specified config property store.
 	 */
-	public JsonSchemaSerializer(PropertyStore ps) {
+	public XmlSchemaSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(SERIALIZER_detectRecursions, true)
-				.set(SERIALIZER_ignoreRecursions, true)
-				.build(),
-			"application/json",
-			"application/json+schema", "text/json+schema"
+				.set(XML_enableNamespaces, true)
+				.build(), 
+			"text/xml", 
+			"text/xml+schema"
 		);
 	}
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new JsonSchemaSerializerSession(this, args);
+		return new XmlSchemaSerializerSession(this, args);
 	}
 }

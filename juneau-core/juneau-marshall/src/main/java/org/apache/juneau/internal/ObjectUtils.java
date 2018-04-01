@@ -297,4 +297,15 @@ public final class ObjectUtils {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Returns the enum names for the specified enum class.
+	 * 
+	 * @param c The enum class.
+	 * @return A modifiable list of all names for that class.
+	 */
+	@SuppressWarnings("unchecked")
+	public static Enum<?>[] getEnumConstants(Class<?> c) {
+		return ((Class<Enum<?>>)c).getEnumConstants();
+	}
 }

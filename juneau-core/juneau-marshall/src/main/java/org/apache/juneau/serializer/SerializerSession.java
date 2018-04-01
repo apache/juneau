@@ -726,6 +726,8 @@ public abstract class SerializerSession extends BeanSession {
 			return null;
 		if (o.getClass() == Class.class)
 			return getReadableClassName((Class<?>)o);
+		if (o.getClass().isEnum()) 
+			return getClassMetaForObject(o).toString(o);
 		String s = o.toString();
 		if (trimStrings)
 			s = s.trim();

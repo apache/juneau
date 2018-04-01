@@ -206,6 +206,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public MsgPackParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -433,6 +439,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 		return this;
 	}
 
+	@Override /* BeanContextBuilder */
+	public <T> MsgPackParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
+		return this;
+	}
+	
 	@Override /* ContextBuilder */
 	public MsgPackParserBuilder set(String name, Object value) {
 		super.set(name, value);

@@ -37,18 +37,18 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class XmlSerializerSession extends WriterSerializerSession {
 
-	final boolean
+	private final boolean
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
 		addBeanTypes;
 
-	Namespace
+	private Namespace
 		defaultNamespace;
-	final Namespace
+	private final Namespace
 		xsNamespace;
 
-	Namespace[] namespaces = new Namespace[0];
+	private Namespace[] namespaces = new Namespace[0];
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -742,5 +742,59 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		CR_EMPTY,     // No content...append "/>" to the start tag if XML, "/></end>" if HTML.
 		CR_MIXED,     // Mixed content...don't add whitespace.
 		CR_ELEMENTS   // Elements...use normal whitespace rules.
+	}
+	
+	/**
+	 * Bean property getter:  <property>defaultNamespace</property>.
+	 *
+	 * @return The value of the <property>defaultNamespace</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	protected Namespace getDefaultNamespace() {
+		return defaultNamespace;
+	}
+
+	/**
+	 * Bean property getter:  <property>namespaces</property>.
+	 *
+	 * @return The value of the <property>namespaces</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	protected Namespace[] getNamespaces() {
+		return namespaces;
+	}
+
+	/**
+	 * Bean property getter:  <property>autoDetectNamespaces</property>.
+	 *
+	 * @return The value of the <property>autoDetectNamespaces</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	protected boolean isAutoDetectNamespaces() {
+		return autoDetectNamespaces;
+	}
+
+	/**
+	 * Bean property getter:  <property>enableNamespaces</property>.
+	 *
+	 * @return The value of the <property>enableNamespaces</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	protected boolean isEnableNamespaces() {
+		return enableNamespaces;
+	}
+
+	/**
+	 * Bean property getter:  <property>addNamespaceUrlsToRoot</property>.
+	 *
+	 * @return The value of the <property>addNamespaceUrlsToRoot</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	protected boolean isAddNamespaceUrlsToRoot() {
+		return addNamespaceUrlsToRoot;
+	}
+
+	/**
+	 * Bean property getter:  <property>xsNamespace</property>.
+	 *
+	 * @return The value of the <property>xsNamespace</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	protected Namespace getXsNamespace() {
+		return xsNamespace;
 	}
 }
