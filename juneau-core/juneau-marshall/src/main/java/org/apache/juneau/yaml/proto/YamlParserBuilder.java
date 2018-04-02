@@ -122,6 +122,90 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanDictionary(boolean append, Object...values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanFilters(boolean append, Object...values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanFilters(Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -164,86 +248,20 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
+	public YamlParserBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
+	public YamlParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-	
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
+	public <T> YamlParserBuilder example(Class<T> c, T o) {
+		super.example(c, o);
 		return this;
 	}
 
@@ -272,14 +290,80 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
+	public YamlParserBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder sortProperties() {
-		super.sortProperties();
+	public YamlParserBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> YamlParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder notBeanClasses(boolean append, Object...values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder notBeanClasses(Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder notBeanPackages(boolean append, Object...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
@@ -296,74 +380,8 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public YamlParserBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
 		return this;
 	}
 
@@ -374,56 +392,32 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder pojoSwaps(Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
+	public YamlParserBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> YamlParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder locale(Locale value) {
-		super.locale(value);
+	public YamlParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 
@@ -434,20 +428,26 @@ public class YamlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
+	public YamlParserBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder debug() {
-		super.debug();
+	public YamlParserBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> YamlParserBuilder example(Class<T> c, T o) {
-		super.example(c, o);
+	public YamlParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
 		return this;
 	}
 	

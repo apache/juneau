@@ -291,6 +291,90 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanDictionary(boolean append, Object...values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanFilters(boolean append, Object...values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanFilters(Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -333,86 +417,20 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
+	public YamlSerializerBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
+	public YamlSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-	
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
+	public <T> YamlSerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
 		return this;
 	}
 
@@ -441,14 +459,80 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
+	public YamlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder sortProperties() {
-		super.sortProperties();
+	public YamlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> YamlSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder notBeanClasses(boolean append, Object...values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder notBeanClasses(Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder notBeanPackages(boolean append, Object...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
@@ -465,74 +549,8 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
 		return this;
 	}
 
@@ -543,68 +561,32 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder pojoSwaps(Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
+	public YamlSerializerBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> YamlSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> YamlSerializerBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder locale(Locale value) {
-		super.locale(value);
+	public YamlSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 
@@ -615,8 +597,26 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder mediaType(MediaType value) {
-		super.mediaType(value);
+	public YamlSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
 		return this;
 	}
 

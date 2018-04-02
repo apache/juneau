@@ -416,6 +416,90 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanDictionary(boolean append, Object...values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanFilters(boolean append, Object...values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanFilters(Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -458,86 +542,20 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
+	public HtmlSerializerBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
+	public HtmlSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
+	public <T> HtmlSerializerBuilder example(Class<T> c, T o) {
+		super.example(c, o);
 		return this;
 	}
 
@@ -566,14 +584,80 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
+	public HtmlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder sortProperties() {
-		super.sortProperties();
+	public HtmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> HtmlSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder notBeanClasses(boolean append, Object...values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder notBeanClasses(Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder notBeanPackages(boolean append, Object...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
@@ -590,74 +674,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
 		return this;
 	}
 
@@ -668,68 +686,32 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder pojoSwaps(Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
+	public HtmlSerializerBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> HtmlSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> HtmlSerializerBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder locale(Locale value) {
-		super.locale(value);
+	public HtmlSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 
@@ -740,8 +722,26 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder mediaType(MediaType value) {
-		super.mediaType(value);
+	public HtmlSerializerBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+	
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
 		return this;
 	}
 

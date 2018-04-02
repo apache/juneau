@@ -204,6 +204,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public InputStreamParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -332,12 +338,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public InputStreamParserBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
 		return this;
 	}
 

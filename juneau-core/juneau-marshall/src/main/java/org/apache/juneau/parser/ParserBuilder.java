@@ -312,6 +312,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -440,12 +446,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
 		return this;
 	}
 
