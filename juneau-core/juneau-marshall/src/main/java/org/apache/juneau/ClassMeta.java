@@ -1138,6 +1138,25 @@ public final class ClassMeta<T> implements Type {
 		return cc == COLLECTION || cc == ARRAY;
 	}
 
+
+	/**
+	 * Returns <jk>true</jk> if this class extends from {@link Set}.
+	 * 
+	 * @return <jk>true</jk> if this class extends from {@link Set}.
+	 */
+	public boolean isSet() {
+		return cc == COLLECTION && isParentClass(Set.class, innerClass);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class extends from {@link List}.
+	 * 
+	 * @return <jk>true</jk> if this class extends from {@link List}.
+	 */
+	public boolean isList() {
+		return cc == COLLECTION && isParentClass(List.class, innerClass);
+	}
+
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Class}.
 	 * 

@@ -126,6 +126,57 @@ public class ParameterInfo extends SwaggerElement {
 	private List<Object> _enum;
 	private Map<String,String> examples;
 
+	/**
+	 * Default constructor.
+	 */
+	public ParameterInfo() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public ParameterInfo(ParameterInfo copyFrom) {
+		super(copyFrom);
+		
+		this.name = copyFrom.name;
+		this.in = copyFrom.in;
+		this.description = copyFrom.description;
+		this.type = copyFrom.type;
+		this.format = copyFrom.format;
+		this.pattern = copyFrom.pattern;
+		this.collectionFormat = copyFrom.collectionFormat;
+		this.maximum = copyFrom.maximum;
+		this.minimum = copyFrom.minimum;
+		this.multipleOf = copyFrom.multipleOf;
+		this.maxLength = copyFrom.maxLength;
+		this.minLength = copyFrom.minLength;
+		this.maxItems = copyFrom.maxItems;
+		this.minItems = copyFrom.minItems;
+		this.required = copyFrom.required;
+		this.allowEmptyValue = copyFrom.allowEmptyValue;
+		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
+		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
+		this.uniqueItems = copyFrom.uniqueItems;
+		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
+		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
+		this._default = copyFrom._default;
+		this._enum = newList(copyFrom._enum);
+		
+		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,String>();
+		if (copyFrom.examples != null)
+			this.examples.putAll(copyFrom.examples);
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public ParameterInfo copy() {
+		return new ParameterInfo(this);
+	}
+	
 	@Override /* SwaggerElement */
 	protected ParameterInfo strict() {
 		super.strict();
@@ -1524,5 +1575,24 @@ public class ParameterInfo extends SwaggerElement {
 			.appendIf(multipleOf != null, "multipleOf")
 			.appendIf(examples != null, "examples");
 		return new MultiSet<>(s, super.keySet());
+	}
+
+	/**
+	 * Resolves any <js>"$ref"</js> attributes in this element.
+	 * 
+	 * @param swagger The swagger document containing the definitions.
+	 * @return 
+	 * 	This object with references resolved.
+	 * 	<br>May or may not be the same object.
+	 */
+	public ParameterInfo resolveRefs(Swagger swagger) {
+		
+		if (schema != null)
+			schema = schema.resolveRefs(swagger);
+		
+		if (items != null)
+			items = items.resolveRefs(swagger);
+
+		return this;
 	}
 }

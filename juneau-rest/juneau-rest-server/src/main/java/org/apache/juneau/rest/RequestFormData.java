@@ -493,7 +493,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 		try {
 			if (parser == null)
 				parser = this.parser;
-			return parser.parse(HttpPartType.FORM_DATA, val, c);
+			return parser.parse(HttpPartType.FORMDATA, val, c);
 		} catch (Exception e) {
 			throw new ParseException(e);
 		}

@@ -58,6 +58,32 @@ public class License extends SwaggerElement {
 	private URI url;
 
 	/**
+	 * Default constructor.
+	 */
+	public License() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public License(License copyFrom) {
+		super(copyFrom);
+		
+		this.name = copyFrom.name;
+		this.url = copyFrom.url;
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public License copy() {
+		return new License(this);
+	}
+	
+	/**
 	 * Bean property getter:  <property>name</property>.
 	 * 
 	 * <p>

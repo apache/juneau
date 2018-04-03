@@ -39,7 +39,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	private final BeanDefMapper beanDefMapper;
 	private final Map<String,ObjectMap> defs;
 	private final Map<String,ObjectMap> defaultSchemas;
-	private final Set<TypeCategory> addExamples, addDescriptions;
+	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -60,8 +60,8 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		allowNestedDescriptions = getProperty(JSONSCHEMA_allowNestedDescriptions, boolean.class, ctx.allowNestedDescriptions);
 		beanDefMapper = getInstanceProperty(JSONSCHEMA_beanDefMapper, BeanDefMapper.class, ctx.beanDefMapper);
 		defaultSchemas = getProperty(JSONSCHEMA_defaultSchemas, Map.class, ctx.defaultSchemas);
-		addExamples = getProperty(JSONSCHEMA_addExamples, Set.class, ctx.addExamples);
-		addDescriptions = getProperty(JSONSCHEMA_addDescriptions, Set.class, ctx.addDescriptions);
+		addExamplesTo = hasProperty(JSONSCHEMA_addExamplesTo) ? TypeCategory.parse(getProperty(JSONSCHEMA_addExamplesTo, String.class)) : ctx.addExamplesTo;
+		addDescriptionsTo = hasProperty(JSONSCHEMA_addDescriptionsTo) ? TypeCategory.parse(getProperty(JSONSCHEMA_addDescriptionsTo, String.class)) : ctx.addDescriptionsTo;
 		defs = useBeanDefs ? new LinkedHashMap<String,ObjectMap>() : null;
 	}
 
@@ -258,7 +258,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	
 	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws Exception {
 		boolean canAdd = allowNestedExamples || ! exampleAdded;
-		if (canAdd && (addExamples.contains(t) || addExamples.contains(ANY))) {
+		if (canAdd && (addExamplesTo.contains(t) || addExamplesTo.contains(ANY))) {
 			Object example = sType.getExample(this);
 			if (example != null)
 				return JsonParser.DEFAULT.parse(serializeJson(example), Object.class);
@@ -268,7 +268,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
 		boolean canAdd = allowNestedDescriptions || ! descriptionAdded;
-		if (canAdd && (addDescriptions.contains(t) || addDescriptions.contains(ANY)))
+		if (canAdd && (addDescriptionsTo.contains(t) || addDescriptionsTo.contains(ANY)))
 			return sType.getReadableName();
 		return null;
 	}
@@ -327,5 +327,14 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		if (defs != null)
 			defs.put(id, def);
 		return this;
+	}
+
+	/**
+	 * Returns the value of the {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} setting.
+	 * 
+	 * @return The value of the {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} setting.
+	 */
+	public boolean isUseBeanDefs() {
+		return useBeanDefs;
 	}
 }

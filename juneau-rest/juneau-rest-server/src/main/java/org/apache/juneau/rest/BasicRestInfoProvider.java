@@ -15,7 +15,10 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
+import static org.apache.juneau.serializer.OutputStreamSerializer.*;
+import static org.apache.juneau.serializer.WriterSerializer.*;
 
+import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
@@ -23,10 +26,13 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -125,6 +131,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		JsonParser jp = JsonParser.DEFAULT;
 		MessageBundle mb = context.getMessages();
 		Class<?> c = context.getResource().getClass();
+		JsonSchemaSerializerSession js = req.getContext().getJsonSchemaSerializer().createSession();
 		
 		// Load swagger JSON from classpath.
 		ObjectMap omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, getClass().getSimpleName() + ".json", locale);
@@ -214,10 +221,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		s = mb.findFirstString(locale, "externalDocs");
 		if (s != null) 
 			externalDocs.putAll(jp.parse(vr.resolve(s), ObjectMap.class));
-		
-//		JsonSchemaDefinitions defs = new JsonSchemaDefinitions();
-//		for (String defId : definitions.keySet()) 
-//			defs.put(defId, definitions.getObjectMap(defId));
+
+		// Load our existing bean definitions into our session.
+		for (String defId : definitions.keySet()) 
+			js.addBeanDef(defId, definitions.getObjectMap(defId));
 		
 		// Iterate through all the @RestMethod methods.
 		for (RestJavaMethod sm : context.getCallMethods().values()) {
@@ -374,8 +381,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 					param.put("required", true);
 				
-//				param.put("schema", getSchema(req, param.getObjectMap("schema", true), defs, mp.getType()));
-//				addXExamples(req, param, in.toString(), defs, mp.getType());
+				param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+				addXExamples(req, sm, omSwagger, param, in.toString(), js, mp.getType());
 			}
 			
 			if (! paramMap.isEmpty())
@@ -407,10 +414,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			if (! responses.containsKey("200"))
 				responses.put("200", new ObjectMap().append("description", "Success"));
 			
-//			ObjectMap okResponse = responses.getObjectMap("200");
-//			
-//			okResponse.put("schema", getSchema(req, okResponse.getObjectMap("schema", true), defs, m.getGenericReturnType()));
-//			addXExamples(req, okResponse, "ok", defs, m.getGenericReturnType());
+			ObjectMap okResponse = responses.getObjectMap("200");
+			
+			okResponse.put("schema", getSchema(req, okResponse.getObjectMap("schema", true), js, m.getGenericReturnType()));
+			addXExamples(req, sm, omSwagger, okResponse, "ok", js, m.getGenericReturnType());
 			
 			if (responses.isEmpty())
 				op.remove("responses");
@@ -430,7 +437,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		}
 		
-//		definitions.putAll(defs);
+		definitions.putAll(js.getBeanDefs());
 		
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");		
@@ -445,92 +452,82 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		}
 		
 		swaggers.get(locale).put(hashCode, swagger);
+
+//		JsonSerializer.DEFAULT_LAX_READABLE.println(swagger);
 		
 		return swagger;
 	}
 	
-//	private ObjectMap getSchema(RestRequest req, ObjectMap schema, JsonSchemaDefinitions defs, Type type) throws Exception {
-//		BeanSession bs = req.getBeanSession();
-//		ClassMeta<?> cm = bs.getClassMeta(type);
-//		
-//		if (schema.containsKey("type") || schema.containsKey("$ref")) 
-//			return schema;
-//		if (cm.isBean()) {
-//			schema.put("$ref", defs.getURI(cm));
-//		} else if (cm.isMap() || cm.isCollectionOrArray()) {
-//			schema.putAll(JsonSchemaUtils.getSchema(bs, defs, cm));
-//			Object example = getExample(req, cm, schema.get("example"));
-//			if (example != null)
-//				schema.put("example", example);
-//		} else {
-//			schema.putAll(JsonSchemaUtils.getSchema(bs, defs, cm));
-//		}
-//		return schema;
-//	}
-//	
-//	private void addXExamples(RestRequest req, ObjectMap m, String in, JsonSchemaDefinitions defs, Type type) throws Exception {
-//		
-//		ClassMeta<?> cm = req.getBeanSession().getClassMeta(type);
-//		Object example = defs.getExample(cm);
-//		if (example == null)
-//			return;
-//		
-//		List<MediaType> mediaTypes = "ok".equals("in") ? req.getSerializers().getSupportedMediaTypes() : req.getParsers().getSupportedMediaTypes();
-//		
-//		if ("ok".equals(in) || "body".equals(in)) {
-//			ObjectMap examples = new ObjectMap();
-//			ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
-//			
-//			for (MediaType mt : mediaTypes) {
-//				if (mt != MediaType.HTML) {
-//					Serializer s2 = req.getSerializers().getSerializer(mt);
-//					if (s2 != null) {
-//						SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
-//						String eVal = s2.createSession(args).serializeToString(example);
-//						examples.put(s2.getMediaTypes()[0].toString(), eVal);
-//					}
-//				}
-//			}
-//			m.put("x-examples", examples);
-//			
-//		} else {
-//			m.put("example", example);
-//		}
-//		
-//	}
-//	
-//	@SuppressWarnings({ "rawtypes", "unchecked" })
-//	private Object getExample(RestRequest req, ClassMeta<?> cm, Object jsonExample) {
-//		try {
-//			BeanSession bs = req.getBeanSession();
-//			
-//			if (cm.isMapOrBean()) {
-//				if (jsonExample instanceof ObjectMap)
-//					return ((ObjectMap)jsonExample).cast(cm);
-//				return cm.getExample(bs);
-//			} else if (cm.isCollectionOrArray()) {
-//				if (jsonExample instanceof ObjectList)
-//					return ((ObjectList)jsonExample).cast(cm);
-//				Object e = cm.getExample(bs);
-//				if (e != null)
-//					return e;
-//				e = cm.getElementType().getExample(bs);
-//				if (e != null) {
-//					if (cm.isCollection()) {
-//						Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
-//						c.add(e);
-//						return c;
-//					}
-//					Object array = Array.newInstance(cm.getInnerClass(), 1);
-//					Array.set(array, 0, e);
-//					return array;
-//				}
-//			} else {
-//				return jsonExample;
-//			}
-//		} catch (Exception e) { /* Ignore */ }
-//		return null;
-//	}
+	private ObjectMap getSchema(RestRequest req, ObjectMap schema, JsonSchemaSerializerSession js, Type type) throws Exception {
+		BeanSession bs = req.getBeanSession();
+		ClassMeta<?> cm = bs.getClassMeta(type);
+		
+		if (schema.containsKey("type") || schema.containsKey("$ref")) 
+			return schema;
+		
+		if (cm.isBean() && js.isUseBeanDefs()) 
+			schema.put("$ref", js.getBeanDefUri(cm));
+		else
+			schema.putAll(js.getSchema(cm));
+
+		return schema;
+	}
+	
+	
+	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap swagger, ObjectMap m, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
+		
+		ObjectMap schema = resolve(m.getObjectMap("schema"));
+		if (schema == null)
+			return;
+
+		Object example = schema.get("example", Object.class);
+		if (example == null)
+			return;
+		
+		boolean isOk = "ok".equals(in), isBody = "body".equals(in);
+		
+		example = JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT.serialize(example), type);
+		
+		String examplesKey = isOk ? "examples" : "x-examples";  // Parameters don't have an examples attribute.
+
+		ObjectMap examples = schema.getObjectMap(examplesKey);
+		if (examples == null)
+			examples = new ObjectMap();
+
+		if (isOk || isBody) {
+			List<MediaType> mediaTypes = isOk ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
+			ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
+			
+			for (MediaType mt : mediaTypes) {
+				if (mt != MediaType.HTML) {
+					Serializer s2 = sm.getSerializers().getSerializer(mt);
+					if (s2 != null) {
+						SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
+						String eVal = s2.createSession(args).serializeToString(example);
+						examples.put(s2.getMediaTypes()[0].toString(), eVal);
+					}
+				}
+			}
+		} else {
+			examples.put("example", req.getPartSerializer().serialize(HttpPartType.valueOf(in.toUpperCase()), example));
+		}
+		
+		if (! examples.isEmpty())
+			m.put(examplesKey, examples);
+	}
+	
+	private ObjectMap resolve(ObjectMap m) {
+		if (m == null)
+			return null;
+		if (m.containsKey("$ref")) {
+			String ref = m.getString("$ref");
+			if (ref.startsWith("#/definitions/")) {
+				ref = ref.substring(1);
+				return m.getAt(ref, ObjectMap.class);
+			}
+		}
+		return m;
+	}
 	
 	private static class SwaggerException extends ParseException {
 		private static final long serialVersionUID = 1L;

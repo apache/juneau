@@ -544,7 +544,7 @@ public class BeanSession extends Session {
 			// Target type is some sort of Collection
 			if (type.isCollection()) {
 				try {
-					Collection l = type.canCreateNewInstance(outer) ? (Collection)type.newInstance(outer) : new ObjectList(this);
+					Collection l = type.canCreateNewInstance(outer) ? (Collection)type.newInstance(outer) : type.isSet() ? new LinkedHashSet<>() : new ObjectList(this);
 					ClassMeta elementType = type.getElementType();
 
 					if (value.getClass().isArray())
@@ -555,6 +555,16 @@ public class BeanSession extends Session {
 							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 					else if (value instanceof Map)
 						l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
+					else if (value instanceof String) {
+						String s = value.toString();
+						if (isObjectList(s, false)) {
+							ObjectList l2 = new ObjectList(s);
+							for (Object o : l2)
+								l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
+						} else {
+							throw new InvalidDataConversionException(value.getClass(), type, null);
+						}
+					}
 					else if (! value.toString().isEmpty())
 						throw new InvalidDataConversionException(value.getClass(), type, null);
 					return (T)l;

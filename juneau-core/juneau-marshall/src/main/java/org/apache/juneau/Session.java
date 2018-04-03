@@ -49,6 +49,16 @@ public abstract class Session {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this session has the specified property defined.
+	 * 
+	 * @param key The property key.
+	 * @return <jk>true</jk> if this session has the specified property defined.
+	 */
+	public final boolean hasProperty(String key) {
+		return properties != null && properties.containsKey(key);
+	}
+	
+	/**
 	 * Returns the session property with the specified key.
 	 * 
 	 * <p>
@@ -94,7 +104,7 @@ public abstract class Session {
 	public final <T> T getProperty(String key, Class<T> type, T...def) {
 		return getProperty(key, type, ObjectUtils.firstNonNull(def));
 	}
-
+	
 	/**
 	 * Returns the session class property with the specified name.
 	 * 

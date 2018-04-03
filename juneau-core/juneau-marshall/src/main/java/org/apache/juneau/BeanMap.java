@@ -225,8 +225,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			if (property.equals(beanTypePropertyName))
 				return null;
-
-			throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
+			
+			p = meta.properties.get("*");
+			if (p == null)
+				throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
 		}
 		if (meta.beanFilter != null)
 			value = meta.beanFilter.writeProperty(this.bean, property, value);

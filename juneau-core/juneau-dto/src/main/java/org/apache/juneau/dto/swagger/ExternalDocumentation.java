@@ -58,6 +58,32 @@ public class ExternalDocumentation extends SwaggerElement {
 	private URI url;
 
 	/**
+	 * Default constructor.
+	 */
+	public ExternalDocumentation() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public ExternalDocumentation(ExternalDocumentation copyFrom) {
+		super(copyFrom);
+		
+		this.description = copyFrom.description;
+		this.url = copyFrom.url;
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public ExternalDocumentation copy() {
+		return new ExternalDocumentation(this);
+	}
+	
+	/**
 	 * Bean property getter:  <property>description</property>.
 	 * 
 	 * <p>

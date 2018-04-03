@@ -616,11 +616,11 @@ public class SchemaInfoTest {
 	public void testSetProperties() {
 		SchemaInfo t = new SchemaInfo();
 		
-		t.setProperties(new AMap<String,Map<String,Object>>().append("foo",new AMap<String,Object>().append("bar",new AList<Number>().append(123))));
-		assertObjectEquals("{foo:{bar:[123]}}", t.getProperties());
+		t.setProperties(new AMap<String,SchemaInfo>().append("foo",new SchemaInfo().type("foo")));
+		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertType(Map.class, t.getProperties());
 		
-		t.setProperties(new AMap<String,Map<String,Object>>());
+		t.setProperties(new AMap<String,SchemaInfo>());
 		assertObjectEquals("{}", t.getProperties());
 		assertType(Map.class, t.getProperties());
 
@@ -635,16 +635,16 @@ public class SchemaInfoTest {
 	public void testAddProperties() {
 		SchemaInfo t = new SchemaInfo();
 		
-		t.addProperties(new AMap<String,Map<String,Object>>().append("foo",new AMap<String,Object>().append("bar",new AList<Number>().append(123))));
-		assertObjectEquals("{foo:{bar:[123]}}", t.getProperties());
+		t.addProperties(new AMap<String,SchemaInfo>().append("foo", new SchemaInfo().type("foo")));
+		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertType(Map.class, t.getProperties());
 		
-		t.addProperties(new AMap<String,Map<String,Object>>());
-		assertObjectEquals("{foo:{bar:[123]}}", t.getProperties());
+		t.addProperties(new AMap<String,SchemaInfo>());
+		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertType(Map.class, t.getProperties());
 
 		t.addProperties(null);
-		assertObjectEquals("{foo:{bar:[123]}}", t.getProperties());
+		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertType(Map.class, t.getProperties());
 	}
 
@@ -655,13 +655,16 @@ public class SchemaInfoTest {
 	public void testProperties() {
 		SchemaInfo t = new SchemaInfo();
 		
-		t.properties(new AMap<String,Map<String,Object>>().append("a", new AMap<String,Object>().append("a1", 1)));
-		t.properties(new AMap<String,String>().append("b", "{b1:2}"));
-		t.properties("{c:{c1:'c2'}}");
+		t.properties(new AMap<String,Map<String,Object>>().append("a", new AMap<String,Object>().append("type", "foo")));
+		t.properties(new AMap<String,String>().append("b", "{type:'bar'}"));
+		t.properties("{c:{type:'baz'}}");
 		t.properties("{}");
 		t.properties((Object[])null);
 		
-		assertObjectEquals("{a:{a1:1},b:{b1:2},c:{c1:'c2'}}", t.getProperties());
+		assertObjectEquals("{a:{type:'foo'},b:{type:'bar'},c:{type:'baz'}}", t.getProperties());
+		assertType(SchemaInfo.class, t.getProperties().get("a"));
+		assertType(SchemaInfo.class, t.getProperties().get("b"));
+		assertType(SchemaInfo.class, t.getProperties().get("c"));
 	}
 
 	/**
@@ -671,50 +674,16 @@ public class SchemaInfoTest {
 	public void testSetAdditionalProperties() {
 		SchemaInfo t = new SchemaInfo();
 		
-		t.setAdditionalProperties(new AMap<String,Object>().append("foo",new AList<String>().append("bar")));
-		assertObjectEquals("{foo:['bar']}", t.getAdditionalProperties());
-		assertType(Map.class, t.getAdditionalProperties());
+		t.setAdditionalProperties(new SchemaInfo().type("foo"));
+		assertObjectEquals("{type:'foo'}", t.getAdditionalProperties());
+		assertType(SchemaInfo.class, t.getAdditionalProperties());
 		
-		t.setAdditionalProperties(new AMap<String,Object>());
+		t.setAdditionalProperties(new SchemaInfo());
 		assertObjectEquals("{}", t.getAdditionalProperties());
-		assertType(Map.class, t.getAdditionalProperties());
+		assertType(SchemaInfo.class, t.getAdditionalProperties());
 
 		t.setAdditionalProperties(null);
 		assertNull(t.getAdditionalProperties());
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#addAdditionalProperties(java.util.Map)}.
-	 */
-	@Test
-	public void testAddAdditionalProperties() {
-		SchemaInfo t = new SchemaInfo();
-		
-		t.addAdditionalProperties(new AMap<String,Object>().append("foo",new AList<String>().append("bar")));
-		assertObjectEquals("{foo:['bar']}", t.getAdditionalProperties());
-		assertType(Map.class, t.getAdditionalProperties());
-		
-		t.addAdditionalProperties(new AMap<String,Object>());
-		assertObjectEquals("{foo:['bar']}", t.getAdditionalProperties());
-		assertType(Map.class, t.getAdditionalProperties());
-
-		t.addAdditionalProperties(null);
-		assertObjectEquals("{foo:['bar']}", t.getAdditionalProperties());
-		assertType(Map.class, t.getAdditionalProperties());
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#additionalProperty(java.lang.String, java.lang.Object)}.
-	 */
-	@Test
-	public void testAdditionalProperty() {
-		SchemaInfo t = new SchemaInfo();
-		
-		t.additionalProperty("a", "a1");
-		t.additionalProperty(null, "b1");
-		t.additionalProperty("c", null);
-		
-		assertObjectEquals("{a:'a1',null:'b1',c:null}", t.getAdditionalProperties());
 	}
 
 	/**
@@ -724,13 +693,10 @@ public class SchemaInfoTest {
 	public void testAdditionalProperties() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.additionalProperties(new AMap<String,Object>().append("a",new AList<String>().append("a1")));
-		t.additionalProperties(new AMap<String,Object>().append("b","b1"));
-		t.additionalProperties("{c:['c1']}");
-		t.additionalProperties("{}");
-		t.additionalProperties((Object)null);
+		t.additionalProperties(new AMap<String,Object>().append("type","foo"));
 		
-		assertObjectEquals("{a:['a1'],b:'b1',c:['c1']}", t.getAdditionalProperties());
+		assertObjectEquals("{type:'foo'}", t.getAdditionalProperties());
+		assertType(SchemaInfo.class, t.getAdditionalProperties());
 	}
 
 	/**
@@ -969,7 +935,7 @@ public class SchemaInfoTest {
 	
 		assertType(StringBuilder.class, t.get("default", Object.class));
 		assertType(List.class, t.get("enum", Object.class));
-		assertType(Map.class, t.get("additionalProperties", Object.class));
+		assertType(SchemaInfo.class, t.get("additionalProperties", Object.class));
 		assertType(List.class, t.get("allOf", Object.class));
 		assertType(String.class, t.get("description", Object.class));
 		assertType(String.class, t.get("discriminator", Object.class));
@@ -996,7 +962,7 @@ public class SchemaInfoTest {
 		assertType(String.class, t.get("type", Object.class));
 		assertType(Boolean.class, t.get("uniqueItems", Object.class));
 		assertType(Xml.class, t.get("xml", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertType(String.class, t.get("$ref", Object.class));
 	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

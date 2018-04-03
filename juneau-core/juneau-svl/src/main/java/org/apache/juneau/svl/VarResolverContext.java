@@ -48,7 +48,7 @@ public class VarResolverContext {
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
 		for (Class<?> c : vars) {
 			if (! isParentClass(Var.class, c))
-				throw new RuntimeException("Invalid variable class.  Must extend from Var");
+				throw new VarResolverException("Invalid variable class.  Must extend from Var");
 			Var v = newInstance(Var.class, c);
 			m.put(v.getName(), v);
 		}

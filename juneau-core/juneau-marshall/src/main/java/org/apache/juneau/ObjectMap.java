@@ -219,7 +219,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param m The map whose entries will be copied into this map.
 	 */
 	public ObjectMap(Map<?,?> m) {
-		super();
+		this();
 		for (Map.Entry<?,?> e : m.entrySet())
 			put(e.getKey().toString(), e.getValue());
 	}

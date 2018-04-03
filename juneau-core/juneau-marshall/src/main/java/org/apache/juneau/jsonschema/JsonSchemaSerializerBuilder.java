@@ -63,7 +63,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addDescriptions}
+	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -71,8 +71,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public JsonSchemaSerializerBuilder addDescriptions(TypeCategory...value) {
-		return set(JSONSCHEMA_addDescriptions, value);
+	public JsonSchemaSerializerBuilder addDescriptionsTo(String value) {
+		return set(JSONSCHEMA_addDescriptionsTo, value);
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamples}
+	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -98,8 +98,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public JsonSchemaSerializerBuilder addExamples(TypeCategory...value) {
-		return set(JSONSCHEMA_addExamples, value);
+	public JsonSchemaSerializerBuilder addExamplesTo(String value) {
+		return set(JSONSCHEMA_addExamplesTo, value);
 	}
 	
 	/**

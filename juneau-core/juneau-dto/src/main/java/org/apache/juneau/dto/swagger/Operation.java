@@ -148,6 +148,59 @@ public class Operation extends SwaggerElement {
 	private Map<String,ResponseInfo> responses;
 
 	/**
+	 * Default constructor.
+	 */
+	public Operation() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public Operation(Operation copyFrom) {
+		super(copyFrom);
+
+		this.summary = copyFrom.summary;
+		this.description = copyFrom.description;
+		this.operationId = copyFrom.operationId;
+		this.deprecated = copyFrom.deprecated;
+		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.tags = newList(copyFrom.tags);
+		this.schemes = newList(copyFrom.schemes);
+		this.consumes = newList(copyFrom.consumes);
+		this.produces = newList(copyFrom.produces);
+		
+		this.parameters = copyFrom.parameters == null ? null : new ArrayList<ParameterInfo>();
+		if (copyFrom.parameters != null)
+			for (ParameterInfo p : copyFrom.parameters)
+				this.parameters.add(p.copy());
+		
+		this.security = copyFrom.security == null ? null : new ArrayList<Map<String,List<String>>>();
+		if (copyFrom.security != null) {
+			for (Map<String,List<String>> m : copyFrom.security) {
+				Map<String,List<String>> m2 = new LinkedHashMap<>();
+				for (Map.Entry<String,List<String>> e : m.entrySet())
+					m2.put(e.getKey(), newList(e.getValue()));
+				this.security.add(m2);
+			}
+		}
+		
+		this.responses = copyFrom.responses == null ? null : new LinkedHashMap<String,ResponseInfo>();
+		if (copyFrom.responses != null)
+			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet()) 
+				this.responses.put(e.getKey(), e.getValue().copy());
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public Operation copy() {
+		return new Operation(this);
+	}
+	
+	/**
 	 * Bean property getter:  <property>tags</property>.
 	 * 
 	 * <p>
@@ -1117,5 +1170,26 @@ public class Operation extends SwaggerElement {
 			.appendIf(deprecated != null, "deprecated")
 			.appendIf(security != null, "security");
 		return new MultiSet<>(s, super.keySet());
+	}
+
+	/**
+	 * Resolves any <js>"$ref"</js> attributes in this element.
+	 * 
+	 * @param swagger The swagger document containing the definitions.
+	 * @return 
+	 * 	This object with references resolved.
+	 * 	<br>May or may not be the same object.
+	 */
+	public Operation resolveRefs(Swagger swagger) {
+		
+		if (parameters != null)
+			for (ListIterator<ParameterInfo> i = parameters.listIterator(); i.hasNext();)
+				i.set(i.next().resolveRefs(swagger));
+
+		if (responses != null)
+			for (Map.Entry<String,ResponseInfo> e : responses.entrySet())
+				e.setValue(e.getValue().resolveRefs(swagger));
+		
+		return this;
 	}
 }

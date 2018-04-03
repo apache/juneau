@@ -568,6 +568,42 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		return 0;
 	}
 
+	/**
+	 * Bean property getter:  <property>serializers</property>.
+	 *
+	 * @return The value of the <property>serializers</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public SerializerGroup getSerializers() {
+		return serializers;
+	}
+
+	/**
+	 * Bean property getter:  <property>parsers</property>.
+	 *
+	 * @return The value of the <property>parsers</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public ParserGroup getParsers() {
+		return parsers;
+	}
+
+	/**
+	 * Bean property getter:  <property>partSerializer</property>.
+	 *
+	 * @return The value of the <property>partSerializer</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public HttpPartSerializer getPartSerializer() {
+		return partSerializer;
+	}
+
+	/**
+	 * Bean property getter:  <property>partParser</property>.
+	 *
+	 * @return The value of the <property>partParser</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public HttpPartParser getPartParser() {
+		return partParser;
+	}
+
 	@Override /* Object */
 	public boolean equals(Object o) {
 		if (! (o instanceof RestJavaMethod))

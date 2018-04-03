@@ -65,6 +65,35 @@ public class Xml extends SwaggerElement {
 		wrapped;
 
 	/**
+	 * Default constructor.
+	 */
+	public Xml() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public Xml(Xml copyFrom) {
+		super(copyFrom);
+		
+		this.name = copyFrom.name;
+		this.namespace = copyFrom.namespace;
+		this.prefix = copyFrom.prefix;
+		this.attribute = copyFrom.attribute;
+		this.wrapped = copyFrom.wrapped;
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public Xml copy() {
+		return new Xml(this);
+	}
+	
+	/**
 	 * Bean property getter:  <property>name</property>.
 	 * 
 	 * <p>

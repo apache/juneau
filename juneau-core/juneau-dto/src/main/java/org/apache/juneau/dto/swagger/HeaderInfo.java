@@ -49,7 +49,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
  * </ul>
  */
-@Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,*")
+@Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
 @SuppressWarnings({"unchecked"})
 public class HeaderInfo extends SwaggerElement {
 
@@ -61,7 +61,8 @@ public class HeaderInfo extends SwaggerElement {
 		type,
 		format,
 		collectionFormat,
-		pattern;
+		pattern,
+		ref;
 	private Number 
 		maximum,
 		minimum,
@@ -78,6 +79,48 @@ public class HeaderInfo extends SwaggerElement {
 	private Items items;
 	private Object _default;
 	private List<Object> _enum;
+	
+	/**
+	 * Default constructor.
+	 */
+	public HeaderInfo() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public HeaderInfo(HeaderInfo copyFrom) {
+		super(copyFrom);
+		
+		this.description = copyFrom.description;
+		this.type = copyFrom.type;
+		this.format = copyFrom.format;
+		this.collectionFormat = copyFrom.collectionFormat;
+		this.pattern = copyFrom.pattern;
+		this.maximum = copyFrom.maximum;
+		this.minimum = copyFrom.minimum;
+		this.multipleOf = copyFrom.multipleOf;
+		this.maxLength = copyFrom.maxLength;
+		this.minLength = copyFrom.minLength;
+		this.maxItems = copyFrom.maxItems;
+		this.minItems = copyFrom.minItems;
+		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
+		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
+		this.uniqueItems = copyFrom.uniqueItems;
+		this._default = copyFrom._default;
+		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
+		this._enum = newList(copyFrom._enum);
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public HeaderInfo copy() {
+		return new HeaderInfo(this);
+	}
 
 	@Override /* SwaggerElement */
 	protected HeaderInfo strict() {
@@ -965,6 +1008,51 @@ public class HeaderInfo extends SwaggerElement {
 		return setMultipleOf(toNumber(value));
 	}
 
+	/**
+	 * Bean property getter:  <property>$ref</property>.
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@BeanProperty("$ref")
+	public String getRef() {
+		return ref;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
+	 * 
+	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
+	 */
+	public boolean hasRef() {
+		return ref != null;
+	}
+
+	/**
+	 * Bean property setter:  <property>$ref</property>.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty("$ref")
+	public HeaderInfo setRef(Object value) {
+		ref = StringUtils.asString(value);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #setRef(Object)}.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderInfo ref(Object value) {
+		return setRef(value);
+	}
+
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -975,6 +1063,7 @@ public class HeaderInfo extends SwaggerElement {
 			case "format": return toType(getFormat(), type);
 			case "items": return toType(getItems(), type);
 			case "collectionFormat": return toType(getCollectionFormat(), type);
+			case "$ref": return toType(getRef(), type);
 			case "default": return toType(getDefault(), type);
 			case "maximum": return toType(getMaximum(), type);
 			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
@@ -1002,6 +1091,7 @@ public class HeaderInfo extends SwaggerElement {
 			case "format": return format(value);
 			case "items": return items(value);
 			case "collectionFormat": return collectionFormat(value);
+			case "$ref": return ref(value);
 			case "default": return _default(value);
 			case "maximum": return maximum(value);
 			case "exclusiveMaximum": return exclusiveMaximum(value);
@@ -1029,6 +1119,7 @@ public class HeaderInfo extends SwaggerElement {
 			.appendIf(format != null, "format")
 			.appendIf(items != null, "items")
 			.appendIf(collectionFormat != null, "collectionFormat")
+			.appendIf(ref != null, "$ref")
 			.appendIf(_default != null, "default")
 			.appendIf(maximum != null, "maximum")
 			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
@@ -1044,5 +1135,24 @@ public class HeaderInfo extends SwaggerElement {
 			.appendIf(multipleOf != null, "multipleOf");
 		return new MultiSet<>(s, super.keySet());
 		
+	}
+
+	/**
+	 * Resolves any <js>"$ref"</js> attributes in this element.
+	 * 
+	 * @param swagger The swagger document containing the definitions.
+	 * @return 
+	 * 	This object with references resolved.
+	 * 	<br>May or may not be the same object.
+	 */
+	public HeaderInfo resolveRefs(Swagger swagger) {
+		
+		if (ref != null)
+			return swagger.findRef(ref, HeaderInfo.class);
+		
+		if (items != null)
+			items = items.resolveRefs(swagger);
+		
+		return this;
 	}
 }

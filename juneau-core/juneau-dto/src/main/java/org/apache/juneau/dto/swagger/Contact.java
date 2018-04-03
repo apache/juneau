@@ -60,6 +60,33 @@ public class Contact extends SwaggerElement {
 	private String email;
 
 	/**
+	 * Default constructor.
+	 */
+	public Contact() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public Contact(Contact copyFrom) {
+		super(copyFrom);
+		
+		this.name = copyFrom.name;
+		this.url = copyFrom.url;
+		this.email = copyFrom.email;
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public Contact copy() {
+		return new Contact(this);
+	}
+	
+	/**
 	 * Bean property getter:  <property>name</property>.
 	 * 
 	 * <p>

@@ -53,6 +53,6 @@ public final class SerializedNameValuePair implements NameValuePair {
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return serializer.serialize(HttpPartType.FORM_DATA, value);
+		return serializer.serialize(HttpPartType.FORMDATA, value);
 	}
 }

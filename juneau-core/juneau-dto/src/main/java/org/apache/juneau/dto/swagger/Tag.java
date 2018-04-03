@@ -59,6 +59,33 @@ public class Tag extends SwaggerElement {
 		name,
 		description;
 	private ExternalDocumentation externalDocs;
+	
+	/**
+	 * Default constructor.
+	 */
+	public Tag() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public Tag(Tag copyFrom) {
+		super(copyFrom);
+		
+		this.name = copyFrom.name;
+		this.description = copyFrom.description;
+		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public Tag copy() {
+		return new Tag(this);
+	}
 
 	/**
 	 * Bean property getter:  <property>name</property>.

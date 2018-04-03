@@ -25,11 +25,11 @@ import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
 /**
- * 
+ * Generates a Swagger-UI interface from a Swagger document.
  */
 public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	
-	static final ClasspathResourceManager RM = new ClasspathResourceManager(SwaggerUI.class);
+	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class);
 	
 	@Override
 	public MediaType[] forMediaTypes() {
@@ -38,9 +38,12 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	
 	@Override
 	public Div swap(BeanSession session, Swagger s) throws Exception {
+		
+		s = s.copy().resolveRefs();
+		
 		Div outer = div(
-			style(RM.getString("SwaggerUI.css")),
-			script("text/javascript", RM.getString("SwaggerUI.js")),
+			style(RESOURCES.getString("SwaggerUI.css")),
+			script("text/javascript", RESOURCES.getString("SwaggerUI.js")),
 			header(s)
 		)._class("swagger-ui");
 		
@@ -175,7 +178,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				
 				Td parameterValue = td(
 					div(pi.getDescription())._class("description"),
-					examples(s, pi)
+					examples(pi.getSchema(), pi.getExamples())
 				)._class("parameter-value");
 				
 				parameters.child(tr(parameterKey, parameterValue));
@@ -197,7 +200,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 				Td codeValue = td(
 					div(ri.getDescription())._class("description"),
-					examples(s, ri),
+					examples(ri.getSchema(), ri.getExamples()),
 					headers(s, ri)
 				)._class("response-value");
 				
@@ -234,33 +237,15 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return headers;
 	}
 
-	private Div examples(Swagger s, ParameterInfo pi) {
-		return examples(s, resolve(s, pi.getSchema()), pi.getExamples());
-	}
-	
-	private Div examples(Swagger s, ResponseInfo ri) {
-		return examples(s, resolve(s, ri.getSchema()), ri.getExamples());
-	}
-	
-	// If SchemaInfo is a "$ref", resolve it, otherwise a no-op.
-	private SchemaInfo resolve(Swagger s, SchemaInfo si) {
-		String ref = si.getRef();
-		if (ref != null) 
-			si = s.findRef(ref, SchemaInfo.class);
-		if (si == null)
-			throw new BeanRuntimeException("Reference not found in swagger document: {0}", ref); 
-		return si;
-	}
-	
-	private Div examples(Swagger s, SchemaInfo si, Map<String,?> examples) {
-		if (examples == null)
+	private Div examples(SchemaInfo si, Map<String,?> examples) {
+		if (examples == null || si == null)
 			return null;
 		
 		Select select = (Select)select().onchange("selectExample(this)")._class("example-select");
 		select.child(option("model","model"));
 		Div div = div(select)._class("examples");
 		
-		div.child(div(getSchemaModel(s, si))._class("model active").attr("data-name", "model"));
+		div.child(div(si.copy().setExample(null))._class("model active").attr("data-name", "model"));
 
 		for (Map.Entry<String,?> e : examples.entrySet()) {
 			String name = e.getKey();
@@ -270,37 +255,5 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		}
 		
 		return div;
-	}
-	
-	// Generates the model contents.
-	@SuppressWarnings("rawtypes")
-	private ObjectMap getSchemaModel(Swagger s, SchemaInfo si) {
-
-		ObjectMap m = new ObjectMap();
-
-		for (String k1 : si.keySet()) {
-			if (k1.equals("properties")) {
-				ObjectMap m2 = new ObjectMap();
-				for (Map.Entry<String,Map<String,Object>> e : si.getProperties().entrySet()) {
-					String pName = e.getKey();
-					Map<String,Object> pEntry = e.getValue();
-					if (pEntry.containsKey("$ref")) 
-						pEntry = getSchemaModel(s, s.findRef(pEntry.get("$ref").toString(), SchemaInfo.class));
-					if (pEntry.containsKey("items")) {
-						Object items = pEntry.get("items");
-						if (items instanceof Map && ((Map)items).containsKey("$ref"))
-							pEntry.put("items", getSchemaModel(s, s.findRef(((Map)items).get("$ref").toString(), SchemaInfo.class)));
-					}
-					m2.put(pName, pEntry);
-				}
-				m.put(k1, m2);
-			} else if (k1.equals("x-examples")) {
-				// Ignore these.
-			} else {
-				m.append(k1, si.get(k1, Object.class));
-			}
-		}
-		
-		return m;
 	}
 }

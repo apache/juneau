@@ -95,9 +95,68 @@ public class SchemaInfo extends SwaggerElement {
 		allOf;
 	private List<String>
 		required;
-	private Map<String,Map<String,Object>> properties;
-	private Map<String,Object> additionalProperties;
-
+	private Map<String,SchemaInfo> properties;
+	private SchemaInfo additionalProperties;
+	
+	/**
+	 * Default constructor.
+	 */
+	public SchemaInfo() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public SchemaInfo(SchemaInfo copyFrom) {
+		super(copyFrom);
+		
+		this.format = copyFrom.format;
+		this.title = copyFrom.title;
+		this.description = copyFrom.description;
+		this.pattern = copyFrom.pattern;
+		this.type = copyFrom.type;
+		this.discriminator = copyFrom.discriminator;
+		this.ref = copyFrom.ref;
+		this.multipleOf = copyFrom.multipleOf;
+		this.maximum = copyFrom.maximum;
+		this.minimum = copyFrom.minimum;
+		this.maxLength = copyFrom.maxLength;
+		this.minLength = copyFrom.minLength;
+		this.maxItems = copyFrom.maxItems;
+		this.minItems = copyFrom.minItems;
+		this.maxProperties = copyFrom.maxProperties;
+		this.minProperties = copyFrom.minProperties;
+		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
+		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
+		this.uniqueItems = copyFrom.uniqueItems;
+		this.readOnly = copyFrom.readOnly;
+		this._default = copyFrom._default;
+		this.example = copyFrom.example;
+		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
+		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
+		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this._enum = newList(copyFrom._enum);
+		this.allOf = newList(copyFrom.allOf);
+		this.required = newList(copyFrom.required);
+		
+		this.properties = copyFrom.properties == null ? null : new LinkedHashMap<String,SchemaInfo>();
+		if (copyFrom.properties != null)
+			for (Map.Entry<String,SchemaInfo> e : copyFrom.properties.entrySet())
+				this.properties.put(e.getKey(), e.getValue().copy());
+		
+		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public SchemaInfo copy() {
+		return new SchemaInfo(this);
+	}
+	
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 * 
@@ -997,7 +1056,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Map<String,Object>> getProperties() {
+	public Map<String,SchemaInfo> getProperties() {
 		return properties;
 	}
 
@@ -1009,7 +1068,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo setProperties(Map<String,Map<String,Object>> value) {
+	public SchemaInfo setProperties(Map<String,SchemaInfo> value) {
 		properties = newMap(value);
 		return this;
 	}
@@ -1022,7 +1081,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo addProperties(Map<String,Map<String,Object>> values) {
+	public SchemaInfo addProperties(Map<String,SchemaInfo> values) {
 		properties = addToMap(properties, values);
 		return this;
 	}
@@ -1044,9 +1103,8 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SchemaInfo properties(Object...values) {
-		properties = addToMap((Map)properties, values, String.class, Map.class, String.class, Object.class);
+		properties = addToMap(properties, values, String.class, SchemaInfo.class);
 		return this;
 	}
 
@@ -1055,7 +1113,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getAdditionalProperties() {
+	public SchemaInfo getAdditionalProperties() {
 		return additionalProperties;
 	}
 
@@ -1067,55 +1125,21 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo setAdditionalProperties(Map<String,Object> value) {
-		additionalProperties = newMap(value);
+	public SchemaInfo setAdditionalProperties(SchemaInfo value) {
+		additionalProperties = value;
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>additionalProperties</property> property.
+	 * Bean property setter:  <property>additionalProperties</property>.
 	 * 
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo addAdditionalProperties(Map<String,Object> values) {
-		additionalProperties = addToMap(additionalProperties, values);
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>additionalProperties</property> property.
-	 * 
-	 * @param name The extra property name.
-	 * @param value The extra property value.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo additionalProperty(String name, Object value) {
-		additionalProperties = addToMap(additionalProperties, name, value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>additionalProperties</property> property.
-	 * 
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Map&lt;String,Object&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	extraProperties(<js>"{name:'value'}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo additionalProperties(Object...values) {
-		additionalProperties = addToMap(additionalProperties, values, String.class, Object.class);
+	public SchemaInfo additionalProperties(Object value) {
+		additionalProperties = toType(value, SchemaInfo.class);
 		return this;
 	}
 
@@ -1320,6 +1344,15 @@ public class SchemaInfo extends SwaggerElement {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
+	 * 
+	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
+	 */
+	public boolean hasRef() {
+		return ref != null;
+	}
+
+	/**
 	 * Bean property setter:  <property>$ref</property>.
 	 * 
 	 * @param value 
@@ -1379,6 +1412,7 @@ public class SchemaInfo extends SwaggerElement {
 			case "xml": return toType(getXml(), type);
 			case "externalDocs": return toType(getExternalDocs(), type);
 			case "example": return toType(getExample(), type);
+			case "$ref": return toType(getRef(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1411,12 +1445,13 @@ public class SchemaInfo extends SwaggerElement {
 			case "items": return items(value);
 			case "allOf": return setAllOf(null).allOf(value);
 			case "properties": return setProperties(null).properties(value);
-			case "additionalProperties": return setAdditionalProperties(null).additionalProperties(value);
+			case "additionalProperties": return additionalProperties(value);
 			case "discriminator": return discriminator(value);
 			case "readOnly": return readOnly(value);
 			case "xml": return xml(value);
 			case "externalDocs": return externalDocs(value);
 			case "example": return example(value);
+			case "$ref": return ref(value);
 			default: 
 				super.set(property, value);
 				return this;
@@ -1454,10 +1489,13 @@ public class SchemaInfo extends SwaggerElement {
 			.appendIf(readOnly != null, "readOnly")
 			.appendIf(xml != null, "xml")
 			.appendIf(externalDocs != null, "externalDocs")
-			.appendIf(example != null, "example");
+			.appendIf(example != null, "example")
+			.appendIf(ref != null, "$ref");
 		return new MultiSet<>(s, super.keySet());
 	}
 
+	
+	
 	/**
 	 * Returns <jk>true</jk> if this schema info has one or more properties defined on it.
 	 * 
@@ -1465,5 +1503,31 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	public boolean hasProperties() {
 		return properties != null && ! properties.isEmpty();
+	}
+
+	/**
+	 * Resolves any <js>"$ref"</js> attributes in this element.
+	 * 
+	 * @param swagger The swagger document containing the definitions.
+	 * @return 
+	 * 	This object with references resolved.
+	 * 	<br>May or may not be the same object.
+	 */
+	public SchemaInfo resolveRefs(Swagger swagger) {
+		
+		if (ref != null) 
+			return swagger.findRef(ref, SchemaInfo.class);
+		
+		if (items != null)
+			items = items.resolveRefs(swagger);
+		
+		if (properties != null) 
+			for (Map.Entry<String,SchemaInfo> e : properties.entrySet())
+				e.setValue(e.getValue().resolveRefs(swagger));
+			
+		if (additionalProperties != null) 
+			additionalProperties = additionalProperties.resolveRefs(swagger);
+
+		return this;
 	}
 }

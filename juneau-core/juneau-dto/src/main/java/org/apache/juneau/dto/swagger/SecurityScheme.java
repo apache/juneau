@@ -74,7 +74,43 @@ public class SecurityScheme extends SwaggerElement {
 		authorizationUrl,
 		tokenUrl;
 	private Map<String,String> scopes;
+	
+	/**
+	 * Default constructor.
+	 */
+	public SecurityScheme() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public SecurityScheme(SecurityScheme copyFrom) {
+		super(copyFrom);
+		
+		this.type = copyFrom.type;
+		this.description = copyFrom.description;
+		this.name = copyFrom.name;
+		this.in = copyFrom.in;
+		this.flow = copyFrom.flow;
+		this.authorizationUrl = copyFrom.authorizationUrl;
+		this.tokenUrl = copyFrom.tokenUrl;
+		
+		this.scopes = copyFrom.scopes == null ? null : new LinkedHashMap<String,String>();
+		if (copyFrom.scopes != null)
+			this.scopes.putAll(copyFrom.scopes);
+	}
 
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public SecurityScheme copy() {
+		return new SecurityScheme(this);
+	}
+	
+	
 	@Override /* SwaggerElement */
 	protected SecurityScheme strict() {
 		super.strict();

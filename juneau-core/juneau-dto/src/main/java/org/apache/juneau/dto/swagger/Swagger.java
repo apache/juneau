@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
@@ -49,12 +50,88 @@ public class Swagger extends SwaggerElement {
 		produces;
 	private List<Tag> tags;
 	private List<Map<String,List<String>>> security;
-	private Map<String,SchemaInfo> definitions;
+	private Map<String,ObjectMap> definitions;
 	private Map<String,ParameterInfo> parameters;
 	private Map<String,ResponseInfo> responses;
 	private Map<String,SecurityScheme> securityDefinitions;
 	private Map<String,Map<String,Operation>> paths;
 
+	/**
+	 * Default constructor.
+	 */
+	public Swagger() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public Swagger(Swagger copyFrom) {
+		super(copyFrom);
+
+		this.swagger = copyFrom.swagger;
+		this.host = copyFrom.host;
+		this.basePath = copyFrom.basePath;
+		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
+		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.schemes = newList(copyFrom.schemes);
+		this.consumes = newList(copyFrom.consumes);
+		this.produces = newList(copyFrom.produces);
+
+		this.tags = copyFrom.tags == null ? null : new ArrayList<Tag>();
+		if (copyFrom.tags != null)
+			for (Tag t : copyFrom.tags)
+				this.tags.add(t.copy());
+		
+		this.security = copyFrom.security == null ? null : new ArrayList<Map<String,List<String>>>();
+		if (copyFrom.security != null)
+			for (Map<String,List<String>> m : copyFrom.security) {
+				Map<String,List<String>> m2 = new LinkedHashMap<>();
+				for (Map.Entry<String,List<String>> e : m.entrySet())
+					m2.put(e.getKey(), newList(e.getValue()));
+				this.security.add(m2);
+			}
+
+		// TODO - Definitions are not deep copied, so they should not contain references.
+		this.definitions = copyFrom.definitions == null ? null : new LinkedHashMap<String,ObjectMap>();
+		if (copyFrom.definitions != null)
+			for (Map.Entry<String,ObjectMap> e : copyFrom.definitions.entrySet())
+				this.definitions.put(e.getKey(), new ObjectMap(e.getValue()));
+		
+		this.parameters = copyFrom.parameters == null ? null : new LinkedHashMap<String,ParameterInfo>();
+		if (copyFrom.parameters != null)
+			for (Map.Entry<String,ParameterInfo> e : copyFrom.parameters.entrySet())
+				this.parameters.put(e.getKey(), e.getValue().copy());
+
+		this.responses = copyFrom.responses == null ? null : new LinkedHashMap<String,ResponseInfo>();
+		if (copyFrom.responses != null)
+			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
+				this.responses.put(e.getKey(), e.getValue().copy());
+
+		this.securityDefinitions = copyFrom.securityDefinitions == null ? null : new LinkedHashMap<String,SecurityScheme>();
+		if (copyFrom.securityDefinitions != null)
+			for (Map.Entry<String,SecurityScheme> e : copyFrom.securityDefinitions.entrySet())
+				this.securityDefinitions.put(e.getKey(), e.getValue().copy());
+
+		this.paths = copyFrom.paths == null ? null : new LinkedHashMap<String,Map<String,Operation>>();
+		if (copyFrom.paths != null)
+			for (Map.Entry<String,Map<String,Operation>> e : copyFrom.paths.entrySet()) {
+				Map<String,Operation> m = new LinkedHashMap<>();
+				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
+					m.put(e2.getKey(), e2.getValue().copy());
+				this.paths.put(e.getKey(), m);
+			}
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public Swagger copy() {
+		return new Swagger(this);
+	}
+	
 	/**
 	 * Bean property getter:  <property>swagger</property>.
 	 * 
@@ -617,7 +694,7 @@ public class Swagger extends SwaggerElement {
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,SchemaInfo> getDefinitions() {
+	public Map<String,ObjectMap> getDefinitions() {
 		return definitions;
 	}
 
@@ -632,7 +709,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setDefinitions(Map<String,SchemaInfo> value) {
+	public Swagger setDefinitions(Map<String,ObjectMap> value) {
 		definitions = newMap(value);
 		return this;
 	}
@@ -648,7 +725,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addDefinitions(Map<String,SchemaInfo> values) {
+	public Swagger addDefinitions(Map<String,ObjectMap> values) {
 		definitions = addToMap(definitions, values);
 		return this;
 	}
@@ -660,7 +737,7 @@ public class Swagger extends SwaggerElement {
 	 * @param schema The schema that the name defines.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger definition(String name, SchemaInfo schema) {
+	public Swagger definition(String name, ObjectMap schema) {
 		definitions = addToMap(definitions, name, schema);
 		return this;
 	}
@@ -683,7 +760,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger definitions(Object...values) {
-		definitions = addToMap(definitions, values, String.class, SchemaInfo.class);
+		definitions = addToMap(definitions, values, String.class, ObjectMap.class);
 		return this;
 	}
 
@@ -1281,7 +1358,34 @@ public class Swagger extends SwaggerElement {
 		if (isEmpty(ref))
 			return null;
 		if (! ref.startsWith("#/"))
-			throw new RuntimeException("Unspported reference:  '" + ref + '"');
-		return new PojoRest(this).get(ref.substring(1), c);
+			throw new RuntimeException("Unsupported reference:  '" + ref + '"');
+		try {
+			return new PojoRest(this).get(ref.substring(1), c);
+		} catch (Exception e) {
+			throw new BeanRuntimeException("Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName()).initCause(e); 
+		}
+	}
+
+	/**
+	 * Resolves any <js>"$ref"</js> attributes in this document.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public Swagger resolveRefs() {
+		
+		if (parameters != null)
+			for (Map.Entry<String,ParameterInfo> e : parameters.entrySet())
+				e.setValue(e.getValue().resolveRefs(this));
+		
+		if (responses != null)
+			for (Map.Entry<String,ResponseInfo> e : responses.entrySet())
+				e.setValue(e.getValue().resolveRefs(this));
+
+		if (paths != null)
+			for (Map.Entry<String,Map<String,Operation>> e : paths.entrySet())
+				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
+					e2.setValue(e2.getValue().resolveRefs(this));
+		
+		return this;
 	}
 }

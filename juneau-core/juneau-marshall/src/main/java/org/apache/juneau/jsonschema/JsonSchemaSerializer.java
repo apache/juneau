@@ -41,17 +41,17 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	private static final String PREFIX = "JsonSchemaSerializer.";
 
 	/**
-	 * Configuration property:  Add descriptions.
+	 * Configuration property:  Add descriptions to types.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addDescriptions.ss"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;{@link TypeCategory}&gt;</code>
-	 * 	<li><b>Default:</b>  Empty set.
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addDescriptionsTo.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addDescriptions(TypeCategory...)}
+	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addDescriptionsTo(String)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -60,21 +60,35 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
 	 * <p>
 	 * The description is the result of calling {@link ClassMeta#getReadableName()}.
+	 * <p>
+	 * The format is a comma-delimited list of any of the following values:
+	 * 
+	 * <ul class='doctree'>
+	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
+	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
+	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
+	 * 	<li class='jf'>{@link TypeCategory#MAP MAP}
+	 * 	<li class='jf'>{@link TypeCategory#STRING STRING}
+	 * 	<li class='jf'>{@link TypeCategory#NUMBER NUMBER}
+	 * 	<li class='jf'>{@link TypeCategory#BOOLEAN BOOLEAN}
+	 * 	<li class='jf'>{@link TypeCategory#ANY ANY}
+	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
+	 * </ul>
 	 */
-	public static final String JSONSCHEMA_addDescriptions = PREFIX + "addDescriptions.ss";
+	public static final String JSONSCHEMA_addDescriptionsTo = PREFIX + "addDescriptionsTo.s";
 	
 	/**
 	 * Configuration property:  Add examples.
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addExamples.ss"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;{@link TypeCategory}&gt;</code>
-	 * 	<li><b>Default:</b>  Empty set.
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addExamplesTo.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addExamples(TypeCategory...)}
+	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addExamplesTo(String)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -88,8 +102,23 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
+	 * 
+	 * <p>
+	 * The format is a comma-delimited list of any of the following values:
+	 * 
+	 * <ul class='doctree'>
+	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
+	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
+	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
+	 * 	<li class='jf'>{@link TypeCategory#MAP MAP}
+	 * 	<li class='jf'>{@link TypeCategory#STRING STRING}
+	 * 	<li class='jf'>{@link TypeCategory#NUMBER NUMBER}
+	 * 	<li class='jf'>{@link TypeCategory#BOOLEAN BOOLEAN}
+	 * 	<li class='jf'>{@link TypeCategory#ANY ANY}
+	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
+	 * </ul>
 	 */
-	public static final String JSONSCHEMA_addExamples = PREFIX + "addExamples.ss";
+	public static final String JSONSCHEMA_addExamplesTo = PREFIX + "addExamplesTo.s";
 	
 	/**
 	 * Configuration property:  Allow nested descriptions.
@@ -295,7 +324,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 
 	final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
 	final BeanDefMapper beanDefMapper;
-	final Set<TypeCategory> addExamples, addDescriptions;
+	final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
 	final Map<String,ObjectMap> defaultSchemas;
 
 	/**
@@ -317,8 +346,8 @@ public class JsonSchemaSerializer extends JsonSerializer {
 		allowNestedExamples = getBooleanProperty(JSONSCHEMA_allowNestedExamples, false);
 		allowNestedDescriptions = getBooleanProperty(JSONSCHEMA_allowNestedDescriptions, false);
 		beanDefMapper = getInstanceProperty(JSONSCHEMA_beanDefMapper, BeanDefMapper.class, BasicBeanDefMapper.class);
-		addExamples = getSetProperty(JSONSCHEMA_addExamples, TypeCategory.class, Collections.<TypeCategory>emptySet());
-		addDescriptions = getSetProperty(JSONSCHEMA_addDescriptions, TypeCategory.class, Collections.<TypeCategory>emptySet());
+		addExamplesTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addExamplesTo, null));
+		addDescriptionsTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addDescriptionsTo, null));
 		defaultSchemas = getMapProperty(JSONSCHEMA_defaultSchemas, ObjectMap.class);
 	}
 

@@ -68,6 +68,41 @@ public class ResponseInfo extends SwaggerElement {
 	private Map<String,Object> examples;
 
 	/**
+	 * Default constructor.
+	 */
+	public ResponseInfo() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public ResponseInfo(ResponseInfo copyFrom) {
+		super(copyFrom);
+		
+		this.description = copyFrom.description;
+		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
+		
+		this.headers = copyFrom.headers == null ? null : new LinkedHashMap<String,HeaderInfo>();
+		if (copyFrom.headers != null) 
+			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
+				this.headers.put(e.getKey(),	e.getValue().copy());
+		
+		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,Object>();
+		if (copyFrom.examples != null)
+			this.examples.putAll(copyFrom.examples);
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public ResponseInfo copy() {
+		return new ResponseInfo(this);
+	}
+	
+	/**
 	 * Copies any non-null fields from the specified object to this object.
 	 * 
 	 * @param r 
@@ -399,5 +434,25 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public boolean hasHeaders() {
 		return headers != null && ! headers.isEmpty();
+	}
+
+	/**
+	 * Resolves any <js>"$ref"</js> attributes in this element.
+	 * 
+	 * @param swagger The swagger document containing the definitions.
+	 * @return 
+	 * 	This object with references resolved.
+	 * 	<br>May or may not be the same object.
+	 */
+	public ResponseInfo resolveRefs(Swagger swagger) {
+
+		if (schema != null)
+			schema = schema.resolveRefs(swagger);
+		
+		if (headers != null)
+			for (Map.Entry<String,HeaderInfo> e : headers.entrySet()) 
+				e.setValue(e.getValue().resolveRefs(swagger));
+
+		return this;
 	}
 }

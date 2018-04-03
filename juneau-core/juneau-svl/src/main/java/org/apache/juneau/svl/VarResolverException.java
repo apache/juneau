@@ -10,64 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jsonschema;
+package org.apache.juneau.svl;
 
-import java.util.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.internal.*;
+import java.text.*;
+
+import org.apache.juneau.*;
 
 /**
- * Represents possible values for the following properties:
- * 
- * <ul class='doctree'>
- * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo}
- * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo}
- * </ul>
+ * Exception that occurs during a var resolver session.
  */
-public enum TypeCategory {
+public class VarResolverException extends FormattedRuntimeException {
+	private static final long serialVersionUID = 1L;
 
-	/** Beans */
-	BEAN, 
-	
-	/** Map */
-	MAP, 
-	
-	/** List/Set */
-	COLLECTION, 
-	
-	/** Array */
-	ARRAY, 
-	
-	/** Boolean (including primitives) */
-	BOOLEAN, 
-	
-	/** Short/Integer/Long/Float/Double (including primitives) */
-	NUMBER, 
-	
-	/** String/CharSequence/Character */
-	STRING, 
-	
-	/** Enums */
-	ENUM, 
-	
-	/** Anything else */
-	OTHER,
-
-	/** Anything */
-	ANY;
-	
 	/**
-	 * Parses a comma-delimited list of values into a set of {@link TypeCategory} values.
+	 * Constructor.
 	 * 
-	 * @param s The comma-delimited string.
-	 * @return A comma-delimited list of values into a set of {@link TypeCategory} values. 
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public static Set<TypeCategory> parse(String s) {
-		if (s == null || s.isEmpty())
-			return Collections.emptySet();
-		Set<TypeCategory> set = new LinkedHashSet<>();
-		for (String ss : StringUtils.split(s))
-			set.add(valueOf(ss.toUpperCase()));
-		return set;
+	public VarResolverException(String message, Object...args) {
+		super(format(message, args));
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param causedBy The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public VarResolverException(Throwable causedBy, String message, Object...args) {
+		this(message, args);
+		initCause(causedBy);
 	}
 }

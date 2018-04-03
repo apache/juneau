@@ -566,7 +566,7 @@ public class ItemsTest {
 		assertType(String.class, t.get("pattern", Object.class));
 		assertType(String.class, t.get("type", Object.class));
 		assertType(Boolean.class, t.get("uniqueItems", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertType(String.class, t.get("$ref", Object.class));
 		
 		JsonSerializer.DEFAULT_LAX.println(t);
 	

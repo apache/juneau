@@ -644,8 +644,8 @@ public final class BeanPropertyMeta {
 								if (! valueType.isObject()) {
 									for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
 										Object v = e.getValue();
-										if (v != null && ! valueType.getInnerClass().isInstance(v))
-											throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the value types in the assigned map do not match the specified ''elementClass'' attribute on the property, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
+										if (v != null && ! valueType.getInnerClass().isInstance(v)) 
+											v = session.convertToType(v, valueType);
 									}
 								}
 								invokeSetter(bean, pName, valueMap);

@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
@@ -360,11 +361,11 @@ public class SwaggerTest {
 	public void testSetDefinitions() {
 		Swagger t = new Swagger();
 		
-		t.setDefinitions(new AMap<String,SchemaInfo>().append("foo",schemaInfo().title("bar")));
-		assertObjectEquals("{foo:{title:'bar'}}", t.getDefinitions());
+		t.setDefinitions(new AMap<String,ObjectMap>().append("foo",new ObjectMap().append("type","bar")));
+		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
 		assertType(Map.class, t.getDefinitions());
 		
-		t.setDefinitions(new AMap<String,SchemaInfo>());
+		t.setDefinitions(new AMap<String,ObjectMap>());
 		assertObjectEquals("{}", t.getDefinitions());
 		assertType(Map.class, t.getDefinitions());
 
@@ -379,16 +380,16 @@ public class SwaggerTest {
 	public void testAddDefinitions() {
 		Swagger t = new Swagger();
 		
-		t.addDefinitions(new AMap<String,SchemaInfo>().append("foo",schemaInfo().title("bar")));
-		assertObjectEquals("{foo:{title:'bar'}}", t.getDefinitions());
+		t.addDefinitions(new AMap<String,ObjectMap>().append("foo", new ObjectMap().append("type", "bar")));
+		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
 		assertType(Map.class, t.getDefinitions());
 		
-		t.addDefinitions(new AMap<String,SchemaInfo>());
-		assertObjectEquals("{foo:{title:'bar'}}", t.getDefinitions());
+		t.addDefinitions(new AMap<String,ObjectMap>());
+		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
 		assertType(Map.class, t.getDefinitions());
 
 		t.addDefinitions(null);
-		assertObjectEquals("{foo:{title:'bar'}}", t.getDefinitions());
+		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
 		assertType(Map.class, t.getDefinitions());
 	}
 
@@ -399,11 +400,11 @@ public class SwaggerTest {
 	public void testDefinition() {
 		Swagger t = new Swagger();
 
-		t.definition("a", schemaInfo().title("a1"));
+		t.definition("a", new ObjectMap().append("type","a1"));
 		t.definition("b", null);
-		t.definition(null, schemaInfo().title("c1"));
+		t.definition(null, new ObjectMap().append("type", "c1"));
 		
-		assertObjectEquals("{a:{title:'a1'},b:null,null:{title:'c1'}}", t.getDefinitions());
+		assertObjectEquals("{a:{type:'a1'},b:null,null:{type:'c1'}}", t.getDefinitions());
 	}
 
 	/**
@@ -874,7 +875,7 @@ public class SwaggerTest {
 		assertType(List.class, t.get("consumes", Object.class));
 		assertType(MediaType.class, t.get("consumes", List.class).get(0));
 		assertType(Map.class, t.get("definitions", Object.class));
-		assertType(SchemaInfo.class, t.get("definitions", Map.class).values().iterator().next());
+		assertType(ObjectMap.class, t.get("definitions", Map.class).values().iterator().next());
 		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
 		assertType(String.class, t.get("host", Object.class));
 		assertType(Info.class, t.get("info", Object.class));

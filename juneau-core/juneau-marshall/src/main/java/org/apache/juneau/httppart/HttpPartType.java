@@ -24,7 +24,7 @@ public enum HttpPartType {
 	QUERY,
 
 	/** A form-data parameter */
-	FORM_DATA,
+	FORMDATA,
 
 	/** An HTTP header */
 	HEADER,

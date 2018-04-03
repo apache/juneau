@@ -32,6 +32,13 @@ public abstract class SwaggerElement {
 	private boolean strict;
 	private Map<String,Object> extra;
 
+	SwaggerElement() {}
+	
+	SwaggerElement(SwaggerElement copyFrom) {
+		this.strict = copyFrom.strict;
+		this.extra = copyFrom.extra == null ? null : new LinkedHashMap<>(copyFrom.extra);
+	}
+	
 	/**
 	 * Returns <jk>true</jk> if contents should be validated per the Swagger spec.
 	 * 

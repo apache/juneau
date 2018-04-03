@@ -18,8 +18,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
-
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
  * 
@@ -106,9 +104,10 @@ public class VarResolverSession {
 					if (s == null)
 						s = "";
 					return (v.allowRecurse() ? resolve(s) : s);
+				} catch (VarResolverException e) {
+					throw e;
 				} catch (Exception e) {
-					e.printStackTrace();
-					return '{' + e.getLocalizedMessage() + '}';
+					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", var); 
 				}
 			}
 			return s;
@@ -162,8 +161,10 @@ public class VarResolverSession {
 				for (Object o2 : c)
 					c2.add(resolve(o2));
 				return (T)c2;
+			} catch (VarResolverException e) {
+				throw e;
 			} catch (Exception e) {
-				return o;
+				throw new VarResolverException(e, "Problem occurred resolving collection."); 
 			}
 		}
 		if (o instanceof Map) {
@@ -175,8 +176,10 @@ public class VarResolverSession {
 				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 					m2.put(e.getKey(), resolve(e.getValue()));
 				return (T)m2;
+			} catch (VarResolverException e) {
+				throw e;
 			} catch (Exception e) {
-				return o;
+				throw new VarResolverException(e, "Problem occurred resolving map."); 
 			}
 		}
 		return o;
@@ -345,8 +348,10 @@ public class VarResolverSession {
 										replacement = resolve(replacement);
 									out.append(replacement);
 								}
+							} catch (VarResolverException e) {
+								throw e;
 							} catch (Exception e) {
-								out.append('{').append(e.getLocalizedMessage()).append('}');
+								throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", varType); 
 							}
 							x = i+1;
 						}
@@ -377,7 +382,7 @@ public class VarResolverSession {
 	 * @return 
 	 * 	The session object.  
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws RuntimeException If session object with specified name does not exist.
+	 * @throws VarResolverException If session object with specified name does not exist.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getSessionObject(Class<T> c, String name) {
@@ -389,11 +394,11 @@ public class VarResolverSession {
 				t = (T)sessionObjects.get(name);
 			}
 		} catch (Exception e) {
-			throw new FormattedRuntimeException(e,
+			throw new VarResolverException(e,
 				"Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c);
 		}
 		if (t == null)
-			throw new FormattedRuntimeException(
+			throw new VarResolverException(
 				"Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name);
 		return t;
 	}

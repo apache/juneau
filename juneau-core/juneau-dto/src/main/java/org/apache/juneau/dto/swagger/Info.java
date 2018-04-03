@@ -80,6 +80,36 @@ public class Info extends SwaggerElement {
 	private License license;
 
 	/**
+	 * Default constructor.
+	 */
+	public Info() {}
+	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param copyFrom The object to copy. 
+	 */
+	public Info(Info copyFrom) {
+		super(copyFrom);
+		
+		this.title = copyFrom.title;
+		this.description = copyFrom.description;
+		this.termsOfService = copyFrom.termsOfService;
+		this.version = copyFrom.version;
+		this.contact = copyFrom.contact == null ? null : copyFrom.contact.copy();
+		this.license = copyFrom.license == null ? null : copyFrom.license.copy();
+	}
+	
+	/**
+	 * Make a deep copy of this object.
+	 * 
+	 * @return A deep copy of this object. 
+	 */
+	public Info copy() {
+		return new Info(this);
+	}
+	
+	/**
 	 * Bean property getter:  <property>title</property>.
 	 * 
 	 * <p>

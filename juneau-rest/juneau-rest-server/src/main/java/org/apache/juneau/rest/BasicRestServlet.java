@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.ui.*;
@@ -174,6 +175,13 @@ import org.apache.juneau.xmlschema.*;
 	),
 	pojoSwaps={
 		SwaggerUI.class
+	},
+	properties={
+		@Property(name=JSONSCHEMA_addDescriptionsTo, value="bean,collection,array,map,enum"),
+		@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
+	},
+	flags={ 
+		JSONSCHEMA_useBeanDefs
 	}
 )
 public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig {
