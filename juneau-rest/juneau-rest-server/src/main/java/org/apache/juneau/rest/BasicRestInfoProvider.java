@@ -382,7 +382,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					param.put("required", true);
 				
 				param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
-				addXExamples(req, sm, omSwagger, param, in.toString(), js, mp.getType());
+				addXExamples(req, sm, param, in.toString(), js, mp.getType());
 			}
 			
 			if (! paramMap.isEmpty())
@@ -417,7 +417,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			ObjectMap okResponse = responses.getObjectMap("200");
 			
 			okResponse.put("schema", getSchema(req, okResponse.getObjectMap("schema", true), js, m.getGenericReturnType()));
-			addXExamples(req, sm, omSwagger, okResponse, "ok", js, m.getGenericReturnType());
+			addXExamples(req, sm, okResponse, "ok", js, m.getGenericReturnType());
 			
 			if (responses.isEmpty())
 				op.remove("responses");
@@ -465,18 +465,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (schema.containsKey("type") || schema.containsKey("$ref")) 
 			return schema;
 		
-		if (cm.isBean() && js.isUseBeanDefs()) 
-			schema.put("$ref", js.getBeanDefUri(cm));
-		else
-			schema.putAll(js.getSchema(cm));
+		schema.putAll(js.getSchema(cm));
 
 		return schema;
 	}
 	
 	
-	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap swagger, ObjectMap m, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
+	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap m, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
 		
-		ObjectMap schema = resolve(m.getObjectMap("schema"));
+		ObjectMap schema = resolve(js, m.getObjectMap("schema"));
 		if (schema == null)
 			return;
 
@@ -516,15 +513,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			m.put(examplesKey, examples);
 	}
 	
-	private ObjectMap resolve(ObjectMap m) {
+	private ObjectMap resolve(JsonSchemaSerializerSession js, ObjectMap m) {
 		if (m == null)
 			return null;
 		if (m.containsKey("$ref")) {
 			String ref = m.getString("$ref");
-			if (ref.startsWith("#/definitions/")) {
-				ref = ref.substring(1);
-				return m.getAt(ref, ObjectMap.class);
-			}
+			if (ref.startsWith("#/definitions/")) 
+				return js.getBeanDefs().get(ref.substring(14));
 		}
 		return m;
 	}

@@ -642,11 +642,16 @@ public final class BeanPropertyMeta {
 
 							if (propertyClass.isInstance(valueMap)) {
 								if (! valueType.isObject()) {
+									boolean needsConversion = false;
 									for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
 										Object v = e.getValue();
-										if (v != null && ! valueType.getInnerClass().isInstance(v)) 
-											v = session.convertToType(v, valueType);
+										if (v != null && ! valueType.getInnerClass().isInstance(v)) {
+											needsConversion = true;
+											break;
+										}
 									}
+									if (needsConversion)
+										valueMap = (Map)session.convertToType(valueMap, rawTypeMeta);
 								}
 								invokeSetter(bean, pName, valueMap);
 								return r;
