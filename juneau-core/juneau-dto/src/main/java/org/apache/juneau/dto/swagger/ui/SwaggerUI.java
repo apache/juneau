@@ -242,7 +242,10 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		if (si == null && examples == null)
 			return null;
 		
+		int count = (si == null ? 0 : 1) + (examples == null ? 0 : examples.entrySet().size());
 		Select select = (Select)select().onchange("selectExample(this)")._class("example-select");
+		if (count < 2)
+			select.disabled(true);
 		Div div = div(select)._class("examples");
 		
 		if (si != null) {

@@ -256,6 +256,11 @@ td.parameter-value, td.response-value {
     background: hsla(0,0%,100%,.3);
 }
 
+.op-block-contents .example-select:disabled {
+    color: rgba(0,0,0,.50);
+    border: 1px solid rgba(0,0,0,.50);
+}
+
 .op-block-contents .example {
     font-size: 12px;
     margin: 0;
