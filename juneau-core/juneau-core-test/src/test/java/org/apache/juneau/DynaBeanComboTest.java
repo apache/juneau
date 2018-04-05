@@ -264,7 +264,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 		}
 
 		@BeanProperty(name="*")
-		public void yyy(String name, Object o) {
+		public void setYYY(String name, Object o) {
 			setterCalled = true;
 			this.f2.put(name, o);
 		}

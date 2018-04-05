@@ -617,6 +617,13 @@ public class BeanMeta<T> {
 					} else if (n.startsWith("is") && (rt.equals(Boolean.TYPE) || rt.equals(Boolean.class))) {
 						methodType = GETTER;
 						n = n.substring(2);
+					} else if ("*".equals(bpName)) {
+						if (isParentClass(Collection.class, rt)) {
+							methodType = EXTRAKEYS;
+						} else if (isParentClass(Map.class, rt)) {
+							methodType = GETTER;
+						}
+						n = bpName;
 					} else if (bpName != null) {
 						methodType = GETTER;
 						if (bpName.isEmpty()) {
@@ -633,6 +640,11 @@ public class BeanMeta<T> {
 					if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
 						methodType = SETTER;
 						n = n.substring(3);
+					} else if ("*".equals(bpName)) {
+						if (isParentClass(Map.class, pt[0])) {
+							methodType = SETTER;
+							n = bpName;
+						}
 					} else if (bpName != null) {
 						methodType = SETTER;
 						if (bpName.isEmpty()) {
@@ -646,13 +658,21 @@ public class BeanMeta<T> {
 						methodType = SETTER;
 					}
 				} else if (pt.length == 2) {
-					if ("*".equals(bpName)) {
-						methodType = SETTER;
+					if ("*".equals(bpName) && pt[0] == String.class) {
+						if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
+							methodType = SETTER;
+						} else {
+							methodType = GETTER;
+						}
 						n = bpName;
 					}
 				}
 				n = pn.getPropertyName(n);
-				if (methodType == GETTER || methodType == SETTER) {
+				
+				if ("*".equals(bpName) && methodType == UNKNOWN)
+					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type.", bpName);
+				
+				if (methodType != UNKNOWN) {
 					if (bpName != null && ! bpName.isEmpty()) {
 						n = bpName;
 						if (! fixedBeanProps.isEmpty())
