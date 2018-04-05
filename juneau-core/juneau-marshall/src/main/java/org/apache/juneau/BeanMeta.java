@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.BeanMeta.MethodType.*;
 
 import java.beans.*;
 import java.io.*;
@@ -306,7 +307,7 @@ public class BeanMeta<T> {
 						if (! normalProps.containsKey(pn))
 							normalProps.put(pn, new BeanPropertyMeta.Builder(beanMeta, pn));
 						BeanPropertyMeta.Builder bpm = normalProps.get(pn);
-						if (! bm.isSetter) {
+						if (bm.methodType == GETTER) {
 							// Two getters.  Pick the best.
 							if (bpm.getter != null) {
 								
@@ -322,7 +323,7 @@ public class BeanMeta<T> {
 
 					// Now iterate through all the setters.
 					for (BeanMethod bm : bms) {
-						if (bm.isSetter) {
+						if (bm.methodType == SETTER) {
 							BeanPropertyMeta.Builder bpm = normalProps.get(bm.propertyName);
 							if (bm.matchesPropertyType(bpm))
 								bpm.setSetter(bm.method);
@@ -501,20 +502,30 @@ public class BeanMeta<T> {
 		return typeProperty;
 	}
 
+	/**
+	 * Possible property method types.
+	 */
+	static enum MethodType {
+		UNKNOWN, 
+		GETTER, 
+		SETTER, 
+		EXTRAKEYS;
+	}
+	
 	/*
 	 * Temporary getter/setter method struct.
 	 */
 	private static final class BeanMethod {
 		String propertyName;
-		boolean isSetter;
+		MethodType methodType;
 		Method method;
 		Class<?> type;
 
-		BeanMethod(String propertyName, boolean isSetter, Method method) {
+		BeanMethod(String propertyName, MethodType type, Method method) {
 			this.propertyName = propertyName;
-			this.isSetter = isSetter;
+			this.methodType = type;
 			this.method = method;
-			if (isSetter)
+			if (type == MethodType.SETTER)
 				this.type = method.getParameterTypes()[0];
 			else
 				this.type = method.getReturnType();
@@ -593,7 +604,7 @@ public class BeanMeta<T> {
 				
 				Class<?>[] pt = m.getParameterTypes();
 				Class<?> rt = m.getReturnType();
-				boolean isGetter = false, isSetter = false;
+				MethodType methodType = UNKNOWN;
 				String bpName = bpName(bp);
 				
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName))) 
@@ -601,13 +612,13 @@ public class BeanMeta<T> {
 				
 				if (pt.length == 0) {
 					if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {
-						isGetter = true;
+						methodType = GETTER;
 						n = n.substring(3);
 					} else if (n.startsWith("is") && (rt.equals(Boolean.TYPE) || rt.equals(Boolean.class))) {
-						isGetter = true;
+						methodType = GETTER;
 						n = n.substring(2);
 					} else if (bpName != null) {
-						isGetter = true;
+						methodType = GETTER;
 						if (bpName.isEmpty()) {
 							if (n.startsWith("get"))
 								n = n.substring(3);
@@ -620,10 +631,10 @@ public class BeanMeta<T> {
 					}
 				} else if (pt.length == 1) {
 					if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
-						isSetter = true;
+						methodType = SETTER;
 						n = n.substring(3);
 					} else if (bpName != null) {
-						isSetter = true;
+						methodType = SETTER;
 						if (bpName.isEmpty()) {
 							if (n.startsWith("set"))
 								n = n.substring(3);
@@ -632,16 +643,16 @@ public class BeanMeta<T> {
 							n = bpName;
 						}
 					} else if (fluentSetters && isParentClass(rt, c)) {
-						isSetter = true;
+						methodType = SETTER;
 					}
 				} else if (pt.length == 2) {
 					if ("*".equals(bpName)) {
-						isSetter = true;
+						methodType = SETTER;
 						n = bpName;
 					}
 				}
 				n = pn.getPropertyName(n);
-				if (isGetter || isSetter) {
+				if (methodType == GETTER || methodType == SETTER) {
 					if (bpName != null && ! bpName.isEmpty()) {
 						n = bpName;
 						if (! fixedBeanProps.isEmpty())
@@ -649,7 +660,7 @@ public class BeanMeta<T> {
 								n = null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties
 					}
 					if (n != null)
-						l.add(new BeanMethod(n, isSetter, m));
+						l.add(new BeanMethod(n, methodType, m));
 				}
 			}
 		}

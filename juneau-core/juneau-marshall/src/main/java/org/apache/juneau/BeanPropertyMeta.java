@@ -88,7 +88,7 @@ public final class BeanPropertyMeta {
 		BeanContext beanContext;
 		String name;
 		Field field;
-		Method getter, setter;
+		Method getter, setter, extraKeys;
 		boolean isConstructorArg, isUri, isDyna;
 		ClassMeta<?> rawTypeMeta, typeMeta;
 		String[] properties;
@@ -322,6 +322,12 @@ public final class BeanPropertyMeta {
 		BeanPropertyMeta.Builder setField(Field field) {
 			setAccessible(field, false);
 			this.field = field;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
+			setAccessible(extraKeys, false);
+			this.extraKeys = extraKeys;
 			return this;
 		}
 
