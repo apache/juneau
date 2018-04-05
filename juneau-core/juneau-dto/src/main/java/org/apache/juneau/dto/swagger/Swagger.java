@@ -1365,27 +1365,4 @@ public class Swagger extends SwaggerElement {
 			throw new BeanRuntimeException("Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName()).initCause(e); 
 		}
 	}
-
-	/**
-	 * Resolves any <js>"$ref"</js> attributes in this document.
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public Swagger resolveRefs() {
-		
-		if (parameters != null)
-			for (Map.Entry<String,ParameterInfo> e : parameters.entrySet())
-				e.setValue(e.getValue().resolveRefs(this));
-		
-		if (responses != null)
-			for (Map.Entry<String,ResponseInfo> e : responses.entrySet())
-				e.setValue(e.getValue().resolveRefs(this));
-
-		if (paths != null)
-			for (Map.Entry<String,Map<String,Operation>> e : paths.entrySet())
-				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
-					e2.setValue(e2.getValue().resolveRefs(this));
-		
-		return this;
-	}
 }

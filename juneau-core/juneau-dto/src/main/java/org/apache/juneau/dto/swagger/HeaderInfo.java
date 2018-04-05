@@ -1141,17 +1141,24 @@ public class HeaderInfo extends SwaggerElement {
 	 * Resolves any <js>"$ref"</js> attributes in this element.
 	 * 
 	 * @param swagger The swagger document containing the definitions.
+	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public HeaderInfo resolveRefs(Swagger swagger) {
+	public HeaderInfo resolveRefs(Swagger swagger, Deque<String> refStack) {
 		
-		if (ref != null)
-			return swagger.findRef(ref, HeaderInfo.class);
-		
+		if (ref != null) {
+			if (refStack.contains(ref) || refStack.size() > 2)
+				return this;
+			refStack.addLast(ref);
+			HeaderInfo r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack);
+			refStack.removeLast();
+			return r;
+		}
+
 		if (items != null)
-			items = items.resolveRefs(swagger);
+			items = items.resolveRefs(swagger, refStack);
 		
 		return this;
 	}

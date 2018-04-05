@@ -89,8 +89,8 @@ public abstract class SwaggerElement {
 	 */
 	@BeanProperty("*")
 	public Map<String,Object> getExtraProperties() {
-		if (extra == null)
-			extra = new LinkedHashMap<>();
+		if (extra == null || extra.isEmpty())
+			return null;
 		return extra;
 	}
 	
@@ -109,7 +109,7 @@ public abstract class SwaggerElement {
 			return null;
 		switch (property) {
 			case "strict": return toType(isStrict(), type);
-			default: return toType(getExtraProperties().get(property), type);
+			default: return extra == null ? null : toType(getExtraProperties().get(property), type);
 		}
 	};
 	
@@ -123,13 +123,16 @@ public abstract class SwaggerElement {
 	 * @param value The new value for the property.
 	 * @return This object (for method chaining).
 	 */
+	@BeanProperty("*")
 	public SwaggerElement set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
 			case "strict": return strict(value);
 			default: 
-				getExtraProperties().put(property, value);
+				if (extra == null)
+					extra = new LinkedHashMap<>();
+				extra.put(property, value);
 				return this;
 		}
 	}

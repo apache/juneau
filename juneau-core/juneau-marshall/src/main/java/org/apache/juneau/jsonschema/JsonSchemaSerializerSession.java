@@ -62,7 +62,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		defaultSchemas = getProperty(JSONSCHEMA_defaultSchemas, Map.class, ctx.defaultSchemas);
 		addExamplesTo = hasProperty(JSONSCHEMA_addExamplesTo) ? TypeCategory.parse(getProperty(JSONSCHEMA_addExamplesTo, String.class)) : ctx.addExamplesTo;
 		addDescriptionsTo = hasProperty(JSONSCHEMA_addDescriptionsTo) ? TypeCategory.parse(getProperty(JSONSCHEMA_addDescriptionsTo, String.class)) : ctx.addDescriptionsTo;
-		defs = useBeanDefs ? new LinkedHashMap<String,ObjectMap>() : null;
+		defs = useBeanDefs ? new TreeMap<String,ObjectMap>() : null;
 	}
 
 	@Override /* SerializerSession */
@@ -108,6 +108,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		aType = push(attrName, eType, null);
 
 		sType = eType.getSerializedClassMeta(this);
+
 		String type = null, format = null;
 		Object example = null, description = null;
 
@@ -118,8 +119,8 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			
 			// If we previously encountered this bean in a collection/array, then it may not have
 			// the example and description associated with it, so add it now.
-			if (! schema.containsKey("example")) 
-				schema.appendIf(true, true, true, "example", getExample(sType, BEAN, exampleAdded));
+			if (! schema.containsKey("x-example")) 
+				schema.appendIf(true, true, true, "x-example", getExample(sType, BEAN, exampleAdded));
 			if (! schema.containsKey("description")) 
 				schema.appendIf(true, true, true, "description", getDescription(sType, BEAN, exampleAdded));
 			
@@ -178,6 +179,10 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		} else if (sType.isCharSequence() || sType.isChar()) {
 			tc = STRING;
 			type = "string";
+		} else if (sType.isUri()) {
+			tc = STRING;
+			type = "string";
+			format = "uri";
 		}
 
 		// Add info from @JsonSchema on bean property.
@@ -237,14 +242,14 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		// Add info from @JsonSchema on bean property.
 		if (jsbpm != null) {
 			out.appendIf(false, true, true, "description", jsbpm.getDescription());
-			out.appendIf(false, true, true, "example", jsbpm.getExample());
+			out.appendIf(false, true, true, "x-example", jsbpm.getExample());
 		}
 
 		out.appendIf(false, true, true, "description", jscm.getDescription());
-		out.appendIf(false, true, true, "example", jscm.getExample());
+		out.appendIf(false, true, true, "x-example", jscm.getExample());
 
 		out.appendIf(false, true, true, "description", description);
-		out.appendIf(false, true, true, "example", example);
+		out.appendIf(false, true, true, "x-example", example);
 
 		if (ds != null)
 			out.appendAll(ds);
@@ -279,7 +284,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
 		boolean canAdd = allowNestedDescriptions || ! descriptionAdded;
 		if (canAdd && (addDescriptionsTo.contains(t) || addDescriptionsTo.contains(ANY)))
-			return sType.getReadableName();
+			return sType.toString();
 		return null;
 	}
 	

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.labels;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 
 /**
@@ -27,7 +28,10 @@ import org.apache.juneau.html.annotation.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; juneau-rest-server &gt; Predefined Label Beans</a>
  * </ul>
  */
-public final class ResourceDescription extends NameDescription implements Comparable<ResourceDescription> {
+@Bean(properties="name,description", fluentSetters=true)
+public final class ResourceDescription implements Comparable<ResourceDescription> {
+
+	private String name, description;
 
 	/**
 	 * Constructor.
@@ -36,18 +40,55 @@ public final class ResourceDescription extends NameDescription implements Compar
 	 * @param description The description of the child resource.
 	 */
 	public ResourceDescription(String name, String description) {
-		super(name, description);
+		this.name = name;
+		this.description = description;
 	}
 
 	/** No-arg constructor.  Used for JUnit testing of OPTIONS pages. */
 	public ResourceDescription() {}
 
-	@Override /* NameDescription */
+	/**
+	 * Returns the name field on this label.
+	 * 
+	 * @return The name.
+	 */
 	@Html(link="servlet:/{name}")
-	public Object getName() {
-		return super.getName();
+	public String getName() {
+		return name;
 	}
 
+	/**
+	 * Sets the name field on this label to a new value.
+	 * 
+	 * @param name The new name.
+	 * @return This object (for method chaining).
+	 */
+	public ResourceDescription name(String name) {
+		this.name = name;
+		return this;
+	}
+
+	/**
+	 * Returns the description field on this label.
+	 * 
+	 * @return The description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Sets the description field on this label to a new value.
+	 * 
+	 * @param description The new description.
+	 * @return This object (for method chaining).
+	 */
+	public ResourceDescription description(String description) {
+		this.description = description;
+		return this;
+	}
+	
+	
 	@Override /* Comparable */
 	public int compareTo(ResourceDescription o) {
 		return getName().toString().compareTo(o.getName().toString());

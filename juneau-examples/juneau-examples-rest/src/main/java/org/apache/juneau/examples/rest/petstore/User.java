@@ -20,6 +20,17 @@ public class User {
 	private String username, firstName, lastName, email, password, phone;
 	private int userStatus;
 	
+	// This shows an example provided as a static field.
+	@Example
+	public static User EXAMPLE = new User()
+		.username("billy")
+		.firstName("Billy")
+		.lastName("Bob")
+		.email("billy@apache.org")
+		.id(123)
+		.userStatus(1)
+		.phone("111-222-3333");
+	
 	public long getId() {
 		return id;
 	}

@@ -1507,7 +1507,7 @@ public class ParameterInfo extends SwaggerElement {
 			case "uniqueItems": return toType(getUniqueItems(), type);
 			case "enum": return toType(getEnum(), type);
 			case "multipleOf": return toType(getMultipleOf(), type);
-			case "examples": return toType(getExamples(), type);
+			case "x-examples": return toType(getExamples(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1573,7 +1573,7 @@ public class ParameterInfo extends SwaggerElement {
 			.appendIf(uniqueItems != null, "uniqueItems")
 			.appendIf(_enum != null, "enum")
 			.appendIf(multipleOf != null, "multipleOf")
-			.appendIf(examples != null, "examples");
+			.appendIf(examples != null, "x-examples");
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -1581,17 +1581,18 @@ public class ParameterInfo extends SwaggerElement {
 	 * Resolves any <js>"$ref"</js> attributes in this element.
 	 * 
 	 * @param swagger The swagger document containing the definitions.
+	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public ParameterInfo resolveRefs(Swagger swagger) {
+	public ParameterInfo resolveRefs(Swagger swagger, Deque<String> refStack) {
 		
 		if (schema != null)
-			schema = schema.resolveRefs(swagger);
+			schema = schema.resolveRefs(swagger, refStack);
 		
 		if (items != null)
-			items = items.resolveRefs(swagger);
+			items = items.resolveRefs(swagger, refStack);
 
 		return this;
 	}

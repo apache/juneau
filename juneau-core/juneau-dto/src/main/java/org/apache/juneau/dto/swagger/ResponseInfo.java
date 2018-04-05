@@ -440,18 +440,19 @@ public class ResponseInfo extends SwaggerElement {
 	 * Resolves any <js>"$ref"</js> attributes in this element.
 	 * 
 	 * @param swagger The swagger document containing the definitions.
+	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public ResponseInfo resolveRefs(Swagger swagger) {
+	public ResponseInfo resolveRefs(Swagger swagger, Deque<String> refStack) {
 
 		if (schema != null)
-			schema = schema.resolveRefs(swagger);
+			schema = schema.resolveRefs(swagger, refStack);
 		
 		if (headers != null)
 			for (Map.Entry<String,HeaderInfo> e : headers.entrySet()) 
-				e.setValue(e.getValue().resolveRefs(swagger));
+				e.setValue(e.getValue().resolveRefs(swagger, refStack));
 
 		return this;
 	}

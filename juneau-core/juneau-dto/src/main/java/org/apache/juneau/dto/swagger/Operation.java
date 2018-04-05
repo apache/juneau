@@ -1171,25 +1171,4 @@ public class Operation extends SwaggerElement {
 			.appendIf(security != null, "security");
 		return new MultiSet<>(s, super.keySet());
 	}
-
-	/**
-	 * Resolves any <js>"$ref"</js> attributes in this element.
-	 * 
-	 * @param swagger The swagger document containing the definitions.
-	 * @return 
-	 * 	This object with references resolved.
-	 * 	<br>May or may not be the same object.
-	 */
-	public Operation resolveRefs(Swagger swagger) {
-		
-		if (parameters != null)
-			for (ListIterator<ParameterInfo> i = parameters.listIterator(); i.hasNext();)
-				i.set(i.next().resolveRefs(swagger));
-
-		if (responses != null)
-			for (Map.Entry<String,ResponseInfo> e : responses.entrySet())
-				e.setValue(e.getValue().resolveRefs(swagger));
-		
-		return this;
-	}
 }

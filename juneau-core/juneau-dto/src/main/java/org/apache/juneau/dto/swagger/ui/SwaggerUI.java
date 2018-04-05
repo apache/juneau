@@ -14,6 +14,7 @@ package org.apache.juneau.dto.swagger.ui;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
+import java.util.*;
 import java.util.Map;
 
 import org.apache.juneau.*;
@@ -39,7 +40,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	@Override
 	public Div swap(BeanSession session, Swagger s) throws Exception {
 		
-		s = s.copy().resolveRefs();
+		s = s.copy();
 		
 		Div outer = div(
 			style(RESOURCES.getString("SwaggerUI.css")),
@@ -178,7 +179,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				
 				Td parameterValue = td(
 					div(pi.getDescription())._class("description"),
-					examples(pi.getSchema(), pi.getExamples())
+					examples(s, pi.getSchema(), pi.getExamples())
 				)._class("parameter-value");
 				
 				parameters.child(tr(parameterKey, parameterValue));
@@ -200,7 +201,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 				Td codeValue = td(
 					div(ri.getDescription())._class("description"),
-					examples(ri.getSchema(), ri.getExamples()),
+					examples(s, ri.getSchema(), ri.getExamples()),
 					headers(s, ri)
 				)._class("response-value");
 				
@@ -237,21 +238,25 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return headers;
 	}
 
-	private Div examples(SchemaInfo si, Map<String,?> examples) {
-		if (examples == null || si == null)
+	private Div examples(Swagger swagger, SchemaInfo si, Map<String,?> examples) {
+		if (si == null && examples == null)
 			return null;
 		
 		Select select = (Select)select().onchange("selectExample(this)")._class("example-select");
-		select.child(option("model","model"));
 		Div div = div(select)._class("examples");
 		
-		div.child(div(si.copy().setExample(null))._class("model active").attr("data-name", "model"));
-
-		for (Map.Entry<String,?> e : examples.entrySet()) {
-			String name = e.getKey();
-			String value = e.getValue().toString();
-			select.child(option(name, name));
-			div.child(div(value.replaceAll("\\n", "\n"))._class("example").attr("data-name", name));
+		if (si != null) {
+			select.child(option("model","model"));
+			div.child(div(si.copy().resolveRefs(swagger, new ArrayDeque<String>()))._class("model active").attr("data-name", "model"));
+		}
+		
+		if (examples != null) {
+			for (Map.Entry<String,?> e : examples.entrySet()) {
+				String name = e.getKey();
+				String value = e.getValue().toString();
+				select.child(option(name, name));
+				div.child(div(value.replaceAll("\\n", "\n"))._class("example").attr("data-name", name));
+			}
 		}
 		
 		return div;

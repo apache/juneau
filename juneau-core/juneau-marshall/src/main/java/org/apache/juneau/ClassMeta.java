@@ -1941,14 +1941,6 @@ public final class ClassMeta<T> implements Type {
 			return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
 		if (cc == COLLECTION)
 			return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
-		if (cc == OTHER && beanMeta == null) {
-			if (simple)
-				return sb.append(n);
-			sb.append("OTHER-").append(n).append(",notABeanReason=").append(notABeanReason);
-			if (initException != null)
-				sb.append(",initException=").append(initException);
-			return sb;
-		}
 		return sb.append(n);
 	}
 

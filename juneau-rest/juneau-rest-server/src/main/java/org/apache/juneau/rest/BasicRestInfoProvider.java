@@ -334,49 +334,51 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if (in != BODY)
 					param.append("name", mp.name);
 				
-				ObjectMap pm = mp.getMetaData();
-				if (pm.containsKeyNotEmpty("required"))
-					param.put("required", vr.resolve(pm.getString("required")));
-				if (pm.containsKeyNotEmpty("description"))
-					param.put("description", vr.resolve(pm.getString("description")));
-				if (pm.containsKeyNotEmpty("type"))
-					param.put("type", vr.resolve(pm.getString("type")));
-				if (pm.containsKeyNotEmpty("format"))
-					param.put("format", vr.resolve(pm.getString("format")));
-				if (pm.containsKeyNotEmpty("pattern"))
-					param.put("pattern", vr.resolve(pm.getString("pattern")));
-				if (pm.containsKeyNotEmpty("collectionFormat"))
-					param.put("collectionFormat", vr.resolve(pm.getString("collectionFormat")));
-				if (pm.containsKeyNotEmpty("maximum"))
-					param.put("maximum", vr.resolve(pm.getString("maximum")));
-				if (pm.containsKeyNotEmpty("minimum"))
-					param.put("minimum", vr.resolve(pm.getString("minimum")));
-				if (pm.containsKeyNotEmpty("multipleOf"))
-					param.put("multipleOf", vr.resolve(pm.getString("multipleOf")));
-				if (pm.containsKeyNotEmpty("maxLength"))
-					param.put("maxLength", vr.resolve(pm.getString("maxLength")));
-				if (pm.containsKeyNotEmpty("minLength"))
-					param.put("minLength", vr.resolve(pm.getString("minLength")));
-				if (pm.containsKeyNotEmpty("maxItems"))
-					param.put("maxItems", vr.resolve(pm.getString("maxItems")));
-				if (pm.containsKeyNotEmpty("minItems"))
-					param.put("minItems", vr.resolve(pm.getString("minItems")));
-				if (pm.containsKeyNotEmpty("allowEmptyVals"))
-					param.put("allowEmptyVals", vr.resolve(pm.getString("allowEmptyVals")));
-				if (pm.containsKeyNotEmpty("exclusiveMaximum"))
-					param.put("exclusiveMaximum", vr.resolve(pm.getString("exclusiveMaximum")));
-				if (pm.containsKeyNotEmpty("exclusiveMimimum"))
-					param.put("exclusiveMimimum", vr.resolve(pm.getString("exclusiveMimimum")));
-				if (pm.containsKeyNotEmpty("uniqueItems"))
-					param.put("uniqueItems", vr.resolve(pm.getString("uniqueItems")));
-				if (pm.containsKeyNotEmpty("schema"))
-					param.put("schema", new ObjectMap(vr.resolve(pm.getString("schema"))));
-				if (pm.containsKeyNotEmpty("default"))
-					param.put("default", JsonParser.DEFAULT.parse(vr.resolve(pm.getString("default")), Object.class));
-				if (pm.containsKeyNotEmpty("enum"))
-					param.put("enum", new ObjectList(vr.resolve(pm.getString("enum"))));
-				if (pm.containsKeyNotEmpty("items"))
-					param.put("items", new ObjectMap(vr.resolve(pm.getString("items"))));
+				ObjectMap pi = mp.getMetaData();
+				if (pi.containsKeyNotEmpty("required"))
+					param.put("required", vr.resolve(pi.getString("required")));
+				if (pi.containsKeyNotEmpty("description"))
+					param.put("description", vr.resolve(pi.getString("description")));
+				if (pi.containsKeyNotEmpty("type"))
+					param.put("type", vr.resolve(pi.getString("type")));
+				if (pi.containsKeyNotEmpty("format"))
+					param.put("format", vr.resolve(pi.getString("format")));
+				if (pi.containsKeyNotEmpty("pattern"))
+					param.put("pattern", vr.resolve(pi.getString("pattern")));
+				if (pi.containsKeyNotEmpty("collectionFormat"))
+					param.put("collectionFormat", vr.resolve(pi.getString("collectionFormat")));
+				if (pi.containsKeyNotEmpty("maximum"))
+					param.put("maximum", vr.resolve(pi.getString("maximum")));
+				if (pi.containsKeyNotEmpty("minimum"))
+					param.put("minimum", vr.resolve(pi.getString("minimum")));
+				if (pi.containsKeyNotEmpty("multipleOf"))
+					param.put("multipleOf", vr.resolve(pi.getString("multipleOf")));
+				if (pi.containsKeyNotEmpty("maxLength"))
+					param.put("maxLength", vr.resolve(pi.getString("maxLength")));
+				if (pi.containsKeyNotEmpty("minLength"))
+					param.put("minLength", vr.resolve(pi.getString("minLength")));
+				if (pi.containsKeyNotEmpty("maxItems"))
+					param.put("maxItems", vr.resolve(pi.getString("maxItems")));
+				if (pi.containsKeyNotEmpty("minItems"))
+					param.put("minItems", vr.resolve(pi.getString("minItems")));
+				if (pi.containsKeyNotEmpty("allowEmptyVals"))
+					param.put("allowEmptyVals", vr.resolve(pi.getString("allowEmptyVals")));
+				if (pi.containsKeyNotEmpty("exclusiveMaximum"))
+					param.put("exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
+				if (pi.containsKeyNotEmpty("exclusiveMimimum"))
+					param.put("exclusiveMimimum", vr.resolve(pi.getString("exclusiveMimimum")));
+				if (pi.containsKeyNotEmpty("uniqueItems"))
+					param.put("uniqueItems", vr.resolve(pi.getString("uniqueItems")));
+				if (pi.containsKeyNotEmpty("schema"))
+					param.put("schema", new ObjectMap(vr.resolve(pi.getString("schema"))));
+				if (pi.containsKeyNotEmpty("default"))
+					param.put("default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
+				if (pi.containsKeyNotEmpty("enum"))
+					param.put("enum", new ObjectList(vr.resolve(pi.getString("enum"))));
+				if (pi.containsKeyNotEmpty("items"))
+					param.put("items", new ObjectMap(vr.resolve(pi.getString("items"))));
+				if (pi.containsKeyNotEmpty("example"))
+					param.put("x-example", parse(vr.resolve(pi.getString("example"))));
 				
 				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 					param.put("required", true);
@@ -411,13 +413,22 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				}
 			}
 			
-			if (! responses.containsKey("200"))
-				responses.put("200", new ObjectMap().append("description", "Success"));
-			
 			ObjectMap okResponse = responses.getObjectMap("200");
+			if (okResponse == null)
+				okResponse = new ObjectMap();
 			
 			okResponse.put("schema", getSchema(req, okResponse.getObjectMap("schema", true), js, m.getGenericReturnType()));
 			addXExamples(req, sm, okResponse, "ok", js, m.getGenericReturnType());
+			
+			responses.put("200", okResponse);
+
+			// Add default response descriptions.
+			for (Map.Entry<String,Object> e : responses.entrySet()) {
+				String key = e.getKey();
+				Object val = e.getValue();
+				if (StringUtils.isDecimal(key) && val instanceof ObjectMap) 
+					responses.getObjectMap(key).appendIf(false, true, true, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
+			}
 			
 			if (responses.isEmpty())
 				op.remove("responses");
@@ -437,7 +448,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		}
 		
-		definitions.putAll(js.getBeanDefs());
+		for (Map.Entry<String,ObjectMap> e : js.getBeanDefs().entrySet())
+			definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 		
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");		
@@ -458,6 +470,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		return swagger;
 	}
 	
+	private Object parse(String s) throws ParseException {
+		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
+		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
+			return JsonParser.DEFAULT.parse(s, Object.class);
+		return s;
+	}
+
 	private ObjectMap getSchema(RestRequest req, ObjectMap schema, JsonSchemaSerializerSession js, Type type) throws Exception {
 		BeanSession bs = req.getBeanSession();
 		ClassMeta<?> cm = bs.getClassMeta(type);
@@ -465,19 +484,31 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (schema.containsKey("type") || schema.containsKey("$ref")) 
 			return schema;
 		
-		schema.putAll(js.getSchema(cm));
-
-		return schema;
+		return fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
 	}
 	
+	/** 
+	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes. 
+	 */
+	private ObjectMap fixSwaggerExtensions(ObjectMap om) {
+		om.appendSkipNull("discriminator", om.remove("x-discriminator"));
+		om.appendSkipNull("readOnly", om.remove("x-readOnly"));
+		om.appendSkipNull("xml", om.remove("x-xml"));
+		om.appendSkipNull("externalDocs", om.remove("x-externalDocs"));
+		om.appendSkipNull("example", om.remove("x-example"));
+		return om;
+	}
 	
-	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap m, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
+	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap piri, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
 		
-		ObjectMap schema = resolve(js, m.getObjectMap("schema"));
-		if (schema == null)
-			return;
+		Object example = piri.get("x-example");
 
-		Object example = schema.get("example", Object.class);
+		if (example == null) {
+			ObjectMap schema = resolve(js, piri.getObjectMap("schema"));
+			if (schema != null)
+				example = schema.get("x-example");
+		}
+
 		if (example == null)
 			return;
 		
@@ -487,7 +518,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		String examplesKey = isOk ? "examples" : "x-examples";  // Parameters don't have an examples attribute.
 
-		ObjectMap examples = schema.getObjectMap(examplesKey);
+		ObjectMap examples = piri.getObjectMap(examplesKey);
 		if (examples == null)
 			examples = new ObjectMap();
 
@@ -506,11 +537,21 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				}
 			}
 		} else {
-			examples.put("example", req.getPartSerializer().serialize(HttpPartType.valueOf(in.toUpperCase()), example));
+			String paramName = piri.getString("name");
+			String s = req.getPartSerializer().serialize(HttpPartType.valueOf(in.toUpperCase()), example);
+			if ("query".equals(in))
+				s = "?" + paramName + "=" + s;
+			else if ("formData".equals(in))
+				s = paramName + "=" + s;
+			else if ("header".equals(in))
+				s = paramName + ": " + s;
+			else if ("path".equals(in))
+				s = sm.getPathPattern().replace("{"+paramName+"}", s);
+ 			examples.put("example", s);
 		}
 		
 		if (! examples.isEmpty())
-			m.put(examplesKey, examples);
+			piri.put(examplesKey, examples);
 	}
 	
 	private ObjectMap resolve(JsonSchemaSerializerSession js, ObjectMap m) {

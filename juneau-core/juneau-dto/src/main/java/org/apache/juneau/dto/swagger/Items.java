@@ -96,7 +96,6 @@ public class Items extends SwaggerElement {
 		this.format = copyFrom.format;
 		this.collectionFormat = copyFrom.collectionFormat;
 		this.pattern = copyFrom.pattern;
-		this.ref = copyFrom.ref;
 		this.maximum = copyFrom.maximum;
 		this.minimum = copyFrom.minimum;
 		this.multipleOf = copyFrom.multipleOf;
@@ -110,6 +109,7 @@ public class Items extends SwaggerElement {
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._default = copyFrom._default;
 		this._enum = newList(copyFrom._enum);
+		this.ref = copyFrom.ref;
 	}
 	
 	/**
@@ -1039,7 +1039,6 @@ public class Items extends SwaggerElement {
 			case "format": return toType(getFormat(), type);
 			case "items": return toType(getItems(), type);
 			case "collectionFormat": return toType(getCollectionFormat(), type);
-			case "$ref": return toType(getRef(), type);
 			case "default": return toType(getDefault(), type);
 			case "maximum": return toType(getMaximum(), type);
 			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
@@ -1053,6 +1052,7 @@ public class Items extends SwaggerElement {
 			case "uniqueItems": return toType(getUniqueItems(), type);
 			case "enum": return toType(getEnum(), type);
 			case "multipleOf": return toType(getMultipleOf(), type);
+			case "$ref": return toType(getRef(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1066,7 +1066,6 @@ public class Items extends SwaggerElement {
 			case "format": return format(value);
 			case "items": return items(value);
 			case "collectionFormat": return collectionFormat(value);
-			case "$ref": return ref(value);
 			case "default": return _default(value);
 			case "maximum": return maximum(value);
 			case "exclusiveMaximum": return exclusiveMaximum(value);
@@ -1080,6 +1079,7 @@ public class Items extends SwaggerElement {
 			case "uniqueItems": return uniqueItems(value);
 			case "enum": return setEnum(null)._enum(value);
 			case "multipleOf": return multipleOf(value);
+			case "$ref": return ref(value);
 			default: 
 				super.set(property, value);
 				return this;
@@ -1093,7 +1093,6 @@ public class Items extends SwaggerElement {
 			.appendIf(format != null, "format")
 			.appendIf(items != null, "items")
 			.appendIf(collectionFormat != null, "collectionFormat")
-			.appendIf(ref != null, "$ref")
 			.appendIf(_default != null, "default")
 			.appendIf(maximum != null, "maximum")
 			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
@@ -1106,7 +1105,8 @@ public class Items extends SwaggerElement {
 			.appendIf(minItems != null, "minItems")
 			.appendIf(uniqueItems != null, "uniqueItems")
 			.appendIf(_enum != null, "enum")
-			.appendIf(multipleOf != null, "multipleOf");
+			.appendIf(multipleOf != null, "multipleOf")
+			.appendIf(ref != null, "$ref");
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -1114,19 +1114,27 @@ public class Items extends SwaggerElement {
 	 * Resolves any <js>"$ref"</js> attributes in this element.
 	 * 
 	 * @param swagger The swagger document containing the definitions.
+	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public Items resolveRefs(Swagger swagger) {
+	public Items resolveRefs(Swagger swagger, Deque<String> refStack) {
 		
-		if (ref != null)
-			return swagger.findRef(ref, Items.class);
+		if (ref != null) {
+			if (refStack.contains(ref) || refStack.size() > 2)
+				return this;
+			refStack.addLast(ref);
+			Items r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack);
+			refStack.removeLast();
+			return r;
+		}
 		
 		if (items != null)
-			items = items.resolveRefs(swagger);
+			items = items.resolveRefs(swagger, refStack);
+		
+		set("example", null);
 
 		return this;
 	}
-
 }

@@ -570,6 +570,7 @@ class RestParamDefaults {
 				.appendSkipEmpty("exclusiveMimimum", a.exclusiveMimimum())
 				.appendSkipEmpty("schema", a.schema())
 				.appendSkipEmpty("enum", a._enum())
+				.appendSkipEmpty("example", a.example())
 			;
 		}
 	}
@@ -610,6 +611,7 @@ class RestParamDefaults {
 				.appendSkipEmpty("default", a._default())
 				.appendSkipEmpty("enum", a._enum())
 				.appendSkipEmpty("items", a.items())
+				.appendSkipEmpty("example", a.example())
 			;
 		}
 	}
@@ -652,6 +654,7 @@ class RestParamDefaults {
 				.appendSkipEmpty("default", a._default())
 				.appendSkipEmpty("enum", a._enum())
 				.appendSkipEmpty("items", a.items())
+				.appendSkipEmpty("example", a.example())
 			;
 		}
 	}
@@ -714,6 +717,7 @@ class RestParamDefaults {
 				.appendSkipEmpty("default", a._default())
 				.appendSkipEmpty("enum", a._enum())
 				.appendSkipEmpty("items", a.items())
+				.appendSkipEmpty("example", a.example())
 			;
 		}
 	}
@@ -762,6 +766,7 @@ class RestParamDefaults {
 				.appendSkipEmpty("default", a._default())
 				.appendSkipEmpty("enum", a._enum())
 				.appendSkipEmpty("items", a.items())
+				.appendSkipEmpty("example", a.example())
 			;
 		}
 

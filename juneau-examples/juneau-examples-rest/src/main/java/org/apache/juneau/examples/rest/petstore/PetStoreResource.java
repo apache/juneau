@@ -89,7 +89,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			"security:[ { api_key:[] } ]"
 		}
 	)
-	public Pet getPet(@Path(description="ID of pet to return") long petId) throws IdNotFoundException {
+	public Pet getPet(@Path(description="ID of pet to return", example="123") long petId) throws IdNotFoundException {
 		return db.getPet(petId);
 	}
 	
@@ -100,10 +100,13 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:['pet'],",
 			"security:[ { petstore_auth:['write:pets','read:pets'] } ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
-	public String addPet(@Body(description="Pet object that needs to be added to the store") Pet pet) throws IdConflictException {
+	public String addPet(
+			@Body(description="Pet object that needs to be added to the store") Pet pet
+		) throws IdConflictException {
+		
 		db.add(pet);
 		return "OK";
 	}
@@ -115,7 +118,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:['pet'],",
 			"security:[ { petstore_auth: ['write:pets','read:pets'] } ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String updatePet(@Body(description="Pet object that needs to be added to the store") Pet pet) throws IdNotFoundException {
@@ -133,7 +136,16 @@ public class PetStoreResource extends BasicRestServletJena {
 			"security:[{ petstore_auth:[ 'write:pets','read:pets' ] } ]"
 		}
 	)
-	public Collection<Pet> findPetsByStatus(@Query(name="status", description="Status values that need to be considered for filter", required="true") PetStatus[] status) {
+	public Collection<Pet> findPetsByStatus(
+			@Query(
+				name="status", 
+				description="Status values that need to be considered for filter", 
+				required="true", 
+				example="['AVAILABLE','PENDING']"
+			) 
+			PetStatus[] status
+		) {
+		
 		return db.getPetsByStatus(status);
 	}
 	
@@ -148,7 +160,16 @@ public class PetStoreResource extends BasicRestServletJena {
 		}
 	)
 	@Deprecated
-	public Collection<Pet> findPetsByTags(@Query(name="tags", description="Tags to filter by", required="true") String[] tags) throws InvalidTagException {
+	public Collection<Pet> findPetsByTags(
+			@Query(
+				name="tags", 
+				description="Tags to filter by", 
+				required="true", 
+				example="['tag1','tag2']"
+			) 
+			String[] tags
+		) throws InvalidTagException {
+		
 		return db.getPetsByTags(tags);
 	}
 
@@ -159,14 +180,15 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:[ 'pet' ],",
 			"security:[ { petstore_auth:[ 'write:pets', 'read:pets' ] } ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String updatePetForm(
-			@Path(description="ID of pet that needs to be updated") long petId, 
-			@FormData(name="name", description="Updated name of the pet") String name, 
-			@FormData(name="status", description="Updated status of the pet") PetStatus status
+			@Path(description="ID of pet that needs to be updated", example="123") long petId, 
+			@FormData(name="name", description="Updated name of the pet", example="'Scruffy'") String name, 
+			@FormData(name="status", description="Updated status of the pet", example="'AVAILABLE'") PetStatus status
 		) throws IdNotFoundException {
+		
 		Pet pet = db.getPet(petId);
 		pet.name(name);
 		pet.status(status);
@@ -181,12 +203,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:[ 'pet' ],",
 			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String deletePet(
-			@Header("api_key") String apiKey, 
-			@Path(description="Pet id to delete") long petId
+			@Header(name="api_key", example="foobar") String apiKey, 
+			@Path(description="Pet id to delete", example="123") long petId
 		) throws IdNotFoundException {
 		db.removePet(petId);
 		return "OK";
@@ -199,12 +221,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:[ 'pet' ],",
 			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String uploadImage(
-			@Path(description="ID of pet to update") long petId, 
-			@FormData(name="additionalMetadata", description="Additional data to pass to server") String additionalMetadata, 
+			@Path(description="ID of pet to update", example="123") long petId, 
+			@FormData(name="additionalMetadata", description="Additional data to pass to server", example="Foobar") String additionalMetadata, 
 			@FormData(name="file", description="file to upload", required="true", type="file") byte[] file
 		) {
 		return "OK";
@@ -236,8 +258,15 @@ public class PetStoreResource extends BasicRestServletJena {
 		}
 	)
 	public Order getOrder(
-			@Path(description="ID of order to fetch", maximum="10.0", minimum="1.0") long orderId
+			@Path(
+				description="ID of order to fetch", 
+				maximum="10", 
+				minimum="1",
+				example="5"
+			) 
+			long orderId
 		) throws InvalidIdException, IdNotFoundException {
+		
 		if (orderId < 0 || orderId > 10)
 			throw new InvalidIdException();
 		return db.getOrder(orderId);
@@ -251,7 +280,14 @@ public class PetStoreResource extends BasicRestServletJena {
 			"tags:[ 'store' ]"
 		}
 	)
-	public Order placeOrder(@Body(description="Order placed for purchasing the pet") Order order) throws IdConflictException {
+	public Order placeOrder(
+			@Body(
+				description="Order placed for purchasing the pet", 
+				example="{petId:456,quantity:100}"
+			) 
+			Order order
+		) throws IdConflictException {
+		
 		return db.add(order);
 	}
 
@@ -262,12 +298,18 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors.",
 		swagger={
 			"tags:[ 'store' ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String deletePurchaseOrder(
-			@Path(description="ID of the order that needs to be deleted", minimum="1.0") long orderId
+			@Path(
+				description="ID of the order that needs to be deleted", 
+				minimum="1",
+				example="5"
+			) 
+			long orderId
 		) throws InvalidIdException, IdNotFoundException {
+		
 		if (orderId < 0)
 			throw new InvalidIdException();
 		db.removeOrder(orderId);
@@ -282,7 +324,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:[ 'store' ],",
 			"responses:{",
-				"200:{ description:'successful operation', schema:{ type:'object', additionalProperties:{ type:'integer', format:'int32' } } }",
+				"200:{ 'x-example':{AVAILABLE:123} }",
 			"},",
 			"security:[ { api_key:[] } ]"
 		}
@@ -326,7 +368,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="This can only be done by the logged in user.",
 		swagger={
 			"tags:[ 'user' ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String createUser(@Body(description="Created user object") User user) throws InvalidUsernameException, IdConflictException {
@@ -340,7 +382,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		summary="Creates list of users with given input array",
 		swagger={
 			"tags:[ 'user' ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String createUsers(@Body(description="List of user objects") User[] users) throws InvalidUsernameException, IdConflictException {
@@ -356,7 +398,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="This can only be done by the logged in user.",
 		swagger={
 			"tags:[ 'user' ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String updateUser(
@@ -376,7 +418,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		description="This can only be done by the logged in user.",
 		swagger={
 			"tags:[ 'user' ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String deleteUser(@Path(description="The name that needs to be deleted") String username) throws InvalidUsernameException, IdNotFoundException {
@@ -393,23 +435,38 @@ public class PetStoreResource extends BasicRestServletJena {
 			"tags:[ 'user' ],",
 			"responses:{",
 				"200:{",
-					"description: 'OK', schema:{ type:'string' },",
+					"'x-example':'OK',",
+					"schema:{ type:'string' },",
 					"headers:{",
-						"X-Rate-Limit:{ type:'integer', format:'int32', description:'calls per hour allowed by the user' },",
-						"X-Expires-After:{ type:'string', format:'date-time', description:'date in UTC when token expires' }",
+						"X-Rate-Limit:{ type:'integer', format:'int32', description:'calls per hour allowed by the user', 'x-example':123},",
+						"X-Expires-After:{ type:'string', format:'date-time', description:'date in UTC when token expires', 'x-example':'2012-10-21'}",
 					"}",
 				"}",
 			"}"
 		}
 	)
 	public String login(
-			@Query(name="username", description="The username for login", required="true") String username, 
-			@Query(name="password", description="The password for login in clear text", required="true") String password, 
+			@Query(
+				name="username", 
+				description="The username for login", 
+				required="true", 
+				example="myuser"
+			) 
+			String username, 
+			@Query(
+				name="password", 
+				description="The password for login in clear text", 
+				required="true", 
+				example="abc123"
+			) 
+			String password, 
 			RestRequest req, 
 			RestResponse res
 		) throws LoginException {
+		
 		if (! db.isValid(username, password))
 			throw new LoginException();
+		
 		Date d = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
 		req.getSession().setAttribute("login-expires", d);
 		res.setHeader("X-Rate-Limit", "1000");
@@ -423,7 +480,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		summary="Logs out current logged in user session",
 		swagger={
 			"tags:[ 'user' ],",
-			"responses: { 200: { description: 'OK', schema:{ type:'string' } } }"
+			"responses: { 200: { 'x-example':'OK' } }"
 		}
 	)
 	public String logout(RestRequest req) {

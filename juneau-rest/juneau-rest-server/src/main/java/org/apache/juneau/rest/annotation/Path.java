@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.rest.*;
 
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a variable
@@ -307,4 +308,22 @@ public @interface Path {
 	 * </ul>
 	 */
 	String _enum() default "";
+	
+	/**
+	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-example</code>.
+	 * 
+	 * <p>
+	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
+	 * an example of the path.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of the value is a JSON object or plain-text string.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String example() default "";
 }

@@ -29,6 +29,7 @@ public class Pet {
 	private List<Tag> tags;
 	private PetStatus status;
 	
+	// This shows an example generated from a static method.
 	@Example
 	public static Pet example() {
 		return new Pet()

@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest.petstore;
 import org.apache.juneau.annotation.*;
 
 @Bean(fluentSetters=true)
+@Example("{id:123,petId:456,quantity:100,shipDate:'2012-12-21',status:'APPROVED'}")
 public class Order {
 	private long id, petId;
 	private int quantity;

@@ -18,6 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.io.*;
 import java.lang.annotation.*;
 
+import org.apache.juneau.rest.*;
+
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the HTTP
  * request body converted to a POJO.
@@ -369,4 +371,22 @@ public @interface Body {
 	 * </ul>
 	 */
 	String items() default "";	
+	
+	/**
+	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-example</code>.
+	 * 
+	 * <p>
+	 * This attribute defines a JSON representation of the body value that is used by {@link BasicRestInfoProvider} to construct
+	 * media-type-based examples of the body of the request.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of the value is a JSON object or plain-text string.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String example() default "";
 }
