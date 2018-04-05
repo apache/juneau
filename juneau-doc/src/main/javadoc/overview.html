@@ -21344,6 +21344,9 @@
 			<li>
 				Fixed <code>NullPointerException</code> when serializing beans with a dyna-property (i.e. <code><ja>@Bean</ja>(<js>"*"</js>)</code>)
 				which returns a <jk>null</jk> value.
+			<li>
+				New option for dyna-property (i.e. <code><ja>@Bean</ja>(<js>"*"</js>)</code>) using a method that returns a collection of extra keys.
+				<br>See new options #4 on {@link org.apache.juneau.annotation.BeanProperty#name()}
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>

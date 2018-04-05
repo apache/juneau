@@ -329,6 +329,14 @@ public class BeanMeta<T> {
 								bpm.setSetter(bm.method);
 						}
 					}
+					
+					// Now iterate through all the extraKeys.
+					for (BeanMethod bm : bms) {
+						if (bm.methodType == EXTRAKEYS) {
+							BeanPropertyMeta.Builder bpm = normalProps.get(bm.propertyName);
+							bpm.setExtraKeys(bm.method);
+						}
+					}
 				}
 
 				typeVarImpls = new HashMap<>();
@@ -611,19 +619,19 @@ public class BeanMeta<T> {
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
 				
 				if (pt.length == 0) {
-					if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {
-						methodType = GETTER;
-						n = n.substring(3);
-					} else if (n.startsWith("is") && (rt.equals(Boolean.TYPE) || rt.equals(Boolean.class))) {
-						methodType = GETTER;
-						n = n.substring(2);
-					} else if ("*".equals(bpName)) {
+					if ("*".equals(bpName)) {
 						if (isParentClass(Collection.class, rt)) {
 							methodType = EXTRAKEYS;
 						} else if (isParentClass(Map.class, rt)) {
 							methodType = GETTER;
 						}
 						n = bpName;
+					} else if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {
+						methodType = GETTER;
+						n = n.substring(3);
+					} else if (n.startsWith("is") && (rt.equals(Boolean.TYPE) || rt.equals(Boolean.class))) {
+						methodType = GETTER;
+						n = n.substring(2);
 					} else if (bpName != null) {
 						methodType = GETTER;
 						if (bpName.isEmpty()) {
@@ -637,14 +645,17 @@ public class BeanMeta<T> {
 						}
 					}
 				} else if (pt.length == 1) {
-					if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
-						methodType = SETTER;
-						n = n.substring(3);
-					} else if ("*".equals(bpName)) {
+					if ("*".equals(bpName)) {
 						if (isParentClass(Map.class, pt[0])) {
 							methodType = SETTER;
 							n = bpName;
+						} else if (pt[0] == String.class) {
+							methodType = GETTER;
+							n = bpName;
 						}
+					} else if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
+						methodType = SETTER;
+						n = n.substring(3);
 					} else if (bpName != null) {
 						methodType = SETTER;
 						if (bpName.isEmpty()) {
@@ -670,7 +681,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 				
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type.", bpName);
+					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type on method ''{0}''.", m.getName());
 				
 				if (methodType != UNKNOWN) {
 					if (bpName != null && ! bpName.isEmpty()) {

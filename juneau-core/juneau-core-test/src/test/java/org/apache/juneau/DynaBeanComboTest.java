@@ -206,6 +206,41 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
+			{ 	/* 5 */
+				new ComboInput<BeanWithDynaMethodsAndExtraKeys>(
+					"BeanWithDynaMethodsAndExtraKeys",
+					BeanWithDynaMethodsAndExtraKeys.class,
+					new BeanWithDynaMethodsAndExtraKeys().init(),
+					/* Json */		"{f1:1,f2a:'a',f2b:'b',f3:3}",
+					/* JsonT */		"{f1:1,f2a:'a',f2b:'b',f3:3}",
+					/* JsonR */		"{\n\tf1: 1,\n\tf2a: 'a',\n\tf2b: 'b',\n\tf3: 3\n}",
+					/* Xml */		"<object><f1>1</f1><f2a>a</f2a><f2b>b</f2b><f3>3</f3></object>",
+					/* XmlT */		"<object><f1>1</f1><f2a>a</f2a><f2b>b</f2b><f3>3</f3></object>",
+					/* XmlR */		"<object>\n\t<f1>1</f1>\n\t<f2a>a</f2a>\n\t<f2b>b</f2b>\n\t<f3>3</f3>\n</object>\n",
+					/* XmlNs */		"<object><f1>1</f1><f2a>a</f2a><f2b>b</f2b><f3>3</f3></object>",
+					/* Html */		"<table><tr><td>f1</td><td>1</td></tr><tr><td>f2a</td><td>a</td></tr><tr><td>f2b</td><td>b</td></tr><tr><td>f3</td><td>3</td></tr></table>",
+					/* HtmlT */		"<table><tr><td>f1</td><td>1</td></tr><tr><td>f2a</td><td>a</td></tr><tr><td>f2b</td><td>b</td></tr><tr><td>f3</td><td>3</td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>f1</td>\n\t\t<td>1</td>\n\t</tr>\n\t<tr>\n\t\t<td>f2a</td>\n\t\t<td>a</td>\n\t</tr>\n\t<tr>\n\t\t<td>f2b</td>\n\t\t<td>b</td>\n\t</tr>\n\t<tr>\n\t\t<td>f3</td>\n\t\t<td>3</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"(f1=1,f2a=a,f2b=b,f3=3)",
+					/* UonT */		"(f1=1,f2a=a,f2b=b,f3=3)",
+					/* UonR */		"(\n\tf1=1,\n\tf2a=a,\n\tf2b=b,\n\tf3=3\n)",
+					/* UrlEnc */	"f1=1&f2a=a&f2b=b&f3=3",
+					/* UrlEncT */	"f1=1&f2a=a&f2b=b&f3=3",
+					/* UrlEncR */	"f1=1\n&f2a=a\n&f2b=b\n&f3=3",
+					/* MsgPack */	"84A2663101A3663261A161A3663262A162A2663303",
+					/* MsgPackT */	"84A2663101A3663261A161A3663262A162A2663303",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(BeanWithDynaMethodsAndExtraKeys o) {
+						assertType(BeanWithDynaMethodsAndExtraKeys.class, o);
+						Assert.assertTrue(o.setterCalled);
+					}
+				}
+			},
 		});
 	}
 
@@ -270,6 +305,50 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 		}
 
 		public BeanWithDynaMethods init() {
+			this.f1 = 1;
+			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
+			this.f3 = 3;
+			return this;
+		}
+	}
+
+	@Bean(sort=true)
+	public static class BeanWithDynaMethodsAndExtraKeys {
+
+		private int f1, f3;
+		private Map<String,Object> f2 = new LinkedHashMap<String,Object>();
+		private boolean setterCalled = false;
+
+		public int getF1() {
+			return f1;
+		}
+		public void setF1(int f1) {
+			this.f1 = f1;
+		}
+		public int getF3() {
+			return f3;
+		}
+		public void setF3(int f3) {
+			this.f3 = f3;
+		}
+
+		@BeanProperty(name="*")
+		public Object get(String name) {
+			return f2.get(name);
+		}
+
+		@BeanProperty(name="*")
+		public void set(String name, Object o) {
+			setterCalled = true;
+			this.f2.put(name, o);
+		}
+
+		@BeanProperty(name="*")
+		public Collection<String> getExtraKeys() {
+			return f2.keySet();
+		}
+		
+		public BeanWithDynaMethodsAndExtraKeys init() {
 			this.f1 = 1;
 			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
 			this.f3 = 3;

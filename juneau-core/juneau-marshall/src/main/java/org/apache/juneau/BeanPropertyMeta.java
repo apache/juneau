@@ -236,7 +236,7 @@ public final class BeanPropertyMeta {
 				if (isDyna) {
 					if (isParentClass(Map.class, c) && pt.length == 0) {
 						isDynaGetterMap = true;
-					} else if (pt.length == 2 && pt[0] == String.class) {
+					} else if (pt.length == 1 && pt[0] == String.class) {
 						// OK.
 					} else {
 						return false;
@@ -271,8 +271,11 @@ public final class BeanPropertyMeta {
 				}
 			}
 
-			if (isDyna)
+			if (isDyna) {
 				rawTypeMeta = rawTypeMeta.getValueType();
+				if (rawTypeMeta == null)
+					rawTypeMeta = beanContext.object();
+			}
 			if (rawTypeMeta == null)
 				return false;
 
@@ -779,7 +782,7 @@ public final class BeanPropertyMeta {
 			Map m = null;
 			if (getter != null) {
 				if (! isDynaGetterMap)
-					return getter.invoke(pName);
+					return getter.invoke(bean, pName);
 				m = (Map)getter.invoke(bean);
 			}
 			else if (field != null)
@@ -837,7 +840,7 @@ public final class BeanPropertyMeta {
 			if (extraKeys != null && getter != null && ! isDynaGetterMap) {
 				Map<String,Object> m = new LinkedHashMap<>();
 				for (String key : (Collection<String>)extraKeys.invoke(bean)) 
-					m.put(key, getter.invoke(bean));
+					m.put(key, getter.invoke(bean, key));
 				return m;
 			}
 			if (getter != null && isDynaGetterMap)

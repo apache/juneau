@@ -93,6 +93,26 @@ public @interface BeanProperty {
 	 * 			...
 	 * 		}
 	 * 	}
+	 * 
+	 * 	<jc>// Option #4 - Getter, setter, and extra-keys method .
+	 * 	// Define a method that returns a Collection&lt;String&gt; with currently-set property names.</jc>
+	 * 	<jk>public class</jk> BeanWithDynaExtraKeys {
+	 * 
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public</jk> Object get(String name) {
+	 * 			...
+	 * 		}
+	 * 
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public void</jk> set(String name, Object value) {
+	 * 			...
+	 * 		}
+	 * 
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public</jk> Collection&lt;String&gt; extraKeys() {
+	 * 			...
+	 * 		}
+	 * 	}
 	 * </p>
 	 * 
 	 *<p>
