@@ -568,8 +568,6 @@ public class ItemsTest {
 		assertType(Boolean.class, t.get("uniqueItems", Object.class));
 		assertType(String.class, t.get("$ref", Object.class));
 		
-		JsonSerializer.DEFAULT_LAX.println(t);
-	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
