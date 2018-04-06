@@ -21,13 +21,12 @@
  ----------------------------------------------------------------------------------------------------------*/
 
 .swagger-ui table.header {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 	width: 95%;
 	border: none;
 }
 
 .swagger-ui table.header * {
-	font-size: 14px;
 	vertical-align: middle;
 }
 
@@ -52,7 +51,6 @@
  ----------------------------------------------------------------------------------------------------------*/
 .method-button {
   	display: inline-block;
-	font-size: 14px;
     font-weight: bold;
     min-width: 60px;
     padding: 6px 15px;
@@ -67,7 +65,9 @@
 .delete .method-button     { background: rgb(249,62,62); }
 .options .method-button    { background: rgb(153,102,255); }
 .deprecated .method-button { background: rgb(170,170,170); }
+.model .method-button      { background: rgb(150,150,150); min-width: 120px;}
 .other .method-button      { background: rgb(230,230,0); }
+
 
 /*-----------------------------------------------------------------------------------------------------------
  - Tag block                                                                                                -
@@ -80,18 +80,23 @@
 
 .tag-block-summary {
 	margin: 10px 0px;
-	padding: 10px 0px;
+	padding: 5px 0px;
     align-items: center;
     cursor: pointer;
 	border-bottom: 1px solid rgba(59,65,81,.2);
 	user-select: none;
+	transition: all .2s;
 }
+.tag-block-summary:hover {
+	background-color: rgba(59,65,81,.1);
+}
+
 .tag-block-summary .name {
-	font-size: 22px;
+	font-size: 18px;
 	padding: 0px 20px;
 }
 .tag-block-summary .description {
-	font-size: 16px;
+	font-size: 14px;
 	padding: 0px 20px;
 }
 .tag-block-summary .extdocs {
@@ -120,6 +125,7 @@
 .op-block.options    { background: rgba(153,102,255,.1); border: 1px solid rgb(153,102,255); }
 .op-block.delete     { background: rgba(249,62,62,.1); border: 1px solid rgb(249,62,62); }
 .op-block.deprecated { background: rgba(170,170,170,.1); border: 1px solid rgb(170,170,170); }
+.op-block.model      { background: rgba(0,0,0,.05); border: 1px solid rgb(170,170,170); }
 .op-block.other      { background: rgba(230,230,0,0.1); border: 1px solid rgb(230,230,0); }
 
 .op-block-summary {	
@@ -129,7 +135,7 @@
 }
 
 .op-block-summary .path {
-	font-size: 16px;
+	font-size: 14px;
 	word-break: break-all;
     font-family: monospace;
     font-weight: bold;
@@ -159,7 +165,7 @@
  ----------------------------------------------------------------------------------------------------------*/
 
 .op-block-section-header {
-    padding: 8px 20px;
+    padding: 8px 15px;
     background: hsla(0,0%,100%,.3);
     box-shadow: 1px 2px 3px rgba(0,0,0,.3);
     margin: 10px;
@@ -185,7 +191,6 @@ table.parameters, table.responses {
 th.parameter-key, th.response-key {
 	font-size: 12px;
     font-weight: bold;
-    padding: 10px;
     text-align: left;
 	border: none;
     border-bottom: 1px solid rgba(59,65,81,.2);
@@ -220,7 +225,7 @@ td.parameter-value, td.response-value {
 }
 
 .parameter-key .name {
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .parameter-key .name.required {
@@ -245,10 +250,9 @@ td.parameter-value, td.response-value {
  ----------------------------------------------------------------------------------------------------------*/
  
 .op-block-contents .example-select {
-    margin: 20px 0 10px 0;
+    margin: 10px 0 5px 0;
 	border-width: 1px;
 	font-weight:bold;
-	font-size: 14px;
     padding: 5px 40px 5px 10px;
     border: 1px solid #41444e;
     border-radius: 4px;
@@ -262,7 +266,6 @@ td.parameter-value, td.response-value {
 }
 
 .op-block-contents .example {
-    font-size: 12px;
     margin: 0;
     padding: 5px 20px;
     white-space: pre-wrap;
@@ -297,14 +300,12 @@ td.parameter-value, td.response-value {
  ----------------------------------------------------------------------------------------------------------*/
 
 .section {
-	font-size: 12px;
     font-weight: bold;
     padding: 5px 0;
     text-align: left;
 }
 
 .headers .name {
-    font-size: 12px;
     padding: 5px 0;
     font-family: monospace;
     font-weight: bold;
@@ -315,7 +316,6 @@ div.headers {
 }
 
 .headers .type {
-    font-size: 12px;
     padding: 5px 0;
     font-family: monospace;
     font-weight: bold;
@@ -325,7 +325,6 @@ div.headers {
 	display: inline-block;
 	vertical-align: top;
 	margin-right: 20px;
-	font-size: 12px;
     font-weight: bold;
     padding: 5px 0;
     text-align: left;

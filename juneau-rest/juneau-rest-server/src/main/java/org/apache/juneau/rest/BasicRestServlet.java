@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
+import static org.apache.juneau.rest.BasicRestInfoProvider.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.ui.*;
@@ -177,8 +178,14 @@ import org.apache.juneau.xmlschema.*;
 		SwaggerUI.class
 	},
 	properties={
+		// Add descriptions to the following types when not specified:
 		@Property(name=JSONSCHEMA_addDescriptionsTo, value="bean,collection,array,map,enum"),
+		
+		// Add x-example to the following types:
 		@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
+		
+		// Don't generate schema information on the Swagger bean itself.
+		@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger")
 	},
 	flags={ 
 		JSONSCHEMA_useBeanDefs

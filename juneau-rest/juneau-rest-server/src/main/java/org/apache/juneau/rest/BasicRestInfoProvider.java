@@ -14,14 +14,15 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
 import static org.apache.juneau.rest.RestParamType.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
-import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
@@ -49,12 +50,48 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class BasicRestInfoProvider implements RestInfoProvider {
+	
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "BasicRestInfoProvider.";
+	
+	/**
+	 * Configuration property:  Ignore types from schema definitions.
+	 * 
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BasicRestInfoProvider.ignoreTypes.b"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited)
+	 * 	<li><b>Default:</b>  <jk>null</jk>.
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines class name patterns that should be ignored when generating schema definitions in the generated 
+	 * Swagger documentation.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
+	 * 	<ja>@RestResource</ja>(
+	 * 			properties={
+	 * 				<ja>@Property</ja>(name=<jsf>INFOPROVIDER_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
+	 * 			}
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 */
+	public static final String INFOPROVIDER_ignoreTypes = PREFIX + "ignoreTypes.s";
+	
 
 	private final RestContext context;
 	private final String
 		siteName,
 		title,
 		description;
+	private final Set<Pattern> ignoreTypes;
 	private final ConcurrentHashMap<Locale,ConcurrentHashMap<Integer,Swagger>> swaggers = new ConcurrentHashMap<>();
 
 	/**
@@ -64,7 +101,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 */
 	public BasicRestInfoProvider(RestContext context) {
 		this.context = context;
-
+		
+		PropertyStore ps = context.getPropertyStore();
+		this.ignoreTypes = new LinkedHashSet<>();
+		for (String s : split(ps.getProperty(INFOPROVIDER_ignoreTypes, String.class, ""))) 
+			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
+		
 		Builder b = new Builder(context);
 		this.siteName = b.siteName;
 		this.title = b.title;
@@ -484,6 +526,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (schema.containsKey("type") || schema.containsKey("$ref")) 
 			return schema;
 		
+		for (Pattern p : ignoreTypes) 
+			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
+				return null;
+		
 		return fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
 	}
 	
@@ -502,11 +548,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap piri, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
 		
 		Object example = piri.get("x-example");
-
+		
 		if (example == null) {
 			ObjectMap schema = resolve(js, piri.getObjectMap("schema"));
 			if (schema != null)
-				example = schema.get("x-example");
+				example = schema.get("example");
 		}
 
 		if (example == null)

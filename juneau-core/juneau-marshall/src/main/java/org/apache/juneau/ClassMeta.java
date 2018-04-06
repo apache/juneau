@@ -1969,6 +1969,15 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Shortcut for calling {@link Class#getName()} on the inner class of this metadata.
+	 * 
+	 * @return The  name of the inner class.
+	 */
+	public String getName() {
+		return innerClass.getName();
+	}
+
+	/**
 	 * Shortcut for calling {@link Class#getSimpleName()} on the inner class of this metadata.
 	 * 
 	 * @return The simple name of the inner class.

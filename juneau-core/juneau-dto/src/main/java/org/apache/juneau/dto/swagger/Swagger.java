@@ -765,6 +765,15 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Convenience method for testing whether this Swagger has one or more definitions defined.
+	 * 
+	 * @return <jk>true</jk> if this Swagger has one or more definitions defined.
+	 */
+	public boolean hasDefinitions() {
+		return definitions != null && ! definitions.isEmpty();
+	}
+
+	/**
 	 * Bean property getter:  <property>parameters</property>.
 	 * 
 	 * <p>
@@ -1198,6 +1207,15 @@ public class Swagger extends SwaggerElement {
 	public Swagger tags(Object...values) {
 		tags = addToList(tags, values, Tag.class);
 		return this;
+	}
+
+	/**
+	 * Convenience method for testing whether this Swagger has one or more tags defined.
+	 * 
+	 * @return <jk>true</jk> if this Swagger has one or more tags defined.
+	 */
+	public boolean hasTags() {
+		return tags != null && ! tags.isEmpty();
 	}
 
 	/**

@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Root class for all Swagger beans.
@@ -73,28 +74,6 @@ public abstract class SwaggerElement {
 	}
 
 	/**
-	 * The map used to store 'extra' properties on the swagger element.
-	 * 
-	 * <p>
-	 * For example, the <js>"$ref"</js> field is not a part of the Swagger doc, but is often
-	 * found since it is a part of the JSON-Schema spec. 
-	 * <br>This map allows you to store such properties.
-	 * 
-	 * <p>
-	 * This map is lazy-created once this method is called.
-	 * 
-	 * @return 
-	 * 	The extra properties map.
-	 * 	<br>It's an instance of {@link LinkedHashMap}.
-	 */
-	@BeanProperty("*")
-	public Map<String,Object> getExtraProperties() {
-		if (extra == null || extra.isEmpty())
-			return null;
-		return extra;
-	}
-	
-	/**
 	 * Generic property getter.
 	 * 
 	 * <p>
@@ -109,10 +88,26 @@ public abstract class SwaggerElement {
 			return null;
 		switch (property) {
 			case "strict": return toType(isStrict(), type);
-			default: return extra == null ? null : toType(getExtraProperties().get(property), type);
+			default: return toType(get(property), type);
 		}
 	};
 	
+	/**
+	 * Generic property getter.
+	 * 
+	 * <p>
+	 * Can be used to retrieve non-standard Swagger fields such as <js>"$ref"</js>.
+	 * 
+	 * @param property The property name to retrieve.
+	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
+	 */
+	@BeanProperty("*")
+	public Object get(String property) {
+		if (property == null || extra == null)
+			return null;
+		return extra.get(property);
+	};
+
 	/**
 	 * Generic property setter.
 	 * 
@@ -138,12 +133,29 @@ public abstract class SwaggerElement {
 	}
 	
 	/**
+	 * Generic property keyset.
+	 * 
+	 * @return 
+	 * 	All the non-standard keys on this element.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	@BeanProperty("*")
+	public Set<String> extraKeys() {
+		return extra == null ? Collections.EMPTY_SET : extra.keySet();
+	}
+	
+	/**
 	 * Returns all the keys on this element.
 	 * 
-	 * @return All the keys on this element.
+	 * @return 
+	 * 	All the keys on this element.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Set<String> keySet() {
-		return extra == null ? Collections.EMPTY_SET : extra.keySet();
+		ASet<String> s = new ASet<String>()
+			.appendIf(strict, "strict");
+		s.addAll(extraKeys());
+		return s;
 	}
 	
 	@Override /* Object */

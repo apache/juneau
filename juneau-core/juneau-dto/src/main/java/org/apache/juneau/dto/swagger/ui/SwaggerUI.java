@@ -51,7 +51,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		// Operations without tags are rendered first.
 		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
 
-		if (s.getTags() != null) {
+		if (s.hasTags()) {
 			for (Tag t : s.getTags()) {
 				Div tagBlock = div()._class("tag-block tag-block-open").children(
 					tagBlockSummary(t),
@@ -59,6 +59,14 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				);
 				outer.child(tagBlock);
 			}
+		}
+		
+		if (s.hasDefinitions()) {
+			Div modelBlock = div()._class("tag-block").children(
+				modelsBlockSummary(),
+				modelsBlockContents(s)
+			);
+			outer.child(modelBlock);
 		}
 		
 		return outer;
@@ -263,5 +271,31 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		}
 		
 		return div;
+	}
+	
+	// Creates the "Model" header.
+	private HtmlElement modelsBlockSummary() {
+		return div()._class("tag-block-summary").children(span("Models")._class("name")).onclick("toggleTagBlock(this)");
+	}
+	
+	// Creates the contents under the "Model" header.
+	private Div modelsBlockContents(Swagger s) {
+		Div modelBlockContents = div()._class("tag-block-contents");
+		for (Map.Entry<String,ObjectMap> e : s.getDefinitions().entrySet()) 
+			modelBlockContents.child(modelBlock(e.getKey(), e.getValue()));
+		return modelBlockContents;
+	}
+
+	private Div modelBlock(String modelName, ObjectMap model) {
+		return div()._class("op-block op-block-closed model").children(
+			modelBlockSummary(modelName, model),
+			div(model)._class("op-block-contents")
+		);
+	}
+	private HtmlElement modelBlockSummary(String modelName, ObjectMap model) {
+		return div()._class("op-block-summary").children(
+			span(modelName)._class("method-button"),
+			model.containsKey("description") ? span(model.remove("description"))._class("summary") : null
+		).onclick("toggleOpBlock(this)");
 	}
 }
