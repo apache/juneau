@@ -174,7 +174,7 @@
 						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
 						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
 						<use>false</use>
-						<additionalparam>-sourcetab 3 -notimestamp -Xdoclint:none</additionalparam>
+						<additionalparam>-sourcetab 3 -notimestamp -Xdoclint:none --allow-script-in-comments</additionalparam>
 						<verbose>false</verbose>
 						<excludePackageNames>*proto*:*samples*:*examples*:*test*</excludePackageNames>
 						<linksource>true</linksource>
