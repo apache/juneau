@@ -1582,17 +1582,21 @@ public class ParameterInfo extends SwaggerElement {
 	 * 
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
+	 * @param maxDepth 
+	 * 	The maximum depth to resolve references. 
+	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
+	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public ParameterInfo resolveRefs(Swagger swagger, Deque<String> refStack) {
+	public ParameterInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 		
 		if (schema != null)
-			schema = schema.resolveRefs(swagger, refStack);
+			schema = schema.resolveRefs(swagger, refStack, maxDepth);
 		
 		if (items != null)
-			items = items.resolveRefs(swagger, refStack);
+			items = items.resolveRefs(swagger, refStack, maxDepth);
 
 		return this;
 	}

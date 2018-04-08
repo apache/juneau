@@ -114,18 +114,13 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 		boolean useDef = useBeanDefs && sType.isBean() && pNames == null;
 		
-		if (useDef && defs.containsKey(getBeanDefId(sType))) {
-			ObjectMap schema = defs.get(getBeanDefId(sType));
-			
-			// If we previously encountered this bean in a collection/array, then it may not have
-			// the example and description associated with it, so add it now.
-			if (! schema.containsKey("x-example")) 
-				schema.appendIf(true, true, true, "x-example", getExample(sType, BEAN, exampleAdded));
-			if (! schema.containsKey("description")) 
-				schema.appendIf(true, true, true, "description", getDescription(sType, BEAN, exampleAdded));
-			
-			return new ObjectMap().append("$ref", getBeanDefUri(sType));
+		if (useDef) {
+			exampleAdded = false;
+			descriptionAdded = false;
 		}
+		
+		if (useDef && defs.containsKey(getBeanDefId(sType))) 
+			return new ObjectMap().append("$ref", getBeanDefUri(sType));
 		
 		ObjectMap ds = defaultSchemas.get(sType.getInnerClass().getName());
 		if (ds != null && ds.containsKey("type")) 

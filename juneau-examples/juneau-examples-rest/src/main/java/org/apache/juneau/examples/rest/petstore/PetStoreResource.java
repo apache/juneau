@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import static org.apache.juneau.dto.swagger.ui.SwaggerUI.*;
+
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -43,6 +45,10 @@ import org.apache.juneau.rest.widget.*;
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/petstore/$R{servletClassSimple}.java"
 		}
 	),
+	properties= {
+		// Resolve recursive references when showing schema info in the swagger.
+		@Property(name=SWAGGERUI_resolveRefsMaxDepth, value="99")
+	},
 	swagger="$F{PetStoreResource.json}"
 )
 public class PetStoreResource extends BasicRestServletJena {

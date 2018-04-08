@@ -1510,30 +1510,34 @@ public class SchemaInfo extends SwaggerElement {
 	 * 
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
+	 * @param maxDepth 
+	 * 	The maximum depth to resolve references. 
+	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
+	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public SchemaInfo resolveRefs(Swagger swagger, Deque<String> refStack) {
+	public SchemaInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 		
 		if (ref != null) {
-			if (refStack.contains(ref) || refStack.size() > 2)
+			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			SchemaInfo r = swagger.findRef(ref, SchemaInfo.class).resolveRefs(swagger, refStack);
+			SchemaInfo r = swagger.findRef(ref, SchemaInfo.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}
 
 		if (items != null)
-			items = items.resolveRefs(swagger, refStack);
+			items = items.resolveRefs(swagger, refStack, maxDepth);
 		
 		if (properties != null) 
 			for (Map.Entry<String,SchemaInfo> e : properties.entrySet())
-				e.setValue(e.getValue().resolveRefs(swagger, refStack));
+				e.setValue(e.getValue().resolveRefs(swagger, refStack, maxDepth));
 			
 		if (additionalProperties != null) 
-			additionalProperties = additionalProperties.resolveRefs(swagger, refStack);
+			additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);
 		
 		this.example = null;
 

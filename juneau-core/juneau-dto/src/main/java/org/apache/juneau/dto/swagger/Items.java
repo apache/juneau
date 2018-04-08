@@ -1115,26 +1115,55 @@ public class Items extends SwaggerElement {
 	 * 
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
+	 * @param maxDepth 
+	 * 	The maximum depth to resolve references. 
+	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
+	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public Items resolveRefs(Swagger swagger, Deque<String> refStack) {
+	public Items resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 		
 		if (ref != null) {
-			if (refStack.contains(ref) || refStack.size() > 2)
+			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			Items r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack);
+			Items r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}
-		
+
+		set("properties", resolveRefs(get("properties"), swagger, refStack, maxDepth));
+
 		if (items != null)
-			items = items.resolveRefs(swagger, refStack);
+			items = items.resolveRefs(swagger, refStack, maxDepth);
 		
 		set("example", null);
 
 		return this;
+	}
+	
+	/* Resolve references in extra attributes */
+	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
+		if (o instanceof ObjectMap) {
+			ObjectMap om = (ObjectMap)o;
+			String ref = om.getString("$ref");
+			if (ref != null) {
+				if (refStack.contains(ref) || refStack.size() >= maxDepth)
+					return o;
+				refStack.addLast(ref);
+				Object o2 = swagger.findRef(ref, Object.class);
+				o2 = resolveRefs(o2, swagger, refStack, maxDepth);
+				refStack.removeLast();
+				return o2;
+			}
+			for (Map.Entry<String,Object> e : om.entrySet()) 
+				e.setValue(resolveRefs(e.getValue(), swagger, refStack, maxDepth));
+		}
+		if (o instanceof ObjectList) 
+			for (ListIterator<Object> li = ((ObjectList)o).listIterator(); li.hasNext();) 
+				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
+		return o;
 	}
 }

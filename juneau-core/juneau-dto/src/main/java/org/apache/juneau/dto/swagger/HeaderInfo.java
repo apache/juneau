@@ -1142,23 +1142,27 @@ public class HeaderInfo extends SwaggerElement {
 	 * 
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
+	 * @param maxDepth 
+	 * 	The maximum depth to resolve references. 
+	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
+	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
 	 * @return 
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public HeaderInfo resolveRefs(Swagger swagger, Deque<String> refStack) {
+	public HeaderInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 		
 		if (ref != null) {
-			if (refStack.contains(ref) || refStack.size() > 2)
+			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			HeaderInfo r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack);
+			HeaderInfo r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}
 
 		if (items != null)
-			items = items.resolveRefs(swagger, refStack);
+			items = items.resolveRefs(swagger, refStack, maxDepth);
 		
 		return this;
 	}

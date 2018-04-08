@@ -551,8 +551,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		if (example == null) {
 			ObjectMap schema = resolve(js, piri.getObjectMap("schema"));
-			if (schema != null)
-				example = schema.get("example");
+			if (schema != null) 
+				example = schema.getWithDefault("example", schema.get("x-example"));
 		}
 
 		if (example == null)
