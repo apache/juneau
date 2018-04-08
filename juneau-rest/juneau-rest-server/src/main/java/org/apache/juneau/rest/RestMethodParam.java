@@ -111,7 +111,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; juneau-rest-server &gt; Java Method Parameters</a>
  * </ul>
  */
-public abstract class RestParam {
+public abstract class RestMethodParam {
 
 	final RestParamType paramType;
 	final String name;
@@ -127,7 +127,7 @@ public abstract class RestParam {
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
 	 */
-	protected RestParam(RestParamType paramType, String name, Type type) {
+	protected RestMethodParam(RestParamType paramType, String name, Type type) {
 		this(paramType, name, type, ObjectMap.EMPTY_MAP);
 	}
 
@@ -141,7 +141,7 @@ public abstract class RestParam {
 	 * @param type The object type to convert the parameter to.
 	 * @param metaData Swagger metadata.
 	 */
-	protected RestParam(RestParamType paramType, String name, Type type, ObjectMap metaData) {
+	protected RestMethodParam(RestParamType paramType, String name, Type type, ObjectMap metaData) {
 		this.paramType = paramType;
 		this.name = name;
 		this.type = type;

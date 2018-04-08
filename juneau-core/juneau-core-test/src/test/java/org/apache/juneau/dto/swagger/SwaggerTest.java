@@ -287,11 +287,11 @@ public class SwaggerTest {
 	public void testSetPaths() {
 		Swagger t = new Swagger();
 		
-		t.setPaths(new AMap<String,Map<String,Operation>>().append("foo", new AMap<String,Operation>().append("bar",operation().summary("baz"))));
+		t.setPaths(new AMap<String,OperationMap>().append("foo", new OperationMap().append("bar",operation().summary("baz"))));
 		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
 		assertType(Map.class, t.getPaths());
 		
-		t.setPaths(new AMap<String,Map<String,Operation>>());
+		t.setPaths(new AMap<String,OperationMap>());
 		assertObjectEquals("{}", t.getPaths());
 		assertType(Map.class, t.getPaths());
 
@@ -306,11 +306,11 @@ public class SwaggerTest {
 	public void testAddPaths() {
 		Swagger t = new Swagger();
 		
-		t.addPaths(new AMap<String,Map<String,Operation>>().append("foo", new AMap<String,Operation>().append("bar",operation().summary("baz"))));
+		t.addPaths(new AMap<String,OperationMap>().append("foo", new OperationMap().append("bar",operation().summary("baz"))));
 		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
 		assertType(Map.class, t.getPaths());
 		
-		t.addPaths(new AMap<String,Map<String,Operation>>());
+		t.addPaths(new AMap<String,OperationMap>());
 		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
 		assertType(Map.class, t.getPaths());
 

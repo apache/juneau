@@ -17,27 +17,49 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import javax.servlet.http.*;
-
 /**
- * Annotation that can be applied to exceptions that identify the HTTP status they trigger and a description about the exception.
+ * Annotation that can be applied to exceptions and return types that identify the HTTP status they trigger and a description about the exception.
  */
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-public @interface RestStatus {
+public @interface ResponseInfo {
 	
 	/**
 	 * The HTTP status of the response.
 	 */
-	int value() default HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+	int code() default 0;
 	
 	/**
-	 * Optional description.
+	 * Description.
 	 * 
 	 * <p>
-	 * Used when generating Swagger documentation.
+	 * Format is plain text.
 	 */
 	String description() default "";
+
+	/**
+	 * Schema information.
+	 * 
+	 * <p>
+	 * Format is a JSON object consisting of a Swagger SchemaInfo object.
+	 */
+	String[] schema() default {};
+	
+	/**
+	 * Header information.
+	 * 
+	 * <p>
+	 * Format is a JSON array consisting of Swagger HeaderInfo objects.
+	 */
+	String[] headers() default {};
+	
+	/**
+	 * Example.
+	 * 
+	 * <p>
+	 * Format is a JSON primitive, array, or object.
+	 */
+	String[] example() default {};
 }

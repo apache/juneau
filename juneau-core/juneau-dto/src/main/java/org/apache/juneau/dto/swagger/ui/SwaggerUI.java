@@ -80,7 +80,6 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		Session(BeanSession bs, Swagger swagger) {
 			this.swagger = swagger.copy();
 			this.resolveRefsMaxDepth = bs.getProperty(SWAGGERUI_resolveRefsMaxDepth, Integer.class, 1);
-			System.err.println("resolveRefsMaxDepth=" + resolveRefsMaxDepth);
 		}
 	}
 	
@@ -180,7 +179,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	private Div tagBlockContents(Session s, Tag t) {
 		Div tagBlockContents = div()._class("tag-block-contents");
 		
-		for (Map.Entry<String,Map<String,Operation>> e : s.swagger.getPaths().entrySet()) {
+		for (Map.Entry<String,OperationMap> e : s.swagger.getPaths().entrySet()) {
 			String path = e.getKey();
 			for (Map.Entry<String,Operation> e2 : e.getValue().entrySet()) {
 				String opName = e2.getKey();

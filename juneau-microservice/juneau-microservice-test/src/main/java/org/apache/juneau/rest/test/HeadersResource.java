@@ -151,7 +151,7 @@ public class HeadersResource extends RestServlet {
 		return customHeader.toString();
 	}
 
-	public static class CustomHeaderParam extends RestParam {
+	public static class CustomHeaderParam extends RestMethodParam {
 		public CustomHeaderParam() {
 			super(RestParamType.HEADER, "Custom", CustomHeader.class);
 		}

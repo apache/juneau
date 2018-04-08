@@ -190,8 +190,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			handleError(r1, r2, e);
 		} catch (Throwable e) {
-			RestStatus status = e.getClass().getAnnotation(RestStatus.class);
-			RestException e2 = new RestException(status == null ? SC_INTERNAL_SERVER_ERROR : status.value(), e);
+			ResponseInfo ri = e.getClass().getAnnotation(ResponseInfo.class);
+			RestException e2 = new RestException(ri == null || ri.code() == 0 ? SC_INTERNAL_SERVER_ERROR : ri.code(), e);
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			handleError(r1, r2, e2);

@@ -18,7 +18,7 @@ import org.apache.juneau.rest.annotation.*;
  * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-@RestStatus(value=400, description="Invalid tag provided")
+@ResponseInfo(code=400, description="Invalid tag provided")
 public class InvalidTagException extends Exception {
 
 	/**

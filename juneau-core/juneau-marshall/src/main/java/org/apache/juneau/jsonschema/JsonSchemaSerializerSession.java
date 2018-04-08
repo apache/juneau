@@ -178,6 +178,9 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			tc = STRING;
 			type = "string";
 			format = "uri";
+		} else {
+			tc = STRING;
+			type = "string";
 		}
 
 		// Add info from @JsonSchema on bean property.

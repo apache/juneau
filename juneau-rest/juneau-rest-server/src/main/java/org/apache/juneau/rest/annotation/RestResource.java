@@ -523,7 +523,7 @@ public @interface RestResource {
 	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
 	 * </ul>
 	 */
-	Class<? extends RestParam>[] paramResolvers() default {};
+	Class<? extends RestMethodParam>[] paramResolvers() default {};
 
 	/**
 	 * Parser listener.

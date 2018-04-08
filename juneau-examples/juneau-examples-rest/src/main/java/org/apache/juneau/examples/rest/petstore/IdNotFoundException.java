@@ -19,7 +19,7 @@ import org.apache.juneau.rest.annotation.*;
  * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-@RestStatus(value=404, description="ID not found")
+@ResponseInfo(code=404, description="ID not found")
 public class IdNotFoundException extends FormattedException {
 
 	/**

@@ -19,7 +19,7 @@ import org.apache.juneau.rest.annotation.*;
  * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-@RestStatus(value=409, description="ID already in use")
+@ResponseInfo(code=409, description="ID already in use")
 public class IdConflictException extends FormattedException {
 
 	/**

@@ -44,7 +44,9 @@ import org.apache.juneau.utils.*;
 public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
-	final RestParam[] params;
+	final RestMethodParam[] methodParams;
+	final RestMethodReturn methodReturn;
+	final RestMethodThrown[] methodThrowns;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
@@ -76,7 +78,9 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.method = method;
 		this.httpMethod = b.httpMethod;
 		this.pathPattern = b.pathPattern;
-		this.params = b.params;
+		this.methodParams = b.methodParams;
+		this.methodReturn = b.methodReturn;
+		this.methodThrowns = b.methodThrowns;
 		this.guards = b.guards;
 		this.optionalMatchers = b.optionalMatchers;
 		this.requiredMatchers = b.requiredMatchers;
@@ -102,7 +106,9 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private static final class Builder  {
 		String httpMethod, defaultCharset;
 		UrlPathPattern pathPattern;
-		RestParam[] params;
+		RestMethodParam[] methodParams;
+		RestMethodReturn methodReturn;
+		RestMethodThrown[] methodThrowns;
 		RestGuard[] guards;
 		RestMatcher[] optionalMatchers, requiredMatchers;
 		RestConverter[] converters;
@@ -389,7 +395,13 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes()))) 
 					: parsers.getSupportedMediaTypes();
 					
-				params = context.findParams(method, pathPattern, false);
+				methodParams = context.findParams(method, pathPattern, false);
+				
+				methodReturn = new RestMethodReturn(method.getGenericReturnType());
+				
+				methodThrowns = new RestMethodThrown[method.getExceptionTypes().length];
+				for (int i = 0; i < methodThrowns.length; i++)
+					methodThrowns[i] = new RestMethodThrown(method.getExceptionTypes()[i]);
 
 				// Need this to access methods in anonymous inner classes.
 				setAccessible(method, true);
@@ -477,16 +489,16 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 		context.preCall(req, res);
 
-		Object[] args = new Object[params.length];
-		for (int i = 0; i < params.length; i++) {
+		Object[] args = new Object[methodParams.length];
+		for (int i = 0; i < methodParams.length; i++) {
 			try {
-				args[i] = params[i].resolve(req, res);
+				args[i] = methodParams[i].resolve(req, res);
 			} catch (RestException e) {
 				throw e;
 			} catch (Exception e) {
 				throw new RestException(SC_BAD_REQUEST,
 					"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
-					params[i].getParamType().name(), params[i].getName(), params[i].getType(), method.getDeclaringClass().getName(), method.getName()
+					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), method.getDeclaringClass().getName(), method.getName()
 				).initCause(e);
 			}
 		}

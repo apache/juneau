@@ -50,10 +50,10 @@ class RestParamDefaults {
 	/**
 	 * Standard set of method parameter resolvers.
 	 */
-	static final Map<Class<?>,RestParam> STANDARD_RESOLVERS;
+	static final Map<Class<?>,RestMethodParam> STANDARD_RESOLVERS;
 
 	static {
-		Map<Class<?>,RestParam> m = new HashMap<>();
+		Map<Class<?>,RestMethodParam> m = new HashMap<>();
 
 		@SuppressWarnings("rawtypes")
 		Class[] r = new Class[] {
@@ -123,7 +123,7 @@ class RestParamDefaults {
 
 		for (Class<?> c : r) {
 			try {
-				RestParam mpr = (RestParam)c.newInstance();
+				RestMethodParam mpr = (RestMethodParam)c.newInstance();
 				m.put(mpr.forClass(), mpr);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -137,49 +137,49 @@ class RestParamDefaults {
 	// Request / Response retrievers
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static final class HttpServletRequestObject extends RestParam {
+	static final class HttpServletRequestObject extends RestMethodParam {
 
 		protected HttpServletRequestObject() {
 			super(OTHER, null, HttpServletRequest.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) {
 			return req;
 		}
 	}
 
-	static final class HttpServletResponseObject extends RestParam {
+	static final class HttpServletResponseObject extends RestMethodParam {
 
 		protected HttpServletResponseObject() {
 			super(OTHER, null, HttpServletResponse.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) {
 			return res;
 		}
 	}
 
-	static final class RestRequestObject extends RestParam {
+	static final class RestRequestObject extends RestMethodParam {
 
 		protected RestRequestObject() {
 			super(OTHER, null, RestRequest.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) {
 			return req;
 		}
 	}
 
-	static final class RestResponseObject extends RestParam {
+	static final class RestResponseObject extends RestMethodParam {
 
 		protected RestResponseObject() {
 			super(OTHER, null, RestResponse.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) {
 			return res;
 		}
@@ -189,31 +189,31 @@ class RestParamDefaults {
 	// Header retrievers
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static final class AcceptHeader extends RestParam {
+	static final class AcceptHeader extends RestMethodParam {
 
 		protected AcceptHeader() {
 			super(HEADER, "Accept-Header", Accept.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) {
 			return req.getHeaders().getAccept();
 		}
 	}
 
-	static final class AcceptCharsetHeader extends RestParam {
+	static final class AcceptCharsetHeader extends RestMethodParam {
 
 		protected AcceptCharsetHeader() {
 			super(HEADER, "Accept-Charset", AcceptCharset.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public AcceptCharset resolve(RestRequest req, RestResponse res) {
 			return req.getHeaders().getAcceptCharset();
 		}
 	}
 
-	static final class AcceptEncodingHeader extends RestParam {
+	static final class AcceptEncodingHeader extends RestMethodParam {
 
 		protected AcceptEncodingHeader() {
 			super(HEADER, "Accept-Encoding", AcceptEncoding.class);
@@ -225,7 +225,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class AcceptLanguageHeader extends RestParam {
+	static final class AcceptLanguageHeader extends RestMethodParam {
 
 		protected AcceptLanguageHeader() {
 			super(HEADER, "Accept-Language", AcceptLanguage.class);
@@ -237,7 +237,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class AuthorizationHeader extends RestParam {
+	static final class AuthorizationHeader extends RestMethodParam {
 
 		protected AuthorizationHeader() {
 			super(HEADER, "Authorization", Authorization.class);
@@ -249,7 +249,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class CacheControlHeader extends RestParam {
+	static final class CacheControlHeader extends RestMethodParam {
 
 		protected CacheControlHeader() {
 			super(HEADER, "Cache-Control", CacheControl.class);
@@ -261,7 +261,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ConnectionHeader extends RestParam {
+	static final class ConnectionHeader extends RestMethodParam {
 
 		protected ConnectionHeader() {
 			super(HEADER, "Connection", Connection.class);
@@ -273,7 +273,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ContentLengthHeader extends RestParam {
+	static final class ContentLengthHeader extends RestMethodParam {
 
 		protected ContentLengthHeader() {
 			super(HEADER, "Content-Length", ContentLength.class);
@@ -285,7 +285,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ContentTypeHeader extends RestParam {
+	static final class ContentTypeHeader extends RestMethodParam {
 
 		protected ContentTypeHeader() {
 			super(HEADER, "Content-Type", ContentType.class);
@@ -297,7 +297,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class DateHeader extends RestParam {
+	static final class DateHeader extends RestMethodParam {
 
 		protected DateHeader() {
 			super(HEADER, "Date", Date.class);
@@ -309,7 +309,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ExpectHeader extends RestParam {
+	static final class ExpectHeader extends RestMethodParam {
 
 		protected ExpectHeader() {
 			super(HEADER, "Expect", Expect.class);
@@ -321,7 +321,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class FromHeader extends RestParam {
+	static final class FromHeader extends RestMethodParam {
 
 		protected FromHeader() {
 			super(HEADER, "From", From.class);
@@ -333,7 +333,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class HostHeader extends RestParam {
+	static final class HostHeader extends RestMethodParam {
 
 		protected HostHeader() {
 			super(HEADER, "Host", Host.class);
@@ -345,7 +345,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class IfMatchHeader extends RestParam {
+	static final class IfMatchHeader extends RestMethodParam {
 
 		protected IfMatchHeader() {
 			super(HEADER, "If-Match", IfMatch.class);
@@ -357,7 +357,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class IfModifiedSinceHeader extends RestParam {
+	static final class IfModifiedSinceHeader extends RestMethodParam {
 
 		protected IfModifiedSinceHeader() {
 			super(HEADER, "If-Modified-Since", IfModifiedSince.class);
@@ -369,7 +369,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class IfNoneMatchHeader extends RestParam {
+	static final class IfNoneMatchHeader extends RestMethodParam {
 
 		protected IfNoneMatchHeader() {
 			super(HEADER, "If-None-Match", IfNoneMatch.class);
@@ -381,7 +381,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class IfRangeHeader extends RestParam {
+	static final class IfRangeHeader extends RestMethodParam {
 
 		protected IfRangeHeader() {
 			super(HEADER, "If-Range", IfRange.class);
@@ -393,7 +393,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class IfUnmodifiedSinceHeader extends RestParam {
+	static final class IfUnmodifiedSinceHeader extends RestMethodParam {
 
 		protected IfUnmodifiedSinceHeader() {
 			super(HEADER, "If-Unmodified-Since", IfUnmodifiedSince.class);
@@ -405,7 +405,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class MaxForwardsHeader extends RestParam {
+	static final class MaxForwardsHeader extends RestMethodParam {
 
 		protected MaxForwardsHeader() {
 			super(HEADER, "Max-Forwards", MaxForwards.class);
@@ -417,7 +417,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class PragmaHeader extends RestParam {
+	static final class PragmaHeader extends RestMethodParam {
 
 		protected PragmaHeader() {
 			super(HEADER, "Pragma", Pragma.class);
@@ -429,7 +429,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ProxyAuthorizationHeader extends RestParam {
+	static final class ProxyAuthorizationHeader extends RestMethodParam {
 
 		protected ProxyAuthorizationHeader() {
 			super(HEADER, "Proxy-Authorization", ProxyAuthorization.class);
@@ -441,7 +441,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class RangeHeader extends RestParam {
+	static final class RangeHeader extends RestMethodParam {
 
 		protected RangeHeader() {
 			super(HEADER, "Range", Range.class);
@@ -453,7 +453,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class RefererHeader extends RestParam {
+	static final class RefererHeader extends RestMethodParam {
 
 		protected RefererHeader() {
 			super(HEADER, "Referer", Referer.class);
@@ -465,7 +465,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class TEHeader extends RestParam {
+	static final class TEHeader extends RestMethodParam {
 
 		protected TEHeader() {
 			super(HEADER, "TE", TE.class);
@@ -477,7 +477,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class UserAgentHeader extends RestParam {
+	static final class UserAgentHeader extends RestMethodParam {
 
 		protected UserAgentHeader() {
 			super(HEADER, "User-Agent", UserAgent.class);
@@ -489,7 +489,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class UpgradeHeader extends RestParam {
+	static final class UpgradeHeader extends RestMethodParam {
 
 		protected UpgradeHeader() {
 			super(HEADER, "Upgrade", Upgrade.class);
@@ -501,7 +501,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ViaHeader extends RestParam {
+	static final class ViaHeader extends RestMethodParam {
 
 		protected ViaHeader() {
 			super(HEADER, "Via", Via.class);
@@ -513,7 +513,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class WarningHeader extends RestParam {
+	static final class WarningHeader extends RestMethodParam {
 
 		protected WarningHeader() {
 			super(HEADER, "Warning", Warning.class);
@@ -525,7 +525,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class TimeZoneHeader extends RestParam {
+	static final class TimeZoneHeader extends RestMethodParam {
 
 		protected TimeZoneHeader() {
 			super(HEADER, "Time-Zone", TimeZone.class);
@@ -541,13 +541,13 @@ class RestParamDefaults {
 	// Annotated retrievers
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static final class PathParameterObject extends RestParam {
+	static final class PathParameterObject extends RestMethodParam {
 
 		protected PathParameterObject(String name, Path a, Type type) {
 			super(PATH, name, type, getMetaData(a));
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getPathMatch().get(name, type);
 		}
@@ -575,13 +575,13 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class BodyObject extends RestParam {
+	static final class BodyObject extends RestMethodParam {
 
 		protected BodyObject(Method method, Body a, Type type) {
 			super(BODY, null, type, getMetaData(a));
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getBody().asType(type);
 		}
@@ -616,7 +616,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class HeaderObject extends RestParam {
+	static final class HeaderObject extends RestMethodParam {
 		private final HttpPartParser partParser;
 
 		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps) {
@@ -624,7 +624,7 @@ class RestParamDefaults {
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getHeaders().get(partParser, name, type);
 		}
@@ -659,7 +659,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class MethodObject extends RestParam {
+	static final class MethodObject extends RestMethodParam {
 
 		protected MethodObject(Method method, Type type) throws ServletException {
 			super(OTHER, null, null);
@@ -667,13 +667,13 @@ class RestParamDefaults {
 				throw new RestServletException("Use of @Method annotation on parameter that is not a String on method ''{0}''", method);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getMethod();
 		}
 	}
 
-	static final class FormDataObject extends RestParam {
+	static final class FormDataObject extends RestMethodParam {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
 
@@ -685,7 +685,7 @@ class RestParamDefaults {
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			if (multiPart)
 				return req.getFormData().getAll(partParser, name, type);
@@ -722,7 +722,7 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class QueryObject extends RestParam {
+	static final class QueryObject extends RestMethodParam {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
 
@@ -734,7 +734,7 @@ class RestParamDefaults {
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			if (multiPart)
 				return req.getQuery().getAll(partParser, name, type);
@@ -772,7 +772,7 @@ class RestParamDefaults {
 
 	}
 
-	static final class HasFormDataObject extends RestParam {
+	static final class HasFormDataObject extends RestMethodParam {
 
 		protected HasFormDataObject(Method method, HasFormData a, Type type) throws ServletException {
 			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type);
@@ -780,14 +780,14 @@ class RestParamDefaults {
 				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", method);
 	}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			BeanSession bs = req.getBeanSession();
 			return bs.convertToType(req.getFormData().containsKey(name), bs.getClassMeta(type));
 		}
 	}
 
-	static final class HasQueryObject extends RestParam {
+	static final class HasQueryObject extends RestMethodParam {
 
 		protected HasQueryObject(Method method, HasQuery a, Type type) throws ServletException {
 			super(QUERY, firstNonEmpty(a.name(), a.value()), type);
@@ -795,14 +795,14 @@ class RestParamDefaults {
 				throw new RestServletException("Use of @HasQuery annotation on parameter that is not a boolean on method ''{0}''", method);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			BeanSession bs = req.getBeanSession();
 			return bs.convertToType(req.getQuery().containsKey(name), bs.getClassMeta(type));
 		}
 	}
 
-	static final class PathRemainderObject extends RestParam {
+	static final class PathRemainderObject extends RestMethodParam {
 
 		protected PathRemainderObject(Method method, Type type) throws ServletException {
 			super(OTHER, null, null);
@@ -810,19 +810,19 @@ class RestParamDefaults {
 				throw new RestServletException("Use of @PathRemainder annotation on parameter that is not a String on method ''{0}''", method);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getPathMatch().getRemainder();
 		}
 	}
 
-	static final class RestRequestPropertiesObject extends RestParam {
+	static final class RestRequestPropertiesObject extends RestMethodParam {
 
 		protected RestRequestPropertiesObject() {
 			super(OTHER, null, RequestProperties.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public RequestProperties resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getProperties();
 		}
@@ -832,265 +832,265 @@ class RestParamDefaults {
 	// Other retrievers
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static final class ResourceBundleObject extends RestParam {
+	static final class ResourceBundleObject extends RestMethodParam {
 
 		protected ResourceBundleObject() {
 			super(OTHER, null, ResourceBundle.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getMessageBundle();
 		}
 	}
 
-	static final class MessageBundleObject extends RestParam {
+	static final class MessageBundleObject extends RestMethodParam {
 
 		protected MessageBundleObject() {
 			super(OTHER, null, MessageBundle.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getMessageBundle();
 		}
 	}
 
-	static final class InputStreamObject extends RestParam {
+	static final class InputStreamObject extends RestMethodParam {
 
 		protected InputStreamObject() {
 			super(OTHER, null, InputStream.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getInputStream();
 		}
 	}
 
-	static final class ServletInputStreamObject extends RestParam {
+	static final class ServletInputStreamObject extends RestMethodParam {
 
 		protected ServletInputStreamObject() {
 			super(OTHER, null, ServletInputStream.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getInputStream();
 		}
 	}
 
-	static final class ReaderObject extends RestParam {
+	static final class ReaderObject extends RestMethodParam {
 
 		protected ReaderObject() {
 			super(OTHER, null, Reader.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getReader();
 		}
 	}
 
-	static final class OutputStreamObject extends RestParam {
+	static final class OutputStreamObject extends RestMethodParam {
 
 		protected OutputStreamObject() {
 			super(OTHER, null, OutputStream.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return res.getOutputStream();
 		}
 	}
 
-	static final class ServletOutputStreamObject extends RestParam {
+	static final class ServletOutputStreamObject extends RestMethodParam {
 
 		protected ServletOutputStreamObject() {
 			super(OTHER, null, ServletOutputStream.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return res.getOutputStream();
 		}
 	}
 
-	static final class WriterObject extends RestParam {
+	static final class WriterObject extends RestMethodParam {
 
 		protected WriterObject() {
 			super(OTHER, null, Writer.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return res.getWriter();
 		}
 	}
 
-	static final class RequestHeadersObject extends RestParam {
+	static final class RequestHeadersObject extends RestMethodParam {
 
 		protected RequestHeadersObject() {
 			super(OTHER, null, RequestHeaders.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getHeaders();
 		}
 	}
 
-	static final class RequestQueryObject extends RestParam {
+	static final class RequestQueryObject extends RestMethodParam {
 
 		protected RequestQueryObject() {
 			super(OTHER, null, RequestQuery.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getQuery();
 		}
 	}
 
-	static final class RequestFormDataObject extends RestParam {
+	static final class RequestFormDataObject extends RestMethodParam {
 
 		protected RequestFormDataObject() {
 			super(OTHER, null, RequestFormData.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getFormData();
 		}
 	}
 
-	static final class HttpMethodObject extends RestParam {
+	static final class HttpMethodObject extends RestMethodParam {
 
 		protected HttpMethodObject() {
 			super(OTHER, null, HttpMethod.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getHttpMethod();
 		}
 	}
 
-	static final class RestLoggerObject extends RestParam {
+	static final class RestLoggerObject extends RestMethodParam {
 
 		protected RestLoggerObject() {
 			super(OTHER, null, RestLogger.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public RestLogger resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getContext().getLogger();
 		}
 	}
 
-	static final class RestContextObject extends RestParam {
+	static final class RestContextObject extends RestMethodParam {
 
 		protected RestContextObject() {
 			super(OTHER, null, RestContext.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getContext();
 		}
 	}
 
-	static final class ParserObject extends RestParam {
+	static final class ParserObject extends RestMethodParam {
 
 		protected ParserObject() {
 			super(OTHER, null, Parser.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getBody().getParser();
 		}
 	}
 
-	static final class LocaleObject extends RestParam {
+	static final class LocaleObject extends RestMethodParam {
 
 		protected LocaleObject() {
 			super(OTHER, null, Locale.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getLocale();
 		}
 	}
 
-	static final class SwaggerObject extends RestParam {
+	static final class SwaggerObject extends RestMethodParam {
 
 		protected SwaggerObject() {
 			super(OTHER, null, Swagger.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getSwagger();
 		}
 	}
 
-	static final class RequestPathMatchObject extends RestParam {
+	static final class RequestPathMatchObject extends RestMethodParam {
 
 		protected RequestPathMatchObject() {
 			super(OTHER, null, RequestPathMatch.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getPathMatch();
 		}
 	}
 
-	static final class RequestBodyObject extends RestParam {
+	static final class RequestBodyObject extends RestMethodParam {
 
 		protected RequestBodyObject() {
 			super(BODY, null, RequestBody.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getBody();
 		}
 	}
 
-	static final class ConfigObject extends RestParam {
+	static final class ConfigObject extends RestMethodParam {
 
 		protected ConfigObject() {
 			super(OTHER, null, Config.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getConfig();
 		}
 	}
 
-	static final class UriContextObject extends RestParam {
+	static final class UriContextObject extends RestMethodParam {
 
 		protected UriContextObject() {
 			super(OTHER, null, UriContext.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getUriContext();
 		}
 	}
 
-	static final class UriResolverObject extends RestParam {
+	static final class UriResolverObject extends RestMethodParam {
 
 		protected UriResolverObject() {
 			super(OTHER, null, UriResolver.class);
 		}
 
-		@Override /* RestParam */
+		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getUriResolver();
 		}

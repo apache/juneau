@@ -54,7 +54,7 @@ public class Swagger extends SwaggerElement {
 	private Map<String,ParameterInfo> parameters;
 	private Map<String,ResponseInfo> responses;
 	private Map<String,SecurityScheme> securityDefinitions;
-	private Map<String,Map<String,Operation>> paths;
+	private Map<String,OperationMap> paths;
 
 	/**
 	 * Default constructor.
@@ -113,10 +113,10 @@ public class Swagger extends SwaggerElement {
 			for (Map.Entry<String,SecurityScheme> e : copyFrom.securityDefinitions.entrySet())
 				this.securityDefinitions.put(e.getKey(), e.getValue().copy());
 
-		this.paths = copyFrom.paths == null ? null : new LinkedHashMap<String,Map<String,Operation>>();
+		this.paths = copyFrom.paths == null ? null : new LinkedHashMap<String,OperationMap>();
 		if (copyFrom.paths != null)
-			for (Map.Entry<String,Map<String,Operation>> e : copyFrom.paths.entrySet()) {
-				Map<String,Operation> m = new LinkedHashMap<>();
+			for (Map.Entry<String,OperationMap> e : copyFrom.paths.entrySet()) {
+				OperationMap m = new OperationMap();
 				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
 					m.put(e2.getKey(), e2.getValue().copy());
 				this.paths.put(e.getKey(), m);
@@ -602,7 +602,7 @@ public class Swagger extends SwaggerElement {
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Map<String,Operation>> getPaths() {
+	public Map<String,OperationMap> getPaths() {
 		return paths;
 	}
 
@@ -617,7 +617,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setPaths(Map<String,Map<String,Operation>> value) {
+	public Swagger setPaths(Map<String,OperationMap> value) {
 		paths = newSortedMap(value, null);
 		return this;
 	}
@@ -636,7 +636,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addPaths(Map<String,Map<String,Operation>> values) {
+	public Swagger addPaths(Map<String,OperationMap> values) {
 		paths = addToSortedMap(paths, values, null);
 		return this;
 	}
@@ -652,9 +652,9 @@ public class Swagger extends SwaggerElement {
 	public Swagger path(String path, String methodName, Operation operation) {
 		if (paths == null)
 			paths = new TreeMap<>();
-		Map<String,Operation> p = paths.get(path);
+		OperationMap p = paths.get(path);
 		if (p == null) {
-			p = new TreeMap<>(OP_SORTER);
+			p = new OperationMap();
 			paths.put(path, p);
 		}
 		p.put(methodName, operation);
@@ -1338,28 +1338,6 @@ public class Swagger extends SwaggerElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 	
-	private static final Comparator<String> OP_SORTER = new Comparator<String>() {
-		private final Map<String,Integer> methods = new AMap<String,Integer>()
-			.append("get",7)
-			.append("put",6)
-			.append("post",5)
-			.append("delete",4)
-			.append("options",3)
-			.append("head",2)
-			.append("patch",1);
-
-		@Override
-		public int compare(String o1, String o2) {
-			Integer i1 = methods.get(o1);
-			Integer i2 = methods.get(o2);
-			if (i1 == null)
-				i1 = 0;
-			if (i2 == null)
-				i2 = 0;
-			return i2.compareTo(i1);
-		}
-	};
-
 	@Override /* Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);

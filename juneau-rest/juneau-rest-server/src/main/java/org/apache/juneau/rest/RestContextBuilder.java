@@ -1171,7 +1171,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	public RestContextBuilder paramResolvers(Class<? extends RestParam>...values) {
+	public RestContextBuilder paramResolvers(Class<? extends RestMethodParam>...values) {
 		return addTo(REST_paramResolvers, values);
 	}
 
@@ -1189,7 +1189,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder paramResolvers(RestParam...values) {
+	public RestContextBuilder paramResolvers(RestMethodParam...values) {
 		return addTo(REST_paramResolvers, values);
 	}
 

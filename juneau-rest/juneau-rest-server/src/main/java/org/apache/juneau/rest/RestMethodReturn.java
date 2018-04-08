@@ -10,21 +10,67 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.lang.reflect.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Exception thrown when trying to add an entry where the ID is already in use.
+ * Contains metadata about the return type on a REST Java method.
  */
-@SuppressWarnings("serial")
-@ResponseInfo(code=400, description="Invalid username provided")
-public class InvalidUsernameException extends Exception {
+public class RestMethodReturn {
+	
+	private final Type type;
+	private final int code;
+	private final ObjectMap metaData;
+	
+	RestMethodReturn(Type type) {
+		this.type = type;
+		this.metaData = new ObjectMap();
+		
+		int code = 200;
+		if (type instanceof Class)
+		for (ResponseInfo ri : ReflectionUtils.findAnnotationsParentFirst(ResponseInfo.class, (Class<?>)type)) {
+			if (ri.code() != 0)
+				code = ri.code();
+			metaData.appendSkipEmpty("description", ri.description());
+			metaData.appendSkipEmpty("example", join(ri.example(), ""));
+			metaData.appendSkipEmpty("headers", join(ri.headers(), ""));
+			metaData.appendSkipEmpty("schema", join(ri.schema(), ""));
+		}
+		 
+		this.code = code;
+	}
+	
+	/**
+	 * Returns the return type of the Java method.
+	 * 
+	 * @return The return type of the Java method.
+	 */
+	public Type getType() {
+		return type;
+	}
 
 	/**
-	 * Constructor.
+	 * Returns the HTTP code code of the response.
+	 * 
+	 * @return The HTTP code code of the response.
 	 */
-	public InvalidUsernameException() {
-		super("Invalid username provided.  Must be 8 or more characters or digits.");
+	public int getCode() {
+		return code;
+	}
+	
+	/**
+	 * Returns the Swagger metadata associated with this return.
+	 * 
+	 * @return A map of return metadata, never <jk>null</jk>.
+	 */
+	public ObjectMap getMetaData() {
+		return metaData;
 	}
 }

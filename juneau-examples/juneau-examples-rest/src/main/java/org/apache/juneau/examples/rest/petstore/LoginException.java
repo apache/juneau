@@ -18,7 +18,7 @@ import org.apache.juneau.rest.annotation.*;
  * Exception thrown when an invalid username or password is provided.
  */
 @SuppressWarnings("serial")
-@RestStatus(value=401, description="Invalid username or password provided")
+@ResponseInfo(code=401, description="Invalid username or password provided")
 public class LoginException extends Exception {
 	
 	/**

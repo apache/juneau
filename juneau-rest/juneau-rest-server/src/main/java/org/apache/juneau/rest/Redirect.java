@@ -25,7 +25,7 @@ import java.text.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; juneau-rest-server &gt; Redirect</a>
  * </ul>
  */
-public final class Redirect {
+public class Redirect {
 
 	private final int httpResponseCode;
 	private final URI uri;

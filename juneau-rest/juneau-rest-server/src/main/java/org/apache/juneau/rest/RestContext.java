@@ -1545,7 +1545,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.paramResolvers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestParam} | Class&lt;? <jk>extends</jk> {@link RestParam}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestMethodParam} | Class&lt;? <jk>extends</jk> {@link RestMethodParam}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>  
@@ -1555,7 +1555,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContextBuilder#paramResolvers(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#paramResolvers(RestParam...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#paramResolvers(RestMethodParam...)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -1570,7 +1570,7 @@ public final class RestContext extends BeanContext {
 	 * the following resolver:
 	 * <p class='bcode'>
 	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
-	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
+	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestMethodParam {
 	 * 
 	 * 		<jc>// Must have no-arg constructor!</jc>
 	 * 		<jk>public</jk> MyRestParam() {
@@ -1624,7 +1624,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
 	 * 	<li>
-	 * 		Refer to {@link RestParam} for the list of predefined parameter resolvers.
+	 * 		Refer to {@link RestMethodParam} for the list of predefined parameter resolvers.
 	 * </ul>
 	 */
 	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
@@ -2758,7 +2758,7 @@ public final class RestContext extends BeanContext {
 	private final Set<String> allowedMethodParams;
 
 	private final RestContextProperties properties;
-	private final Map<Class<?>,RestParam> paramResolvers;
+	private final Map<Class<?>,RestMethodParam> paramResolvers;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
@@ -2801,7 +2801,7 @@ public final class RestContext extends BeanContext {
 		startCallMethods,
 		endCallMethods,
 		destroyMethods;
-	private final RestParam[][]
+	private final RestMethodParam[][]
 		preCallMethodParams,
 		postCallMethodParams;
 	private final Class<?>[][]
@@ -2853,8 +2853,8 @@ public final class RestContext extends BeanContext {
 			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, this);
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], true, this);
 
-			Map<Class<?>,RestParam> _paramResolvers = new HashMap<>();
-			for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, this)) 
+			Map<Class<?>,RestMethodParam> _paramResolvers = new HashMap<>();
+			for (RestMethodParam rp : getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, new RestMethodParam[0], true, this)) 
 				_paramResolvers.put(rp.forClass(), rp);
 			paramResolvers = unmodifiableMap(_paramResolvers);
 			
@@ -2948,7 +2948,7 @@ public final class RestContext extends BeanContext {
 				_postInitMethods = new LinkedHashMap<>(),
 				_postInitChildFirstMethods = new LinkedHashMap<>(),
 				_destroyMethods = new LinkedHashMap<>();
-			List<RestParam[]>
+			List<RestMethodParam[]>
 				_preCallMethodParams = new ArrayList<>(),
 				_postCallMethodParams = new ArrayList<>();
 			List<Class<?>[]>
@@ -3110,8 +3110,8 @@ public final class RestContext extends BeanContext {
 			this.postInitMethods = _postInitMethods.values().toArray(new Method[_postInitMethods.size()]);
 			this.postInitChildFirstMethods = _postInitChildFirstMethods.values().toArray(new Method[_postInitChildFirstMethods.size()]);
 			this.destroyMethods = _destroyMethods.values().toArray(new Method[_destroyMethods.size()]);
-			this.preCallMethodParams = _preCallMethodParams.toArray(new RestParam[_preCallMethodParams.size()][]);
-			this.postCallMethodParams = _postCallMethodParams.toArray(new RestParam[_postCallMethodParams.size()][]);
+			this.preCallMethodParams = _preCallMethodParams.toArray(new RestMethodParam[_preCallMethodParams.size()][]);
+			this.postCallMethodParams = _postCallMethodParams.toArray(new RestMethodParam[_postCallMethodParams.size()][]);
 			this.startCallMethodParams = _startCallMethodParams.toArray(new Class[_startCallMethodParams.size()][]);
 			this.endCallMethodParams = _endCallMethodParams.toArray(new Class[_endCallMethodParams.size()][]);
 			this.postInitMethodParams = _postInitMethodParams.toArray(new Class[_postInitMethodParams.size()][]);
@@ -4139,8 +4139,28 @@ public final class RestContext extends BeanContext {
 	 * @param method The Java method to check.
 	 * @return The parameters defined on the Java method.
 	 */
-	public RestParam[] getRestParams(Method method) {
-		return callMethods.get(method.getName()).params;
+	public RestMethodParam[] getRestMethodParams(Method method) {
+		return callMethods.get(method.getName()).methodParams;
+	}
+
+	/**
+	 * Returns the parameters defined on the specified Java method.
+	 * 
+	 * @param method The Java method to check.
+	 * @return The parameters defined on the Java method.
+	 */
+	public RestMethodReturn getRestMethodReturn(Method method) {
+		return callMethods.get(method.getName()).methodReturn;
+	}
+
+	/**
+	 * Returns the parameters defined on the specified Java method.
+	 * 
+	 * @param method The Java method to check.
+	 * @return The parameters defined on the Java method.
+	 */
+	public RestMethodThrown[] getRestMethodThrowns(Method method) {
+		return callMethods.get(method.getName()).methodThrowns;
 	}
 
 	/**
@@ -4190,7 +4210,7 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Finds the {@link RestParam} instances to handle resolving objects on the calls to the specified Java method.
+	 * Finds the {@link RestMethodParam} instances to handle resolving objects on the calls to the specified Java method.
 	 * 
 	 * @param method The Java method being called.
 	 * @param pathPattern The parsed URL path pattern.
@@ -4198,11 +4218,11 @@ public final class RestContext extends BeanContext {
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	protected RestParam[] findParams(Method method, UrlPathPattern pathPattern, boolean isPreOrPost) throws ServletException {
+	protected RestMethodParam[] findParams(Method method, UrlPathPattern pathPattern, boolean isPreOrPost) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
 		Annotation[][] pa = method.getParameterAnnotations();
-		RestParam[] rp = new RestParam[pt.length];
+		RestMethodParam[] rp = new RestMethodParam[pt.length];
 		int attrIndex = 0;
 		PropertyStore ps = getPropertyStore();
 
@@ -4285,7 +4305,7 @@ public final class RestContext extends BeanContext {
 			preOrPost(resource, postCallMethods[i], postCallMethodParams[i], req, res);
 	}
 
-	private static void preOrPost(Object resource, Method m, RestParam[] mp, RestRequest req, RestResponse res) throws RestException {
+	private static void preOrPost(Object resource, Method m, RestMethodParam[] mp, RestRequest req, RestResponse res) throws RestException {
 		if (m != null) {
 			Object[] args = new Object[mp.length];
 			for (int i = 0; i < mp.length; i++) {
