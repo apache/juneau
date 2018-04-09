@@ -68,6 +68,8 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	
 	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class);
 	
+	private static final Set<String> STANDARD_METHODS = new ASet<String>().appendAll("get", "put", "post", "delete", "options");
+	
 	@Override
 	public MediaType[] forMediaTypes() {
 		return new MediaType[] {MediaType.HTML};
@@ -193,9 +195,12 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	}
 	
 	private Div opBlock(Session s, String path, String opName, Operation op) {
-		String opNameLc = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
 		
-		return div()._class("op-block op-block-closed " + opNameLc).children(
+		String opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
+		if (! STANDARD_METHODS.contains(opClass))
+			opClass = "other";
+		
+		return div()._class("op-block op-block-closed " + opClass).children(
 			opBlockSummary(path, opName, op),
 			div(tableContainer(s, op))._class("op-block-contents")
 		);

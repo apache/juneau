@@ -299,7 +299,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			if (s != null)
 				op.put("summary", vr.resolve(s));
 
-			s = rm.description();
+			s = join(rm.description(), "");
 			if (s.isEmpty())
 				s = mb.findFirstString(locale, mn + ".description");
 			if (s != null)
@@ -507,6 +507,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");		
+		if (externalDocs.isEmpty())
+			omSwagger.remove("externalDocs");
 		if (tagMap.isEmpty())
 			omSwagger.remove("tags");
 		
@@ -771,7 +773,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		
-		String s = method.getAnnotation(RestMethod.class).description();
+		String s = join(method.getAnnotation(RestMethod.class).description(), "");
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)

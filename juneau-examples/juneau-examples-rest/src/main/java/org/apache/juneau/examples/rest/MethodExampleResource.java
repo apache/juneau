@@ -49,7 +49,7 @@ public class MethodExampleResource extends BasicRestServlet {
 	private static final String SAMPLE_UUID_STRING = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
 
 	/** Example GET request that redirects to our example method */
-	@RestMethod(name=GET, path="/")
+	@RestMethod(name=GET, path="/", summary="Top-level page")
 	public ResourceDescription[] doExample() throws Exception {
 		return new ResourceDescription[] {
 			new ResourceDescription(
@@ -67,11 +67,11 @@ public class MethodExampleResource extends BasicRestServlet {
 		};
 	}
 
-	/**
-	 * Methodology #1 - GET request using annotated attributes.
-	 * This approach uses annotated parameters for retrieving input.
-	 */
-	@RestMethod(name=GET, path="/example1/{p1}/{p2}/{p3}/*")
+	@RestMethod(
+		name=GET, path="/example1/{p1}/{p2}/{p3}/*", 
+		summary="GET request using annotated attributes",
+		description="This approach uses annotated parameters for retrieving input."
+	)
 	public Map<String,Object> example1(
 			@Method String method,                  // HTTP method.
 			@Path String p1,                        // Path variables.
@@ -101,11 +101,11 @@ public class MethodExampleResource extends BasicRestServlet {
 			.append("header-doNotTrack", doNotTrack);
 	}
 
-	/**
-	 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
-	 * This approach uses low-level request/response objects to perform the same as above.
-	 */
-	@RestMethod(name=GET, path="/example2/{p1}/{p2}/{p3}/*")
+	@RestMethod(
+		name=GET, path="/example2/{p1}/{p2}/{p3}/*", 
+		summary="GET request using methods on RestRequest and RestResponse",
+		description="This approach uses low-level request/response objects to perform the same as above."
+	)
 	public void example2(
 			RestRequest req,          // A direct subclass of HttpServletRequest.
 			RestResponse res          // A direct subclass of HttpServletResponse.
@@ -150,12 +150,14 @@ public class MethodExampleResource extends BasicRestServlet {
 		res.setOutput(m);  // Use setOutput(Object) just to be different.
 	}
 
-	/**
-	 * Methodology #3 - GET request using special objects.
-	 * This approach uses intermediate-level APIs.
-	 * The framework recognizes the parameter types and knows how to resolve them.
-	 */
-	@RestMethod(name=GET, path="/example3/{p1}/{p2}/{p3}/*")
+	@RestMethod(
+		name=GET, path="/example3/{p1}/{p2}/{p3}/*", 
+		summary="GET request using special objects",
+		description={
+			"This approach uses intermediate-level APIs.\n",
+			"The framework recognizes the parameter types and knows how to resolve them."
+		}
+	)
 	public Map<String,Object> example3(
 		HttpMethod method,           // HTTP method.
 		RequestPathMatch path,       // Path variables.

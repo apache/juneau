@@ -369,7 +369,7 @@ public @interface RestMethod {
 	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
 	 * </ul>
 	 */
-	String description() default "";
+	String[] description() default {};
 
 	/**
 	 * Compression encoders. 

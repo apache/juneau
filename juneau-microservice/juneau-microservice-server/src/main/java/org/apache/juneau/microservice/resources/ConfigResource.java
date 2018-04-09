@@ -190,8 +190,8 @@ public class ConfigResource extends BasicRestServlet {
 		description="Add or overwrite a config file entry.",
 		swagger={
 			"parameters:[",
-				"{name:'section',in:'path',description:'Section name.'}",
-				"{name:'key',in:'path',description:'Entry name.'}",
+				"{name:'section',in:'path',description:'Section name.'},",
+				"{name:'key',in:'path',description:'Entry name.'},",
 				"{in:'body',description:'New value as a string.'}",
 			"]"
 		}
