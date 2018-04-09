@@ -23,6 +23,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 
 @RestResource(
@@ -115,13 +116,13 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Returns the value of the specified system property.",
 		swagger={
 			"responses:{",
-				"200: {description:'The system property value, or null if not found.'}",
+				"200: {description:'The system property value, or null if not found'}",
 			"}"
 		}
 	)
 	public String getSystemProperty(
 			@Path(description="The system property name.", example="PATH") String propertyName
-		) throws Throwable {
+		) {
 		
 		return System.getProperty(propertyName);
 	}
@@ -132,13 +133,13 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Sets a new value for the specified system property.",
 		guards=AdminGuard.class
 	)
-	public RedirectToRoot setSystemProperty(
+	public RedirectServletRoot setSystemProperty(
 			@Path(description="The system property name") String propertyName, 
 			@Body(description="The new system property value") String value
 		) throws UserNotAdminException {
 		
 		System.setProperty(propertyName, value);
-		return new RedirectToRoot();
+		return RedirectServletRoot.INSTANCE;
 	}
 
 	@RestMethod(
@@ -147,12 +148,12 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Takes in a map of key/value pairs and creates a set of new system properties.",
 		guards=AdminGuard.class
 	)
-	public RedirectToRoot setSystemProperties(
+	public RedirectServletRoot setSystemProperties(
 			@Body(description="The new system property values", example="{key1:'val1',key2:123}") java.util.Properties newProperties
 		) throws UserNotAdminException {
 		
 		System.setProperties(newProperties);
-		return new RedirectToRoot();
+		return RedirectServletRoot.INSTANCE;
 	}
 
 	@RestMethod(
@@ -161,12 +162,12 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Deletes the specified system property.",
 		guards=AdminGuard.class
 	)
-	public RedirectToRoot deleteSystemProperty(
+	public RedirectServletRoot deleteSystemProperty(
 			@Path(description="The system property name") String propertyName
 		) throws UserNotAdminException {
 		
 		System.clearProperty(propertyName);
-		return new RedirectToRoot();
+		return RedirectServletRoot.INSTANCE;
 	}
 
 	@RestMethod(
@@ -205,9 +206,13 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Accepts a simple form post of a system property name/value pair.",
 		guards=AdminGuard.class
 	)
-	public RedirectToRoot formPagePost(@FormData("name") String name, @FormData("value") String value) throws UserNotAdminException {
+	public RedirectServletRoot formPagePost(
+			@FormData("name") String name, 
+			@FormData("value") String value
+		) throws UserNotAdminException {
+		
 		System.setProperty(name, value);
-		return new RedirectToRoot();
+		return RedirectServletRoot.INSTANCE;
 	}
 	
 	
@@ -221,13 +226,6 @@ public class SystemPropertiesResource extends BasicRestServlet {
 
 		public UserNotAdminException() {
 			super("User is not an administrator");
-		}
-	}
-
-	@ResponseInfo(code=302, description="Redirect to root.", headers={"Location:{description:'Redirect URI', type:'string'}"}, schema="IGNORE")
-	public static class RedirectToRoot extends Redirect {
-		public RedirectToRoot() {
-			super("servlet:/");
 		}
 	}
 	

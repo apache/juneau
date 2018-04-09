@@ -46,6 +46,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;

@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest.petstore;
 
 import static org.apache.juneau.dto.swagger.ui.SwaggerUI.*;
+import static org.apache.juneau.rest.helper.Ok.*;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.labels.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 
 /**
@@ -473,24 +474,5 @@ public class PetStoreResource extends BasicRestServletJena {
 	public Ok logout(RestRequest req) {
 		req.getSession().removeAttribute("login-expires");
 		return OK;
-	}
-	
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// Helper beans
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	static final Ok OK = new Ok();
-	
-	@ResponseInfo(code=200, example="'OK'")
-	public static class Ok {
-
-		@Override
-		public String toString() {
-			return "OK";
-		}
-		
-		public static Ok fromString(String s) {
-			return OK;
-		}
 	}
 }

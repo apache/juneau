@@ -13,6 +13,6 @@
  ***************************************************************************************************************************/
 
 /**
- * REST Interface Label Classes
+ * REST Interface Helper Classes
  */
-package org.apache.juneau.rest.labels;
+package org.apache.juneau.rest.helper;

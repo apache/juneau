@@ -18,7 +18,7 @@ import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.labels.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 
 /**

@@ -21,7 +21,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.labels.*;
+import org.apache.juneau.rest.helper.*;
 
 /**
  * Sample resource that shows how to mirror query results from a Docker registry.

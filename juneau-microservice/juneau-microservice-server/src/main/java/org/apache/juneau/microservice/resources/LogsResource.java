@@ -29,6 +29,7 @@ import org.apache.juneau.dto.LinkString;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.transforms.*;
 
 /**

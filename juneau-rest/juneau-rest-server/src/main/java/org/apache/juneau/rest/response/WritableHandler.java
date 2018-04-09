@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.helper.*;
 
 /**
  * Response handler for {@link Writable} and {@link ReaderResource} objects.

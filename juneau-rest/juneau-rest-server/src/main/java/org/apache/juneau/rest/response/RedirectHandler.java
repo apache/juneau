@@ -15,6 +15,7 @@ package org.apache.juneau.rest.response;
 import java.io.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.helper.*;
 
 /**
  * Response handler for {@link Redirect} objects.

@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.labels.*;
+import org.apache.juneau.rest.helper.*;
 
 /**
  * Microservice debug utilities.

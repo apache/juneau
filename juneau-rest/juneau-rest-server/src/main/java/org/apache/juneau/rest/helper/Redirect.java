@@ -10,12 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.helper;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
 import java.text.*;
+
+import org.apache.juneau.rest.annotation.*;
 
 /**
  * REST methods can return this object as a shortcut for performing <code>HTTP 302</code> redirects.
@@ -25,6 +27,7 @@ import java.text.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; juneau-rest-server &gt; Redirect</a>
  * </ul>
  */
+@ResponseInfo(code=302, description="Redirect", headers={"Location:{description:'Redirect URI', type:'string', format:'uri'}"}, schema="IGNORE")
 public class Redirect {
 
 	private final int httpResponseCode;

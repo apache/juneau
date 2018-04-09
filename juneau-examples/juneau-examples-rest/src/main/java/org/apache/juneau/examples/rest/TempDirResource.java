@@ -24,6 +24,7 @@ import org.apache.commons.io.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.utils.*;
 

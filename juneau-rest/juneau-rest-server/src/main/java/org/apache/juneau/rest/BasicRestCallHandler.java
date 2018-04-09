@@ -24,6 +24,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.vars.*;
 
 /**

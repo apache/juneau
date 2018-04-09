@@ -329,7 +329,7 @@
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.Injection'>Using with Spring and Injection frameworks</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.HTTP2'>Using HTTP/2 features</a></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.PredefinedLabelBeans'>Predefined Label Beans</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.PredefinedHelperBeans'>Predefined Helper Beans</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.OtherNotes'>Other Notes</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server-jaxrs'><i>juneau-rest-server-jaxrs</i></a></p>
@@ -12003,7 +12003,7 @@
 					{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
 					<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
 					the <l>Content-Type</l> header if you use this object type.
-				<li class='jc'>{@link org.apache.juneau.rest.Redirect}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
 					<br>Represents an HTTP redirect response.
 				<li class='jc'>{@link org.apache.juneau.Streamable}
 					<br>Interface that identifies that an object can be serialized directly to an output stream.
@@ -12079,13 +12079,13 @@
 		<h4 class='topic' onclick='toggle(this)'>7.6.11 - ReaderResource</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.ReaderResource} class is a convenience object for defining thread-safe
+				The {@link org.apache.juneau.rest.helper.ReaderResource} class is a convenience object for defining thread-safe
 				reusable character-based responses.
 				<br>In essence, it's a container for character data with optional response headers and support for
 				resolving SVL variables.
 			</p>
 			<p>
-				The {@link org.apache.juneau.rest.ReaderResource} class implements the {@link org.apache.juneau.Writable}
+				The {@link org.apache.juneau.rest.helper.ReaderResource} class implements the {@link org.apache.juneau.Writable}
 				interface which is handled by the {@link org.apache.juneau.rest.response.WritableHandler} class.
 				<br>This allows these objects to be returned as responses by REST methods.
 			</p>
@@ -12107,12 +12107,12 @@
 				The important methods on this class are:
 			</p>
 			<ul class='doctree'>
-				<li class='jc'>{@link org.apache.juneau.rest.ReaderResourceBuilder}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#contents(Object...) contents(Object...)}
-					<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#header(String,Object) header(String,Object)}
-					<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
-					<li class='jm'>{@link org.apache.juneau.rest.ReaderResourceBuilder#varResolver(VarResolverSession) varResolver(VarResolverSession)}
+					<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#contents(Object...) contents(Object...)}
+					<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#header(String,Object) header(String,Object)}
+					<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+					<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#varResolver(VarResolverSession) varResolver(VarResolverSession)}
 				</ul>
 			</ul>
 		</div>
@@ -12122,11 +12122,11 @@
 		<h4 class='topic' onclick='toggle(this)'>7.6.12 - StreamResource</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.StreamResource} class is the binary equivalent to the {@link org.apache.juneau.rest.ReaderResource} object.
+				The {@link org.apache.juneau.rest.helper.StreamResource} class is the binary equivalent to the {@link org.apache.juneau.rest.helper.ReaderResource} object.
 				<br>In essence, it's a container for binary data with optional response headers.
 			</p>
 			<p>
-				The {@link org.apache.juneau.rest.StreamResource} class implements the {@link org.apache.juneau.Streamable}
+				The {@link org.apache.juneau.rest.helper.StreamResource} class implements the {@link org.apache.juneau.Streamable}
 				interface which is handled by the {@link org.apache.juneau.rest.response.StreamableHandler} class.
 				<br>This allows these objects to be returned as responses by REST methods.
 			</p>
@@ -12147,11 +12147,11 @@
 				The important methods on this class are:
 			</p>
 			<ul class='doctree'>
-				<li class='jc'>{@link org.apache.juneau.rest.StreamResourceBuilder}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.StreamResourceBuilder#contents(Object...) contents(Object...)}
-					<li class='jm'>{@link org.apache.juneau.rest.StreamResourceBuilder#header(String,Object) header(String,Object)}
-					<li class='jm'>{@link org.apache.juneau.rest.StreamResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+					<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#contents(Object...) contents(Object...)}
+					<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#header(String,Object) header(String,Object)}
+					<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
 				</ul>
 			</ul>
 		</div>
@@ -12161,7 +12161,7 @@
 		<h4 class='topic' onclick='toggle(this)'>7.6.13 - Redirect</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.Redirect} object is a convenience shortcut for performing <code>HTTP 302</code> redirects.
+				The {@link org.apache.juneau.rest.helper.Redirect} object is a convenience shortcut for performing <code>HTTP 302</code> redirects.
 			</p>
 			<p>
 				<l>Redirect</l> objects are handled by the {@link org.apache.juneau.rest.response.RedirectHandler} class.
@@ -15365,15 +15365,15 @@
 	</div>
 	
 	<!-- ======================================================================================================= -->
-	<a id='juneau-rest-server.PredefinedLabelBeans'></a>
-	<h3 class='topic' onclick='toggle(this)'>7.35 - Predefined Label Beans</h3>
+	<a id='juneau-rest-server.PredefinedHelperBeans'></a>
+	<h3 class='topic' onclick='toggle(this)'>7.35 - Predefined Helper Beans</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.labels} package contains some reusable beans that are useful for 
+			The {@link org.apache.juneau.rest.helper} package contains some reusable beans that are useful for 
 			creating linked items in HTML views.
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.labels.ResourceDescription} class is a bean with name/description
+			The {@link org.apache.juneau.rest.helper.ResourceDescription} class is a bean with name/description
 			properties for labeling and linking to child resources.
 			<br>The following examples is pulled from the REST examples:
 		</p>
@@ -15407,7 +15407,7 @@
 	}
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.labels.BeanDescription} class provides a simple view
+			The {@link org.apache.juneau.rest.helper.BeanDescription} class provides a simple view
 			of a bean and it's properties.
 		</p>
 		<p class='bcode w800'>
@@ -17838,7 +17838,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				Using the {@link org.apache.juneau.rest.Redirect} object to perform redirections.
+				Using the {@link org.apache.juneau.rest.helper.Redirect} object to perform redirections.
 			<li>
 				Using the various Java method parameter annotations to retrieve request attributes, parameters, etc.
 			<li>
@@ -18036,7 +18036,7 @@
 				<l>doExample()</l>
 				<br>The root page. 
 				<br>Performs a simple redirection to the <l>doGetExample1()</l> method using a 
-				{@link org.apache.juneau.rest.Redirect} object.
+				{@link org.apache.juneau.rest.helper.Redirect} object.
 			<li class='jm'>
 				<l>example1()</l>
 				<br>Shows how to use the following annotations:
@@ -19894,7 +19894,7 @@
 			<li>
 				Accessing a docker registry REST API as POJOs using {@link org.apache.juneau.rest.client.RestClient}.
 			<li>
-				Using the {@link org.apache.juneau.rest.labels.ResourceDescription} class to implement a top-level 
+				Using the {@link org.apache.juneau.rest.helper.ResourceDescription} class to implement a top-level 
 				'router' page.
 			<li>
 				Using the {@link org.apache.juneau.rest.RestContext#getConfig()} method to access external 
@@ -21381,6 +21381,23 @@
 					<li class='ja'>{@link org.apache.juneau.rest.annotation.Path}
 					<li class='ja'>{@link org.apache.juneau.rest.annotation.Query}
 				</ul>
+			<li>
+				"Helper" classes (i.e. reusable beans that can be returned by REST methods) have been moved to the following package with some new additions:
+				<ul class='doctree'>
+					<li class='jp'>{@link org.apache.juneau.rest.helper}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.Ok}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.RedirectServletRoot}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+					</ul>
+				</ul>
 		</ul>
 		
 		<h5 class='topic w800'>juneau-rest-client</h5>
@@ -21789,8 +21806,8 @@
 			<li>
 				New builder classes:
 				<ul>
-					<li>{@link org.apache.juneau.rest.ReaderResourceBuilder}
-					<li>{@link org.apache.juneau.rest.StreamResourceBuilder}
+					<li><code><del>ReaderResourceBuilder</del></code>
+					<li><code><del>StreamResourceBuilder</del></code>
 				</ul>
 			<li>
 				{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} now returns a 
@@ -22714,7 +22731,7 @@
 	)
 				</p>
 			<li>
-				New {@link org.apache.juneau.rest.ReaderResource#toCommentStrippedString()} method.
+				New <code><del>ReaderResource.toCommentStrippedString()</del></code> method.
 			<li>
 				The <code>bpIncludes()</code> and <code>bpExcludes()</code> annotations on <ja>@RestMethod</ja>
 				has been replaced with the following:
@@ -23328,8 +23345,8 @@
 	)
 				</p>
 			<li><code><del>RestResource.stylesheet()</del></code> can now take in a comma-delimited list of stylesheet paths.
-			<li>{@link org.apache.juneau.rest.StreamResource} can now contain multiple sources from a variety of source types (e.g. <code><jk>byte</jk>[]</code> arrays, <code>InputStreams</code>, <code>Files</code>, etc...)
-				and is now immutable.  It also includes a new {@link org.apache.juneau.rest.StreamResourceBuilder} class.
+			<li><code><del>StreamResource</del></code> can now contain multiple sources from a variety of source types (e.g. <code><jk>byte</jk>[]</code> arrays, <code>InputStreams</code>, <code>Files</code>, etc...)
+				and is now immutable.  It also includes a new <code><del>StreamResourceBuilder</del></code> class.
 			<li>Simplified remoteable proxies using the <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> annotation on REST methods.
 				Used to expose interface proxies without the need for {@link org.apache.juneau.rest.remoteable.RemoteableServlet}.
 			<p class='bcode w800'>
@@ -24239,12 +24256,12 @@
 
 		<h5 class='topic w800'>Server</h5>
 		<ul class='spaced-list'>
-			<li>New {@link org.apache.juneau.rest.ReaderResource} class.   
+			<li>New <code><del>ReaderResource</del></code> class.   
 				Represents the contents of a text file with convenience methods for resolving
 				<del><code>StringVar</code></del> variables and adding HTTP response headers.	
 				REST Java methods can return instances of these to serialize <code>Readers</code>
 					containing text with <del><code>StringVarResolver</code></del> variables in them.
-			<li>New {@link org.apache.juneau.rest.StreamResource} class.   
+			<li>New <code><del>StreamResource</del></code> class.   
 				REST Java methods can return instances of these to serialize <code>OutputStreams</code>.
 			<li>Fixed a bug in the stack trace hash algorithm in {@link org.apache.juneau.rest.RestException}.
 			<li>New methods in {@link org.apache.juneau.rest.RestRequest}:
@@ -24624,7 +24641,7 @@
 					<li><del><code>Param.description()</code></del>
 					<li><del><code>QParam.description()</code></del>
 				</ul>
-			<li>Support for sorting resources by name in {@link org.apache.juneau.rest.labels.ChildResourceDescriptions}.
+			<li>Support for sorting resources by name in <code><del>ChildResourceDescriptions</del></code>.
 		</ul>
 		
 		<h5 class='topic w800'>Samples</h5>
@@ -24673,7 +24690,7 @@
 		<ul class='spaced-list'>
 			<li>New <code><del>RestRequest.getServletParentURI()</del></code> method.
 			<li>New <code>$R{servletParentURI}</code> variable.
-			<li>Removed final modifier from {@link org.apache.juneau.rest.labels.ChildResourceDescriptions}.
+			<li>Removed final modifier from <code><del>ChildResourceDescriptions</del></code>.
 		</ul>
 		
 		<h5 class='topic w800'>Samples</h5>
@@ -25119,7 +25136,7 @@
 			Juno 5.1.0.5 is a moderate update.
 		</p>
 		<ul class='spaced-list'>
-			<li>New {@link org.apache.juneau.rest.Redirect} class that simplifies performing redirections in REST methods.
+			<li>New <code><del>Redirect</del></code> class that simplifies performing redirections in REST methods.
 			<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} annotation
 				for defining customer response handlers for special kinds of POJOs.
 			<li>New method <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
@@ -25132,7 +25149,7 @@
 			<li>Fixed bug in {@link org.apache.juneau.json.JsonSerializer} where <js>"_class"</js> and <js>"items"</js> attributes were not quoted in strict mode when using SERIALIZER_addClassAttrs feature.	
 			<li>Fixed bug where <code>Content-Encoding</code> and<code>Character-Encoding</code> headers were being set when calling {@link org.apache.juneau.rest.RestResponse#getOutputStream()}.
 				These should not be set if interacting with the output streams at a low level.
-			<li>Eliminated various convenience <code>RestResponse.sendRedirect(...)</code> methods due to the introduction of the {@link org.apache.juneau.rest.Redirect} class.
+			<li>Eliminated various convenience <code>RestResponse.sendRedirect(...)</code> methods due to the introduction of the <code><del>Redirect</del></code> class.
 		</ul>
 	</div>
 
@@ -25284,7 +25301,7 @@
 			<li>Various new methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
 			<li>Improved support on <code><del>BeanContext.getClassMetaFromString(String)</del></code>.<br>
 				Now supports resolving <code>"long[]"</code>, and so forth.
-			<li>{@link org.apache.juneau.rest.labels.ResourceDescription} name parameter is now automatically URL-encoded in links.
+			<li><code><del>ResourceDescription</del></code> name parameter is now automatically URL-encoded in links.
 			<li>{@link org.apache.juneau.rest.RestRequest} now correctly handles cases involving URL-encoded characters in the 
 				path info portion of URLs (e.g. <code>http://host/contextRoot/foo%2Fbar</code>).
 			<li>Removed lazy-initialization that required locking in {@link org.apache.juneau.ClassMeta}.  
@@ -25682,7 +25699,7 @@
 				Child resource paths are specified through {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource.path()}.
      		</li>
      		<li>
-     			New {@link org.apache.juneau.rest.labels.ChildResourceDescriptions} bean for automatically generating the contents of router resource pages.
+     			New <code><del>ChildResourceDescriptions</del></code> bean for automatically generating the contents of router resource pages.
      		</li>
      		<li>
 				Changed <code><ja>@RestMethod</ja>.pattern()</code> to {@link org.apache.juneau.rest.annotation.RestMethod#path() @RestMethod.path()} for naming consistency.

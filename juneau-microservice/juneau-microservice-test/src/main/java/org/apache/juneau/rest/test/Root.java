@@ -17,7 +17,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.labels.*;
+import org.apache.juneau.rest.helper.*;
 
 @RestResource(
 	path="/",

@@ -10,10 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.labels;
+package org.apache.juneau.rest.helper;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
  * Shortcut label for child resources.  Typically used in router resources.
@@ -29,6 +30,7 @@ import org.apache.juneau.html.annotation.*;
  * </ul>
  */
 @Bean(properties="name,description", fluentSetters=true)
+@ResponseInfo(schema="IGNORE")
 public final class ResourceDescription implements Comparable<ResourceDescription> {
 
 	private String name, description;
