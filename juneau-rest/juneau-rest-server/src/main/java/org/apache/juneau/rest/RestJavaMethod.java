@@ -33,6 +33,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -452,7 +453,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
-	int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException {
+	int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException, BadRequest, InternalServerError {
 
 		String[] patternVals = pathPattern.match(pathInfo);
 		if (patternVals == null)
@@ -496,10 +497,10 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			} catch (RestException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new RestException(SC_BAD_REQUEST,
+				throw new BadRequest(e,
 					"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
 					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), method.getDeclaringClass().getName(), method.getName()
-				).initCause(e);
+				);
 			}
 		}
 
@@ -523,23 +524,23 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				res.setOutput(output);
 			}
 		} catch (IllegalArgumentException e) {
-			throw new RestException(SC_BAD_REQUEST,
+			throw new BadRequest(e,
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
 				method.toString(), getReadableClassNames(args)
-			).initCause(e);
+			);
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
 			if (e2 instanceof RestException)
 				throw (RestException)e2;
 			if (e2 instanceof ParseException)
-				throw new RestException(SC_BAD_REQUEST, e2);
+				throw new BadRequest(e2);
 			if (e2 instanceof InvalidDataConversionException)
-				throw new RestException(SC_BAD_REQUEST, e2);
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e2);
+				throw new BadRequest(e2);
+			throw new InternalServerError(e2);
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 		return SC_OK;
 	}

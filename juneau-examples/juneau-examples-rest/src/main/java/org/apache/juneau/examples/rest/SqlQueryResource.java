@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -27,6 +26,7 @@ import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.widget.*;
 
 /**
@@ -53,7 +53,16 @@ import org.apache.juneau.rest.widget.*;
 			"	<p><a class='link' href='?sql=select+*+from sys.systables'>try me</a></p>",
 			"</div>"
 		}
-	)
+	),
+	swagger={
+		"info: {",
+			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
+			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
+			"version:'2.0',",
+			"termsOfService:'You are on your own.'",
+		"},",
+		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
+	}
 )
 public class SqlQueryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
@@ -129,7 +138,7 @@ public class SqlQueryResource extends BasicRestServlet {
 
 	/** POST request handler - Execute the query. */
 	@RestMethod(name=POST, path="/", summary="Execute one or more queries")
-	public List<Object> doPost(@Body PostInput in) throws Exception {
+	public List<Object> doPost(@Body PostInput in) throws BadRequest {
 
 		List<Object> results = new LinkedList<>();
 
@@ -138,9 +147,9 @@ public class SqlQueryResource extends BasicRestServlet {
 			return results;
 
 		if (in.pos < 1 || in.pos > 10000)
-			throw new RestException(SC_BAD_REQUEST, "Invalid value for position.  Must be between 1-10000");
+			throw new BadRequest("Invalid value for position.  Must be between 1-10000");
 		if (in.limit < 1 || in.limit > 10000)
-			throw new RestException(SC_BAD_REQUEST, "Invalid value for limit.  Must be between 1-10000");
+			throw new BadRequest("Invalid value for limit.  Must be between 1-10000");
 
 		String sql = null;
 
@@ -175,7 +184,7 @@ public class SqlQueryResource extends BasicRestServlet {
 			else if (allowTempUpdates)
 				c.rollback();
 		} catch (SQLException e) {
-			throw new RestException(SC_BAD_REQUEST, "Invalid query:  {0}", sql).initCause(e);
+			throw new BadRequest(e, "Invalid query:  {0}", sql);
 		}
 
 		return results;

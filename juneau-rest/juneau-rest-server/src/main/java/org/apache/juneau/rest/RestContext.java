@@ -46,6 +46,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
@@ -2983,7 +2984,7 @@ public final class RestContext extends BeanContext {
 							sm = new RestJavaMethod(resource, method, this) {
 
 								@Override
-								int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException {
+								int invoke(String pathInfo, RestRequest req, RestResponse res) throws InternalServerError {
 
 									int rc = super.invoke(pathInfo, req, res);
 									if (rc != SC_OK)
@@ -3010,7 +3011,7 @@ public final class RestContext extends BeanContext {
 												}
 												return SC_OK;
 											} catch (Exception e) {
-												throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+												throw new InternalServerError(e);
 											}
 										}
 									}
@@ -3172,7 +3173,7 @@ public final class RestContext extends BeanContext {
 			_initException = e;
 			throw e;
 		} catch (Exception e) {
-			_initException = new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			_initException = new RestException(e, SC_INTERNAL_SERVER_ERROR);
 			throw e;
 		} finally {
 			initException = _initException;
@@ -3290,13 +3291,14 @@ public final class RestContext extends BeanContext {
 	 * 
 	 * @param pathInfo The unencoded path info.
 	 * @return The resource, or <jk>null</jk> if the resource could not be resolved.
+	 * @throws NotFound Invalid path.
 	 * @throws IOException
 	 */
-	public StreamResource resolveStaticFile(String pathInfo) throws IOException {
+	public StreamResource resolveStaticFile(String pathInfo) throws NotFound, IOException {
 		if (! staticFilesCache.containsKey(pathInfo)) {
 			String p = urlDecode(trimSlashes(pathInfo));
 			if (p.indexOf("..") != -1)
-				throw new RestException(SC_NOT_FOUND, "Invalid path");
+				throw new NotFound("Invalid path");
 			for (StaticFileMapping sfm : staticFiles) {
 				String path = sfm.path;
 				if (p.startsWith(path)) {
@@ -4315,10 +4317,10 @@ public final class RestContext extends BeanContext {
 				} catch (RestException e) {
 					throw e;
 				} catch (Exception e) {
-					throw new RestException(SC_BAD_REQUEST,
+					throw new BadRequest(e,
 						"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
 						mp[i].getParamType().name(), mp[i].getName(), mp[i].getType(), m.getDeclaringClass().getName(), m.getName()
-					).initCause(e);
+					);
 				}
 			}
 			try {
@@ -4326,7 +4328,7 @@ public final class RestContext extends BeanContext {
 			} catch (RestException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new RestException(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage()).initCause(e);
+				throw new InternalServerError(e);
 			}
 		}
 	}
@@ -4347,7 +4349,7 @@ public final class RestContext extends BeanContext {
 			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], req, res);
 	}
 
-	private static void startOrFinish(Object resource, Method m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) {
+	private static void startOrFinish(Object resource, Method m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws RestException, InternalServerError {
 		if (m != null) {
 			Object[] args = new Object[p.length];
 			for (int i = 0; i < p.length; i++) {
@@ -4361,7 +4363,7 @@ public final class RestContext extends BeanContext {
 			} catch (RestException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new RestException(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage()).initCause(e);
+				throw new InternalServerError(e);
 			}
 		}
 	}
@@ -4402,7 +4404,7 @@ public final class RestContext extends BeanContext {
 			} catch (RestException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new RestException(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage()).initCause(e);
+				throw new InternalServerError(e);
 			}
 		}
 	}

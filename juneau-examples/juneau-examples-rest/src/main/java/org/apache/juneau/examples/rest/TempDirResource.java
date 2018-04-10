@@ -60,6 +60,15 @@ import org.apache.juneau.utils.*;
 		@Property(name="allowViews", value="true"),
 		@Property(name="allowDeletes", value="true"),
 		@Property(name="allowPuts", value="false")
+	},
+	swagger={
+		"info: {",
+			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
+			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
+			"version:'2.0',",
+			"termsOfService:'You are on your own.'",
+		"},",
+		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
 	}
 )
 public class TempDirResource extends DirectoryResource {
@@ -80,10 +89,12 @@ public class TempDirResource extends DirectoryResource {
 		}
 	}
 	
-	/**
-	 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
-	 */
-	@RestMethod(name=GET, path="/upload")
+	@RestMethod(
+		name=GET, 
+		path="/upload", 
+		summary="Upload file form entry page", 
+		description="Renders an example form page for uploading a file in multipart/form-data format to the temp directory."
+	)
 	public Form getUploadForm() {
 		return
 			form().id("form").action("servlet:/upload").method(POST).enctype("multipart/form-data")
@@ -94,11 +105,16 @@ public class TempDirResource extends DirectoryResource {
 		;
 	}
 
-	/**
-	 * [POST /upload] - Upload a file as a multipart form post.
-	 * Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.
-	 */
-	@RestMethod(name=POST, path="/upload", matchers=TempDirResource.MultipartFormDataMatcher.class)
+	@RestMethod(
+		name=POST, 
+		path="/upload", 
+		summary="Upload a file as a multipart form post",
+		description= {
+			"Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.\n",
+			"Matcher ensures Java method is called only when Content-Type is multipart/form-data."
+		},
+		matchers=TempDirResource.MultipartFormDataMatcher.class
+	)
 	public Redirect uploadFile(RestRequest req) throws Exception {
 		ServletFileUpload upload = new ServletFileUpload();
 		FileItemIterator iter = upload.getItemIterator(req);

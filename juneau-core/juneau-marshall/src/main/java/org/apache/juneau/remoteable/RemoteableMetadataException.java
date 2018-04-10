@@ -27,12 +27,23 @@ public class RemoteableMetadataException extends FormattedRuntimeException {
 	/**
 	 * Constructor.
 	 * 
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public RemoteableMetadataException(Throwable cause, String message, Object... args) {
+		super(cause, getMessage(cause, message, null), args);
+	}
+
+	/**
+	 * Constructor.
+	 * 
 	 * @param m The interface method that has an invalid definition.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RemoteableMetadataException(Method m, String message, Object...args) {
-		super(getMessage(m.getDeclaringClass(), m, message), args);
+		this((Throwable)null, getMessage(m.getDeclaringClass(), m, message), args);
 	}
 
 	/**
@@ -43,7 +54,7 @@ public class RemoteableMetadataException extends FormattedRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RemoteableMetadataException(Class<?> c, String message, Object...args) {
-		super(getMessage(c, null, message), args);
+		this((Throwable)null, getMessage(c, null, message), args);
 	}
 
 	private static final String getMessage(Class<?> c, Method m, String msg) {

@@ -10,25 +10,69 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.rest.exception;
 
-import org.apache.juneau.*;
+import static org.apache.juneau.rest.exception.TooManyRequests.*;
+
+import java.text.*;
+
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Exception thrown when trying to add an entry where the ID is already in use.
+ * Exception representing an HTTP 429 (Too Many Requests).
+ * 
+ * <p>
+ * The user has sent too many requests in a given amount of time. 
+ * <br>Intended for use with rate-limiting schemes.
  */
-@SuppressWarnings("serial")
-@ResponseInfo(code=409, description="ID already in use")
-public class IdConflictException extends FormattedException {
+@ResponseInfo(
+	code=CODE,
+	description=MESSAGE
+)
+public class TooManyRequests extends RestException {
+	private static final long serialVersionUID = 1L;
+	
+	/** Default message */
+	public static final String MESSAGE = "Too Many Requests";
+	
+	/** HTTP status code */
+	public static final int CODE = 429;
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param id The duplicate ID.
-	 * @param c The object type..
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
-	public IdConflictException(Object id, Class<?> c) {
-		super("ID ''{0}'' already in use for type ''{1}''", id, c.getSimpleName());
+	public TooManyRequests(Throwable cause, String msg, Object...args) {
+		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+	}
+	
+	/**
+	 * Constructor.
+	 */
+	public TooManyRequests() {
+		this((Throwable)null, MESSAGE);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 */
+	public TooManyRequests(String msg, Object...args) {
+		this(null, msg, args);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 */
+	public TooManyRequests(Throwable cause) {
+		this(cause, null);
 	}
 }

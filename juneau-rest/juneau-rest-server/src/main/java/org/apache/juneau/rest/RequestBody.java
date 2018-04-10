@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -27,6 +26,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * Contains the body of the HTTP request.
@@ -373,7 +373,7 @@ public class RequestBody {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(ClassMeta<T> cm) throws RestException {
+	private <T> T parse(ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
 
 		try {
 			if (cm.isReader())
@@ -396,34 +396,34 @@ public class RequestBody {
 						return session.parse(in, cm);
 					}
 				} catch (ParseException e) {
-					throw new RestException(SC_BAD_REQUEST,
+					throw new BadRequest(e,
 						"Could not convert request body content to class type ''{0}'' using parser ''{1}''.",
 						cm, p.getClass().getName()
-					).initCause(e);
+					);
 				}
 			}
 
-			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE,
+			throw new UnsupportedMediaType(
 				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
 				headers.getContentType(), req.getParsers().getSupportedMediaTypes()
 			);
 
 		} catch (IOException e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR,
+			throw new InternalServerError(e,
 				"I/O exception occurred while attempting to handle request ''{0}''.",
 				req.getDescription()
-			).initCause(e);
+			);
 		}
 	}
 
-	private Encoder getEncoder() {
+	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
 			String ce = req.getHeader("content-encoding");
 			if (! isEmpty(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
-					throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE,
+					throw new UnsupportedMediaType(
 						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
 						req.getHeader("content-encoding"), encoders.getSupportedEncodings()
 					);

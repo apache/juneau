@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 
+import java.text.*;
+
 import org.apache.juneau.json.*;
 
 /**
@@ -28,12 +30,23 @@ public final class InvalidDataConversionException extends FormattedRuntimeExcept
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public InvalidDataConversionException(Throwable cause, String message, Object... args) {
+		super(cause, getMessage(cause, message, null), args);
+	}
+
+	/**
 	 * @param toType Attempting to convert to this class type.
 	 * @param cause The cause.
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, Class<?> toType, Exception cause) {
-		super(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.",
+		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.",
 			getReadableClassNameForObject(value), getReadableClassName(toType), getValue(value));
 	}
 
@@ -43,7 +56,7 @@ public final class InvalidDataConversionException extends FormattedRuntimeExcept
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, ClassMeta<?> toType, Exception cause) {
-		super(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.",
+		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.",
 			getReadableClassNameForObject(value), toType.toString(), getValue(value));
 	}
 

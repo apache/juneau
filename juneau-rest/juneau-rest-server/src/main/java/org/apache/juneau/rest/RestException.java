@@ -36,38 +36,34 @@ public class RestException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 * @param cause The cause of this exception.
 	 * @param status The HTTP status code.
 	 * @param msg The status message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public RestException(int status, String msg, Object...args) {
-		super(msg, args);
+	public RestException(Throwable cause, int status, String msg, Object...args) {
+		super(cause, msg, args);
 		this.status = status;
+	}
+
+	/**
+	 * Constructor.
+	 * @param cause The root exception.
+	 * @param status The HTTP status code.
+	 */
+	public RestException(Throwable cause, int status) {
+		this(cause, status, null);
 	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param status The HTTP status code.
-	 * @param cause The root exception.
+	 * @param msg The status message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public RestException(int status, Throwable cause) {
-		this(status, cause.getLocalizedMessage());
-		initCause(cause);
-	}
-
-
-	/**
-	 * Sets the inner cause for this exception.
-	 * 
-	 * @param cause The inner cause.
-	 * @return This object (for method chaining).
-	 */
-	@Override /* Throwable */
-	public synchronized RestException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
+	public RestException(int status, String msg, Object...args) {
+		this(null, status, msg, args);
 	}
 
 	/**

@@ -528,7 +528,7 @@ public final class BeanPropertyMeta {
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
 			}
-			throw new BeanRuntimeException(beanMeta.c, "Exception occurred while getting property ''{0}''", name).initCause(e);
+			throw new BeanRuntimeException(e, beanMeta.c, "Exception occurred while getting property ''{0}''", name);
 		}
 	}
 
@@ -554,7 +554,7 @@ public final class BeanPropertyMeta {
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
 			}
-			throw new BeanRuntimeException(beanMeta.c, "Exception occurred while getting property ''{0}''", name).initCause(e);
+			throw new BeanRuntimeException(e, beanMeta.c, "Exception occurred while getting property ''{0}''", name);
 		}
 	}
 
@@ -770,7 +770,7 @@ public final class BeanPropertyMeta {
 							return rawTypeMeta.getPrimitiveDefault();
 					return null;
 				}
-				throw new BeanRuntimeException(beanMeta.c, "Error occurred trying to set property ''{0}''", name).initCause(e);
+				throw new BeanRuntimeException(e, beanMeta.c, "Error occurred trying to set property ''{0}''", name);
 			}
 		} catch (ParseException e) {
 			throw new BeanRuntimeException(e);

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -29,6 +28,7 @@ import org.apache.juneau.dto.LinkString;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.transforms.*;
 
@@ -131,7 +131,9 @@ public class LogsResource extends BasicRestServlet {
 	 * @param thread Optional thread name filter.  Only show log entries with the specified thread name.  Example: "&amp;thread=pool-33-thread-1".
 	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&amp;loggers=(LinkIndexService,LinkIndexRestService)".
 	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&amp;severity=(ERROR,WARN)".
-	 * @throws Exception
+	 * @throws NotFound File not found.
+	 * @throws MethodNotAllowed View not available on directories.
+	 * @throws IOException Could not write file.
 	 */
 	@RestMethod(
 		name="VIEW",
@@ -143,11 +145,22 @@ public class LogsResource extends BasicRestServlet {
 			"}"
 		}
 	)
-	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, RequestProperties properties, @Query("highlight") boolean highlight, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
+	public void viewFile(
+			RestRequest req, 
+			RestResponse res, 
+			@PathRemainder String path, 
+			RequestProperties properties, 
+			@Query("highlight") boolean highlight, 
+			@Query("start") String start, 
+			@Query("end") String end, 
+			@Query("thread") String thread, 
+			@Query("loggers") String[] loggers, 
+			@Query("severity") String[] severity
+		) throws NotFound, MethodNotAllowed, IOException {
 
 		File f = getFile(path);
 		if (f.isDirectory())
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "View not available on directories");
+			throw new MethodNotAllowed("View not available on directories");
 
 		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
 
@@ -201,7 +214,9 @@ public class LogsResource extends BasicRestServlet {
 	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&amp;loggers=(LinkIndexService,LinkIndexRestService)".
 	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&amp;severity=(ERROR,WARN)".
 	 * @return The parsed contents of the log file.
-	 * @throws Exception
+	 * @throws NotFound File not found.
+	 * @throws MethodNotAllowed View not available on directories.
+	 * @throws IOException Could not read file.
 	 */
 	@RestMethod(
 		name="PARSE",
@@ -214,13 +229,21 @@ public class LogsResource extends BasicRestServlet {
 			"}"
 		}
 	)
-	public LogParser viewParsedEntries(RestRequest req, @PathRemainder String path, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
+	public LogParser viewParsedEntries(
+			RestRequest req, 
+			@PathRemainder String path, 
+			@Query("start") String start,
+			@Query("end") String end, 
+			@Query("thread") String thread, 
+			@Query("loggers") String[] loggers, 
+			@Query("severity") String[] severity
+		) throws NotFound, MethodNotAllowed, IOException {
 
 		File f = getFile(path);
 		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
 
 		if (f.isDirectory())
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "View not available on directories");
+			throw new MethodNotAllowed("View not available on directories");
 
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}
@@ -231,7 +254,8 @@ public class LogsResource extends BasicRestServlet {
 	 * @param res The HTTP response.
 	 * @param path The log file path.
 	 * @return The contents of the log file.
-	 * @throws Exception
+	 * @throws NotFound File not found.
+	 * @throws MethodNotAllowed Download not available on directories.
 	 */
 	@RestMethod(
 		name="DOWNLOAD",
@@ -243,16 +267,21 @@ public class LogsResource extends BasicRestServlet {
 			"}"
 		}
 	)
-	public Object downloadFile(RestResponse res, @PathRemainder String path) throws Exception {
+	public Object downloadFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
 
 		File f = getFile(path);
 
 		if (f.isDirectory())
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "Download not available on directories");
+			throw new MethodNotAllowed("Download not available on directories");
 
 		res.setContentType("application/octet-stream");
 		res.setContentLength((int)f.length());
-		return new FileInputStream(f);
+		
+		try {
+			return new FileInputStream(f);
+		} catch (FileNotFoundException e) {
+			throw new NotFound("File not found");
+		}
 	}
 
 	/**
@@ -260,7 +289,9 @@ public class LogsResource extends BasicRestServlet {
 	 * 
 	 * @param path The log file path.
 	 * @return A redirect object to the root.
-	 * @throws Exception
+	 * @throws NotFound File not found.
+	 * @throws BadRequest Delete not available on directories.
+	 * @throws Forbidden Could not delete file.
 	 */
 	@RestMethod(
 		name=DELETE,
@@ -272,16 +303,16 @@ public class LogsResource extends BasicRestServlet {
 			"}"
 		}
 	)
-	public Object deleteFile(@PathRemainder String path) throws Exception {
+	public Object deleteFile(@PathRemainder String path) throws NotFound, BadRequest, Forbidden {
 
 		File f = getFile(path);
 
 		if (f.isDirectory())
-			throw new RestException(SC_BAD_REQUEST, "Delete not available on directories.");
+			throw new BadRequest("Delete not available on directories.");
 
 		if (f.canWrite())
 			if (! f.delete())
-				throw new RestException(SC_FORBIDDEN, "Could not delete file.");
+				throw new Forbidden("Could not delete file.");
 
 		return new Redirect(path + "/..");
 	}
@@ -290,13 +321,13 @@ public class LogsResource extends BasicRestServlet {
 		return new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
 	}
 
-	private File getFile(String path) {
+	private File getFile(String path) throws NotFound {
 		if (path != null && path.indexOf("..") != -1)
-			throw new RestException(SC_NOT_FOUND, "File not found.");
+			throw new NotFound("File not found.");
 		File f = (path == null ? logDir : new File(logDir.getAbsolutePath() + '/' + path));
 		if (filter.accept(f))
 			return f;
-		throw new RestException(SC_NOT_FOUND, "File not found.");
+		throw new NotFound("File not found.");
 	}
 
 	/**

@@ -130,12 +130,6 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			if (info.hasVersion())
 				table.child(tr(th("Version:"),td(info.getVersion())));
 
-			if (info.hasTermsOfService()) {
-				String tos = info.getTermsOfService();
-				Object child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
-				table.child(tr(th("Terms of Service:"),td(child)));
-			}
-			
 			Contact c = info.getContact();
 			if (c != null) {
 				Table t2 = table();
@@ -160,6 +154,12 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			if (ed != null) {
 				Object child = ed.hasUrl() ? a(ed.getUrl(), ed.hasDescription() ? ed.getDescription() : ed.getUrl()) : ed.getDescription();
 				table.child(tr(th("Docs:"),td(child)));
+			}
+
+			if (info.hasTermsOfService()) {
+				String tos = info.getTermsOfService();
+				Object child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
+				table.child(tr(th("Terms of Service:"),td(child)));
 			}
 		}
 		

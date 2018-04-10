@@ -68,7 +68,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
  * </ul>
  */
-@Bean(properties="title,description,termsOfService,contact,license,version,*")
+@Bean(properties="title,description,version,contact,license,termsOfService,*")
 public class Info extends SwaggerElement {
 
 	private String 

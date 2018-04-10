@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
-import static javax.servlet.http.HttpServletResponse.*;
-
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -44,7 +43,7 @@ public class DefaultHandler implements ResponseHandler {
 
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
+	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, InternalServerError, NotAcceptable {
 		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
@@ -93,10 +92,10 @@ public class DefaultHandler implements ResponseHandler {
 					w.finish();
 				}
 			} catch (SerializeException e) {
-				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+				throw new InternalServerError(e);
 			}
 		} else {
-			throw new RestException(SC_NOT_ACCEPTABLE,
+			throw new NotAcceptable(
 				"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
 				req.getHeaders().getString("Accept", ""), g.getSupportedMediaTypes()
 			);

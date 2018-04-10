@@ -40,7 +40,16 @@ import org.apache.juneau.utils.*;
 			"	<p>Each method is functionally equivalent but demonstrate different ways to accomplish the same tasks.</p>",
 			"</div>"
 		}
-	)
+	),
+	swagger={
+		"info: {",
+			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
+			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
+			"version:'2.0',",
+			"termsOfService:'You are on your own.'",
+		"},",
+		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
+	}
 )
 public class MethodExampleResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;

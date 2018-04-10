@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.text.*;
+
 /**
  * General runtime operation exception that can occur in any of the context classes.
  */
@@ -22,10 +24,12 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 	/**
 	 * Constructor.
 	 * 
-	 * @param message The error message.
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ContextRuntimeException(String message) {
-		super(message);
+	public ContextRuntimeException(Throwable cause, String message, Object... args) {
+		super(cause, getMessage(cause, message, null), args);
 	}
 
 	/**
@@ -35,19 +39,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
 	public ContextRuntimeException(String message, Object...args) {
-		super(message, args);
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param cause The initial cause of the exception.
-	 * @param message The error message.
-	 * @param args Arguments passed in to the {@code String.format()} method.
-	 */
-	public ContextRuntimeException(Throwable cause, String message, Object...args) {
-		super(message, args);
-		initCause(cause);
+		this(null, message, args);
 	}
 
 	/**
@@ -56,19 +48,6 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 	 * @param cause The initial cause of the exception.
 	 */
 	public ContextRuntimeException(Throwable cause) {
-		super(cause == null ? null : cause.getLocalizedMessage());
-		initCause(cause);
-	}
-
-	/**
-	 * Sets the inner cause for this exception.
-	 * 
-	 * @param cause The inner cause.
-	 * @return This object (for method chaining).
-	 */
-	@Override /* Throwable */
-	public synchronized ContextRuntimeException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
+		this(cause, null);
 	}
 }

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.text.*;
 
 import org.apache.juneau.*;
@@ -27,22 +25,21 @@ public class VarResolverException extends FormattedRuntimeException {
 	/**
 	 * Constructor.
 	 * 
+	 * @param cause The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public VarResolverException(String message, Object...args) {
-		super(format(message, args));
+	public VarResolverException(Throwable cause, String message, Object... args) {
+		super(cause, getMessage(cause, message, null), args);
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param causedBy The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public VarResolverException(Throwable causedBy, String message, Object...args) {
-		this(message, args);
-		initCause(causedBy);
+	public VarResolverException(String message, Object...args) {
+		this(null, message, args);
 	}
 }

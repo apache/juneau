@@ -26,6 +26,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -67,7 +68,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Constructor.
 	 */
-	RestResponse(RestContext context, RestRequest req, HttpServletResponse res) {
+	RestResponse(RestContext context, RestRequest req, HttpServletResponse res) throws BadRequest {
 		super(res);
 		this.request = req;
 
@@ -83,14 +84,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 					setHeader(e.getKey(), e.getValue().toString());
 			}
 		} catch (Exception e1) {
-			throw new RestException(SC_BAD_REQUEST, "Invalid format for header 'x-response-headers'.  Must be in URL-encoded format.").initCause(e1);
+			throw new BadRequest(e1, "Invalid format for header 'x-response-headers'.  Must be in URL-encoded format.");
 		}
 	}
 
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestJavaMethod rjm, RequestProperties properties) {
+	final void init(RestJavaMethod rjm, RequestProperties properties) throws NotAcceptable {
 		this.restJavaMethod = rjm;
 		this.properties = properties;
 
@@ -112,7 +113,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		}
 
 		if (charset == null)
-			throw new RestException(SC_NOT_ACCEPTABLE, "No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
+			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
 		super.setCharacterEncoding(charset);
 	}
 
@@ -347,9 +348,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * was found that matched the <code>Accept-Encoding</code> header.
 	 * 
 	 * @return A negotiated output stream.
+	 * @throws NotAcceptable If unsupported Accept-Encoding value specified.
 	 * @throws IOException
 	 */
-	public FinishableServletOutputStream getNegotiatedOutputStream() throws IOException {
+	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
 			EncoderGroup encoders = restJavaMethod.encoders;
@@ -360,7 +362,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
 					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
-						throw new RestException(SC_NOT_ACCEPTABLE,
+						throw new NotAcceptable(
 							"Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}",
 							ae, encoders.getSupportedEncodings()
 						);
@@ -435,14 +437,15 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * header to the appropriate value.
 	 * 
 	 * @return The negotiated writer.
+	 * @throws NotAcceptable If unsupported charset in request header Accept-Charset.
 	 * @throws IOException
 	 */
-	public FinishablePrintWriter getNegotiatedWriter() throws IOException {
+	public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException {
 		return getWriter(false);
 	}
 
 	@SuppressWarnings("resource")
-	private FinishablePrintWriter getWriter(boolean raw) throws IOException {
+	private FinishablePrintWriter getWriter(boolean raw) throws NotAcceptable, IOException {
 		if (w != null)
 			return w;
 
@@ -457,7 +460,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		} catch (UnsupportedEncodingException e) {
 			String ce = getCharacterEncoding();
 			setCharacterEncoding("UTF-8");
-			throw new RestException(SC_NOT_ACCEPTABLE, "Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);
+			throw new NotAcceptable("Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);
 		}
 	}
 

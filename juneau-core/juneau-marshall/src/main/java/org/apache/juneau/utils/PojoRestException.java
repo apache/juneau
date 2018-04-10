@@ -46,13 +46,25 @@ public final class PojoRestException extends FormattedRuntimeException {
 	/**
 	 * Constructor.
 	 * 
+	 * @param cause The cause of this exception.
+	 * @param status HTTP status code.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public PojoRestException(Throwable cause, int status, String message, Object... args) {
+		super(cause, getMessage(cause, message, null), args);
+		this.status = status;
+	}
+
+	/**
+	 * Constructor.
+	 * 
 	 * @param status The HTTP-equivalent status code.
 	 * @param message The detailed message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public PojoRestException(int status, String message, Object...args) {
-		super(message, args);
-		this.status = status;
+		this(null, status, message, args);
 	}
 
 	/**

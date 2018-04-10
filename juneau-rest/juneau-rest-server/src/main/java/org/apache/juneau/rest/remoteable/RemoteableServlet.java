@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.remoteable;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -29,6 +28,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * Abstract class for defining Remoteable services.
@@ -111,15 +111,16 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	 * @param javaInterface The Java interface name.
 	 * @param javaMethod The Java method name or signature.
 	 * @return A simple form entry page for invoking a remoteable method.
+	 * @throws NotFound 
 	 * @throws Exception
 	 */
 	@RestMethod(name=GET, path="/{javaInterface}/{javaMethod}", summary="Form entry for method $RP{javaMethod} on interface $RP{javaInterface}")
-	public Div showEntryForm(RestRequest req, @Path("javaInterface") String javaInterface, @Path("javaMethod") String javaMethod) throws Exception {
+	public Div showEntryForm(RestRequest req, @Path("javaInterface") String javaInterface, @Path("javaMethod") String javaMethod) throws NotFound, Exception {
 		
 		// Find the method.
 		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
 		if (m == null)
-			throw new RestException(SC_NOT_FOUND, "Method not found");
+			throw new NotFound("Method not found");
 
 		Table t = table();
 		
@@ -154,26 +155,28 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	 * @param javaInterface The Java interface name.
 	 * @param javaMethod The Java method name or signature.
 	 * @return The results from invoking the specified Java method.
+	 * @throws UnsupportedMediaType 
+	 * @throws NotFound 
 	 * @throws Exception
 	 */
 	@RestMethod(name=POST, path="/{javaInterface}/{javaMethod}")
-	public Object invoke(RestRequest req, @Path String javaInterface, @Path String javaMethod) throws Exception {
+	public Object invoke(RestRequest req, @Path String javaInterface, @Path String javaMethod) throws UnsupportedMediaType, NotFound, Exception {
 
 		// Find the parser.
 		ReaderParser p = req.getBody().getReaderParser();
 		if (p == null)
-			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Could not find parser for media type ''{0}''", req.getHeaders().getContentType());
+			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", req.getHeaders().getContentType());
 		Class<?> c = getInterfaceClass(javaInterface);
 
 		// Find the service.
 		Object service = getServiceMap().get(c);
 		if (service == null)
-			throw new RestException(SC_NOT_FOUND, "Service not found");
+			throw new NotFound("Service not found");
 
 		// Find the method.
 		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
 		if (m == null)
-			throw new RestException(SC_NOT_FOUND, "Method not found");
+			throw new NotFound("Method not found");
 
 		// Parse the args and invoke the method.
 		Object[] params = p.parseArgs(req.getReader(), m.getGenericParameterTypes());
@@ -198,7 +201,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	/**
 	 * Return the <code>Class</code> given it's name if it exists in the services map.
 	 */
-	private Class<?> getInterfaceClass(String javaInterface) throws Exception {
+	private Class<?> getInterfaceClass(String javaInterface) throws NotFound, Exception {
 		Class<?> c = classNameMap.get(javaInterface);
 		if (c == null) {
 			for (Class<?> c2 : getServiceMap().keySet())
@@ -206,7 +209,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 					classNameMap.put(javaInterface, c2);
 					return c2;
 				}
-			throw new RestException(SC_NOT_FOUND, "Interface class not found");
+			throw new NotFound("Interface class not found");
 		}
 		return c;
 	}

@@ -29,54 +29,54 @@ public class PetStore {
 	private IdMap<Long,User> userDb = IdMap.createLongMap(User.class);
 
 	
-	public Pet getPet(long id) throws IdNotFoundException {
+	public Pet getPet(long id) throws IdNotFound {
 		Pet value = petDb.get(id);
 		if (value == null)
-			throw new IdNotFoundException(id, Pet.class);
+			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
 	
-	public Category getCategory(long id) throws IdNotFoundException {
+	public Category getCategory(long id) throws IdNotFound {
 		Category value = categoryDb.get(id);
 		if (value == null)
-			throw new IdNotFoundException(id, Pet.class);
+			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
 	
-	public Order getOrder(long id) throws IdNotFoundException {
+	public Order getOrder(long id) throws IdNotFound {
 		Order value = orderDb.get(id);
 		if (value == null)
-			throw new IdNotFoundException(id, Pet.class);
+			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
 	
-	public Tag getTag(long id) throws IdNotFoundException {
+	public Tag getTag(long id) throws IdNotFound {
 		Tag value =  tagDb.get(id);
 		if (value == null)
-			throw new IdNotFoundException(id, Pet.class);
+			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
 	
-	public Tag getTag(String name) throws InvalidTagException  {
+	public Tag getTag(String name) throws InvalidTag  {
 		for (Tag value : tagDb.values())
 			if (value.getName().equals(name))
 				return value;
-		throw new InvalidTagException();
+		throw new InvalidTag();
 	}
 
-	public User getUser(long id) throws IdNotFoundException {
+	public User getUser(long id) throws IdNotFound {
 		User value =  userDb.get(id);
 		if (value == null)
-			throw new IdNotFoundException(id, Pet.class);
+			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
 	
-	public User getUser(String username) throws InvalidUsernameException, IdNotFoundException  {
+	public User getUser(String username) throws InvalidUsername, IdNotFound  {
 		assertValidUsername(username);
 		for (User user : userDb.values())
 			if (user.getUsername().equals(username))
 				return user;
-		throw new IdNotFoundException(username, User.class);
+		throw new IdNotFound(username, User.class);
 	}
 
 	public boolean isValid(String username, String password) {
@@ -106,117 +106,117 @@ public class PetStore {
 		return userDb.values();
 	}
 
-	public Pet add(Pet value) throws IdConflictException {
+	public Pet add(Pet value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(petDb.nextId());
 		Pet old = petDb.putIfAbsent(value.getId(), value);
 		if (old != null)
-			throw new IdConflictException(value.getId(), Pet.class);
+			throw new IdConflict(value.getId(), Pet.class);
 		return value;
 	}
 
-	public Category add(Category value) throws IdConflictException {
+	public Category add(Category value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(categoryDb.nextId());
 		Category old = categoryDb.putIfAbsent(value.getId(), value);
 		if (old != null)
-			throw new IdConflictException(value.getId(), Category.class);
+			throw new IdConflict(value.getId(), Category.class);
 		return value;
 	}
 	
-	public Order add(Order value) throws IdConflictException {
+	public Order add(Order value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(orderDb.nextId());
 		Order old = orderDb.putIfAbsent(value.getId(), value);
 		if (old != null)
-			throw new IdConflictException(value.getId(), Order.class);
+			throw new IdConflict(value.getId(), Order.class);
 		return value;
 	}
 	
-	public Tag add(Tag value) throws IdConflictException {
+	public Tag add(Tag value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(tagDb.nextId());
 		Tag old = tagDb.putIfAbsent(value.getId(), value);
 		if (old != null)
-			throw new IdConflictException(value.getId(), Tag.class);
+			throw new IdConflict(value.getId(), Tag.class);
 		return value;
 	}
 	
-	public User add(User value) throws IdConflictException, InvalidUsernameException {
+	public User add(User value) throws IdConflict, InvalidUsername {
 		assertValidUsername(value.getUsername());
 		if (value.getId() == 0)
 			value.id(userDb.nextId());
 		User old = userDb.putIfAbsent(value.getId(), value);
 		if (old != null)
-			throw new IdConflictException(value.getId(), User.class);
+			throw new IdConflict(value.getId(), User.class);
 		return value;
 	}
 	
-	public Pet update(Pet value) throws IdNotFoundException {
+	public Pet update(Pet value) throws IdNotFound {
 		Pet old = petDb.replace(value.getId(), value);
 		if (old == null)
-			throw new IdNotFoundException(value.getId(), Pet.class);
+			throw new IdNotFound(value.getId(), Pet.class);
 		return value;
 	}
 
-	public Category update(Category value) throws IdNotFoundException {
+	public Category update(Category value) throws IdNotFound {
 		Category old = categoryDb.replace(value.getId(), value);
 		if (old == null)
-			throw new IdNotFoundException(value.getId(), Category.class);
+			throw new IdNotFound(value.getId(), Category.class);
 		return value;
 	}
 	
-	public Order update(Order value) throws IdNotFoundException {
+	public Order update(Order value) throws IdNotFound {
 		Order old = orderDb.replace(value.getId(), value);
 		if (old == null)
-			throw new IdNotFoundException(value.getId(), Order.class);
+			throw new IdNotFound(value.getId(), Order.class);
 		return value;
 	}
 	
-	public Tag update(Tag value) throws IdNotFoundException, InvalidTagException {
+	public Tag update(Tag value) throws IdNotFound, InvalidTag {
 		assertValidTag(value.getName());
 		Tag old = tagDb.replace(value.getId(), value);
 		if (old == null)
-			throw new IdNotFoundException(value.getId(), Tag.class);
+			throw new IdNotFound(value.getId(), Tag.class);
 		return value;
 	}
 	
-	public User update(User value) throws IdNotFoundException, InvalidUsernameException {
+	public User update(User value) throws IdNotFound, InvalidUsername {
 		assertValidUsername(value.getUsername());
 		User old = userDb.replace(value.getId(), value);
 		if (old == null)
-			throw new IdNotFoundException(value.getId(), User.class);
+			throw new IdNotFound(value.getId(), User.class);
 		return value;
 	}
 
-	public void removePet(long id) throws IdNotFoundException {
+	public void removePet(long id) throws IdNotFound {
 		petDb.remove(getPet(id).getId());
 	}
 
-	public void removeCategory(long id) throws IdNotFoundException {
+	public void removeCategory(long id) throws IdNotFound {
 		categoryDb.remove(getCategory(id).getId());
 	}
 	
-	public void removeOrder(long id) throws IdNotFoundException {
+	public void removeOrder(long id) throws IdNotFound {
 		orderDb.remove(getOrder(id).getId());
 	}
 	
-	public void removeTag(long id) throws IdNotFoundException {
+	public void removeTag(long id) throws IdNotFound {
 		tagDb.remove(getTag(id).getId());
 	}
 	
-	public void removeUser(long id) throws IdNotFoundException {
+	public void removeUser(long id) throws IdNotFound {
 		userDb.remove(getUser(id).getId());
 	}
 
-	private void assertValidUsername(String username) throws InvalidUsernameException {
+	private void assertValidUsername(String username) throws InvalidUsername {
 		if (username == null || ! username.matches("[\\w\\d]{8,}"))
-			throw new InvalidUsernameException();
+			throw new InvalidUsername();
 	}
 
-	private void assertValidTag(String tag) throws InvalidTagException {
+	private void assertValidTag(String tag) throws InvalidTag {
 		if (tag == null || ! tag.matches("[\\w\\d]{1,8}"))
-			throw new InvalidTagException();
+			throw new InvalidTag();
 	}
 
 	public Collection<Pet> getPetsByStatus(PetStatus[] status) {
@@ -227,7 +227,7 @@ public class PetStore {
 		return list;
 	}
 
-	public Collection<Pet> getPetsByTags(String[] tags) throws InvalidTagException {
+	public Collection<Pet> getPetsByTags(String[] tags) throws InvalidTag {
 		for (String tag : tags)
 			assertValidTag(tag);
 		List<Pet> list = new ArrayList<>();

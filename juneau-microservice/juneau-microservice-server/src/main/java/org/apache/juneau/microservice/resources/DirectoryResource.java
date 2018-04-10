@@ -13,7 +13,6 @@
 package org.apache.juneau.microservice.resources;
 
 import static java.util.logging.Level.*;
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -28,6 +27,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
@@ -117,20 +117,21 @@ public class DirectoryResource extends BasicRestServlet {
 	 * @param req The HTTP request.
 	 * @return Either a FileResource or list of FileResources depending on whether it's a
 	 * 	file or directory.
-	 * @throws Exception If file could not be read or access was not granted.
+	 * @throws NotFound If file was not found.
+	 * @throws MalformedURLException 
 	 */
 	@RestMethod(name=GET, path="/*",
 		description="On directories, returns a directory listing.\nOn files, returns information about the file.",
 		converters={Queryable.class}
 	)
-	public Object doGet(RestRequest req) throws Exception {
+	public Object doGet(RestRequest req) throws NotFound, MalformedURLException {
 		checkAccess(req);
 
 		String pathInfo = req.getPathInfo();
 		File f = pathInfo == null ? rootDir : new File(rootDir.getAbsolutePath() + pathInfo);
 
 		if (!f.exists())
-			throw new RestException(SC_NOT_FOUND, "File not found");
+			throw new NotFound("File not found");
 
 		req.setAttribute("path", f.getAbsolutePath());
 
@@ -175,18 +176,20 @@ public class DirectoryResource extends BasicRestServlet {
 	 * 
 	 * @param req The HTTP request.
 	 * @return The message <js>"File added"</js> if successful.
-	 * @throws Exception If file could not be read or access was not granted.
+	 * @throws InternalServerError If file could not be read or access was not granted.
 	 */
 	@RestMethod(name=PUT, path="/*",
 		description="Add or overwrite a file on the file system."
 	)
-	public Object doPut(RestRequest req) throws Exception {
+	public Object doPut(RestRequest req) throws InternalServerError {
 		checkAccess(req);
 
 		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
 		String parentSubPath = f.getParentFile().getAbsolutePath().substring(rootDir.getAbsolutePath().length());
 		try (InputStream is = req.getInputStream(); OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
 			IOPipe.create(is, os).run();
+		} catch (IOException e) {
+			throw new InternalServerError(e);
 		}
 		if (req.getContentType().contains("html"))
 			return new Redirect(parentSubPath);
@@ -202,24 +205,26 @@ public class DirectoryResource extends BasicRestServlet {
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @return A Reader containing the contents of the file.
-	 * @throws Exception If file could not be read or access was not granted.
+	 * @throws NotFound File not found.
+	 * @throws MethodNotAllowed Method not allowed on directories.
 	 */
 	@RestMethod(name="VIEW", path="/*",
 		description="View the contents of a file.\nApplies to files only."
 	)
-	public Reader doView(RestRequest req, RestResponse res) throws Exception {
+	public Reader doView(RestRequest req, RestResponse res) throws NotFound, MethodNotAllowed {
 		checkAccess(req);
 
 		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
 
-		if (!f.exists())
-			throw new RestException(SC_NOT_FOUND, "File not found");
-
 		if (f.isDirectory())
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "VIEW not available on directories");
+			throw new MethodNotAllowed("VIEW not available on directories");
 
 		res.setContentType("text/plain");
-		return new FileReader(f);
+		try {
+			return new FileReader(f);
+		} catch (FileNotFoundException e) {
+			throw new NotFound("File not found");
+		}
 	}
 
 	/**
@@ -231,24 +236,26 @@ public class DirectoryResource extends BasicRestServlet {
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @return A Reader containing the contents of the file.
-	 * @throws Exception If file could not be read or access was not granted.
+	 * @throws NotFound Found could not be found. 
+	 * @throws MethodNotAllowed Cannot call on a directory.
 	 */
 	@RestMethod(name="DOWNLOAD", path="/*",
 		description="Download the contents of a file.\nApplies to files only."
 	)
-	public Reader doDownload(RestRequest req, RestResponse res) throws Exception {
+	public Reader doDownload(RestRequest req, RestResponse res) throws NotFound, MethodNotAllowed {
 		checkAccess(req);
 
 		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
 
-		if (!f.exists())
-			throw new RestException(SC_NOT_FOUND, "File not found");
-
 		if (f.isDirectory())
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "DOWNLOAD not available on directories");
+			throw new MethodNotAllowed("DOWNLOAD not available on directories");
 
 		res.setContentType("application");
-		return new FileReader(f);
+		try {
+			return new FileReader(f);
+		} catch (FileNotFoundException e) {
+			throw new NotFound("File not found");
+		}
 	}
 
 	/**
@@ -259,17 +266,18 @@ public class DirectoryResource extends BasicRestServlet {
 	 * Method should throw a {@link RestException} if the request should be disallowed.
 	 * 
 	 * @param req The HTTP request.
+	 * @throws MethodNotAllowed Thrown if specified method is not allowed.
 	 */
-	protected void checkAccess(RestRequest req) {
+	protected void checkAccess(RestRequest req) throws MethodNotAllowed {
 		String method = req.getMethod();
 		if (method.equals("VIEW") && ! allowViews)
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "VIEW not enabled");
+			throw new MethodNotAllowed("VIEW not enabled");
 		if (method.equals("PUT") && ! allowPuts)
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "PUT not enabled");
+			throw new MethodNotAllowed("PUT not enabled");
 		if (method.equals("DELETE") && ! allowDeletes)
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "DELETE not enabled");
+			throw new MethodNotAllowed("DELETE not enabled");
 		if (method.equals("DOWNLOAD") && ! allowViews)
-			throw new RestException(SC_METHOD_NOT_ALLOWED, "DOWNLOAD not enabled");
+			throw new MethodNotAllowed("DOWNLOAD not enabled");
 	}
 
 	/** File POJO */

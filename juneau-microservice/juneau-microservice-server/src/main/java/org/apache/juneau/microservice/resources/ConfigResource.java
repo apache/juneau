@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -21,9 +20,11 @@ import java.util.Map;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * Shows contents of the microservice configuration file.
@@ -184,7 +185,8 @@ public class ConfigResource extends BasicRestServlet {
 	 * @param key The section key.
 	 * @param value The new value.
 	 * @return The new value.
-	 * @throws Exception
+	 * @throws NotFound Thrown if config section not found.
+	 * @throws BadRequest Thrown if contents are not valid.
 	 */
 	@RestMethod(name=PUT, path="/{section}/{key}",
 		description="Add or overwrite a config file entry.",
@@ -196,15 +198,20 @@ public class ConfigResource extends BasicRestServlet {
 			"]"
 		}
 	)
-	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws Exception {
+	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws NotFound, BadRequest {
 		getServletConfig().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
 	}
 
-	private ObjectMap getSection(String name) throws Exception {
-		ObjectMap m = getServletConfig().getConfig().getSectionAsMap(name);
+	private ObjectMap getSection(String name) throws NotFound, BadRequest {
+		ObjectMap m;
+		try {
+			m = getServletConfig().getConfig().getSectionAsMap(name);
+		} catch (ParseException e) {
+			throw new BadRequest(e, "Invalid input");
+		}
 		if (m == null)
-			throw new RestException(SC_NOT_FOUND, "Section not found.");
+			throw new NotFound("Section not found.");
 		return m;
 	}
 }

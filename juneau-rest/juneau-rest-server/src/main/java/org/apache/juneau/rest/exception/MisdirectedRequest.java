@@ -10,21 +10,68 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.rest.exception;
 
+import static org.apache.juneau.rest.exception.MisdirectedRequest.*;
+
+import java.text.*;
+
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Exception thrown when trying to add an entry where the ID is already in use.
+ * Exception representing an HTTP 421 (Misdirected Request).
+ * 
+ * <p>
+ * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  */
-@SuppressWarnings("serial")
-@ResponseInfo(code=400, description="Invalid tag provided")
-public class InvalidTagException extends Exception {
+@ResponseInfo(
+	code=CODE,
+	description=MESSAGE
+)
+public class MisdirectedRequest extends RestException {
+	private static final long serialVersionUID = 1L;
+	
+	/** Default message */
+	public static final String MESSAGE = "Misdirected Request";
+	
+	/** HTTP status code */
+	public static final int CODE = 421;
 
 	/**
 	 * Constructor.
+	 * 
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
-	public InvalidTagException() {
-		super("Invalid tag provided.  Must be at most 8 characters or digits.");
+	public MisdirectedRequest(Throwable cause, String msg, Object...args) {
+		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+	}
+	
+	/**
+	 * Constructor.
+	 */
+	public MisdirectedRequest() {
+		this((Throwable)null, MESSAGE);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 */
+	public MisdirectedRequest(String msg, Object...args) {
+		this(null, msg, args);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 */
+	public MisdirectedRequest(Throwable cause) {
+		this(cause, null);
 	}
 }

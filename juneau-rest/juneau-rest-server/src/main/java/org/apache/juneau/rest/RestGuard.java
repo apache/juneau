@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static javax.servlet.http.HttpServletResponse.*;
-
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * REST method guard.
@@ -92,7 +91,7 @@ public abstract class RestGuard {
 	 */
 	public boolean guard(RestRequest req, RestResponse res) throws RestException {
 		if (! isRequestAllowed(req))
-			throw new RestException(SC_FORBIDDEN, "Access denied by guard");
+			throw new Forbidden("Access denied by guard");
 		return true;
 	}
 

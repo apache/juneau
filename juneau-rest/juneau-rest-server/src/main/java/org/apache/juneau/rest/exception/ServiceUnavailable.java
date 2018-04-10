@@ -10,21 +10,69 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.rest.exception;
 
+import static org.apache.juneau.rest.exception.ServiceUnavailable.*;
+
+import java.text.*;
+
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Exception thrown when trying to add an entry where the ID is already in use.
+ * Exception representing an HTTP 503 (Service Unavailable).
+ * 
+ * <p>
+ * The server is currently unavailable (because it is overloaded or down for maintenance). 
+ * <br>Generally, this is a temporary state.
  */
-@SuppressWarnings("serial")
-@ResponseInfo(code=400, description="Invalid ID provided")
-public class InvalidIdException extends Exception {
+@ResponseInfo(
+	code=CODE,
+	description=MESSAGE
+)
+public class ServiceUnavailable extends RestException {
+	private static final long serialVersionUID = 1L;
+	
+	/** Default message */
+	public static final String MESSAGE = "Service Unavailable";
+	
+	/** HTTP status code */
+	public static final int CODE = 503;
 
 	/**
 	 * Constructor.
+	 * 
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
-	public InvalidIdException() {
-		super("Invalid ID provided.");
+	public ServiceUnavailable(Throwable cause, String msg, Object...args) {
+		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+	}
+	
+	/**
+	 * Constructor.
+	 */
+	public ServiceUnavailable() {
+		this((Throwable)null, MESSAGE);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 */
+	public ServiceUnavailable(String msg, Object...args) {
+		this(null, msg, args);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 */
+	public ServiceUnavailable(Throwable cause) {
+		this(cause, null);
 	}
 }

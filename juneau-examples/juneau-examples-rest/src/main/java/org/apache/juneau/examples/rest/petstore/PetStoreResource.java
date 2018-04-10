@@ -98,7 +98,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Pet getPet(
 			@Path(description="ID of pet to return", example="123") long petId
-		) throws IdNotFoundException {
+		) throws IdNotFound {
 		
 		return db.getPet(petId);
 	}
@@ -114,7 +114,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok addPet(
 			@Body(description="Pet object that needs to be added to the store") Pet pet
-		) throws IdConflictException {
+		) throws IdConflict {
 		
 		db.add(pet);
 		return OK;
@@ -131,7 +131,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok updatePet(
 			@Body(description="Pet object that needs to be added to the store") Pet pet
-		) throws IdNotFoundException {
+		) throws IdNotFound {
 		
 		db.update(pet);
 		return OK;
@@ -179,7 +179,7 @@ public class PetStoreResource extends BasicRestServletJena {
 				example="['tag1','tag2']"
 			) 
 			String[] tags
-		) throws InvalidTagException {
+		) throws InvalidTag {
 		
 		return db.getPetsByTags(tags);
 	}
@@ -197,7 +197,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Path(description="ID of pet that needs to be updated", example="123") long petId, 
 			@FormData(name="name", description="Updated name of the pet", example="'Scruffy'") String name, 
 			@FormData(name="status", description="Updated status of the pet", example="'AVAILABLE'") PetStatus status
-		) throws IdNotFoundException {
+		) throws IdNotFound {
 		
 		Pet pet = db.getPet(petId);
 		pet.name(name);
@@ -218,7 +218,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	public Ok deletePet(
 			@Header(name="api_key", example="foobar") String apiKey, 
 			@Path(description="Pet id to delete", example="123") long petId
-		) throws IdNotFoundException {
+		) throws IdNotFound {
 		
 		db.removePet(petId);
 		return OK;
@@ -269,10 +269,10 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Order getOrder(
 			@Path(description="ID of order to fetch", maximum="10", minimum="1", example="5") long orderId
-		) throws InvalidIdException, IdNotFoundException {
+		) throws InvalidId, IdNotFound {
 		
 		if (orderId < 0 || orderId > 10)
-			throw new InvalidIdException();
+			throw new InvalidId();
 		return db.getOrder(orderId);
 	}
 	
@@ -286,7 +286,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Order placeOrder(
 			@Body(description="Order placed for purchasing the pet", example="{petId:456,quantity:100}") Order order
-		) throws IdConflictException {
+		) throws IdConflict {
 		
 		return db.add(order);
 	}
@@ -302,10 +302,10 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok deletePurchaseOrder(
 			@Path(description="ID of the order that needs to be deleted", minimum="1", example="5") long orderId
-		) throws InvalidIdException, IdNotFoundException {
+		) throws InvalidId, IdNotFound {
 		
 		if (orderId < 0)
-			throw new InvalidIdException();
+			throw new InvalidId();
 		db.removeOrder(orderId);
 		return OK;
 	}
@@ -353,7 +353,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public User getUser(
 			@Path(description="The name that needs to be fetched. Use user1 for testing.") String username
-		) throws InvalidUsernameException, IdNotFoundException {
+		) throws InvalidUsername, IdNotFound {
 		
 		return db.getUser(username);
 	}
@@ -369,7 +369,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok createUser(
 			@Body(description="Created user object") User user
-		) throws InvalidUsernameException, IdConflictException {
+		) throws InvalidUsername, IdConflict {
 		
 		db.add(user);
 		return OK;
@@ -385,7 +385,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok createUsers(
 			@Body(description="List of user objects") User[] users
-		) throws InvalidUsernameException, IdConflictException {
+		) throws InvalidUsername, IdConflict {
 		
 		for (User user : users)
 			db.add(user);
@@ -404,7 +404,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	public Ok updateUser(
 			@Path(description="Name that need to be updated") String username, 
 			@Body(description="Updated user object") User user
-		) throws InvalidUsernameException, IdNotFoundException {
+		) throws InvalidUsername, IdNotFound {
 		
 		User oldUser = db.getUser(username);
 		user.id(oldUser.getId());
@@ -423,7 +423,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok deleteUser(
 			@Path(description="The name that needs to be deleted") String username
-		) throws InvalidUsernameException, IdNotFoundException {
+		) throws InvalidUsername, IdNotFound {
 		
 		User oldUser = db.getUser(username);
 		db.removeUser(oldUser.getId());
@@ -451,10 +451,10 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Query(name="password", description="The password for login in clear text", required="true", example="abc123") String password, 
 			RestRequest req, 
 			RestResponse res
-		) throws LoginException {
+		) throws InvalidLogin {
 		
 		if (! db.isValid(username, password))
-			throw new LoginException();
+			throw new InvalidLogin();
 		
 		Date d = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
 		req.getSession().setAttribute("login-expires", d);

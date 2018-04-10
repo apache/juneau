@@ -10,21 +10,69 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.rest.exception;
 
+import static org.apache.juneau.rest.exception.UnsupportedMediaType.*;
+
+import java.text.*;
+
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Exception thrown when an invalid username or password is provided.
+ * Exception representing an HTTP 415 (Unsupported Media Type).
+ * 
+ * <p>
+ * The request entity has a media type which the server or resource does not support. 
+ * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  */
-@SuppressWarnings("serial")
-@ResponseInfo(code=401, description="Invalid username or password provided")
-public class LoginException extends Exception {
+@ResponseInfo(
+	code=CODE,
+	description=MESSAGE
+)
+public class UnsupportedMediaType extends RestException {
+	private static final long serialVersionUID = 1L;
+	
+	/** Default message */
+	public static final String MESSAGE = "Unsupported Media Type";
+	
+	/** HTTP status code */
+	public static final int CODE = 415;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 */
+	public UnsupportedMediaType(Throwable cause, String msg, Object...args) {
+		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+	}
 	
 	/**
 	 * Constructor.
 	 */
-	public LoginException() {
-		super("Invalid username or password.");
+	public UnsupportedMediaType() {
+		this((Throwable)null, MESSAGE);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 */
+	public UnsupportedMediaType(String msg, Object...args) {
+		this(null, msg, args);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 */
+	public UnsupportedMediaType(Throwable cause) {
+		this(cause, null);
 	}
 }

@@ -1489,8 +1489,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
-			throw new BeanRuntimeException(cm.innerClass,
-				"Error occurred attempting to cast to an object of type ''{0}''", cm.innerClass.getName()).initCause(e);
+			throw new BeanRuntimeException(e, cm.innerClass,
+				"Error occurred attempting to cast to an object of type ''{0}''", cm.innerClass.getName());
 		}
 
 		throw new BeanRuntimeException(cm.innerClass,

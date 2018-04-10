@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converters;
 
-import static javax.servlet.http.HttpServletResponse.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -53,7 +52,7 @@ public final class Introspectable implements RestConverter {
 
 	@Override /* RestConverter */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public Object convert(RestRequest req, Object o) throws RestException {
+	public Object convert(RestRequest req, Object o) throws InternalServerError {
 		String method = req.getQuery().getString("invokeMethod");
 		String args = req.getQuery().getString("invokeArgs");
 		if (method == null)
@@ -65,8 +64,7 @@ public final class Introspectable implements RestConverter {
 				o = swap.swap(bs, o);
 			return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new RestException(SC_INTERNAL_SERVER_ERROR,
+			return new InternalServerError(
 				"Error occurred trying to invoke method: {0}",
 				e.getLocalizedMessage()
 			).initCause(e);

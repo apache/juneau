@@ -15,6 +15,7 @@ package org.apache.juneau.rest.response;
 import java.io.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -31,7 +32,7 @@ import org.apache.juneau.utils.*;
 public final class ReaderHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
+	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, NotAcceptable, RestException {
 		if (output instanceof Reader) {
 			try (Writer w = res.getNegotiatedWriter()) {
 				IOPipe.create(output, w).run();

@@ -21,26 +21,26 @@ public class ConfigException extends FormattedRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ConfigException(Throwable cause, String message, Object... args) {
+		super(cause, getMessage(cause, message, null), args);
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param message The error message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ConfigException(String message, Object...args) {
-		super(message, args);
+		this(null, message, args);
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param t The init cause.  Can be <jk>null</jk>. 
-	 * @param message The error message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ConfigException(Throwable t, String message, Object...args) {
-		super(t, message, args);
-	}
-	
 	@Override
 	public String getMessage() {
 		Throwable t = getCause();

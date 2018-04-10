@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
@@ -38,6 +37,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -392,7 +392,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the charset specified on the <code>Content-Type</code> header, or <js>"UTF-8"</js> if not specified.
 	 */
 	@Override /* ServletRequest */
-	public String getCharacterEncoding() {
+	public String getCharacterEncoding() throws UnsupportedMediaType {
 		if (charset == null) {
 			// Determine charset
 			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
@@ -406,7 +406,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (charset == null)
 				charset = restJavaMethod.defaultCharset;
 			if (! Charset.isSupported(charset))
-				throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported charset in header ''Content-Type'': ''{0}''", h);
+				throw new UnsupportedMediaType("Unsupported charset in header ''Content-Type'': ''{0}''", h);
 		}
 		return charset;
 	}
@@ -552,9 +552,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return 
 	 * 	The URL-encoded form data from the request.
 	 * 	<br>Never <jk>null</jk>.
+	 * @throws InternalServerError If query parameters could not be parsed.
 	 * @see org.apache.juneau.rest.annotation.FormData
 	 */
-	public RequestFormData getFormData() {
+	public RequestFormData getFormData() throws InternalServerError {
 		try {
 			if (formData == null) {
 				formData = new RequestFormData();
@@ -572,7 +573,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			formData.addDefault(restJavaMethod.defaultFormData);
 			return formData;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 
@@ -900,6 +901,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return
 	 * 	The swagger associated with the resource.
 	 * 	<br>Never <jk>null</jk>.
+	 * @throws RestException 
+	 * @throws InternalServerError 
 	 */
 	public Swagger getSwagger() {
 		try {
@@ -909,7 +912,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 
@@ -935,6 +938,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.
 	 * 
 	 * @return The localized site name.
+	 * @throws RestException 
+	 * @throws InternalServerError 
 	 */
 	public String getSiteName() {
 		try {
@@ -942,7 +947,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 
@@ -953,6 +958,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.
 	 * 
 	 * @return The localized resource title.
+	 * @throws RestException 
+	 * @throws InternalServerError 
 	 */
 	public String getResourceTitle() {
 		try {
@@ -960,7 +967,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 
@@ -971,6 +978,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.
 	 * 
 	 * @return The localized resource description.
+	 * @throws RestException 
+	 * @throws InternalServerError 
 	 */
 	public String getResourceDescription() {
 		try {
@@ -978,7 +987,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 
@@ -989,6 +998,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(Method, RestRequest)} with this object.
 	 * 
 	 * @return The localized method description.
+	 * @throws RestException 
+	 * @throws InternalServerError 
 	 */
 	public String getMethodSummary() {
 		try {
@@ -996,7 +1007,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 
@@ -1007,14 +1018,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(Method, RestRequest)} with this object.
 	 * 
 	 * @return The localized method description.
+	 * @throws RestException 
+	 * @throws InternalServerError 
 	 */
-	public String getMethodDescription() {
+	public String getMethodDescription() throws RestException, InternalServerError {
 		try {
 			return context.getInfoProvider().getMethodDescription(javaMethod, this);
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 

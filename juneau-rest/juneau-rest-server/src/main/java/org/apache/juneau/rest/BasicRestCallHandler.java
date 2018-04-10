@@ -24,6 +24,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.vars.*;
 
@@ -192,7 +193,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 			handleError(r1, r2, e);
 		} catch (Throwable e) {
 			ResponseInfo ri = e.getClass().getAnnotation(ResponseInfo.class);
-			RestException e2 = new RestException(ri == null || ri.code() == 0 ? SC_INTERNAL_SERVER_ERROR : ri.code(), e);
+			RestException e2 = new RestException(e, ri == null || ri.code() == 0 ? SC_INTERNAL_SERVER_ERROR : ri.code());
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			handleError(r1, r2, e2);
@@ -223,12 +224,12 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @throws RestException
 	 */
 	@Override /* RestCallHandler */
-	public void handleResponse(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
+	public void handleResponse(RestRequest req, RestResponse res, Object output) throws IOException, RestException, NotImplemented {
 		// Loop until we find the correct handler for the POJO.
 		for (ResponseHandler h : context.getResponseHandlers())
 			if (h.handle(req, res, output))
 				return;
-		throw new RestException(SC_NOT_IMPLEMENTED, "No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
+		throw new NotImplemented("No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
 	}
 
 	/**
@@ -241,19 +242,18 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @param rc The HTTP response code.
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @throws Exception
 	 */
 	@Override /* RestCallHandler */
-	public void handleNotFound(int rc, RestRequest req, RestResponse res) throws Exception {
+	public void handleNotFound(int rc, RestRequest req, RestResponse res) throws NotFound, PreconditionFailed, MethodNotAllowed, ServletException {
 		String pathInfo = req.getPathInfo();
 		String methodUC = req.getMethod();
 		String onPath = pathInfo == null ? " on no pathInfo"  : String.format(" on path '%s'", pathInfo);
 		if (rc == SC_NOT_FOUND)
-			throw new RestException(rc, "Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
+			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
 		else if (rc == SC_PRECONDITION_FAILED)
-			throw new RestException(rc, "Method ''{0}'' not found on resource{1} with matching matcher.", methodUC, onPath);
+			throw new PreconditionFailed("Method ''{0}'' not found on resource{1} with matching matcher.", methodUC, onPath);
 		else if (rc == SC_METHOD_NOT_ALLOWED)
-			throw new RestException(rc, "Method ''{0}'' not found on resource.", methodUC);
+			throw new MethodNotAllowed("Method ''{0}'' not found on resource.", methodUC);
 		else
 			throw new ServletException("Invalid method response: " + rc);
 	}

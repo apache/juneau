@@ -41,7 +41,17 @@ import org.apache.juneau.rest.remoteable.*;
 		}
 	),
 	// Allow us to use method=POST from a browser.
-	allowedMethodParams="*"
+	allowedMethodParams="*",
+	swagger={
+		"info: {",
+			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
+			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
+			"version:'2.0',",
+			"termsOfService:'You are on your own.'",
+		"},",
+		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
+	}
+
 )
 public class SampleRemoteableServlet extends RemoteableServlet {
 

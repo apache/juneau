@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 
 /**
@@ -36,7 +37,7 @@ import org.apache.juneau.rest.helper.*;
 public final class WritableHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
+	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, NotAcceptable, RestException {
 		if (output instanceof Writable) {
 			if (output instanceof ReaderResource) {
 				ReaderResource r = (ReaderResource)output;

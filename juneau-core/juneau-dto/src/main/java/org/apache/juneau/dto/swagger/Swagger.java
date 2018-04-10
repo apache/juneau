@@ -1358,7 +1358,7 @@ public class Swagger extends SwaggerElement {
 		try {
 			return new PojoRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw new BeanRuntimeException("Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName()).initCause(e); 
+			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName()); 
 		}
 	}
 }

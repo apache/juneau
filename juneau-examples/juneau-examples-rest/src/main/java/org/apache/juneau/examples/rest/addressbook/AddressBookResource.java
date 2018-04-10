@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.addressbook;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
@@ -30,6 +29,7 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.transform.*;
@@ -115,13 +115,14 @@ import org.apache.juneau.utils.*;
 	encoders=GzipEncoder.class,
 
 	// Swagger info.
-	swagger= {
-		"contact:{name:'John Smith',email:'john@smith.com'},",
-		"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
-		"version:'2.0',",
-		"termsOfService:'You\\'re on your own.',",
-		"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}],",
-		"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"
+	swagger={
+		"info: {",
+			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
+			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
+			"version:'2.0',",
+			"termsOfService:'You are on your own.'",
+		"},",
+		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
 	}
 )
 public class AddressBookResource extends BasicRestServletJena {
@@ -262,10 +263,10 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=DELETE, path="/addresses/{id}",
 		guards=AdminGuard.class
 	)
-	public String deleteAddress(@Path int addressId) throws Exception {
+	public String deleteAddress(@Path int addressId) throws NotFound {
 		Person p = addressBook.findPersonWithAddress(addressId);
 		if (p == null)
-			throw new RestException(SC_NOT_FOUND, "Person not found");
+			throw new NotFound("Person not found");
 		Address a = findAddress(addressId);
 		p.addresses.remove(a);
 		return "DELETE successful";
@@ -278,7 +279,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=PUT, path="/people/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updatePerson(RequestBody body, @Path int id, @PathRemainder String remainder) throws Exception {
+	public String updatePerson(RequestBody body, @Path int id, @PathRemainder String remainder) throws BadRequest {
 		try {
 			Person p = findPerson(id);
 			PojoRest r = new PojoRest(p);
@@ -287,7 +288,7 @@ public class AddressBookResource extends BasicRestServletJena {
 			r.put(remainder, in);
 			return "PUT successful";
 		} catch (Exception e) {
-			throw new RestException(SC_BAD_REQUEST, "PUT unsuccessful").initCause(e);
+			throw new BadRequest(e, "PUT unsuccessful");
 		}
 	}
 
@@ -298,7 +299,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=PUT, path="/addresses/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updateAddress(RestRequest req, @Path int id, @PathRemainder String remainder) throws Exception {
+	public String updateAddress(RestRequest req, @Path int id, @PathRemainder String remainder) throws BadRequest {
 		try {
 			Address a = findAddress(id);
 			PojoRest r = new PojoRest(a);
@@ -307,7 +308,7 @@ public class AddressBookResource extends BasicRestServletJena {
 			r.put(remainder, in);
 			return "PUT successful";
 		} catch (Exception e) {
-			throw new RestException(SC_BAD_REQUEST, "PUT unsuccessful").initCause(e);
+			throw new BadRequest(e, "PUT unsuccessful");
 		}
 	}
 
@@ -358,18 +359,18 @@ public class AddressBookResource extends BasicRestServletJena {
 	}
 
 	/** Convenience method - Find a person by ID */
-	private Person findPerson(int id) throws RestException {
+	private Person findPerson(int id) throws NotFound {
 		Person p = addressBook.findPerson(id);
 		if (p == null)
-			throw new RestException(SC_NOT_FOUND, "Person not found");
+			throw new NotFound("Person not found");
 		return p;
 	}
 
 	/** Convenience method - Find an address by ID */
-	private Address findAddress(int id) throws RestException {
+	private Address findAddress(int id) throws NotFound {
 		Address a = addressBook.findAddress(id);
 		if (a == null)
-			throw new RestException(SC_NOT_FOUND, "Address not found");
+			throw new NotFound("Address not found");
 		return a;
 	}
 }

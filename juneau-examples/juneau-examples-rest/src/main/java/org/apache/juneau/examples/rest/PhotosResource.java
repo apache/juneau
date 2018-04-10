@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -27,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -53,6 +53,15 @@ import org.apache.juneau.serializer.*;
 	properties={
 		// Make the anchor text on URLs be just the path relative to the servlet.
 		@Property(name=HTML_uriAnchorText, value="SERVLET_RELATIVE")
+	},
+	swagger={
+		"info: {",
+			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
+			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
+			"version:'2.0',",
+			"termsOfService:'You are on your own.'",
+		"},",
+		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
 	}
 )
 public class PhotosResource extends BasicRestServlet {
@@ -95,10 +104,10 @@ public class PhotosResource extends BasicRestServlet {
 
 	/** GET request handler for single photo */
 	@RestMethod(name=GET, path="/{id}", serializers=ImageSerializer.class, summary="Get a photo by ID")
-	public BufferedImage getPhoto(@Path String id) throws Exception {
+	public BufferedImage getPhoto(@Path String id) throws NotFound {
 		Photo p = photos.get(id);
 		if (p == null)
-			throw new RestException(SC_NOT_FOUND, "Photo not found");
+			throw new NotFound("Photo not found");
 		return p.image;
 	}
 
@@ -119,10 +128,10 @@ public class PhotosResource extends BasicRestServlet {
 
 	/** DELETE request handler */
 	@RestMethod(name=DELETE, path="/{id}", summary="Delete a photo by ID")
-	public String deletePhoto(@Path String id) throws Exception {
+	public String deletePhoto(@Path String id) throws NotFound {
 		Photo p = photos.remove(id);
 		if (p == null)
-			throw new RestException(SC_NOT_FOUND, "Photo not found");
+			throw new NotFound("Photo not found");
 		return "OK";
 	}
 

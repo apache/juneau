@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.text.*;
+
 /**
  * General bean runtime operation exception.
  */
@@ -22,10 +24,22 @@ public final class BeanRuntimeException extends FormattedRuntimeException {
 	/**
 	 * Constructor.
 	 * 
+	 * @param cause The cause of this exception.
+	 * @param c The class name of the bean that caused the exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public BeanRuntimeException(Throwable cause, Class<?> c, String message, Object... args) {
+		super(cause, getMessage(cause, c, message), args);
+	}
+
+	/**
+	 * Constructor.
+	 * 
 	 * @param message The error message.
 	 */
 	public BeanRuntimeException(String message) {
-		super(message);
+		this((Throwable)null, null, message);
 	}
 
 	/**
@@ -35,18 +49,18 @@ public final class BeanRuntimeException extends FormattedRuntimeException {
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
 	public BeanRuntimeException(String message, Object...args) {
-		super(message, args);
+		this(null, null, message, args);
 	}
 
 	/**
-	 * Shortcut for calling <code><jk>new</jk> BeanRuntimeException(String.format(c.getName() + <js>": "</js> + message, args));</code>
+	 * Constructor.
 	 * 
 	 * @param c The class name of the bean that caused the exception.
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
 	public BeanRuntimeException(Class<?> c, String message, Object... args) {
-		super(c.getName() + ": " + message, args);
+		this(null, c,  message, args);
 	}
 
 	/**
@@ -55,19 +69,14 @@ public final class BeanRuntimeException extends FormattedRuntimeException {
 	 * @param cause The initial cause of the exception.
 	 */
 	public BeanRuntimeException(Throwable cause) {
-		super(cause == null ? null : cause.getLocalizedMessage());
-		initCause(cause);
+		this(cause, null, null);
 	}
 
-	/**
-	 * Sets the inner cause for this exception.
-	 * 
-	 * @param cause The inner cause.
-	 * @return This object (for method chaining).
-	 */
-	@Override /* Throwable */
-	public synchronized BeanRuntimeException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
+	private static String getMessage(Throwable cause, Class<?> c, String msg) {
+		if (msg != null)
+			return (c == null ? "" : c.getName() + ": ") + msg;
+		if (cause != null)
+			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
+		return null;
 	}
 }

@@ -15,12 +15,11 @@ package org.apache.juneau.rest.vars;
 import java.lang.reflect.*;
 import java.util.*;
 
-import javax.servlet.http.*;
-
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -99,7 +98,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 	}
 
 	@Override /* Parameter */
-	public String resolve(VarResolverSession session, String key) {
+	public String resolve(VarResolverSession session, String key) throws RestException, InternalServerError {
 		try {
 			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
 			Swagger swagger = req.getSwagger();
@@ -149,7 +148,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
+			throw new InternalServerError(e);
 		}
 	}
 }
