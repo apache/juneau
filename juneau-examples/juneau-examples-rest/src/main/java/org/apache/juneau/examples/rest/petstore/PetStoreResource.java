@@ -21,8 +21,10 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.converters.*;
 
 /**
  * Sample resource that shows how to generate ATOM feeds.
@@ -79,10 +81,14 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/pet",
 		summary="All pets in the store",
 		swagger={
-			"tags:['pet']"
-		}
+			"tags:['pet'],",
+			"parameters:[",
+				 Queryable.SWAGGER_PARAMS,
+			"]"
+		},
+		converters={Queryable.class}
 	)
-	public Collection<Pet> getPets() {
+	public Collection<Pet> getPets() throws NotAcceptable {
 		return db.getPets();
 	}
 	
@@ -98,7 +104,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Pet getPet(
 			@Path(description="ID of pet to return", example="123") long petId
-		) throws IdNotFound {
+		) throws IdNotFound, NotAcceptable {
 		
 		return db.getPet(petId);
 	}
@@ -114,7 +120,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok addPet(
 			@Body(description="Pet object that needs to be added to the store") Pet pet
-		) throws IdConflict {
+		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
 		db.add(pet);
 		return OK;
@@ -131,7 +137,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok updatePet(
 			@Body(description="Pet object that needs to be added to the store") Pet pet
-		) throws IdNotFound {
+		) throws IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
 		db.update(pet);
 		return OK;
@@ -155,7 +161,7 @@ public class PetStoreResource extends BasicRestServletJena {
 				example="['AVAILABLE','PENDING']"
 			) 
 			PetStatus[] status
-		) {
+		) throws NotAcceptable {
 		
 		return db.getPetsByStatus(status);
 	}
@@ -179,7 +185,7 @@ public class PetStoreResource extends BasicRestServletJena {
 				example="['tag1','tag2']"
 			) 
 			String[] tags
-		) throws InvalidTag {
+		) throws InvalidTag, NotAcceptable {
 		
 		return db.getPetsByTags(tags);
 	}
@@ -197,7 +203,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Path(description="ID of pet that needs to be updated", example="123") long petId, 
 			@FormData(name="name", description="Updated name of the pet", example="'Scruffy'") String name, 
 			@FormData(name="status", description="Updated status of the pet", example="'AVAILABLE'") PetStatus status
-		) throws IdNotFound {
+		) throws IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
 		Pet pet = db.getPet(petId);
 		pet.name(name);
@@ -218,7 +224,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	public Ok deletePet(
 			@Header(name="api_key", example="foobar") String apiKey, 
 			@Path(description="Pet id to delete", example="123") long petId
-		) throws IdNotFound {
+		) throws IdNotFound, NotAcceptable {
 		
 		db.removePet(petId);
 		return OK;
@@ -237,7 +243,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Path(description="ID of pet to update", example="123") long petId, 
 			@FormData(name="additionalMetadata", description="Additional data to pass to server", example="Foobar") String additionalMetadata, 
 			@FormData(name="file", description="file to upload", required="true", type="file") byte[] file
-		) {
+		) throws NotAcceptable, UnsupportedMediaType {
 		
 		return OK;
 	}
@@ -253,8 +259,8 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger={
 			"tags:['store']"
 		}
-	)
-	public Collection<Order> getOrders() {
+	) 
+	public Collection<Order> getOrders() throws NotAcceptable {
 		return db.getOrders();
 	}
 
@@ -269,7 +275,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Order getOrder(
 			@Path(description="ID of order to fetch", maximum="10", minimum="1", example="5") long orderId
-		) throws InvalidId, IdNotFound {
+		) throws InvalidId, IdNotFound, NotAcceptable {
 		
 		if (orderId < 0 || orderId > 10)
 			throw new InvalidId();
@@ -286,7 +292,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Order placeOrder(
 			@Body(description="Order placed for purchasing the pet", example="{petId:456,quantity:100}") Order order
-		) throws IdConflict {
+		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
 		return db.add(order);
 	}
@@ -302,7 +308,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok deletePurchaseOrder(
 			@Path(description="ID of the order that needs to be deleted", minimum="1", example="5") long orderId
-		) throws InvalidId, IdNotFound {
+		) throws InvalidId, IdNotFound, NotAcceptable {
 		
 		if (orderId < 0)
 			throw new InvalidId();
@@ -323,7 +329,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			"security:[ { api_key:[] } ]"
 		}
 	)
-	public Map<PetStatus,Integer> getStoreInventory() {
+	public Map<PetStatus,Integer> getStoreInventory() throws NotAcceptable {
 		return db.getInventory();
 	}
 
@@ -339,7 +345,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			"tags:['user']"
 		}
 	)
-	public Collection<User> getUsers() {
+	public Collection<User> getUsers() throws NotAcceptable {
 		return db.getUsers();
 	}
 
@@ -353,7 +359,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public User getUser(
 			@Path(description="The name that needs to be fetched. Use user1 for testing.") String username
-		) throws InvalidUsername, IdNotFound {
+		) throws InvalidUsername, IdNotFound, NotAcceptable {
 		
 		return db.getUser(username);
 	}
@@ -369,7 +375,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok createUser(
 			@Body(description="Created user object") User user
-		) throws InvalidUsername, IdConflict {
+		) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
 		
 		db.add(user);
 		return OK;
@@ -385,7 +391,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok createUsers(
 			@Body(description="List of user objects") User[] users
-		) throws InvalidUsername, IdConflict {
+		) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
 		
 		for (User user : users)
 			db.add(user);
@@ -404,7 +410,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	public Ok updateUser(
 			@Path(description="Name that need to be updated") String username, 
 			@Body(description="Updated user object") User user
-		) throws InvalidUsername, IdNotFound {
+		) throws InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
 		User oldUser = db.getUser(username);
 		user.id(oldUser.getId());
@@ -423,7 +429,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok deleteUser(
 			@Path(description="The name that needs to be deleted") String username
-		) throws InvalidUsername, IdNotFound {
+		) throws InvalidUsername, IdNotFound, NotAcceptable {
 		
 		User oldUser = db.getUser(username);
 		db.removeUser(oldUser.getId());
@@ -451,7 +457,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Query(name="password", description="The password for login in clear text", required="true", example="abc123") String password, 
 			RestRequest req, 
 			RestResponse res
-		) throws InvalidLogin {
+		) throws InvalidLogin, NotAcceptable {
 		
 		if (! db.isValid(username, password))
 			throw new InvalidLogin();
@@ -471,7 +477,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			"tags:[ 'user' ]"
 		}
 	)
-	public Ok logout(RestRequest req) {
+	public Ok logout(RestRequest req) throws NotAcceptable {
 		req.getSession().removeAttribute("login-expires");
 		return OK;
 	}

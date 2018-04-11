@@ -70,7 +70,19 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public final class Queryable implements RestConverter {
-
+	
+	/**
+	 * Swagger parameters for this converter.
+	 */
+	public static final String SWAGGER_PARAMS= ""
+		+ "{in:'query',name:'s',description:'Search.\nComma-delimited list of key/value pairs representing column names and search tokens.\n\\'*\\' and \\'?\\' can be used as meta-characters.',schema:{type:'string'},x-examples:{example:'?s=Bill*,birthDate>2000'}},"
+		+ "{in:'query',name:'v',description:'View.\nComma-delimited list of column names to display.',schema:{type:'string'},x-examples:{example:'?v=name,birthDate'}},"
+		+ "{in:'query',name:'o',description:'Order by.\nComma-delimited list of columns to sort by.\nColumn names can be suffixed with \\'+\\' or \\'-\\' to indicate ascending or descending order.\nThe default is ascending order.',schema:{type:'string'},x-examples:{example:'?o=name,birthDate-'}},"
+		+ "{in:'query',name:'i',description:'Case-insensitive.\nBoolean flag for case-insensitive matching on the search parameters.',schema:{type:'boolean'},x-examples:{example:'?i=true'}},"
+		+ "{in:'query',name:'p',description:'Position.\nOnly return rows starting at the specified index position (zero-indexed).\nDefault is 0',schema:{type:'integer'},x-examples:{example:'?p=100'}},"
+		+ "{in:'query',name:'l',description:'Limit.\nOnly return the specified number of rows.\nDefault is 0 (meaning return all rows).',schema:{type:'integer'},x-examples:{example:'?l=100'}}"
+	;
+	
 	@Override /* RestConverter */
 	public Object convert(RestRequest req, Object o) {
 		if (o == null)

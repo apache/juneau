@@ -311,13 +311,13 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			select.child(option("model","model"));
 			div.child(div(si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth))._class("model active").attr("data-name", "model"));
 		}
-		
+
 		if (examples != null) {
 			for (Map.Entry<String,?> e : examples.entrySet()) {
 				String name = e.getKey();
 				String value = e.getValue().toString();
 				select.child(option(name, name));
-				div.child(div(value.replaceAll("\\n", "\n"))._class("example").attr("data-name", name));
+				div.child(div(value.replaceAll("\\n", "\n"))._class("example" + (si == null ? " active" : "")).attr("data-name", name));
 			}
 		}
 		

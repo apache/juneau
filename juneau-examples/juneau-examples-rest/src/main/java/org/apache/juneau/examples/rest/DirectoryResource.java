@@ -136,6 +136,8 @@ public class DirectoryResource extends BasicRestServlet {
 	@RestMethod(
 		name=DELETE, 
 		path="/*", 
+		summary="Delete file",
+		description="Delete a file on the file system.",
 		guards=AdminGuard.class
 	)
 	public Object doDelete(RestRequest req) throws MethodNotAllowed {
@@ -151,9 +153,14 @@ public class DirectoryResource extends BasicRestServlet {
 		return "File deleted";
 	}
 
-	/** PUT request handler */
-	@RestMethod(name=PUT, path="/*", guards=AdminGuard.class)
-	public Object doPut(RestRequest req) throws MethodNotAllowed, InternalServerError {
+	@RestMethod(
+		name=PUT, 
+		path="/*", 
+		summary="Upload file",
+		description="Uploads a file to the file system.",
+		guards=AdminGuard.class
+	)
+	public Object doPut(RestRequest req) throws MethodNotAllowed, InternalServerError, Forbidden {
 
 		if (! allowPuts)
 			throw new MethodNotAllowed("PUT not enabled");
@@ -174,7 +181,12 @@ public class DirectoryResource extends BasicRestServlet {
 
 	/** VIEW request handler (overloaded GET for viewing file contents) */
 	@SuppressWarnings("resource")
-	@RestMethod(name="VIEW", path="/*")
+	@RestMethod(
+		name="VIEW", 
+		path="/*",
+		summary="View file",
+		description="Views the contents of a file as plain text."
+	)
 	public void doView(RestRequest req, RestResponse res) throws MethodNotAllowed, NotFound {
 
 		if (! allowViews)
@@ -194,7 +206,12 @@ public class DirectoryResource extends BasicRestServlet {
 
 	/** DOWNLOAD request handler (overloaded GET for downloading file contents) */
 	@SuppressWarnings("resource")
-	@RestMethod(name="DOWNLOAD")
+	@RestMethod(
+		name="DOWNLOAD",
+		path="/*",
+		summary="Download file",
+		description="Download the contents of a file as an octet stream."
+	)
 	public void doDownload(RestRequest req, RestResponse res) throws MethodNotAllowed, NotFound {
 
 		if (! allowViews)

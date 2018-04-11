@@ -23,6 +23,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -103,7 +104,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Map getSystemProperties(
 			@Query(name="sort", description="Sort results alphabetically", _default="false", example="true") boolean sort
-		) {
+		) throws NotAcceptable {
 
 		if (sort)
 			return new TreeMap(System.getProperties());
@@ -122,7 +123,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	)
 	public String getSystemProperty(
 			@Path(description="The system property name.", example="PATH") String propertyName
-		) {
+		) throws NotAcceptable {
 		
 		return System.getProperty(propertyName);
 	}
@@ -136,7 +137,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	public RedirectServletRoot setSystemProperty(
 			@Path(description="The system property name") String propertyName, 
 			@Body(description="The new system property value") String value
-		) throws UserNotAdminException {
+		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 		
 		System.setProperty(propertyName, value);
 		return RedirectServletRoot.INSTANCE;
@@ -150,7 +151,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	)
 	public RedirectServletRoot setSystemProperties(
 			@Body(description="The new system property values", example="{key1:'val1',key2:123}") java.util.Properties newProperties
-		) throws UserNotAdminException {
+		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 		
 		System.setProperties(newProperties);
 		return RedirectServletRoot.INSTANCE;
@@ -163,8 +164,8 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public RedirectServletRoot deleteSystemProperty(
-			@Path(description="The system property name") String propertyName
-		) throws UserNotAdminException {
+			@Path(description="The system property name", example="PATH") String propertyName
+		) throws UserNotAdminException, NotAcceptable {
 		
 		System.clearProperty(propertyName);
 		return RedirectServletRoot.INSTANCE;
@@ -183,7 +184,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 			}
 		)
 	)
-	public Form getFormPage() {
+	public Form getFormPage() throws NotAcceptable {
 		return form().method(POST).action("servlet:/formPagePost").children(
 			table(
 				tr(
@@ -209,7 +210,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	public RedirectServletRoot formPagePost(
 			@FormData("name") String name, 
 			@FormData("value") String value
-		) throws UserNotAdminException {
+		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 		
 		System.setProperty(name, value);
 		return RedirectServletRoot.INSTANCE;
@@ -220,8 +221,8 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	// Beans
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	@ResponseInfo(code=403, description="User is not an administrator.")
-	public static class UserNotAdminException extends RuntimeException {
+	@ResponseInfo( description="User is not an administrator.")
+	public static class UserNotAdminException extends Forbidden {
 		private static final long serialVersionUID = 1L;
 
 		public UserNotAdminException() {

@@ -323,7 +323,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if (! tagMap.containsKey(tag))
 					tagMap.put(tag, new ObjectMap().append("name", tag));
 			
-			op.put("tags", tags);
+			if (! tags.isEmpty())
+				op.put("tags", tags);
 			
 			s = mb.findFirstString(locale, mn + ".externalDocs");
 			if (s != null) {

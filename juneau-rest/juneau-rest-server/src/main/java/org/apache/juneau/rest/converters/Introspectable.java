@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * 		<code>&amp;invokeMethod</code> - The Java method name, optionally with arguments if necessary to
  * 		differentiate between methods.
  * 	<li>
- * 		<code>&amp;invokeArgs</code> - The arguments as a JSON array.
+ * 		<code>&amp;invokeArgs</code> - The arguments as an array.
  * </ul>
  * 
  * <h5 class='section'>See Also:</h5>
@@ -49,6 +49,14 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public final class Introspectable implements RestConverter {
+
+	/**
+	 * Swagger parameters for this converter.
+	 */
+	public static final String SWAGGER_PARAMS= ""
+		+ "{in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments if necessary to differentiate between methods.',x-examples:{example:'toString'}},"
+		+ "{in:'query',name:'invokeArgs',description:'The arguments as an array.',x-examples:{example:'foo,bar'}}"
+	;
 
 	@Override /* RestConverter */
 	@SuppressWarnings({"unchecked", "rawtypes"})
