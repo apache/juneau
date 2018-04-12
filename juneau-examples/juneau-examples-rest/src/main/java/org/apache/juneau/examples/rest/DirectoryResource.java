@@ -101,7 +101,12 @@ public class DirectoryResource extends BasicRestServlet {
 		path="/*",
 		summary="Get file or directory information",
 		description="Returns information about a file or directory.",
-		converters={Queryable.class}
+		converters={Queryable.class},
+		swagger={
+			"parameters:[",
+				 Queryable.SWAGGER_PARAMS,
+			"]"
+		}
 	)
 	public Object doGet(RestRequest req, RequestProperties properties) throws NotFound, InternalServerError {
 
@@ -140,7 +145,7 @@ public class DirectoryResource extends BasicRestServlet {
 		description="Delete a file on the file system.",
 		guards=AdminGuard.class
 	)
-	public Object doDelete(RestRequest req) throws MethodNotAllowed {
+	public Object doDelete(RestRequest req) throws MethodNotAllowed, Forbidden {
 
 		if (! allowDeletes)
 			throw new MethodNotAllowed("DELETE not enabled");
@@ -150,6 +155,7 @@ public class DirectoryResource extends BasicRestServlet {
 
 		if (req.getHeader("Accept").contains("text/html"))
 			return new Redirect();
+		
 		return "File deleted";
 	}
 
@@ -176,6 +182,7 @@ public class DirectoryResource extends BasicRestServlet {
 		
 		if (req.getContentType().contains("html"))
 			return new Redirect(parentSubPath);
+		
 		return "File added";
 	}
 

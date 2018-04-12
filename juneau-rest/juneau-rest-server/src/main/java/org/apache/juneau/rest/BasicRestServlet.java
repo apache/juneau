@@ -185,7 +185,7 @@ import org.apache.juneau.xmlschema.*;
 		@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
 		
 		// Don't generate schema information on the Swagger bean itself.
-		@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger")
+		@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger,org.apache.juneau.dto.html5.*")
 	},
 	flags={ 
 		JSONSCHEMA_useBeanDefs

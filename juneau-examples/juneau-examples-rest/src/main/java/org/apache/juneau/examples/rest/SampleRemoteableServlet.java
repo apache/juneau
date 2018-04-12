@@ -79,7 +79,11 @@ public class SampleRemoteableServlet extends RemoteableServlet {
 	//-----------------------------------------------------------------------------------------------------------------
 	
 	@Override /* RemoteableServlet */
-	@RestMethod(name=GET, path="/",
+	@RestMethod(
+		name=GET, 
+		path="/",
+		summary="List of available remoteable interfaces",
+		description="Shows a list of the interfaces registered with this remoteable servlet.",
 		htmldoc=@HtmlDoc(
 			aside={
 				"<div style='max-width:400px;min-width:200px' class='text'>",
@@ -97,7 +101,10 @@ public class SampleRemoteableServlet extends RemoteableServlet {
 	}
 
 	@Override /* RemoteableServlet */
-	@RestMethod(name=GET, path="/{javaInterface}", summary="List of available methods on $RP{javaInterface}.",
+	@RestMethod(
+		name=GET, 
+		path="/{javaInterface}", 
+		summary="List of available methods on $CO{{$RP{javaInterface},an interface}",
 		htmldoc=@HtmlDoc(
 			aside={
 				"<div style='max-width:400px;min-width:200px' class='text'>",
@@ -112,7 +119,10 @@ public class SampleRemoteableServlet extends RemoteableServlet {
 	}
 
 	@Override /* RemoteableServlet */
-	@RestMethod(name=GET, path="/{javaInterface}/{javaMethod}", summary="Form entry for method $RP{javaMethod} on interface $RP{javaInterface}",
+	@RestMethod(
+		name=GET, 
+		path="/{javaInterface}/{javaMethod}", 
+		summary="Form entry for $CO{$RP{javaMethod},method} on $CO{$RP{javaInterface},interface}",
 		htmldoc=@HtmlDoc(
 			aside={
 				"<div style='max-width:400px;min-width:200px' class='text'>",
