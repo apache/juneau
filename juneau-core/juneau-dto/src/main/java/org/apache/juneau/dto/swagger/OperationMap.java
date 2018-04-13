@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -38,24 +39,24 @@ public class OperationMap extends TreeMap<String,Operation> {
 	private static final long serialVersionUID = 1L;
 
 	private static final Comparator<String> OP_SORTER = new Comparator<String>() {
-		private final Map<String,Integer> methods = new AMap<String,Integer>()
-			.append("get",7)
-			.append("put",6)
-			.append("post",5)
-			.append("delete",4)
-			.append("options",3)
-			.append("head",2)
-			.append("patch",1);
+		private final Map<String,String> methods = new AMap<String,String>()
+			.append("get","0")
+			.append("put","1")
+			.append("post","2")
+			.append("delete","3")
+			.append("options","4")
+			.append("head","5")
+			.append("patch","6");
 
 		@Override
 		public int compare(String o1, String o2) {
-			Integer i1 = methods.get(o1);
-			Integer i2 = methods.get(o2);
-			if (i1 == null)
-				i1 = 0;
-			if (i2 == null)
-				i2 = 0;
-			return i2.compareTo(i1);
+			String s1 = methods.get(o1);
+			String s2 = methods.get(o2);
+			if (s1 == null)
+				s1 = o1;
+			if (s2 == null)
+				s2 = o2;
+			return StringUtils.compare(s1, s2);
 		}
 	};
 

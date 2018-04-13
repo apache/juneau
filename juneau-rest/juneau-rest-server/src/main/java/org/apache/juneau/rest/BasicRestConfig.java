@@ -75,7 +75,7 @@ import org.apache.juneau.xmlschema.*;
 		},
 		stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
 		head={
-			"<link rel='icon' href='$U{$C{REST/icon}}'/>"
+			"<link rel='icon' href='$U{$C{REST/favicon}}'/>"
 		},
 		footer="$C{REST/footer}"
 	),

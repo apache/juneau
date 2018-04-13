@@ -14,8 +14,8 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import org.apache.juneau.dto.*;
 import org.apache.juneau.examples.addressbook.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;
@@ -68,19 +68,10 @@ public class PredefinedLabelsResource extends BasicRestServlet {
 	}	
 	
 	@RestMethod(name=GET, path="/htmlLinks")
-	public ALink[] htmlLinks() throws Exception {
-		return new ALink[] {
-			new ALink("apache", "http://apache.org"),
-			new ALink("juneau", "http://juneau.apache.org")
+	public LinkString[] htmlLinks() throws Exception {
+		return new LinkString[] {
+			new LinkString("apache", "http://apache.org"),
+			new LinkString("juneau", "http://juneau.apache.org")
 		};
-	}
-	
-	@HtmlLink(nameProperty="n", hrefProperty="l")
-	public static class ALink {
-		public String n, l;
-		public ALink(String n, String l) {
-			this.n = n;
-			this.l = l;
-		}
 	}
 }

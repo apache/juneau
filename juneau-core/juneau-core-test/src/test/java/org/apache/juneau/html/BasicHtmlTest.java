@@ -2832,7 +2832,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@HtmlLink(nameProperty="a",hrefProperty="b")
+	@HtmlLink(nameProperty="a",uriProperty="b")
 	public static class LinkBean {
 		public String a;
 		public String b;

@@ -15,15 +15,16 @@ package org.apache.juneau.microservice.resources;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
-import java.net.*;
+import java.net.URI;
 import java.util.*;
 import java.util.logging.*;
 
-import javax.servlet.*;
-
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.dto.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
@@ -60,7 +61,6 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	title="File System Explorer",
-	description="Contents of $RA{path}",
 	messages="nls/DirectoryResource",
 	htmldoc=@HtmlDoc(
 		navlinks={
@@ -74,6 +74,7 @@ import org.apache.juneau.utils.*;
 		@Property(name="DirectoryResource.rootDir", value="")
 	}
 )
+@SuppressWarnings("javadoc")
 public class DirectoryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -84,9 +85,9 @@ public class DirectoryResource extends BasicRestServlet {
 
 	private static Logger logger = Logger.getLogger(DirectoryResource.class.getName());
 
-	@Override /* Servlet */
-	public void init() throws ServletException {
-		RestContextProperties p = getProperties();
+	@RestHook(INIT)
+	public void init(RestContextBuilder b) throws Exception { 
+		RestContextProperties p = b.getProperties();
 		rootDir = new File(p.getString("DirectoryResource.rootDir"));
 		allowViews = p.getBoolean("DirectoryResource.allowViews", false);
 		allowDeletes = p.getBoolean("DirectoryResource.allowDeletes", false);
@@ -111,257 +112,189 @@ public class DirectoryResource extends BasicRestServlet {
 		return rootDir;
 	}
 
-	/**
-	 * [GET /*] - On directories, returns a directory listing.  On files, returns information about the file.
-	 * 
-	 * @param req The HTTP request.
-	 * @return Either a FileResource or list of FileResources depending on whether it's a
-	 * 	file or directory.
-	 * @throws NotFound If file was not found.
-	 * @throws MalformedURLException 
-	 */
-	@RestMethod(name=GET, path="/*",
-		description="On directories, returns a directory listing.\nOn files, returns information about the file.",
+	@RestMethod(
+		name=GET, 
+		path="/*",
+		summary="View files on directory",
+		description="Returns a listing of all files in the specified directory.",
 		converters={Queryable.class}
 	)
-	public Object doGet(RestRequest req) throws NotFound, MalformedURLException {
-		checkAccess(req);
-
-		String pathInfo = req.getPathInfo();
-		File f = pathInfo == null ? rootDir : new File(rootDir.getAbsolutePath() + pathInfo);
-
-		if (!f.exists())
-			throw new NotFound("File not found");
-
-		req.setAttribute("path", f.getAbsolutePath());
-
-		if (f.isDirectory()) {
-			List<FileResource> l = new LinkedList<>();
-			File[] files = f.listFiles();
-			if (files != null) {
-				for (File fc : files) {
-					URL fUrl = new URL(req.getRequestURL().append("/").append(fc.getName()).toString());
-					l.add(new FileResource(fc, fUrl));
-				}
-			}
-			return l;
-		}
-
-		return new FileResource(f, new URL(req.getRequestURL().toString()));
+	public FileListing listFiles(@PathRemainder String path) throws NotFound, Exception {
+		FileListing l = new FileListing();
+		for (File fc : getDir(path).listFiles()) 
+			l.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName())));
+		return l;
+	}
+	
+	@RestMethod(
+		name=GET, 
+		path="/file/*",
+		summary="View information about file",
+		description="Returns detailed information about the specified file."
+	)
+	public FileResource getFileInfo(@PathRemainder String path) throws NotFound, Exception {
+		return new FileResource(getFile(path), path);
 	}
 
-	/**
-	 * [DELETE /*] - Delete a file on the file system.
-	 * 
-	 * @param req The HTTP request.
-	 * @return The message <js>"File deleted"</js> if successful.
-	 * @throws Exception If file could not be read or access was not granted.
-	 */
-	@RestMethod(name=DELETE, path="/*",
+	@RestMethod(
+		name=DELETE, 
+		path="/file/*",
+		summary="Delete file",
 		description="Delete a file on the file system."
 	)
-	public Object doDelete(RestRequest req) throws Exception {
-		checkAccess(req);
-
-		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
-		deleteFile(f);
-
-		if (req.getHeader("Accept").contains("text/html"))
-			return new Redirect();
-		return "File deleted";
+	public RedirectToRoot deleteFile(@PathRemainder String path) throws MethodNotAllowed {
+		if (! allowDeletes)
+			throw new MethodNotAllowed("DELETE not enabled");
+		deleteFile(getFile(path));
+		return new RedirectToRoot();
 	}
 
-	/**
-	 * [PUT /*] - Add or overwrite a file on the file system.
-	 * 
-	 * @param req The HTTP request.
-	 * @return The message <js>"File added"</js> if successful.
-	 * @throws InternalServerError If file could not be read or access was not granted.
-	 */
-	@RestMethod(name=PUT, path="/*",
+	@RestMethod(
+		name=PUT, 
+		path="/file/*",
+		summary="Add or replace file",
 		description="Add or overwrite a file on the file system."
 	)
-	public Object doPut(RestRequest req) throws InternalServerError {
-		checkAccess(req);
+	public RedirectToRoot updateFile(
+		@Body(schema="{type:'string',format:'binary'}") InputStream is, 
+		@PathRemainder String path
+	) throws InternalServerError {
+		
+		if (! allowPuts)
+			throw new MethodNotAllowed("PUT not enabled");
 
-		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
-		String parentSubPath = f.getParentFile().getAbsolutePath().substring(rootDir.getAbsolutePath().length());
-		try (InputStream is = req.getInputStream(); OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
+		File f = getFile(path);
+		
+		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
 			IOPipe.create(is, os).run();
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}
-		if (req.getContentType().contains("html"))
-			return new Redirect(parentSubPath);
-		return "File added";
+		
+		return new RedirectToRoot();
 	}
 
-	/**
-	 * [VIEW /*] - View the contents of a file.  
-	 * 
-	 * <p>
-	 * Applies to files only.
-	 * 
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
-	 * @return A Reader containing the contents of the file.
-	 * @throws NotFound File not found.
-	 * @throws MethodNotAllowed Method not allowed on directories.
-	 */
-	@RestMethod(name="VIEW", path="/*",
-		description="View the contents of a file.\nApplies to files only."
+	@RestMethod(
+		name="VIEW", 
+		path="/file/*",
+		summary="View contents of file",
+		description="View the contents of a file."
 	)
-	public Reader doView(RestRequest req, RestResponse res) throws NotFound, MethodNotAllowed {
-		checkAccess(req);
-
-		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
-
-		if (f.isDirectory())
-			throw new MethodNotAllowed("VIEW not available on directories");
+	public FileContents doView(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
+		if (! allowViews)
+			throw new MethodNotAllowed("VIEW not enabled");
 
 		res.setContentType("text/plain");
 		try {
-			return new FileReader(f);
+			return new FileContents(getFile(path));
 		} catch (FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
-
-	/**
-	 * [DOWNLOAD /*] - Download the contents of a file.
-	 * 
-	 * <p>
-	 * Applies to files only.
-	 * 
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
-	 * @return A Reader containing the contents of the file.
-	 * @throws NotFound Found could not be found. 
-	 * @throws MethodNotAllowed Cannot call on a directory.
-	 */
-	@RestMethod(name="DOWNLOAD", path="/*",
-		description="Download the contents of a file.\nApplies to files only."
+	
+	@RestMethod(
+		name="DOWNLOAD", 
+		path="/file/*",
+		summary="Download file",
+		description="Download the contents of a file"
 	)
-	public Reader doDownload(RestRequest req, RestResponse res) throws NotFound, MethodNotAllowed {
-		checkAccess(req);
+	public FileContents doDownload(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
+		if (! allowViews)
+			throw new MethodNotAllowed("DOWNLOAD not enabled");
 
-		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
-
-		if (f.isDirectory())
-			throw new MethodNotAllowed("DOWNLOAD not available on directories");
-
-		res.setContentType("application");
+		res.setContentType("application/octet-stream");
 		try {
-			return new FileReader(f);
+			return new FileContents(getFile(path));
 		} catch (FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
 
-	/**
-	 * Verify that the specified request is allowed.
-	 * 
-	 * <p>
-	 * Subclasses can override this method to provide customized behavior.
-	 * Method should throw a {@link RestException} if the request should be disallowed.
-	 * 
-	 * @param req The HTTP request.
-	 * @throws MethodNotAllowed Thrown if specified method is not allowed.
-	 */
-	protected void checkAccess(RestRequest req) throws MethodNotAllowed {
-		String method = req.getMethod();
-		if (method.equals("VIEW") && ! allowViews)
-			throw new MethodNotAllowed("VIEW not enabled");
-		if (method.equals("PUT") && ! allowPuts)
-			throw new MethodNotAllowed("PUT not enabled");
-		if (method.equals("DELETE") && ! allowDeletes)
-			throw new MethodNotAllowed("DELETE not enabled");
-		if (method.equals("DOWNLOAD") && ! allowViews)
-			throw new MethodNotAllowed("DOWNLOAD not enabled");
+	private File getFile(String path) throws NotFound {
+		File f = new File(rootDir.getAbsolutePath() + '/' + path);
+		if (f.exists() && f.isFile())
+			return f;
+		throw new NotFound("File not found.");
+	}
+	
+	private File getDir(String path) throws NotFound {
+		if (path == null)
+			return rootDir;
+		File f = new File(rootDir.getAbsolutePath() + '/' + path);
+		if (f.exists() && f.isDirectory())
+			return f;
+		throw new NotFound("Directory not found.");
 	}
 
-	/** File POJO */
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper beans
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SuppressWarnings("serial")
+	@ResponseInfo(description="Directory listing")
+	static class FileListing extends ArrayList<FileResource> {}
+	
+	@ResponseInfo(schema="{schema:{type:'string',format:'binary'}}", description="Contents of file")
+	static class FileContents extends FileReader {
+		public FileContents(File file) throws FileNotFoundException {
+			super(file);
+		}
+	}
+	
+	@ResponseInfo(description="Redirect to root page on success")
+	static class RedirectToRoot extends RedirectToServletRoot {}
+
+	@ResponseInfo(description="File action")
+	public static class Action extends LinkString {
+		public Action(String name, String uri, Object...uriArgs) {
+			super(name, uri, uriArgs);
+		}
+	}
+
+	@ResponseInfo(description="File or directory details")
 	public class FileResource {
 		private File f;
-		private URL url;
+		private String path;
 
-		/**
-		 * Constructor.
-		 * 
-		 * @param f The file.
-		 * @param url The URL of the file resource.
-		 */
-		public FileResource(File f, URL url) {
+		public FileResource(File f, String path) {
 			this.f = f;
-			this.url = url;
+			this.path = path;
 		}
 
 		// Bean property getters
 
-		/**
-		 * @return The URL of the file resource.
-		 */
-		public URL getUrl() {
-			return url;
+		public URI getUri() {
+			if (f.isDirectory())
+				return URI.create("servlet:/"+path);
+			return URI.create("servlet:/file/"+path);
 		}
 
-		/**
-		 * @return The file type.
-		 */
 		public String getType() {
 			return (f.isDirectory() ? "dir" : "file");
 		}
 
-		/**
-		 * @return The file name.
-		 */
 		public String getName() {
 			return f.getName();
 		}
 
-		/**
-		 * @return The file size.
-		 */
 		public long getSize() {
-			return f.length();
+			return f.isDirectory() ? f.listFiles().length : f.length();
 		}
 
-		/**
-		 * @return The file last modified timestamp.
-		 */
 		@Swap(DateSwap.ISO8601DTP.class)
 		public Date getLastModified() {
 			return new Date(f.lastModified());
 		}
 
-		/**
-		 * @return A hyperlink to view the contents of the file.
-		 * @throws Exception If access is not allowed.
-		 */
-		public URL getView() throws Exception {
-			if (allowViews && f.canRead() && ! f.isDirectory())
-				return new URL(url + "?method=VIEW");
-			return null;
-		}
-
-		/**
-		 * @return A hyperlink to download the contents of the file.
-		 * @throws Exception If access is not allowed.
-		 */
-		public URL getDownload() throws Exception {
-			if (allowViews && f.canRead() && ! f.isDirectory())
-				return new URL(url + "?method=DOWNLOAD");
-			return null;
-		}
-
-		/**
-		 * @return A hyperlink to delete the file.
-		 * @throws Exception If access is not allowed.
-		 */
-		public URL getDelete() throws Exception {
-			if (allowDeletes && f.canWrite())
-				return new URL(url + "?method=DELETE");
-			return null;
+		public List<Action> getActions() throws Exception {
+			List<Action> l = new ArrayList<>();
+			if (allowViews && f.canRead() && ! f.isDirectory()) {
+				l.add(new Action("view", getUri().toString() + "?method=VIEW"));
+				l.add(new Action("download", getUri().toString() + "?method=DOWNLOAD"));
+			}
+			if (allowDeletes && f.canWrite() && ! f.isDirectory())
+				l.add(new Action("delete", getUri().toString() + "?method=DELETE"));
+			return l;
 		}
 	}
 

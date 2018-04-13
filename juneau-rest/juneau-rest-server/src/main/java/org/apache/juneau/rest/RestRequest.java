@@ -650,6 +650,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return getPathMatch().get(name);
 	}
 
+	/**
+	 * Shortcut for calling <code>getPathMatch().getRemainder()</code>.
+	 * 
+	 * @return The path remainder value, or <jk>null</jk> if not found.
+	 */
+	public String getPathRemainder() {
+		return getPathMatch().getRemainder();
+	}
+
 	//--------------------------------------------------------------------------------
 	// Body methods
 	//--------------------------------------------------------------------------------

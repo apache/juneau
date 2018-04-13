@@ -875,4 +875,16 @@ public class StringUtilsTest {
 		assertEquals("1: foo\n", getNumberedLines("foo"));
 		assertEquals("1: foo\n2: bar\n", getNumberedLines("foo\nbar"));
 	}
+	
+	//====================================================================================================
+	// compare(String,String)
+	//====================================================================================================
+	@Test
+	public void testCompare() throws Exception {
+		assertTrue(compare("a","b") < 0);
+		assertTrue(compare("b","a") > 0);
+		assertTrue(compare(null,"b") < 0);
+		assertTrue(compare("b",null) > 0);
+		assertTrue(compare(null,null) == 0);
+	}	
 }

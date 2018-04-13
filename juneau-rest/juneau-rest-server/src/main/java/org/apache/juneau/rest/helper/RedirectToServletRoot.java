@@ -18,17 +18,17 @@ import org.apache.juneau.rest.annotation.*;
  * Convenience subclass of {@link Redirect} for redirecting a response to the servlet root.
  */
 @ResponseInfo(description="Redirect to servlet root")
-public class RedirectServletRoot extends Redirect {
+public class RedirectToServletRoot extends Redirect {
 	
 	/**
 	 * Reusable instance.
 	 */
-	public static final RedirectServletRoot INSTANCE = new RedirectServletRoot();
+	public static final RedirectToServletRoot INSTANCE = new RedirectToServletRoot();
 	
 	/**
 	 * Constructor.
 	 */
-	public RedirectServletRoot() {
+	public RedirectToServletRoot() {
 		super("servlet:/");
 	}
 }

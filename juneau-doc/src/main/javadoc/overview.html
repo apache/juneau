@@ -15443,14 +15443,23 @@
 	}
 		</p>			
 		<p>
-			This example renders the following consisting of a list of hyperlinks:
+			The {@link org.apache.juneau.dto.LinkString Action} bean is a predefined <ja>@HtmlLink</ja> bean provided
+			to simplify specifying actions.
+			<br>The following is equivalent to above.
+		</p>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
+	<jk>public</jk> Action[] htmlLinks() {
+		<jk>return new</jk> Action[] {
+			<jk>new</jk> Action(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> Action(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+		};
+	}
+		</p>			
+		<p>
+			Both examples render the following consisting of a list of hyperlinks:
 		</p>
 		<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
-		
-		<h5 class='section'>See Also:</h5>
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.dto.LinkString}
-		</ul>
 	</div>
 	
 	<!-- ======================================================================================================== -->
@@ -21392,7 +21401,7 @@
 						<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
 						<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
 						<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
-						<li class='jc'>{@link org.apache.juneau.rest.helper.RedirectServletRoot}
+						<li class='jc'>{@link org.apache.juneau.rest.helper.RedirectToServletRoot}
 						<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
 						<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
 						<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}

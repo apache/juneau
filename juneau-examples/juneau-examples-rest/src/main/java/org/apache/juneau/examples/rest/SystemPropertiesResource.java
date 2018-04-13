@@ -134,13 +134,13 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Sets a new value for the specified system property.",
 		guards=AdminGuard.class
 	)
-	public RedirectServletRoot setSystemProperty(
+	public RedirectToServletRoot setSystemProperty(
 			@Path(description="The system property name") String propertyName, 
 			@Body(description="The new system property value") String value
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 		
 		System.setProperty(propertyName, value);
-		return RedirectServletRoot.INSTANCE;
+		return RedirectToServletRoot.INSTANCE;
 	}
 
 	@RestMethod(
@@ -149,12 +149,12 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Takes in a map of key/value pairs and creates a set of new system properties.",
 		guards=AdminGuard.class
 	)
-	public RedirectServletRoot setSystemProperties(
+	public RedirectToServletRoot setSystemProperties(
 			@Body(description="The new system property values", example="{key1:'val1',key2:123}") java.util.Properties newProperties
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 		
 		System.setProperties(newProperties);
-		return RedirectServletRoot.INSTANCE;
+		return RedirectToServletRoot.INSTANCE;
 	}
 
 	@RestMethod(
@@ -163,12 +163,12 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Deletes the specified system property.",
 		guards=AdminGuard.class
 	)
-	public RedirectServletRoot deleteSystemProperty(
+	public RedirectToServletRoot deleteSystemProperty(
 			@Path(description="The system property name", example="PATH") String propertyName
 		) throws UserNotAdminException, NotAcceptable {
 		
 		System.clearProperty(propertyName);
-		return RedirectServletRoot.INSTANCE;
+		return RedirectToServletRoot.INSTANCE;
 	}
 
 	@RestMethod(
@@ -207,13 +207,13 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		description="Accepts a simple form post of a system property name/value pair.",
 		guards=AdminGuard.class
 	)
-	public RedirectServletRoot formPagePost(
+	public RedirectToServletRoot formPagePost(
 			@FormData("name") String name, 
 			@FormData("value") String value
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 		
 		System.setProperty(name, value);
-		return RedirectServletRoot.INSTANCE;
+		return RedirectToServletRoot.INSTANCE;
 	}
 	
 	

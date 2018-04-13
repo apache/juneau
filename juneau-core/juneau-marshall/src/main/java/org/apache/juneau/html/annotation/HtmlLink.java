@@ -44,10 +44,10 @@ public @interface HtmlLink {
 	/**
 	 * The bean property whose value becomes the name in the hyperlink.
 	 */
-	String nameProperty() default "";
+	String nameProperty() default "name";
 
 	/**
 	 * The bean property whose value becomes the url in the hyperlink.
 	 */
-	String hrefProperty() default "";
+	String uriProperty() default "uri";
 }

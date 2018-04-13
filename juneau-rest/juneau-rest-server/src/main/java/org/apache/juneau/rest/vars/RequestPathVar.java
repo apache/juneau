@@ -77,6 +77,8 @@ public class RequestPathVar extends MultipartResolvingVar {
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+		if ("REMAINDER".equals(key))
+			return req.getPathRemainder();
 		return req.getPath(key);
 	}
 }

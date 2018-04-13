@@ -315,7 +315,7 @@ public final class HtmlParserSession extends XmlParserSession {
 		if (beanClass.isAnnotationPresent(HtmlLink.class)) {
 			HtmlLink h = beanClass.getAnnotation(HtmlLink.class);
 			BeanMap<T> m = newBeanMap(beanClass);
-			m.put(h.hrefProperty(), href);
+			m.put(h.uriProperty(), href);
 			m.put(h.nameProperty(), name);
 			return m.getBean();
 		}

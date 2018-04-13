@@ -22,6 +22,7 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.io.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;
@@ -56,10 +57,10 @@ import org.apache.juneau.utils.*;
 		}
 	),
 	properties={
-		@Property(name="rootDir", value="$C{TempDirResource/dir,$S{java.io.tmpdir}}"),
-		@Property(name="allowViews", value="true"),
-		@Property(name="allowDeletes", value="true"),
-		@Property(name="allowPuts", value="false")
+		@Property(name="DirectoryResource.rootDir", value="$C{TempDirResource/dir,$S{java.io.tmpdir}}"),
+		@Property(name="DirectoryResource.allowViews", value="true"),
+		@Property(name="DirectoryResource.allowDeletes", value="true"),
+		@Property(name="DirectoryResource.allowPuts", value="false")
 	},
 	swagger={
 		"info: {",
@@ -115,7 +116,7 @@ public class TempDirResource extends DirectoryResource {
 		},
 		matchers=TempDirResource.MultipartFormDataMatcher.class
 	)
-	public Redirect uploadFile(RestRequest req) throws Exception {
+	public RedirectToServletRoot uploadFile(RestRequest req) throws Exception {
 		ServletFileUpload upload = new ServletFileUpload();
 		FileItemIterator iter = upload.getItemIterator(req);
 		while (iter.hasNext()) {
@@ -127,7 +128,7 @@ public class TempDirResource extends DirectoryResource {
 				}
 			}
 		}
-		return new Redirect(); // Redirect to the servlet root.
+		return RedirectToServletRoot.INSTANCE; 
 	}
 
 	/** Causes a 404 if POST isn't multipart/form-data */

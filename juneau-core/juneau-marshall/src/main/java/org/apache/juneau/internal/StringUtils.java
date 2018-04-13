@@ -2149,4 +2149,21 @@ public final class StringUtils {
 			sb.append(String.format("%0"+digits+"d", start++)).append(": ").append(l).append("\n");
 		return sb.toString();
 	}
+
+	/**
+	 * Compares two strings, but gracefully handles <jk>nulls</jk>.
+	 * 
+	 * @param s1 The first string.
+	 * @param s2 The second string.
+	 * @return The same as {@link String#compareTo(String)}.
+	 */
+	public static int compare(String s1, String s2) {
+		if (s1 == null && s2 == null)
+			return 0;
+		if (s1 == null)
+			return Integer.MIN_VALUE;
+		if (s2 == null)
+			return Integer.MAX_VALUE;
+		return s1.compareTo(s2);
+	}
 }

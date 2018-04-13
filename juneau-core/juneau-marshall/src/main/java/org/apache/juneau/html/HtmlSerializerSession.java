@@ -378,7 +378,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				Class<?> c = o.getClass();
 				if (c.isAnnotationPresent(HtmlLink.class)) {
 					HtmlLink h = o.getClass().getAnnotation(HtmlLink.class);
-					Object urlProp = m.get(h.hrefProperty());
+					Object urlProp = m.get(h.uriProperty());
 					Object nameProp = m.get(h.nameProperty());
 					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");
 					cr = CR_MIXED;
