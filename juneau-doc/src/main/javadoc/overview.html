@@ -21296,7 +21296,7 @@
 				and is disabled by default.
 			<li>
 				Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
-				<p class='bcode' style='color:red'>
+				<p class='bcode w800' style='color:red'>
 	org.apache.juneau.parser.ParseException: Expected '[' at beginning of JSON array.
 		At line 80, column 20.
 		While parsing into: 
@@ -21463,7 +21463,78 @@
 		<h5 class='topic w800'>juneau-rest-microservice</h5>
 		<ul class='spaced-list'>
 			<li>
-				The look-and-feel of an application is now controlled 
+				The look-and-feel of an application is now controlled through the external configuration file and access to
+				CSS stylesheets in the working directory in a new folder called <code>files</code>:
+				<br><img class='bordered' style='width:170px' src='doc-files/ReleaseNotes.711.1.png'>
+				<br><br>
+				The default configuration is this: 
+				<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# REST settings
+	#=======================================================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
+	
+	<cc># Stylesheet to use for HTML views.</cc>
+	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+	
+	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+	
+	<ck>icon</ck> = <cv>$C{REST/headerIcon}</cv>
+	<ck>header</ck> = <cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;</cv>
+	<ck>footer</ck> = <cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='$U{$C{REST/footerIcon}}'&gt;</cv>	
+				</p>				
+				<br><br>
+				Note that static files can now be served up from the <code>files</code> directory in the working directory, 
+				and you have access to modify the CSS theme files.
+				<br>The <code>SwaggerUI.css</code> file controls the look-and-feel of the Swagger UI, so you can make
+				modification there as well.
+				<br><br>
+				The <code>BasicRestConfig</code> interface (which defines the default settings for the <code>BasicRestServlet</code> class)
+				now looks like this...
+				<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		...
+		htmldoc=<ja>@HtmlDoc</ja>(
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
+				<js>"$C{REST/header}"</js>
+			},
+			navlinks={
+				<js>"up: request:/.."</js>
+			},
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/icon}}'/&gt;"</js>
+			},
+			footer=<js>"$C{REST/footer}"</js>
+		),
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"</jc>
+		staticFiles={<js>"$C{REST/staticFiles}"</js>}
+	)
+	<jk>public interface</jk> BasicRestConfig {}			
+				</p>	
+				<br><br>
+				The <code>PoweredByApache</code> widget which used to serve as a page footer has been eliminated.
+				<br><br>
+				If you're testing out changes in the theme stylesheets, you may want to set the following system property
+				that prevents caching of those files so that you don't need to restart the microservice each time a change is made:
+				<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# System properties
+	#=======================================================================================================================</cc>
+	<cs>[SystemProperties]</cs>
+	
+	<cc># Disable classpath resource caching.
+	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
+	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
 		</ul>
 	</div>
 	
