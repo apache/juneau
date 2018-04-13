@@ -39,12 +39,12 @@ import org.apache.juneau.rest.widget.*;
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
 	htmldoc=@HtmlDoc(
 		widgets={ 
-			StyleMenuItem.class 
+			ThemeMenuItem.class 
 		},
 		navlinks={
 			"up: request:/..",
 			"options: servlet:/..",
-			"$W{StyleMenuItem}",
+			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={

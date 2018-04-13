@@ -18,7 +18,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.HtmlDoc;
 import org.apache.juneau.rest.annotation.RestResource;
 import org.apache.juneau.rest.widget.ContentTypeMenuItem;
-import org.apache.juneau.rest.widget.StyleMenuItem;
+import org.apache.juneau.rest.widget.ThemeMenuItem;
 
 /**
  * Root microservice page.
@@ -30,7 +30,7 @@ import org.apache.juneau.rest.widget.StyleMenuItem;
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
-			StyleMenuItem.class
+			ThemeMenuItem.class
 		},
 		navlinks={
 			"options: servlet:/?method=OPTIONS"

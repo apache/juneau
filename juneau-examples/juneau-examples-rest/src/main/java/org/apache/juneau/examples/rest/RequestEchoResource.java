@@ -33,13 +33,13 @@ import org.apache.juneau.transforms.*;
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
-			StyleMenuItem.class
+			ThemeMenuItem.class
 		},
 		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
-			"$W{StyleMenuItem}",
+			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={

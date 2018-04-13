@@ -26,12 +26,12 @@ public class RootContentTest extends ContentComboTestBase {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
 				new ComboInput("HTML-stylesheet", "/", MediaType.HTML,
-					"@import '/styles/devops.css';",
+					"@import '/htdocs/themes/devops.css';",
 					".menu-item {"
 				)
 			},
 			{ 	/* 1 */
-				new ComboInput("HTML-stylesheet-contnt", "/styles/devops.css", MediaType.PLAIN,
+				new ComboInput("HTML-stylesheet-contnt", "/htdocs/themes/devops.css", MediaType.PLAIN,
 					"/** DevOps look-and-feel */"
 				)
 			},
@@ -40,7 +40,7 @@ public class RootContentTest extends ContentComboTestBase {
 					"<head>",
 					"<h1>Root resources</h1>",
 					"<h2>Example of a router resource page.</h2>",
-					"<img src='/htdocs/juneau.png' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/>"
+					"<img src='/htdocs/images/juneau.png' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/>"
 				)
 			},
 			{ 	/* 3 */
@@ -48,7 +48,7 @@ public class RootContentTest extends ContentComboTestBase {
 					"<nav>",
 					"<a href='/?method=OPTIONS'>options</a>",
 					"<a onclick='menuClick(this)'>content-type</a>",
-					"<a onclick='menuClick(this)'>styles</a>",
+					"<a onclick='menuClick(this)'>themes</a>",
 					"<a href='https://github.com/apache/juneau/blob/master/juneau-examples/juneau-examples-rest/src/main/java/org/apache/juneau/examples/rest/RootResources.java'>source</a>"
 				)
 			},
@@ -60,10 +60,10 @@ public class RootContentTest extends ContentComboTestBase {
 			},
 			{ 	/* 5 */
 				new ComboInput("HTML-nav-popup-styles", "/", MediaType.HTML,
-					"<a href='/?stylesheet=styles%2Fdevops.css'>devops</a>",
-					"<a href='/?stylesheet=styles%2Flight.css'>light</a>",
-					"<a href='/?stylesheet=styles%2Foriginal.css'>original</a>",
-					"<a href='/?stylesheet=styles%2Fdark.css'>dark</a>"
+					"<a href='/?stylesheet=htdocs%2Fthemes%2Fdevops.css'>devops</a>",
+					"<a href='/?stylesheet=htdocs%2Fthemes%2Flight.css'>light</a>",
+					"<a href='/?stylesheet=htdocs%2Fthemes%2Foriginal.css'>original</a>",
+					"<a href='/?stylesheet=htdocs%2Fthemes%2Fdark.css'>dark</a>"
 				)
 			},
 			{ 	/* 6 */
@@ -76,7 +76,7 @@ public class RootContentTest extends ContentComboTestBase {
 			{ 	/* 7 */
 				new ComboInput("HTML-footer", "/", MediaType.HTML,
 					"<footer>",
-					"<img style='float:right;padding-right:20px;height:32px' src='/htdocs/asf.png'>"
+					"<img style='float:right;padding-right:20px;height:32px' src='/htdocs/images/asf.png'>"
 				)
 			},
 			{ 	/* 8 */

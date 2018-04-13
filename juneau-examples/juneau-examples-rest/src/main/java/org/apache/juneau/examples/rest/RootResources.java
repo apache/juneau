@@ -29,14 +29,13 @@ import org.apache.juneau.rest.widget.*;
 	description="Example of a router resource page.",
 	htmldoc=@HtmlDoc(
 		widgets={
-			PoweredByApache.class,
 			ContentTypeMenuItem.class,
-			StyleMenuItem.class
+			ThemeMenuItem.class
 		},
 		navlinks={
 			"options: ?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
-			"$W{StyleMenuItem}",
+			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
@@ -48,8 +47,7 @@ import org.apache.juneau.rest.widget.*;
 			"	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>",
 			"	<p>Other features (such as this aside) are added through annotations.</p>",
 			"</div>"
-		},
-		footer="$W{PoweredByApache}"
+		}
 	),
 	properties={
 		// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple

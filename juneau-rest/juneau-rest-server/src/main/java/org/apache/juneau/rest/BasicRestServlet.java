@@ -204,10 +204,6 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource.",
 		htmldoc=@HtmlDoc(
-			header={
-				"<h1>$R{resourceTitle}</h1>",
-				"<h2>$R{resourceDescription}</h2>"
-			},
 			navlinks={
 				"back: servlet:/",
 				"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"

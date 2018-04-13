@@ -51,7 +51,7 @@ import org.apache.juneau.utils.*;
 			PoweredByJuneau.class,
 			ContentTypeMenuItem.class,
 			QueryMenuItem.class,
-			StyleMenuItem.class
+			ThemeMenuItem.class
 		},
 
 		// Links on the HTML rendition page.
@@ -62,7 +62,7 @@ import org.apache.juneau.utils.*;
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
-			"$W{StyleMenuItem}",
+			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/$R{servletClassSimple}.java"
 		},
 		

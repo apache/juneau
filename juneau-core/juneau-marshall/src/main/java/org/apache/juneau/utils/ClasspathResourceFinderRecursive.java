@@ -20,6 +20,11 @@ import java.util.*;
  */
 public class ClasspathResourceFinderRecursive extends ClasspathResourceFinderBasic {
 
+	/**
+	 * Reusable instance.
+	 */
+	public static final ClasspathResourceFinderRecursive INSTANCE = new ClasspathResourceFinderRecursive();
+
 	@Override /* ResourceFinder2 */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 		while (baseClass != null) {

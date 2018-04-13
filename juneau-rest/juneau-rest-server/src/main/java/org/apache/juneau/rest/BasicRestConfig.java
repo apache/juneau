@@ -68,15 +68,16 @@ import org.apache.juneau.xmlschema.*;
 		header={
 			"<h1>$R{resourceTitle}</h1>",
 			"<h2>$R{methodSummary,resourceDescription}</h2>",
-			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
+			"$C{REST/header}"
 		},
 		navlinks={
 			"up: request:/.."
 		},
-		stylesheet="$C{REST/stylesheet,servlet:/styles/devops.css}",
+		stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
 		head={
-			"<link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/>"
-		}
+			"<link rel='icon' href='$U{$C{REST/icon}}'/>"
+		},
+		footer="$C{REST/footer}"
 	),
 	
 	// Optional external configuration file.
@@ -84,6 +85,6 @@ import org.apache.juneau.xmlschema.*;
 
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
-	staticFiles={"htdocs:htdocs","styles:styles"}
+	staticFiles={"$C{REST/staticFiles}"}
 )
 public interface BasicRestConfig {}

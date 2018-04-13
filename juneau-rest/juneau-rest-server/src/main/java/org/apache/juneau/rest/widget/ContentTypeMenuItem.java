@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * 				<js>"options: ..."</js>,
  * 				<js>"$W{QueryMenuItem}"</js>,
  * 				<js>"$W{ContentTypeMenuItem}"</js>,
- * 				<js>"$W{StyleMenuItem}"</js>,
+ * 				<js>"$W{ThemeMenuItem}"</js>,
  * 				<js>"source: ..."</js>
  * 			}
  * 		)

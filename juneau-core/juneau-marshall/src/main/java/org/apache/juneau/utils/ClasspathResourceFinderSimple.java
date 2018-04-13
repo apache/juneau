@@ -36,6 +36,11 @@ import java.util.ResourceBundle.*;
  */
 public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 
+	/**
+	 * Reusable instance.
+	 */
+	public static final ClasspathResourceFinderSimple INSTANCE = new ClasspathResourceFinderSimple();
+
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 	private static final List<Locale> ROOT_LOCALE = Arrays.asList(Locale.ROOT);
 

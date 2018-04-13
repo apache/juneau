@@ -66,7 +66,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	public static final String SWAGGERUI_resolveRefsMaxDepth = PREFIX + "resolveRefsMaxDepth.i";
 
 	
-	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class);
+	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class, ClasspathResourceFinderBasic.INSTANCE, Boolean.getBoolean("RestContext.useClasspathResourceCaching.b"));
 	
 	private static final Set<String> STANDARD_METHODS = new ASet<String>().appendAll("get", "put", "post", "delete", "options");
 	
@@ -90,8 +90,12 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		
 		Session s = new Session(beanSession, swagger);
 		
+		String css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css");
+		if (css == null)
+			css = RESOURCES.getString("SwaggerUI.css");
+		
 		Div outer = div(
-			style(RESOURCES.getString("SwaggerUI.css")),
+			style(css),
 			script("text/javascript", RESOURCES.getString("SwaggerUI.js")),
 			header(s)
 		)._class("swagger-ui");

@@ -51,9 +51,6 @@
 					<Item>
 						<New class="org.eclipse.jetty.server.handler.DefaultHandler" />
 					</Item>
-					<Item>
-						<New class="org.eclipse.jetty.server.session.SessionHandler" />
-					</Item>
 				</Array>
 			</Set>
 		</New>

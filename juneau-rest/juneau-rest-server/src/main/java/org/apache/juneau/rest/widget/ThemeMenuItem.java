@@ -12,51 +12,66 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
-import org.apache.juneau.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Widget that places a powered-by-Apache message on the page.
+ * Widget that returns back a list of hyperlinks for rendering the contents of a page in the various default styles.
  * 
  * <p>
- * The variable it resolves is <js>"$W{PoweredByApache}"</js>.
+ * The variable it resolves is <js>"$W{ThemeMenuItem}"</js>.
  * 
  * <p>
- * It produces a simple Apache icon floating on the right.
- * Typically it's used in the footer of the page, as shown below in the <code>RootResources</code> from the examples:
- * 
+ * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
+ * a drop-down menu item for rendering all other supported content types in plain text:
  * <p class='bcode'>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@RestMethod</ja>(
+ * 		name=<jsf>GET</jsf>,
  * 		path=<js>"/"</js>,
- * 		title=<js>"Root resources"</js>,
- * 		description=<js>"Example of a router resource page."</js>,
  * 		widgets={
- * 			PoweredByApache.<jk>class</jk>
+ * 			ThemeMenuItem.<jk>class</jk>,
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			footer=<js>"$W{PoweredByApache}"</js>
+ * 			navlinks={
+ * 				<js>"up: ..."</js>,
+ * 				<js>"options: ..."</js>,
+ * 				<js>"$W{QueryMenuItem}"</js>,
+ * 				<js>"$W{ContentTypeMenuItem}"</js>,
+ * 				<js>"$W{ThemeMenuItem}"</js>,
+ * 				<js>"source: ..."</js>
+ * 			}
  * 		)
+ * 	)
+ * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>
- * 
- * <p>
- * It renders the following image:
- * <img class='bordered' src='doc-files/PoweredByApacheWidget.png'>
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
  * </ul>
  */
-public class PoweredByApache extends Widget {
+public class ThemeMenuItem extends MenuItemWidget {
 
-	/**
-	 * Returns an Apache image tag hyperlinked to <js>"http://apache.org"</js>
-	 */
+	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original", "dark"};
+
 	@Override /* Widget */
-	public String getHtml(RestRequest req) throws Exception {
-		UriResolver r = req.getUriResolver();
-		return "<a href='http://apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/asf.png")+"'>";
+	public String getLabel(RestRequest req) {
+		return "themes";
+	}
+	/**
+	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data
+	 * as plain-text.
+	 */
+	@Override /* MenuItemWidget */
+	public Div getContent(RestRequest req) throws Exception {
+		Div div = div();
+		for (String s : BUILT_IN_STYLES) {
+			java.net.URI uri = req.getUri(true, new AMap<String,String>().append("stylesheet", "htdocs/themes/"+s+".css"));
+			div.children(a(uri, s), br());
+		}
+		return div;
 	}
 }
-
-

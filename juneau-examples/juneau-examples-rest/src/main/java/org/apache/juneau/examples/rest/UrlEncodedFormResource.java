@@ -34,11 +34,11 @@ import org.apache.juneau.transforms.*;
 	title="URL-Encoded form example",
 	htmldoc=@HtmlDoc(
 		widgets={ 
-			StyleMenuItem.class 
+			ThemeMenuItem.class 
 		},
 		navlinks={
 			"up: request:/..",
-			"$W{StyleMenuItem}",
+			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={

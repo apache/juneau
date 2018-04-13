@@ -19,18 +19,23 @@ import java.util.*;
  * Utility class for finding resources for a class.
  * 
  * <p>
- * Same as {@link ClasspathResourceFinderSimple}, but if the resource cannot be found in the classpath, then an attempt 
- * is made to look in the JVM working directory.
+ * Same as {@link ClasspathResourceFinderSimple}, but first searches the working directory for the file before
+ * looking in the classpath.
  * <br>Path traversals outside the working directory are not allowed for security reasons.
  */
 public class ClasspathResourceFinderBasic extends ClasspathResourceFinderSimple {
+	
+	/**
+	 * Reusable instance.
+	 */
+	public static final ClasspathResourceFinderBasic INSTANCE = new ClasspathResourceFinderBasic();
 
 	@Override /* ClasspathResourceFinder */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		InputStream is = findClasspathResource(baseClass, name, locale);
+		InputStream is = findFileSystemResource(name, locale);
 		if (is != null)
 			return is;
-		return findFileSystemResource(name, locale);
+		return findClasspathResource(baseClass, name, locale);
 	}
 	
 	/**
