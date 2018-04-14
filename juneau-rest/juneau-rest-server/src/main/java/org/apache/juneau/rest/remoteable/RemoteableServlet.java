@@ -16,6 +16,7 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map;
@@ -24,10 +25,12 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Header;
 import org.apache.juneau.rest.exception.*;
 
 /**
@@ -45,7 +48,7 @@ import org.apache.juneau.rest.exception.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RemoteableProxies">Overview &gt; juneau-rest-server &gt; Remoteable Proxies</a>
  * </ul>
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","javadoc"})
 public abstract class RemoteableServlet extends BasicRestServlet {
 
 	private final Map<String,Class<?>> classNameMap = new ConcurrentHashMap<>();
@@ -69,53 +72,56 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	// REST methods
 	//--------------------------------------------------------------------------------
 
-	/**
-	 * [GET /] - Get the list of all remote interfaces.
-	 * 
-	 * @param req The HTTP servlet request.
-	 * @return The list of links to the remote interfaces.
-	 * @throws Exception
-	 */
-	@RestMethod(name=GET, path="/")
-	public List<LinkString> getInterfaces(RestRequest req) throws Exception {
+	@RestMethod(
+		name=GET, 
+		path="/",
+		summary="List of available remoteable interfaces",
+		description="Shows a list of the interfaces registered with this remoteable servlet."
+	)
+	public List<LinkString> getInterfaces() throws Exception {
 		List<LinkString> l = new LinkedList<>();
 		boolean useAll = ! useOnlyAnnotated();
-		for (Class<?> c : getServiceMap().keySet()) {
+		for (Class<?> c : getServiceMap().keySet()) 
 			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())
-				l.add(new LinkString(c.getName(), "{0}/{1}", req.getRequestURI(), urlEncode(c.getName())));
-		}
+				l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));
 		return l;
 	}
 
-	/**
-	 * [GET /{javaInterface] - Get the list of all remoteable methods on the specified interface name.
-	 * 
-	 * @param req The HTTP servlet request.
-	 * @param javaInterface The Java interface name.
-	 * @return The methods defined on the interface.
-	 * @throws Exception
-	 */
-	@RestMethod(name=GET, path="/{javaInterface}", summary="List of available methods on $RP{javaInterface}.")
-	public Collection<LinkString> listMethods(RestRequest req, @Path("javaInterface") String javaInterface) throws Exception {
+	@RestMethod(
+		name=GET, 
+		path="/{javaInterface}", 
+		summary="List of available methods on interface",
+		description="Shows a list of all the exposed methods on an interface.",
+		htmldoc=@HtmlDoc(
+			nav="<h5>Interface:  $RP{javaInterface}</h5>"
+		)
+	)
+	public Collection<LinkString> listMethods(
+			@Path(value="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface
+		) throws Exception {
+		
 		List<LinkString> l = new ArrayList<>();
-		for (String s : getMethods(javaInterface).keySet()) {
-			l.add(new LinkString(s, "{0}/{1}", req.getRequestURI(), urlEncode(s)));
-		}
+		for (String s : getMethods(javaInterface).keySet()) 
+			l.add(new LinkString(s, "servlet:/{0}/{1}", urlEncode(javaInterface), urlEncode(s)));
 		return l;
 	}
 
-	/**
-	 * [GET /{javaInterface] - Get the list of all remoteable methods on the specified interface name.
-	 * 
-	 * @param req The HTTP servlet request.
-	 * @param javaInterface The Java interface name.
-	 * @param javaMethod The Java method name or signature.
-	 * @return A simple form entry page for invoking a remoteable method.
-	 * @throws NotFound 
-	 * @throws Exception
-	 */
-	@RestMethod(name=GET, path="/{javaInterface}/{javaMethod}", summary="Form entry for method $RP{javaMethod} on interface $RP{javaInterface}")
-	public Div showEntryForm(RestRequest req, @Path("javaInterface") String javaInterface, @Path("javaMethod") String javaMethod) throws NotFound, Exception {
+	@RestMethod(
+		name=GET, 
+		path="/{javaInterface}/{javaMethod}", 
+		summary="Form entry for interface method call",
+		description="Shows a form entry page for executing a remoteable interface method.",
+		htmldoc=@HtmlDoc(
+			nav={
+				"<h5>Interface:  $RP{javaInterface}</h5>",
+				"<h5>Method:  $RP{javaMethod}</h5>"
+			}
+		)
+	)
+	public Div showEntryForm(
+			@Path(value="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
+			@Path(value="javaMethod", description="Java method name", example="myMethod") String javaMethod
+		) throws NotFound, Exception {
 		
 		// Find the method.
 		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
@@ -148,24 +154,46 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		return div(form().id("form").action("request:/").method(POST).children(t));
 	} 
 
-	/**
-	 * [POST /{javaInterface}/{javaMethod}] - Invoke the specified service method.
-	 * 
-	 * @param req The HTTP request.
-	 * @param javaInterface The Java interface name.
-	 * @param javaMethod The Java method name or signature.
-	 * @return The results from invoking the specified Java method.
-	 * @throws UnsupportedMediaType 
-	 * @throws NotFound 
-	 * @throws Exception
-	 */
-	@RestMethod(name=POST, path="/{javaInterface}/{javaMethod}")
-	public Object invoke(RestRequest req, @Path String javaInterface, @Path String javaMethod) throws UnsupportedMediaType, NotFound, Exception {
+	@RestMethod(
+		name=POST, 
+		path="/{javaInterface}/{javaMethod}",
+		summary="Invoke an interface method",
+		description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",
+		htmldoc=@HtmlDoc(
+			nav= {
+				"<h5>Interface:  $RP{javaInterface}</h5>",
+				"<h5>Method:  $RP{javaMethod}</h5>"
+			}
+		),
+		swagger= {
+			"parameters: [",
+				"{",
+					"in: 'body',",
+					"description: 'Serialized array of Java objects',",
+					"schema: {",
+						"type': 'array'",
+					"},",
+					"x-examples: {",
+						"'application/json+lax': '[\\'foo\\', 123, true]'",
+					"}",
+				"}",
+			"],",
+			"responses:{",
+				"200:{ description:'The return object serialized', schema:{type:'any'},'x-example':{foo:123} }",
+			"}"
+		}
+	)
+	public Object invoke(
+			Reader r,
+			ReaderParser p,
+			@Header("Content-Type") ContentType contentType,
+			@Path(value="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
+			@Path(value="javaMethod", description="Java method name", example="myMethod") String javaMethod
+		) throws UnsupportedMediaType, NotFound, Exception {
 
 		// Find the parser.
-		ReaderParser p = req.getBody().getReaderParser();
 		if (p == null)
-			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", req.getHeaders().getContentType());
+			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);
 		Class<?> c = getInterfaceClass(javaInterface);
 
 		// Find the service.
@@ -179,7 +207,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 			throw new NotFound("Method not found");
 
 		// Parse the args and invoke the method.
-		Object[] params = p.parseArgs(req.getReader(), m.getGenericParameterTypes());
+		Object[] params = p.parseArgs(r, m.getGenericParameterTypes());
 		return m.invoke(service, params);
 	}
 

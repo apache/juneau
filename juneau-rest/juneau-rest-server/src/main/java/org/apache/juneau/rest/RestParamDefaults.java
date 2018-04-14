@@ -111,6 +111,8 @@ class RestParamDefaults {
 			RestLoggerObject.class,
 			RestContextObject.class,
 			ParserObject.class,
+			ReaderParserObject.class,
+			InputStreamParserObject.class,
 			LocaleObject.class,
 			SwaggerObject.class,
 			RequestPathMatchObject.class,
@@ -1009,6 +1011,30 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getBody().getParser();
+		}
+	}
+
+	static final class ReaderParserObject extends RestMethodParam {
+
+		protected ReaderParserObject() {
+			super(OTHER, null, ReaderParser.class);
+		}
+
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getBody().getReaderParser();
+		}
+	}
+
+	static final class InputStreamParserObject extends RestMethodParam {
+
+		protected InputStreamParserObject() {
+			super(OTHER, null, InputStreamParser.class);
+		}
+
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getBody().getInputStreamParser();
 		}
 	}
 

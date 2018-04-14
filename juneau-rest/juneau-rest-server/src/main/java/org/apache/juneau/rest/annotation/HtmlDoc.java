@@ -276,7 +276,7 @@ public @interface HtmlDoc {
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			nav={
-	 * 				<js>"&lt;p&gt;Custom nav content&lt;/p&gt;"</js>
+	 * 				<js>"&lt;h5&gt;Custom nav content&lt;/h5&gt;"</js>
 	 * 			}
 	 * 		)
 	 * 	)
@@ -287,7 +287,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		When a value is specified, the {@link #navlinks()} value will be ignored.
+	 * 		When {@link #navlinks()} is also specified, this content is placed AFTER the navigation links.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

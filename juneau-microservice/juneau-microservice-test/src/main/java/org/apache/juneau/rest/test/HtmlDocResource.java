@@ -24,6 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 		aside={"aside1a","aside1b","INHERIT"},
 		footer={"footer1a","footer1b"},
 		header={"header1a","header1b"},
+		navlinks={"NONE"},
 		nav={"nav1a","nav1b"},
 		script={"script1a","script1b"},
 		style={"style1a","style1b"},

@@ -109,32 +109,31 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+		String[] links = session.getNavLinks();
+		if (links.length > 0 && ! ArrayUtils.contains("NONE", links)) {
+			w.sTag(3, "ol").nl(3);
+			for (String l : links) {
+				w.sTag(4, "li");
+				if (l.matches("(?s)\\S+\\:.*")) {
+					int i = l.indexOf(':');
+					String key = l.substring(0, i);
+					String val = l.substring(i+1).trim();
+					if (val.startsWith("<"))
+						w.nl(4).appendln(5, val);
+					else
+						w.oTag("a").attr("href", session.resolveUri(val), true).cTag().text(key, true).eTag("a");
+					w.eTag("li").nl(4);
+				} else {
+					w.nl(4).appendln(5, l);
+					w.eTag(4, "li").nl(4);
+				}
+			}
+			w.eTag(3, "ol").nl(3);
+		}
 		String[] nav = session.getNav();
 		if (nav.length > 0) {
 			for (int i = 0; i < nav.length; i++)
 				w.sIf(i > 0).appendln(3, nav[i]);
-		} else {
-			String[] links = session.getNavLinks();
-			if (links.length > 0) {
-				w.sTag(3, "ol").nl(3);
-				for (String l : links) {
-					w.sTag(4, "li");
-					if (l.matches("(?s)\\S+\\:.*")) {
-						int i = l.indexOf(':');
-						String key = l.substring(0, i);
-						String val = l.substring(i+1).trim();
-						if (val.startsWith("<"))
-							w.nl(4).appendln(5, val);
-						else
-							w.oTag("a").attr("href", session.resolveUri(val), true).cTag().text(key, true).eTag("a");
-						w.eTag("li").nl(4);
-					} else {
-						w.nl(4).appendln(5, l);
-						w.eTag(4, "li").nl(4);
-					}
-				}
-				w.eTag(3, "ol").nl(3);
-			}
 		}
 	}
 

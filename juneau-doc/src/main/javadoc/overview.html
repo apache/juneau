@@ -11537,6 +11537,8 @@
 								<li class='jc'>{@link org.apache.juneau.rest.RestLogger} - Logger with additional features.
 								<li class='jc'>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
 								<li class='jc'>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
+								<li class='jc'>{@link org.apache.juneau.parser.ReaderParser} - The reader parser matching the request content type.
+								<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser} - The input stream parser matching the request content type.
 								<li class='jc'>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
 								<li class='jc'>{@link org.apache.juneau.config.Config} - The external config for the resource.
 								<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} - API for modifying request-time configuration properties.
@@ -21448,6 +21450,16 @@
 						<li class='jc'>{@link org.apache.juneau.rest.exception.VariantAlsoNegotiates}
 					</ul>
 				</ul>	
+			<li>
+				The {@link org.apache.juneau.rest.annotation.HtmlDoc#nav() @HtmlDoc.nav()} and {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() @HtmlDoc.navlinks()}
+				can now both be used on the same annotation.
+				<br>The contents of <code>nav()</code> are free-form HTML that gets rendered immediately after the navigation links.
+			<li>
+				The following new parameter types can be used on REST methods:
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.parser.ReaderParser} - The reader parser matching the request content type.
+					<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser} - The input stream parser matching the request content type.
+				</ul>
 		</ul>
 		
 		<h5 class='topic w800'>juneau-rest-client</h5>

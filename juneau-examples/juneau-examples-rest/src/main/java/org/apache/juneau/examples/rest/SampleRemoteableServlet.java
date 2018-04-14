@@ -12,15 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import java.util.*;
 import java.util.Map;
 
-import org.apache.juneau.dto.*;
-import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.examples.addressbook.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.remoteable.*;
 
@@ -73,67 +68,4 @@ public class SampleRemoteableServlet extends RemoteableServlet {
 		m.put(AddressBook.class, addressBook);
 		return m;
 	}
-	
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods to provide aside messages
-	//-----------------------------------------------------------------------------------------------------------------
-	
-	@Override /* RemoteableServlet */
-	@RestMethod(
-		name=GET, 
-		path="/",
-		summary="List of available remoteable interfaces",
-		description="Shows a list of the interfaces registered with this remoteable servlet.",
-		htmldoc=@HtmlDoc(
-			aside={
-				"<div style='max-width:400px;min-width:200px' class='text'>",
-				"	<p>Shows how to use the <code>RemoteableServlet</code> class to define RPC-style remoteable interfaces using REST as a protocol.</p>",
-				"	<p>Remoteable proxies are retrieved on the client side using <code>RestClient.getInterfaceProxy(Class)</code>.</p>",
-				"	<p>Methods are invoked using POSTs of serialized arrays of objects and the returned value is marshalled back as a response.</p>",
-				"	<p>This page shows the list of keys returned by the getServiceMap() method which returns a Map&lt;Class,Object&gt; which maps interfaces to objects.</p>",
-				"	<p>This example shows the differences between using interfaces (preferred) and classes as keys.</p>",
-				"</div>"
-			}
-		)
-	)
-	public List<LinkString> getInterfaces(RestRequest req) throws Exception {
-		return super.getInterfaces(req);
-	}
-
-	@Override /* RemoteableServlet */
-	@RestMethod(
-		name=GET, 
-		path="/{javaInterface}", 
-		summary="List of available methods on $CO{{$RP{javaInterface},an interface}",
-		htmldoc=@HtmlDoc(
-			aside={
-				"<div style='max-width:400px;min-width:200px' class='text'>",
-				"	<p>Shows the list of methods defined on this interface.</p>",
-				"	<p>Links take you to a form-entry page for testing.</p>",
-				"</div>"
-			}
-		)
-	)
-	public Collection<LinkString> listMethods(RestRequest req, @Path("javaInterface") String javaInterface) throws Exception {
-		return super.listMethods(req, javaInterface);
-	}
-
-	@Override /* RemoteableServlet */
-	@RestMethod(
-		name=GET, 
-		path="/{javaInterface}/{javaMethod}", 
-		summary="Form entry for $CO{$RP{javaMethod},method} on $CO{$RP{javaInterface},interface}",
-		htmldoc=@HtmlDoc(
-			aside={
-				"<div style='max-width:400px;min-width:200px' class='text'>",
-				"	<p>A rudimentary form-entry page.</p>",
-				"	<p>When using this form, arguments are passed as a URL-encoded FORM post.</p>",
-				"	<p>However, other formats such as JSON and XML can also be posted.</p>",
-				"</div>"
-			}
-		)
-	)
-	public Div showEntryForm(RestRequest req, @Path("javaInterface") String javaInterface, @Path("javaMethod") String javaMethod) throws Exception {
-		return super.showEntryForm(req, javaInterface, javaMethod);
-	} 
 }

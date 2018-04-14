@@ -372,6 +372,20 @@ public class RequestBody {
 		return null;
 	}
 
+	/**
+	 * Returns the input stream parser matching the request <code>Content-Type</code> header.
+	 * 
+	 * @return
+	 * 	The input stream parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
+	 * 	reader parser was found, or the matching parser was a reader parser.
+	 */
+	public InputStreamParser getInputStreamParser() {
+		Parser p = getParser();
+		if (p != null && ! p.isReaderParser())
+			return (InputStreamParser)p;
+		return null;
+	}
+
 	/* Workhorse method */
 	private <T> T parse(ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
 

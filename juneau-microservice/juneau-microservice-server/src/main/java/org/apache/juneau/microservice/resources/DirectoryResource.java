@@ -55,9 +55,6 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
- * 
- * <p>
- * Access can also be controlled by overriding the {@link #checkAccess(RestRequest)} method.
  */
 @RestResource(
 	title="File System Explorer",
@@ -117,11 +114,18 @@ public class DirectoryResource extends BasicRestServlet {
 		path="/*",
 		summary="View files on directory",
 		description="Returns a listing of all files in the specified directory.",
-		converters={Queryable.class}
+		converters={Queryable.class},
+		htmldoc=@HtmlDoc(
+			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
+		)
 	)
-	public FileListing listFiles(@PathRemainder String path) throws NotFound, Exception {
+	public FileListing listFiles(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
+
+		File dir = getDir(path);
+		req.setAttribute("fullPath", dir.getAbsolutePath());
+		
 		FileListing l = new FileListing();
-		for (File fc : getDir(path).listFiles()) 
+		for (File fc : dir.listFiles()) 
 			l.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName())));
 		return l;
 	}
@@ -130,10 +134,17 @@ public class DirectoryResource extends BasicRestServlet {
 		name=GET, 
 		path="/file/*",
 		summary="View information about file",
-		description="Returns detailed information about the specified file."
+		description="Returns detailed information about the specified file.",
+		htmldoc=@HtmlDoc(
+			nav={"<h5>File:  $RA{fullPath}</h5>"}
+		)
 	)
-	public FileResource getFileInfo(@PathRemainder String path) throws NotFound, Exception {
-		return new FileResource(getFile(path), path);
+	public FileResource getFileInfo(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
+		
+		File f = getFile(path);
+		req.setAttribute("fullPath", f.getAbsolutePath());
+		
+		return new FileResource(f, path);
 	}
 
 	@RestMethod(
