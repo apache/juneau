@@ -79,7 +79,7 @@ public class RequestAttributeVar extends MultipartResolvingVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		return asString(req.getAttribute(key));
 	}
 }

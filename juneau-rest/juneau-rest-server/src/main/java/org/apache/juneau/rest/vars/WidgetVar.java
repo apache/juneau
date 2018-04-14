@@ -58,7 +58,7 @@ public class WidgetVar extends SimpleVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		boolean isScript = false, isStyle = false;
 
 		if (key.endsWith(".script")) {

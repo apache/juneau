@@ -10,47 +10,77 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.vars;
-
-import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
-
-/**
- * Servlet init parameter variable resolver.
- * 
- * <p>
- * The format for this var is <js>"$I{key[,defaultValue]}"</js>.
- * 
- * <p>
- * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * session object on the resolver session.
- * 
- * <p>
- * Values are pulled from the {@link RestServlet#getInitParameter(String)} method.
- * 
- * <p>
- * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
- * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
- * 
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
- * </ul>
- */
-public class ServletInitParamVar extends DefaultingVar {
-
-	/** The name of this variable. */
-	public static final String NAME = "I";
-
-	/**
-	 * Constructor.
-	 */
-	public ServletInitParamVar() {
-		super(NAME);
-	}
-
-	@Override /* Parameter */
-	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(RestRequest.class, RequestVar.SESSION_req, true).getContext().getServletInitParameter(key);
+{
+	id: {
+		text: 'tag:juneau.sample.com,2013:1'
+	},
+	title: {
+		text: 'Juneau ATOM specification'
+	},
+	links: [
+		{
+			type: 'text/html',
+			href: 'http://www.sample.com/',
+			hreflang: 'en',
+			rel: 'alternate'
+		},
+		{
+			type: 'application/atom+xml',
+			href: 'http://www.sample.com/feed.atom',
+			rel: 'self'
+		}
+	],
+	updated: '2013-05-08T12:29:29Z',
+	entries: [
+		{
+			id: {
+				text: 'tag:juneau.sample.com,2013:1.2345'
+			},
+			title: {
+				text: 'Juneau ATOM specification snapshot'
+			},
+			links: [
+				{
+					type: 'text/html',
+					href: 'http://www.sample.com/2012/05/08/juneau.atom',
+					rel: 'alternate'
+				},
+				{
+					type: 'audio/mpeg',
+					length: 1337,
+					href: 'http://www.sample.com/audio/juneau_podcast.mp3',
+					rel: 'enclosure'
+				}
+			],
+			authors: [
+				{
+					name: 'James Bognar',
+					uri: 'http://www.sample.com/',
+					email: 'jamesbognar@apache.org'
+				}
+			],
+			contributors: [
+				{
+					name: 'Barry M. Caceres'
+				}
+			],
+			updated: '2013-05-08T12:29:29Z',
+			content: {
+				base: 'http://www.apache.org/',
+				lang: 'en',
+				type: 'xhtml',
+				text: '<div><p>[Update: Juneau supports ATOM.]</p></div>'
+			},
+			published: '2013-05-08T12:29:29Z'
+		}
+	],
+	generator: {
+		version: '1.0',
+		uri: 'http://juneau.apache.org/',
+		text: 'Juneau'
+	},
+	subtitle: {
+		type: 'html',
+		text: 'A <em>lot</em> of effort went into making this effortless'
 	}
 }

@@ -57,7 +57,7 @@ public class LocalizationVar extends MultipartVar {
 		if (args.length > 0) {
 			String key = args[0];
 			String[] a = (args.length > 1) ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
-			return session.getSessionObject(RestRequest.class, RequestVar.SESSION_req).getMessage(key, (Object[])a);
+			return session.getSessionObject(RestRequest.class, RequestVar.SESSION_req, true).getMessage(key, (Object[])a);
 		}
 		return "";
 	}

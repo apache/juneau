@@ -36,6 +36,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.response.*;
+import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -144,7 +145,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			htmlDocBuilder = new HtmlDocBuilder(properties);
 			varResolverBuilder = new VarResolverBuilder()
 				.defaultVars()
-				.vars(ConfigVar.class);
+				.vars(ConfigVar.class)
+				.vars(FileVar.class)
+				.contextObject("crm", new ClasspathResourceManager(resourceClass));
 
 			VarResolver vr = varResolverBuilder.build();
 

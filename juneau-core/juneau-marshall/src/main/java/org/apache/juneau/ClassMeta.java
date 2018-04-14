@@ -1013,6 +1013,12 @@ public final class ClassMeta<T> implements Type {
 					if (isCollectionOrArray() && StringUtils.isObjectList(s, false))
 						return JsonParser.DEFAULT.parse(s, this);
 				}
+				if (example instanceof Map && isMapOrBean()) {
+					return JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT_LAX_READABLE.toString(example), this);
+				}
+				if (example instanceof Collection && isCollectionOrArray()) {
+					return JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT_LAX_READABLE.serialize(example), this);
+				}
 			}
 			if (exampleMethod != null) 
 				return (T)invokeMethodFuzzy(exampleMethod, null, session);

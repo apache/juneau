@@ -48,7 +48,8 @@ import org.apache.juneau.rest.widget.*;
 	properties={
 		@Property(name=WSERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
-		@Property(name=RDF_addRootProperty, value="true")
+		@Property(name=RDF_addRootProperty, value="true"),
+		@Property(name=BEAN_examples, value="{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}")
 	},
 	encoders=GzipEncoder.class,
 	swagger={
@@ -104,19 +105,21 @@ public class AtomFeedResource extends BasicRestServletJena {
 		}
 	}
 
-	/**
-	 * GET request handler
-	 */
-	@RestMethod(name=GET, path="/", summary="Get the sample ATOM feed")
+	@RestMethod(
+		name=GET, 
+		path="/", 
+		summary="Get the sample ATOM feed"
+	)
 	public Feed getFeed() throws Exception {
 		return feed;
 	}
 
-	/**
-	 * PUT request handler.
-	 * Replaces the feed with the specified content, and then mirrors it as the response.
-	 */
-	@RestMethod(name=PUT, path="/", summary="Overwrite the sample ATOM feed")
+	@RestMethod(
+		name=PUT, 
+		path="/", 
+		summary="Overwrite the sample ATOM feed",
+		description="Replaces the feed with the specified content, and then mirrors it as the response."
+	)
 	public Feed setFeed(@Body Feed feed) throws Exception {
 		this.feed = feed;
 		return feed;

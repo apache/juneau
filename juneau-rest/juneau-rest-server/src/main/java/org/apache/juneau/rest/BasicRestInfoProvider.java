@@ -610,8 +610,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					Serializer s2 = sm.getSerializers().getSerializer(mt);
 					if (s2 != null) {
 						SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
-						String eVal = s2.createSession(args).serializeToString(example);
-						examples.put(s2.getMediaTypes()[0].toString(), eVal);
+						try {
+							String eVal = s2.createSession(args).serializeToString(example);
+							examples.put(s2.getMediaTypes()[0].toString(), eVal);
+						} catch (Exception e) {
+							System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());
+						}
 					}
 				}
 			}

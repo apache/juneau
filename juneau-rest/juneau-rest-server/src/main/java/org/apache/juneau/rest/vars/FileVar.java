@@ -68,6 +68,7 @@ import org.apache.juneau.utils.*;
 public class FileVar extends DefaultingVar {
 
 	private static final String SESSION_req = "req";
+	private static final String SESSION_crm = "crm";
 
 	/**
 	 * The name of this variable.
@@ -83,8 +84,17 @@ public class FileVar extends DefaultingVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
-		ReaderResource rr = req.getClasspathReaderResource(key);
-		return (rr == null ? null : rr.toCommentStrippedString());
+		
+		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, false);
+		if (req != null) {
+			ReaderResource rr = req.getClasspathReaderResource(key);
+			return (rr == null ? null : rr.toCommentStrippedString());			
+		}
+
+		ClasspathResourceManager crm = session.getSessionObject(ClasspathResourceManager.class, SESSION_crm, false);
+		if (crm != null) 
+			return crm.getString(key);
+		
+		return null;
 	}
 }

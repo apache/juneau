@@ -68,6 +68,6 @@ public class ConfigVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(Config.class, SESSION_config).getString(key);
+		return session.getSessionObject(Config.class, SESSION_config, true).getString(key);
 	}
 }

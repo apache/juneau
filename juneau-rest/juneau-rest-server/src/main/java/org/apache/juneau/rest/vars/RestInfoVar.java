@@ -100,7 +100,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws RestException, InternalServerError {
 		try {
-			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 			Swagger swagger = req.getSwagger();
 			RestInfoProvider rip = req.getInfoProvider();
 			WriterSerializer s = JsonSerializer.DEFAULT_LAX;

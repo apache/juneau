@@ -379,13 +379,14 @@ public class VarResolverSession {
 	 * 
 	 * @param c The class type to cast to.
 	 * @param name The name of the session object.
+	 * @param throwNotSetException Throw a {@link VarResolverException} if the session object is not set.
 	 * @return 
 	 * 	The session object.  
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws VarResolverException If session object with specified name does not exist.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getSessionObject(Class<T> c, String name) {
+	public <T> T getSessionObject(Class<T> c, String name, boolean throwNotSetException) {
 		T t = null;
 		try {
 			t = (T)sessionObjects.get(name);
@@ -397,7 +398,7 @@ public class VarResolverSession {
 			throw new VarResolverException(e,
 				"Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c);
 		}
-		if (t == null)
+		if (t == null && throwNotSetException)
 			throw new VarResolverException(
 				"Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name);
 		return t;

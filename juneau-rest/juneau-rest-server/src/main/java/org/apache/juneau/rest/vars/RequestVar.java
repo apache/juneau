@@ -92,7 +92,7 @@ public class RequestVar extends MultipartResolvingVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		char c = StringUtils.charAt(key, 0);
 		if (c == 'c') {
 			if ("contextPath".equals(key))
