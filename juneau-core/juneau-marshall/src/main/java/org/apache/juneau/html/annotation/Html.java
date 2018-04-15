@@ -49,7 +49,6 @@ public @interface Html {
 
 	/**
 	 * Specifies what format to use for the HTML element.
-	 * 
 	 */
 	HtmlFormat format() default HtmlFormat.HTML;
 

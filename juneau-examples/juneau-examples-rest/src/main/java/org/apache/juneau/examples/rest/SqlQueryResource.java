@@ -43,7 +43,7 @@ import org.apache.juneau.rest.widget.*;
 		},
 		navlinks={
 			"up: request:/..",
-			"options: servlet:/..",
+			"options: servlet:/?method=OPTIONS",
 			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
@@ -93,9 +93,15 @@ public class SqlQueryResource extends BasicRestServlet {
 		}
 	}
 
-	/** GET request handler - Display the query entry page. */
-	@RestMethod(name=GET, path="/", summary="Display the query entry page")
-	public Div doGet(RestRequest req, @Query("sql") String sql) {
+	@RestMethod(
+		name=GET, 
+		path="/", 
+		summary="Display the query entry page"
+	)
+	public Div doGet(
+			@Query(name="sql", description="Text to prepopulate the SQL query field with.", example="select * from sys.systables") String sql
+		) {
+		
 		return div(
 			script("text/javascript",
 				"\n	// Quick and dirty function to allow tabs in textarea."
@@ -117,9 +123,9 @@ public class SqlQueryResource extends BasicRestServlet {
 			form("servlet:/").method(POST).target("buf").children(
 				table(
 					tr(
-						th("Position (1-10000):"),
+						th("Position (1-10000):").style("white-space:nowrap"),
 						td(input().name("pos").type("number").value(1)),
-						th("Limit (1-10000):"),
+						th("Limit (1-10000):").style("white-space:nowrap"),
 						td(input().name("limit").type("number").value(100)),
 						td(button("submit", "Submit"), button("reset", "Reset"))
 					),
@@ -136,9 +142,19 @@ public class SqlQueryResource extends BasicRestServlet {
 		);
 	}
 
-	/** POST request handler - Execute the query. */
-	@RestMethod(name=POST, path="/", summary="Execute one or more queries")
-	public List<Object> doPost(@Body PostInput in) throws BadRequest {
+	@RestMethod(
+		name=POST, 
+		path="/", 
+		summary="Execute one or more queries",
+		swagger= {
+			"responses:{",
+				"200:{ description:'Query results.\nEach entry in the array is a result of one query.\nEach result can be a result set (for queries) or update count (for updates).', 'x-example':[[{col1:'val1'},{col2:'val2'},{col3:'val3'}],123]}",
+			"}",
+		}
+	)
+	public List<Object> doPost(
+			@Body(description="Query input", example="{sql:'select * from sys.systables',pos:1,limit:100}") PostInput in
+		) throws BadRequest {
 
 		List<Object> results = new LinkedList<>();
 

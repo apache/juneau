@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
+import static org.apache.juneau.microservice.resources.DirectoryResource.*;
 
 import java.io.*;
 
@@ -57,10 +58,10 @@ import org.apache.juneau.utils.*;
 		}
 	),
 	properties={
-		@Property(name="DirectoryResource.rootDir", value="$C{TempDirResource/dir,$S{java.io.tmpdir}}"),
-		@Property(name="DirectoryResource.allowViews", value="true"),
-		@Property(name="DirectoryResource.allowDeletes", value="true"),
-		@Property(name="DirectoryResource.allowPuts", value="false")
+		@Property(name=DIRECTORY_RESOURCE_rootDir, value="$C{TempDirResource/dir,$S{java.io.tmpdir}}"),
+		@Property(name=DIRECTORY_RESOURCE_allowViews, value="true"),
+		@Property(name=DIRECTORY_RESOURCE_allowDeletes, value="true"),
+		@Property(name=DIRECTORY_RESOURCE_allowUploads, value="false")
 	},
 	swagger={
 		"info: {",

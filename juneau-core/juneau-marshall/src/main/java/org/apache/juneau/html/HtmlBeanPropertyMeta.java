@@ -22,6 +22,11 @@ import org.apache.juneau.html.annotation.*;
 @SuppressWarnings("rawtypes")
 public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
+	/**
+	 * Default instance.
+	 */
+	public static final HtmlBeanPropertyMeta DEFAULT = new HtmlBeanPropertyMeta();
+	
 	private final boolean noTables, noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender render;
@@ -51,6 +56,16 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		this.anchorText = b.anchorText;
 	}
 
+	private HtmlBeanPropertyMeta() {
+		super(null);
+		this.format = HtmlFormat.HTML;
+		this.noTables = false;
+		this.noTableHeaders = false;
+		this.render = null;
+		this.link = null;
+		this.anchorText = null;
+	}
+	
 	static final class Builder {
 		boolean noTables, noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
@@ -108,6 +123,24 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 */
 	protected boolean isHtml() {
 		return format == HtmlFormat.HTML;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
+	 */
+	protected boolean isHtmlCdc() {
+		return format == HtmlFormat.HTML_CDC;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
+	 */
+	protected boolean isHtmlSdc() {
+		return format == HtmlFormat.HTML_SDC;
 	}
 
 	/**

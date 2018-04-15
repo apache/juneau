@@ -79,7 +79,7 @@ public class HtmlWriter extends XmlWriter {
 				else if (test == ' ')
 					append("<sp> </sp>");
 				else
-					append("<sp>&#x").append(toHex(test)).append(";</sp>");
+					append("<sp>&#x").append(toHex4(test)).append(";</sp>");
 			}
 			else if (Character.isISOControl(test))
 				append("&#" + (int) test + ";");

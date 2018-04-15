@@ -76,7 +76,6 @@ import org.apache.juneau.rest.widget.*;
 		LogsResource.class,
 		DockerRegistryResource.class,
 		PredefinedLabelsResource.class,
-		StaticFilesResource.class,
 		DebugResource.class,
 		ShutdownResource.class
 	}

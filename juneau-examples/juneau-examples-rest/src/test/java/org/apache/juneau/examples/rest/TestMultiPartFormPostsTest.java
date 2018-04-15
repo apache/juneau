@@ -41,7 +41,7 @@ public class TestMultiPartFormPostsTest extends RestTestcase {
 		HttpEntity entity = MultipartEntityBuilder.create().addBinaryBody(f.getName(), f).build();
 		client.doPost(URL + "/upload", entity);
 
-		String downloaded = client.doGet(URL + "/file/" + f.getName() + "?method=VIEW").getResponseAsString();
+		String downloaded = client.doGet(URL + "/" + f.getName() + "?method=VIEW").getResponseAsString();
 		assertEquals("test!", downloaded);
 	}
 }

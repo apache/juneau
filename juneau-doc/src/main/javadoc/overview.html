@@ -9051,7 +9051,7 @@
 			Both kinds of objects are accessible through the following method:
 		</p>
 		<ul>
-			<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#getSessionObject(Class, String)}
+			<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
 		</ul>
 		<p>
 			Var resolvers can be cloned and extended by using the {@link org.apache.juneau.svl.VarResolver#builder()} method.
@@ -21358,6 +21358,12 @@
 			<li>
 				New option for dyna-property (i.e. <code><ja>@Bean</ja>(<js>"*"</js>)</code>) using a method that returns a collection of extra keys.
 				<br>See new options #4 on {@link org.apache.juneau.annotation.BeanProperty#name()}
+			<li>
+				New formats for the {@link org.apache.juneau.html.annotation.Html#format() @Html.format()} annotation:
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
+					<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
+				</ul> 
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>
@@ -21460,9 +21466,23 @@
 					<li class='jc'>{@link org.apache.juneau.parser.ReaderParser} - The reader parser matching the request content type.
 					<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser} - The input stream parser matching the request content type.
 				</ul>
+			<li>
+				The <code>$F</code> variable can now be used as a initialization time variable.
+				<br>For example, the <code>AtomFeedResource</code> example pulls a bean example from a file on the classpath:
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>,
+		properties={
+			<ja>@Property</ja>(name=<jsf>BEAN_examples</jsf>, value=<js>"{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}"</js>)
+		},
+		...
+	)
+				</p>
+				<br>It should be noted that you cannot use the <code>$F</code> variable to retrieve localized versions of files (since you're not within
+				the scope of a client request.
 		</ul>
-		
-		<h5 class='topic w800'>juneau-rest-client</h5>
+	
 		<ul class='spaced-list'>
 			<li>
 				Made improvements to the builder API for defining SSL support.

@@ -23,6 +23,11 @@ import org.apache.juneau.parser.*;
  */
 public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 
+	/**
+	 * Default instance.
+	 */
+	public static final JsonSchemaBeanPropertyMeta DEFAULT = new JsonSchemaBeanPropertyMeta();
+
 	private String type, format, description;
 	private Object example;
 
@@ -40,6 +45,14 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 			findInfo(bpm.getGetter().getAnnotation(JsonSchema.class));
 		if (bpm.getSetter() != null)
 			findInfo(bpm.getSetter().getAnnotation(JsonSchema.class));
+	}
+	
+	private JsonSchemaBeanPropertyMeta() {
+		super(null);
+		this.type = null;
+		this.format = null;
+		this.description = null;
+		this.example = null;
 	}
 
 	private void findInfo(JsonSchema js) {

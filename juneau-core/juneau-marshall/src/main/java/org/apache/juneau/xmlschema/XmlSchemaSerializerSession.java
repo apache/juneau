@@ -351,8 +351,8 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 					for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
 						if (pMeta.canRead()) {
-							XmlFormat pMetaFormat = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
-							if (pMetaFormat != XmlFormat.ATTR)
+							XmlFormat bpXml = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+							if (bpXml != XmlFormat.ATTR)
 								hasChildElements = true;
 						}
 					}

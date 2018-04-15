@@ -41,29 +41,32 @@ import org.apache.juneau.rest.exception.*;
 		}
 	)
 )
+@SuppressWarnings("javadoc")
 public class ConfigResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * [GET /] - Show contents of config file.
-	 * 
-	 * @return The config file.
-	 * @throws Exception
-	 */
-	@RestMethod(name=GET, path="/", description="Show contents of config file.")
-	public ObjectMap getConfig() throws Exception {
+	
+	@RestMethod(
+		name=GET, 
+		path="/", 
+		summary="Get config file contents",
+		description="Show contents of config file as an ObjectMap.",
+		swagger={
+			"responses:{",
+				"200:{ description:'Config file as a map of map of objects.', 'x-example':{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}",
+			"}",
+		}
+	)
+	public ObjectMap getConfig() {
 		return getServletConfig().getConfig().asMap();
 	}
 
-	/**
-	 * [GET /edit] - Show config file edit page.
-	 * 
-	 * @param req The HTTP request.
-	 * @return The config file as a reader resource.
-	 * @throws Exception
-	 */
-	@RestMethod(name=GET, path="/edit", description="Edit config file.")
-	public Form getConfigEditForm(RestRequest req) throws Exception {
+	@RestMethod(
+		name=GET, 
+		path="/edit",
+		summary="Render form entry page for editing config file",
+		description="Renders a form entry page for editing the raw text of a config file."
+	)
+	public Form getConfigEditForm() {
 		return form().id("form").action("servlet:/").method("POST").enctype("application/x-www-form-urlencoded").children(
 			div()._class("data").children(
 				table(
@@ -78,140 +81,158 @@ public class ConfigResource extends BasicRestServlet {
 		);
 	}
 
-	/**
-	 * [GET /{section}] - Show config file section.
-	 * 
-	 * @param section The section name.
-	 * @return The config file section.
-	 * @throws Exception
-	 */
-	@RestMethod(name=GET, path="/{section}",
-		description="Show config file section.",
+	@RestMethod(
+		name=GET, 
+		path="/{section}",
+		summary="Get config file section contents",
+		description="Show contents of config file section as an ObjectMap.",
 		swagger={
-			"parameters:[",
-				"{name:'section',in:'path',description:'Section name.'}",
-			"]"
+			"responses:{",
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
+			"}",
 		}
 	)
-	public ObjectMap getConfigSection(@Path("section") String section) throws Exception {
+	public ObjectMap getConfigSection(
+			@Path(name="section", description="Section name in config file.", example="REST") String section
+		) throws SectionNotFound, BadConfig {
+		
 		return getSection(section);
 	}
 
-	/**
-	 * [GET /{section}/{key}] - Show config file entry.
-	 * 
-	 * @param section The section name.
-	 * @param key The section key.
-	 * @return The value of the config file entry.
-	 * @throws Exception
-	 */
-	@RestMethod(name=GET, path="/{section}/{key}",
-		description="Show config file entry.",
+	@RestMethod(
+		name=GET, 
+		path="/{section}/{key}",
+		summary="Get config file entry value",
+		description="Show value of config file entry as a simple string.",
 		swagger={
-			"parameters:[",
-				"{name:'section',in:'path',description:'Section name.'},",
-				"{name:'key',in:'path',description:'Entry name.'}",
-			"]"
+			"responses:{",
+				"200:{ description:'Entry value.', 'x-example':'servlet:/htdocs/themes/dark.css'}",
+			"}",
 		}
 	)
-	public String getConfigEntry(@Path("section") String section, @Path("key") String key) throws Exception {
+	public String getConfigEntry(
+			@Path(name="section", description="Section name in config file.", example="REST") String section,
+			@Path(name="key", description="Key name in section.", example="theme") String key
+		) throws SectionNotFound, BadConfig {
+		
 		return getSection(section).getString(key);
 	}
 
-	/**
-	 * [POST /] - Sets contents of config file from a FORM post.
-	 * 
-	 * @param contents The new contents of the config file.
-	 * @return The new config file contents.
-	 * @throws Exception
-	 */
-	@RestMethod(name=POST, path="/",
-		description="Sets contents of config file from a FORM post.",
+	@RestMethod(
+		name=POST, 
+		path="/",
+		summary="Update config file contents",
+		description="Update the contents of the config file from a FORM post.",
 		swagger={
-			"parameters:[",
-				"{name:'contents',in:'formData',description:'New contents in INI file format.'}",
-			"]"
+			"responses:{",
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
+			"}",
 		}
 	)
-	public ObjectMap setConfigContentsFormPost(@FormData("contents") String contents) throws Exception {
+	public ObjectMap setConfigContentsFormPost(
+			@FormData(name="contents", description="New contents in INI file format.") String contents
+		) throws Exception {
+
 		return setConfigContents(new StringReader(contents));
 	}
 
-	/**
-	 * [PUT /] - Sets contents of config file.
-	 * 
-	 * @param contents The new contents of the config file.
-	 * @return The new config file contents.
-	 * @throws Exception
-	 */
-	@RestMethod(name=PUT, path="/",
-		description="Sets contents of config file.",
+	@RestMethod(
+		name=PUT, 
+		path="/",
+		summary="Update config file contents",
+		description="Update the contents of the config file from raw text.",
 		swagger={
-			"parameters:[",
-				"{in:'body',description:'New contents in INI file format.'}",
-			"]"
+			"responses:{",
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
+			"}",
 		}
 	)
-	public ObjectMap setConfigContents(@Body Reader contents) throws Exception {
+	public ObjectMap setConfigContents(
+			@Body(description="New contents in INI file format.") Reader contents
+		) throws Exception {
+		
 		return getServletConfig().getConfig().load(contents, true).asMap();
 	}
 
-	/**
-	 * [PUT /{section}] - Add or overwrite a config file section.
-	 * 
-	 * @param section The section name.
-	 * @param contents The new contents of the config file section.
-	 * @return The new section.
-	 * @throws Exception
-	 */
-	@RestMethod(name=PUT, path="/{section}",
+	@RestMethod(
+		name=PUT, 
+		path="/{section}",
+		summary="Update config section contents",
 		description="Add or overwrite a config file section.",
 		swagger={
-			"parameters:[",
-				"{name:'section',in:'path',description:'Section name.'},",
-				"{in:'body',description:'New contents for section as a simple map with string keys and values.'}",
-			"]"
+			"responses:{",
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
+			"}",
 		}
 	)
-	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,Object> contents) throws Exception {
+	public ObjectMap setConfigSection(
+			@Path(name="section", description="Section name in config file.", example="REST") String section,
+			@Body(
+				description="New contents of config section as a simple map of key/value pairs.", 
+				example="{theme:'servlet:/htdocs/themes/dark.css'}"
+			) Map<String,Object> contents
+		) throws Exception {
+		
 		getServletConfig().getConfig().setSection(section, null, contents);
 		return getSection(section);
 	}
 
-	/**
-	 * [PUT /{section}/{key}] - Add or overwrite a config file entry.
-	 * 
-	 * @param section The section name.
-	 * @param key The section key.
-	 * @param value The new value.
-	 * @return The new value.
-	 * @throws NotFound Thrown if config section not found.
-	 * @throws BadRequest Thrown if contents are not valid.
-	 */
-	@RestMethod(name=PUT, path="/{section}/{key}",
+	@RestMethod(
+		name=PUT, 
+		path="/{section}/{key}",
+		summary="Update config entry value",
 		description="Add or overwrite a config file entry.",
 		swagger={
-			"parameters:[",
-				"{name:'section',in:'path',description:'Section name.'},",
-				"{name:'key',in:'path',description:'Entry name.'},",
-				"{in:'body',description:'New value as a string.'}",
-			"]"
+			"responses:{",
+				"200:{ description:'The updated value.', 'x-example':'servlet:/htdocs/themes/dark.css'}",
+			"}",
 		}
 	)
-	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws NotFound, BadRequest {
+	public String setConfigValue(
+			@Path(name="section", description="Section name in config file.", example="REST") String section,
+			@Path(name="key", description="Key name in section.", example="theme") String key,
+			@Body(description="New value for entry.", example="servlet:/htdocs/themes/dark.css") String value
+		) throws SectionNotFound, BadConfig {
+		
 		getServletConfig().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
 	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper beans
+	//-----------------------------------------------------------------------------------------------------------------
 
-	private ObjectMap getSection(String name) throws NotFound, BadRequest {
+	@ResponseInfo(description="Section not found.")
+	private class SectionNotFound extends NotFound {
+		private static final long serialVersionUID = 1L;
+
+		SectionNotFound() {
+			super("Section not found.");
+		}
+	}
+	
+	@ResponseInfo(description="The configuration file contained syntax errors and could not be parsed.")
+	private class BadConfig extends InternalServerError {
+		private static final long serialVersionUID = 1L;
+
+		BadConfig(Exception e) {
+			super(e, "The configuration file contained syntax errors and could not be parsed.");
+		}
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private ObjectMap getSection(String name) throws SectionNotFound, BadConfig {
 		ObjectMap m;
 		try {
 			m = getServletConfig().getConfig().getSectionAsMap(name);
 		} catch (ParseException e) {
-			throw new BadRequest(e, "Invalid input");
+			throw new BadConfig(e);
 		}
 		if (m == null)
-			throw new NotFound("Section not found.");
+			throw new SectionNotFound();
 		return m;
 	}
 }

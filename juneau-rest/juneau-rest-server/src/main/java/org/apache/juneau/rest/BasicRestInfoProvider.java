@@ -623,13 +623,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			String paramName = piri.getString("name");
 			String s = req.getPartSerializer().serialize(HttpPartType.valueOf(in.toUpperCase()), example);
 			if ("query".equals(in))
-				s = "?" + paramName + "=" + s;
+				s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
 			else if ("formData".equals(in))
 				s = paramName + "=" + s;
 			else if ("header".equals(in))
 				s = paramName + ": " + s;
 			else if ("path".equals(in))
-				s = sm.getPathPattern().replace("{"+paramName+"}", s);
+				s = sm.getPathPattern().replace("{"+paramName+"}", urlEncodeLax(s));
  			examples.put("example", s);
 		}
 		

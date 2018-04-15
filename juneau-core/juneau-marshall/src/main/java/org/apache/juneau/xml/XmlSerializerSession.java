@@ -181,7 +181,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		aType = push(null, o, null);
 
 		if (aType != null) {
-			Namespace ns = aType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+			Namespace ns = cXml(aType).getNamespace();
 			if (ns != null) {
 				if (ns.uri != null)
 					addNamespace(ns);
@@ -200,7 +200,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				bm = toBeanMap(o);
 			} else if (aType.isDelegate()) {
 				ClassMeta<?> innerType = ((Delegate<?>)o).getClassMeta();
-				Namespace ns = innerType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+				Namespace ns = cXml(innerType).getNamespace();
 				if (ns != null) {
 					if (ns.uri != null)
 						addNamespace(ns);
@@ -211,7 +211,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				if (innerType.isBean()) {
 					for (BeanPropertyMeta bpm : innerType.getBeanMeta().getPropertyMetas()) {
 						if (bpm.canRead()) {
-							ns = bpm.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
+							ns = bpXml(bpm).getNamespace();
 							if (ns != null && ns.uri != null)
 								addNamespace(ns);
 						}
@@ -238,7 +238,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (bm != null) {
 				for (BeanPropertyValue p : bm.getValues(isTrimNulls())) {
 
-					Namespace ns = p.getMeta().getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
+					Namespace ns = bpXml(p.getMeta()).getNamespace();
 					if (ns != null && ns.uri != null)
 						addNamespace(ns);
 
@@ -362,7 +362,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		} else if (sType.isBoolean()) {
 			type = BOOLEAN;
 		} else if (sType.isMapOrBean()) {
-			isCollapsed = sType.getExtendedMeta(XmlClassMeta.class).getFormat() == COLLAPSED;
+			isCollapsed = cXml(sType).getFormat() == COLLAPSED;
 			type = OBJECT;
 		} else if (sType.isCollectionOrArray()) {
 			isCollapsed = (format == COLLAPSED && ! addNamespaceUris);
@@ -382,9 +382,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		if (enableNamespaces) {
 			if (elementNamespace == null)
-				elementNamespace = sType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+				elementNamespace = cXml(sType).getNamespace();
 			if (elementNamespace == null)
-				elementNamespace = aType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+				elementNamespace = cXml(aType).getNamespace();
 			if (elementNamespace != null && elementNamespace.uri == null)
 				elementNamespace = null;
 			if (elementNamespace == null)
@@ -546,7 +546,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		List<BeanPropertyValue> lp = m.getValues(isTrimNulls());
 
-		XmlBeanMeta xbm = bm.getExtendedMeta(XmlBeanMeta.class);
+		XmlBeanMeta xbm = bXml(bm);
 
 		Set<String>
 			attrs = xbm.getAttrPropertyNames(),
@@ -576,7 +576,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					if (canIgnoreValue(cMeta, key, value))
 						continue;
 
-					Namespace ns = (enableNamespaces && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() != elementNs ? pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() : null);
+					XmlBeanPropertyMeta bpXml = bpXml(pMeta);
+					Namespace ns = (enableNamespaces && bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);
 
 					if (pMeta.isUri()  ) {
 						out.attrUri(ns, key, value);
@@ -643,8 +644,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						out.appendIf(! isCollapsed, '>').nlIf(! isMixed, indent);
 					}
 
-					XmlBeanPropertyMeta xbpm = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-					serializeAnything(out, value, cMeta, key, xbpm.getNamespace(), false, xbpm.getXmlFormat(), isMixed, false, pMeta);
+					XmlBeanPropertyMeta bpXml = bpXml(pMeta);
+					serializeAnything(out, value, cMeta, key, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixed, false, pMeta);
 				}
 			}
 		}
@@ -685,9 +686,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,
 			ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws Exception {
 
-		ClassMeta<?> seType = sType.getElementType();
-		if (seType == null)
-			seType = object();
 		ClassMeta<?> eeType = eType.getElementType();
 
 		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
@@ -700,9 +698,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		Namespace eNs = null;
 
 		if (ppMeta != null) {
-			XmlBeanPropertyMeta xbpm = ppMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-			eName = xbpm.getChildName();
-			eNs = xbpm.getNamespace();
+			XmlBeanPropertyMeta bpXml = bpXml(ppMeta);
+			eName = bpXml.getChildName();
+			eNs = bpXml.getNamespace();
 		}
 
 		for (Iterator i = c.iterator(); i.hasNext();) {
@@ -710,6 +708,18 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			serializeAnything(out, value, eeType, eName, eNs, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
 		return out;
+	}
+
+	private static XmlClassMeta cXml(ClassMeta<?> cm) {
+		return cm.getExtendedMeta(XmlClassMeta.class);
+	}
+
+	private static XmlBeanPropertyMeta bpXml(BeanPropertyMeta pMeta) {
+		return pMeta == null ? XmlBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+	}
+
+	private static XmlBeanMeta bXml(BeanMeta bm) {
+		return (XmlBeanMeta)bm.getExtendedMeta(XmlBeanMeta.class);
 	}
 
 	static enum JsonType {

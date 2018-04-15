@@ -23,6 +23,11 @@ import org.apache.juneau.xml.annotation.*;
  */
 public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
+	/**
+	 * Default instance.
+	 */
+	public static final XmlBeanPropertyMeta DEFAULT = new XmlBeanPropertyMeta();
+
 	private Namespace namespace = null;
 	private XmlFormat xmlFormat = XmlFormat.DEFAULT;
 	private String childName;
@@ -44,6 +49,10 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 		if (namespace == null)
 			namespace = bpm.getBeanMeta().getClassMeta().getExtendedMeta(XmlClassMeta.class).getNamespace();
+	}
+	
+	private XmlBeanPropertyMeta() {
+		super(null);
 	}
 
 	/**

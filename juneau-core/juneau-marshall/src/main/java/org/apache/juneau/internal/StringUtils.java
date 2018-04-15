@@ -49,6 +49,12 @@ public final class StringUtils {
 	// Characters that do not need to be URL-encoded
 	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars("-_.!~*'()\\").build();
 
+	// Characters that really do not need to be URL-encoded
+	private static final AsciiSet unencodedCharsLax = unencodedChars.copy()
+		.chars(":@$,")  // reserved, but can't be confused in a query parameter.
+		.chars("{}|\\^[]`")  // unwise characters.
+		.build();
+
 	// Maps BASE64 characters to 6-bit nibbles.
 	private static final byte[] base64m2 = new byte[128];
 	static {
@@ -909,12 +915,29 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Converts the specified number into a 2 hexadecimal characters.
+	 * 
+	 * @param num The number to convert to hex.
+	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
+	 */
+	public static final char[] toHex2(int num) {
+		if (num < 0 || num > 255)
+			throw new NumberFormatException("toHex2 can only be used on numbers between 0 and 255");
+		char[] n = new char[2];
+		int a = num%16;
+		n[1] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		a = (num/16)%16;
+		n[0] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		return n;
+	}
+
+	/**
 	 * Converts the specified number into a 4 hexadecimal characters.
 	 * 
 	 * @param num The number to convert to hex.
 	 * @return A <code><jk>char</jk>[4]</code> containing the specified characters.
 	 */
-	public static final char[] toHex(int num) {
+	public static final char[] toHex4(int num) {
 		char[] n = new char[4];
 		int a = num%16;
 		n[3] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
@@ -923,6 +946,25 @@ public final class StringUtils {
 			a = (num/base)%16;
 			base <<= 4;
 			n[3-i] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		}
+		return n;
+	}
+
+	/**
+	 * Converts the specified number into a 8 hexadecimal characters.
+	 * 
+	 * @param num The number to convert to hex.
+	 * @return A <code><jk>char</jk>[8]</code> containing the specified characters.
+	 */
+	public static final char[] toHex8(long num) {
+		char[] n = new char[8];
+		long a = num%16;
+		n[7] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		int base = 16;
+		for (int i = 1; i < 8; i++) {
+			a = (num/base)%16;
+			base <<= 4;
+			n[7-i] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
 		}
 		return n;
 	}
@@ -1090,6 +1132,10 @@ public final class StringUtils {
 	/**
 	 * Parses an ISO8601 string into a date.
 	 * 
+	 * <p>
+	 * Supports any of the following formats:
+	 * <br><code>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</code>
+	 * 
 	 * @param date The date string.
 	 * @return The parsed date.
 	 * @throws IllegalArgumentException
@@ -1252,7 +1298,7 @@ public final class StringUtils {
 	public static String unicodeSequence(char c) {
 		StringBuilder sb = new StringBuilder(6);
 		sb.append('\\').append('u');
-		for (char cc : toHex(c))
+		for (char cc : toHex4(c))
 			sb.append(cc);
 		return sb.toString();
 	}
@@ -1654,6 +1700,40 @@ public final class StringUtils {
 		return s;
 	}
 	
+	/**
+	 * Same as {@link #urlEncode(String)} except only excapes characters that absolutely need to be escaped.
+	 * 
+	 * @param s The string to escape.
+	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String urlEncodeLax(String s) {
+		if (s == null)
+			return null;
+		boolean needsEncode = false;
+		for (int i = 0; i < s.length() && ! needsEncode; i++)
+			needsEncode |= (! unencodedCharsLax.contains(s.charAt(i)));
+		if (needsEncode) {
+			StringBuilder sb = new StringBuilder(s.length()*2);
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (unencodedCharsLax.contains(c))
+					sb.append(c);
+				else if (c == ' ')
+					sb.append("+");
+				else if (c <= 127)
+					sb.append('%').append(toHex2(c));
+				else
+					try {
+						sb.append(URLEncoder.encode(""+c, "UTF-8"));  // Yuck.
+					} catch (UnsupportedEncodingException e) {
+						// Not possible.
+					} 
+			}
+			s = sb.toString();
+		}
+		return s;
+	}
+
 	/**
 	 * Splits a string into equally-sized parts.
 	 * 

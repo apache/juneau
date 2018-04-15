@@ -44,6 +44,18 @@ public final class AsciiSet {
 	}
 
 	/**
+	 * Copies an existing {@link AsciiSet} so that you can augment it with additional values.
+	 * 
+	 * @return A builder initialized to the same characters in the copied set.
+	 */
+	public AsciiSet.Builder copy() {
+		Builder b = new Builder();
+		for (int i = 0; i < 128; i++)
+			b.store[i] = store[i];
+		return b;
+	}
+
+	/**
 	 * Builder class for {@link AsciiSet} objects.
 	 */
 	public static class Builder {

@@ -252,7 +252,8 @@ public final class ObjectUtils {
 	 * @param t
 	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
 	 */
-	public static <T> T firstNonNull(T[] t) {
+	@SafeVarargs
+	public static <T> T firstNonNull(T... t) {
 		if (t != null)
 			for (T tt : t)
 				if (tt != null)

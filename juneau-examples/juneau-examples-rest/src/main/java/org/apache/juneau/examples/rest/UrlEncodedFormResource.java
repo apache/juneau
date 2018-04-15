@@ -67,6 +67,7 @@ public class UrlEncodedFormResource extends BasicRestServlet {
 		path="/",
 		htmldoc=@HtmlDoc(
 			script={
+				"INHERIT",
 				"// Load results from IFrame into this document.",
 				"function loadResults(buff) {",
 				"	var doc = buff.contentDocument || buff.contentWindow.document;",
@@ -81,16 +82,16 @@ public class UrlEncodedFormResource extends BasicRestServlet {
 			form().id("form").action("servlet:/").method(POST).target("buff").children(
 				table(
 					tr(
-						th(req.getMessage("aString")),
-						td(input().name("aString").type("text"))
+						th(req.getMessage("aString")).style("white-space:nowrap"),
+						td(input().name("aString").type("text").size(50))
 					),
 					tr(
-						th(req.getMessage("aNumber")),
-						td(input().name("aNumber").type("number"))
+						th(req.getMessage("aNumber")).style("white-space:nowrap"),
+						td(input().name("aNumber").type("number").size(50))
 					),
 					tr(
-						th(req.getMessage("aDate")),
-						td(input().name("aDate").type("datetime"), br(), "ISO8601", br(), code("2001-07-04T15:30:45Z"))
+						th(req.getMessage("aDate")).style("white-space:nowrap"),
+						td(input().name("aDate").type("datetime-local").size(50).value("2001-07-04T15:30:45"), br(), "ISO8601", code("")).style("white-space:nowrap")
 					),
 					tr(
 						td().colspan(2).style("text-align:right").children(

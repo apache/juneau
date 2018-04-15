@@ -12,19 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
-import java.net.URI;
 import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.config.*;
-import org.apache.juneau.dto.LinkString;
+import org.apache.juneau.dto.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
@@ -41,6 +40,11 @@ import org.apache.juneau.transforms.*;
 	description="Log files from this service",
 	properties={
 		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
+		@Property(name=LogsResource.LOGS_RESOURCE_logDir, value="$C{Logging/logDir}"),
+		@Property(name=LogsResource.LOGS_RESOURCE_allowDeletes, value="$C{Logging/allowDeletes,true}"),
+		@Property(name=LogsResource.LOGS_RESOURCE_logFormat, value="$C{Logging/format}"),
+		@Property(name=LogsResource.LOGS_RESOURCE_dateFormat, value="$C{Logging/dateFormat}"),
+		@Property(name=LogsResource.LOGS_RESOURCE_useStackTraceHashes, value="$C{Logging/useStackTraceHashes}")
 	},
 	allowedMethodParams="*",
 	pojoSwaps={
@@ -48,119 +52,98 @@ import org.apache.juneau.transforms.*;
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
 	}
 )
+@SuppressWarnings("javadoc")
 public class LogsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	private File logDir;
-	private LogEntryFormatter leFormatter;
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
 
-	private final FileFilter filter = new FileFilter() {
-		@Override /* FileFilter */
-		public boolean accept(File f) {
-			return f.isDirectory() || f.getName().endsWith(".log");
-		}
-	};
+	private static final String PREFIX = "LogsResource.";
+	
+	/**
+	 * Configuration property:  Root directory.
+	 */
+	public static final String LOGS_RESOURCE_logDir = PREFIX + "logDir.s";
+	
+	/**
+	 * Configuration property:  Allow deletes on files.
+	 */
+	public static final String LOGS_RESOURCE_allowDeletes = PREFIX + "allowDeletes.b";
+	
+	/**
+	 * Configuration property:  Log entry format.
+	 */
+	public static final String LOGS_RESOURCE_logFormat = PREFIX + "logFormat.s";
 
 	/**
-	 * Initializes the log directory and formatter.
-	 * 
-	 * @param builder The resource config.
-	 * @throws Exception
+	 * Configuration property:  Log entry format.
 	 */
-	@RestHook(INIT) 
-	public void init(RestContextBuilder builder) throws Exception {
-		Config c = builder.getConfig();
+	public static final String LOGS_RESOURCE_dateFormat = PREFIX + "dateFormat.s";
 
-		logDir = new File(c.getString("Logging/logDir", "."));
+	/**
+	 * Configuration property:  Log entry format.
+	 */
+	public static final String LOGS_RESOURCE_useStackTraceHashes = PREFIX + "useStackTraceHashes.b";
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+	
+	private File logDir;
+	private LogEntryFormatter leFormatter;
+	boolean allowDeletes;
+
+
+	@RestHook(INIT) 
+	public void init(RestContextBuilder b) throws Exception {
+		RestContextProperties p = b.getProperties();
+		logDir = new File(p.getString(LOGS_RESOURCE_logDir));
+		allowDeletes = p.getBoolean(LOGS_RESOURCE_allowDeletes);
 		leFormatter = new LogEntryFormatter(
-			c.getString("Logging/format", "[{date} {level}] {msg}%n"),
-			c.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss"),
-			c.getBoolean("Logging/useStackTraceHashes")
+			p.getString(LOGS_RESOURCE_logFormat, "[{date} {level}] {msg}%n"),
+			p.getString(LOGS_RESOURCE_dateFormat, "yyyy.MM.dd hh:mm:ss"),
+			p.getBoolean(LOGS_RESOURCE_useStackTraceHashes, true)
 		);
 	}
 
-	/**
-	 * [GET /*] - Get file details or directory listing.
-	 * 
-	 * @param req The HTTP request
-	 * @param res The HTTP response
-	 * @param properties The writable properties for setting the descriptions.
-	 * @param path The log file path.
-	 * @return The log file.
-	 * @throws Exception
-	 */
 	@RestMethod(
-		name=GET,
+		name=GET, 
 		path="/*",
-		swagger= {
-			"responses:{",
-				"200: {description:'OK'},",
-				"404: {description:'Not Found'}",
-			"}"
-		}
+		summary="View information on file or directory",
+		description="Returns information about the specified file or directory.",
+		htmldoc=@HtmlDoc(
+			nav={"<h5>Folder:  $RA{fullPath}</h5>"},
+			nowrap=true
+		)
 	)
-	public Object getFileOrDirectory(RestRequest req, RestResponse res, RequestProperties properties, @PathRemainder String path) throws Exception {
+	public FileResource getFile(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
 
-		File f = getFile(path);
+		File dir = getFile(path);
+		req.setAttribute("fullPath", dir.getAbsolutePath());
 
-		if (f.isDirectory()) {
-			Set<FileResource> l = new TreeSet<>(new FileResourceComparator());
-			File[] files = f.listFiles(filter);
-			if (files != null) {
-				for (File fc : files) {
-					URI fUrl = new URI("servlet:/" + fc.getName());
-					l.add(new FileResource(fc, fUrl));
-				}
-			}
-			return l;
-		}
-
-		return new FileResource(f, new URI("servlet:/"));
+		return new FileResource(dir, path, allowDeletes, true);
 	}
 
-	/**
-	 * [VIEW /*] - Retrieve the contents of a log file.
-	 * 
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
-	 * @param path The log file path.
-	 * @param properties The writable properties for setting the descriptions.
-	 * @param highlight If <code>true</code>, add color highlighting based on severity.
-	 * @param start Optional start timestamp.  Don't print lines logged before the specified timestamp.  Example:  "&amp;start=2014-01-23 11:25:47".
-	 * @param end Optional end timestamp.  Don't print lines logged after the specified timestamp.  Example:  "&amp;end=2014-01-23 11:25:47".
-	 * @param thread Optional thread name filter.  Only show log entries with the specified thread name.  Example: "&amp;thread=pool-33-thread-1".
-	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&amp;loggers=(LinkIndexService,LinkIndexRestService)".
-	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&amp;severity=(ERROR,WARN)".
-	 * @throws NotFound File not found.
-	 * @throws MethodNotAllowed View not available on directories.
-	 * @throws IOException Could not write file.
-	 */
 	@RestMethod(
 		name="VIEW",
 		path="/*",
-		swagger= {
-			"responses:{",
-				"200: {description:'OK'},",
-				"404: {description:'Not Found'}",
-			"}"
-		}
+		summary="View contents of log file",
+		description="View the contents of a log file."
 	)
 	public void viewFile(
-			RestRequest req, 
 			RestResponse res, 
 			@PathRemainder String path, 
-			RequestProperties properties, 
-			@Query("highlight") boolean highlight, 
-			@Query("start") String start, 
-			@Query("end") String end, 
-			@Query("thread") String thread, 
-			@Query("loggers") String[] loggers, 
-			@Query("severity") String[] severity
+			@Query(name="highlight", description="Add severity color highlighting.", example="true") boolean highlight, 
+			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start, 
+			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end, 
+			@Query(name="thread", description="Thread name filter.\nOnly show log entries with the specified thread name.", example="thread-pool-33-thread-1") String thread, 
+			@Query(name="loggers", description="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", example="['LinkIndexService','LinkIndexRestService']") String[] loggers, 
+			@Query(name="severity", description="Severity filter.\nOnly show log entries with the specified severity.", example="['ERROR','WARN']") String[] severity
 		) throws NotFound, MethodNotAllowed, IOException {
 
 		File f = getFile(path);
-		if (f.isDirectory())
-			throw new MethodNotAllowed("View not available on directories");
 
 		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
 
@@ -203,168 +186,189 @@ public class LogsResource extends BasicRestServlet {
 		}
 	}
 
-	/**
-	 * [VIEW /*] - Retrieve the contents of a log file as parsed entries.
-	 * 
-	 * @param req The HTTP request.
-	 * @param path The log file path.
-	 * @param start Optional start timestamp.  Don't print lines logged before the specified timestamp.  Example:  "&amp;start=2014-01-23 11:25:47".
-	 * @param end Optional end timestamp.  Don't print lines logged after the specified timestamp.  Example:  "&amp;end=2014-01-23 11:25:47".
-	 * @param thread Optional thread name filter.  Only show log entries with the specified thread name.  Example: "&amp;thread=pool-33-thread-1".
-	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&amp;loggers=(LinkIndexService,LinkIndexRestService)".
-	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&amp;severity=(ERROR,WARN)".
-	 * @return The parsed contents of the log file.
-	 * @throws NotFound File not found.
-	 * @throws MethodNotAllowed View not available on directories.
-	 * @throws IOException Could not read file.
-	 */
 	@RestMethod(
 		name="PARSE",
 		path="/*",
 		converters=Queryable.class,
-		swagger= {
-			"responses:{",
-				"200: {description:'OK'},",
-				"404: {description:'Not Found'}",
-			"}"
+		summary="View parsed contents of file",
+		description="View the parsed contents of a file.",
+		htmldoc=@HtmlDoc(
+			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
+		),
+		swagger={
+			"parameters:[",
+				 Queryable.SWAGGER_PARAMS,
+			"]"
 		}
 	)
 	public LogParser viewParsedEntries(
-			RestRequest req, 
+			RestRequest req,
 			@PathRemainder String path, 
-			@Query("start") String start,
-			@Query("end") String end, 
-			@Query("thread") String thread, 
-			@Query("loggers") String[] loggers, 
-			@Query("severity") String[] severity
-		) throws NotFound, MethodNotAllowed, IOException {
+			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start, 
+			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end, 
+			@Query(name="thread", description="Thread name filter.\nOnly show log entries with the specified thread name.", example="thread-pool-33-thread-1") String thread, 
+			@Query(name="loggers", description="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", example="['LinkIndexService','LinkIndexRestService']") String[] loggers, 
+			@Query(name="severity", description="Severity filter.\nOnly show log entries with the specified severity.", example="['ERROR','WARN']") String[] severity
+		) throws NotFound, IOException {
 
 		File f = getFile(path);
-		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
+		req.setAttribute("fullPath", f.getAbsolutePath());
 
-		if (f.isDirectory())
-			throw new MethodNotAllowed("View not available on directories");
+		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
 
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}
 
-	/**
-	 * [DOWNLOAD /*] - Download file.
-	 * 
-	 * @param res The HTTP response.
-	 * @param path The log file path.
-	 * @return The contents of the log file.
-	 * @throws NotFound File not found.
-	 * @throws MethodNotAllowed Download not available on directories.
-	 */
 	@RestMethod(
-		name="DOWNLOAD",
+		name="DOWNLOAD", 
 		path="/*",
-		swagger= {
-			"responses:{",
-				"200: {description:'OK'},",
-				"404: {description:'Not Found'}",
-			"}"
-		}
+		summary="Download file",
+		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
 	)
-	public Object downloadFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
-
-		File f = getFile(path);
-
-		if (f.isDirectory())
-			throw new MethodNotAllowed("Download not available on directories");
-
+	public FileContents downloadFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
 		res.setContentType("application/octet-stream");
-		res.setContentLength((int)f.length());
-		
 		try {
-			return new FileInputStream(f);
+			return new FileContents(getFile(path));
 		} catch (FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
 
-	/**
-	 * [DELETE /*] - Delete a file.
-	 * 
-	 * @param path The log file path.
-	 * @return A redirect object to the root.
-	 * @throws NotFound File not found.
-	 * @throws BadRequest Delete not available on directories.
-	 * @throws Forbidden Could not delete file.
-	 */
 	@RestMethod(
-		name=DELETE,
+		name=DELETE, 
 		path="/*",
-		swagger= {
-			"responses:{",
-				"200: {description:'OK'},",
-				"404: {description:'Not Found'}",
-			"}"
-		}
+		summary="Delete log file",
+		description="Delete a log file on the file system."
 	)
-	public Object deleteFile(@PathRemainder String path) throws NotFound, BadRequest, Forbidden {
+	public RedirectToRoot deleteFile(@PathRemainder String path) throws MethodNotAllowed {
+		deleteFile(getFile(path));
+		return new RedirectToRoot();
+	}
 
-		File f = getFile(path);
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper beans
+	//-----------------------------------------------------------------------------------------------------------------
 
-		if (f.isDirectory())
-			throw new BadRequest("Delete not available on directories.");
+	@ResponseInfo(schema="{schema:{type:'string',format:'binary'}}", description="Contents of file")
+	static class FileContents extends FileInputStream {
+		public FileContents(File file) throws FileNotFoundException {
+			super(file);
+		}
+	}
+	
+	@ResponseInfo(description="Redirect to root page on success")
+	static class RedirectToRoot extends RedirectToServletRoot {}
 
-		if (f.canWrite())
-			if (! f.delete())
-				throw new Forbidden("Could not delete file.");
+	@ResponseInfo(description="File action")
+	public static class Action extends LinkString {
+		public Action(String name, String uri, Object...uriArgs) {
+			super(name, uri, uriArgs);
+		}
+	}
 
-		return new Redirect(path + "/..");
+	@ResponseInfo(description="File or directory details")
+	@Bean(properties="type,name,size,lastModified,actions,files")
+	public static class FileResource {
+		private final File f;
+		private final String path;
+		private final String uri;
+		private final boolean includeChildren, allowDeletes;
+
+		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
+			this.f = f;
+			this.path = path;
+			this.uri = "servlet:/"+(path == null ? "" : path);
+			this.includeChildren = includeChildren;
+			this.allowDeletes = allowDeletes;
+		}
+
+		public String getType() {
+			return (f.isDirectory() ? "dir" : "file");
+		}
+
+		public LinkString getName() {
+			return new LinkString(f.getName(), uri);
+		}
+
+		public long getSize() {
+			return f.isDirectory() ? f.listFiles().length : f.length();
+		}
+
+		@Swap(DateSwap.ISO8601DTP.class)
+		public Date getLastModified() {
+			return new Date(f.lastModified());
+		}
+
+		@Html(format=HtmlFormat.HTML_CDC)
+		public List<Action> getActions() throws Exception {
+			List<Action> l = new ArrayList<>();
+			if (f.canRead() && ! f.isDirectory()) {
+				l.add(new Action("view", uri + "?method=VIEW"));
+				l.add(new Action("highlighted", uri + "?method=VIEW&highlight=true"));
+				l.add(new Action("parsed", uri + "?method=PARSE"));
+				l.add(new Action("download", uri + "?method=DOWNLOAD"));
+				if (allowDeletes)
+					l.add(new Action("delete", uri + "?method=DELETE"));
+			}
+			return l;
+		}
+		
+		public Set<FileResource> getFiles() {
+			if (f.isFile() || ! includeChildren)
+				return null;
+			Set<FileResource> s = new TreeSet<>(FILE_COMPARATOR);
+			for (File fc : f.listFiles(FILE_FILTER)) 
+				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
+			return s;
+		}
+
+		static final FileFilter FILE_FILTER = new FileFilter() {
+			@Override /* FileFilter */
+			public boolean accept(File f) {
+				return f.isDirectory() || f.getName().endsWith(".log");
+			}
+		};
+
+		static final Comparator<FileResource> FILE_COMPARATOR = new Comparator<FileResource>() {
+			@Override /* Comparator */
+			public int compare(FileResource o1, FileResource o2) {
+				int c = o1.getType().compareTo(o2.getType());
+				return c != 0 ? c : o1.getName().compareTo(o2.getName());
+			}
+		};
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private File getFile(String path) throws NotFound {
+		if (path == null)
+			return logDir;
+		File f = new File(logDir.getAbsolutePath() + '/' + path);
+		if (f.exists())
+			return f;
+		throw new NotFound("File not found.");
+	}
+	
+	private void deleteFile(File f) {
+		if (! allowDeletes)
+			throw new MethodNotAllowed("DELETE not enabled");
+		if (f.isDirectory()) {
+			File[] files = f.listFiles();
+			if (files != null) {
+				for (File fc : files)
+					deleteFile(fc);
+			}
+		}
+		if (! f.delete())
+			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath()) ;
 	}
 
 	private static BufferedReader getReader(File f) throws IOException {
 		return new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
-	}
-
-	private File getFile(String path) throws NotFound {
-		if (path != null && path.indexOf("..") != -1)
-			throw new NotFound("File not found.");
-		File f = (path == null ? logDir : new File(logDir.getAbsolutePath() + '/' + path));
-		if (filter.accept(f))
-			return f;
-		throw new NotFound("File not found.");
-	}
-
-	/**
-	 * File bean.
-	 */
-	@SuppressWarnings("javadoc")
-	public static class FileResource {
-		final File f;
-		public final String type;
-		public final Object name;
-		public final Long size;
-		@Swap(DateSwap.DateTimeMedium.class) public Date lastModified;
-		public URI view, highlighted, parsed, download, delete;
-
-		public FileResource(File f, URI uri) throws Exception {
-			this.f = f;
-			this.type = (f.isDirectory() ? "dir" : "file");
-			this.name = f.isDirectory() ? new LinkString(f.getName(), uri.toString()) : f.getName();
-			this.size = f.isDirectory() ? null : f.length();
-			this.lastModified = new Date(f.lastModified());
-			if (f.canRead() && ! f.isDirectory()) {
-				this.view = new URI(uri + "?method=VIEW");
-				this.highlighted = new URI(uri + "?method=VIEW&highlight=true");
-				this.parsed = new URI(uri + "?method=PARSE");
-				this.download = new URI(uri + "?method=DOWNLOAD");
-				this.delete = new URI(uri + "?method=DELETE");
-			}
-		}
-	}
-
-	static final class FileResourceComparator implements Comparator<FileResource>, Serializable {
-		private static final long serialVersionUID = 1L;
-		@Override /* Comparator */
-		public int compare(FileResource o1, FileResource o2) {
-			int c = o1.type.compareTo(o2.type);
-			return c != 0 ? c : o1.f.getName().compareTo(o2.f.getName());
-		}
 	}
 
 	private Object getReader(File f, final Date start, final Date end, final String thread, final String[] loggers, final String[] severity) throws IOException {

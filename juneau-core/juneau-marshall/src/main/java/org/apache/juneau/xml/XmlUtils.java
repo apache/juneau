@@ -473,7 +473,7 @@ public final class XmlUtils {
 	// Converts an integer to a hexadecimal string padded to 4 places.
 	private static final Writer appendPaddedHexChar(Writer out, int num) throws IOException {
 		out.append("_x");
-		for (char c : toHex(num))
+		for (char c : toHex4(num))
 			out.append(c);
 		return out.append('_');
 	}

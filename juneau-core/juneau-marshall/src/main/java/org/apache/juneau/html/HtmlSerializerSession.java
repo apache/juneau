@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 
 import java.io.*;
@@ -240,8 +241,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				type = getClassMetaForObject(o);
 		}
 
-		HtmlClassMeta html = type.getExtendedMeta(HtmlClassMeta.class);
-		if (type.isMapOrBean() && ! html.isXml()) 
+		HtmlClassMeta cHtml = cHtml(type);
+		
+		if (type.isMapOrBean() && ! cHtml.isXml()) 
 			return serializeAnything(out, o, eType, elementName, pMeta, 0, false);
 		
 		return super.serializeAnything(out, o, eType, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
@@ -322,10 +324,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				return ContentResult.CR_MIXED;
 			}
 
-			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
-			HtmlRender render = (pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getRender());
-			if (render == null)
-				render = html.getRender();
+			HtmlClassMeta cHtml = cHtml(sType);
+			HtmlBeanPropertyMeta bpHtml = bpHtml(pMeta);
+			
+			HtmlRender render = firstNonNull(bpHtml.getRender(), cHtml.getRender());
 
 			if (render != null) {
 				Object o2 = render.getContent(this, o);
@@ -337,14 +339,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				}
 			}
 
-			if (html.isXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isXml())) {
+			if (cHtml.isXml() || bpHtml.isXml()) {
 				pop();
 				indent++;
 				super.serializeAnything(out, o, null, null, null, false, XmlFormat.MIXED, false, false, null);
 				indent -= xIndent+1;
 				return cr;
 
-			} else if (html.isPlainText() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isPlainText())) {
+			} else if (cHtml.isPlainText() || bpHtml.isPlainText()) {
 				out.write(o == null ? "null" : o.toString());
 				cr = CR_MIXED;
 
@@ -418,6 +420,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		ClassMeta<?> keyType = eKeyType == null ? string() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? object() : eValueType;
 		ClassMeta<?> aType = getClassMetaForObject(m);       // The actual type
+		HtmlClassMeta cHtml = cHtml(aType);
+		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
 
 		int i = indent;
 
@@ -427,8 +431,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.attr(getBeanTypePropertyName(sType), typeName);
 
 		out.append(">").nl(i+1);
-		if (isAddKeyValueTableHeaders() && ! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders()
-				|| (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
+		if (isAddKeyValueTableHeaders() && ! (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())) {
 			out.sTag(i+1, "tr").nl(i+2);
 			out.sTag(i+2, "th").append("key").eTag("th").nl(i+3);
 			out.sTag(i+2, "th").append("value").eTag("th").nl(i+3);
@@ -472,8 +475,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType,
-			BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws Exception {
+
+		HtmlClassMeta cHtml = cHtml(m.getClassMeta());
+		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
+
 		int i = indent;
 
 		out.oTag(i, "table");
@@ -483,8 +489,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.attr(getBeanTypePropertyName(m.getClassMeta()), typeName);
 
 		out.append('>').nl(i);
-		if (isAddKeyValueTableHeaders() && ! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders()
-				|| (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
+		if (isAddKeyValueTableHeaders() && ! (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())) {
 			out.sTag(i+1, "tr").nl(i+1);
 			out.sTag(i+2, "th").append("key").eTag("th").nl(i+2);
 			out.sTag(i+2, "th").append("value").eTag("th").nl(i+2);
@@ -544,15 +549,17 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,
-			ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
 
-		ClassMeta<?> seType = sType.getElementType();
-		if (seType == null)
-			seType = object();
+		HtmlClassMeta cHtml = cHtml(sType);
+		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
 
 		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
 
+		boolean isCdc = cHtml.isHtmlCdc() || bpHtml.isHtmlCdc();
+		boolean isSdc = cHtml.isHtmlSdc() || bpHtml.isHtmlSdc();
+		boolean isDc = isCdc || isSdc;
+		
 		int i = indent;
 		if (c.isEmpty()) {
 			out.appendln(i, "<ul></ul>");
@@ -567,14 +574,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		c = sort(c);
 
-		HtmlBeanPropertyMeta hbpMeta = (ppMeta == null ? null : ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class));
 		String btpn = getBeanTypePropertyName(eType);
 
 		// Look at the objects to see how we're going to handle them.  Check the first object to see how we're going to
 		// handle this.
 		// If it's a map or bean, then we'll create a table.
 		// Otherwise, we'll create a list.
-		Object[] th = getTableHeaders(c, hbpMeta);
+		Object[] th = getTableHeaders(c, bpHtml);
 
 		if (th != null) {
 
@@ -662,17 +668,22 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.ie(i).eTag("table").nl(i);
 
 		} else {
-			out.oTag(i, "ul");
+			out.oTag(i, isDc ? "p" : "ul");
 			if (! type2.equals("array"))
 				out.attr(btpn, type2);
 			out.append('>').nl(i+1);
+			boolean isFirst = true;
 			for (Object o : c) {
-				out.oTag(i+1, "li");
+				if (isDc && ! isFirst)
+					out.append(isCdc ? ", " : " ");
+				if (! isDc)
+					out.oTag(i+1, "li");
 				String style = getStyle(this, ppMeta, o);
 				String link = getLink(ppMeta);
-				if (style != null)
+				if (style != null && ! isDc)
 					out.attr("style", style);
-				out.cTag();
+				if (! isDc)
+					out.cTag();
 				if (link != null)
 					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", asString(o))).cTag();
 				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false);
@@ -680,21 +691,22 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.eTag("a");
 				if (cr == CR_ELEMENTS)
 					out.ie(i+1);
-				out.eTag("li").nl(i+1);
+				if (! isDc)
+					out.eTag("li").nl(i+1);
+				isFirst = false;
 			}
-			out.ie(i).eTag("ul").nl(i);
+			out.ie(i).eTag(isDc ? "p" : "ul").nl(i);
 		}
 	}
 
 	private static HtmlRender<?> getRender(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
 		if (pMeta == null)
 			return null;
-		HtmlBeanPropertyMeta hpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
-		HtmlRender<?> render = hpMeta.getRender();
+		HtmlRender<?> render = bpHtml(pMeta).getRender();
 		if (render != null)
 			return render;
 		ClassMeta<?> cMeta = session.getClassMetaForObject(value);
-		render = cMeta == null ? null : cMeta.getExtendedMeta(HtmlClassMeta.class).getRender();
+		render = cMeta == null ? null : cHtml(cMeta).getRender();
 		return render;
 	}
 
@@ -711,6 +723,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	private static String getAnchorText(BeanPropertyMeta pMeta) {
 		return pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getAnchorText();
 	}
+	
+	private static HtmlClassMeta cHtml(ClassMeta<?> cm) {
+		return cm.getExtendedMeta(HtmlClassMeta.class);
+	}
+
+	private static HtmlBeanPropertyMeta bpHtml(BeanPropertyMeta pMeta) {
+		return pMeta == null ? HtmlBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
+	}
 
 	/*
 	 * Returns the table column headers for the specified collection of objects.
@@ -718,7 +738,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta hbpMeta) throws Exception {
+	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws Exception {
 		if (c.size() == 0)
 			return null;
 		c = sort(c);
@@ -744,10 +764,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return null;
 		if (cm.getInnerClass().isAnnotationPresent(HtmlLink.class))
 			return null;
-		HtmlClassMeta h = cm.getExtendedMeta(HtmlClassMeta.class);
-		if (h.isNoTables() || (hbpMeta != null && hbpMeta.isNoTables()))
+		
+		HtmlClassMeta cHtml = cHtml(cm);
+		
+		if (cHtml.isNoTables() || bpHtml.isNoTables())
 			return null;
-		if (h.isNoTableHeaders() || (hbpMeta != null && hbpMeta.isNoTableHeaders()))
+		if (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())
 			return new Object[0];
 		if (canIgnoreValue(cm, null, o1))
 			return null;

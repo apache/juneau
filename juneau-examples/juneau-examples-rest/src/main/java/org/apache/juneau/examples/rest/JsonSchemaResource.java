@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.dto.jsonschema.*;
@@ -27,6 +28,9 @@ import org.apache.juneau.rest.widget.*;
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
+	properties={
+		@Property(name=BEAN_examples, value="{'org.apache.juneau.dto.jsonschema.Schema': $F{JsonSchemaResource_example.json}}")
+	},
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
@@ -82,17 +86,21 @@ public class JsonSchemaResource extends BasicRestServletJena {
 		}
 	}
 
-	/** GET request handler */
-	@RestMethod(name=GET, path="/", summary="Get the JSON-Schema document")
+	@RestMethod(
+		name=GET, 
+		path="/", 
+		summary="Get the JSON-Schema document"
+	)
 	public Schema getSchema() throws Exception {
 		return schema;
 	}
 
-	/**
-	 * PUT request handler.
-	 * Replaces the schema document with the specified content, and then mirrors it as the response.
-	 */
-	@RestMethod(name=PUT, path="/", summary="Overwrite the JSON-Schema document")
+	@RestMethod(
+		name=PUT, 
+		path="/", 
+		summary="Overwrite the JSON-Schema document",
+		description="Replaces the schema document with the specified content, and then mirrors it as the response."
+	)
 	public Schema setSchema(@Body Schema schema) throws Exception {
 		this.schema = schema;
 		return schema;

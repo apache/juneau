@@ -221,8 +221,11 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	private boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
-		if (pMeta != null && pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() != RdfCollectionFormat.DEFAULT)
-			return pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
+		RdfBeanPropertyMeta bpRdf = (pMeta == null ? RdfBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(RdfBeanPropertyMeta.class));
+		
+		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
+			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
+		
 		return collectionFormat == RdfCollectionFormat.MULTI_VALUED;
 	}
 

@@ -94,6 +94,24 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
+	 */
+	protected boolean isHtmlCdc() {
+		return format == HtmlFormat.HTML_CDC;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
+	 * 
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
+	 */
+	protected boolean isHtmlSdc() {
+		return format == HtmlFormat.HTML_SDC;
+	}
+
+	/**
 	 * Returns the {@link Html#noTables() @Html.noTables()} annotation defined on the class.
 	 * 
 	 * @return The value of the annotation.

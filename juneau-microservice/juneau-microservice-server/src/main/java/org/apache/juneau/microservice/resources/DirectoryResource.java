@@ -12,22 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static java.util.logging.Level.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
-import java.net.URI;
 import java.util.*;
-import java.util.logging.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.transforms.*;
@@ -51,7 +48,7 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		<l>DirectoryResource.allowViews</l> - If <jk>true</jk>, allows view and download access to files.
  * 	<li>
- * 		<l>DirectoryResource.allowPuts</l> - If <jk>true</jk>, allows files to be created or overwritten.
+ * 		<l>DirectoryResource.allowUploads</l> - If <jk>true</jk>, allows files to be created or overwritten.
  * 	<li>
  * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
@@ -67,131 +64,83 @@ import org.apache.juneau.utils.*;
 	),
 	allowedMethodParams="*",
 	properties={
-		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
-		@Property(name="DirectoryResource.rootDir", value="")
+		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME")
 	}
 )
 @SuppressWarnings("javadoc")
 public class DirectoryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "DirectoryResource.";
+	
+	/**
+	 * Configuration property:  Root directory.
+	 */
+	public static final String DIRECTORY_RESOURCE_rootDir = PREFIX + "rootDir.s";
+	
+	/**
+	 * Configuration property:  Allow view and downloads on files.
+	 */
+	public static final String DIRECTORY_RESOURCE_allowViews = PREFIX + "allowViews.b";
+	
+	/**
+	 * Configuration property:  Allow deletes on files.
+	 */
+	public static final String DIRECTORY_RESOURCE_allowDeletes = PREFIX + "allowDeletes.b";
+	
+	/**
+	 * Configuration property:  Allow uploads on files.
+	 */
+	public static final String DIRECTORY_RESOURCE_allowUploads = PREFIX + "allowUploads.b";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+	
 	private File rootDir;     // The root directory
 
 	// Settings enabled through servlet init parameters
-	boolean allowDeletes, allowPuts, allowViews;
-
-	private static Logger logger = Logger.getLogger(DirectoryResource.class.getName());
+	boolean allowDeletes, allowUploads, allowViews;
 
 	@RestHook(INIT)
 	public void init(RestContextBuilder b) throws Exception { 
 		RestContextProperties p = b.getProperties();
-		rootDir = new File(p.getString("DirectoryResource.rootDir"));
-		allowViews = p.getBoolean("DirectoryResource.allowViews", false);
-		allowDeletes = p.getBoolean("DirectoryResource.allowDeletes", false);
-		allowPuts = p.getBoolean("DirectoryResource.allowPuts", false);
-	}
-
-	/**
-	 * Returns the root directory defined by the 'rootDir' init parameter.
-	 * 
-	 * <p>
-	 * Subclasses can override this method to provide their own root directory.
-	 * 
-	 * @return The root directory.
-	 */
-	protected File getRootDir() {
-		if (rootDir == null) {
-			rootDir = new File(getProperties().getString("rootDir"));
-			if (! rootDir.exists())
-				if (! rootDir.mkdirs())
-					throw new RuntimeException("Could not create root dir");
-		}
-		return rootDir;
+		rootDir = new File(p.getString(DIRECTORY_RESOURCE_rootDir));
+		allowViews = p.getBoolean(DIRECTORY_RESOURCE_allowViews, false);
+		allowDeletes = p.getBoolean(DIRECTORY_RESOURCE_allowDeletes, false);
+		allowUploads = p.getBoolean(DIRECTORY_RESOURCE_allowUploads, false);
 	}
 
 	@RestMethod(
 		name=GET, 
 		path="/*",
-		summary="View files on directory",
-		description="Returns a listing of all files in the specified directory.",
-		converters={Queryable.class},
+		summary="View information on file or directory",
+		description="Returns information about the specified file or directory.",
 		htmldoc=@HtmlDoc(
-			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
+			nav={"<h5>Folder:  $RA{fullPath}</h5>"},
+			nowrap=true
 		)
 	)
-	public FileListing listFiles(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
+	public FileResource getFile(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
 
-		File dir = getDir(path);
+		File dir = getFile(path);
 		req.setAttribute("fullPath", dir.getAbsolutePath());
-		
-		FileListing l = new FileListing();
-		for (File fc : dir.listFiles()) 
-			l.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName())));
-		return l;
+
+		return new FileResource(dir, path, true);
 	}
 	
 	@RestMethod(
-		name=GET, 
-		path="/file/*",
-		summary="View information about file",
-		description="Returns detailed information about the specified file.",
-		htmldoc=@HtmlDoc(
-			nav={"<h5>File:  $RA{fullPath}</h5>"}
-		)
-	)
-	public FileResource getFileInfo(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
-		
-		File f = getFile(path);
-		req.setAttribute("fullPath", f.getAbsolutePath());
-		
-		return new FileResource(f, path);
-	}
-
-	@RestMethod(
-		name=DELETE, 
-		path="/file/*",
-		summary="Delete file",
-		description="Delete a file on the file system."
-	)
-	public RedirectToRoot deleteFile(@PathRemainder String path) throws MethodNotAllowed {
-		if (! allowDeletes)
-			throw new MethodNotAllowed("DELETE not enabled");
-		deleteFile(getFile(path));
-		return new RedirectToRoot();
-	}
-
-	@RestMethod(
-		name=PUT, 
-		path="/file/*",
-		summary="Add or replace file",
-		description="Add or overwrite a file on the file system."
-	)
-	public RedirectToRoot updateFile(
-		@Body(schema="{type:'string',format:'binary'}") InputStream is, 
-		@PathRemainder String path
-	) throws InternalServerError {
-		
-		if (! allowPuts)
-			throw new MethodNotAllowed("PUT not enabled");
-
-		File f = getFile(path);
-		
-		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
-			IOPipe.create(is, os).run();
-		} catch (IOException e) {
-			throw new InternalServerError(e);
-		}
-		
-		return new RedirectToRoot();
-	}
-
-	@RestMethod(
 		name="VIEW", 
-		path="/file/*",
+		path="/*",
 		summary="View contents of file",
-		description="View the contents of a file."
+		description="View the contents of a file.\nContent-Type is set to 'text/plain'."
 	)
-	public FileContents doView(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
+	public FileContents viewFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
 		if (! allowViews)
 			throw new MethodNotAllowed("VIEW not enabled");
 
@@ -205,11 +154,11 @@ public class DirectoryResource extends BasicRestServlet {
 	
 	@RestMethod(
 		name="DOWNLOAD", 
-		path="/file/*",
+		path="/*",
 		summary="Download file",
-		description="Download the contents of a file"
+		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
 	)
-	public FileContents doDownload(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
+	public FileContents downloadFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
 		if (! allowViews)
 			throw new MethodNotAllowed("DOWNLOAD not enabled");
 
@@ -221,32 +170,48 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
-	private File getFile(String path) throws NotFound {
-		File f = new File(rootDir.getAbsolutePath() + '/' + path);
-		if (f.exists() && f.isFile())
-			return f;
-		throw new NotFound("File not found.");
+	@RestMethod(
+		name=DELETE, 
+		path="/*",
+		summary="Delete file",
+		description="Delete a file on the file system."
+	)
+	public RedirectToRoot deleteFile(@PathRemainder String path) throws MethodNotAllowed {
+		deleteFile(getFile(path));
+		return new RedirectToRoot();
 	}
-	
-	private File getDir(String path) throws NotFound {
-		if (path == null)
-			return rootDir;
-		File f = new File(rootDir.getAbsolutePath() + '/' + path);
-		if (f.exists() && f.isDirectory())
-			return f;
-		throw new NotFound("Directory not found.");
+
+	@RestMethod(
+		name=PUT, 
+		path="/*",
+		summary="Add or replace file",
+		description="Add or overwrite a file on the file system."
+	)
+	public RedirectToRoot updateFile(
+		@Body(schema="{type:'string',format:'binary'}") InputStream is, 
+		@PathRemainder String path
+	) throws InternalServerError {
+		
+		if (! allowUploads)
+			throw new MethodNotAllowed("PUT not enabled");
+
+		File f = getFile(path);
+		
+		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
+			IOPipe.create(is, os).run();
+		} catch (IOException e) {
+			throw new InternalServerError(e);
+		}
+		
+		return new RedirectToRoot();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("serial")
-	@ResponseInfo(description="Directory listing")
-	static class FileListing extends ArrayList<FileResource> {}
-	
 	@ResponseInfo(schema="{schema:{type:'string',format:'binary'}}", description="Contents of file")
-	static class FileContents extends FileReader {
+	static class FileContents extends FileInputStream {
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);
 		}
@@ -263,31 +228,28 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@ResponseInfo(description="File or directory details")
+	@Bean(properties="type,name,size,lastModified,actions,files")
 	public class FileResource {
-		private File f;
-		private String path;
+		private final File f;
+		private final String path;
+		private final String uri;
+		private final boolean includeChildren;
 
-		public FileResource(File f, String path) {
+		public FileResource(File f, String path, boolean includeChildren) {
 			this.f = f;
 			this.path = path;
-		}
-
-		// Bean property getters
-
-		public URI getUri() {
-			if (f.isDirectory())
-				return URI.create("servlet:/"+path);
-			return URI.create("servlet:/file/"+path);
+			this.uri = "servlet:/"+(path == null ? "" : path);
+			this.includeChildren = includeChildren;
 		}
 
 		public String getType() {
 			return (f.isDirectory() ? "dir" : "file");
 		}
 
-		public String getName() {
-			return f.getName();
+		public LinkString getName() {
+			return new LinkString(f.getName(), uri);
 		}
-
+		
 		public long getSize() {
 			return f.isDirectory() ? f.listFiles().length : f.length();
 		}
@@ -297,31 +259,70 @@ public class DirectoryResource extends BasicRestServlet {
 			return new Date(f.lastModified());
 		}
 
+		@Html(format=HtmlFormat.HTML_CDC)
 		public List<Action> getActions() throws Exception {
 			List<Action> l = new ArrayList<>();
 			if (allowViews && f.canRead() && ! f.isDirectory()) {
-				l.add(new Action("view", getUri().toString() + "?method=VIEW"));
-				l.add(new Action("download", getUri().toString() + "?method=DOWNLOAD"));
+				l.add(new Action("view", uri + "?method=VIEW"));
+				l.add(new Action("download", uri + "?method=DOWNLOAD"));
 			}
 			if (allowDeletes && f.canWrite() && ! f.isDirectory())
-				l.add(new Action("delete", getUri().toString() + "?method=DELETE"));
+				l.add(new Action("delete", uri + "?method=DELETE"));
 			return l;
+		}
+		
+		public Set<FileResource> getFiles() {
+			if (f.isFile() || ! includeChildren)
+				return null;
+			Set<FileResource> s = new TreeSet<>(new FileResourceComparator());
+			for (File fc : f.listFiles()) 
+				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), false));
+			return s;
+		}
+	}
+	
+	static final class FileResourceComparator implements Comparator<FileResource>, Serializable {
+		private static final long serialVersionUID = 1L;
+		@Override /* Comparator */
+		public int compare(FileResource o1, FileResource o2) {
+			int c = o1.getType().compareTo(o2.getType());
+			return c != 0 ? c : o1.getName().compareTo(o2.getName());
 		}
 	}
 
-	/** Utility method */
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the root directory.
+	 * 
+	 * @return The root directory.
+	 */
+	protected File getRootDir() {
+		return rootDir;
+	}
+
+	private File getFile(String path) throws NotFound {
+		if (path == null)
+			return rootDir;
+		File f = new File(rootDir.getAbsolutePath() + '/' + path);
+		if (f.exists())
+			return f;
+		throw new NotFound("File not found.");
+	}
+
 	private void deleteFile(File f) {
-		try {
-			if (f.isDirectory()) {
-				File[] files = f.listFiles();
-				if (files != null) {
-					for (File fc : files)
-						deleteFile(fc);
-				}
+		if (! allowDeletes)
+			throw new MethodNotAllowed("DELETE not enabled");
+		if (f.isDirectory()) {
+			File[] files = f.listFiles();
+			if (files != null) {
+				for (File fc : files)
+					deleteFile(fc);
 			}
-			f.delete();
-		} catch (Exception e) {
-			logger.log(WARNING, "Cannot delete file '" + f.getAbsolutePath() + "'", e);
 		}
+		if (! f.delete())
+			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath()) ;
 	}
 }

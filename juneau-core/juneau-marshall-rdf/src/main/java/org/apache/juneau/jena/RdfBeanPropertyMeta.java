@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.RdfCollectionFormat.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -26,7 +24,13 @@ import org.apache.juneau.xml.*;
  */
 public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
-	private RdfCollectionFormat collectionFormat = DEFAULT;
+	/**
+	 * Default instance.
+	 */
+	public static final RdfBeanPropertyMeta DEFAULT = new RdfBeanPropertyMeta();
+
+	
+	private RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
 	private Namespace namespace = null;
 	private boolean isBeanUri;
 
@@ -42,13 +46,17 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 		List<RdfSchema> schemas = bpm.findAnnotations(RdfSchema.class);
 
 		for (Rdf rdf : rdfs) {
-			if (collectionFormat == DEFAULT)
+			if (collectionFormat == RdfCollectionFormat.DEFAULT)
 				collectionFormat = rdf.collectionFormat();
 			if (rdf.beanUri())
 				isBeanUri = true;
 		}
 
 		namespace = RdfUtils.findNamespace(rdfs, schemas);
+	}
+	
+	private RdfBeanPropertyMeta() {
+		super(null);
 	}
 
 	/**
