@@ -400,7 +400,6 @@
 		<li><p><a class='doclink' href='#juneau-examples-rest.TempDirResource'>TempDirResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.AtomFeedResource'>AtomFeedResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.DockerRegistryResource'>DockerRegistryResource</a></p>
-		<li><p><a class='doclink' href='#juneau-examples-rest.TumblrParserResource'>TumblrParserResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.PhotosResource'>PhotosResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.JsonSchemaResource'>JsonSchemaResource</a></p>
 		<li><p><a class='doclink' href='#juneau-examples-rest.SqlQueryResource'>SqlQueryResource</a></p>
@@ -11097,7 +11096,6 @@
 			AtomFeedResource.<jk>class</jk>,
 			JsonSchemaResource.<jk>class</jk>,
 			SqlQueryResource.<jk>class</jk>,
-			TumblrParserResource.<jk>class</jk>,
 			CodeFormatterResource.<jk>class</jk>,
 			UrlEncodedFormResource.<jk>class</jk>,
 			SourceResource.<jk>class</jk>,
@@ -17476,7 +17474,6 @@
 			AtomFeedResource.<jk>class</jk>,
 			JsonSchemaResource.<jk>class</jk>,
 			SqlQueryResource.<jk>class</jk>,
-			TumblrParserResource.<jk>class</jk>,
 			CodeFormatterResource.<jk>class</jk>,
 			UrlEncodedFormResource.<jk>class</jk>,
 			ConfigResource.<jk>class</jk>,
@@ -20019,106 +20016,8 @@
 	</div>	
 
 	<!-- ======================================================================================================= -->
-	<a id='juneau-examples-rest.TumblrParserResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.12 - TumblrParserResource</h4>
-	<div class='topic'>
-		<p>
-			<b>Note:</b>  As of March 2018, this resource is known to not work against the Tumblr API.
-		</p>
-		<p>	
-			The <l>TumblrParserResource</l> class shows examples of the following:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				Using {@link org.apache.juneau.rest.client.RestClient} to retrieve information from other REST resources.
-			<li>
-				Using {@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} to produce
-				generalized POJO models.
-		</ul>
-		<p>
-			Pointing a browser at a Tumblr blog name, such as <l>ibmblr</l> causes a REST call to be make to the Tumblr
-			blog and the results to be parsed:
-		</p>
-		<p class='bcode w800'>
-	http://localhost:10000/tumblrParser/ibmblr
-		</p>			
-		<img class='bordered w800' src='doc-files/juneau-examples-rest.TumblrParserResource.1.png'>
-		
-		<h5 class='figure'>TumblrParserResource.java</h5>
-		<p class='bcode w800'>
-	<ja>@RestResource</ja>( 
-		path=<js>"/tumblrParser"</js>,
-		messages=<js>"nls/TumblrParserResource"</js>,
-		title=<js>"Tumblr parser service"</js>,
-		description=<js>"Specify a URL to a Tumblr blog and parse the results."</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-			},
-			aside={
-				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;An example of a REST interface that retrieves data from another REST interface.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;&lt;a class='link' href='$U{servlet:/ibmblr}'&gt;try me&lt;/a&gt;&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			}
-		)
-	) 
-	<jk>public class</jk> TumblrParserResource <jk>extends</jk> BasicRestServlet { 
-		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
-	
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> String getInstructions() <jk>throws</jk> Exception { 
-			<jk>return</jk> <js>"Append the Tumblr blog name to the URL above (e.g. /tumblrParser/mytumblrblog)"</js>; 
-		} 
-		
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{blogName}"</js>) 
-		<jk>public</jk> ObjectList parseBlog(<ja>@Path</ja> String blogName) <jk>throws</jk> Exception { 
-			ObjectList l = <jk>new</jk> ObjectList(); 
-			RestClient rc = RestClient.<jsm>create</jsm>().build(); 
-			String site = <js>"http:<jc>//"</js> + blogName + <js>".tumblr.com/api/read/json"</js>;</jc> 
-			ObjectMap m = rc.doGet(site).getResponse(ObjectMap.<jk>class</jk>); 
-			<jk>int</jk> postsTotal = m.getInt(<js>"posts-total"</js>); 
-			<jk>for</jk> (<jk>int</jk> i = 0; i &lt; postsTotal; i += 20) { 
-				m = rc.doGet(site + <js>"?start="</js> + i + <js>"&amp;num=20&amp;transform=text"</js>).getResponse(ObjectMap.<jk>class</jk>); 
-				ObjectList ol = m.getObjectList(<js>"posts"</js>); 
-				<jk>for</jk> (<jk>int</jk> j = 0; j &lt; ol.size(); j++) { 
-					ObjectMap om = ol.getObjectMap(j); 
-					String type = om.getString(<js>"type"</js>); 
-					Entry e = <jk>new</jk> Entry(); 
-					e.date = om.getString(<js>"date"</js>); 
-					<jk>if</jk> (type.equals(<js>"link"</js>)) 
-						e.entry = <jk>new</jk> Link(om.getString(<js>"link-text"</js>), om.getString(<js>"link-url"</js>)); 
-					<jk>else if</jk> (type.equals(<js>"audio"</js>)) 
-						e.entry = <jk>new</jk> ObjectMap().append(<js>"type"</js>,<js>"audio"</js>).append(<js>"audio-caption"</js>, om.getString(<js>"audio-caption"</js>)); 
-					<jk>else if</jk> (type.equals(<js>"video"</js>)) 
-						e.entry = <jk>new</jk> ObjectMap().append(<js>"type"</js>,<js>"video"</js>).append(<js>"video-caption"</js>, om.getString(<js>"video-caption"</js>)); 
-					<jk>else if</jk> (type.equals(<js>"quote"</js>)) 
-						e.entry = <jk>new</jk> ObjectMap().append(<js>"type"</js>,<js>"quote"</js>).append(<js>"quote-source"</js>, om.getString(<js>"quote-source"</js>)).append(<js>"quote-text"</js>, om.getString(<js>"quote-text"</js>)); 
-					<jk>else if</jk> (type.equals(<js>"regular"</js>)) 
-						e.entry = om.getString(<js>"regular-body"</js>); 
-					<jk>else if</jk> (type.equals(<js>"photo"</js>)) 
-						e.entry = <jk>new</jk> Img(om.getString(<js>"photo-url-250"</js>)); 
-					<jk>else</jk> 
-						e.entry = <jk>new</jk> ObjectMap().append(<js>"type"</js>, type); 
-					l.add(e); 
-				} 
-			} 
-			<jk>return</jk> l; 
-		} 
-		
-		<jk>public static class</jk> Entry { 
-			<jk>public</jk> String <jf>date</jf>; 
-			<jk>public</jk> Object <jf>entry</jf>; 
-		} 
-	} 		
-		</p>
-	</div>	
-
-	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.PhotosResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.13 - PhotosResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.12 - PhotosResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>PhotosResource</l> class shows examples of the following:
@@ -20295,7 +20194,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.JsonSchemaResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.14 - JsonSchemaResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.13 - JsonSchemaResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>JsonSchemaResource</l> class shows examples of the following:
@@ -20398,7 +20297,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.SqlQueryResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.15 - SqlQueryResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.14 - SqlQueryResource</h4>
 	<div class='topic'>
 		<p>	
 			The <l>SqlQueryResource</l> class shows examples of the following:
@@ -20608,7 +20507,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.ConfigResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.16 - ConfigResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.15 - ConfigResource</h4>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
@@ -20763,7 +20662,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.LogsResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.17 - LogsResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.16 - LogsResource</h4>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
@@ -20780,7 +20679,7 @@
 
 	<!-- ======================================================================================================= -->
 	<a id='juneau-examples-rest.PetStoreResource'></a>
-	<h4 class='topic' onclick='toggle(this)'>12.18 - PetStoreResource</h4>
+	<h4 class='topic' onclick='toggle(this)'>12.17 - PetStoreResource</h4>
 	<div class='topic'>
 		<p>
 			The <code>PetStoreResource</code> class provides examples of the following: 

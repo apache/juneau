@@ -14,25 +14,24 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
-import org.apache.juneau.examples.rest.addressbook.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
 
 /**
- * Sample REST resource showing how to implement a "router" resource page.
+ * Sample REST resource showing how to implement a nested "router" resource page.
  */
 @RestResource(
-	path="/",
-	title="Root resources",
-	description="Example of a router resource page.",
+	path="/dto",
+	title="DTO examples",
+	description="Example serialization of predefined Data Transfer Objects.",
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
 			ThemeMenuItem.class
 		},
 		navlinks={
+			"up: request:/..",
 			"options: ?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{ThemeMenuItem}",
@@ -40,12 +39,7 @@ import org.apache.juneau.rest.widget.*;
 		},
 		aside={
 			"<div style='max-width:400px' class='text'>",
-			"	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>",
-			"	<p>Resources can be nested arbitrarily deep through router pages.</p>",
-			"	<p>Note the <span class='link'>options</span> link provided that lets you see the generated swagger doc for this page.</p>",
-			"	<p>Also note the <span class='link'>sources</span> link on these pages to view the source code for the page.</p>",
-			"	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>",
-			"	<p>Other features (such as this aside) are added through annotations.</p>",
+			"	<p>This is an example of a nested 'router' page that serves as a jumping-off point to other child resources.</p>",
 			"</div>"
 		}
 	),
@@ -56,30 +50,11 @@ import org.apache.juneau.rest.widget.*;
 		@Property(name=WSERIALIZER_quoteChar, value="'")
 	},
 	children={
-		HelloWorldResource.class,
-		PetStoreResource.class,
-		org.apache.juneau.examples.rest.petstore.PetStoreResource.class,
-		SystemPropertiesResource.class,
-		MethodExampleResource.class,
-		RequestEchoResource.class,
-		AddressBookResource.class,
-		SampleRemoteableServlet.class,
-		DtoExamples.class,
-		PhotosResource.class,
-		SqlQueryResource.class,
-		CodeFormatterResource.class,
-		UrlEncodedFormResource.class,
-		TempDirResource.class,
-		ConfigResource.class,
-		LogsResource.class,
-		DockerRegistryResource.class,
-		DebugResource.class,
-		ShutdownResource.class
+		AtomFeedResource.class,
+		JsonSchemaResource.class,
+		PredefinedLabelsResource.class,
 	}
 )
-public class RootResources extends BasicRestServletJenaGroup {
-	// IMPORTANT!  If you don't need RDF support, change the parent class to ResourceGroup.
-	// It allows you to remove the Jena prerequisite.
-
+public class DtoExamples extends BasicRestServletJenaGroup {
 	private static final long serialVersionUID = 1L;
 }
