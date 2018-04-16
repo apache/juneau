@@ -95,4 +95,12 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 	public K nextId() {
 		return idGen.next();
 	}	
+
+	/**
+	 * Sets a lower bound on the specified ID.
+	 * @param k The lower-bound key.
+	 */
+	public void lbId(K k) {
+		idGen.lb(k);
+	}	
 }

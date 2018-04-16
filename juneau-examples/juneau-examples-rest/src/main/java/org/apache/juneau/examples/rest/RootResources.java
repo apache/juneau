@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import org.apache.juneau.examples.rest.addressbook.*;
+import org.apache.juneau.examples.rest.petstore.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.annotation.*;
@@ -58,7 +59,6 @@ import org.apache.juneau.rest.widget.*;
 	children={
 		HelloWorldResource.class,
 		PetStoreResource.class,
-		org.apache.juneau.examples.rest.petstore.PetStoreResource.class,
 		SystemPropertiesResource.class,
 		MethodExampleResource.class,
 		RequestEchoResource.class,

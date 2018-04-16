@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -143,6 +144,8 @@ public class PetStore {
 	public Pet add(Pet value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(petDb.nextId());
+		else
+			petDb.lbId(value.getId());
 		Pet old = petDb.putIfAbsent(value.getId(), value);
 		if (old != null)
 			throw new IdConflict(value.getId(), Pet.class);
@@ -184,6 +187,39 @@ public class PetStore {
 		return value;
 	}
 	
+	public Pet create(CreatePet c) {
+		Pet p = new Pet();
+		p.name(c.getName());
+		p.price(c.getPrice());
+		p.species(getSpecies(c.getName()));
+		p.tags(getTags(c.getTags()));
+		p.status(c.getStatus());
+		return add(p);
+	}
+
+	public Order create(CreateOrder c) {
+		Order o = new Order();
+		o.petId(c.getPetId());
+		o.quantity(c.getQuantity());
+		o.shipDate(StringUtils.parseISO8601Date(c.getShipDate()));
+		o.status(OrderStatus.PLACED);
+		return add(o);
+	}
+
+	private List<Tag> getTags(List<String> tags) {
+		List<Tag> l = new ArrayList<>();
+		for (String t : tags)
+			l.add(getOrCreateTag(t));
+		return l;
+	}
+
+	private Tag getOrCreateTag(String name) {
+		for (Tag t : tagDb.values())
+			if (t.getName().equals(name))
+				return t;
+		return add(new Tag().name(name));
+	}
+
 	public Pet update(Pet value) throws IdNotFound {
 		Pet old = petDb.replace(value.getId(), value);
 		if (old == null)
@@ -191,13 +227,6 @@ public class PetStore {
 		return value;
 	}
 
-	public Species update(Species value) throws IdNotFound {
-		Species old = speciesDb.replace(value.getId(), value);
-		if (old == null)
-			throw new IdNotFound(value.getId(), Species.class);
-		return value;
-	}
-	
 	public Order update(Order value) throws IdNotFound {
 		Order old = orderDb.replace(value.getId(), value);
 		if (old == null)

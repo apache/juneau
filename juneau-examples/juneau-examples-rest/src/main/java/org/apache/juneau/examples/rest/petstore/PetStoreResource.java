@@ -31,8 +31,8 @@ import org.apache.juneau.rest.converters.*;
  * Sample resource that shows how to generate ATOM feeds.
  */
 @RestResource(
-	path="/petstore2",
-	title="Swagger Petstore",
+	path="/petstore",
+	title="Petstore application",
 	description=
 		"This is a sample server Petstore server based on the Petstore sample at Swagger.io."
 		+ "<br>You can find out more about Swagger at <a class='link' href='http://swagger.io'>http://swagger.io</a>.",
@@ -55,6 +55,14 @@ import org.apache.juneau.rest.converters.*;
 			"<h1>$R{resourceTitle}</h1>",
 			"<h2>$R{methodSummary}</h2>",
 			"$C{PetStore/headerImage}"
+		},
+		aside={
+			"<div style='max-width:400px' class='text'>",
+			"	<p>This page shows a standard nested REST resource.</p>",
+			"	<p>It shows how different properties can be rendered on the same bean in different views.</p>",
+			"	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>",
+			"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
+			"</div>"
 		}
 	),
 	properties= {
@@ -107,7 +115,6 @@ public class PetStoreResource extends BasicRestServletJena {
 				QueryMenuItem.class,
 				AddPetMenuItem.class
 			},
-
 			navlinks={
 				"INHERIT",                // Inherit links from class.
 				"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
@@ -147,10 +154,10 @@ public class PetStoreResource extends BasicRestServletJena {
 		}
 	)
 	public Ok addPet(
-			@Body(description="Pet object that needs to be added to the store") Pet pet
+			@Body(description="Pet object that needs to be added to the store") CreatePet pet
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
-		store.add(pet);
+		store.create(pet);
 		return OK;
 	}
 	
@@ -331,10 +338,10 @@ public class PetStoreResource extends BasicRestServletJena {
 		}
 	)
 	public Order placeOrder(
-			@Body(description="Order placed for purchasing the pet", example="{petId:456,quantity:100}") Order order
+			@Body(description="Order placed for purchasing the pet", example="{petId:456,quantity:100}") CreateOrder order
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
-		return store.add(order);
+		return store.create(order);
 	}
 
 	@RestMethod(

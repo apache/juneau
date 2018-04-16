@@ -12,65 +12,36 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
-import java.util.*;
-
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.transforms.*;
 
-@Bean(fluentSetters=true, properties="id,petId,quantity,shipDate,status")
-@Example("{id:123,petId:456,quantity:100,shipDate:'2012-12-21',status:'APPROVED'}")
-public class Order {
-	private long id, petId;
-	private int quantity;
-	private Date shipDate;
-	private OrderStatus status;
-	
-	public long getId() {
-		return id;
+/**
+ * Bean for creating {@link Order} objects.
+ */
+public class CreateOrder {
+	private final long petId;
+	private final int quantity;
+	private final String shipDate;
+
+	@BeanConstructor(properties="petId,quantity,shipDate")
+	public CreateOrder(long petId, int quantity, String shipDate) {
+		this.petId = petId;
+		this.quantity = quantity;
+		this.shipDate = shipDate;
 	}
 	
-	@Html(link="servlet:/store/order/{id}") 
-	public Order id(long id) {
-		this.id = id;
-		return this;
+	public static CreateOrder example() {
+		return new CreateOrder(123, 10, "2012-12-21");
 	}
-	
-	@Html(link="servlet:/pet/{id}")
+
 	public long getPetId() {
 		return petId;
 	}
-	
-	public Order petId(long petId) {
-		this.petId = petId;
-		return this;
-	}
-	
+
 	public int getQuantity() {
 		return quantity;
 	}
-	
-	public Order quantity(int quantity) {
-		this.quantity = quantity;
-		return this;
-	}
-	
-	@Swap(DateSwap.ISO8601D.class)
-	public Date getShipDate() {
+
+	public String getShipDate() {
 		return shipDate;
-	}
-	
-	public Order shipDate(Date shipDate) {
-		this.shipDate = shipDate;
-		return this;
-	}
-	
-	public OrderStatus getStatus() {
-		return status;
-	}
-	
-	public Order status(OrderStatus status) {
-		this.status = status;
-		return this;
 	}
 }
