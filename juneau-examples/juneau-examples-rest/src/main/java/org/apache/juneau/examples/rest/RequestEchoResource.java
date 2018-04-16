@@ -48,7 +48,8 @@ import org.apache.juneau.transforms.*;
 			"	<p>Also shows how to specify serializer properties, filters, and swaps at the servlet level to control how POJOs are serialized.</p>",
 			"	<p>Also provides an example of how to use the Traversable and Queryable APIs.</p>",
 			"</div>"
-		}
+		},
+		nowrap="false"
 	),
 	properties={
 		@Property(name=SERIALIZER_maxDepth, value="5"),

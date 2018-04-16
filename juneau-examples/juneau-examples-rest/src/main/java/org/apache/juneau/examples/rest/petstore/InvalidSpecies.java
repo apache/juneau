@@ -12,23 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 
-@Html(render=OrderStatus.OrderStatusRender.class)
-public enum OrderStatus {
-	PLACED, APPROVED, DELIVERED;
-	
-	public static class OrderStatusRender extends HtmlRender<OrderStatus> {
-		@Override /* HtmlRender */
-		public String getStyle(SerializerSession session, OrderStatus value) {
-			switch(value) {
-				case PLACED:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;"; 
-				case APPROVED:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;"; 
-				case DELIVERED:  return "background-color:#777;text-align:center;vertical-align:middle;"; 
-				default:  return "background-color:#888;text-align:center;vertical-align:middle;"; 
-			}
-		}
+/**
+ * Exception thrown when an invalid species is looked up.
+ */
+@SuppressWarnings("serial")
+@ResponseInfo(description="Invalid species provided")
+public class InvalidSpecies extends BadRequest {
+
+	/**
+	 * Constructor.
+	 */
+	public InvalidSpecies() {
+		super("Invalid species provided.");
 	}
 }

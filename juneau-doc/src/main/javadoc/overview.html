@@ -21380,6 +21380,9 @@
 				</p>
 				<br>It should be noted that you cannot use the <code>$F</code> variable to retrieve localized versions of files (since you're not within
 				the scope of a client request.
+			<li>
+				The {@link org.apache.juneau.rest.annotation.RestResource#nowrap()} annotation has been changed to a string with a default value of <js>"true"</js>.
+				<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
 		</ul>
 	
 		<ul class='spaced-list'>

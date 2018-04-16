@@ -13,9 +13,14 @@
 package org.apache.juneau.examples.rest.petstore;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.dto.html5.Img;
+import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.serializer.*;
 
-@Bean(typeName="Category", fluentSetters=true)
-public class Category {
+@Bean(typeName="Species", fluentSetters=true)
+@Html(render=Species.SpeciesRender.class)
+public class Species {
 	private long id;
 	private String name;
 	
@@ -23,7 +28,7 @@ public class Category {
 		return id;
 	}
 	
-	public Category id(long id) {
+	public Species id(long id) {
 		this.id = id;
 		return this;
 	}
@@ -32,15 +37,26 @@ public class Category {
 		return name;
 	}
 	
-	public Category name(String name) {
+	public Species name(String name) {
 		this.name = name;
 		return this;
 	}
 	
 	@Example
-	public static Category example() {
-		return new Category()
+	public static Species example() {
+		return new Species()
 			.id(123)
 			.name("Dog");
+	}
+
+	public static class SpeciesRender extends HtmlRender<Species> {
+		@Override
+		public Object getContent(SerializerSession session, Species value) {
+			return new Img().src("servlet:/htdocs/"+value.getName().toLowerCase()+".png");
+		}
+		@Override
+		public String getStyle(SerializerSession session, Species value) {
+			return "background-color:#FDF2E9";
+		}
 	}
 }

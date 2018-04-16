@@ -13,12 +13,12 @@
 package org.apache.juneau.examples.rest.petstore;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.html.annotation.*;
 
-@Bean(typeName="User", fluentSetters=true)
+@Bean(typeName="User", fluentSetters=true, properties="username,firstName,lastName,email,password,phone,userStatus")
 public class User {
-	private long id;
 	private String username, firstName, lastName, email, password, phone;
-	private int userStatus;
+	private UserStatus userStatus;
 	
 	// This shows an example provided as a static field.
 	@Example
@@ -27,19 +27,10 @@ public class User {
 		.firstName("Billy")
 		.lastName("Bob")
 		.email("billy@apache.org")
-		.id(123)
-		.userStatus(1)
+		.userStatus(UserStatus.ACTIVE)
 		.phone("111-222-3333");
 	
-	public long getId() {
-		return id;
-	}
-
-	public User id(long id) {
-		this.id = id;
-		return this;
-	}
-
+	@Html(link="servlet:/user/{username}")
 	public String getUsername() {
 		return username;
 	}
@@ -94,11 +85,11 @@ public class User {
 		return this;
 	}
 
-	public int getUserStatus() {
+	public UserStatus getUserStatus() {
 		return userStatus;
 	}
 
-	public User userStatus(int userStatus) {
+	public User userStatus(UserStatus userStatus) {
 		this.userStatus = userStatus;
 		return this;
 	}

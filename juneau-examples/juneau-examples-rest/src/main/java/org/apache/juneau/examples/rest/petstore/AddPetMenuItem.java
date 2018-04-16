@@ -12,23 +12,55 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.serializer.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
-@Html(render=OrderStatus.OrderStatusRender.class)
-public enum OrderStatus {
-	PLACED, APPROVED, DELIVERED;
-	
-	public static class OrderStatusRender extends HtmlRender<OrderStatus> {
-		@Override /* HtmlRender */
-		public String getStyle(SerializerSession session, OrderStatus value) {
-			switch(value) {
-				case PLACED:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;"; 
-				case APPROVED:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;"; 
-				case DELIVERED:  return "background-color:#777;text-align:center;vertical-align:middle;"; 
-				default:  return "background-color:#888;text-align:center;vertical-align:middle;"; 
-			}
-		}
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.widget.*;
+
+/**
+ * Menu item for adding a Pet.
+ */
+public class AddPetMenuItem extends MenuItemWidget {
+
+	@Override /* MenuItemWidget */
+	public String getLabel(RestRequest req) throws Exception {
+		return "add";
+	}
+
+	@Override /* Widget */
+	public Object getContent(RestRequest req) throws Exception {
+		return div(
+			form().id("form").action("servlet:/").method(POST).children(
+				table(
+					tr(
+						th("Name:"),
+						td(input().name("name").type("text")),
+						td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'")) 
+					),
+					tr(
+						th("Species:"),
+						td(
+							select().name("kind").children(
+								option("CAT"), option("DOG"), option("BIRD"), option("FISH"), option("MOUSE"), option("RABBIT"), option("SNAKE")
+							)
+						),
+						td(new Tooltip("(?)", "The kind of animal.")) 
+					),
+					tr(
+						th("Price:"),
+						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100)),
+						td(new Tooltip("(?)", "The price to charge for this pet.")) 
+					),
+					tr(
+						td().colspan(2).style("text-align:right").children(
+							button("reset", "Reset"),
+							button("button","Cancel").onclick("window.location.href='/'"),
+							button("submit", "Submit")
+						)
+					)
+				).style("white-space:nowrap")
+			)
+		);
 	}
 }

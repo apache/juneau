@@ -13,8 +13,9 @@
 package org.apache.juneau.examples.rest.petstore;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.html.annotation.*;
 
-@Bean(fluentSetters=true)
+@Bean(fluentSetters=true, properties="id,petId,quantity,shipDate,status")
 @Example("{id:123,petId:456,quantity:100,shipDate:'2012-12-21',status:'APPROVED'}")
 public class Order {
 	private long id, petId;
@@ -26,11 +27,13 @@ public class Order {
 		return id;
 	}
 	
+	@Html(link="servlet:/store/order/{id}") 
 	public Order id(long id) {
 		this.id = id;
 		return this;
 	}
 	
+	@Html(link="servlet:/pet/{id}")
 	public long getPetId() {
 		return petId;
 	}

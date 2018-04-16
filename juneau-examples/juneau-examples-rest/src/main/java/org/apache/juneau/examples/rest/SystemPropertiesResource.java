@@ -67,7 +67,10 @@ import org.apache.juneau.rest.widget.*;
 		style={
 			"aside {display:table-caption} ",
 			"aside p {margin: 0px 20px;}"
-		}
+		},
+		
+		// Allow text wrapping in cells.
+		nowrap="false"
 	),
 		
 	// Properties that get applied to all serializers and parsers.

@@ -15,15 +15,17 @@ package org.apache.juneau.examples.rest.petstore;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * 
+ * Pet bean.
  */
-@Bean(typeName="Pet", fluentSetters=true)
+@Bean(typeName="Pet", fluentSetters=true, properties="id,species,name,photoUrls,tags,price,status")
 public class Pet {
 	private long id;
-	private Category category;
+	private float price;
+	private Species species;
 	private String name;
 	private List<String> photoUrls;
 	private List<Tag> tags;
@@ -34,12 +36,13 @@ public class Pet {
 	public static Pet example() {
 		return new Pet()
 			.id(123)
-			.category(Category.example())
+			.species(Species.example())
 			.name("Doggie")
 			.tags(Tag.example())
 			.status(PetStatus.AVAILABLE);
 	}
 
+	@Html(link="servlet:/pet/{id}")
 	public long getId() {
 		return id;
 	}
@@ -49,12 +52,12 @@ public class Pet {
 		return this;
 	}
 	
-	public Category getCategory() {
-		return category;
+	public Species getSpecies() {
+		return species;
 	}
 	
-	public Pet category(Category category) {
-		this.category = category;
+	public Pet species(Species species) {
+		this.species = species;
 		return this;
 	}
 	
@@ -114,5 +117,15 @@ public class Pet {
 				if (t.getName().equals(tag))
 					return true;
 		return false;
+	}
+	
+	@BeanProperty(format="$%.2f")  // Renders price in dollars.
+	public float getPrice() {
+		return price;
+	}
+	
+	public Pet price(float price) {
+		this.price = price;
+		return this;
 	}
 }

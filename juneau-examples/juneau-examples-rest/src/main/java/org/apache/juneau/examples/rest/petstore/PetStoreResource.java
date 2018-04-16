@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest.petstore;
 
 import static org.apache.juneau.dto.swagger.ui.SwaggerUI.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.rest.helper.Ok.*;
 
 import java.util.*;
@@ -38,7 +39,7 @@ import org.apache.juneau.rest.converters.*;
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
-			ThemeMenuItem.class
+			ThemeMenuItem.class,
 		},
 		navlinks={
 			"up: request:/..",
@@ -46,19 +47,33 @@ import org.apache.juneau.rest.converters.*;
 			"$W{ContentTypeMenuItem}",
 			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/petstore/$R{servletClassSimple}.java"
+		},
+		head={
+			"<link rel='icon' href='$U{servlet:/htdocs/cat.png}'/>"  // Add a cat icon to the page.
+		},
+		header={
+			"<h1>$R{resourceTitle}</h1>",
+			"<h2>$R{methodSummary}</h2>",
+			"$C{PetStore/headerImage}"
 		}
 	),
 	properties= {
 		// Resolve recursive references when showing schema info in the swagger.
 		@Property(name=SWAGGERUI_resolveRefsMaxDepth, value="99")
 	},
-	swagger="$F{PetStoreResource.json}"
+	swagger="$F{PetStoreResource.json}",
+	staticFiles={"htdocs:htdocs"}
 )
 public class PetStoreResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 	
-	private final PetStore db = new PetStore();
+	private PetStore store;
 	
+	@RestHook(INIT) 
+	public void initDatabase(RestContextBuilder builder) throws Exception {
+		store = new PetStore().init();
+	}
+
 	@RestMethod(
 		name="GET", 
 		path="/",
@@ -67,7 +82,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	public ResourceDescription[] getTopPage() {
 		return new ResourceDescription[] {
 			new ResourceDescription("pet", "All pets in the store"), 
-			new ResourceDescription("store", "Petstore orders"), 
+			new ResourceDescription("store", "Orders and inventory"), 
 			new ResourceDescription("user", "Petstore users")
 		};
 	}
@@ -86,10 +101,23 @@ public class PetStoreResource extends BasicRestServletJena {
 				 Queryable.SWAGGER_PARAMS,
 			"]"
 		},
+		bpx="Pet: tags",
+		htmldoc=@HtmlDoc(
+			widgets={
+				QueryMenuItem.class,
+				AddPetMenuItem.class
+			},
+
+			navlinks={
+				"INHERIT",                // Inherit links from class.
+				"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
+				"[3]:$W{AddPetMenuItem}"  // Insert ADD link in position 3.
+			}
+		),
 		converters={Queryable.class}
 	)
 	public Collection<Pet> getPets() throws NotAcceptable {
-		return db.getPets();
+		return store.getPets();
 	}
 	
 	@RestMethod(
@@ -106,7 +134,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Path(description="ID of pet to return", example="123") long petId
 		) throws IdNotFound, NotAcceptable {
 		
-		return db.getPet(petId);
+		return store.getPet(petId);
 	}
 	
 	@RestMethod(
@@ -122,7 +150,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Body(description="Pet object that needs to be added to the store") Pet pet
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
-		db.add(pet);
+		store.add(pet);
 		return OK;
 	}
 	
@@ -139,7 +167,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Body(description="Pet object that needs to be added to the store") Pet pet
 		) throws IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
-		db.update(pet);
+		store.update(pet);
 		return OK;
 	}
 
@@ -163,7 +191,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			PetStatus[] status
 		) throws NotAcceptable {
 		
-		return db.getPetsByStatus(status);
+		return store.getPetsByStatus(status);
 	}
 	
 	@RestMethod(
@@ -187,7 +215,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			String[] tags
 		) throws InvalidTag, NotAcceptable {
 		
-		return db.getPetsByTags(tags);
+		return store.getPetsByTags(tags);
 	}
 
 	@RestMethod(
@@ -205,10 +233,10 @@ public class PetStoreResource extends BasicRestServletJena {
 			@FormData(name="status", description="Updated status of the pet", example="'AVAILABLE'") PetStatus status
 		) throws IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
-		Pet pet = db.getPet(petId);
+		Pet pet = store.getPet(petId);
 		pet.name(name);
 		pet.status(status);
-		db.update(pet);
+		store.update(pet);
 		return OK;
 	}
 
@@ -226,7 +254,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Path(description="Pet id to delete", example="123") long petId
 		) throws IdNotFound, NotAcceptable {
 		
-		db.removePet(petId);
+		store.removePet(petId);
 		return OK;
 	}
 
@@ -253,33 +281,45 @@ public class PetStoreResource extends BasicRestServletJena {
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@RestMethod(
-		name="GET",
+		name="GET", 
 		path="/store",
+		summary="Navigation page"
+	) 
+	public ResourceDescription[] getTopStorePage() {
+		return new ResourceDescription[] {
+			new ResourceDescription("store/order", "Petstore orders"), 
+			new ResourceDescription("store/inventory", "Petstore inventory")
+		};
+	}
+
+	@RestMethod(
+		name="GET",
+		path="/store/order",
 		summary="Petstore orders",
 		swagger={
 			"tags:['store']"
 		}
 	) 
 	public Collection<Order> getOrders() throws NotAcceptable {
-		return db.getOrders();
+		return store.getOrders();
 	}
 
 	@RestMethod(
 		name="GET", 
 		path="/store/order/{orderId}",
 		summary="Find purchase order by ID",
-		description="For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+		description="Returns a purchase order by ID.",
 		swagger={
 			"tags:[ 'store' ]",
 		}
 	)
 	public Order getOrder(
-			@Path(description="ID of order to fetch", maximum="10", minimum="1", example="5") long orderId
+			@Path(description="ID of order to fetch", maximum="1000", minimum="101", example="123") long orderId
 		) throws InvalidId, IdNotFound, NotAcceptable {
 		
-		if (orderId < 0 || orderId > 10)
+		if (orderId < 101 || orderId > 1000)
 			throw new InvalidId();
-		return db.getOrder(orderId);
+		return store.getOrder(orderId);
 	}
 	
 	@RestMethod(
@@ -294,7 +334,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Body(description="Order placed for purchasing the pet", example="{petId:456,quantity:100}") Order order
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
-		return db.add(order);
+		return store.add(order);
 	}
 
 	@RestMethod(
@@ -312,7 +352,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		
 		if (orderId < 0)
 			throw new InvalidId();
-		db.removeOrder(orderId);
+		store.removeOrder(orderId);
 		return OK;
 	}
 
@@ -330,7 +370,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		}
 	)
 	public Map<PetStatus,Integer> getStoreInventory() throws NotAcceptable {
-		return db.getInventory();
+		return store.getInventory();
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -341,12 +381,13 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="GET",
 		path="/user",
 		summary="Petstore users",
+		bpx="User: email,password,phone",
 		swagger={
 			"tags:['user']"
 		}
 	)
 	public Collection<User> getUsers() throws NotAcceptable {
-		return db.getUsers();
+		return store.getUsers();
 	}
 
 	@RestMethod(
@@ -361,7 +402,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Path(description="The name that needs to be fetched. Use user1 for testing.") String username
 		) throws InvalidUsername, IdNotFound, NotAcceptable {
 		
-		return db.getUser(username);
+		return store.getUser(username);
 	}
 	
 	@RestMethod(
@@ -377,7 +418,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Body(description="Created user object") User user
 		) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
 		
-		db.add(user);
+		store.add(user);
 		return OK;
 	}
 
@@ -394,7 +435,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
 		
 		for (User user : users)
-			db.add(user);
+			store.add(user);
 		return OK;
 	}
 
@@ -412,9 +453,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Body(description="Updated user object") User user
 		) throws InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
-		User oldUser = db.getUser(username);
-		user.id(oldUser.getId());
-		db.update(user);
+		store.update(user);
 		return OK;
 	}
 
@@ -431,8 +470,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Path(description="The name that needs to be deleted") String username
 		) throws InvalidUsername, IdNotFound, NotAcceptable {
 		
-		User oldUser = db.getUser(username);
-		db.removeUser(oldUser.getId());
+		store.removeUser(username);
 		return OK;
 	}
 	
@@ -459,7 +497,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			RestResponse res
 		) throws InvalidLogin, NotAcceptable {
 		
-		if (! db.isValid(username, password))
+		if (! store.isValid(username, password))
 			throw new InvalidLogin();
 		
 		Date d = new Date(System.currentTimeMillis() + 30 * 60 * 1000);

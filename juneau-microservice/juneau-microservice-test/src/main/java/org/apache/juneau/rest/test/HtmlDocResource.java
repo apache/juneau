@@ -28,7 +28,8 @@ import org.apache.juneau.rest.annotation.*;
 		nav={"nav1a","nav1b"},
 		script={"script1a","script1b"},
 		style={"style1a","style1b"},
-		stylesheet="stylesheet1"
+		stylesheet="stylesheet1",
+		nowrap="false"
 	),
 	children={
 		HtmlDocResource.HtmlDocResource2.class

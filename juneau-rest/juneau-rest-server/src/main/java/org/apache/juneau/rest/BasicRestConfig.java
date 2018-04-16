@@ -77,7 +77,8 @@ import org.apache.juneau.xmlschema.*;
 		head={
 			"<link rel='icon' href='$U{$C{REST/favicon}}'/>"
 		},
-		footer="$C{REST/footer}"
+		footer="$C{REST/footer}",
+		nowrap="true"
 	),
 	
 	// Optional external configuration file.

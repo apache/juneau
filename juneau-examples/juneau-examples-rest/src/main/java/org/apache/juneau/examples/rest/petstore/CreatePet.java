@@ -12,23 +12,52 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.serializer.*;
+import java.util.*;
 
-@Html(render=OrderStatus.OrderStatusRender.class)
-public enum OrderStatus {
-	PLACED, APPROVED, DELIVERED;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.utils.*;
+
+/**
+ * Bean for creating {@link Pet} objects.
+ */
+public class CreatePet {
+
+	private final String name;
+	private final float price;
+	private final String species;
+	private final List<String> tags;
+	private final PetStatus status;
 	
-	public static class OrderStatusRender extends HtmlRender<OrderStatus> {
-		@Override /* HtmlRender */
-		public String getStyle(SerializerSession session, OrderStatus value) {
-			switch(value) {
-				case PLACED:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;"; 
-				case APPROVED:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;"; 
-				case DELIVERED:  return "background-color:#777;text-align:center;vertical-align:middle;"; 
-				default:  return "background-color:#888;text-align:center;vertical-align:middle;"; 
-			}
-		}
+	@BeanConstructor(properties="name,price,species,tags,status")
+	public CreatePet(String name, float price, String species, List<String> tags, PetStatus status) {
+		this.name = name;
+		this.price = price;
+		this.species = species;
+		this.tags = tags;
+		this.status = status;
+	}
+	
+	public static CreatePet example() {
+		return new CreatePet("Doggie", 9.99f, "doc", AList.create("friendly","cute"), PetStatus.AVAILABLE);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public String getSpecies() {
+		return species;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public PetStatus getStatus() {
+		return status;
 	}
 }

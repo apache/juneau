@@ -12,6 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.serializer.*;
+
+@Html(render=PetStatus.PetStatusRender.class)
 public enum PetStatus {
-	AVAILABLE, PENDING, SOLD;
+	AVAILABLE, PENDING, SOLD, UNKNOWN;
+	
+	public static class PetStatusRender extends HtmlRender<PetStatus> {
+		@Override /* HtmlRender */
+		public String getStyle(SerializerSession session, PetStatus value) {
+			switch(value) {
+				case AVAILABLE:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;"; 
+				case PENDING:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;"; 
+				case SOLD:  return "background-color:#888;text-align:center;vertical-align:middle;"; 
+				default:  return "background-color:#777;text-align:center;vertical-align:middle;"; 
+			}
+		}
+	}
 }

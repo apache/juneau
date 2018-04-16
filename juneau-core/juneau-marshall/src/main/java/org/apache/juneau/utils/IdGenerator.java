@@ -25,4 +25,11 @@ public interface IdGenerator<K> {
 	 * @return The next available ID.
 	 */
 	K next();
+	
+	/**
+	 * Sets a lower bound for this generator.
+	 * 
+	 * @param k The lower bound.
+	 */
+	void lb(K k);
 }

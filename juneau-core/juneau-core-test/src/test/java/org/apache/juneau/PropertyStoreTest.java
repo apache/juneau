@@ -641,7 +641,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.lc/add", "java.lang.Integer", "Cannot add value 'java.lang.Integer' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
-		b.set("A.f1.lc/add", new AList<Class<?>>().appendAll(Integer.class, String.class));  
+		b.set("A.f1.lc/add", AList.<Class<?>>create(Integer.class, String.class));  
 		b.set("A.f1.lc/add", new AList<Class<?>>().appendAll(Map.class));
 		b.addTo("A.f1.lc", new AList<Class<?>>().appendAll(List.class));
 		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());

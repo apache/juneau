@@ -122,8 +122,7 @@ public class DirectoryResource extends BasicRestServlet {
 		summary="View information on file or directory",
 		description="Returns information about the specified file or directory.",
 		htmldoc=@HtmlDoc(
-			nav={"<h5>Folder:  $RA{fullPath}</h5>"},
-			nowrap=true
+			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 		)
 	)
 	public FileResource getFile(RestRequest req, @PathRemainder String path) throws NotFound, Exception {

@@ -28,7 +28,17 @@ import java.util.*;
  */
 @SuppressWarnings({"serial","unchecked"})
 public final class AList<T> extends LinkedList<T> {
-
+	
+	/**
+	 * Convenience method for creating a list of objects.
+	 * 
+	 * @param t The initial values.
+	 * @return A new list.
+	 */
+	public static <T> AList<T> create(T...t) {
+		return new AList<T>().appendAll(t);
+	}
+	
 	/**
 	 * Adds an entry to this list.
 	 * 

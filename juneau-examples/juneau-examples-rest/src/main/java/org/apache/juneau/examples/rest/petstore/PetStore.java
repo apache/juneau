@@ -12,8 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -21,13 +26,42 @@ import org.apache.juneau.utils.*;
  */
 public class PetStore {
 
-	// Our databases.
-	private IdMap<Long,Pet> petDb = IdMap.createLongMap(Pet.class);
-	private IdMap<Long,Category> categoryDb = IdMap.createLongMap(Category.class);
-	private IdMap<Long,Order> orderDb = IdMap.createLongMap(Order.class);
-	private IdMap<Long,Tag> tagDb = IdMap.createLongMap(Tag.class);
-	private IdMap<Long,User> userDb = IdMap.createLongMap(User.class);
+	// Our "databases".
+	IdMap<Long,Pet> petDb = IdMap.createLongMap(Pet.class);
+	IdMap<Long,Species> speciesDb = IdMap.createLongMap(Species.class);
+	IdMap<Long,Order> orderDb = IdMap.createLongMap(Order.class);
+	IdMap<Long,Tag> tagDb = IdMap.createLongMap(Tag.class);
+	ConcurrentHashMap<String,User> userDb = new ConcurrentHashMap<>();
 
+	public PetStore init() throws Exception {
+		
+		// Load our databases from local JSON files.
+		
+		JsonParser parser = JsonParser.create().build();
+		
+		// Note that these must be loaded in the specified order to prevent IdNotFound exceptions.
+		for (Species s : parser.parse(getStream("Species.json"), Species[].class)) 
+			add(s);
+		for (Tag t : parser.parse(getStream("Tags.json"), Tag[].class)) 
+			add(t);
+		
+		parser = parser.builder().pojoSwaps(new CategorySwap(), new TagSwap()).build();
+		for (Pet p : parser.parse(getStream("Pets.json"), Pet[].class)) 
+			add(p);
+		
+		parser = parser.builder().pojoSwaps(new PetSwap()).build();
+		for (Order o : parser.parse(getStream("Orders.json"), Order[].class)) 
+			add(o);
+
+		for (User u : parser.parse(getStream("Users.json"), User[].class)) 
+			add(u);
+		
+		return this;
+	}
+	
+	private InputStream getStream(String fileName) {
+		return getClass().getResourceAsStream(fileName);
+	}
 	
 	public Pet getPet(long id) throws IdNotFound {
 		Pet value = petDb.get(id);
@@ -36,13 +70,20 @@ public class PetStore {
 		return value;
 	}
 	
-	public Category getCategory(long id) throws IdNotFound {
-		Category value = categoryDb.get(id);
+	public Species getSpecies(long id) throws IdNotFound {
+		Species value = speciesDb.get(id);
 		if (value == null)
 			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
 	
+	public Species getSpecies(String name) throws IdNotFound {
+		for (Species value : speciesDb.values())
+			if (value.getName().equals(name))
+				return value;
+		throw new InvalidSpecies();
+	}
+
 	public Order getOrder(long id) throws IdNotFound {
 		Order value = orderDb.get(id);
 		if (value == null)
@@ -64,13 +105,6 @@ public class PetStore {
 		throw new InvalidTag();
 	}
 
-	public User getUser(long id) throws IdNotFound {
-		User value =  userDb.get(id);
-		if (value == null)
-			throw new IdNotFound(id, Pet.class);
-		return value;
-	}
-	
 	public User getUser(String username) throws InvalidUsername, IdNotFound  {
 		assertValidUsername(username);
 		for (User user : userDb.values())
@@ -90,8 +124,8 @@ public class PetStore {
 		return petDb.values();
 	}
 
-	public Collection<Category> getCategories() {
-		return categoryDb.values();
+	public Collection<Species> getCategories() {
+		return speciesDb.values();
 	}
 
 	public Collection<Order> getOrders() {
@@ -115,12 +149,12 @@ public class PetStore {
 		return value;
 	}
 
-	public Category add(Category value) throws IdConflict {
+	public Species add(Species value) throws IdConflict {
 		if (value.getId() == 0)
-			value.id(categoryDb.nextId());
-		Category old = categoryDb.putIfAbsent(value.getId(), value);
+			value.id(speciesDb.nextId());
+		Species old = speciesDb.putIfAbsent(value.getId(), value);
 		if (old != null)
-			throw new IdConflict(value.getId(), Category.class);
+			throw new IdConflict(value.getId(), Species.class);
 		return value;
 	}
 	
@@ -144,11 +178,9 @@ public class PetStore {
 	
 	public User add(User value) throws IdConflict, InvalidUsername {
 		assertValidUsername(value.getUsername());
-		if (value.getId() == 0)
-			value.id(userDb.nextId());
-		User old = userDb.putIfAbsent(value.getId(), value);
+		User old = userDb.putIfAbsent(value.getUsername(), value);
 		if (old != null)
-			throw new IdConflict(value.getId(), User.class);
+			throw new IdConflict(value.getUsername(), User.class);
 		return value;
 	}
 	
@@ -159,10 +191,10 @@ public class PetStore {
 		return value;
 	}
 
-	public Category update(Category value) throws IdNotFound {
-		Category old = categoryDb.replace(value.getId(), value);
+	public Species update(Species value) throws IdNotFound {
+		Species old = speciesDb.replace(value.getId(), value);
 		if (old == null)
-			throw new IdNotFound(value.getId(), Category.class);
+			throw new IdNotFound(value.getId(), Species.class);
 		return value;
 	}
 	
@@ -183,9 +215,9 @@ public class PetStore {
 	
 	public User update(User value) throws IdNotFound, InvalidUsername {
 		assertValidUsername(value.getUsername());
-		User old = userDb.replace(value.getId(), value);
+		User old = userDb.replace(value.getUsername(), value);
 		if (old == null)
-			throw new IdNotFound(value.getId(), User.class);
+			throw new IdNotFound(value.getUsername(), User.class);
 		return value;
 	}
 
@@ -194,7 +226,7 @@ public class PetStore {
 	}
 
 	public void removeCategory(long id) throws IdNotFound {
-		categoryDb.remove(getCategory(id).getId());
+		speciesDb.remove(getSpecies(id).getId());
 	}
 	
 	public void removeOrder(long id) throws IdNotFound {
@@ -205,8 +237,8 @@ public class PetStore {
 		tagDb.remove(getTag(id).getId());
 	}
 	
-	public void removeUser(long id) throws IdNotFound {
-		userDb.remove(getUser(id).getId());
+	public void removeUser(String username) throws IdNotFound {
+		userDb.remove(getUser(username).getUsername());
 	}
 
 	private void assertValidUsername(String username) throws InvalidUsername {
@@ -238,8 +270,51 @@ public class PetStore {
 	}
 
 	public Map<PetStatus,Integer> getInventory() {
-		// TODO
 		Map<PetStatus,Integer> m = new LinkedHashMap<>();
+		for (Pet p : petDb.values()) {
+			PetStatus ps = p.getStatus();
+			if (! m.containsKey(ps))
+				m.put(ps, 1);
+			else
+				m.put(ps, m.get(ps) + 1);
+		}
 		return m;
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper beans
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	public class CategorySwap extends PojoSwap<Species,String> {
+		@Override
+		public String swap(BeanSession bs, Species o) throws Exception {
+			return o.getName();
+		}
+		@Override
+		public Species unswap(BeanSession bs, String o, ClassMeta<?> hint) throws Exception {
+			return getSpecies(o);
+		}
+	}
+	
+	public class TagSwap extends PojoSwap<Tag,String> {
+		@Override
+		public String swap(BeanSession bs, Tag o) throws Exception {
+			return o.getName();
+		}
+		@Override
+		public Tag unswap(BeanSession bs, String o, ClassMeta<?> hint) throws Exception {
+			return getTag(o);
+		}
+	}
+
+	public class PetSwap extends PojoSwap<Pet,Long> {
+		@Override
+		public Long swap(BeanSession bs, Pet o) throws Exception {
+			return o.getId();
+		}
+		@Override
+		public Pet unswap(BeanSession bs, Long o, ClassMeta<?> hint) throws Exception {
+			return petDb.get(o);
+		}
 	}
 }

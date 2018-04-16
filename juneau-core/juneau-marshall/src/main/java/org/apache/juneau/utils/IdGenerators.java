@@ -30,8 +30,13 @@ public class IdGenerators {
 			private final AtomicInteger i = new AtomicInteger(initValue);
 			
 			@Override /* IdGenerator */
-			public Integer next() {
+			public synchronized Integer next() {
 				return i.getAndIncrement();
+			}
+
+			@Override
+			public synchronized void lb(Integer k) {
+				i.set(Math.max(k + 1, i.get()));
 			}
 		};
 	}
@@ -56,8 +61,13 @@ public class IdGenerators {
 			private final AtomicLong l = new AtomicLong(initValue);
 			
 			@Override /* IdGenerator */
-			public Long next() {
+			public synchronized Long next() {
 				return l.getAndIncrement();
+			}
+
+			@Override
+			public synchronized void lb(Long k) {
+				l.set(Math.max(k + 1, l.get()));
 			}
 		};
 	}

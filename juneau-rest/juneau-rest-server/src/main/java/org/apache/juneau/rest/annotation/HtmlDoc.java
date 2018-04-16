@@ -396,7 +396,7 @@ public @interface HtmlDoc {
 	 * 	<li class='jm'>{@link HtmlDocBuilder#nowrap(boolean)}
 	 * </ul>
 	 */
-	boolean nowrap() default false;
+	String nowrap() default "";
 
 	/**
 	 * Sets the HTML script section contents.

@@ -71,8 +71,8 @@ public class HtmlDocBuilder {
 			stylesheet((Object[])hd.stylesheet());
 		if (! hd.noResultsMessage().isEmpty())
 			noResultsMessage(hd.noResultsMessage());
-		if (hd.nowrap())
-			nowrap(true);
+		if (! hd.nowrap().isEmpty())
+			nowrap(Boolean.valueOf(hd.nowrap()));
 		if (hd.template() != HtmlDocTemplate.class)
 			template(hd.template());
 	}

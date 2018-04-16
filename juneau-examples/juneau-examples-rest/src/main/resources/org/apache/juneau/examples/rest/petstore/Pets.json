@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -10,25 +10,15 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.serializer.*;
-
-@Html(render=OrderStatus.OrderStatusRender.class)
-public enum OrderStatus {
-	PLACED, APPROVED, DELIVERED;
-	
-	public static class OrderStatusRender extends HtmlRender<OrderStatus> {
-		@Override /* HtmlRender */
-		public String getStyle(SerializerSession session, OrderStatus value) {
-			switch(value) {
-				case PLACED:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;"; 
-				case APPROVED:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;"; 
-				case DELIVERED:  return "background-color:#777;text-align:center;vertical-align:middle;"; 
-				default:  return "background-color:#888;text-align:center;vertical-align:middle;"; 
-			}
-		}
-	}
-}
+[
+	{id:101, species:'cat', name:'Mr. Frisky', price:39.99, tags:['friendly'], status:'AVAILABLE'},
+	{id:102, species:'dog', name:'Kibbles', price:99.99, tags:['loyal'], status:'AVAILABLE'},
+	{id:103, species:'rabbit', name:'Hoppy', price:49.99, tags:['friendly','smells nice'], status:'AVAILABLE'},
+	{id:104, species:'rabbit', name:'Hoppy 2', price:49.99, status:'AVAILABLE'},
+	{id:105, species:'rabbit', name:'Hoppy 3', price:49.99, status:'AVAILABLE'},
+	{id:106, species:'rabbit', name:'Hoppy 4', price:49.99, status:'AVAILABLE'},
+	{id:107, species:'fish', name:'Gorton', price:1.99, status:'PENDING'},
+	{id:108, species:'mouse', name:'Hackwrench', price:4.99, status:'SOLD'},
+	{id:109, species:'snake', name:'Just Snake', price:9.99, status:'SOLD'}
+]

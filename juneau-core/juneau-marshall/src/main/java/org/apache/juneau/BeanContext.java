@@ -1468,8 +1468,8 @@ public class BeanContext extends Context {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lc"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lo"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Object&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
@@ -1503,6 +1503,7 @@ public class BeanContext extends Context {
 	 * Values can consist of any of the following types:
 	 * <ul>
 	 * 	<li>Any subclass of {@link PojoSwap}.
+	 * 	<li>Any instance of {@link PojoSwap}.
 	 * 	<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
@@ -1565,17 +1566,17 @@ public class BeanContext extends Context {
 	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SurrogateClasses">Overview &gt; juneau-marshall &gt; Surrogate Classes</a>
 	 * </ul>
 	 */
-	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lc";
+	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lo";
 
 	/**
 	 * Configuration property:  Add to POJO swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_add = PREFIX + "pojoSwaps.lc/add";
+	public static final String BEAN_pojoSwaps_add = PREFIX + "pojoSwaps.lo/add";
 
 	/**
 	 * Configuration property:  Remove from POJO swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.lc/remove";
+	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.lo/remove";
 
 	/**
 	 * Configuration property:  Bean property namer.
@@ -2000,13 +2001,18 @@ public class BeanContext extends Context {
 		beanFilters = lbf.toArray(new BeanFilter[0]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
-		for (Class<?> c : getClassListProperty(BEAN_pojoSwaps)) {
-			if (isParentClass(PojoSwap.class, c))
-				lpf.add(newInstance(PojoSwap.class, c));
-			else if (isParentClass(Surrogate.class, c))
-				lpf.addAll(SurrogateSwap.findPojoSwaps(c));
-			else
-				throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", c);
+		for (Object o : getListProperty(BEAN_pojoSwaps, Object.class)) {
+			if (o instanceof Class) {
+				Class<?> c = (Class<?>)o;
+				if (isParentClass(PojoSwap.class, c))
+					lpf.add(newInstance(PojoSwap.class, c));
+				else if (isParentClass(Surrogate.class, c))
+					lpf.addAll(SurrogateSwap.findPojoSwaps(c));
+				else
+					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", c);
+			} else if (o instanceof PojoSwap) {
+				lpf.add((PojoSwap)o);
+			}
 		}
 		pojoSwaps = lpf.toArray(new PojoSwap[lpf.size()]);
 		

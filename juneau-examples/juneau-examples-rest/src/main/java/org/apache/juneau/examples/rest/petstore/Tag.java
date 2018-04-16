@@ -12,9 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.transform.*;
 
 @Bean(typeName="Tag", fluentSetters=true)
+@Swap(Tag.TagNameOnly.class)
 public class Tag {
 	private long id;
 	private String name;
@@ -42,5 +46,16 @@ public class Tag {
 		return new Tag()
 			.id(123)
 			.name("MyTag");
+	}
+	
+	public static class TagNameOnly extends PojoSwap<Tag,String> {
+		@Override
+		public String swap(BeanSession bs, Tag o) throws Exception {
+			return o.getName();
+		}
+		@Override
+		public MediaType[] forMediaTypes() {
+			return new MediaType[] { MediaType.HTML };
+		}
 	}
 }

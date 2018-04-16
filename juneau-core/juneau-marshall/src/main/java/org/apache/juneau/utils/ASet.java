@@ -30,6 +30,16 @@ import java.util.*;
 public final class ASet<T> extends LinkedHashSet<T> {
 
 	/**
+	 * Convenience method for creating a list of objects.
+	 * 
+	 * @param t The initial values.
+	 * @return A new list.
+	 */
+	public static <T> ASet<T> create(T...t) {
+		return new ASet<T>().appendAll(t);
+	}
+
+	/**
 	 * Adds an entry to this set.
 	 * 
 	 * @param t The entry to add to this set.
