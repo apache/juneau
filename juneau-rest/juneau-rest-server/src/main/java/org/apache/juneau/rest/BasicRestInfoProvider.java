@@ -424,13 +424,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				op.put("responses", new TreeMap<>(responses));
 			
 			if (! op.containsKey("consumes")) {
-				List<MediaType> mConsumes = req.getParsers().getSupportedMediaTypes();
+				List<MediaType> mConsumes = sm.supportedContentTypes;
 				if (! mConsumes.equals(consumes))
 					op.put("consumes", mConsumes);
 			}
 
 			if (! op.containsKey("produces")) {
-				List<MediaType> mProduces = req.getSerializers().getSupportedMediaTypes();
+				List<MediaType> mProduces = sm.supportedAcceptTypes;
 				if (! mProduces.equals(produces))
 					op.put("produces", mProduces);
 			}
@@ -529,6 +529,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 	private ObjectMap getSchema(RestRequest req, ObjectMap schema, JsonSchemaSerializerSession js, Type type) throws Exception {
 		BeanSession bs = req.getBeanSession();
+		if (bs == null)
+			bs = BeanContext.DEFAULT.createBeanSession();
+		
 		ClassMeta<?> cm = bs.getClassMeta(type);
 		
 		if (schema.getBoolean("ignore", false))

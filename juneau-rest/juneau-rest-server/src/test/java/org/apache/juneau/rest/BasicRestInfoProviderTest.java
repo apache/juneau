@@ -45,8 +45,11 @@ public class BasicRestInfoProviderTest {
 
 		@Override
 		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-			if (name.endsWith(".json"))
+			System.out.println("XXX - TestClasspathResourceFinder.findResource("+baseClass+", "+name+", " + locale + ")");
+			if (name.endsWith(".json")) {
+				System.out.println("XXX - InputStream1=" + BasicRestInfoProvider.class.getResourceAsStream("BasicRestinfoProviderTest_swagger.json"));
 				return BasicRestInfoProvider.class.getResourceAsStream("BasicRestinfoProviderTest_swagger.json");
+			}
 			return super.findResource(baseClass, name, locale);
 		}
 	}
@@ -557,6 +560,76 @@ public class BasicRestInfoProviderTest {
 	public void j07_tags_ResourceSwagger_tags_localised() throws Exception {
 		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", getSwagger(new J07()).getTags());
 		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", getSwaggerWithFile(new J07()).getTags());
+	}
+
+	// Auto-detect tags defined on methods.
+	@RestResource()
+	public static class J08 {
+		
+		@RestMethod(swagger=@MethodSwagger(tags="foo"))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void j08_tags_ResourceSwagger_tags_loose() throws Exception {
+		assertObjectEquals("[{name:'foo'}]", getSwagger(new J08()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'}]", getSwaggerWithFile(new J08()).getTags());
+	}
+	
+	// Comma-delimited list
+	@RestResource()
+	public static class J09 {
+		
+		@RestMethod(swagger=@MethodSwagger(tags=" foo, bar "))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void j09_tags_ResourceSwagger_tags_loose_cdl() throws Exception {
+		assertObjectEquals("[{name:'foo'},{name:'bar'}]", getSwagger(new J09()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", getSwaggerWithFile(new J09()).getTags());
+	}
+
+	// ObjectList
+	@RestResource()
+	public static class J10 {
+		
+		@RestMethod(swagger=@MethodSwagger(tags="['foo', 'bar']"))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void j10_tags_ResourceSwagger_tags_loose_objectlist() throws Exception {
+		assertObjectEquals("[{name:'foo'},{name:'bar'}]", getSwagger(new J10()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", getSwaggerWithFile(new J10()).getTags());
+	}
+
+	// ObjectList localized
+	@RestResource(messages="BasicRestInfoProviderTest")
+	public static class J11 {
+		
+		@RestMethod(swagger=@MethodSwagger(tags="['$L{foo}', '$L{bar}']"))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void j11_tags_ResourceSwagger_tags_loose_objectlist_localized() throws Exception {
+		assertObjectEquals("[{name:'l-foo'},{name:'l-bar'}]", getSwagger(new J11()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]", getSwaggerWithFile(new J11()).getTags());
+	}
+
+	// Comma-delimited list localized
+	@RestResource(messages="BasicRestInfoProviderTest")
+	public static class J12 {
+		
+		@RestMethod(swagger=@MethodSwagger(tags=" $L{foo}, $L{bar} "))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void j12_tags_ResourceSwagger_tags_loose_cdl_localized() throws Exception {
+		assertObjectEquals("[{name:'l-foo'},{name:'l-bar'}]", getSwagger(new J12()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]", getSwaggerWithFile(new J12()).getTags());
 	}
 
 	
