@@ -108,29 +108,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
 
-	/**
-	 * Constructor for top-level servlets when using dependency injection.
-	 * 
-	 * <p>
-	 * Work-in-progress.
-	 * 
-	 * @param config
-	 * 	The servlet config object we're extending.
-	 * @param resourceClass
-	 * 	The class annotated with the {@link RestResource @RestResource} annotation.
-	 * @throws ServletException
-	 */
-	public RestContextBuilder(ServletConfig config, Class<?> resourceClass) throws ServletException {
-		this(config, resourceClass, null);
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param servletConfig The servlet config passed into the servlet by the servlet container.
-	 * @param resource The class annotated with <ja>@RestResource</ja>.
-	 * @throws ServletException Something bad happened.
-	 */
 	RestContextBuilder(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;

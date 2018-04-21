@@ -46,8 +46,7 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
-			builder = new RestContextBuilder(servletConfig, this.getClass(), null);
-			builder.init(this);
+			builder = RestContext.create(servletConfig, this.getClass(), null).init(this);
 			super.init(servletConfig);
 			if (! isInitialized) {
 				builder.servletContext(this.getServletContext());
