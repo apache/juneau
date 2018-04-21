@@ -158,6 +158,8 @@ public class MessageBundle extends ResourceBundle {
 	private MessageBundle(Class<?> forClass, String bundlePath, Locale locale) {
 		this.forClass = forClass;
 		this.className = forClass.getSimpleName();
+		if (bundlePath.endsWith(".properties"))
+			throw new RuntimeException("Bundle path should not end with '.properties'");
 		this.bundlePath = bundlePath;
 		this.creationThreadId = Thread.currentThread().getId();
 		ClassLoader cl = forClass.getClassLoader();

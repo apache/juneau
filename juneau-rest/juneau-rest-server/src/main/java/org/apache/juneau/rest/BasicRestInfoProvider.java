@@ -185,9 +185,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			RestResource rr = e.getValue();
 
 			if (! rr.title().isEmpty())
-				omSwagger.getObjectMap("info", true).appendIf(true, true, true, "title", vr.resolve(rr.title()));
+				omSwagger.getObjectMap("info", true).appendIf(false, true, true, "title", vr.resolve(rr.title()));
 			if (! rr.description().isEmpty())
-				omSwagger.getObjectMap("info", true).appendIf(true, true, true, "description", vr.resolve(rr.description()));
+				omSwagger.getObjectMap("info", true).appendIf(false, true, true, "description", vr.resolve(rr.description()));
 			
 			ResourceSwagger r = rr.swagger();
 			
@@ -433,13 +433,18 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		}
 		
-		for (Map.Entry<String,ObjectMap> e : js.getBeanDefs().entrySet())
-			definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
+		if (js.getBeanDefs() != null) 
+			for (Map.Entry<String,ObjectMap> e : js.getBeanDefs().entrySet())
+				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 		
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");		
 		if (tagMap.isEmpty())
 			omSwagger.remove("tags");
+		if (consumes.isEmpty())
+			omSwagger.remove("consumes");
+		if (produces.isEmpty())
+			omSwagger.remove("produces");
 		
 		try {
 			String swaggerJson = omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE);

@@ -3559,6 +3559,20 @@ public final class RestContext extends BeanContext {
 			return null;
 		try {
 			Parser p = parsers.getParser(mediaType);
+			if (p == null) {
+				if (mediaType == MediaType.JSON)
+					p = JsonParser.DEFAULT;
+				if (mediaType == MediaType.XML)
+					p = XmlParser.DEFAULT;
+				if (mediaType == MediaType.HTML)
+					p = HtmlParser.DEFAULT;
+				if (mediaType == MediaType.UON)
+					p = UonParser.DEFAULT;
+				if (mediaType == MediaType.URLENCODING)
+					p = UrlEncodingParser.DEFAULT;
+				if (mediaType == MediaType.MSGPACK)
+					p = MsgPackParser.DEFAULT;
+			}
 			if (p != null) {
 				try {
 					try (Closeable in = p.isReaderParser() ? new InputStreamReader(is, UTF8) : is) {
@@ -3667,7 +3681,7 @@ public final class RestContext extends BeanContext {
 	 * 	The call handler for this resource.  
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	protected RestCallHandler getCallHandler() {
+	RestCallHandler getCallHandler() {
 		return callHandler;
 	}
 
