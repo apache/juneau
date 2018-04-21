@@ -201,7 +201,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	private Div opBlock(Session s, String path, String opName, Operation op) {
 		
 		String opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
-		if (! STANDARD_METHODS.contains(opClass))
+		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass))
 			opClass = "other";
 		
 		return div()._class("op-block op-block-closed " + opClass).children(

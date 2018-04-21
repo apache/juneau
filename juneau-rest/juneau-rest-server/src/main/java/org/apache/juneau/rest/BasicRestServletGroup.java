@@ -43,7 +43,7 @@ public abstract class BasicRestServletGroup extends BasicRestServlet {
 	 * @return The bean containing links to the child resources.
 	 * @throws Exception 
 	 */
-	@RestMethod(name=GET, path="/", description="Child resources")
+	@RestMethod(name=GET, path="/", summary="Navigation page")
 	public ChildResourceDescriptions getChildren(RestRequest req) throws Exception {
 		return new ChildResourceDescriptions(getContext(), req);
 	}

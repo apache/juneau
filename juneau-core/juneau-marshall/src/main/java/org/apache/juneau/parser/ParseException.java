@@ -30,6 +30,36 @@ public class ParseException extends FormattedException {
 	/**
 	 * Constructor.
 	 * 
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ParseException(String message, Object...args) {
+		super(message, args);
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param causedBy The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ParseException(Throwable causedBy, String message, Object...args) {
+		super(causedBy, message, args);
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param causedBy The cause of this exception.
+	 */
+	public ParseException(Throwable causedBy) {
+		super(causedBy);
+	}
+
+	/**
+	 * Constructor.
+	 * 
 	 * @param session The parser session.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -41,11 +71,13 @@ public class ParseException extends FormattedException {
 	/**
 	 * Constructor.
 	 * 
+	 * @param session The parser session.
+	 * @param causedBy The cause of this exception.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ParseException(String message, Object...args) {
-		this(null, message, args);
+	public ParseException(ParserSession session, Throwable causedBy, String message, Object...args) {
+		super(causedBy, getMessage(session, message, args));
 	}
 
 	/**
@@ -58,14 +90,6 @@ public class ParseException extends FormattedException {
 		super(causedBy, getMessage(session, causedBy.getMessage()));
 	}
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param causedBy The inner exception.
-	 */
-	public ParseException(Exception causedBy) {
-		super(causedBy, getMessage(null, causedBy.getMessage()));
-	}
 
 	private static String getMessage(ParserSession session, String msg, Object... args) {
 		if (args.length != 0)
@@ -108,17 +132,5 @@ public class ParseException extends FormattedException {
 		while (! (t.getCause() == null || ! (t.getCause() instanceof ParseException)))
 			t = (ParseException)t.getCause();
 		return t;
-	}
-
-	/**
-	 * Sets the inner cause for this exception.
-	 * 
-	 * @param cause The inner cause.
-	 * @return This object (for method chaining).
-	 */
-	@Override /* Throwable */
-	public synchronized ParseException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
 	}
 }

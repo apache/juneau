@@ -14,7 +14,7 @@ package org.apache.juneau.rest.test;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.util.*;
 import org.junit.*;
 
 public class JacocoDummyTest {

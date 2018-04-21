@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-select-element">&lt;select&gt;</a>
@@ -134,6 +135,24 @@ public class Select extends HtmlElementContainer {
 		return this;
 	}
 
+	/**
+	 * Convenience method for selecting a child {@link Option} after the options have already been populated. 
+	 * 
+	 * @param optionValue The option value.
+	 * @return This object (for method chaining).
+	 */
+	public Select choose(Object optionValue) {
+		if (optionValue != null) {
+			for (Object o : getChildren()) {
+				if (o instanceof Option) {
+					Option o2 = (Option)o;
+					if (StringUtils.isEquals(optionValue.toString(), o2.getAttr(String.class, "value"))) 
+						o2.selected(true);
+				}
+			}
+		}
+		return this;
+	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

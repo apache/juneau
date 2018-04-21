@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -187,29 +186,47 @@ public class PetStore {
 		return value;
 	}
 	
-	public Pet create(CreatePet c) {
+	public Pet create(PetCreate pc) {
 		Pet p = new Pet();
-		p.name(c.getName());
-		p.price(c.getPrice());
-		p.species(getSpecies(c.getName()));
-		p.tags(getTags(c.getTags()));
-		p.status(c.getStatus());
+		p.name(pc.getName());
+		p.price(pc.getPrice());
+		p.species(getSpecies(pc.getSpecies()));
+		p.tags(getTags(pc.getTags()));
+		p.status(PetStatus.AVAILABLE);
 		return add(p);
+	}
+
+	public Pet update(PetUpdate pu) throws IdNotFound {
+		Pet p = petDb.get(pu.getId());
+		if (p == null)
+			throw new IdNotFound(pu.getId(), Pet.class);
+		p.name(pu.getName());
+		p.price(pu.getPrice());
+		p.species(getSpecies(pu.getSpecies()));
+		p.tags(getTags(pu.getTags()));
+		p.status(pu.getStatus());
+		return p;
+	}
+
+	public Pet update(Pet pet) {
+		petDb.put(pet.getId(), pet);
+		return pet;
 	}
 
 	public Order create(CreateOrder c) {
 		Order o = new Order();
 		o.petId(c.getPetId());
-		o.quantity(c.getQuantity());
-		o.shipDate(StringUtils.parseISO8601Date(c.getShipDate()));
+		o.shipDate(c.getShipDate());
 		o.status(OrderStatus.PLACED);
 		return add(o);
 	}
 
-	private List<Tag> getTags(List<String> tags) {
-		List<Tag> l = new ArrayList<>();
-		for (String t : tags)
-			l.add(getOrCreateTag(t));
+	private Tag[] getTags(String[] tags) {
+		if (tags == null)
+			return null;
+		Tag[] l = new Tag[tags.length];
+		for (int i = 0; i < tags.length; i++)
+			l[i]= getOrCreateTag(tags[i]);
 		return l;
 	}
 
@@ -218,13 +235,6 @@ public class PetStore {
 			if (t.getName().equals(name))
 				return t;
 		return add(new Tag().name(name));
-	}
-
-	public Pet update(Pet value) throws IdNotFound {
-		Pet old = petDb.replace(value.getId(), value);
-		if (old == null)
-			throw new IdNotFound(value.getId(), Pet.class);
-		return value;
 	}
 
 	public Order update(Order value) throws IdNotFound {

@@ -51,7 +51,7 @@ public abstract class RestServlet extends HttpServlet {
 			super.init(servletConfig);
 			if (! isInitialized) {
 				builder.servletContext(this.getServletContext());
-				context = new RestContext(builder);
+				context = builder.build();
 				isInitialized = true;
 			}
 			context.postInit();

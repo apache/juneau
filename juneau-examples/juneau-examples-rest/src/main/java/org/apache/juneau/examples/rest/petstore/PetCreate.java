@@ -12,33 +12,28 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
-import java.util.*;
-
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Bean for creating {@link Pet} objects.
  */
-public class CreatePet {
+public class PetCreate {
 
 	private final String name;
 	private final float price;
 	private final String species;
-	private final List<String> tags;
-	private final PetStatus status;
+	private final String[] tags;
 	
-	@BeanConstructor(properties="name,price,species,tags,status")
-	public CreatePet(String name, float price, String species, List<String> tags, PetStatus status) {
+	@BeanConstructor(properties="name,price,species,tags")
+	public PetCreate(String name, float price, String species, String[] tags) {
 		this.name = name;
 		this.price = price;
 		this.species = species;
 		this.tags = tags;
-		this.status = status;
 	}
 	
-	public static CreatePet example() {
-		return new CreatePet("Doggie", 9.99f, "doc", AList.create("friendly","cute"), PetStatus.AVAILABLE);
+	public static PetCreate example() {
+		return new PetCreate("Doggie", 9.99f, "doc", new String[] {"friendly","cute"});
 	}
 
 	public String getName() {
@@ -53,11 +48,7 @@ public class CreatePet {
 		return species;
 	}
 
-	public List<String> getTags() {
+	public String[] getTags() {
 		return tags;
-	}
-
-	public PetStatus getStatus() {
-		return status;
 	}
 }

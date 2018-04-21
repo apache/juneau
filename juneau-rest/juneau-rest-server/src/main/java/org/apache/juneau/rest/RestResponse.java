@@ -27,6 +27,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
 /**

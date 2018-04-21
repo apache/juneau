@@ -144,7 +144,7 @@ public class LogsResource extends BasicRestServlet {
 
 		File f = getFile(path);
 
-		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
+		Date startDate = parseIsoDate(start), endDate = parseIsoDate(end);
 
 		if (! highlight) {
 			Object o = getReader(f, startDate, endDate, thread, loggers, severity);
@@ -194,11 +194,11 @@ public class LogsResource extends BasicRestServlet {
 		htmldoc=@HtmlDoc(
 			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 		),
-		swagger={
-			"parameters:[",
-				 Queryable.SWAGGER_PARAMS,
-			"]"
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				 Queryable.SWAGGER_PARAMS
+			}
+		)
 	)
 	public LogParser viewParsedEntries(
 			RestRequest req,
@@ -213,7 +213,7 @@ public class LogsResource extends BasicRestServlet {
 		File f = getFile(path);
 		req.setAttribute("fullPath", f.getAbsolutePath());
 
-		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
+		Date startDate = parseIsoDate(start), endDate = parseIsoDate(end);
 
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}

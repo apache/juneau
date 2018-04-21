@@ -33,6 +33,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -146,7 +147,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@Override /* RestInfoProvider */
 	public Swagger getSwagger(RestRequest req) throws Exception {
 		
@@ -182,55 +182,46 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		// Combine it with @RestResource(swagger)
 		for (Map.Entry<Class<?>,RestResource> e : findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass()).entrySet()) {
-			RestResource r = e.getValue();
-			if (r.swagger().length > 0) {
-				try {
-					omSwagger.putAll(parseObjectMap(vr.resolve(join(r.swagger(), '\n').trim()), true));
-				} catch (ParseException x) {
-					throw new SwaggerException(x, e.getKey(), "Malformed swagger JSON encountered in @RestResource(swagger).");
-				}
+			RestResource rr = e.getValue();
+
+			if (! rr.title().isEmpty())
+				omSwagger.getObjectMap("info", true).appendIf(true, true, true, "title", vr.resolve(rr.title()));
+			if (! rr.description().isEmpty())
+				omSwagger.getObjectMap("info", true).appendIf(true, true, true, "description", vr.resolve(rr.description()));
+			
+			ResourceSwagger r = rr.swagger();
+			
+			omSwagger.putAll(parseMap(join(r.value()), vr, true, false, "@ResourceSwagger(value) on class {0}", c));
+			
+			if (r.title().length + r.description().length + r.version().length() + r.contact().length + r.license().length + r.termsOfService().length > 0) {
+				ObjectMap info = omSwagger.getObjectMap("info", true);
+				info.appendIf(true, true, true, "title", vr.resolve(join(r.title())));
+				info.appendIf(true, true, true, "description", vr.resolve(join(r.description())));
+				info.appendIf(true, true, true, "version", vr.resolve(join(r.version())));
+				info.appendIf(true, true, true, "termsOfService", vr.resolve(join(r.termsOfService())));
+				info.appendIf(true, true, true, "contact", parseMap(join(r.contact()), vr, false, true, "@ResourceSwagger(contact) on class {0}", c));
+				info.appendIf(true, true, true, "license", parseMap(join(r.license()), vr, false, true, "@ResourceSwagger(license) on class {0}", c));
 			}
+
+			omSwagger.appendIf(true, true, true, "externalDocs", parseMap(join(r.externalDocs()), vr, false, true, "@ResourceSwagger(externalDocs) on class {0}", c));
+			omSwagger.appendIf(true, true, true, "tags", parseList(join(r.tags()), vr, false, true, "@ResourceSwagger(tags) on class {0}", c));
 		}
+
+		omSwagger.appendIf(true, true, true, "externalDocs", parseMap(mb.findFirstString(locale, "externalDocs"), vr, false, true, "Messages/externalDocs on class {0}", c));
 		
-		ObjectMap 
-			info = omSwagger.getObjectMap("info", true),
-			externalDocs = omSwagger.getObjectMap("externalDocs", true),
-			definitions = omSwagger.getObjectMap("definitions", true);
+		ObjectMap info = omSwagger.getObjectMap("info", true);
+		info.appendIf(true, true, true, "title", vr.resolve(mb.findFirstString(locale, "title")));
+		info.appendIf(true, true, true, "description", vr.resolve(mb.findFirstString(locale, "description")));
+		info.appendIf(true, true, true, "version", vr.resolve(mb.findFirstString(locale, "version")));
+		info.appendIf(true, true, true, "termsOfService", vr.resolve(mb.findFirstString(locale, "termsOfService")));
+		info.appendIf(true, true, true, "contact", parseMap(mb.findFirstString(locale, "contact"), vr, false, true, "Messages/contact on class {0}", c));
+		info.appendIf(true, true, true, "license", parseMap(mb.findFirstString(locale, "license"), vr, false, true, "Messages/license on class {0}", c));
+
 		ObjectList
 			produces = omSwagger.getObjectList("produces", true),
 			consumes = omSwagger.getObjectList("consumes", true);
-		
-		String s = this.title;
-		if (s == null)
-			s = mb.findFirstString(locale, "title");
-		if (s != null) 
-			info.put("title", vr.resolve(s));
-
-		s = this.description;
-		if (s == null)
-			s = mb.findFirstString(locale, "description");
-		if (s != null) 
-			info.put("description", vr.resolve(s));
-		
-		s = mb.findFirstString(locale, "version");
-		if (s != null) 
-			info.put("version", vr.resolve(s));
-		
-		s = mb.findFirstString(locale, "contact");
-		if (s != null) 
-			info.put("contact", jp.parse(vr.resolve(s), ObjectMap.class));
-		
-		s = mb.findFirstString(locale, "license");
-		if (s != null) 
-			info.put("license", jp.parse(vr.resolve(s), ObjectMap.class));
-		
-		s = mb.findFirstString(locale, "termsOfService");
-		if (s != null) 
-			info.put("termsOfService", vr.resolve(s));
-		
 		if (consumes.isEmpty()) 
 			consumes.addAll(req.getContext().getConsumes());
-
 		if (produces.isEmpty()) 
 			produces.addAll(req.getContext().getProduces());
 		
@@ -239,17 +230,17 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			for (ObjectMap om : omSwagger.getObjectList("tags").elements(ObjectMap.class)) {
 				String name = om.getString("name");
 				if (name == null)
-					throw new SwaggerException(c, "Tag definition found without name in swagger JSON.");
+					throw new SwaggerException(null, "Tag definition found without name in swagger JSON.");
 				tagMap.put(name, om);
 			}
 		}
 		
-		s = mb.findFirstString(locale, "tags");
+		String s = mb.findFirstString(locale, "tags");
 		if (s != null) {
-			for (ObjectMap m : jp.parse(vr.resolve(s), ObjectList.class).elements(ObjectMap.class)) {
+			for (ObjectMap m : parseList(s, vr, true, false, "Messages/tags on class {0}", c).elements(ObjectMap.class)) {
 				String name = m.getString("name");
 				if (name == null)
-					throw new SwaggerException(c, "Tag definition found without name in resource bundle.");
+					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c) ;
 				if (tagMap.containsKey(name))
 					tagMap.get(name).putAll(m);
 				else
@@ -257,11 +248,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		}
 
-		s = mb.findFirstString(locale, "externalDocs");
-		if (s != null) 
-			externalDocs.putAll(jp.parse(vr.resolve(s), ObjectMap.class));
-
 		// Load our existing bean definitions into our session.
+		ObjectMap definitions = omSwagger.getObjectMap("definitions", true);
 		for (String defId : definitions.keySet()) 
 			js.addBeanDef(defId, definitions.getObjectMap(defId));
 		
@@ -280,61 +268,46 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			ObjectMap op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 			
 			// Add @RestMethod(swagger)
-			if (rm.swagger().length > 0) {
-				try {
-					op.putAll(parseObjectMap( vr.resolve(join(rm.swagger(), '\n').trim()), true));
-				} catch (ParseException e) {
-					throw new SwaggerException(e, m, "Malformed swagger JSON encountered in @RestMethod(swagger).");
-				}
-			}
+			MethodSwagger ms = rm.swagger();
+
+			op.putAll(parseMap(join(ms.value()), vr, true, false, "@MethodSwagger(value) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "summary", vr.resolve(rm.summary()));
+			op.appendIf(true, true, true, "summary", vr.resolve(join(ms.summary())));
+			op.appendIf(true, true, true, "description", vr.resolve(join(rm.description())));
+			op.appendIf(true, true, true, "description", vr.resolve(join(ms.description())));
+			op.appendIf(true, true, true, "deprecated", vr.resolve(ms.deprecated()));
+			op.appendIf(true, true, true, "externalDocs", parseMap(join(ms.externalDocs()), vr, false, true, "@MethodSwagger(externalDocs) on class {0} method {1}", c, m));
+			
+			if (ms.parameters().length > 0)
+				op.getObjectList("parameters", true).addAll(parseList(join(ms.parameters()), vr, false, false, "@MethodSwagger(parameters) on class {0} method {1}", c, m));
+			if (ms.responses().length > 0)
+				op.getObjectMap("responses", true).putAll(parseMap(join(ms.responses()), vr, false, false, "@MethodSwagger(responses) on class {0} method {1}", c, m));
+			if (ms.tags().length > 0)
+				op.getObjectList("tags", true).addAll(parseListOrCdl(join(ms.tags()), vr, false, false, "@MethodSwagger(tags) on class {0} method {1}", c, m));
 
 			op.putIfNotExists("operationId", mn);
 			
 			if (m.getAnnotation(Deprecated.class) != null)
 				op.put("deprecated", true);
-				
-			s = rm.summary();
-			if (s.isEmpty())
-				s = mb.findFirstString(locale, mn + ".summary");
-			if (s != null)
-				op.put("summary", vr.resolve(s));
 
-			s = join(rm.description(), "");
-			if (s.isEmpty())
-				s = mb.findFirstString(locale, mn + ".description");
-			if (s != null)
-				op.put("description", vr.resolve(s));
+			op.appendIf(true, true, true, "summary", vr.resolve(mb.findFirstString(locale, mn + ".summary")));
+			op.appendIf(true, true, true, "description", vr.resolve(mb.findFirstString(locale, mn + ".description")));
 
-			Set<String> tags = new LinkedHashSet<>();
+			s = mb.findFirstString(locale, mn + ".tags");
+			if (s != null) 
+				op.getObjectList("tags", true).addAll(parseListOrCdl(s, vr, false, false, "Messages/tags on class {0} method {1}", c, m));
+			
 			if (op.containsKey("tags"))
 				for (String tag : op.getObjectList("tags").elements(String.class)) 
-					tags.add(tag);
+					if (! tagMap.containsKey(tag))
+						tagMap.put(tag, new ObjectMap().append("name", tag));
 			
-			s = mb.findFirstString(locale, mn + ".tags");
-			if (s != null) {
-				s = vr.resolve(s);
-				if (isObjectList(s, true))
-					tags.addAll((List<String>)jp.parse(s, ArrayList.class, String.class));
-				else
-					tags.addAll(Arrays.asList(StringUtils.split(s)));
-			}
+			op.appendIf(true, true, true, "externalDocs", parseMap(mb.findFirstString(locale, mn + ".description"), vr, false, true, "Messages/externalDocs on class {0} method {1}", c, m));
 			
-			for (String tag : tags) 
-				if (! tagMap.containsKey(tag))
-					tagMap.put(tag, new ObjectMap().append("name", tag));
-			
-			if (! tags.isEmpty())
-				op.put("tags", tags);
-			
-			s = mb.findFirstString(locale, mn + ".externalDocs");
-			if (s != null) {
-				ObjectMap eom = jp.parse(vr.resolve(s), ObjectMap.class);
-				if (op.containsKey("externalDocs"))
-					op.getObjectMap("externalDocs").putAll(eom);
-				else
-					op.put("externalDocs", eom);
-			}
-			
+			s = mb.findFirstString(locale, mn + ".parameters");
+			if (s != null) 
+				op.getObjectList("parameters", true).addAll(parseList(s, vr, false, false, "Messages/parameters on class {0} method {1}", c, m));
+
 			ObjectMap paramMap = new ObjectMap();
 
 			ObjectList ol = op.getObjectList("parameters");
@@ -342,18 +315,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				for (ObjectMap param : ol.elements(ObjectMap.class)) 
 					paramMap.put(param.getString("in") + '.' + param.getString("name"), param);
 		
-			s = mb.findFirstString(locale, mn + ".parameters");
-			if (s != null) {
-				ol = jp.parse(vr.resolve(s), ObjectList.class);
-				for (ObjectMap param : ol.elements(ObjectMap.class)) {
-					String key = param.getString("in") + '.' + param.getString("name");
-					if (paramMap.containsKey(key))
-						paramMap.getObjectMap(key).putAll(param);
-					else
-						paramMap.put(key, param);
-				}
-			}
-			
 			// Finally, look for parameters defined on method.
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
 				
@@ -372,50 +333,29 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					param.append("name", mp.name);
 				
 				ObjectMap pi = mp.getMetaData();
-				if (pi.containsKeyNotEmpty("required"))
-					param.appendIf(false, true, true, "required", vr.resolve(pi.getString("required")));
-				if (pi.containsKeyNotEmpty("description"))
-					param.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
-				if (pi.containsKeyNotEmpty("type"))
-					param.appendIf(false, true, true, "type", vr.resolve(pi.getString("type")));
-				if (pi.containsKeyNotEmpty("format"))
-					param.appendIf(false, true, true, "format", vr.resolve(pi.getString("format")));
-				if (pi.containsKeyNotEmpty("pattern"))
-					param.appendIf(false, true, true, "pattern", vr.resolve(pi.getString("pattern")));
-				if (pi.containsKeyNotEmpty("collectionFormat"))
-					param.appendIf(false, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
-				if (pi.containsKeyNotEmpty("maximum"))
-					param.appendIf(false, true, true, "maximum", vr.resolve(pi.getString("maximum")));
-				if (pi.containsKeyNotEmpty("minimum"))
-					param.appendIf(false, true, true, "minimum", vr.resolve(pi.getString("minimum")));
-				if (pi.containsKeyNotEmpty("multipleOf"))
-					param.appendIf(false, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
-				if (pi.containsKeyNotEmpty("maxLength"))
-					param.appendIf(false, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
-				if (pi.containsKeyNotEmpty("minLength"))
-					param.appendIf(false, true, true, "minLength", vr.resolve(pi.getString("minLength")));
-				if (pi.containsKeyNotEmpty("maxItems"))
-					param.appendIf(false, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
-				if (pi.containsKeyNotEmpty("minItems"))
-					param.appendIf(false, true, true, "minItems", vr.resolve(pi.getString("minItems")));
-				if (pi.containsKeyNotEmpty("allowEmptyVals"))
-					param.appendIf(false, true, true, "allowEmptyVals", vr.resolve(pi.getString("allowEmptyVals")));
-				if (pi.containsKeyNotEmpty("exclusiveMaximum"))
-					param.appendIf(false, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
-				if (pi.containsKeyNotEmpty("exclusiveMimimum"))
-					param.appendIf(false, true, true, "exclusiveMimimum", vr.resolve(pi.getString("exclusiveMimimum")));
-				if (pi.containsKeyNotEmpty("uniqueItems"))
-					param.appendIf(false, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
-				if (pi.containsKeyNotEmpty("schema"))
-					param.appendIf(false, true, true, "schema", parseObjectMap(vr.resolve(pi.getString("schema")), false));
-				if (pi.containsKeyNotEmpty("default"))
-					param.appendIf(false, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
-				if (pi.containsKeyNotEmpty("enum"))
-					param.appendIf(false, true, true, "enum", parseObjectList(vr.resolve(pi.getString("enum")), false));
+				param.appendIf(false, true, true, "required", vr.resolve(pi.getString("required")));
+				param.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
+				param.appendIf(false, true, true, "type", vr.resolve(pi.getString("type")));
+				param.appendIf(false, true, true, "format", vr.resolve(pi.getString("format")));
+				param.appendIf(false, true, true, "pattern", vr.resolve(pi.getString("pattern")));
+				param.appendIf(false, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
+				param.appendIf(false, true, true, "maximum", vr.resolve(pi.getString("maximum")));
+				param.appendIf(false, true, true, "minimum", vr.resolve(pi.getString("minimum")));
+				param.appendIf(false, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
+				param.appendIf(false, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
+				param.appendIf(false, true, true, "minLength", vr.resolve(pi.getString("minLength")));
+				param.appendIf(false, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
+				param.appendIf(false, true, true, "minItems", vr.resolve(pi.getString("minItems")));
+				param.appendIf(false, true, true, "allowEmptyVals", vr.resolve(pi.getString("allowEmptyVals")));
+				param.appendIf(false, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
+				param.appendIf(false, true, true, "exclusiveMimimum", vr.resolve(pi.getString("exclusiveMimimum")));
+				param.appendIf(false, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
+				param.appendIf(false, true, true, "schema", parseMap(pi.getString("schema"), vr, false, true, "ParameterInfo/schema on class {0} method {1}", c, m));
+				param.appendIf(false, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
+				param.appendIf(false, true, true, "enum", parseList(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
+				param.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
 				if (pi.containsKeyNotEmpty("items"))
 					param.appendIf(false, true, true, "items", new ObjectMap(vr.resolve(pi.getString("items"))));
-				if (pi.containsKeyNotEmpty("example"))
-					param.appendIf(false, true, true, "x-example", parse(vr.resolve(pi.getString("example"))));
 				
 				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 					param.put("required", true);
@@ -444,18 +384,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			for (RestMethodThrown rt : context.getRestMethodThrowns(m)) {
 				int code = rt.getCode();
 				if (code != 0) {
-					ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
-					
 					ObjectMap md = rt.getMetaData();
-					if (md.containsKeyNotEmpty("description"))
-						om.appendIf(false, true, true, "description", vr.resolve(md.getString("description")));
-					if (md.containsKeyNotEmpty("example"))
-						om.appendIf(false, true, true, "x-example", parse(vr.resolve(md.getString("example"))));
-					if (md.containsKeyNotEmpty("schema"))
-						om.appendIf(false, true, true, "schema", parseObjectMap(vr.resolve(md.getString("schema")), false));
-					if (md.containsKeyNotEmpty("headers")) {
-						om.appendIf(false, true, true, "headers", parseObjectList(vr.resolve(md.getString("headers")), false));
-					}
+					ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
+					om.appendIf(false, true, true, "description", vr.resolve(md.getString("description")));
+					om.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(md.getString("example"))));
+					om.appendIf(false, true, true, "schema", parseMap(md.getString("schema"), vr, false, true, "RestMethodThrown/schema on class {0} method {1}", c, m));
+					om.appendIf(false, true, true, "headers", parseList(md.getString("headers"), vr, false, true, "RestMethodThrown/headers on class {0} method {1}", c, m));
 				}
 			}
 			
@@ -465,14 +399,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			ObjectMap rom = responses.getObjectMap(rStatus, true);
 
 			ObjectMap rmd = r.getMetaData();
-			if (rmd.containsKeyNotEmpty("description"))
-				rom.appendIf(false, true, true, "description", vr.resolve(rmd.getString("description")));
-			if (rmd.containsKeyNotEmpty("example"))
-				rom.appendIf(false, true, true, "x-example", parse(vr.resolve(rmd.getString("example"))));
-			if (rmd.containsKeyNotEmpty("schema"))
-				rom.appendIf(false, true, true, "schema", parseObjectMap(vr.resolve(rmd.getString("schema")), false));
-			if (rmd.containsKeyNotEmpty("headers")) 
-				rom.appendIf(false, true, true, "headers", parseObjectMap(vr.resolve(rmd.getString("headers")), false));
+			rom.appendIf(false, true, true, "description", vr.resolve(rmd.getString("description")));
+			rom.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(rmd.getString("example"))));
+			rom.appendIf(false, true, true, "schema", parseMap(rmd.getString("schema"), vr, false, true, "RestMethodReturn/schema on class {0} method {1}", c, m));
+			rom.appendIf(false, true, true, "headers", parseMap(rmd.getString("headers"), vr, false, true, "RestMethodReturn/headers on class {0} method {1}", c, m));
 			
 			rom.put("schema", getSchema(req, rom.getObjectMap("schema", true), js, m.getGenericReturnType()));
 			addXExamples(req, sm, rom, "ok", js, m.getGenericReturnType());
@@ -508,8 +438,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");		
-		if (externalDocs.isEmpty())
-			omSwagger.remove("externalDocs");
 		if (tagMap.isEmpty())
 			omSwagger.remove("tags");
 		
@@ -527,27 +455,65 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		return swagger;
 	}
 	
-	private Object parse(String s) throws ParseException {
+	private String join(String...s) {
+		return StringUtils.join(s, '\n');
+	}
+	
+	private Object parseAnything(String s) throws ParseException {
+		if (s == null)
+			return null;
 		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
 		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
 			return JsonParser.DEFAULT.parse(s, Object.class);
 		return s;
 	}
 	
-	private ObjectMap parseObjectMap(String s, boolean ignoreCommentsAndWhitespace) throws ParseException {
-		s = s.trim();
-		if ("IGNORE".equalsIgnoreCase(s))
-			return new ObjectMap().append("ignore", true);
-		if (! isObjectMap(s, ignoreCommentsAndWhitespace))
-			s = "{" + s + "}";
-		return new ObjectMap(s);
+	private ObjectMap parseMap(String s, VarResolverSession vs, boolean ignoreCommentsAndWhitespace, boolean nullOnEmpty, String location, Object...locationArgs) throws ParseException {
+		try {
+			if (s == null)
+				return null;
+			if (s.isEmpty())
+				return nullOnEmpty ? null : ObjectMap.EMPTY_MAP;
+			s = vs.resolve(s.trim());
+			if ("IGNORE".equalsIgnoreCase(s))
+				return new ObjectMap().append("ignore", true);
+			if (! isObjectMap(s, ignoreCommentsAndWhitespace))
+				s = "{" + s + "}";
+			return new ObjectMap(s);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", locationArgs);
+		}
 	}	
 
-	private ObjectList parseObjectList(String s, boolean ignoreCommentsAndWhitespace) throws ParseException {
-		if (! isObjectList(s, ignoreCommentsAndWhitespace))
-			s = "[" + s + "]";
-		return new ObjectList(s);
+	private ObjectList parseList(String s, VarResolverSession vs, boolean ignoreCommentsAndWhitespace, boolean nullOnEmpty, String location, Object...locationArgs) throws ParseException {
+		try {
+			if (s == null)
+				return null;
+			if (s.isEmpty())
+				return nullOnEmpty ? null : ObjectList.EMPTY_LIST;
+			s = vs.resolve(s.trim());
+			if (! isObjectList(s, ignoreCommentsAndWhitespace))
+				s = "[" + s + "]";
+			return new ObjectList(s);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
+		}
 	}	
+	
+	private ObjectList parseListOrCdl(String s, VarResolverSession vs, boolean ignoreCommentsAndWhitespace, boolean nullOnEmpty, String location, Object...locationArgs) throws ParseException {
+		try {
+			if (s == null)
+				return null;
+			if (s.isEmpty())
+				return nullOnEmpty ? null : ObjectList.EMPTY_LIST;
+			s = vs.resolve(s.trim());
+			if (! isObjectList(s, ignoreCommentsAndWhitespace))
+				return new ObjectList(Arrays.asList(StringUtils.split(s, ',')));
+			return new ObjectList(s);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
+		}
+	}
 
 	private ObjectMap getSchema(RestRequest req, ObjectMap schema, JsonSchemaSerializerSession js, Type type) throws Exception {
 		BeanSession bs = req.getBeanSession();
@@ -651,16 +617,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	private static class SwaggerException extends ParseException {
 		private static final long serialVersionUID = 1L;
 		
-		SwaggerException(Class<?> c, String message, Object...args) {
-			this(null, c, message, args);
-		}
-		SwaggerException(Exception e, Class<?> c, String message, Object...args) {
-			super("Swagger exception on class " + c.getName() + ".  " + message, args);
-			initCause(e);
-		}
-		SwaggerException(Exception e, Method m, String message, Object...args) {
-			super("Swagger exception on class " + m.getDeclaringClass().getName() + " method "+m.getName()+".  " + message, args);
-			initCause(e);
+		SwaggerException(Exception e, String location, Object...locationArgs) {
+			super(e, "Swagger exception:  at " + format(location, locationArgs));
 		}
 	}
 	
@@ -778,7 +736,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		
-		String s = join(method.getAnnotation(RestMethod.class).description(), "");
+		String s = join(method.getAnnotation(RestMethod.class).description());
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)

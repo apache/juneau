@@ -10,69 +10,57 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.examples.rest.petstore;
 
-import java.io.*;
-
-import javax.servlet.*;
-
-import org.apache.juneau.encoders.*;
+import org.apache.juneau.annotation.*;
 
 /**
- * A wrapped {@link ServletOutputStream} with an added <code>finish()</code> method.
+ * Bean for creating {@link Pet} objects.
  */
-public class FinishableServletOutputStream extends ServletOutputStream implements Finishable {
+public class PetUpdate {
 
-	final OutputStream os;
-	final ServletOutputStream sos;
-	final Finishable f;
+	private final long id;
+	private final String name;
+	private final float price;
+	private final String species;
+	private final String[] tags;
+	private final PetStatus status;
 	
-	FinishableServletOutputStream(OutputStream os) {
-		this.os = os;
-		this.sos = (os instanceof ServletOutputStream ? (ServletOutputStream)os : null);
-		this.f = (os instanceof Finishable ? (Finishable)os : null);
+	@BeanConstructor(properties="id,name,price,species,tags,status")
+	public PetUpdate(long id, String name, float price, String species, String[] tags, PetStatus status) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.species = species;
+		this.tags = tags;
+		this.status = status;
 	}
 	
-	@Override /* OutputStream */
-	public final void write(byte[] b, int off, int len) throws IOException {
-		os.write(b, off, len);
-	}
-	
-	@Override /* OutputStream */
-	public final void write(int b) throws IOException {
-		os.write(b);
-	}
-	
-	@Override /* OutputStream */
-	public final void flush() throws IOException {
-		os.flush();
-	}
-	
-	@Override /* OutputStream */
-	public final void close() throws IOException {
-		os.close();
-	}
-	
-	@Override /* ServletOutputStream */
-	public boolean isReady() {
-		return sos == null ? true : sos.isReady();
-	}
-	
-	@Override /* ServletOutputStream */
-	public void setWriteListener(WriteListener arg0) {
-		if (sos != null)
-			sos.setWriteListener(arg0);
+	public static PetUpdate example() {
+		return new PetUpdate(123l, "Doggie", 9.99f, "doc", new String[] {"friendly","cute"}, PetStatus.AVAILABLE);
 	}
 
-	/**
-	 * Calls {@link Finishable#finish()} on the underlying output stream.
-	 * 
-	 * <p>
-	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
-	 */
-	@Override /* Finishable */
-	public void finish() throws IOException {
-		if (f != null)
-			f.finish();
+	public long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public String getSpecies() {
+		return species;
+	}
+
+	public String[] getTags() {
+		return tags;
+	}
+
+	public PetStatus getStatus() {
+		return status;
 	}
 }

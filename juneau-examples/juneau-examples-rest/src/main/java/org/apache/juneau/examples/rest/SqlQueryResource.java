@@ -54,15 +54,13 @@ import org.apache.juneau.rest.widget.*;
 			"</div>"
 		}
 	),
-	swagger={
-		"info: {",
-			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
-			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
-			"version:'2.0',",
-			"termsOfService:'You are on your own.'",
-		"},",
-		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
-	}
+	swagger=@ResourceSwagger(
+		contact="name:'Juneau Developer',email:'dev@juneau.apache.org'",
+		license="name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'",
+		version="2.0",
+		termsOfService="You are on your own.",
+		externalDocs="description:'Apache Juneau',url:'http://juneau.apache.org'"
+	)
 )
 public class SqlQueryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
@@ -146,11 +144,11 @@ public class SqlQueryResource extends BasicRestServlet {
 		name=POST, 
 		path="/", 
 		summary="Execute one or more queries",
-		swagger= {
-			"responses:{",
-				"200:{ description:'Query results.\nEach entry in the array is a result of one query.\nEach result can be a result set (for queries) or update count (for updates).', 'x-example':[[{col1:'val1'},{col2:'val2'},{col3:'val3'}],123]}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'Query results.\nEach entry in the array is a result of one query.\nEach result can be a result set (for queries) or update count (for updates).', 'x-example':[[{col1:'val1'},{col2:'val2'},{col3:'val3'}],123]}"
+			}
+		)
 	)
 	public List<Object> doPost(
 			@Body(description="Query input", example="{sql:'select * from sys.systables',pos:1,limit:100}") PostInput in

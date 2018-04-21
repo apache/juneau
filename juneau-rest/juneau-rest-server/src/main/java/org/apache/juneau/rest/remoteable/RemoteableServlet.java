@@ -165,8 +165,8 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 				"<h5>Method:  $RP{javaMethod}</h5>"
 			}
 		),
-		swagger= {
-			"parameters: [",
+		swagger=@MethodSwagger(
+			parameters= {
 				"{",
 					"in: 'body',",
 					"description: 'Serialized array of Java objects',",
@@ -176,12 +176,12 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 					"x-examples: {",
 						"'application/json+lax': '[\\'foo\\', 123, true]'",
 					"}",
-				"}",
-			"],",
-			"responses:{",
+				"}"
+			},
+			responses= {
 				"200:{ description:'The return object serialized', schema:{type:'any'},'x-example':{foo:123} }",
-			"}"
-		}
+			}
+		)
 	)
 	public Object invoke(
 			Reader r,

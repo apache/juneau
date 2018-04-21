@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.util;
 
 import java.io.*;
 
@@ -23,7 +23,14 @@ public class FinishablePrintWriter extends PrintWriter implements Finishable {
 
 	final Finishable f;
 
-	FinishablePrintWriter(OutputStream out, String characterEncoding) throws IOException {
+	/**
+	 * Constructor.
+	 * 
+	 * @param out The wrapped output stream.
+	 * @param characterEncoding The character encoding of the output stream.
+	 * @throws IOException
+	 */
+	public FinishablePrintWriter(OutputStream out, String characterEncoding) throws IOException {
 		super(new OutputStreamWriter(out, characterEncoding));
 		f = (out instanceof Finishable ? (Finishable)out : null);
 	}

@@ -27,6 +27,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.util.*;
 
 /**
  * Contains the body of the HTTP request.
@@ -460,115 +461,5 @@ public class RequestBody {
 	 */
 	public int getContentLength() {
 		return contentLength == 0 ? req.getRawContentLength() : contentLength;
-	}
-
-	/**
-	 * ServletInputStream wrapper around a normal input stream.
-	 */
-	static final class BoundedServletInputStream extends ServletInputStream {
-
-		private final InputStream is;
-		private final ServletInputStream sis;
-		private long remain;
-
-		BoundedServletInputStream(InputStream is, long max) {
-			this.is = is;
-			this.sis = null;
-			this.remain = max;
-		}
-
-		BoundedServletInputStream(ServletInputStream sis, long max) {
-			this.sis = sis;
-			this.is = sis;
-			this.remain = max;
-		}
-
-		BoundedServletInputStream(byte[] b) {
-			this(new ByteArrayInputStream(b), Long.MAX_VALUE);
-		}
-
-		@Override /* InputStream */
-		public final int read() throws IOException {
-			decrement();
-			return is.read();
-		}
-
-		@Override /* InputStream */
-		public int read(byte[] b) throws IOException {
-			return read(b, 0, b.length);
-		}
-
-		@Override /* InputStream */
-		public int read(final byte[] b, final int off, final int len) throws IOException {
-			long numBytes = Math.min(len, remain);
-			int r = is.read(b, off, (int) numBytes);
-			if (r == -1) 
-				return -1;
-			decrement(numBytes);
-			return r;
-		}
-
-		@Override /* InputStream */
-		public long skip(final long n) throws IOException {
-			long toSkip = Math.min(n, remain);
-			long r = is.skip(toSkip);
-			decrement(r);
-			return r;
-		}
-
-		@Override /* InputStream */
-		public int available() throws IOException {
-			if (remain <= 0)
-				return 0;
-			return is.available();
-		}
-
-		@Override /* InputStream */
-		public synchronized void reset() throws IOException {
-			is.reset();
-		}
-
-		@Override /* InputStream */
-		public synchronized void mark(int limit) {
-			is.mark(limit);
-		}
-
-		@Override /* InputStream */
-		public boolean markSupported() {
-			return is.markSupported();
-		}
-
-		@Override /* InputStream */
-		public final void close() throws IOException {
-			is.close();
-		}
-
-		@Override /* ServletInputStream */
-		public boolean isFinished() {
-			return sis == null ? false : sis.isFinished();
-		}
-
-		@Override /* ServletInputStream */
-		public boolean isReady() {
-			return sis == null ? true : sis.isReady();
-		}
-
-		@Override /* ServletInputStream */
-		public void setReadListener(ReadListener arg0) {
-			if (sis != null)
-				sis.setReadListener(arg0);
-		}
-		
-		private void decrement() throws IOException {
-			remain--;
-			if (remain < 0)
-				throw new IOException("Input limit exceeded.  See @RestResource.maxInput().");
-		}
-
-		private void decrement(long count) throws IOException {
-			remain -= count;
-			if (remain < 0)
-				throw new IOException("Input limit exceeded.  See @RestResource.maxInput().");
-		}
 	}
 }

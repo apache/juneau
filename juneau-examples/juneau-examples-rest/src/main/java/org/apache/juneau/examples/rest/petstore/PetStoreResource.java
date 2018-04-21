@@ -12,19 +12,27 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.dto.swagger.ui.SwaggerUI.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.rest.helper.Ok.*;
 
 import java.util.*;
+import java.util.Map;
 
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.annotation.Header;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.transforms.*;
 import org.apache.juneau.rest.converters.*;
 
 /**
@@ -69,7 +77,7 @@ import org.apache.juneau.rest.converters.*;
 		// Resolve recursive references when showing schema info in the swagger.
 		@Property(name=SWAGGERUI_resolveRefsMaxDepth, value="99")
 	},
-	swagger="$F{PetStoreResource.json}",
+	swagger=@ResourceSwagger("$F{PetStoreResource.json}"),
 	staticFiles={"htdocs:htdocs"}
 )
 public class PetStoreResource extends BasicRestServletJena {
@@ -103,12 +111,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="GET",
 		path="/pet",
 		summary="All pets in the store",
-		swagger={
-			"tags:['pet'],",
-			"parameters:[",
-				 Queryable.SWAGGER_PARAMS,
-			"]"
-		},
+		swagger=@MethodSwagger(
+			tags="pet",
+			parameters={
+				Queryable.SWAGGER_PARAMS
+			}
+		),
 		bpx="Pet: tags",
 		htmldoc=@HtmlDoc(
 			widgets={
@@ -132,10 +140,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/pet/{petId}",
 		summary="Find pet by ID",
 		description="Returns a single pet",
-		swagger={
-			"tags:[ 'pet' ],",
-			"security:[ { api_key:[] } ]"
-		}
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { api_key:[] } ]"
+			}
+		)
 	)
 	public Pet getPet(
 			@Path(description="ID of pet to return", example="123") long petId
@@ -148,15 +158,18 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="POST", 
 		path="/pet",
 		summary="Add a new pet to the store",
-		swagger={
-			"tags:['pet'],",
-			"security:[ { petstore_auth:['write:pets','read:pets'] } ]"
-		}
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { petstore_auth:['write:pets','read:pets'] } ]"
+			}
+		)
 	)
 	public Ok addPet(
-			@Body(description="Pet object that needs to be added to the store") CreatePet pet
+			@Body(description="Pet object that needs to be added to the store") PetCreate pet
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
+		JsonSerializer.DEFAULT_LAX_READABLE.println(pet);
 		store.create(pet);
 		return OK;
 	}
@@ -165,13 +178,15 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="PUT", 
 		path="/pet/{petId}",
 		summary="Update an existing pet",
-		swagger={
-			"tags:['pet'],",
-			"security:[ { petstore_auth: ['write:pets','read:pets'] } ]"
-		}
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { petstore_auth: ['write:pets','read:pets'] } ]"
+			}
+		)
 	)
 	public Ok updatePet(
-			@Body(description="Pet object that needs to be added to the store") Pet pet
+			@Body(description="Pet object that needs to be added to the store") PetUpdate pet
 		) throws IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
 		store.update(pet);
@@ -180,13 +195,85 @@ public class PetStoreResource extends BasicRestServletJena {
 
 	@RestMethod(
 		name="GET", 
+		path="/pet/{petId}/edit",
+		summary="Pet edit page",
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { petstore_auth:['write:pets','read:pets'] } ]"
+			}
+		)
+	)
+	public Div editPetPage(
+			@Path(description="ID of pet to return", example="123") long petId
+		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
+		
+		Pet pet = getPet(petId);
+		
+		return div(
+			form().id("form").action("servlet:/pet/" + petId).method(POST).children(
+				table(
+					tr(
+						th("Id:"),
+						td(input().name("id").type("text").value(petId).readonly(true)),
+						td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'")) 
+					),
+					tr(
+						th("Name:"),
+						td(input().name("name").type("text").value(pet.getName())),
+						td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'")) 
+					),
+					tr(
+						th("Species:"),
+						td(
+							select().name("species").children(
+								option("cat"), option("dog"), option("bird"), option("fish"), option("mouse"), option("rabbit"), option("snake")
+							).choose(pet.getSpecies())
+						),
+						td(new Tooltip("(?)", "The kind of animal.")) 
+					),
+					tr(
+						th("Price:"),
+						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100).value(pet.getPrice())),
+						td(new Tooltip("(?)", "The price to charge for this pet.")) 
+					),
+					tr(
+						th("Tags:"),
+						td(input().name("tags").type("text").value(Tag.asString(pet.getTags()))),
+						td(new Tooltip("(?)", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'")) 
+					),
+					tr(
+						th("Status:"),
+						td(
+							select().name("status").children(
+								option("AVAILABLE"), option("PENDING"), option("SOLD")
+							).choose(pet.getStatus())
+						),
+						td(new Tooltip("(?)", "The current status of the animal.")) 
+					),
+					tr(
+						td().colspan(2).style("text-align:right").children(
+							button("reset", "Reset"),
+							button("button","Cancel").onclick("window.location.href='/'"),
+							button("submit", "Submit")
+						)
+					)
+				).style("white-space:nowrap")
+			)
+		);
+	}
+
+	@RestMethod(
+		name="GET", 
 		path="/pet/findByStatus",
 		summary="Finds Pets by status",
 		description="Multiple status values can be provided with comma separated strings.",
-		swagger={
-			"tags:['pet'],",
-			"security:[{ petstore_auth:[ 'write:pets','read:pets' ] } ]"
-		}
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[{ petstore_auth:[ 'write:pets','read:pets' ] } ]"
+			}
+		)
 	)
 	public Collection<Pet> findPetsByStatus(
 			@Query(
@@ -206,10 +293,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/pet/findByTags",
 		summary="Finds Pets by tags",
 		description="Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-		swagger={
-			"tags:['pet'],",
-			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
-		}
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
+			}
+		)
 	)
 	@Deprecated
 	public Collection<Pet> findPetsByTags(
@@ -226,35 +315,15 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="POST", 
-		path="/pet/{petId}",
-		summary="Updates a pet in the store with form data",
-		swagger={
-			"tags:[ 'pet' ],",
-			"security:[ { petstore_auth:[ 'write:pets', 'read:pets' ] } ]"
-		}
-	)
-	public Ok updatePetForm(
-			@Path(description="ID of pet that needs to be updated", example="123") long petId, 
-			@FormData(name="name", description="Updated name of the pet", example="'Scruffy'") String name, 
-			@FormData(name="status", description="Updated status of the pet", example="'AVAILABLE'") PetStatus status
-		) throws IdNotFound, NotAcceptable, UnsupportedMediaType {
-		
-		Pet pet = store.getPet(petId);
-		pet.name(name);
-		pet.status(status);
-		store.update(pet);
-		return OK;
-	}
-
-	@RestMethod(
 		name="DELETE", 
 		path="/pet/{petId}",
 		summary="Deletes a pet",
-		swagger={
-			"tags:[ 'pet' ],",
-			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
-		}
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
+			}
+		)
 	)
 	public Ok deletePet(
 			@Header(name="api_key", example="foobar") String apiKey, 
@@ -269,10 +338,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="POST", 
 		path="/pet/{petId}/uploadImage",
 		summary="Uploads an image",
-		swagger={
-			"tags:[ 'pet' ],",
-			"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
-		}
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
+			}
+		)
 	)
 	public Ok uploadImage(
 			@Path(description="ID of pet to update", example="123") long petId, 
@@ -290,7 +361,10 @@ public class PetStoreResource extends BasicRestServletJena {
 	@RestMethod(
 		name="GET", 
 		path="/store",
-		summary="Navigation page"
+		summary="Store navigation page",
+		swagger=@MethodSwagger(
+			tags="store"
+		)
 	) 
 	public ResourceDescription[] getTopStorePage() {
 		return new ResourceDescription[] {
@@ -303,9 +377,20 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="GET",
 		path="/store/order",
 		summary="Petstore orders",
-		swagger={
-			"tags:['store']"
-		}
+		swagger=@MethodSwagger(
+			tags="store"
+		),
+		htmldoc=@HtmlDoc(
+			widgets={
+				QueryMenuItem.class,
+				AddOrderMenuItem.class
+			},
+			navlinks={
+				"INHERIT",                // Inherit links from class.
+				"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
+				"[3]:$W{AddOrderMenuItem}"  // Insert ADD link in position 3.
+			}
+		)
 	) 
 	public Collection<Order> getOrders() throws NotAcceptable {
 		return store.getOrders();
@@ -316,9 +401,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/store/order/{orderId}",
 		summary="Find purchase order by ID",
 		description="Returns a purchase order by ID.",
-		swagger={
-			"tags:[ 'store' ]",
-		}
+		swagger=@MethodSwagger(
+			tags="store"
+		)
 	)
 	public Order getOrder(
 			@Path(description="ID of order to fetch", maximum="1000", minimum="101", example="123") long orderId
@@ -333,25 +418,33 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="POST", 
 		path="/store/order",
 		summary="Place an order for a pet",
-		swagger={
-			"tags:[ 'store' ]"
+		swagger=@MethodSwagger(
+			tags="store"
+		),
+		pojoSwaps={
+			DateSwap.ISO8601D.class
 		}
 	)
 	public Order placeOrder(
-			@Body(description="Order placed for purchasing the pet", example="{petId:456,quantity:100}") CreateOrder order
+			@FormData(name="petId", description="Pet ID") long petId,
+			@FormData(name="shipDate", description="Ship date") Date shipDate
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
-		return store.create(order);
+		CreateOrder co = new CreateOrder(petId, shipDate);
+		return store.create(co);
 	}
 
 	@RestMethod(
 		name="DELETE", 
 		path="/store/order/{orderId}",
 		summary="Delete purchase order by ID",
-		description="For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors.",
-		swagger={
-			"tags:[ 'store' ]"
-		}
+		description= {
+			"For valid response try integer IDs with positive integer value.",
+			"Negative or non-integer values will generate API errors."
+		},
+		swagger=@MethodSwagger(
+			tags="store"
+		)
 	)
 	public Ok deletePurchaseOrder(
 			@Path(description="ID of the order that needs to be deleted", minimum="1", example="5") long orderId
@@ -368,13 +461,15 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/store/inventory",
 		summary="Returns pet inventories by status",
 		description="Returns a map of status codes to quantities",
-		swagger={
-			"tags:[ 'store' ],",
-			"responses:{",
+		swagger=@MethodSwagger(
+			tags="store",
+			responses={
 				"200:{ 'x-example':{AVAILABLE:123} }",
-			"},",
-			"security:[ { api_key:[] } ]"
-		}
+			},
+			value={
+				"security:[ { api_key:[] } ]"
+			}
+		)
 	)
 	public Map<PetStatus,Integer> getStoreInventory() throws NotAcceptable {
 		return store.getInventory();
@@ -389,9 +484,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/user",
 		summary="Petstore users",
 		bpx="User: email,password,phone",
-		swagger={
-			"tags:['user']"
-		}
+		swagger=@MethodSwagger(
+			tags="user"
+		)
 	)
 	public Collection<User> getUsers() throws NotAcceptable {
 		return store.getUsers();
@@ -401,9 +496,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="GET", 
 		path="/user/{username}",
 		summary="Get user by user name",
-		swagger={
-			"tags:[ 'user' ]"
-		}
+		swagger=@MethodSwagger(
+			tags="user"
+		)
 	)
 	public User getUser(
 			@Path(description="The name that needs to be fetched. Use user1 for testing.") String username
@@ -417,9 +512,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/user",
 		summary="Create user",
 		description="This can only be done by the logged in user.",
-		swagger={
-			"tags:[ 'user' ]"
-		}
+		swagger=@MethodSwagger(
+			tags="user"
+		)
 	)
 	public Ok createUser(
 			@Body(description="Created user object") User user
@@ -433,9 +528,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="POST", 
 		path="/user/createWithArray",
 		summary="Creates list of users with given input array",
-		swagger={
-			"tags:[ 'user' ]"
-		}
+		swagger=@MethodSwagger(
+			tags="user"
+		)
 	)
 	public Ok createUsers(
 			@Body(description="List of user objects") User[] users
@@ -451,9 +546,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/user/{username}",
 		summary="Update user",
 		description="This can only be done by the logged in user.",
-		swagger={
-			"tags:[ 'user' ]"
-		}
+		swagger=@MethodSwagger(
+			tags="user"
+		)
 	)
 	public Ok updateUser(
 			@Path(description="Name that need to be updated") String username, 
@@ -469,9 +564,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/user/{username}",
 		summary="Delete user",
 		description="This can only be done by the logged in user.",
-		swagger={
-			"tags:[ 'user' ]"
-		}
+		swagger=@MethodSwagger(
+			tags="user"
+		)
 	)
 	public Ok deleteUser(
 			@Path(description="The name that needs to be deleted") String username
@@ -485,17 +580,17 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="GET", 
 		path="/user/login",
 		summary="Logs user into the system",
-		swagger={
-			"tags:[ 'user' ],",
-			"responses:{",
+		swagger=@MethodSwagger(
+			tags="user",
+			responses={
 				"200:{",
 					"headers:{",
 						"X-Rate-Limit:{ type:'integer', format:'int32', description:'calls per hour allowed by the user', 'x-example':123},",
 						"X-Expires-After:{ type:'string', format:'date-time', description:'date in UTC when token expires', 'x-example':'2012-10-21'}",
 					"}",
-				"}",
-			"}"
-		}
+				"}"
+			}
+		)
 	)
 	public Ok login(
 			@Query(name="username", description="The username for login", required="true", example="myuser") String username, 
@@ -518,9 +613,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		name="GET", 
 		path="/user/logout",
 		summary="Logs out current logged in user session",
-		swagger={
-			"tags:[ 'user' ]"
-		}
+		swagger=@MethodSwagger(
+			tags="user"
+		)
 	)
 	public Ok logout(RestRequest req) throws NotAcceptable {
 		req.getSession().removeAttribute("login-expires");

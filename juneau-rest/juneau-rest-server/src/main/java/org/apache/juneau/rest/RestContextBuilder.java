@@ -36,6 +36,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.response.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -170,10 +171,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			vr = varResolverBuilder.build();
 
 			// Add the servlet init parameters to our properties.
-			for (Enumeration<String> ep = servletConfig.getInitParameterNames(); ep.hasMoreElements();) {
-				String p = ep.nextElement();
-				String initParam = servletConfig.getInitParameter(p);
-				set(vr.resolve(p), vr.resolve(initParam));
+			if (servletConfig != null) {
+				for (Enumeration<String> ep = servletConfig.getInitParameterNames(); ep.hasMoreElements();) {
+					String p = ep.nextElement();
+					String initParam = servletConfig.getInitParameter(p);
+					set(vr.resolve(p), vr.resolve(initParam));
+				}
 			}
 
 			// Load stuff from parent-to-child order.
@@ -262,6 +265,17 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 	}
 	
+	@Override /* BeanContextBuilder */
+	public RestContext build() {
+		try {
+			return new RestContext(this);
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	private static String[] resolveVars(VarResolver vr, String[] in) {
 		String[] out = new String[in.length];
 		for (int i = 0; i < in.length; i++) 
@@ -272,7 +286,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/*
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
 	 */
-	void init(Object resource) throws ServletException {
+	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
 
 		// Once we have the resource object, we can construct the Widgets.
@@ -311,6 +325,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				throw new RestServletException("Exception thrown from @RestHook(INIT) method {0}.", m).initCause(e);
 			}
 		}
+		return this;
 	}
 	
 	RestContextBuilder servletContext(ServletContext servletContext) {
@@ -2342,11 +2357,5 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* ServletConfig */
 	public String getServletName() {
 		return inner.getServletName();
-	}
-
-	@Override /* BeanContextBuilder */
-	public BeanContext build() {
-		// We don't actually generate bean context objects from this class yet.
-		return null;
 	}
 }

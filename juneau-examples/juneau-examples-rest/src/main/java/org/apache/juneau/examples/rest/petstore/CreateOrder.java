@@ -12,36 +12,33 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Bean for creating {@link Order} objects.
  */
 public class CreateOrder {
 	private final long petId;
-	private final int quantity;
-	private final String shipDate;
+	private final Date shipDate;
 
-	@BeanConstructor(properties="petId,quantity,shipDate")
-	public CreateOrder(long petId, int quantity, String shipDate) {
+	@BeanConstructor(properties="petId,shipDate")
+	public CreateOrder(long petId, Date shipDate) {
 		this.petId = petId;
-		this.quantity = quantity;
 		this.shipDate = shipDate;
 	}
 	
 	public static CreateOrder example() {
-		return new CreateOrder(123, 10, "2012-12-21");
+		return new CreateOrder(123, StringUtils.parseIsoDate("2012-12-21"));
 	}
 
 	public long getPetId() {
 		return petId;
 	}
 
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public String getShipDate() {
+	public Date getShipDate() {
 		return shipDate;
 	}
 }

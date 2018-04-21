@@ -38,6 +38,13 @@ public class Swagger extends SwaggerElement {
 	/** Represents a null swagger */
 	public static final Swagger NULL = new Swagger();
 
+	private static final Comparator<String> PATH_COMPARATOR = new Comparator<String>() {
+		@Override /* Comparator */
+		public int compare(String o1, String o2) {
+			return o1.replace('{', '@').compareTo(o2.replace('{', '@'));
+		}
+	};
+	
 	private String 
 		swagger = "2.0",
 		host, 
@@ -618,7 +625,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger setPaths(Map<String,OperationMap> value) {
-		paths = newSortedMap(value, null);
+		paths = newSortedMap(value, PATH_COMPARATOR);
 		return this;
 	}
 
@@ -637,7 +644,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addPaths(Map<String,OperationMap> values) {
-		paths = addToSortedMap(paths, values, null);
+		paths = addToSortedMap(paths, values, PATH_COMPARATOR);
 		return this;
 	}
 	
@@ -651,7 +658,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger path(String path, String methodName, Operation operation) {
 		if (paths == null)
-			paths = new TreeMap<>();
+			paths = new TreeMap<>(PATH_COMPARATOR);
 		OperationMap p = paths.get(path);
 		if (p == null) {
 			p = new OperationMap();
@@ -681,7 +688,7 @@ public class Swagger extends SwaggerElement {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger paths(Object...values) {
 		if (paths == null)
-			paths = new TreeMap<>();
+			paths = new TreeMap<>(PATH_COMPARATOR);
 		paths = addToMap((Map)paths, values, String.class, Map.class, String.class, Operation.class);
 		return this;
 	}

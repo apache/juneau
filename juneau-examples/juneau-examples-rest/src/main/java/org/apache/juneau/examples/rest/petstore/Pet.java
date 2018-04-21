@@ -128,4 +128,8 @@ public class Pet {
 		this.price = price;
 		return this;
 	}
+
+	public java.net.URI getEdit() {
+		return java.net.URI.create("servlet:/pet/edit/{id}");
+	}
 }

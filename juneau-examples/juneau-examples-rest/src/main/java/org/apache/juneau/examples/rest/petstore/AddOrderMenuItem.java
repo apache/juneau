@@ -12,55 +12,62 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.util.*;
+import java.util.Map;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.widget.*;
 
-@Bean(fluentSetters=true, properties="id,petId,shipDate,status")
-@Example("{id:123,petId:456,shipDate:'2012-12-21',status:'APPROVED'}")
-public class Order {
-	private long id, petId;
-	private Date shipDate;
-	private OrderStatus status;
-	
-	public long getId() {
-		return id;
+/**
+ * Menu item for adding a Pet.
+ */
+public class AddOrderMenuItem extends MenuItemWidget {
+
+	@Override /* MenuItemWidget */
+	public String getLabel(RestRequest req) throws Exception {
+		return "add";
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* Widget */
+	public Object getContent(RestRequest req) throws Exception {
+		Map<Long,String> petNames = (Map<Long,String>)req.getAttribute("availablePets");
 	
-	@Html(link="servlet:/store/order/{id}") 
-	public Order id(long id) {
-		this.id = id;
-		return this;
-	}
+		List<Option> options = new ArrayList<>();
+		for (Map.Entry<Long,String> e : petNames.entrySet())
+			options.add(option(e.getKey(), e.getValue()));
 	
-	@Html(link="servlet:/pet/{id}")
-	public long getPetId() {
-		return petId;
-	}
-	
-	public Order petId(long petId) {
-		this.petId = petId;
-		return this;
-	}
-	
-	@Swap(DateSwap.ISO8601D.class)
-	public Date getShipDate() {
-		return shipDate;
-	}
-	
-	public Order shipDate(Date shipDate) {
-		this.shipDate = shipDate;
-		return this;
-	}
-	
-	public OrderStatus getStatus() {
-		return status;
-	}
-	
-	public Order status(OrderStatus status) {
-		this.status = status;
-		return this;
+		
+		return div(
+			form().id("form").action("servlet:/store/order").method(POST).children(
+				table(
+					tr(
+						th("Pet:"),
+						td(
+							select().name("petId").children(
+								options.toArray()
+							)
+						),
+						td(new Tooltip("(?)", "The pet to purchase.")) 
+					),
+					tr(
+						th("Ship date:"),
+						td(input().name("shipDate").type("date")),
+						td(new Tooltip("(?)", "The requested ship date.")) 
+					),
+					tr(
+						td().colspan(2).style("text-align:right").children(
+							button("reset", "Reset"),
+							button("button","Cancel").onclick("window.location.href='/'"),
+							button("submit", "Submit")
+						)
+					)
+				).style("white-space:nowrap")
+			)
+		);
 	}
 }

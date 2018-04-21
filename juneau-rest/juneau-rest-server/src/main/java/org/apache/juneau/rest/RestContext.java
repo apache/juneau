@@ -3159,7 +3159,7 @@ public final class RestContext extends BeanContext {
 				if (r instanceof RestServlet)
 					((RestServlet)r).innerInit(childBuilder);
 				childBuilder.servletContext(servletContext);
-				RestContext rc2 = new RestContext(childBuilder);
+				RestContext rc2 = childBuilder.build();
 				if (r instanceof RestServlet)
 					((RestServlet)r).setContext(rc2);
 				path = childBuilder.path;

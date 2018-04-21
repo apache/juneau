@@ -59,4 +59,9 @@ public class Species {
 			return "background-color:#FDF2E9";
 		}
 	}
+	
+	@Override /* Object */
+	public String toString() {
+		return name;
+	}
 }

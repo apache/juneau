@@ -50,11 +50,11 @@ public class ConfigResource extends BasicRestServlet {
 		path="/", 
 		summary="Get config file contents",
 		description="Show contents of config file as an ObjectMap.",
-		swagger={
-			"responses:{",
-				"200:{ description:'Config file as a map of map of objects.', 'x-example':{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'Config file as a map of map of objects.', 'x-example':{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}"
+			}
+		)
 	)
 	public ObjectMap getConfig() {
 		return getServletConfig().getConfig().asMap();
@@ -86,11 +86,11 @@ public class ConfigResource extends BasicRestServlet {
 		path="/{section}",
 		summary="Get config file section contents",
 		description="Show contents of config file section as an ObjectMap.",
-		swagger={
-			"responses:{",
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+			}
+		)
 	)
 	public ObjectMap getConfigSection(
 			@Path(name="section", description="Section name in config file.", example="REST") String section
@@ -104,11 +104,11 @@ public class ConfigResource extends BasicRestServlet {
 		path="/{section}/{key}",
 		summary="Get config file entry value",
 		description="Show value of config file entry as a simple string.",
-		swagger={
-			"responses:{",
-				"200:{ description:'Entry value.', 'x-example':'servlet:/htdocs/themes/dark.css'}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'Entry value.', 'x-example':'servlet:/htdocs/themes/dark.css'}"
+			}
+		)
 	)
 	public String getConfigEntry(
 			@Path(name="section", description="Section name in config file.", example="REST") String section,
@@ -123,11 +123,11 @@ public class ConfigResource extends BasicRestServlet {
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from a FORM post.",
-		swagger={
-			"responses:{",
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+			}
+		)
 	)
 	public ObjectMap setConfigContentsFormPost(
 			@FormData(name="contents", description="New contents in INI file format.") String contents
@@ -141,11 +141,11 @@ public class ConfigResource extends BasicRestServlet {
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from raw text.",
-		swagger={
-			"responses:{",
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+			}
+		)
 	)
 	public ObjectMap setConfigContents(
 			@Body(description="New contents in INI file format.") Reader contents
@@ -159,11 +159,11 @@ public class ConfigResource extends BasicRestServlet {
 		path="/{section}",
 		summary="Update config section contents",
 		description="Add or overwrite a config file section.",
-		swagger={
-			"responses:{",
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+			}
+		)
 	)
 	public ObjectMap setConfigSection(
 			@Path(name="section", description="Section name in config file.", example="REST") String section,
@@ -182,11 +182,11 @@ public class ConfigResource extends BasicRestServlet {
 		path="/{section}/{key}",
 		summary="Update config entry value",
 		description="Add or overwrite a config file entry.",
-		swagger={
-			"responses:{",
-				"200:{ description:'The updated value.', 'x-example':'servlet:/htdocs/themes/dark.css'}",
-			"}",
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200:{ description:'The updated value.', 'x-example':'servlet:/htdocs/themes/dark.css'}"
+			}
+		)
 	)
 	public String setConfigValue(
 			@Path(name="section", description="Section name in config file.", example="REST") String section,

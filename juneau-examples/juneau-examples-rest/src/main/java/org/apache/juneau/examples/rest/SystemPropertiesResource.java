@@ -81,15 +81,13 @@ import org.apache.juneau.rest.widget.*;
 	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,
 
-	swagger={
-		"info: {",
-			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
-			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
-			"version:'2.0',",
-			"termsOfService:'You are on your own.'",
-		"},",
-		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
-	}
+	swagger=@ResourceSwagger(
+		contact="name:'Juneau Developer',email:'dev@juneau.apache.org'",
+		license="name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'",
+		version="2.0",
+		termsOfService="You are on your own.",
+		externalDocs="description:'Apache Juneau',url:'http://juneau.apache.org'"
+	)
 )
 public class SystemPropertiesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
@@ -98,11 +96,11 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		name=GET, path="/",
 		summary="Show all system properties",
 		description="Returns all system properties defined in the JVM.",
-		swagger={
-			"responses:{",
-				"200: {description:'Returns a map of key/value pairs.', x-example:{key1:'val1',key2:'val2'}}",
-			"}"
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200: {description:'Returns a map of key/value pairs.', x-example:{key1:'val1',key2:'val2'}}"
+			}
+		)
 	)
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Map getSystemProperties(
@@ -118,11 +116,11 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		name=GET, path="/{propertyName}",
 		summary="Get system property",
 		description="Returns the value of the specified system property.",
-		swagger={
-			"responses:{",
-				"200: {description:'The system property value, or null if not found'}",
-			"}"
-		}
+		swagger=@MethodSwagger(
+			responses={
+				"200: {description:'The system property value, or null if not found'}"
+			}
+		)
 	)
 	public String getSystemProperty(
 			@Path(description="The system property name.", example="PATH") String propertyName

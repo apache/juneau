@@ -31,7 +31,7 @@ public class AddPetMenuItem extends MenuItemWidget {
 	@Override /* Widget */
 	public Object getContent(RestRequest req) throws Exception {
 		return div(
-			form().id("form").action("servlet:/").method(POST).children(
+			form().id("form").action("servlet:/pet").method(POST).children(
 				table(
 					tr(
 						th("Name:"),
@@ -41,16 +41,21 @@ public class AddPetMenuItem extends MenuItemWidget {
 					tr(
 						th("Species:"),
 						td(
-							select().name("kind").children(
-								option("CAT"), option("DOG"), option("BIRD"), option("FISH"), option("MOUSE"), option("RABBIT"), option("SNAKE")
+							select().name("species").children(
+								option("cat"), option("dog"), option("bird"), option("fish"), option("mouse"), option("rabbit"), option("snake")
 							)
 						),
 						td(new Tooltip("(?)", "The kind of animal.")) 
 					),
 					tr(
 						th("Price:"),
-						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100)),
+						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100).value(9.99)),
 						td(new Tooltip("(?)", "The price to charge for this pet.")) 
+					),
+					tr(
+						th("Tags:"),
+						td(input().name("tags").type("text")),
+						td(new Tooltip("(?)", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'")) 
 					),
 					tr(
 						td().colspan(2).style("text-align:right").children(

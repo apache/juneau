@@ -513,11 +513,11 @@ public abstract class ParserSession extends BeanSession {
 		} catch (StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, "I/O exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} catch (Exception e) {
-			throw new ParseException(this, "Exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} finally {
 			checkForWarnings();
 		}
@@ -604,11 +604,11 @@ public abstract class ParserSession extends BeanSession {
 		} catch (StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, "I/O exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} catch (Exception e) {
-			throw new ParseException(this, "Exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} finally {
 			checkForWarnings();
 		}
@@ -659,11 +659,11 @@ public abstract class ParserSession extends BeanSession {
 		} catch (StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, "I/O exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} catch (Exception e) {
-			throw new ParseException(this, "Exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} finally {
 			checkForWarnings();
 		}

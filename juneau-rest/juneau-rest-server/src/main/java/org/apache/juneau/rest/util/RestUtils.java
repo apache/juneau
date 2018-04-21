@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -163,7 +163,13 @@ public final class RestUtils {
 		}
 	}
 
-	static String[] parseHeader(String s) {
+	/**
+	 * Parses HTTP header.
+	 * 
+	 * @param s The string to parse.
+	 * @return The parsed string.
+	 */
+	public static String[] parseHeader(String s) {
 		int i = s.indexOf(':');
 		if (i == -1)
 			return null;
@@ -174,8 +180,11 @@ public final class RestUtils {
 
 	/**
 	 * Parses key/value pairs separated by either : or =
+	 * 
+	 * @param s The string to parse.
+	 * @return The parsed string.
 	 */
-	static String[] parseKeyValuePair(String s) {
+	public static String[] parseKeyValuePair(String s) {
 		int i = -1;
 		for (int j = 0; j < s.length() && i < 0; j++) {
 			char c = s.charAt(j);

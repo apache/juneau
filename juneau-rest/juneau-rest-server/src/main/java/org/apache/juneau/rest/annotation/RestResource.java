@@ -859,13 +859,14 @@ public @interface RestResource {
 	 * 		}
 	 * 	)
 	 * </p>
+	 * {@link TODO}
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
 	 * </ul>
 	 */
-	String[] swagger() default {};
+	ResourceSwagger swagger() default @ResourceSwagger;
 
 	/**
 	 * Optional servlet title.

@@ -39,6 +39,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;

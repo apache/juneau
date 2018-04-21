@@ -19,6 +19,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
 /**

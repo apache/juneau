@@ -39,7 +39,7 @@ public class RootContentTest extends ContentComboTestBase {
 				new ComboInput("HTML-header", "/", MediaType.HTML,
 					"<head>",
 					"<h1>Root resources</h1>",
-					"<h2>Example of a router resource page.</h2>",
+					"<h2>Navigation page</h2>",
 					"<img src='/htdocs/images/juneau.png' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/>"
 				)
 			},

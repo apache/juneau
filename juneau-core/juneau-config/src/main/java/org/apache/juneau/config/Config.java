@@ -1678,7 +1678,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 					default: return (T)base64Decode(s);
 				}
 			} catch (Exception e) {
-				throw new ParseException("Value could not be converted to a byte array.").initCause(e);
+				throw new ParseException(e, "Value could not be converted to a byte array.");
 			}
 		}
 		

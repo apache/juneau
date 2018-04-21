@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 [
-	{id:101,petId:101,quantity:1,shipDate:'2018-01-01',status:'PLACED'},
-	{id:102,petId:102,quantity:5,shipDate:'2018-01-01',status:'APPROVED'},
-	{id:103,petId:103,quantity:10,shipDate:'2018-01-01',status:'DELIVERED'}
+	{id:101,petId:101,shipDate:'2018-01-01',status:'PLACED'},
+	{id:102,petId:102,shipDate:'2018-01-01',status:'APPROVED'},
+	{id:103,petId:103,shipDate:'2018-01-01',status:'DELIVERED'}
 ]

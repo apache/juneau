@@ -204,7 +204,7 @@ public final class StringUtils {
 				return new AtomicInteger(Integer.decode(s));
 			throw new ParseException("Unsupported Number type: {0}", type.getName());
 		} catch (NumberFormatException e) {
-			throw new ParseException("Invalid number: ''{0}'', class=''{1}''", s, type.getSimpleName()).initCause(e);
+			throw new ParseException(e, "Invalid number: ''{0}'', class=''{1}''", s, type.getSimpleName());
 		}
 	}
 
@@ -1140,7 +1140,7 @@ public final class StringUtils {
 	 * @return The parsed date.
 	 * @throws IllegalArgumentException
 	 */
-	public static Date parseISO8601Date(String date) throws IllegalArgumentException {
+	public static Date parseIsoDate(String date) throws IllegalArgumentException {
 		if (isEmpty(date))
 			return null;
 		date = date.trim().replace(' ', 'T');  // Convert to 'standard' ISO8601

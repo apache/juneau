@@ -766,11 +766,12 @@ public @interface RestMethod {
 	 * 		}
 	 * 	)
 	 * </p>
+	 * {@link TODO}
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
 	 * </ul>
 	 */
-	String[] swagger() default {};
+	MethodSwagger swagger() default @MethodSwagger;
 }

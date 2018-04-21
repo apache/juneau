@@ -12,9 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 @Bean(typeName="Tag", fluentSetters=true)
@@ -57,5 +60,14 @@ public class Tag {
 		public MediaType[] forMediaTypes() {
 			return new MediaType[] { MediaType.HTML };
 		}
+	}
+	
+	public static String asString(List<Tag> tags) {
+		if (tags == null)
+			return "";
+		List<String> l = new ArrayList<>(tags.size());
+		for (Tag t : tags)
+			l.add(t.getName());
+		return StringUtils.join(l, ',');
 	}
 }
