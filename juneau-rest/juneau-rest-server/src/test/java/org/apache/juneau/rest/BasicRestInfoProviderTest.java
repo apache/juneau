@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.junit.Assert.assertEquals;
 import static org.apache.juneau.rest.TestUtils.*;
 
 import java.io.*;
@@ -30,18 +31,14 @@ public class BasicRestInfoProviderTest {
 		RestContext rc = RestContext.create(resource).classpathResourceFinder(TestClasspathResourceFinder.class).build();
 		RestRequest req = rc.getCallHandler().createRequest(new MockHttpServletRequest());
 		RestInfoProvider ip = rc.getInfoProvider();
-		Swagger s = ip.getSwagger(req);
-		s.setSwagger(null);
-		return s;
+		return ip.getSwagger(req);
 	}
 
 	private Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).build();
 		RestRequest req = rc.getCallHandler().createRequest(new MockHttpServletRequest());
 		RestInfoProvider ip = rc.getInfoProvider();
-		Swagger s = ip.getSwagger(req);
-		s.setSwagger(null);
-		return s;
+		return ip.getSwagger(req);
 	}
 	
 	public static class TestClasspathResourceFinder extends ClasspathResourceFinderBasic {
@@ -52,80 +49,597 @@ public class BasicRestInfoProviderTest {
 				return BasicRestInfoProvider.class.getResourceAsStream("BasicRestinfoProviderTest_swagger.json");
 			return super.findResource(baseClass, name, locale);
 		}
-		
+	}
+	
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /swagger
+	// "swagger": "2.0",
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource()
+	public static class A01 {}
+	
+	@Test
+	public void a01_swagger_default() throws Exception {
+		assertEquals("2.0", getSwagger(new A01()).getSwagger());
+		assertEquals("0.0", getSwaggerWithFile(new A01()).getSwagger());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger("{swagger:'3.0'}"))
+	public static class A02 {}
+	
+	@Test
+	public void a02_swagger_ResourceSwagger_value() throws Exception {
+		assertEquals("3.0", getSwagger(new A02()).getSwagger());
+		assertEquals("3.0", getSwaggerWithFile(new A02()).getSwagger());
 	}
 	
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	// /info/title
+	// "title": "Swagger Petstore",
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource(title="a-title")
-	public static class A1 {}
+	public static class B01 {}
 
 	@Test
-	public void title_RestResource_title() throws Exception {
-		assertObjectEquals("{info:{title:'a-title'}}", getSwagger(new A1()));
-		assertObjectEquals("{info:{title:'s-title'}}", getSwaggerWithFile(new A1()));
+	public void b01_title_RestResource_title() throws Exception {
+		assertEquals("a-title", getSwagger(new B01()).getInfo().getTitle());
+		assertEquals("s-title", getSwaggerWithFile(new B01()).getInfo().getTitle());
 	}
 
 	
 	@RestResource(title="$L{foo}",messages="BasicRestInfoProviderTest")
-	public static class A1L {}
+	public static class B02 {}
 
 	@Test
-	public void title_RestResource_title_localized() throws Exception {
-		assertObjectEquals("{info:{title:'l-foo'}}", getSwagger(new A1L()));
-		assertObjectEquals("{info:{title:'s-title'}}", getSwaggerWithFile(new A1L()));
+	public void b02_title_RestResource_title_localized() throws Exception {
+		assertEquals("l-foo", getSwagger(new B02()).getInfo().getTitle());
+		assertEquals("s-title", getSwaggerWithFile(new B02()).getInfo().getTitle());
 	}
 
 	
 	@RestResource(title="a-title", swagger=@ResourceSwagger("{info:{title:'b-title'}}"))
-	public static class A2 {}
+	public static class B03 {}
 
 	@Test
-	public void title_ResourceSwagger_value() throws Exception {
-		assertObjectEquals("{info:{title:'b-title'}}", getSwagger(new A2()));
-		assertObjectEquals("{info:{title:'b-title'}}", getSwaggerWithFile(new A2()));
+	public void b03_title_ResourceSwagger_value() throws Exception {
+		assertEquals("b-title", getSwagger(new B03()).getInfo().getTitle());
+		assertEquals("b-title", getSwaggerWithFile(new B03()).getInfo().getTitle());
 	}
 	
 
 	@RestResource(title="a-title", swagger=@ResourceSwagger("{info:{title:'$L{bar}'}}"), messages="BasicRestInfoProviderTest")
-	public static class A2L {}
+	public static class B04 {}
 	
 	@Test
-	public void title_ResourceSwagger_value_localised() throws Exception {
-		assertObjectEquals("{info:{title:'l-bar'}}", getSwagger(new A2L()));
-		assertObjectEquals("{info:{title:'l-bar'}}", getSwaggerWithFile(new A2L()));
+	public void b04_title_ResourceSwagger_value_localised() throws Exception {
+		assertEquals("l-bar", getSwagger(new B04()).getInfo().getTitle());
+		assertEquals("l-bar", getSwaggerWithFile(new B04()).getInfo().getTitle());
 	}
 
 	
 	@RestResource(title="a-title", swagger=@ResourceSwagger(value="{info:{title:'b-title'}}", title="c-title"))
-	public static class A3 {}
+	public static class B05 {}
 
 	@Test
-	public void title_ResourceSwagger_title() throws Exception {
-		assertObjectEquals("{info:{title:'c-title'}}", getSwagger(new A3()));
-		assertObjectEquals("{info:{title:'c-title'}}", getSwaggerWithFile(new A3()));
+	public void b05_title_ResourceSwagger_title() throws Exception {
+		assertEquals("c-title", getSwagger(new B05()).getInfo().getTitle());
+		assertEquals("c-title", getSwaggerWithFile(new B05()).getInfo().getTitle());
 	}
 	
 	
 	@RestResource(title="a-title", swagger=@ResourceSwagger(value="{info:{title:'b-title'}}", title="$L{baz}"), messages="BasicRestInfoProviderTest")
-	public static class A3L {}
+	public static class B06 {}
 	
 	@Test
-	public void title_RsourceSwagger_title_localized() throws Exception {
-		assertObjectEquals("{info:{title:'l-baz'}}", getSwagger(new A3L()));
-		assertObjectEquals("{info:{title:'l-baz'}}", getSwaggerWithFile(new A3L()));
+	public void b06_title_ResourceSwagger_title_localized() throws Exception {
+		assertEquals("l-baz", getSwagger(new B06()).getInfo().getTitle());
+		assertEquals("l-baz", getSwaggerWithFile(new B06()).getInfo().getTitle());
 	}
 
 	
 	@RestResource(swagger=@ResourceSwagger(title="c-title"))
-	public static class A4 {}
+	public static class B07 {}
 
 	@Test
-	public void title_RsourceSwagger_title_only() throws Exception {
-		assertObjectEquals("{info:{title:'c-title'}}", getSwagger(new A4()));
-		assertObjectEquals("{info:{title:'c-title'}}", getSwaggerWithFile(new A4()));
+	public void b07_title_ResourceSwagger_title_only() throws Exception {
+		assertEquals("c-title", getSwagger(new B07()).getInfo().getTitle());
+		assertEquals("c-title", getSwaggerWithFile(new B07()).getInfo().getTitle());
 	}
+	
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /info/description
+	// "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource(description="a-description")
+	public static class C01 {}
+
+	@Test
+	public void c01_description_RestResource_description() throws Exception {
+		assertEquals("a-description", getSwagger(new C01()).getInfo().getDescription());
+		assertEquals("s-description", getSwaggerWithFile(new C01()).getInfo().getDescription());
+	}
+
+	
+	@RestResource(description="$L{foo}",messages="BasicRestInfoProviderTest")
+	public static class C02 {}
+
+	@Test
+	public void c02_description_RestResource_description_localized() throws Exception {
+		assertEquals("l-foo", getSwagger(new C02()).getInfo().getDescription());
+		assertEquals("s-description", getSwaggerWithFile(new C02()).getInfo().getDescription());
+	}
+
+	
+	@RestResource(description="a-description", swagger=@ResourceSwagger("{info:{description:'b-description'}}"))
+	public static class C03 {}
+
+	@Test
+	public void c03_description_ResourceSwagger_value() throws Exception {
+		assertEquals("b-description", getSwagger(new C03()).getInfo().getDescription());
+		assertEquals("b-description", getSwaggerWithFile(new C03()).getInfo().getDescription());
+	}
+	
+
+	@RestResource(description="a-description", swagger=@ResourceSwagger("{info:{description:'$L{bar}'}}"), messages="BasicRestInfoProviderTest")
+	public static class C04 {}
+	
+	@Test
+	public void c04_description_ResourceSwagger_value_localised() throws Exception {
+		assertEquals("l-bar", getSwagger(new C04()).getInfo().getDescription());
+		assertEquals("l-bar", getSwaggerWithFile(new C04()).getInfo().getDescription());
+	}
+
+	
+	@RestResource(description="a-description", swagger=@ResourceSwagger(value="{info:{description:'b-description'}}", description="c-description"))
+	public static class C05 {}
+
+	@Test
+	public void c05_description_ResourceSwagger_description() throws Exception {
+		assertEquals("c-description", getSwagger(new C05()).getInfo().getDescription());
+		assertEquals("c-description", getSwaggerWithFile(new C05()).getInfo().getDescription());
+	}
+	
+	
+	@RestResource(description="a-description", swagger=@ResourceSwagger(value="{info:{description:'b-description'}}", description="$L{baz}"), messages="BasicRestInfoProviderTest")
+	public static class C06 {}
+	
+	@Test
+	public void c06_description_ResourceSwagger_description_localized() throws Exception {
+		assertEquals("l-baz", getSwagger(new C06()).getInfo().getDescription());
+		assertEquals("l-baz", getSwaggerWithFile(new C06()).getInfo().getDescription());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger(description="c-description"))
+	public static class C07 {}
+
+	@Test
+	public void c07_description_ResourceSwagger_description_only() throws Exception {
+		assertEquals("c-description", getSwagger(new C07()).getInfo().getDescription());
+		assertEquals("c-description", getSwaggerWithFile(new C07()).getInfo().getDescription());
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /info/version
+	// "version": "1.0.0",
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class D01 {}
+	
+	@Test
+	public void d01_version_default() throws Exception {
+		assertEquals(null, getSwagger(new D01()).getInfo().getVersion());
+		assertEquals("0.0.0", getSwaggerWithFile(new D01()).getInfo().getVersion());
+	}
+
+
+	@RestResource(swagger=@ResourceSwagger("{info:{version:'2.0.0'}}"))
+	public static class D02 {}
+	
+	@Test
+	public void d02_version_ResourceSwagger_value() throws Exception {
+		assertEquals("2.0.0", getSwagger(new D02()).getInfo().getVersion());
+		assertEquals("2.0.0", getSwaggerWithFile(new D02()).getInfo().getVersion());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger(value="{info:{version:'2.0.0'}}", version="3.0.0"))
+	public static class D03 {}
+	
+	@Test
+	public void d03_version_ResourceSwagger_version() throws Exception {
+		assertEquals("3.0.0", getSwagger(new D03()).getInfo().getVersion());
+		assertEquals("3.0.0", getSwaggerWithFile(new D03()).getInfo().getVersion());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{info:{version:'2.0.0'}}", version="$L{foo}"), messages="BasicRestInfoProviderTest")
+	public static class D04 {}
+	
+	@Test
+	public void d04_version_ResourceSwagger_version_localised() throws Exception {
+		assertEquals("l-foo", getSwagger(new D04()).getInfo().getVersion());
+		assertEquals("l-foo", getSwaggerWithFile(new D04()).getInfo().getVersion());
+	}
+	
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// /info/termsOfService
+	// "termsOfService": "http://swagger.io/terms/",
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource()
+	public static class E01 {}
+	
+	@Test
+	public void e01_termsOfService_default() throws Exception {
+		assertEquals(null, getSwagger(new E01()).getInfo().getTermsOfService());
+		assertEquals("s-termsOfService", getSwaggerWithFile(new E01()).getInfo().getTermsOfService());
+	}
+
+
+	@RestResource(swagger=@ResourceSwagger("{info:{termsOfService:'a-termsOfService'}}"))
+	public static class E02 {}
+	
+	@Test
+	public void e02_termsOfService_ResourceSwagger_value() throws Exception {
+		assertEquals("a-termsOfService", getSwagger(new E02()).getInfo().getTermsOfService());
+		assertEquals("a-termsOfService", getSwaggerWithFile(new E02()).getInfo().getTermsOfService());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger(value="{info:{termsOfService:'a-termsOfService'}}", termsOfService="b-termsOfService"))
+	public static class E03 {}
+	
+	@Test
+	public void e03_termsOfService_ResourceSwagger_termsOfService() throws Exception {
+		assertEquals("b-termsOfService", getSwagger(new E03()).getInfo().getTermsOfService());
+		assertEquals("b-termsOfService", getSwaggerWithFile(new E03()).getInfo().getTermsOfService());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{info:{termsOfService:'a-termsOfService'}}", termsOfService="$L{foo}"), messages="BasicRestInfoProviderTest")
+	public static class E04 {}
+	
+	@Test
+	public void e04_termsOfService_ResourceSwagger_termsOfService_localised() throws Exception {
+		assertEquals("l-foo", getSwagger(new E04()).getInfo().getTermsOfService());
+		assertEquals("l-foo", getSwaggerWithFile(new E04()).getInfo().getTermsOfService());
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /info/contact
+	// "contact": {
+	// 	"email": "apiteam@swagger.io"
+	// },
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class F01 {}
+	
+	@Test
+	public void f01_contact_default() throws Exception {
+		assertEquals(null, getSwagger(new F01()).getInfo().getContact());
+		assertObjectEquals("{name:'s-name',url:'s-url',email:'s-email'}", getSwaggerWithFile(new F01()).getInfo().getContact());
+	}
+
+
+	@RestResource(swagger=@ResourceSwagger("{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}"))
+	public static class F02 {}
+	
+	@Test
+	public void f02_contact_ResourceSwagger_value() throws Exception {
+		assertObjectEquals("{name:'a-name',url:'a-url',email:'a-email'}", getSwagger(new F02()).getInfo().getContact());
+		assertObjectEquals("{name:'a-name',url:'a-url',email:'a-email'}", getSwaggerWithFile(new F02()).getInfo().getContact());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger(value="{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}", contact="{name:'b-name',url:'b-url',email:'b-email'}"))
+	public static class F03 {}
+	
+	@Test
+	public void f03_contact_ResourceSwagger_contact() throws Exception {
+		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwagger(new F03()).getInfo().getContact());
+		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwaggerWithFile(new F03()).getInfo().getContact());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}", contact=" name:'b-name', url:'b-url', email:'b-email' "))
+	public static class F04 {}
+	
+	@Test
+	public void f04_contact_ResourceSwagger_contact() throws Exception {
+		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwagger(new F04()).getInfo().getContact());
+		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwaggerWithFile(new F04()).getInfo().getContact());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}", contact="{name:'$L{foo}',url:'$L{bar}',email:'$L{baz}'}"), messages="BasicRestInfoProviderTest")
+	public static class F05 {}
+	
+	@Test
+	public void f05_contact_ResourceSwagger_contact_localised() throws Exception {
+		assertObjectEquals("{name:'l-foo',url:'l-bar',email:'l-baz'}", getSwagger(new F05()).getInfo().getContact());
+		assertObjectEquals("{name:'l-foo',url:'l-bar',email:'l-baz'}", getSwaggerWithFile(new F05()).getInfo().getContact());
+	}
+	
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// /info/license
+	// "license": {
+	// 	"name": "Apache 2.0",
+	// 	"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+	// }
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class G01 {}
+	
+	@Test
+	public void g01_license_default() throws Exception {
+		assertEquals(null, getSwagger(new G01()).getInfo().getLicense());
+		assertObjectEquals("{name:'s-name',url:'s-url'}", getSwaggerWithFile(new G01()).getInfo().getLicense());
+	}
+
+
+	@RestResource(swagger=@ResourceSwagger("{info:{license:{name:'a-name',url:'a-url'}}}"))
+	public static class G02 {}
+	
+	@Test
+	public void g02_license_ResourceSwagger_value() throws Exception {
+		assertObjectEquals("{name:'a-name',url:'a-url'}", getSwagger(new G02()).getInfo().getLicense());
+		assertObjectEquals("{name:'a-name',url:'a-url'}", getSwaggerWithFile(new G02()).getInfo().getLicense());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger(value="{info:{license:{name:'a-name',url:'a-url'}}}", license="{name:'b-name',url:'b-url'}"))
+	public static class G03 {}
+	
+	@Test
+	public void g03_license_ResourceSwagger_license() throws Exception {
+		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwagger(new G03()).getInfo().getLicense());
+		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwaggerWithFile(new G03()).getInfo().getLicense());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{info:{license:{name:'a-name',url:'a-url'}}}", license=" name:'b-name', url:'b-url' "))
+	public static class G04 {}
+	
+	@Test
+	public void g04_license_ResourceSwagger_license() throws Exception {
+		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwagger(new G04()).getInfo().getLicense());
+		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwaggerWithFile(new G04()).getInfo().getLicense());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{info:{license:{name:'a-name',url:'a-url'}}}", license="{name:'$L{foo}',url:'$L{bar}'}"), messages="BasicRestInfoProviderTest")
+	public static class G05 {}
+	
+	@Test
+	public void g05_license_ResourceSwagger_license_localised() throws Exception {
+		assertObjectEquals("{name:'l-foo',url:'l-bar'}", getSwagger(new G05()).getInfo().getLicense());
+		assertObjectEquals("{name:'l-foo',url:'l-bar'}", getSwaggerWithFile(new G05()).getInfo().getLicense());
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /host
+	// "host": "petstore.swagger.io",
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class H01 {}
+	
+	@Test
+	public void h01_host_default() throws Exception {
+		assertEquals(null, getSwagger(new H01()).getHost());
+		assertEquals("s-host", getSwaggerWithFile(new H01()).getHost());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger("{host:'a-host'}"))
+	public static class H02 {}
+	
+	@Test
+	public void h02_host_ResourceSwagger_value() throws Exception {
+		assertEquals("a-host", getSwagger(new H02()).getHost());
+		assertEquals("a-host", getSwaggerWithFile(new H02()).getHost());
+	}
+	
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /basePath
+	// "basePath": "/v2",
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class I01 {}
+	
+	@Test
+	public void i01_basePath_default() throws Exception {
+		assertEquals(null, getSwagger(new I01()).getBasePath());
+		assertEquals("s-basePath", getSwaggerWithFile(new I01()).getBasePath());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger("{basePath:'a-basePath'}"))
+	public static class I02 {}
+	
+	@Test
+	public void i02_basePath_ResourceSwagger_value() throws Exception {
+		assertEquals("a-basePath", getSwagger(new I02()).getBasePath());
+		assertEquals("a-basePath", getSwaggerWithFile(new I02()).getBasePath());
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /tags
+	// "tags": [
+	//	{
+	//		"name": "pet",
+	//		"description": "Everything about your Pets",
+	//		"externalDocs": {
+	//			"description": "Find out more",
+	//			"url": "http://swagger.io"
+	//		}
+	//	},
+	// ],
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class J01 {}
+	
+	@Test
+	public void j01_tags_default() throws Exception {
+		assertEquals(null, getSwagger(new J01()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}}]", getSwaggerWithFile(new J01()).getTags());
+	}
+
+	// Tags in @ResourceSwagger(value) should override file.
+	@RestResource(swagger=@ResourceSwagger("{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}"))
+	public static class J02 {}
+	
+	@Test
+	public void j02_tags_ResourceSwagger_value() throws Exception {
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]", getSwagger(new J02()).getTags());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]", getSwaggerWithFile(new J02()).getTags());
+	}
+
+	// Tags in both @ResourceSwagger(value) and @ResourceSwagger(tags) should accumulate.
+	@RestResource(swagger=@ResourceSwagger(value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}", tags="[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]"))
+	public static class J03 {}
+	
+	@Test
+	public void j03_tags_ResourceSwagger_tags() throws Exception {
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwagger(new J03()).getTags());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwaggerWithFile(new J03()).getTags());
+	}
+
+	// Same as above but without [] outer characters.
+	@RestResource(swagger=@ResourceSwagger(value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}", tags=" { name:'b-name', description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } "))
+	public static class J04 {}
+	
+	@Test
+	public void j04_tags_ResourceSwagger_tags() throws Exception {
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwagger(new J04()).getTags());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwaggerWithFile(new J04()).getTags());
+	}
+	
+	// Tags in both Swagger.json and @ResourceSwagger(tags) should accumulate.
+	@RestResource(swagger=@ResourceSwagger(tags="[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]"))
+	public static class J05 {}
+	
+	@Test
+	public void j05_tags_ResourceSwagger_tags_only() throws Exception {
+		assertObjectEquals("[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwagger(new J05()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwaggerWithFile(new J05()).getTags());
+	}
+	
+	// Dup tag names should be overwritten
+	@RestResource(swagger=@ResourceSwagger(tags="[{name:'s-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}},{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]"))
+	public static class J06 {}
+	
+	@Test
+	public void j06_tags_ResourceSwagger_tags_dups() throws Exception {
+		assertObjectEquals("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]", getSwagger(new J06()).getTags());
+		assertObjectEquals("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]", getSwaggerWithFile(new J06()).getTags());
+	}
+
+
+	@RestResource(swagger=@ResourceSwagger(value="{tags:[{name:'$L{foo}',description:'$L{foo}',externalDocs:{description:'$L{foo}',url:'$L{foo}'}}]}", tags="[{name:'$L{foo}',description:'$L{foo}',externalDocs:{description:'$L{foo}',url:'$L{foo}'}}]"), messages="BasicRestInfoProviderTest")
+	public static class J07 {}
+	
+	@Test
+	public void j07_tags_ResourceSwagger_tags_localised() throws Exception {
+		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", getSwagger(new J07()).getTags());
+		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", getSwaggerWithFile(new J07()).getTags());
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /schemes
+	// "schemes": [
+	//	"http"
+	// ],
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class K01 {}
+	
+	@Test
+	public void k01_schemes_default() throws Exception {
+		assertEquals(null, getSwagger(new K01()).getSchemes());
+		assertObjectEquals("['s-scheme']", getSwaggerWithFile(new K01()).getSchemes());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger("{schemes:['a-scheme']}"))
+	public static class K02 {}
+	
+	@Test
+	public void k02_schemes_ResourceSwagger_value() throws Exception {
+		assertObjectEquals("['a-scheme']", getSwagger(new K02()).getSchemes());
+		assertObjectEquals("['a-scheme']", getSwaggerWithFile(new K02()).getSchemes());
+	}
+	
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /externalDocs
+	// "externalDocs": {
+	//	"description": "Find out more about Swagger",
+	//	"url": "http://swagger.io"
+	// }
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class L01 {}
+	
+	@Test
+	public void l01_externalDocs_default() throws Exception {
+		assertEquals(null, getSwagger(new L01()).getExternalDocs());
+		assertObjectEquals("{description:'s-description',url:'s-url'}", getSwaggerWithFile(new L01()).getExternalDocs());
+	}
+
+
+	@RestResource(swagger=@ResourceSwagger("{externalDocs:{description:'a-description',url:'a-url'}}"))
+	public static class L02 {}
+	
+	@Test
+	public void l02_externalDocs_ResourceSwagger_value() throws Exception {
+		assertObjectEquals("{description:'a-description',url:'a-url'}", getSwagger(new L02()).getExternalDocs());
+		assertObjectEquals("{description:'a-description',url:'a-url'}", getSwaggerWithFile(new L02()).getExternalDocs());
+	}
+
+	
+	@RestResource(swagger=@ResourceSwagger(value="{externalDocs:{description:'a-description',url:'a-url'}}", externalDocs="{description:'b-description',url:'b-url'}"))
+	public static class L03 {}
+	
+	@Test
+	public void l03_externalDocs_ResourceSwagger_externalDocs() throws Exception {
+		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwagger(new L03()).getExternalDocs());
+		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwaggerWithFile(new L03()).getExternalDocs());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{info:{externalDocs:{description:'a-description',url:'a-url'}}}", externalDocs=" description:'b-description', url:'b-url' "))
+	public static class L04 {}
+	
+	@Test
+	public void l04_externalDocs_ResourceSwagger_externalDocs() throws Exception {
+		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwagger(new L04()).getExternalDocs());
+		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwaggerWithFile(new L04()).getExternalDocs());
+	}
+
+	@RestResource(swagger=@ResourceSwagger(value="{externalDocs:{description:'a-description',url:'a-url'}}", externalDocs="{description:'$L{foo}',url:'$L{bar}'}"), messages="BasicRestInfoProviderTest")
+	public static class L05 {}
+	
+	@Test
+	public void l05_externalDocs_ResourceSwagger_externalDocs_localised() throws Exception {
+		assertObjectEquals("{description:'l-foo',url:'l-bar'}", getSwagger(new L05()).getExternalDocs());
+		assertObjectEquals("{description:'l-foo',url:'l-bar'}", getSwaggerWithFile(new L05()).getExternalDocs());
+	}
+	
 }

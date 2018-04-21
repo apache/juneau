@@ -204,7 +204,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 
 			omSwagger.appendIf(true, true, true, "externalDocs", parseMap(join(r.externalDocs()), vr, false, true, "@ResourceSwagger(externalDocs) on class {0}", c));
-			omSwagger.appendIf(true, true, true, "tags", parseList(join(r.tags()), vr, false, true, "@ResourceSwagger(tags) on class {0}", c));
+			
+			ObjectList tags = parseList(join(r.tags()), vr, false, true, "@ResourceSwagger(tags) on class {0}", c);
+			if (tags != null)
+				omSwagger.getObjectList("tags", true).addAll(tags);
 		}
 
 		omSwagger.appendIf(true, true, true, "externalDocs", parseMap(mb.findFirstString(locale, "externalDocs"), vr, false, true, "Messages/externalDocs on class {0}", c));
@@ -438,9 +441,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 		
 		if (definitions.isEmpty())
-			omSwagger.remove("definitions");		
+			omSwagger.remove("definitions");	
+		
 		if (tagMap.isEmpty())
 			omSwagger.remove("tags");
+		else
+			omSwagger.put("tags", tagMap.values());
+		
 		if (consumes.isEmpty())
 			omSwagger.remove("consumes");
 		if (produces.isEmpty())

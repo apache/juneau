@@ -12,7 +12,39 @@
 // ***************************************************************************************************************************
 
 {
+	swagger: '0.0',
 	info: {
-		title: 's-title'
+		title: 's-title',
+		description: 's-description',
+		version: '0.0.0',
+		termsOfService: 's-termsOfService',
+		contact: {
+			name: 's-name',
+			url: 's-url',
+			email: 's-email'
+		},
+		license: {
+			name: 's-name',
+			url: 's-url'
+		}
+	},
+	host: 's-host',
+	basePath: 's-basePath',
+	tags: [
+		{
+			name: 's-name',
+			description: 's-description',
+			externalDocs: {
+				description: 's-description',
+				url: 's-url'
+			}
+		}
+	],
+	schemes: [
+		's-scheme'
+	],
+	externalDocs: {
+		description: 's-description',
+		url: 's-url'
 	}
 }
