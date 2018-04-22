@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The server is unable to store the representation needed to complete the request.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

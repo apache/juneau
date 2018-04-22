@@ -37,6 +37,15 @@ public enum RestParamType {
 	/** Request body */
 	BODY("body"),
 
+	/** Response value */
+	RESPONSE("response"),
+	
+	/** Response header value */
+	RESPONSE_HEADER("responseHeader"),
+	
+	/** Response status value */
+	RESPONSE_STATUS("responseStatus"),
+	
 	/** Not a standard Swagger-defined field */
 	OTHER("other");
 

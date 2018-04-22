@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Further extensions to the request are required for the server to fulfill it.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

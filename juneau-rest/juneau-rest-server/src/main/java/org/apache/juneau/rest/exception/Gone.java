@@ -29,7 +29,7 @@ import org.apache.juneau.rest.annotation.*;
  * <br>Clients such as search engines should remove the resource from their indices.
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * The server is currently unavailable (because it is overloaded or down for maintenance). 
  * <br>Generally, this is a temporary state.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

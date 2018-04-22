@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The request did not specify the length of its content, which is required by the requested resource.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

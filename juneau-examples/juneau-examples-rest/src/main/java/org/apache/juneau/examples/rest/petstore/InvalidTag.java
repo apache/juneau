@@ -19,7 +19,7 @@ import org.apache.juneau.rest.exception.*;
  * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-@ResponseInfo(description="Invalid tag provided")
+@Response(description="Invalid tag provided")
 public class InvalidTag extends BadRequest {
 
 	/**

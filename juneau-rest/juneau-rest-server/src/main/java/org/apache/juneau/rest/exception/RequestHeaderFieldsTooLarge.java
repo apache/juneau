@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

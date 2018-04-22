@@ -10,68 +10,75 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.exception;
-
-import static org.apache.juneau.rest.exception.MethodNotAllowed.*;
-
-import java.text.*;
-
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
+package org.apache.juneau.utils;
 
 /**
- * Exception representing an HTTP 405 (Method Not Allowed).
+ * Represents a simple settable value.
  * 
  * <p>
- * A request method is not supported for the requested resource; for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
+ * This object is not thread safe.
+ * 
+ * @param <T> The value type.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
-public class MethodNotAllowed extends RestException {
-	private static final long serialVersionUID = 1L;
+public class Value<T> {
+
+	private T t;
+	private ValueListener<T> listener;
 	
-	/** Default message */
-	public static final String MESSAGE = "Method Not Allowed";
-	
-	/** HTTP status code */
-	public static final int CODE = 405;
+	/**
+	 * Constructor.
+	 */
+	public Value() {
+	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param cause The cause.  Can be <jk>null</jk>. 
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param t Initial value.
 	 */
-	public MethodNotAllowed(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+	public Value(T t) {
+		set(t);
 	}
 	
 	/**
-	 * Constructor.
-	 */
-	public MethodNotAllowed() {
-		this((Throwable)null, MESSAGE);
-	}
-	
-	/**
-	 * Constructor.
+	 * Adds a listener for this value.
 	 * 
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param listener The new listener for this value.
+	 * @return This object (for method chaining).
 	 */
-	public MethodNotAllowed(String msg, Object...args) {
-		this(null, msg, args);
+	public Value<T> listener(ValueListener<T> listener) {
+		this.listener = listener;
+		return this;
 	}
 	
 	/**
-	 * Constructor.
+	 * Sets the value.
 	 * 
-	 * @param cause The cause.  Can be <jk>null</jk>. 
+	 * @param t The new value.
+	 * @return This object (for method chaining).
 	 */
-	public MethodNotAllowed(Throwable cause) {
-		this(cause, null);
+	public Value<T> set(T t) {
+		this.t = t;
+		if (listener != null)
+			listener.onSet(t);
+		return this;
+	}
+	
+	/**
+	 * Returns the value.
+	 * 
+	 * @return The value, or <jk>null</jk> if it is not set.
+	 */
+	public T get() {
+		return t;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the value is set.
+	 * 
+	 * @return <jk>true</jk> if the value is set.
+	 */
+	public boolean isSet() {
+		return get() != null;
 	}
 }

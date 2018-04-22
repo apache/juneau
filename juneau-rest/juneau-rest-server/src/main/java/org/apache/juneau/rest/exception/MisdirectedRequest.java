@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

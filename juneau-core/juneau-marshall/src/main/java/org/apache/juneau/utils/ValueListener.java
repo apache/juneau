@@ -10,22 +10,18 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
-
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.exception.*;
+package org.apache.juneau.utils;
 
 /**
- * Exception thrown when trying to add an entry where the ID is already in use.
+ * Simple listener for the {@link Value} class.
+ * @param <T> 
  */
-@SuppressWarnings("serial")
-@Response(description="Invalid ID provided")
-public class InvalidId extends BadRequest {
+public interface ValueListener<T> {
 
 	/**
-	 * Constructor.
+	 * Called when {@link Value#set(Object)} is called.
+	 * 
+	 * @param newValue The new value.
 	 */
-	public InvalidId() {
-		super("Invalid ID provided.");
-	}
+	void onSet(T newValue);
 }

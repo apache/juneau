@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * The request was valid, but the server is refusing action. 
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

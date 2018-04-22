@@ -33,6 +33,7 @@ import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.rest.converters.*;
 
 /**
@@ -581,20 +582,14 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/user/login",
 		summary="Logs user into the system",
 		swagger=@MethodSwagger(
-			tags="user",
-			responses={
-				"200:{",
-					"headers:{",
-						"X-Rate-Limit:{ type:'integer', format:'int32', description:'calls per hour allowed by the user', 'x-example':123},",
-						"X-Expires-After:{ type:'string', format:'date-time', description:'date in UTC when token expires', 'x-example':'2012-10-21'}",
-					"}",
-				"}"
-			}
+			tags="user"
 		)
 	)
 	public Ok login(
 			@Query(name="username", description="The username for login", required="true", example="myuser") String username, 
 			@Query(name="password", description="The password for login in clear text", required="true", example="abc123") String password, 
+			@ResponseHeader(name="X-Rate-Limit", type="integer", format="int32", description="Calls per hour allowed by the user.", example="123") Value<Integer> rateLimit,
+			ExpiresAfter expiresAfter,
 			RestRequest req, 
 			RestResponse res
 		) throws InvalidLogin, NotAcceptable {
@@ -604,10 +599,13 @@ public class PetStoreResource extends BasicRestServletJena {
 		
 		Date d = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
 		req.getSession().setAttribute("login-expires", d);
-		res.setHeader("X-Rate-Limit", "1000");
-		res.setHeader("X-Expires-After", DateUtils.formatDate(d));
+		rateLimit.set(1000);
+		expiresAfter.set(DateUtils.formatDate(d));
 		return OK;
 	}
+	
+	@ResponseHeader(name="X-Expires-After", type="string", format="date-time", description="Date in UTC when token expires", example="20120-10-21")
+	public static class ExpiresAfter extends Value<String> {}
 
 	@RestMethod(
 		name="GET", 

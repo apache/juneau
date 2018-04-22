@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

@@ -23,6 +23,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
@@ -193,8 +194,9 @@ public class BasicRestCallHandler implements RestCallHandler {
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			handleError(r1, r2, e);
 		} catch (Throwable e) {
-			ResponseInfo ri = e.getClass().getAnnotation(ResponseInfo.class);
-			RestException e2 = new RestException(e, ri == null || ri.code() == 0 ? SC_INTERNAL_SERVER_ERROR : ri.code());
+			Response ri = e.getClass().getAnnotation(Response.class);
+			int code = ri == null ? SC_INTERNAL_SERVER_ERROR : ObjectUtils.firstNonZero(ri.code(), ri.value(), SC_INTERNAL_SERVER_ERROR);
+			RestException e2 = new RestException(e, code);
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			handleError(r1, r2, e2);

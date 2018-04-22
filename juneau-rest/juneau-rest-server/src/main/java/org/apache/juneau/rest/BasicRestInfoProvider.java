@@ -326,7 +326,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				
 				RestParamType in = mp.getParamType();
 				
-				if (in == OTHER)
+				if (in == OTHER || in == RESPONSE || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
 					continue;
 				
 				String key = in.toString() + '.' + (in == BODY ? null : mp.getName());
@@ -386,7 +386,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				}
 			}
 			
-			// Gather responses from @ResponseInfo-annotated exceptions.
+			// Gather responses from @Response-annotated exceptions.
 			for (RestMethodThrown rt : context.getRestMethodThrowns(m)) {
 				int code = rt.getCode();
 				if (code != 0) {
@@ -419,6 +419,58 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				Object val = e.getValue();
 				if (StringUtils.isDecimal(key) && val instanceof ObjectMap) 
 					responses.getObjectMap(key).appendIf(false, true, true, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
+			}
+			
+			// Finally, look for @ResponseHeader parameters defined on method.
+			for (RestMethodParam mp : context.getRestMethodParams(m)) {
+				
+				RestParamType in = mp.getParamType();
+				
+				if (in == RESPONSE_HEADER) {
+					ObjectMap pi = mp.getMetaData();
+					String code = pi.getString("status", "200");  
+					String name = mp.getName();
+					
+					ObjectMap header = responses.getObjectMap(code, true).getObjectMap("headers", true).getObjectMap(name, true);
+
+					header.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
+					header.appendIf(false, true, true, "type", vr.resolve(pi.getString("type")));
+					header.appendIf(false, true, true, "format", vr.resolve(pi.getString("format")));
+					header.appendIf(false, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
+					header.appendIf(false, true, true, "maximum", vr.resolve(pi.getString("maximum")));
+					header.appendIf(false, true, true, "minimum", vr.resolve(pi.getString("minimum")));
+					header.appendIf(false, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
+					header.appendIf(false, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
+					header.appendIf(false, true, true, "minLength", vr.resolve(pi.getString("minLength")));
+					header.appendIf(false, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
+					header.appendIf(false, true, true, "minItems", vr.resolve(pi.getString("minItems")));
+					header.appendIf(false, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
+					header.appendIf(false, true, true, "exclusiveMimimum", vr.resolve(pi.getString("exclusiveMimimum")));
+					header.appendIf(false, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
+					header.appendIf(false, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
+					header.appendIf(false, true, true, "enum", parseList(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
+					header.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
+					if (pi.containsKeyNotEmpty("items"))
+						header.appendIf(false, true, true, "items", new ObjectMap(vr.resolve(pi.getString("items"))));
+				
+				} else if (in == RESPONSE) {
+					ObjectMap pi = mp.getMetaData();
+					String code = pi.getString("status", "200");  
+					
+					ObjectMap response = responses.getObjectMap(code, true);
+					
+					response.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
+					response.appendIf(false, true, true, "schema", vr.resolve(pi.getString("schema")));
+					response.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
+					
+				} else if (in == RESPONSE_STATUS) {
+					ObjectMap pi = mp.getMetaData();
+					String code = pi.getString("status", "200");  
+					
+					ObjectMap response = responses.getObjectMap(code, true);
+
+					response.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
+				}
 			}
 			
 			if (responses.isEmpty())

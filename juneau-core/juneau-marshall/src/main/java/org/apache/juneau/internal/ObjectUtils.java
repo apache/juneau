@@ -309,4 +309,31 @@ public final class ObjectUtils {
 	public static Enum<?>[] getEnumConstants(Class<?> c) {
 		return ((Class<Enum<?>>)c).getEnumConstants();
 	}
+	
+	/**
+	 * If the specified object is an instance of the specified class, casts it to that type.
+	 * 
+	 * @param o The object to cast.
+	 * @param c The class to cast to.
+	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T castOrNull(Object o, Class<T> c) {
+		if (c.isInstance(o))
+			return (T)o;
+		return null;
+	}
+	
+	/**
+	 * Returns the first non-zero value in the list of ints.
+	 * 
+	 * @param ints The ints to check.
+	 * @return The first non-zero value, or <code>0</code> if they were all zero.
+	 */
+	public static int firstNonZero(int...ints) {
+		for (int i : ints)
+			if (i != 0)
+				return i;
+		return 0;
+	}
 }

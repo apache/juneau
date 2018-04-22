@@ -19,7 +19,7 @@ import org.apache.juneau.rest.exception.*;
  * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-@ResponseInfo(description="ID not found")
+@Response(description="ID not found")
 public class IdNotFound extends NotFound {
 
 	/**

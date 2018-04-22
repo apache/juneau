@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The request is larger than the server is willing or able to process. 
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

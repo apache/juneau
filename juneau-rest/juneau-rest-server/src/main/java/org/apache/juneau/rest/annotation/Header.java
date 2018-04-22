@@ -48,7 +48,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  */
 @Documented
-@Target(PARAMETER)
+@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Header {
@@ -317,7 +317,7 @@ public @interface Header {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String exclusiveMimimum() default "";
+	String exclusiveMinimum() default "";
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/uniqueItems</code>.

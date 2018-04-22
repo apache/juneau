@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <br>
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

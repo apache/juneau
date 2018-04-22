@@ -49,7 +49,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
  * </ul>
  */
-@Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
+@Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,x-examples,*")
 @SuppressWarnings({"unchecked"})
 public class HeaderInfo extends SwaggerElement {
 
@@ -79,6 +79,7 @@ public class HeaderInfo extends SwaggerElement {
 	private Items items;
 	private Object _default;
 	private List<Object> _enum;
+	private Map<String,String> examples;
 	
 	/**
 	 * Default constructor.
@@ -111,6 +112,10 @@ public class HeaderInfo extends SwaggerElement {
 		this._default = copyFrom._default;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._enum = newList(copyFrom._enum);
+		
+		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,String>();
+		if (copyFrom.examples != null)
+			this.examples.putAll(copyFrom.examples);
 	}
 	
 	/**
@@ -1053,6 +1058,77 @@ public class HeaderInfo extends SwaggerElement {
 		return setRef(value);
 	}
 
+	/**
+	 * Bean property getter:  <property>x-examples</property>.
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@BeanProperty("x-examples")
+	public Map<String,String> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty("x-examples")
+	public HeaderInfo setExamples(Map<String,String> value) {
+		examples = newMap(value);
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>examples</property> property.
+	 * 
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderInfo addExamples(Map<String,String> values) {
+		examples = addToMap(examples, values);
+		return this;
+	}
+
+	/**
+	 * Adds a single value to the <property>examples</property> property.
+	 * 
+	 * @param name The extra property name.
+	 * @param value The extra property value.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderInfo example(String name, String value) {
+		examples = addToMap(examples, name, value);
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>examples</property> property.
+	 * 
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Map&lt;String,String&gt;</code>
+	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	examples(<js>"{'text/json':'{foo:\\'bar\\'}'}"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderInfo examples(Object...values) {
+		examples = addToMap(examples, values, String.class, String.class);
+		return this;
+	}
+
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -1077,6 +1153,7 @@ public class HeaderInfo extends SwaggerElement {
 			case "uniqueItems": return toType(getUniqueItems(), type);
 			case "enum": return toType(getEnum(), type);
 			case "multipleOf": return toType(getMultipleOf(), type);
+			case "x-examples": return toType(getExamples(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1105,6 +1182,7 @@ public class HeaderInfo extends SwaggerElement {
 			case "uniqueItems": return uniqueItems(value);
 			case "enum": return setEnum(null)._enum(value);
 			case "multipleOf": return multipleOf(value);
+			case "x-examples": return examples(value);
 			default: 
 				super.set(property, value);
 				return this;
@@ -1132,7 +1210,8 @@ public class HeaderInfo extends SwaggerElement {
 			.appendIf(minItems != null, "minItems")
 			.appendIf(uniqueItems != null, "uniqueItems")
 			.appendIf(_enum != null, "enum")
-			.appendIf(multipleOf != null, "multipleOf");
+			.appendIf(multipleOf != null, "multipleOf")
+			.appendIf(examples != null, "x-examples");
 		return new MultiSet<>(s, super.keySet());
 		
 	}

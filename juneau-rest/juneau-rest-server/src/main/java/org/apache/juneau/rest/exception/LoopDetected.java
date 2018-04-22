@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

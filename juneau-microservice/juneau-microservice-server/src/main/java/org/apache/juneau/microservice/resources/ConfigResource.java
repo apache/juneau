@@ -202,7 +202,7 @@ public class ConfigResource extends BasicRestServlet {
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@ResponseInfo(description="Section not found.")
+	@Response(description="Section not found.")
 	private class SectionNotFound extends NotFound {
 		private static final long serialVersionUID = 1L;
 
@@ -211,7 +211,7 @@ public class ConfigResource extends BasicRestServlet {
 		}
 	}
 	
-	@ResponseInfo(description="The configuration file contained syntax errors and could not be parsed.")
+	@Response(description="The configuration file contained syntax errors and could not be parsed.")
 	private class BadConfig extends InternalServerError {
 		private static final long serialVersionUID = 1L;
 

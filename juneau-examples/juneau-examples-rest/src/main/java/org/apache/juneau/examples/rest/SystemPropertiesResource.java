@@ -222,7 +222,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	// Beans
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	@ResponseInfo( description="User is not an administrator.")
+	@Response(description="User is not an administrator.")
 	public static class UserNotAdminException extends Forbidden {
 		private static final long serialVersionUID = 1L;
 

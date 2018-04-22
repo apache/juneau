@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request. 
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

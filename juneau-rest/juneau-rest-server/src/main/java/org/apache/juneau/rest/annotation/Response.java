@@ -24,42 +24,17 @@ import java.lang.annotation.*;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-public @interface ResponseInfo {
+public @interface Response {
 	
-	/**
-	 * The HTTP status of the response.
-	 */
 	int code() default 0;
 	
-	/**
-	 * Description.
-	 * 
-	 * <p>
-	 * Format is plain text.
-	 */
+	int value() default 0;
+	
 	String description() default "";
 
-	/**
-	 * Schema information.
-	 * 
-	 * <p>
-	 * Format is a JSON object consisting of a Swagger SchemaInfo object.
-	 */
 	String[] schema() default {};
 	
-	/**
-	 * Header information.
-	 * 
-	 * <p>
-	 * Format is a JSON array consisting of Swagger HeaderInfo objects.
-	 */
 	String[] headers() default {};
 	
-	/**
-	 * Example.
-	 * 
-	 * <p>
-	 * Format is a JSON primitive, array, or object.
-	 */
 	String[] example() default {};
 }

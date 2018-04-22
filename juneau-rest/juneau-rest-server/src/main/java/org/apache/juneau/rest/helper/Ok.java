@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The response consist of the serialized string <js>"OK"</js>.
  */
-@ResponseInfo(code=200, example="'OK'")
+@Response(code=200, example="'OK'")
 public class Ok {
 	
 	/**

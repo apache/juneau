@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -4274,25 +4275,65 @@ public final class RestContext extends BeanContext {
 				rp[i] = paramResolvers.get(c);
 				if (rp[i] == null)
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
+				for (Annotation a : c.getAnnotations()) {
+					if (a instanceof Header)
+						rp[i] = new RestParamDefaults.HeaderObject(method, (Header)a, t, ps, rp[i]);
+					else if (a instanceof FormData)
+						rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps, rp[i]);
+					else if (a instanceof Query)
+						rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps, rp[i]);
+					else if (a instanceof HasFormData)
+						rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
+					else if (a instanceof HasQuery)
+						rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
+					else if (a instanceof Body)
+						rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t, null);
+					else if (a instanceof PathRemainder)
+						rp[i] = new RestParamDefaults.PathRemainderObject(method, t);					
+					else if (a instanceof Response)
+						rp[i] = new RestParamDefaults.ResponseObject(method, (Response)a, t, ps, rp[i]);					
+					else if (a instanceof ResponseHeader)
+						rp[i] = new RestParamDefaults.ResponseHeaderObject(method, (ResponseHeader)a, t, ps, rp[i]);					
+					else if (a instanceof ResponseStatus)
+						rp[i] = new RestParamDefaults.ResponseStatusObject(method, (ResponseStatus)a, t, ps, rp[i]);			
+					else if (a instanceof Responses) 
+						for (Response r : ((Responses)a).value())
+							rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
+					else if (a instanceof ResponseStatuses)
+						for (ResponseStatus rs : ((ResponseStatuses)a).value())
+							rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
+				}
 			}
 
 			for (Annotation a : pa[i]) {
 				if (a instanceof Header)
-					rp[i] = new RestParamDefaults.HeaderObject(method, (Header)a, t, ps);
+					rp[i] = new RestParamDefaults.HeaderObject(method, (Header)a, t, ps, rp[i]);
 				else if (a instanceof FormData)
-					rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps);
+					rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps, rp[i]);
 				else if (a instanceof Query)
-					rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps);
+					rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps, rp[i]);
 				else if (a instanceof HasFormData)
 					rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
 				else if (a instanceof HasQuery)
 					rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
 				else if (a instanceof Body)
-					rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t);
+					rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t, rp[i]);
 				else if (a instanceof org.apache.juneau.rest.annotation.Method)
 					rp[i] = new RestParamDefaults.MethodObject(method, t);
 				else if (a instanceof PathRemainder)
 					rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
+				else if (a instanceof Response)
+					rp[i] = new RestParamDefaults.ResponseObject(method, (Response)a, t, ps, rp[i]);
+				else if (a instanceof ResponseHeader)
+					rp[i] = new RestParamDefaults.ResponseHeaderObject(method, (ResponseHeader)a, t, ps, rp[i]);
+				else if (a instanceof ResponseStatus)
+					rp[i] = new RestParamDefaults.ResponseStatusObject(method, (ResponseStatus)a, t, ps, rp[i]);
+				else if (a instanceof Responses) 
+					for (Response r : ((Responses)a).value())
+						rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
+				else if (a instanceof ResponseStatuses)
+					for (ResponseStatus rs : ((ResponseStatuses)a).value())
+						rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
 			}
 
 			if (rp[i] == null) {

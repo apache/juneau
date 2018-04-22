@@ -19,7 +19,7 @@ import org.apache.juneau.rest.exception.*;
  * Exception thrown when an invalid species is looked up.
  */
 @SuppressWarnings("serial")
-@ResponseInfo(description="Invalid species provided")
+@Response(description="Invalid species provided")
 public class InvalidSpecies extends BadRequest {
 
 	/**

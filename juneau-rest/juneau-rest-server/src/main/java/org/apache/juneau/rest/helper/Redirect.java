@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; juneau-rest-server &gt; Redirect</a>
  * </ul>
  */
-@ResponseInfo(code=302, description="Redirect", headers={"Location:{description:'Redirect URI', type:'string', format:'uri'}"}, schema="IGNORE")
+@Response(code=302, description="Redirect", headers={"Location:{description:'Redirect URI', type:'string', format:'uri'}"}, schema="IGNORE")
 public class Redirect {
 
 	private final int httpResponseCode;

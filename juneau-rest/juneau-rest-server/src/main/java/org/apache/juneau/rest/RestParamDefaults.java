@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
 import java.io.*;
@@ -30,6 +31,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
@@ -579,8 +581,8 @@ class RestParamDefaults {
 
 	static final class BodyObject extends RestMethodParam {
 
-		protected BodyObject(Method method, Body a, Type type) {
-			super(BODY, null, type, getMetaData(a));
+		protected BodyObject(Method method, Body a, Type type, RestMethodParam existing) {
+			super(BODY, null, type, getMetaData(a, castOrNull(existing, BodyObject.class)));
 		}
 
 		@Override /* RestMethodParam */
@@ -588,11 +590,12 @@ class RestParamDefaults {
 			return req.getBody().asType(type);
 		}
 		
-		private static final ObjectMap getMetaData(Body a) {
+		private static final ObjectMap getMetaData(Body a, BodyObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
-				return ObjectMap.EMPTY_MAP;
-			return new ObjectMap()
-				.appendSkipEmpty("description", a.description())
+				return om;
+			return om
+				.appendSkipEmpty("description", join(a.description()))
 				.appendSkipEmpty("required", a.required())
 				.appendSkipEmpty("type", a.type())
 				.appendSkipEmpty("format", a.format())
@@ -608,6 +611,50 @@ class RestParamDefaults {
 				.appendSkipEmpty("allowEmptyVals", a.allowEmptyVals())
 				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 				.appendSkipEmpty("exclusiveMimimum", a.exclusiveMimimum())
+				.appendSkipEmpty("uniqueItems", a.uniqueItems())
+				.appendSkipEmpty("schema", join(a.schema()))
+				.appendSkipEmpty("default", join(a._default()))
+				.appendSkipEmpty("enum", join(a._enum()))
+				.appendSkipEmpty("items", join(a.items()))
+				.appendSkipEmpty("example", join(a.example()))
+			;
+		}
+	}
+
+	static final class HeaderObject extends RestMethodParam {
+		private final HttpPartParser partParser;
+
+		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps, RestMethodParam existing) {
+			super(HEADER, firstNonEmpty(a.name(), a.value()), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
+			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+		}
+
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getHeaders().get(partParser, name, type);
+		}
+		
+		private static ObjectMap getMetaData(Header a, HeaderObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
+			if (a == null)
+				return om;
+			return om
+				.appendSkipEmpty("description", a.description())
+				.appendSkipEmpty("required", a.required())
+				.appendSkipEmpty("type", a.type())
+				.appendSkipEmpty("format", a.format())
+				.appendSkipEmpty("pattern", a.pattern())
+				.appendSkipEmpty("collectionFormat", a.collectionFormat())
+				.appendSkipEmpty("maximum", a.maximum())
+				.appendSkipEmpty("minimum", a.minimum())
+				.appendSkipEmpty("multipleOf", a.multipleOf())
+				.appendSkipEmpty("maxLength", a.maxLength())
+				.appendSkipEmpty("minLength", a.minLength())
+				.appendSkipEmpty("maxItems", a.maxItems())
+				.appendSkipEmpty("minItems", a.minItems())
+				.appendSkipEmpty("allowEmptyVals", a.allowEmptyVals())
+				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
+				.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 				.appendSkipEmpty("uniqueItems", a.uniqueItems())
 				.appendSkipEmpty("schema", a.schema())
 				.appendSkipEmpty("default", a._default())
@@ -618,46 +665,175 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class HeaderObject extends RestMethodParam {
-		private final HttpPartParser partParser;
+	static final class ResponseHeaderObject extends RestMethodParam {
+		final HttpPartSerializer partSerializer;
 
-		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps) {
-			super(HEADER, firstNonEmpty(a.name(), a.value()), type, getMetaData(a));
-			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+		protected ResponseHeaderObject(Method method, ResponseHeader a, Type type, PropertyStore ps, RestMethodParam existing) {
+			super(RESPONSE_HEADER, firstNonEmpty(a.name(), a.value(), "Unknown"), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
+			this.partSerializer = a.serializer() == HttpPartSerializer.Null.class ? null : ClassUtils.newInstance(HttpPartSerializer.class, a.serializer(), true, ps);
 		}
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getHeaders().get(partParser, name, type);
+		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
+			if (type instanceof Class) {
+				Class<?> c = (Class<?>)type;
+				if (ClassUtils.isParentClass(Value.class, c)) {
+					try {
+						Value<Object> v = (Value<Object>)c.newInstance();
+						v.listener(new ValueListener() {
+							@Override
+							public void onSet(Object newValue) {
+								res.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, newValue));
+							}
+						});
+						String def = getMetaData().getString("default");
+						if (def != null) {
+							Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
+							v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
+						}
+							
+						return v;
+					} catch (Exception e) {
+						throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must have a public no-arg constructor.", type);
+					}
+				}
+			}
+			throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must be a subclass of Value.", type);
 		}
 		
-		private static ObjectMap getMetaData(Header a) {
+		public HttpPartSerializer getPartSerializer() {
+			return partSerializer;
+		}
+		
+		private static ObjectMap getMetaData(ResponseHeader a, ResponseHeaderObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
-				return ObjectMap.EMPTY_MAP;
-			return new ObjectMap()
-				.appendSkipEmpty("description", a.description())
-				.appendSkipEmpty("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("maxLength", a.maxLength())
-				.appendSkipEmpty("minLength", a.minLength())
-				.appendSkipEmpty("maxItems", a.maxItems())
-				.appendSkipEmpty("minItems", a.minItems())
-				.appendSkipEmpty("allowEmptyVals", a.allowEmptyVals())
-				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipEmpty("exclusiveMimimum", a.exclusiveMimimum())
-				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", a.schema())
-				.appendSkipEmpty("default", a._default())
-				.appendSkipEmpty("enum", a._enum())
-				.appendSkipEmpty("items", a.items())
-				.appendSkipEmpty("example", a.example())
+				return om;
+			String code = firstNonEmpty(a.code(), "200");
+			for (String c : StringUtils.split(code)) {
+				ObjectMap om2 = om.getObjectMap(c, true);
+				om2
+					.appendSkipEmpty("description", join(a.description()))
+					.appendSkipEmpty("type", a.type())
+					.appendSkipEmpty("format", a.format())
+					.appendSkipEmpty("collectionFormat", a.collectionFormat())
+					.appendSkipEmpty("maximum", a.maximum())
+					.appendSkipEmpty("minimum", a.minimum())
+					.appendSkipEmpty("multipleOf", a.multipleOf())
+					.appendSkipEmpty("maxLength", a.maxLength())
+					.appendSkipEmpty("minLength", a.minLength())
+					.appendSkipEmpty("maxItems", a.maxItems())
+					.appendSkipEmpty("minItems", a.minItems())
+					.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
+					.appendSkipEmpty("exclusiveMimimum", a.exclusiveMinimum())
+					.appendSkipEmpty("uniqueItems", a.uniqueItems())
+					.appendSkipEmpty("default", join(a._default()))
+					.appendSkipEmpty("enum", join(a._enum()))
+					.appendSkipEmpty("items", join(a.items()))
+					.appendSkipEmpty("example", join(a.example()))
+				;
+			}
+			return om;
+		}
+	}
+
+	static final class ResponseObject extends RestMethodParam {
+
+		protected ResponseObject(Method method, Response a, Type type, PropertyStore ps, RestMethodParam existing) {
+			super(RESPONSE, "body", type, getMetaData(a, castOrNull(existing, ResponseObject.class)));
+		}
+
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
+			if (type instanceof Class) {
+				Class<?> c = (Class<?>)type;
+				if (ClassUtils.isParentClass(Value.class, c)) {
+					try {
+						Value<Object> v = (Value<Object>)c.newInstance();
+						v.listener(new ValueListener() {
+							@Override
+							public void onSet(Object newValue) {
+								res.setOutput(newValue);
+							}
+						});
+						String def = getMetaData().getString("default");
+						if (def != null) {
+							Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
+							v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
+						}
+							
+						return v;
+					} catch (Exception e) {
+						throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must have a public no-arg constructor.", type);
+					}
+				}
+			}
+			throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must be a subclass of Value.", type);
+		}
+		
+		private static ObjectMap getMetaData(Response a, ResponseObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
+			if (a == null)
+				return om;
+			int status = ObjectUtils.firstNonZero(a.code(), a.value(), 200);
+			ObjectMap om2 = om.getObjectMap(String.valueOf(status), true);
+			om2
+				.appendSkipEmpty("description", join(a.description()))
+				.appendSkipEmpty("schema", join(a.schema()))
+				.appendSkipEmpty("headers", join(a.headers()))
+				.appendSkipEmpty("example", join(a.example()))
 			;
+			return om;
+		}
+	}
+
+	static final class ResponseStatusObject extends RestMethodParam {
+
+		protected ResponseStatusObject(Method method, ResponseStatus a, Type type, PropertyStore ps, RestMethodParam existing) {
+			super(RESPONSE_STATUS, "", type, getMetaData(a, castOrNull(existing, ResponseStatusObject.class)));
+		}
+
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
+			if (type instanceof Class) {
+				Class<?> c = (Class<?>)type;
+				if (ClassUtils.isParentClass(Value.class, c)) {
+					try {
+						Value<Object> v = (Value<Object>)c.newInstance();
+						v.listener(new ValueListener() {
+							@Override
+							public void onSet(Object newValue) {
+								res.setStatus(Integer.parseInt(newValue.toString()));
+							}
+						});
+						String def = getMetaData().getString("default");
+						if (def != null) {
+							Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
+							v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
+						}
+							
+						return v;
+					} catch (Exception e) {
+						throw new RestException(500, "Invalid type {0} specified with @ResponseStatus annotation.  It must have a public no-arg constructor.", type);
+					}
+				}
+			}
+			throw new RestException(500, "Invalid type {0} specified with @ResponseStatus annotation.  It must be a subclass of Value.", type);
+		}
+		
+		private static ObjectMap getMetaData(ResponseStatus a, ResponseStatusObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
+			if (a == null)
+				return om;
+			int status = firstNonZero(a.code(), a.value(), 200);
+			ObjectMap om2 = om.getObjectMap(String.valueOf(status), true);
+			om2
+				.appendSkipEmpty("description", join(a.description()))
+			;
+			return om;
 		}
 	}
 
@@ -679,8 +855,8 @@ class RestParamDefaults {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
 
-		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps) throws ServletException {
-			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type, getMetaData(a));
+		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps, RestMethodParam existing) throws ServletException {
+			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
@@ -694,10 +870,11 @@ class RestParamDefaults {
 			return req.getFormData().get(partParser, name, type);
 		}
 		
-		private static final ObjectMap getMetaData(FormData a) {
+		private static final ObjectMap getMetaData(FormData a, FormDataObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
-				return ObjectMap.EMPTY_MAP;
-			return new ObjectMap()
+				return om;
+			return om
 				.appendSkipEmpty("description", a.description())
 				.appendSkipEmpty("required", a.required())
 				.appendSkipEmpty("type", a.type())
@@ -728,8 +905,8 @@ class RestParamDefaults {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
 
-		protected QueryObject(Method method, Query a, Type type, PropertyStore ps) throws ServletException {
-			super(QUERY, firstNonEmpty(a.name(), a.value()), type, getMetaData(a));
+		protected QueryObject(Method method, Query a, Type type, PropertyStore ps, RestMethodParam existing) throws ServletException {
+			super(QUERY, firstNonEmpty(a.name(), a.value()), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
@@ -743,10 +920,11 @@ class RestParamDefaults {
 			return req.getQuery().get(partParser, name, type);
 		}
 		
-		private static final ObjectMap getMetaData(Query a) {
+		private static final ObjectMap getMetaData(Query a, QueryObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
-				return ObjectMap.EMPTY_MAP;
-			return new ObjectMap()
+				return om;
+			return om
 				.appendSkipEmpty("description", a.description())
 				.appendSkipEmpty("required", a.required())
 				.appendSkipEmpty("type", a.type())
@@ -1124,5 +1302,9 @@ class RestParamDefaults {
 
 	static final boolean isCollection(Type t) {
 		return BeanContext.DEFAULT.getClassMeta(t).isCollectionOrArray();
+	}
+	
+	static final String join(String...s) {
+		return StringUtils.join(s, '\n');
 	}
 }

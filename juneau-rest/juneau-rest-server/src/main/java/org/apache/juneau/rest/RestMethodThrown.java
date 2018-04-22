@@ -34,9 +34,8 @@ public class RestMethodThrown {
 		this.metaData = new ObjectMap();
 		
 		int code = 500;
-		for (ResponseInfo ri : ReflectionUtils.findAnnotationsParentFirst(ResponseInfo.class, type)) {
-			if (ri.code() != 0)
-				code = ri.code();
+		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, type)) {
+			code = ObjectUtils.firstNonZero(ri.code(), ri.value(), code);
 			metaData.appendSkipEmpty("description", ri.description());
 			metaData.appendSkipEmpty("example", join(ri.example(), ""));
 			metaData.appendSkipEmpty("headers", join(ri.headers(), ""));

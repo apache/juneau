@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion. 
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * The requested resource could not be found but may be available in the future. 
  * <br>Subsequent requests by the client are permissible.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )

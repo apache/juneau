@@ -19,7 +19,7 @@ import org.apache.juneau.rest.exception.*;
  * Exception thrown when an invalid username or password is provided.
  */
 @SuppressWarnings("serial")
-@ResponseInfo(description="Invalid username or password provided")
+@Response(description="Invalid username or password provided")
 public class InvalidLogin extends Unauthorized {
 	
 	/**

@@ -57,7 +57,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  */
 @Documented
-@Target(PARAMETER)
+@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Query {

@@ -17,7 +17,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Convenience subclass of {@link Redirect} for redirecting a response to the servlet root.
  */
-@ResponseInfo(description="Redirect to servlet root")
+@Response(description="Redirect to servlet root")
 public class RedirectToServletRoot extends Redirect {
 	
 	/**

@@ -19,7 +19,7 @@ import org.apache.juneau.rest.exception.*;
  * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-@ResponseInfo(description="ID already in use")
+@Response(description="ID already in use")
 public class IdConflict extends Conflict {
 
 	/**

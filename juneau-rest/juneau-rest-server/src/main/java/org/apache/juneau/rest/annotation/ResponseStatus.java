@@ -10,22 +10,28 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
 
 /**
- * Exception thrown when trying to add an entry where the ID is already in use.
+ * Annotation that can be applied to parameters and types to denote them as an HTTP response status.
  */
-@SuppressWarnings("serial")
-@Response(description="Invalid ID provided")
-public class InvalidId extends BadRequest {
-
+@Documented
+@Target({PARAMETER,TYPE})
+@Retention(RUNTIME)
+@Inherited
+public @interface ResponseStatus {
+	
 	/**
-	 * Constructor.
+	 * The HTTP status of the response.
 	 */
-	public InvalidId() {
-		super("Invalid ID provided.");
-	}
+	int code() default 0;
+	
+	int value() default 0;
+
+	String[] description() default {};
 }

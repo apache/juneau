@@ -19,7 +19,7 @@ import org.apache.juneau.rest.exception.*;
  * Exception thrown when trying to add an entry where the ID is already in use.
  */
 @SuppressWarnings("serial")
-@ResponseInfo(description="Invalid username provided")
+@Response(description="Invalid username provided")
 public class InvalidUsername extends BadRequest {
 
 	/**

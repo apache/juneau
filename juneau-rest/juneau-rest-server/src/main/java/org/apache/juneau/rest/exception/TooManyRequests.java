@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * The user has sent too many requests in a given amount of time. 
  * <br>Intended for use with rate-limiting schemes.
  */
-@ResponseInfo(
+@Response(
 	code=CODE,
 	description=MESSAGE
 )
