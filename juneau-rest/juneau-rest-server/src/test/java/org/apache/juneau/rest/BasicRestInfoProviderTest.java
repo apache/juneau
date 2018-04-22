@@ -45,11 +45,8 @@ public class BasicRestInfoProviderTest {
 
 		@Override
 		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-			System.out.println("XXX - TestClasspathResourceFinder.findResource("+baseClass+", "+name+", " + locale + ")");
-			if (name.endsWith(".json")) {
-				System.out.println("XXX - InputStream1=" + BasicRestInfoProvider.class.getResourceAsStream("BasicRestinfoProviderTest_swagger.json"));
+			if (name.endsWith(".json")) 
 				return BasicRestInfoProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json");
-			}
 			return super.findResource(baseClass, name, locale);
 		}
 	}

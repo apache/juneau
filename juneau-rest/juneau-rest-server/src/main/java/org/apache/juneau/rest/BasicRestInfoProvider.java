@@ -169,6 +169,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 		// Wasn't cached...need to create one.
 		
+		Object resource = context.getResource();
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
 		MessageBundle mb = context.getMessages();
@@ -176,12 +177,14 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		JsonSchemaSerializerSession js = req.getContext().getJsonSchemaSerializer().createSession();
 		
 		// Load swagger JSON from classpath.
-		ObjectMap omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, getClass().getSimpleName() + ".json", locale);
+		ObjectMap omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, ClassUtils.getSimpleName(resource.getClass()) + ".json", locale);
+		if (omSwagger == null)
+			omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, resource.getClass().getSimpleName() + ".json", locale);
 		if (omSwagger == null)
 			omSwagger = new ObjectMap();
 		
 		// Combine it with @RestResource(swagger)
-		for (Map.Entry<Class<?>,RestResource> e : findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass()).entrySet()) {
+		for (Map.Entry<Class<?>,RestResource> e : findAnnotationsMapParentFirst(RestResource.class, resource.getClass()).entrySet()) {
 			RestResource rr = e.getValue();
 
 			if (! rr.title().isEmpty())

@@ -2042,4 +2042,21 @@ public final class ClassUtils {
 			return t.toString(); 
 		}
 	}
+	
+	/**
+	 * Returns the simple name of a class.
+	 * 
+	 * <p>
+	 * Similar to {@link Class#getSimpleName()}, but includes the simple name of an enclosing or declaring class.
+	 * 
+	 * @param c The class to get the simple name on.
+	 * @return The simple name of a class.
+	 */
+	public static String getSimpleName(Class<?> c) {
+		if (c.isLocalClass())
+			return getSimpleName(c.getEnclosingClass()) + '.' + c.getSimpleName();
+		if (c.isMemberClass())
+			return getSimpleName(c.getDeclaringClass()) + '.' + c.getSimpleName();
+		return c.getSimpleName();
+	}
 }

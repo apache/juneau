@@ -379,4 +379,16 @@ public class ClassUtilsTest {
 			c = 1;
 		}
 	}
+	
+	//====================================================================================================
+	// getSimpleName()
+	//====================================================================================================
+	@Test
+	public void getSimpleName() throws Exception {
+		assertEquals("ClassUtilsTest.G1", ClassUtils.getSimpleName(G1.class));
+		assertEquals("ClassUtilsTest.G2", ClassUtils.getSimpleName(G2.class));
+	}
+	
+	public class G1 {}
+	public static class G2 {}
 }
