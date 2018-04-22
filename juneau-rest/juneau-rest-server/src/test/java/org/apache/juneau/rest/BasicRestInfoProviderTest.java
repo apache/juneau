@@ -48,7 +48,7 @@ public class BasicRestInfoProviderTest {
 			System.out.println("XXX - TestClasspathResourceFinder.findResource("+baseClass+", "+name+", " + locale + ")");
 			if (name.endsWith(".json")) {
 				System.out.println("XXX - InputStream1=" + BasicRestInfoProvider.class.getResourceAsStream("BasicRestinfoProviderTest_swagger.json"));
-				return BasicRestInfoProvider.class.getResourceAsStream("BasicRestinfoProviderTest_swagger.json");
+				return BasicRestInfoProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json");
 			}
 			return super.findResource(baseClass, name, locale);
 		}
@@ -714,5 +714,9 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'l-foo',url:'l-bar'}", getSwagger(new L05()).getExternalDocs());
 		assertObjectEquals("{description:'l-foo',url:'l-bar'}", getSwaggerWithFile(new L05()).getExternalDocs());
 	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /paths/<path>/<method>/tags
+	//-----------------------------------------------------------------------------------------------------------------
 	
 }

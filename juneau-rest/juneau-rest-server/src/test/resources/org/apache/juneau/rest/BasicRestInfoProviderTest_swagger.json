@@ -46,5 +46,68 @@
 	externalDocs: {
 		description: 's-description',
 		url: 's-url'
+	},
+	paths: {
+		'/path/{foo}': {
+			get: {
+				summary: 's-summary',
+				description: 's-description',
+				operationId: 's-operationId',
+				deprecated: true,
+				consumes: ['s-consumes'],
+				produces: ['s-produces'],
+				tags: ['s-tag'],
+				schemes: ['s-scheme'],
+				externalDocs: {
+					description: 's-description',
+					url: 's-url'
+				},
+				parameters: [
+					{
+						name: 's-name',
+						in: 'query',
+						description: 's-description',
+						type: 'string',
+						format: 's-format',
+						pattern: 's-pattern',
+						collectionFormat: 's-collectionFormat',
+						minimum: 1.0,
+						maximum: 2.0,
+						multipleOf: 3.0,
+						minLength: 1,
+						maxLength: 2,
+						minItems: 3,
+						maxItems: 4,
+						required: true,
+						allowEmptyValue: true,
+						exclusiveMinimum: true,
+						exclusiveMaximum: true,
+						uniqueItems: true,						
+						schemaInfo: {
+						}						
+					}
+				],
+				responses: {
+					100: {description:'s-100-description'}
+				},
+				security: [
+					{foo_auth:['read:foo','write-foo']}
+				]
+			} 
+		}
+	},
+	definitions: {
+		Foo: {
+			type: 'object',
+			properties: {
+				id: {
+					type: 'integer',
+					format: 'int64'
+				}
+			},
+			xml: {
+				name: 'Foo'
+			}
+		}
 	}
 }
