@@ -194,21 +194,21 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			
 			ResourceSwagger r = rr.swagger();
 			
-			omSwagger.putAll(parseMap(join(r.value()), vr, true, false, "@ResourceSwagger(value) on class {0}", c));
+			omSwagger.putAll(parseMap(joinnl(r.value()), vr, true, false, "@ResourceSwagger(value) on class {0}", c));
 			
 			if (r.title().length + r.description().length + r.version().length() + r.contact().length + r.license().length + r.termsOfService().length > 0) {
 				ObjectMap info = omSwagger.getObjectMap("info", true);
-				info.appendIf(true, true, true, "title", vr.resolve(join(r.title())));
-				info.appendIf(true, true, true, "description", vr.resolve(join(r.description())));
-				info.appendIf(true, true, true, "version", vr.resolve(join(r.version())));
-				info.appendIf(true, true, true, "termsOfService", vr.resolve(join(r.termsOfService())));
-				info.appendIf(true, true, true, "contact", parseMap(join(r.contact()), vr, false, true, "@ResourceSwagger(contact) on class {0}", c));
-				info.appendIf(true, true, true, "license", parseMap(join(r.license()), vr, false, true, "@ResourceSwagger(license) on class {0}", c));
+				info.appendIf(true, true, true, "title", vr.resolve(joinnl(r.title())));
+				info.appendIf(true, true, true, "description", vr.resolve(joinnl(r.description())));
+				info.appendIf(true, true, true, "version", vr.resolve(r.version()));
+				info.appendIf(true, true, true, "termsOfService", vr.resolve(joinnl(r.termsOfService())));
+				info.appendIf(true, true, true, "contact", parseMap(joinnl(r.contact()), vr, false, true, "@ResourceSwagger(contact) on class {0}", c));
+				info.appendIf(true, true, true, "license", parseMap(joinnl(r.license()), vr, false, true, "@ResourceSwagger(license) on class {0}", c));
 			}
 
-			omSwagger.appendIf(true, true, true, "externalDocs", parseMap(join(r.externalDocs()), vr, false, true, "@ResourceSwagger(externalDocs) on class {0}", c));
+			omSwagger.appendIf(true, true, true, "externalDocs", parseMap(joinnl(r.externalDocs()), vr, false, true, "@ResourceSwagger(externalDocs) on class {0}", c));
 			
-			ObjectList tags = parseList(join(r.tags()), vr, false, true, "@ResourceSwagger(tags) on class {0}", c);
+			ObjectList tags = parseList(joinnl(r.tags()), vr, false, true, "@ResourceSwagger(tags) on class {0}", c);
 			if (tags != null)
 				omSwagger.getObjectList("tags", true).addAll(tags);
 		}
@@ -276,20 +276,20 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			// Add @RestMethod(swagger)
 			MethodSwagger ms = rm.swagger();
 
-			op.putAll(parseMap(join(ms.value()), vr, true, false, "@MethodSwagger(value) on class {0} method {1}", c, m));
+			op.putAll(parseMap(joinnl(ms.value()), vr, true, false, "@MethodSwagger(value) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "summary", vr.resolve(rm.summary()));
-			op.appendIf(true, true, true, "summary", vr.resolve(join(ms.summary())));
-			op.appendIf(true, true, true, "description", vr.resolve(join(rm.description())));
-			op.appendIf(true, true, true, "description", vr.resolve(join(ms.description())));
+			op.appendIf(true, true, true, "summary", vr.resolve(joinnl(ms.summary())));
+			op.appendIf(true, true, true, "description", vr.resolve(joinnl(rm.description())));
+			op.appendIf(true, true, true, "description", vr.resolve(joinnl(ms.description())));
 			op.appendIf(true, true, true, "deprecated", vr.resolve(ms.deprecated()));
-			op.appendIf(true, true, true, "externalDocs", parseMap(join(ms.externalDocs()), vr, false, true, "@MethodSwagger(externalDocs) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "externalDocs", parseMap(joinnl(ms.externalDocs()), vr, false, true, "@MethodSwagger(externalDocs) on class {0} method {1}", c, m));
 			
 			if (ms.parameters().length > 0)
-				op.getObjectList("parameters", true).addAll(parseList(join(ms.parameters()), vr, false, false, "@MethodSwagger(parameters) on class {0} method {1}", c, m));
+				op.getObjectList("parameters", true).addAll(parseList(joinnl(ms.parameters()), vr, false, false, "@MethodSwagger(parameters) on class {0} method {1}", c, m));
 			if (ms.responses().length > 0)
-				op.getObjectMap("responses", true).putAll(parseMap(join(ms.responses()), vr, false, false, "@MethodSwagger(responses) on class {0} method {1}", c, m));
+				op.getObjectMap("responses", true).putAll(parseMap(joinnl(ms.responses()), vr, false, false, "@MethodSwagger(responses) on class {0} method {1}", c, m));
 			if (ms.tags().length > 0)
-				op.getObjectList("tags", true).addAll(parseListOrCdl(join(ms.tags()), vr, false, false, "@MethodSwagger(tags) on class {0} method {1}", c, m));
+				op.getObjectList("tags", true).addAll(parseListOrCdl(joinnl(ms.tags()), vr, false, false, "@MethodSwagger(tags) on class {0} method {1}", c, m));
 
 			op.putIfNotExists("operationId", mn);
 			
@@ -520,10 +520,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 //		JsonSerializer.DEFAULT_LAX_READABLE.println(swagger);
 		
 		return swagger;
-	}
-	
-	private String join(String...s) {
-		return StringUtils.join(s, '\n');
 	}
 	
 	private Object parseAnything(String s) throws ParseException {
@@ -806,7 +802,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 		
-		String s = join(method.getAnnotation(RestMethod.class).description());
+		String s = joinnl(method.getAnnotation(RestMethod.class).description());
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)

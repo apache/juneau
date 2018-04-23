@@ -37,10 +37,10 @@ public class RestMethodReturn {
 		if (type instanceof Class)
 		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, (Class<?>)type)) {
 			code = ObjectUtils.firstNonZero(ri.code(), ri.value(), code);
-			metaData.appendSkipEmpty("description", ri.description());
-			metaData.appendSkipEmpty("example", join(ri.example(), ""));
-			metaData.appendSkipEmpty("headers", join(ri.headers(), ""));
-			metaData.appendSkipEmpty("schema", join(ri.schema(), ""));
+			metaData.appendSkipEmpty("description", joinnl(ri.description()));
+			metaData.appendSkipEmpty("example", joinnl(ri.example()));
+			metaData.appendSkipEmpty("headers", joinnl(ri.headers()));
+			metaData.appendSkipEmpty("schema", joinnl(ri.schema()));
 		}
 		 
 		this.code = code;

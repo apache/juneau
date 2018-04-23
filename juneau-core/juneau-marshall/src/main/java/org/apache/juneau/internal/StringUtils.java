@@ -465,6 +465,16 @@ public final class StringUtils {
 		}
 		return sb.toString();
 	}
+	
+	/**
+	 * Joins tokens with newlines.
+	 * 
+	 * @param tokens The tokens to concatenate.
+	 * @return A string with the specified tokens contatenated with newlines.
+	 */
+	public static String joinnl(Object[] tokens) {
+		return join(tokens, '\n');
+	}
 
 	/**
 	 * Shortcut for calling <code>split(s, <js>','</js>)</code>

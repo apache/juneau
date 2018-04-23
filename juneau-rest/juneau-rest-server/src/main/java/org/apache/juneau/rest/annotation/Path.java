@@ -112,12 +112,13 @@ public @interface Path {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of the value is plain-text.
+	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String description() default "";
+	String[] description() default {};
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/type</code>.
@@ -288,12 +289,13 @@ public @interface Path {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of the value is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String schema() default "";
+	String[] schema() default {};
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/enum</code>.
@@ -302,12 +304,13 @@ public @interface Path {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of the value is a JSON array or comma-delimited list.
+	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String _enum() default "";
+	String[] _enum() default {};
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-example</code>.
@@ -320,10 +323,11 @@ public @interface Path {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of the value is a JSON object or plain-text string.
+	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String example() default "";
+	String[] example() default {};
 }

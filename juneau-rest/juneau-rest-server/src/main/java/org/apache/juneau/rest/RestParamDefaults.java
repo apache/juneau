@@ -560,7 +560,7 @@ class RestParamDefaults {
 			if (a == null)
 				return ObjectMap.EMPTY_MAP;
 			return new ObjectMap()
-				.appendSkipEmpty("description", a.description())
+				.appendSkipEmpty("description", joinnl(a.description()))
 				.appendSkipEmpty("type", a.type())
 				.appendSkipEmpty("format", a.format())
 				.appendSkipEmpty("pattern", a.pattern())
@@ -572,9 +572,9 @@ class RestParamDefaults {
 				.appendSkipEmpty("allowEmptyVals", a.allowEmptyVals())
 				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 				.appendSkipEmpty("exclusiveMimimum", a.exclusiveMimimum())
-				.appendSkipEmpty("schema", a.schema())
-				.appendSkipEmpty("enum", a._enum())
-				.appendSkipEmpty("example", a.example())
+				.appendSkipEmpty("schema", joinnl(a.schema()))
+				.appendSkipEmpty("enum", joinnl(a._enum()))
+				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
 	}
@@ -595,7 +595,7 @@ class RestParamDefaults {
 			if (a == null)
 				return om;
 			return om
-				.appendSkipEmpty("description", join(a.description()))
+				.appendSkipEmpty("description", joinnl(a.description()))
 				.appendSkipEmpty("required", a.required())
 				.appendSkipEmpty("type", a.type())
 				.appendSkipEmpty("format", a.format())
@@ -612,11 +612,11 @@ class RestParamDefaults {
 				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 				.appendSkipEmpty("exclusiveMimimum", a.exclusiveMimimum())
 				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", join(a.schema()))
-				.appendSkipEmpty("default", join(a._default()))
-				.appendSkipEmpty("enum", join(a._enum()))
-				.appendSkipEmpty("items", join(a.items()))
-				.appendSkipEmpty("example", join(a.example()))
+				.appendSkipEmpty("schema", joinnl(a.schema()))
+				.appendSkipEmpty("default", joinnl(a._default()))
+				.appendSkipEmpty("enum", joinnl(a._enum()))
+				.appendSkipEmpty("items", joinnl(a.items()))
+				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
 	}
@@ -639,7 +639,7 @@ class RestParamDefaults {
 			if (a == null)
 				return om;
 			return om
-				.appendSkipEmpty("description", a.description())
+				.appendSkipEmpty("description", joinnl(a.description()))
 				.appendSkipEmpty("required", a.required())
 				.appendSkipEmpty("type", a.type())
 				.appendSkipEmpty("format", a.format())
@@ -656,11 +656,11 @@ class RestParamDefaults {
 				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 				.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", a.schema())
-				.appendSkipEmpty("default", a._default())
-				.appendSkipEmpty("enum", a._enum())
-				.appendSkipEmpty("items", a.items())
-				.appendSkipEmpty("example", a.example())
+				.appendSkipEmpty("schema", joinnl(a.schema()))
+				.appendSkipEmpty("default", joinnl(a._default()))
+				.appendSkipEmpty("enum", joinnl(a._enum()))
+				.appendSkipEmpty("items", joinnl(a.items()))
+				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
 	}
@@ -714,7 +714,7 @@ class RestParamDefaults {
 			for (String c : StringUtils.split(code)) {
 				ObjectMap om2 = om.getObjectMap(c, true);
 				om2
-					.appendSkipEmpty("description", join(a.description()))
+					.appendSkipEmpty("description", joinnl(a.description()))
 					.appendSkipEmpty("type", a.type())
 					.appendSkipEmpty("format", a.format())
 					.appendSkipEmpty("collectionFormat", a.collectionFormat())
@@ -728,10 +728,10 @@ class RestParamDefaults {
 					.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 					.appendSkipEmpty("exclusiveMimimum", a.exclusiveMinimum())
 					.appendSkipEmpty("uniqueItems", a.uniqueItems())
-					.appendSkipEmpty("default", join(a._default()))
-					.appendSkipEmpty("enum", join(a._enum()))
-					.appendSkipEmpty("items", join(a.items()))
-					.appendSkipEmpty("example", join(a.example()))
+					.appendSkipEmpty("default", joinnl(a._default()))
+					.appendSkipEmpty("enum", joinnl(a._enum()))
+					.appendSkipEmpty("items", joinnl(a.items()))
+					.appendSkipEmpty("example", joinnl(a.example()))
 				;
 			}
 			return om;
@@ -780,10 +780,10 @@ class RestParamDefaults {
 			int status = ObjectUtils.firstNonZero(a.code(), a.value(), 200);
 			ObjectMap om2 = om.getObjectMap(String.valueOf(status), true);
 			om2
-				.appendSkipEmpty("description", join(a.description()))
-				.appendSkipEmpty("schema", join(a.schema()))
-				.appendSkipEmpty("headers", join(a.headers()))
-				.appendSkipEmpty("example", join(a.example()))
+				.appendSkipEmpty("description", joinnl(a.description()))
+				.appendSkipEmpty("schema", joinnl(a.schema()))
+				.appendSkipEmpty("headers", joinnl(a.headers()))
+				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 			return om;
 		}
@@ -831,7 +831,7 @@ class RestParamDefaults {
 			int status = firstNonZero(a.code(), a.value(), 200);
 			ObjectMap om2 = om.getObjectMap(String.valueOf(status), true);
 			om2
-				.appendSkipEmpty("description", join(a.description()))
+				.appendSkipEmpty("description", joinnl(a.description()))
 			;
 			return om;
 		}
@@ -875,7 +875,7 @@ class RestParamDefaults {
 			if (a == null)
 				return om;
 			return om
-				.appendSkipEmpty("description", a.description())
+				.appendSkipEmpty("description", joinnl(a.description()))
 				.appendSkipEmpty("required", a.required())
 				.appendSkipEmpty("type", a.type())
 				.appendSkipEmpty("format", a.format())
@@ -892,11 +892,11 @@ class RestParamDefaults {
 				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 				.appendSkipEmpty("exclusiveMimimum", a.exclusiveMimimum())
 				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", a.schema())
-				.appendSkipEmpty("default", a._default())
-				.appendSkipEmpty("enum", a._enum())
-				.appendSkipEmpty("items", a.items())
-				.appendSkipEmpty("example", a.example())
+				.appendSkipEmpty("schema", joinnl(a.schema()))
+				.appendSkipEmpty("default", joinnl(a._default()))
+				.appendSkipEmpty("enum", joinnl(a._enum()))
+				.appendSkipEmpty("items", joinnl(a.items()))
+				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
 	}
@@ -925,7 +925,7 @@ class RestParamDefaults {
 			if (a == null)
 				return om;
 			return om
-				.appendSkipEmpty("description", a.description())
+				.appendSkipEmpty("description", joinnl(a.description()))
 				.appendSkipEmpty("required", a.required())
 				.appendSkipEmpty("type", a.type())
 				.appendSkipEmpty("format", a.format())
@@ -942,11 +942,11 @@ class RestParamDefaults {
 				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 				.appendSkipEmpty("exclusiveMimimum", a.exclusiveMimimum())
 				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", a.schema())
-				.appendSkipEmpty("default", a._default())
-				.appendSkipEmpty("enum", a._enum())
-				.appendSkipEmpty("items", a.items())
-				.appendSkipEmpty("example", a.example())
+				.appendSkipEmpty("schema", joinnl(a.schema()))
+				.appendSkipEmpty("default", joinnl(a._default()))
+				.appendSkipEmpty("enum", joinnl(a._enum()))
+				.appendSkipEmpty("items", joinnl(a.items()))
+				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
 
@@ -1302,9 +1302,5 @@ class RestParamDefaults {
 
 	static final boolean isCollection(Type t) {
 		return BeanContext.DEFAULT.getClassMeta(t).isCollectionOrArray();
-	}
-	
-	static final String join(String...s) {
-		return StringUtils.join(s, '\n');
 	}
 }

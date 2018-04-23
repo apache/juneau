@@ -30,7 +30,7 @@ public @interface Response {
 	
 	int value() default 0;
 	
-	String description() default "";
+	String[] description() default {};
 
 	String[] schema() default {};
 	
