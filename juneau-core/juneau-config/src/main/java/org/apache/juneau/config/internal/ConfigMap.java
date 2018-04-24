@@ -99,7 +99,7 @@ public class ConfigMap implements ConfigStoreListener {
 		boolean foundComment = false;
 		for (ListIterator<String> li = lines.listIterator(); li.hasNext();) {
 			String l = li.next();
-			char c = StringUtils.firstNonWhitespaceChar(l);
+			char c = firstChar(l);
 			if (c != '#') {
 				if (c == 0 && foundComment) {
 					li.set("[]");

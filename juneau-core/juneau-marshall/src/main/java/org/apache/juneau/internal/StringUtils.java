@@ -2256,4 +2256,16 @@ public final class StringUtils {
 			return Integer.MAX_VALUE;
 		return s1.compareTo(s2);
 	}
+
+	/**
+	 * Returns the first character in the specified string.
+	 * 
+	 * @param s The string to check.
+	 * @return The first character in the string, or <code>0</code> if the string is <jk>null</jk> or empty.
+	 */
+	public static char firstChar(String s) {
+		if (s == null || s.length() == 0)
+			return 0;
+		return s.charAt(0);
+	}
 }
