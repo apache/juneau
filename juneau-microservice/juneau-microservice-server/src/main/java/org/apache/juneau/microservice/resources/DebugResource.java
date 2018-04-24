@@ -49,10 +49,10 @@ public class DebugResource extends BasicRestServlet {
 	 * @throws Exception 
 	 */
 	@RestMethod(name=GET, path="/", description="Show contents of config file.")
-	public ResourceDescription[] getChildren() throws Exception {
-		return new ResourceDescription[] {
-			new ResourceDescription("jetty/dump", "Jetty thread dump")
-		};
+	public ResourceDescriptions getChildren() throws Exception {
+		return new ResourceDescriptions()
+			.append("jetty/dump", "Jetty thread dump")
+		;
 	}
 
 	/**

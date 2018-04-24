@@ -75,10 +75,10 @@ public class DockerRegistryResource extends BasicRestServlet {
 
 	/** [GET /] - Show child resources. */
 	@RestMethod(name=GET, path="/")
-	public ResourceDescription[] getChildren(RestRequest req) {
-		return new ResourceDescription[] {
-			new ResourceDescription("search", "Search Registry")
-		};
+	public ResourceDescriptions getChildren(RestRequest req) {
+		return new ResourceDescriptions()
+			.append("search", "Search Registry")
+		;
 	}
 
 	/**

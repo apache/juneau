@@ -27,7 +27,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; juneau-rest-server &gt; Predefined Label Beans</a>
  * </ul>
  */
-public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
+public class ChildResourceDescriptions extends ResourceDescriptions {
 
 	private static final long serialVersionUID = 1L;
 

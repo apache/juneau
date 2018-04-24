@@ -57,21 +57,21 @@ public class MethodExampleResource extends BasicRestServlet {
 
 	/** Example GET request that redirects to our example method */
 	@RestMethod(name=GET, path="/", summary="Top-level page")
-	public ResourceDescription[] doExample() throws Exception {
-		return new ResourceDescription[] {
-			new ResourceDescription(
+	public ResourceDescriptions doExample() throws Exception {
+		return new ResourceDescriptions()
+			.append(
 				"example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
 				"Example 1 - Annotated method attributes."
-			),
-			new ResourceDescription(
+			)
+			.append(
 				"example2/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
 				"Example 2 - Low-level RestRequest/RestResponse objects."
-			),
-			new ResourceDescription(
+			)
+			.append(
 				"example3/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
 				"Example 3 - Intermediate-level APIs."
 			)
-		};
+		;
 	}
 
 	@RestMethod(

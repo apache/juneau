@@ -53,11 +53,11 @@ public class PredefinedLabelsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/")
-	public ResourceDescription[] getChildMethods() throws Exception {
-		return new ResourceDescription[] {
-			new ResourceDescription("beanDescription", "BeanDescription"),
-			new ResourceDescription("htmlLinks", "HtmlLink")
-		};
+	public ResourceDescriptions getChildMethods() throws Exception {
+		return new ResourceDescriptions()
+			.append("beanDescription", "BeanDescription")
+			.append("htmlLinks", "HtmlLink")
+		;
 	}
 	
 	@RestMethod(name=GET, path="/beanDescription")

@@ -96,12 +96,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		path="/",
 		summary="Navigation page"
 	) 
-	public ResourceDescription[] getTopPage() {
-		return new ResourceDescription[] {
-			new ResourceDescription("pet", "All pets in the store"), 
-			new ResourceDescription("store", "Orders and inventory"), 
-			new ResourceDescription("user", "Petstore users")
-		};
+	public ResourceDescriptions getTopPage() {
+		return new ResourceDescriptions()
+			.append("pet", "All pets in the store")
+			.append("store", "Orders and inventory") 
+			.append("user", "Petstore users")
+		;
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -367,11 +367,11 @@ public class PetStoreResource extends BasicRestServletJena {
 			tags="store"
 		)
 	) 
-	public ResourceDescription[] getTopStorePage() {
-		return new ResourceDescription[] {
-			new ResourceDescription("store/order", "Petstore orders"), 
-			new ResourceDescription("store/inventory", "Petstore inventory")
-		};
+	public ResourceDescriptions getTopStorePage() {
+		return new ResourceDescriptions()
+			.append("store/order", "Petstore orders")
+			.append("store/inventory", "Petstore inventory")
+		;
 	}
 
 	@RestMethod(

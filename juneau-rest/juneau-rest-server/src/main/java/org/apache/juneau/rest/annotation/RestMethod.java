@@ -737,7 +737,6 @@ public @interface RestMethod {
 	String[] consumes() default {};
 
 	/**
-	/**
 	 * Provides swagger-specific metadata on this method.
 	 * 
 	 * <p>

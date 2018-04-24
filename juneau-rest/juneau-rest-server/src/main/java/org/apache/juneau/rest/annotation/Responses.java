@@ -17,11 +17,21 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+/**
+ * Used to associate multiple {@link Response @Response} annotations to the same parameter or class.
+ * 
+ * <p>
+ * Since Juneau currently prereq's Java 1.7, we cannot take advantage of annotation duplication support in Java 8.
+ * <br>This annotation overcomes that limitation.
+ */
 @Documented
-@Target({TYPE})
+@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Responses {
 
+	/**
+	 * Specifies one or more {@link Response @Response} annotations to apply to the same parameter or class.
+	 */
 	Response[] value() default {};
 }
