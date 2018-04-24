@@ -343,6 +343,13 @@ public @interface Header {
 	 * 		The format of the value is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<ul>
+	 * 			<li><code>schema=<js>"{type:'string',format:'binary'}"</js></code>
+	 * 			<li><code>schema=<js>"type:'string',format:'binary'"</js></code>
+	 * 		<ul>
+	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
