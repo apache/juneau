@@ -50,7 +50,8 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
 			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
-			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, true);  // This usually has no effect anyway.
+			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
+			factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
 			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && reporter != null)
 				factory.setProperty(XMLInputFactory.REPORTER, reporter);
 			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && resolver != null)
