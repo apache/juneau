@@ -1009,7 +1009,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 						String url = rmm.getUrl();
 						String httpMethod = rmm.getHttpMethod();
-						try (RestCall rc = doCall(httpMethod, url, httpMethod.equals("POST"))) {
+						try (RestCall rc = doCall(httpMethod, url, httpMethod.equals("POST") || httpMethod.equals("PUT"))) {
 
 							rc.serializer(serializer).parser(parser);
 
