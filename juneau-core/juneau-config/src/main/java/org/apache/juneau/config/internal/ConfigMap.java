@@ -81,7 +81,7 @@ public class ConfigMap implements ConfigStoreListener {
 		try (Scanner scanner = new Scanner(contents)) {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
-				char c = StringUtils.firstNonWhitespaceChar(line);
+				char c = firstChar(line);
 				if (c != 0 || c != '#') {
 					if (c == '[') {
 						int c2 = StringUtils.lastNonWhitespaceChar(line);
@@ -99,7 +99,7 @@ public class ConfigMap implements ConfigStoreListener {
 		boolean foundComment = false;
 		for (ListIterator<String> li = lines.listIterator(); li.hasNext();) {
 			String l = li.next();
-			char c = firstChar(l);
+			char c = firstNonWhitespaceChar(l);
 			if (c != '#') {
 				if (c == 0 && foundComment) {
 					li.set("[]");
