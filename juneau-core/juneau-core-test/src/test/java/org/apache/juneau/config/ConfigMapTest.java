@@ -261,17 +261,17 @@ public class ConfigMapTest {
 	public void testMalformedSectionHeaders() throws Exception {
 		
 		String[] test = {
-			"[]", "[  ]", " [  ] ", "\t[\t\t]\t",
+			"[]", "[  ]",
 			"[/]", "[[]", "[]]", "[\\]", 
 			"[foo/bar]", "[foo[bar]", "[foo]bar]", "[foo\\bar]", 
-			"[]", "[ ]", "[\t]", " [] ",
+			"[]", "[ ]", "[\t]",
 		};
 		
 		for (String t : test) {
 			ConfigStore s = initStore("Foo.cfg", t);		
 			try {
 				s.getMap("Foo.cfg");
-				fail("Exception expected.");
+				fail("Exception expected on t=["+t+"].");
 			} catch (ConfigException e) {
 				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name"));
 			}

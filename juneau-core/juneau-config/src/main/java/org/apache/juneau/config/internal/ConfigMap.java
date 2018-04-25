@@ -82,13 +82,11 @@ public class ConfigMap implements ConfigStoreListener {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				char c = firstChar(line);
-				if (c != 0 || c != '#') {
-					if (c == '[') {
-						int c2 = StringUtils.lastNonWhitespaceChar(line);
-						String l = line.trim();
-						if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length()-1)))
-							throw new ConfigException("Invalid section name found in configuration:  {0}", line) ;
-					}
+				if (c == '[') {
+					int c2 = StringUtils.lastNonWhitespaceChar(line);
+					String l = line.trim();
+					if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length()-1)))
+						throw new ConfigException("Invalid section name found in configuration:  {0}", line) ;
 				}
 				lines.add(line);
 			}
@@ -117,7 +115,7 @@ public class ConfigMap implements ConfigStoreListener {
 		String accumulator = null;
 		while (li.hasPrevious()) {
 			String l = li.previous();
-			char c = l.isEmpty() ? 0 : l.charAt(0);
+			char c = firstChar(l);
 			if (c == '\t') {
 				c = firstNonWhitespaceChar(l);
 				if (c != '#') {
@@ -143,7 +141,7 @@ public class ConfigMap implements ConfigStoreListener {
 		
 		for (int i = last; i >= 0; i--) {
 			String l = lines.get(i);
-			char c = StringUtils.firstNonWhitespaceChar(l);
+			char c = firstChar(l);
 			
 			if (state == S1) {
 				if (c == '[') {
