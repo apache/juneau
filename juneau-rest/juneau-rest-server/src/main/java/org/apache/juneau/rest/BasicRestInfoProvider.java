@@ -277,20 +277,20 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			MethodSwagger ms = rm.swagger();
 
 			op.putAll(parseMap(joinnl(ms.value()), vr, true, false, "@MethodSwagger(value) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "operationId", vr.resolve(ms.operationId()));
 			op.appendIf(true, true, true, "summary", vr.resolve(rm.summary()));
 			op.appendIf(true, true, true, "summary", vr.resolve(joinnl(ms.summary())));
 			op.appendIf(true, true, true, "description", vr.resolve(joinnl(rm.description())));
 			op.appendIf(true, true, true, "description", vr.resolve(joinnl(ms.description())));
 			op.appendIf(true, true, true, "deprecated", vr.resolve(ms.deprecated()));
 			op.appendIf(true, true, true, "externalDocs", parseMap(joinnl(ms.externalDocs()), vr, false, true, "@MethodSwagger(externalDocs) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "tags", parseListOrCdl(joinnl(ms.tags()), vr, false, true, "@MethodSwagger(tags) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "schemes", parseListOrCdl(joinnl(ms.schemes()), vr, false, true, "@MethodSwagger(schemes) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "consumes", parseListOrCdl(joinnl(ms.consumes()), vr, false, true, "@MethodSwagger(consumes) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "produces", parseListOrCdl(joinnl(ms.produces()), vr, false, true, "@MethodSwagger(produces) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "parameters", parseList(joinnl(ms.parameters()), vr, false, true, "@MethodSwagger(parameters) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "responses", parseMap(joinnl(ms.responses()), vr, false, true, "@MethodSwagger(responses) on class {0} method {1}", c, m));
 			
-			if (ms.parameters().length > 0)
-				op.getObjectList("parameters", true).addAll(parseList(joinnl(ms.parameters()), vr, false, false, "@MethodSwagger(parameters) on class {0} method {1}", c, m));
-			if (ms.responses().length > 0)
-				op.getObjectMap("responses", true).putAll(parseMap(joinnl(ms.responses()), vr, false, false, "@MethodSwagger(responses) on class {0} method {1}", c, m));
-			if (ms.tags().length > 0)
-				op.getObjectList("tags", true).addAll(parseListOrCdl(joinnl(ms.tags()), vr, false, false, "@MethodSwagger(tags) on class {0} method {1}", c, m));
-
 			op.putIfNotExists("operationId", mn);
 			
 			if (m.getAnnotation(Deprecated.class) != null)
@@ -298,27 +298,22 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 			op.appendIf(true, true, true, "summary", vr.resolve(mb.findFirstString(locale, mn + ".summary")));
 			op.appendIf(true, true, true, "description", vr.resolve(mb.findFirstString(locale, mn + ".description")));
+			op.appendIf(true, true, true, "externalDocs", parseMap(mb.findFirstString(locale, mn + ".description"), vr, false, true, "Messages/externalDocs on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "tags", parseListOrCdl(mb.findFirstString(locale, mn + ".tags"), vr, false, true, "Messages/tags on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "schemes", parseListOrCdl(mb.findFirstString(locale, mn + ".schemes"), vr, false, true, "Messages/schemes on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "consumes", parseListOrCdl(mb.findFirstString(locale, mn + ".consumes"), vr, false, true, "Messages/consumes on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "produces", parseListOrCdl(mb.findFirstString(locale, mn + ".produces"), vr, false, true, "Messages/produces on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "parameters", parseList(mb.findFirstString(locale, mn + ".parameters"), vr, false, true, "Messages/parameters on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "responses", parseMap(mb.findFirstString(locale, mn + ".responses"), vr, false, true, "Messages/responses on class {0} method {1}", c, m));
 
-			s = mb.findFirstString(locale, mn + ".tags");
-			if (s != null) 
-				op.getObjectList("tags", true).addAll(parseListOrCdl(s, vr, false, false, "Messages/tags on class {0} method {1}", c, m));
-			
 			if (op.containsKey("tags"))
 				for (String tag : op.getObjectList("tags").elements(String.class)) 
 					if (! tagMap.containsKey(tag))
 						tagMap.put(tag, new ObjectMap().append("name", tag));
 			
-			op.appendIf(true, true, true, "externalDocs", parseMap(mb.findFirstString(locale, mn + ".description"), vr, false, true, "Messages/externalDocs on class {0} method {1}", c, m));
-			
-			s = mb.findFirstString(locale, mn + ".parameters");
-			if (s != null) 
-				op.getObjectList("parameters", true).addAll(parseList(s, vr, false, false, "Messages/parameters on class {0} method {1}", c, m));
-
 			ObjectMap paramMap = new ObjectMap();
-
-			ObjectList ol = op.getObjectList("parameters");
-			if (ol != null) 
-				for (ObjectMap param : ol.elements(ObjectMap.class)) 
+			if (op.containsKey("parameters"))
+				for (ObjectMap param : op.getObjectList("parameters").elements(ObjectMap.class)) 
 					paramMap.put(param.getString("in") + '.' + param.getString("name"), param);
 		
 			// Finally, look for parameters defined on method.
@@ -374,18 +369,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				op.put("parameters", paramMap.values());
 
 			ObjectMap responses = op.getObjectMap("responses", true);
-			
-			s = mb.findFirstString(locale, mn + ".responses");
-			if (s != null) {
-				for (Map.Entry<String,Object> e : jp.parse(vr.resolve(s), ObjectMap.class).entrySet()) {
-					String httpCode = e.getKey();
-					if (responses.containsKey(httpCode))
-						responses.getObjectMap(httpCode).putAll((ObjectMap)e.getValue());
-					else
-						responses.put(httpCode, e.getValue());
-				}
-			}
-			
+						
 			// Gather responses from @Response-annotated exceptions.
 			for (RestMethodThrown rt : context.getRestMethodThrowns(m)) {
 				int code = rt.getCode();

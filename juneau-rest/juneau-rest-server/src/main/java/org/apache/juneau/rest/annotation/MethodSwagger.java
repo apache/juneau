@@ -84,6 +84,10 @@ public @interface MethodSwagger {
 	
 	String[] description() default {};
 
+	String operationId() default "";
+	
+	String[] schemes() default {};
+	
 	/**
 	 * Optional deprecated flag for the exposed API.
 	 * 
@@ -106,6 +110,10 @@ public @interface MethodSwagger {
 	 * </ul>
 	 */
 	String deprecated() default "";
+	
+	String[] consumes() default {};
+	
+	String[] produces() default {};
 
 	/**
 	 * Optional external documentation information for the exposed API.
@@ -241,5 +249,5 @@ public @interface MethodSwagger {
 	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
 	 * </ul>
 	 */
-	String[] tags() default "";
+	String[] tags() default {};
 }

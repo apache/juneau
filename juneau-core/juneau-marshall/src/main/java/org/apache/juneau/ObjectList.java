@@ -141,11 +141,11 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 */
 	public ObjectList(CharSequence s, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
+		this(p == null ? null : p.createBeanSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		if (s != null)
-			p.parseIntoCollection(s, this, session.object());
+			p.parseIntoCollection(s, this, bs().object());
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectList(Reader r, Parser p) throws ParseException, IOException {
-		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
+		this(p == null ? null : p.createBeanSession());
 		parseReader(r, p);
 	}
 
@@ -183,21 +183,19 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectList(Reader r) throws ParseException, IOException {
-		this(BeanContext.DEFAULT.createSession());
 		parseReader(r, JsonParser.DEFAULT);
 	}
 
 	private void parseReader(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		p.parseIntoCollection(r, this, session.object());
+		p.parseIntoCollection(r, this, bs().object());
 	}
 
 	/**
 	 * Construct an empty JSON array. (i.e. an empty {@link LinkedList}).
 	 */
 	public ObjectList() {
-		this(BeanContext.DEFAULT.createSession());
 	}
 
 	/**
@@ -243,6 +241,15 @@ public class ObjectList extends LinkedList<Object> {
 	public ObjectList setBeanSession(BeanSession session) {
 		this.session = session;
 		return this;
+	}
+
+	/**
+	 * Returns the {@link BeanSession} currently associated with this list.
+	 * 
+	 * @return The {@link BeanSession} currently associated with this list.
+	 */
+	public BeanSession getBeanSession() {
+		return session;
 	}
 
 	/**
@@ -324,7 +331,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The converted entry.
 	 */
 	public <T> T get(int index, Class<T> type) {
-		return session.convertToType(get(index), type);
+		return bs().convertToType(get(index), type);
 	}
 
 	/**
@@ -372,7 +379,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The converted entry.
 	 */
 	public <T> T get(int index, Type type, Type...args) {
-		return session.convertToType(get(index), type, args);
+		return bs().convertToType(get(index), type, args);
 	}
 
 	/**
@@ -439,7 +446,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public <K,V> Map<K,V> getMap(int index, Class<K> keyType, Class<V> valType) {
-		return session.convertToType(get(index), Map.class, keyType, valType);
+		return bs().convertToType(get(index), Map.class, keyType, valType);
 	}
 
 	/**
@@ -462,7 +469,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public <E> List<E> getList(int index, Class<E> elementType) {
-		return session.convertToType(get(index), List.class, elementType);
+		return bs().convertToType(get(index), List.class, elementType);
 	}
 
 	/**
@@ -671,7 +678,7 @@ public class ObjectList extends LinkedList<Object> {
 
 					@Override /* Iterator */
 					public E next() {
-						return session.convertToType(i.next(), childType);
+						return bs().convertToType(i.next(), childType);
 					}
 
 					@Override /* Iterator */
@@ -691,7 +698,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The data type of the object at the specified index, or <jk>null</jk> if the value is null.
 	 */
 	public ClassMeta<?> getClassMeta(int index) {
-		return session.getClassMetaForObject(get(index));
+		return bs().getClassMetaForObject(get(index));
 	}
 
 	private PojoRest getPojoRest() {
@@ -750,5 +757,11 @@ public class ObjectList extends LinkedList<Object> {
 		} catch (ParseException | SerializeException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	BeanSession bs() {
+		if (session == null)
+			session = BeanContext.DEFAULT.createBeanSession();
+		return session;
 	}
 }

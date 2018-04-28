@@ -14,10 +14,12 @@ package org.apache.juneau.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.apache.juneau.rest.TestUtils.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
@@ -713,7 +715,266 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
-	// /paths/<path>/<method>/tags
+	// /paths/<path>/<method>
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource()
+	public static class M01 {
+		
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo() {
+			return null;
+		}
+	}
+	
+	@Test
+	public void m01_operation_default() throws Exception {
+		assertObjectEquals("{operationId:'doFoo',responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}}}", getSwagger(new M01()).getPaths().get("/path/{foo}").get("get"));
+		assertObjectEquals("{operationId:'s-operationId',summary:'s-summary',description:'s-description',tags:['s-tag'],externalDocs:{description:'s-description',url:'s-url'},consumes:['s-consumes'],produces:['s-produces'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['s-scheme'],deprecated:true}", getSwaggerWithFile(new M01()).getPaths().get("/path/{foo}").get("get"));
+	}
+
+	@RestResource(swagger=@ResourceSwagger("{paths:{'/path/{foo}':{get:{summary:'a-summary',description:'a-description',operationId:'a-operationId',deprecated:true,consumes:['a-consumes'],produces:['a-produces'],tags:['a-tag'],schemes:['a-scheme'],externalDocs:{description: 'a-description',url: 'a-url'}}}}}"))
+	public static class M02 {		
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo() {
+			return null;
+		}
+	}
+	
+	@Test
+	public void m02_operation_swaggerOnClass() throws Exception {
+		assertObjectEquals("{operationId:'a-operationId',summary:'a-summary',description:'a-description',tags:['a-tag'],externalDocs:{description:'a-description',url:'a-url'},consumes:['a-consumes'],produces:['a-produces'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['a-scheme'],deprecated:true}", getSwagger(new M02()).getPaths().get("/path/{foo}").get("get"));
+		assertObjectEquals("{operationId:'a-operationId',summary:'a-summary',description:'a-description',tags:['a-tag'],externalDocs:{description:'a-description',url:'a-url'},consumes:['a-consumes'],produces:['a-produces'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['a-scheme'],deprecated:true}", getSwaggerWithFile(new M02()).getPaths().get("/path/{foo}").get("get"));
+	}
+
+	@RestResource(swagger=@ResourceSwagger("{paths:{'/path/{foo}':{get:{summary:'a-summary',description:'a-description',operationId:'a-operationId',deprecated:true,consumes:['a-consumes'],produces:['a-produces'],tags:['a-tag'],schemes:['a-scheme'],externalDocs:{description:'a-description',url:'a-url'}}}}}"))
+	public static class M03 {		
+		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("summary:'b-summary',description:'b-description',operationId:'b-operationId',deprecated:false,consumes:['b-consumes'],produces:['b-produces'],tags:['b-tag'],schemes:['b-scheme'],externalDocs:{description:'b-description',url:'b-url'}}"))
+		public Foo doFoo() {
+			return null;
+		}
+	}
+	
+	@Test
+	public void m03_operation_swaggerOnMethod() throws Exception {
+		assertObjectEquals("{operationId:'b-operationId',summary:'b-summary',description:'b-description',tags:['b-tag'],externalDocs:{description:'b-description',url:'b-url'},consumes:['b-consumes'],produces:['b-produces'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['b-scheme'],deprecated:false}", getSwagger(new M03()).getPaths().get("/path/{foo}").get("get"));
+		assertObjectEquals("{operationId:'b-operationId',summary:'b-summary',description:'b-description',tags:['b-tag'],externalDocs:{description:'b-description',url:'b-url'},consumes:['b-consumes'],produces:['b-produces'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['b-scheme'],deprecated:false}", getSwaggerWithFile(new M03()).getPaths().get("/path/{foo}").get("get"));
+	}
+
+	@RestResource(swagger=@ResourceSwagger("{paths:{'/path/{foo}':{get:{summary:'a-summary',description:'a-description',operationId:'a-operationId',deprecated:true,consumes:['a-consumes'],produces:['a-produces'],tags:['a-tag'],schemes:['a-scheme'],externalDocs:{description:'a-description',url:'a-url'}}}}}"))
+	public static class M04 {		
+		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(summary="b-summary",description="b-description",operationId="b-operationId",deprecated="false",consumes="b-consumes",produces="b-produces",tags="b-tag",schemes="b-scheme",externalDocs="description:'b-description',url:'b-url'"))
+		public Foo doFoo() {
+			return null;
+		}
+	}
+
+	@Test
+	public void m04_operation_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{operationId:'b-operationId',summary:'b-summary',description:'b-description',tags:['b-tag'],externalDocs:{description:'b-description',url:'b-url'},consumes:['b-consumes'],produces:['b-produces'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['b-scheme'],deprecated:false}", getSwagger(new M04()).getPaths().get("/path/{foo}").get("get"));
+		assertObjectEquals("{operationId:'b-operationId',summary:'b-summary',description:'b-description',tags:['b-tag'],externalDocs:{description:'b-description',url:'b-url'},consumes:['b-consumes'],produces:['b-produces'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['b-scheme'],deprecated:false}", getSwaggerWithFile(new M04()).getPaths().get("/path/{foo}").get("get"));
+	}
+
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("{paths:{'/path/{foo}':{get:{summary:'a-summary',description:'a-description',operationId:'a-operationId',deprecated:true,consumes:['a-consumes'],produces:['a-produces'],tags:['a-tag'],schemes:['a-scheme'],externalDocs:{description:'a-description',url:'a-url'}}}}}"))
+	public static class M05 {		
+		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(summary="$L{foo}",description="$L{foo}",operationId="$L{foo}",deprecated="$L{foo}",consumes="$L{foo}",produces="$L{foo}",tags="$L{foo}",schemes="$L{foo}",externalDocs="description:'$L{foo}',url:'$L{foo}'"))
+		public Foo doFoo() {
+			return null;
+		}
+	}
+
+	@Test
+	public void m05_operation_swaggerOnAnnotation_localized() throws Exception {
+		assertObjectEquals("{operationId:'l-foo',summary:'l-foo',description:'l-foo',tags:['l-foo'],externalDocs:{description:'l-foo',url:'l-foo'},consumes:['l-foo'],produces:['l-foo'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['l-foo'],deprecated:false}", getSwagger(new M05()).getPaths().get("/path/{foo}").get("get"));
+		assertObjectEquals("{operationId:'l-foo',summary:'l-foo',description:'l-foo',tags:['l-foo'],externalDocs:{description:'l-foo',url:'l-foo'},consumes:['l-foo'],produces:['l-foo'],responses:{'200':{description:'OK',schema:{type:'object',properties:{id:{format:'int32',type:'integer'}}}}},schemes:['l-foo'],deprecated:false}", getSwaggerWithFile(new M05()).getPaths().get("/path/{foo}").get("get"));
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// /paths/<path>/<method>/description
 	//-----------------------------------------------------------------------------------------------------------------
 	
+	//	paths: {
+//		'/path/{foo}': {
+//			get: {
+//				summary: 's-summary',
+//				description: 's-description',
+//				operationId: 's-operationId',
+//				deprecated: true,
+//				consumes: ['s-consumes'],
+//				produces: ['s-produces'],
+//				tags: ['s-tag'],
+//				schemes: ['s-scheme'],
+//				externalDocs: {
+//					description: 's-description',
+//					url: 's-url'
+//				},
+//				parameters: [
+//					{
+//						name: 's-query-name',
+//						in: 'query',
+//						description: 's-description',
+//						type: 'string',
+//						format: 's-format',
+//						pattern: 's-pattern',
+//						collectionFormat: 's-collectionFormat',
+//						minimum: 1.0,
+//						maximum: 2.0,
+//						multipleOf: 3.0,
+//						minLength: 1,
+//						maxLength: 2,
+//						minItems: 3,
+//						maxItems: 4,
+//						required: true,
+//						allowEmptyValue: true,
+//						exclusiveMinimum: true,
+//						exclusiveMaximum: true,
+//						uniqueItems: true,						
+//						schemaInfo: {
+//						}						
+//					},
+//					{
+//						name: 's-header-name',
+//						in: 'header',
+//						description: 's-description',
+//						type: 'string',
+//						format: 's-format',
+//						pattern: 's-pattern',
+//						collectionFormat: 's-collectionFormat',
+//						minimum: 1.0,
+//						maximum: 2.0,
+//						multipleOf: 3.0,
+//						minLength: 1,
+//						maxLength: 2,
+//						minItems: 3,
+//						maxItems: 4,
+//						required: true,
+//						allowEmptyValue: true,
+//						exclusiveMinimum: true,
+//						exclusiveMaximum: true,
+//						uniqueItems: true,						
+//						schemaInfo: {
+//							$ref: '#/definitions/Foo'
+//						}						
+//					},
+//					{
+//						name: 's-path-name',
+//						in: 'path',
+//						description: 's-description',
+//						type: 'string',
+//						format: 's-format',
+//						pattern: 's-pattern',
+//						collectionFormat: 's-collectionFormat',
+//						minimum: 1.0,
+//						maximum: 2.0,
+//						multipleOf: 3.0,
+//						minLength: 1,
+//						maxLength: 2,
+//						minItems: 3,
+//						maxItems: 4,
+//						required: true,
+//						allowEmptyValue: true,
+//						exclusiveMinimum: true,
+//						exclusiveMaximum: true,
+//						uniqueItems: true,						
+//						schemaInfo: {
+//							$ref: '#/definitions/Foo'
+//						}						
+//					},
+//					{
+//						name: 's-formData-name',
+//						in: 'formData',
+//						description: 's-description',
+//						type: 'string',
+//						format: 's-format',
+//						pattern: 's-pattern',
+//						collectionFormat: 's-collectionFormat',
+//						minimum: 1.0,
+//						maximum: 2.0,
+//						multipleOf: 3.0,
+//						minLength: 1,
+//						maxLength: 2,
+//						minItems: 3,
+//						maxItems: 4,
+//						required: true,
+//						allowEmptyValue: true,
+//						exclusiveMinimum: true,
+//						exclusiveMaximum: true,
+//						uniqueItems: true,						
+//						schemaInfo: {
+//							$ref: '#/definitions/Foo'
+//						}						
+//					},
+//					{
+//						name: 's-body-name',
+//						in: 'body',
+//						description: 's-description',
+//						type: 'string',
+//						format: 's-format',
+//						pattern: 's-pattern',
+//						collectionFormat: 's-collectionFormat',
+//						minimum: 1.0,
+//						maximum: 2.0,
+//						multipleOf: 3.0,
+//						minLength: 1,
+//						maxLength: 2,
+//						minItems: 3,
+//						maxItems: 4,
+//						required: true,
+//						allowEmptyValue: true,
+//						exclusiveMinimum: true,
+//						exclusiveMaximum: true,
+//						uniqueItems: true,						
+//						schemaInfo: {
+//							$ref: '#/definitions/Foo'
+//						}						
+//					}
+//				],
+//				responses: {
+//					100: {
+//						description:'s-100-description',
+//						schema: {
+//							type: array,
+//							items: {
+//								$ref: '#/definitions/Foo'
+//							}
+//						},
+//						headers: {
+//							X-Foo: {
+//								type: 'integer',
+//								format: 'int32',
+//								description: 's-description'
+//							}
+//						},
+//						examples: {
+//							foo: {bar:123},
+//							bar: 'baz'
+//						}
+//					}
+//				},
+//				security: [
+//					{foo_auth:['read:foo','write-foo']}
+//				]
+//			} 
+//		}
+//	},
+//	definitions: {
+//		Foo: {
+//			type: 'object',
+//			properties: {
+//				id: {
+//					type: 'integer',
+//					format: 'int64'
+//				}
+//			},
+//			xml: {
+//				name: 'Foo'
+//			}
+//		}
+//	}
+	
+	@Bean(typeName="Foo")
+	public static class Foo {
+		public int id;
+	}
+
 }

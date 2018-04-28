@@ -534,6 +534,7 @@ public class BeanSession extends Session {
 						return (T)m;
 					} else if (!type.canCreateNewInstanceFromString(outer)) {
 						ObjectMap m = new ObjectMap(value.toString());
+						m.setBeanSession(this);
 						return convertToMemberType(outer, m, type);
 					}
 				} catch (Exception e) {
@@ -559,6 +560,7 @@ public class BeanSession extends Session {
 						String s = value.toString();
 						if (isObjectList(s, false)) {
 							ObjectList l2 = new ObjectList(s);
+							l2.setBeanSession(this);
 							for (Object o : l2)
 								l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 						} else {

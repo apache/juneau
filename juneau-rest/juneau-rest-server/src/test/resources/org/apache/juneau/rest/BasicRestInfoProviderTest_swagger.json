@@ -61,10 +61,14 @@
 				externalDocs: {
 					description: 's-description',
 					url: 's-url'
-				},
+				}
+			}
+		},
+		'/path/{foo}/query': {
+			get: {
 				parameters: [
 					{
-						name: 's-name',
+						name: 's-query-name',
 						in: 'query',
 						description: 's-description',
 						type: 'string',
@@ -84,15 +88,156 @@
 						exclusiveMaximum: true,
 						uniqueItems: true,						
 						schemaInfo: {
+							$ref: '#/definitions/Foo'
 						}						
 					}
-				],
-				responses: {
-					100: {description:'s-100-description'}
-				},
-				security: [
-					{foo_auth:['read:foo','write-foo']}
 				]
+			}
+		},
+		'/path/{foo}/header': {
+			get: {
+				parameters: [
+					{
+						name: 's-header-name',
+						in: 'header',
+						description: 's-description',
+						type: 'string',
+						format: 's-format',
+						pattern: 's-pattern',
+						collectionFormat: 's-collectionFormat',
+						minimum: 1.0,
+						maximum: 2.0,
+						multipleOf: 3.0,
+						minLength: 1,
+						maxLength: 2,
+						minItems: 3,
+						maxItems: 4,
+						required: true,
+						allowEmptyValue: true,
+						exclusiveMinimum: true,
+						exclusiveMaximum: true,
+						uniqueItems: true,						
+						schemaInfo: {
+							$ref: '#/definitions/Foo'
+						}						
+					}
+				]
+			}
+		},
+		'/path/{foo}/path': {
+			get: {
+				parameters: [
+					{
+						name: 's-path-name',
+						in: 'path',
+						description: 's-description',
+						type: 'string',
+						format: 's-format',
+						pattern: 's-pattern',
+						collectionFormat: 's-collectionFormat',
+						minimum: 1.0,
+						maximum: 2.0,
+						multipleOf: 3.0,
+						minLength: 1,
+						maxLength: 2,
+						minItems: 3,
+						maxItems: 4,
+						required: true,
+						allowEmptyValue: true,
+						exclusiveMinimum: true,
+						exclusiveMaximum: true,
+						uniqueItems: true,						
+						schemaInfo: {
+							$ref: '#/definitions/Foo'
+						}						
+					}
+				]
+			}
+		},
+		'/path/{foo}/formData': {
+			get: {
+				parameters: [
+					{
+						name: 's-formData-name',
+						in: 'formData',
+						description: 's-description',
+						type: 'string',
+						format: 's-format',
+						pattern: 's-pattern',
+						collectionFormat: 's-collectionFormat',
+						minimum: 1.0,
+						maximum: 2.0,
+						multipleOf: 3.0,
+						minLength: 1,
+						maxLength: 2,
+						minItems: 3,
+						maxItems: 4,
+						required: true,
+						allowEmptyValue: true,
+						exclusiveMinimum: true,
+						exclusiveMaximum: true,
+						uniqueItems: true,						
+						schemaInfo: {
+							$ref: '#/definitions/Foo'
+						}						
+					}
+				]
+			}
+		},
+		'/path/{foo}/body': {
+			get: {
+				parameters: [
+					{
+						name: 's-body-name',
+						in: 'body',
+						description: 's-description',
+						type: 'string',
+						format: 's-format',
+						pattern: 's-pattern',
+						collectionFormat: 's-collectionFormat',
+						minimum: 1.0,
+						maximum: 2.0,
+						multipleOf: 3.0,
+						minLength: 1,
+						maxLength: 2,
+						minItems: 3,
+						maxItems: 4,
+						required: true,
+						allowEmptyValue: true,
+						exclusiveMinimum: true,
+						exclusiveMaximum: true,
+						uniqueItems: true,						
+						schemaInfo: {
+							$ref: '#/definitions/Foo'
+						}						
+					}
+				]
+			}
+		},
+		'/path/{foo}/responses/100': {
+			get: {
+				responses: {
+					100: {
+						description:'s-100-description',
+						schema: {
+							type: 'array',
+							items: {
+								$ref: '#/definitions/Foo'
+							}
+						},
+						headers: {
+							X-Foo: {
+								type: 'integer',
+								format: 'int32',
+								description: 's-description'
+							}
+						},
+						examples: {
+							foo: {bar:123},
+							bar: 'baz'
+						}
+					}
+				}
 			} 
 		}
 	},
