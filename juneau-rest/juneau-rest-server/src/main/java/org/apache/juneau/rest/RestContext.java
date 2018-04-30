@@ -4302,6 +4302,9 @@ public final class RestContext extends BeanContext {
 					else if (a instanceof ResponseStatuses)
 						for (ResponseStatus rs : ((ResponseStatuses)a).value())
 							rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
+					else if (a instanceof ResponseHeaders)
+						for (ResponseHeader rh : ((ResponseHeaders)a).value())
+							rp[i] = new RestParamDefaults.ResponseHeaderObject(method, rh, t, ps, rp[i]);			
 				}
 			}
 
@@ -4334,6 +4337,9 @@ public final class RestContext extends BeanContext {
 				else if (a instanceof ResponseStatuses)
 					for (ResponseStatus rs : ((ResponseStatuses)a).value())
 						rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
+				else if (a instanceof ResponseHeaders)
+					for (ResponseHeader rh : ((ResponseHeaders)a).value())
+						rp[i] = new RestParamDefaults.ResponseHeaderObject(method, rh, t, ps, rp[i]);			
 			}
 
 			if (rp[i] == null) {

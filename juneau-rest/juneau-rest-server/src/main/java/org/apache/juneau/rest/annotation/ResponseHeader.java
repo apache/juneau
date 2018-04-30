@@ -321,7 +321,7 @@ public @interface ResponseHeader {
 	String exclusiveMaximum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMimimum</code>.
+	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMinimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>

@@ -59,12 +59,13 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
  * </ul>
  */
-@Bean(properties="description,schema,headers,examples,*")
+@Bean(properties="description,schema,headers,x-example,examples,*")
 public class ResponseInfo extends SwaggerElement {
 
 	private String description;
 	private SchemaInfo schema;
 	private Map<String,HeaderInfo> headers;
+	private Object example;
 	private Map<String,Object> examples;
 
 	/**
@@ -88,6 +89,8 @@ public class ResponseInfo extends SwaggerElement {
 			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
 				this.headers.put(e.getKey(),	e.getValue().copy());
 		
+		this.example = copyFrom.example;
+
 		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,Object>();
 		if (copyFrom.examples != null)
 			this.examples.putAll(copyFrom.examples);
@@ -118,6 +121,8 @@ public class ResponseInfo extends SwaggerElement {
 				schema = r.schema;
 			if (r.headers != null)
 				headers = r.headers;
+			if (r.example != null)
+				example = r.example;
 			if (r.examples != null)
 				examples = r.examples;
 		}
@@ -314,6 +319,41 @@ public class ResponseInfo extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property getter:  <property>x-example</property>.
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@BeanProperty("x-example")
+	public Object getExample() {
+		return example;
+	}
+
+	/**
+	 * Bean property setter:  <property>x-example</property>.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty("x-example")
+	public ResponseInfo setExample(Object value) {
+		example = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>x-example</property>.
+	 * 
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo example(Object value) {
+		example = value;
+		return this;
+	}
+
+	/**
 	 * Bean property getter:  <property>examples</property>.
 	 * 
 	 * <p>
@@ -397,6 +437,7 @@ public class ResponseInfo extends SwaggerElement {
 			case "description": return toType(getDescription(), type);
 			case "schema": return toType(getSchema(), type);
 			case "headers": return toType(getHeaders(), type);
+			case "example": return toType(getExample(), type);
 			case "examples": return toType(getExamples(), type);
 			default: return super.get(property, type);
 		}
@@ -410,6 +451,7 @@ public class ResponseInfo extends SwaggerElement {
 			case "description": return description(value);
 			case "schema": return schema(value);
 			case "headers": return setHeaders(null).headers(value);
+			case "example": return setExample(value);
 			case "examples": return setExamples(null).examples(value);
 			default: 
 				super.set(property, value);
@@ -423,6 +465,7 @@ public class ResponseInfo extends SwaggerElement {
 			.appendIf(description != null, "description")
 			.appendIf(schema != null, "schema")
 			.appendIf(headers != null, "headers")
+			.appendIf(example != null, "example")
 			.appendIf(examples != null, "examples");
 		return new MultiSet<>(s, super.keySet());
 	}

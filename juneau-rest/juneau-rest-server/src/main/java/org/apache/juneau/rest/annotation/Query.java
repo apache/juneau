@@ -302,7 +302,7 @@ public @interface Query {
 	String minItems() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/allowEmptyVals</code>.
+	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/allowEmptyValue</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -313,7 +313,7 @@ public @interface Query {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String allowEmptyVals() default "";
+	String allowEmptyValue() default "";
 
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMaximum</code>.
@@ -330,7 +330,7 @@ public @interface Query {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMimimum</code>.
+	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMinimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -341,7 +341,7 @@ public @interface Query {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String exclusiveMimimum() default "";
+	String exclusiveMinimum() default "";
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/uniqueItems</code>.

@@ -273,7 +273,7 @@ public @interface Body {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String allowEmptyVals() default "";
+	String allowEmptyValue() default "";
 
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMaximum</code>.
@@ -290,7 +290,7 @@ public @interface Body {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMimimum</code>.
+	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMinimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -301,7 +301,7 @@ public @interface Body {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String exclusiveMimimum() default "";
+	String exclusiveMinimum() default "";
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/uniqueItems</code>.
@@ -402,4 +402,6 @@ public @interface Body {
 	 * </ul>
 	 */
 	String[] example() default {};
+
+	String[] examples() default {};
 }

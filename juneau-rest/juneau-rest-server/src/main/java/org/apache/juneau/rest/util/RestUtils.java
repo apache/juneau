@@ -41,6 +41,10 @@ public final class RestUtils {
 	}
 
 	private static Map<Integer,String> httpMsgs = new AMap<Integer,String>()
+		.append(100, "Continue")
+		.append(101, "Switching Protocols")
+		.append(102, "Processing")
+		.append(103, "Early Hints")
 		.append(200, "OK")
 		.append(201, "Created")
 		.append(202, "Accepted")

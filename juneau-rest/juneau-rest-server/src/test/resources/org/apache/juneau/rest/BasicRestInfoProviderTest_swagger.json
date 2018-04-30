@@ -68,7 +68,7 @@
 			get: {
 				parameters: [
 					{
-						name: 's-query-name',
+						name: 'foo',
 						in: 'query',
 						description: 's-description',
 						type: 'string',
@@ -76,110 +76,23 @@
 						pattern: 's-pattern',
 						collectionFormat: 's-collectionFormat',
 						minimum: 1.0,
-						maximum: 2.0,
-						multipleOf: 3.0,
+						maximum: 1.0,
+						multipleOf: 1.0,
 						minLength: 1,
-						maxLength: 2,
-						minItems: 3,
-						maxItems: 4,
+						maxLength: 1,
+						minItems: 1,
+						maxItems: 1,
 						required: true,
 						allowEmptyValue: true,
 						exclusiveMinimum: true,
 						exclusiveMaximum: true,
 						uniqueItems: true,						
-						schemaInfo: {
+						schema: {
 							$ref: '#/definitions/Foo'
-						}						
-					}
-				]
-			}
-		},
-		'/path/{foo}/header': {
-			get: {
-				parameters: [
-					{
-						name: 's-header-name',
-						in: 'header',
-						description: 's-description',
-						type: 'string',
-						format: 's-format',
-						pattern: 's-pattern',
-						collectionFormat: 's-collectionFormat',
-						minimum: 1.0,
-						maximum: 2.0,
-						multipleOf: 3.0,
-						minLength: 1,
-						maxLength: 2,
-						minItems: 3,
-						maxItems: 4,
-						required: true,
-						allowEmptyValue: true,
-						exclusiveMinimum: true,
-						exclusiveMaximum: true,
-						uniqueItems: true,						
-						schemaInfo: {
-							$ref: '#/definitions/Foo'
-						}						
-					}
-				]
-			}
-		},
-		'/path/{foo}/path': {
-			get: {
-				parameters: [
-					{
-						name: 's-path-name',
-						in: 'path',
-						description: 's-description',
-						type: 'string',
-						format: 's-format',
-						pattern: 's-pattern',
-						collectionFormat: 's-collectionFormat',
-						minimum: 1.0,
-						maximum: 2.0,
-						multipleOf: 3.0,
-						minLength: 1,
-						maxLength: 2,
-						minItems: 3,
-						maxItems: 4,
-						required: true,
-						allowEmptyValue: true,
-						exclusiveMinimum: true,
-						exclusiveMaximum: true,
-						uniqueItems: true,						
-						schemaInfo: {
-							$ref: '#/definitions/Foo'
-						}						
-					}
-				]
-			}
-		},
-		'/path/{foo}/formData': {
-			get: {
-				parameters: [
-					{
-						name: 's-formData-name',
-						in: 'formData',
-						description: 's-description',
-						type: 'string',
-						format: 's-format',
-						pattern: 's-pattern',
-						collectionFormat: 's-collectionFormat',
-						minimum: 1.0,
-						maximum: 2.0,
-						multipleOf: 3.0,
-						minLength: 1,
-						maxLength: 2,
-						minItems: 3,
-						maxItems: 4,
-						required: true,
-						allowEmptyValue: true,
-						exclusiveMinimum: true,
-						exclusiveMaximum: true,
-						uniqueItems: true,						
-						schemaInfo: {
-							$ref: '#/definitions/Foo'
-						}						
+						},
+						'x-example': {
+							id:1
+						}
 					}
 				]
 			}
@@ -188,7 +101,6 @@
 			get: {
 				parameters: [
 					{
-						name: 's-body-name',
 						in: 'body',
 						description: 's-description',
 						type: 'string',
@@ -196,19 +108,24 @@
 						pattern: 's-pattern',
 						collectionFormat: 's-collectionFormat',
 						minimum: 1.0,
-						maximum: 2.0,
-						multipleOf: 3.0,
+						maximum: 1.0,
+						multipleOf: 1.0,
 						minLength: 1,
-						maxLength: 2,
-						minItems: 3,
-						maxItems: 4,
-						required: true,
+						maxLength: 1,
+						minItems: 1,
+						maxItems: 1,
 						allowEmptyValue: true,
 						exclusiveMinimum: true,
 						exclusiveMaximum: true,
 						uniqueItems: true,						
-						schemaInfo: {
+						schema: {
 							$ref: '#/definitions/Foo'
+						},						
+						'x-example': {
+							id:1
+						},
+						'x-examples': {
+							foo: 'a'
 						}						
 					}
 				]
@@ -232,9 +149,9 @@
 								description: 's-description'
 							}
 						},
+						x-example: {foo:'a'},
 						examples: {
-							foo: {bar:123},
-							bar: 'baz'
+							foo: 'a'
 						}
 					}
 				}

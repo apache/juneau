@@ -91,7 +91,7 @@ import org.apache.juneau.rest.helper.*;
  * 
  */
 @Documented
-@Target(TYPE)
+@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Response {
@@ -201,4 +201,6 @@ public @interface Response {
 	 * </ul>
 	 */
 	String[] example() default {};
+	
+	String[] examples() default {};
 }

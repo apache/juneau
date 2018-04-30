@@ -278,9 +278,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 			op.putAll(parseMap(joinnl(ms.value()), vr, true, false, "@MethodSwagger(value) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "operationId", vr.resolve(ms.operationId()));
-			op.appendIf(true, true, true, "summary", vr.resolve(rm.summary()));
+			op.appendIf(false, true, true, "summary", vr.resolve(rm.summary()));
 			op.appendIf(true, true, true, "summary", vr.resolve(joinnl(ms.summary())));
-			op.appendIf(true, true, true, "description", vr.resolve(joinnl(rm.description())));
+			op.appendIf(false, true, true, "description", vr.resolve(joinnl(rm.description())));
 			op.appendIf(true, true, true, "description", vr.resolve(joinnl(ms.description())));
 			op.appendIf(true, true, true, "deprecated", vr.resolve(ms.deprecated()));
 			op.appendIf(true, true, true, "externalDocs", parseMap(joinnl(ms.externalDocs()), vr, false, true, "@MethodSwagger(externalDocs) on class {0} method {1}", c, m));
@@ -293,7 +293,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			
 			op.putIfNotExists("operationId", mn);
 			
-			if (m.getAnnotation(Deprecated.class) != null)
+			if (m.getAnnotation(Deprecated.class) != null || m.getDeclaringClass().getAnnotation(Deprecated.class) != null)
 				op.put("deprecated", true);
 
 			op.appendIf(true, true, true, "summary", vr.resolve(mb.findFirstString(locale, mn + ".summary")));
@@ -314,7 +314,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			ObjectMap paramMap = new ObjectMap();
 			if (op.containsKey("parameters"))
 				for (ObjectMap param : op.getObjectList("parameters").elements(ObjectMap.class)) 
-					paramMap.put(param.getString("in") + '.' + param.getString("name"), param);
+					paramMap.put(param.getString("in") + '.' + ("body".equals(param.getString("in")) ? "body" : param.getString("name")), param);
 		
 			// Finally, look for parameters defined on method.
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
@@ -324,7 +324,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if (in == OTHER || in == RESPONSE || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
 					continue;
 				
-				String key = in.toString() + '.' + (in == BODY ? null : mp.getName());
+				String key = in.toString() + '.' + (in == BODY ? "body" : mp.getName());
 				
 				ObjectMap param = paramMap.getObjectMap(key, true);
 					
@@ -334,29 +334,29 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					param.append("name", mp.name);
 				
 				ObjectMap pi = mp.getMetaData();
-				param.appendIf(false, true, true, "required", vr.resolve(pi.getString("required")));
-				param.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
-				param.appendIf(false, true, true, "type", vr.resolve(pi.getString("type")));
-				param.appendIf(false, true, true, "format", vr.resolve(pi.getString("format")));
-				param.appendIf(false, true, true, "pattern", vr.resolve(pi.getString("pattern")));
-				param.appendIf(false, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
-				param.appendIf(false, true, true, "maximum", vr.resolve(pi.getString("maximum")));
-				param.appendIf(false, true, true, "minimum", vr.resolve(pi.getString("minimum")));
-				param.appendIf(false, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
-				param.appendIf(false, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
-				param.appendIf(false, true, true, "minLength", vr.resolve(pi.getString("minLength")));
-				param.appendIf(false, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
-				param.appendIf(false, true, true, "minItems", vr.resolve(pi.getString("minItems")));
-				param.appendIf(false, true, true, "allowEmptyVals", vr.resolve(pi.getString("allowEmptyVals")));
-				param.appendIf(false, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
-				param.appendIf(false, true, true, "exclusiveMimimum", vr.resolve(pi.getString("exclusiveMimimum")));
-				param.appendIf(false, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
-				param.appendIf(false, true, true, "schema", parseMap(pi.getString("schema"), vr, false, true, "ParameterInfo/schema on class {0} method {1}", c, m));
-				param.appendIf(false, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
-				param.appendIf(false, true, true, "enum", parseList(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
-				param.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
-				if (pi.containsKeyNotEmpty("items"))
-					param.appendIf(false, true, true, "items", new ObjectMap(vr.resolve(pi.getString("items"))));
+				param.appendIf(true, true, true, "required", vr.resolve(pi.getString("required")));
+				param.appendIf(true, true, true, "description", vr.resolve(pi.getString("description")));
+				param.appendIf(true, true, true, "type", vr.resolve(pi.getString("type")));
+				param.appendIf(true, true, true, "format", vr.resolve(pi.getString("format")));
+				param.appendIf(true, true, true, "pattern", vr.resolve(pi.getString("pattern")));
+				param.appendIf(true, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
+				param.appendIf(true, true, true, "maximum", vr.resolve(pi.getString("maximum")));
+				param.appendIf(true, true, true, "minimum", vr.resolve(pi.getString("minimum")));
+				param.appendIf(true, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
+				param.appendIf(true, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
+				param.appendIf(true, true, true, "minLength", vr.resolve(pi.getString("minLength")));
+				param.appendIf(true, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
+				param.appendIf(true, true, true, "minItems", vr.resolve(pi.getString("minItems")));
+				param.appendIf(true, true, true, "allowEmptyValue", vr.resolve(pi.getString("allowEmptyValue")));
+				param.appendIf(true, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
+				param.appendIf(true, true, true, "exclusiveMinimum", vr.resolve(pi.getString("exclusiveMinimum")));
+				param.appendIf(true, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
+				param.appendIf(true, true, true, "schema", parseMap(pi.getString("schema"), vr, false, true, "ParameterInfo/schema on class {0} method {1}", c, m));
+				param.appendIf(true, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
+				param.appendIf(true, true, true, "enum", parseList(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
+				param.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
+				param.appendIf(true, true, true, "x-examples", parseMap(pi.getString("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
+				param.appendIf(true, true, true, "items", parseMap(pi.getString("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
 				
 				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 					param.put("required", true);
@@ -376,10 +376,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if (code != 0) {
 					ObjectMap md = rt.getMetaData();
 					ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
-					om.appendIf(false, true, true, "description", vr.resolve(md.getString("description")));
-					om.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(md.getString("example"))));
-					om.appendIf(false, true, true, "schema", parseMap(md.getString("schema"), vr, false, true, "RestMethodThrown/schema on class {0} method {1}", c, m));
-					om.appendIf(false, true, true, "headers", parseList(md.getString("headers"), vr, false, true, "RestMethodThrown/headers on class {0} method {1}", c, m));
+					om.appendIf(true, true, true, "description", vr.resolve(md.getString("description")));
+					om.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(md.getString("example"))));
+					om.appendIf(true, true, true, "examples", parseMap(md.getString("examples"), vr, false, true, "RestMethodThrown/examples on class {0} method {1}", c, m));
+					om.appendIf(true, true, true, "schema", parseMap(md.getString("schema"), vr, false, true, "RestMethodThrown/schema on class {0} method {1}", c, m));
+					om.appendIf(true, true, true, "headers", parseMap(md.getString("headers"), vr, false, true, "RestMethodThrown/headers on class {0} method {1}", c, m));
 				}
 			}
 			
@@ -389,22 +390,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			ObjectMap rom = responses.getObjectMap(rStatus, true);
 
 			ObjectMap rmd = r.getMetaData();
-			rom.appendIf(false, true, true, "description", vr.resolve(rmd.getString("description")));
-			rom.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(rmd.getString("example"))));
-			rom.appendIf(false, true, true, "schema", parseMap(rmd.getString("schema"), vr, false, true, "RestMethodReturn/schema on class {0} method {1}", c, m));
-			rom.appendIf(false, true, true, "headers", parseMap(rmd.getString("headers"), vr, false, true, "RestMethodReturn/headers on class {0} method {1}", c, m));
+			rom.appendIf(true, true, true, "description", vr.resolve(rmd.getString("description")));
+			rom.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(rmd.getString("example"))));
+			rom.appendIf(true, true, true, "examples", parseMap(rmd.getString("examples"), vr, false, true, "RestMethodReturn/examples on class {0} method {1}", c, m));
+			rom.appendIf(true, true, true, "schema", parseMap(rmd.getString("schema"), vr, false, true, "RestMethodReturn/schema on class {0} method {1}", c, m));
+			rom.appendIf(true, true, true, "headers", parseMap(rmd.getString("headers"), vr, false, true, "RestMethodReturn/headers on class {0} method {1}", c, m));
 			
 			rom.put("schema", getSchema(req, rom.getObjectMap("schema", true), js, m.getGenericReturnType()));
 			addXExamples(req, sm, rom, "ok", js, m.getGenericReturnType());
 
-			// Add default response descriptions.
-			for (Map.Entry<String,Object> e : responses.entrySet()) {
-				String key = e.getKey();
-				Object val = e.getValue();
-				if (StringUtils.isDecimal(key) && val instanceof ObjectMap) 
-					responses.getObjectMap(key).appendIf(false, true, true, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
-			}
-			
 			// Finally, look for @ResponseHeader parameters defined on method.
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
 				
@@ -412,49 +406,65 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				
 				if (in == RESPONSE_HEADER) {
 					ObjectMap pi = mp.getMetaData();
-					String code = pi.getString("status", "200");  
-					String name = mp.getName();
-					
-					ObjectMap header = responses.getObjectMap(code, true).getObjectMap("headers", true).getObjectMap(name, true);
+					for (String code : pi.keySet()) {
+						String name = mp.getName();
+						ObjectMap pi2 = pi.getObjectMap(code, true);
+						
+						ObjectMap header = responses.getObjectMap(code, true).getObjectMap("headers", true).getObjectMap(name, true);
 
-					header.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
-					header.appendIf(false, true, true, "type", vr.resolve(pi.getString("type")));
-					header.appendIf(false, true, true, "format", vr.resolve(pi.getString("format")));
-					header.appendIf(false, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
-					header.appendIf(false, true, true, "maximum", vr.resolve(pi.getString("maximum")));
-					header.appendIf(false, true, true, "minimum", vr.resolve(pi.getString("minimum")));
-					header.appendIf(false, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
-					header.appendIf(false, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
-					header.appendIf(false, true, true, "minLength", vr.resolve(pi.getString("minLength")));
-					header.appendIf(false, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
-					header.appendIf(false, true, true, "minItems", vr.resolve(pi.getString("minItems")));
-					header.appendIf(false, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
-					header.appendIf(false, true, true, "exclusiveMimimum", vr.resolve(pi.getString("exclusiveMimimum")));
-					header.appendIf(false, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
-					header.appendIf(false, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
-					header.appendIf(false, true, true, "enum", parseList(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
-					header.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
-					if (pi.containsKeyNotEmpty("items"))
-						header.appendIf(false, true, true, "items", new ObjectMap(vr.resolve(pi.getString("items"))));
+						header.appendIf(true, true, true, "description", vr.resolve(pi2.getString("description")));
+						header.appendIf(true, true, true, "type", vr.resolve(pi2.getString("type")));
+						header.appendIf(true, true, true, "format", vr.resolve(pi2.getString("format")));
+						header.appendIf(true, true, true, "collectionFormat", vr.resolve(pi2.getString("collectionFormat")));
+						header.appendIf(true, true, true, "maximum", vr.resolve(pi2.getString("maximum")));
+						header.appendIf(true, true, true, "minimum", vr.resolve(pi2.getString("minimum")));
+						header.appendIf(true, true, true, "multipleOf", vr.resolve(pi2.getString("multipleOf")));
+						header.appendIf(true, true, true, "maxLength", vr.resolve(pi2.getString("maxLength")));
+						header.appendIf(true, true, true, "minLength", vr.resolve(pi2.getString("minLength")));
+						header.appendIf(true, true, true, "maxItems", vr.resolve(pi2.getString("maxItems")));
+						header.appendIf(true, true, true, "minItems", vr.resolve(pi2.getString("minItems")));
+						header.appendIf(true, true, true, "exclusiveMaximum", vr.resolve(pi2.getString("exclusiveMaximum")));
+						header.appendIf(true, true, true, "exclusiveMinimum", vr.resolve(pi2.getString("exclusiveMinimum")));
+						header.appendIf(true, true, true, "uniqueItems", vr.resolve(pi2.getString("uniqueItems")));
+						header.appendIf(true, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi2.getString("default")), Object.class));
+						header.appendIf(true, true, true, "enum", parseList(pi2.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
+						header.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi2.getString("example"))));
+						header.appendIf(true, true, true, "examples", parseMap(pi2.getString("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
+						header.appendIf(true, true, true, "items", parseMap(pi2.getString("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
+					}
 				
 				} else if (in == RESPONSE) {
 					ObjectMap pi = mp.getMetaData();
-					String code = pi.getString("status", "200");  
-					
-					ObjectMap response = responses.getObjectMap(code, true);
-					
-					response.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
-					response.appendIf(false, true, true, "schema", vr.resolve(pi.getString("schema")));
-					response.appendIf(false, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
+					for (String code : pi.keySet()) {
+						ObjectMap pi2 = pi.getObjectMap(code, true);
+						
+						ObjectMap response = responses.getObjectMap(code, true);
+						
+						response.appendIf(true, true, true, "description", vr.resolve(pi2.getString("description")));
+						response.appendIf(true, true, true, "schema", parseMap(pi2.getString("schema"), vr, false, true, "@Response/schema on class {0} method {1}", c, m));
+						response.appendIf(true, true, true, "headers", parseMap(pi2.getString("headers"), vr, false, true, "@Response/headers on class {0} method {1}", c, m));
+						response.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi2.getString("example"))));
+						response.appendIf(true, true, true, "examples", parseMap(pi2.getString("examples"), vr, false, true, "@Response/examples on class {0} method {1}", c, m));
+					}
 					
 				} else if (in == RESPONSE_STATUS) {
 					ObjectMap pi = mp.getMetaData();
-					String code = pi.getString("status", "200");  
+					for (String code : pi.keySet()) {
+						ObjectMap pi2 = pi.getObjectMap(code, true);
 					
-					ObjectMap response = responses.getObjectMap(code, true);
+						ObjectMap response = responses.getObjectMap(code, true);
 
-					response.appendIf(false, true, true, "description", vr.resolve(pi.getString("description")));
+						response.appendIf(true, true, true, "description", vr.resolve(pi2.getString("description")));
+					}
 				}
+			}
+			
+			// Add default response descriptions.
+			for (Map.Entry<String,Object> e : responses.entrySet()) {
+				String key = e.getKey();
+				ObjectMap val = responses.getObjectMap(key);
+				if (StringUtils.isDecimal(key)) 
+					val.appendIf(false, true, true, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
 			}
 			
 			if (responses.isEmpty())
@@ -637,7 +647,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		} else {
 			String paramName = piri.getString("name");
-			String s = req.getPartSerializer().serialize(HttpPartType.valueOf(in.toUpperCase()), example);
+			String s = sm.partSerializer.serialize(HttpPartType.valueOf(in.toUpperCase()), example);
 			if ("query".equals(in))
 				s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
 			else if ("formData".equals(in))
@@ -656,7 +666,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	private ObjectMap resolve(JsonSchemaSerializerSession js, ObjectMap m) {
 		if (m == null)
 			return null;
-		if (m.containsKey("$ref")) {
+		if (m.containsKey("$ref") && js.getBeanDefs() != null) {
 			String ref = m.getString("$ref");
 			if (ref.startsWith("#/definitions/")) 
 				return js.getBeanDefs().get(ref.substring(14));

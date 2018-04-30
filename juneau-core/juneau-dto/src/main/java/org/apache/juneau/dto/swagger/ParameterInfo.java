@@ -90,7 +90,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
  * </ul>
  */
-@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,x-examples,*")
+@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,x-example,x-examples,*")
 public class ParameterInfo extends SwaggerElement {
 
 	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};
@@ -124,6 +124,7 @@ public class ParameterInfo extends SwaggerElement {
 	private Items items;
 	private Object _default;
 	private List<Object> _enum;
+	private Object example;
 	private Map<String,String> examples;
 
 	/**
@@ -162,6 +163,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._default = copyFrom._default;
 		this._enum = newList(copyFrom._enum);
+		this.example = copyFrom.example;
 		
 		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,String>();
 		if (copyFrom.examples != null)
@@ -239,6 +241,10 @@ public class ParameterInfo extends SwaggerElement {
 				_default = p._default;
 			if (p._enum != null)
 				_enum = p._enum;
+			if (p.example != null)
+				example = p.examples;
+			if (p.examples != null)
+				examples = p.examples;
 		}
 		return this;
 	}
@@ -1409,6 +1415,41 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property getter:  <property>x-example</property>.
+	 * 
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@BeanProperty("x-example")
+	public Object getExample() {
+		return example;
+	}
+
+	/**
+	 * Bean property setter:  <property>x-example</property>.
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty("x-example")
+	public ParameterInfo setExample(Object value) {
+		example = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>x-example</property>.
+	 * 
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo example(Object value) {
+		example = value;
+		return this;
+	}
+
+	/**
 	 * Bean property getter:  <property>x-examples</property>.
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1419,7 +1460,7 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>examples</property>.
+	 * Bean property setter:  <property>x-examples</property>.
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
@@ -1433,7 +1474,7 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>examples</property> property.
+	 * Adds one or more values to the <property>x-examples</property> property.
 	 * 
 	 * @param values
 	 * 	The values to add to this property.
@@ -1446,7 +1487,7 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Adds a single value to the <property>examples</property> property.
+	 * Adds a single value to the <property>x-examples</property> property.
 	 * 
 	 * @param name The extra property name.
 	 * @param value The extra property value.
@@ -1458,7 +1499,7 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>examples</property> property.
+	 * Adds one or more values to the <property>x-examples</property> property.
 	 * 
 	 * @param values
 	 * 	The values to add to this property.
@@ -1507,6 +1548,7 @@ public class ParameterInfo extends SwaggerElement {
 			case "uniqueItems": return toType(getUniqueItems(), type);
 			case "enum": return toType(getEnum(), type);
 			case "multipleOf": return toType(getMultipleOf(), type);
+			case "x-example": return toType(getExample(), type);
 			case "x-examples": return toType(getExamples(), type);
 			default: return super.get(property, type);
 		}
@@ -1540,6 +1582,7 @@ public class ParameterInfo extends SwaggerElement {
 			case "uniqueItems": return uniqueItems(value);
 			case "enum": return setEnum(null)._enum(value);
 			case "multipleOf": return multipleOf(value);
+			case "x-example": return example(value);
 			case "x-examples": return examples(value);
 			default: 
 				super.set(property, value);
@@ -1573,6 +1616,7 @@ public class ParameterInfo extends SwaggerElement {
 			.appendIf(uniqueItems != null, "uniqueItems")
 			.appendIf(_enum != null, "enum")
 			.appendIf(multipleOf != null, "multipleOf")
+			.appendIf(example != null, "x-example")
 			.appendIf(examples != null, "x-examples");
 		return new MultiSet<>(s, super.keySet());
 	}

@@ -653,6 +653,22 @@ public class Operation extends SwaggerElement {
 	public List<ParameterInfo> getParameters() {
 		return parameters;
 	}
+	
+	/**
+	 * Returns the parameter with the specified type and name.
+	 * 
+	 * @param in The parameter in.
+	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <code>body</code>.
+	 * @return The matching parameter info, or <jk>null</jk> if not found.
+	 */
+	public ParameterInfo getParameter(String in, String name) {
+		if (parameters != null)
+			for (ParameterInfo pi : parameters) 
+				if (StringUtils.isEquals(pi.getIn(), in)) 
+					if (StringUtils.isEquals(pi.getName(), name) || "body".equals(pi.getIn()))
+						return pi;
+		return null;
+	}
 
 	/**
 	 * Bean property setter:  <property>parameters</property>.
@@ -756,6 +772,19 @@ public class Operation extends SwaggerElement {
 	 */
 	public Map<String,ResponseInfo> getResponses() {
 		return responses;
+	}
+
+
+	/**
+	 * Returns the response info with the given status code.
+	 * 
+	 * @param status The HTTP status code.
+	 * @return The response info, or <jk>null</jk> if not found.
+	 */
+	public ResponseInfo getResponse(Object status) {
+		if (responses != null)
+			return responses.get(String.valueOf(status));
+		return null;
 	}
 
 	/**
