@@ -403,5 +403,21 @@ public @interface Body {
 	 */
 	String[] example() default {};
 
+	/**
+	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-examples</code>.
+	 * 
+	 * <p>
+	 * This is a JSON object whose keys are media types and values are string representations of that value.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of the value is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String[] examples() default {};
 }

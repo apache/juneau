@@ -26,10 +26,19 @@ import org.apache.juneau.svl.vars.*;
  */
 public @interface ResourceSwagger {
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] value() default {};
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] title() default {};
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] description() default {};
 
 	/**

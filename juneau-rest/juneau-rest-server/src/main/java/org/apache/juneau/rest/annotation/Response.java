@@ -202,5 +202,23 @@ public @interface Response {
 	 */
 	String[] example() default {};
 	
+	/**
+	 * Used for populating the Swagger field <code>/paths/{path}/{method}/responses/{status-code}/examples</code>.
+	 * 
+	 * <p>
+	 * The format is a JSON object with keys as media types and values as string representations of the body response.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of the value is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String[] examples() default {};
 }

@@ -28,64 +28,27 @@ public @interface MethodSwagger {
 	 * 
 	 * <p>
 	 * Used for free-form Swagger documentation of a REST resource.
-	 * 
-	 * 
-		swagger={
-			"tags:[ 'store' ],",
-			"responses:{",
-				"200:{ 'x-example':{AVAILABLE:123} }",
-			"},",
-			"security:[ { api_key:[] } ]"
-		}
-	)
-		swagger={
-			"tags:[ 'store' ],",
-			"responses:{",
-				"200:{ 'x-example':{AVAILABLE:123} }",
-			"},",
-			"security:[ { api_key:[] } ]"
-		}
-			swagger= {
-				"parameters:[",
-					"{name:'a',in:'path',type:'string',description:'Test1.d'},",
-					"{name:'b',in:'query',type:'string',description:'Test1.e'},",
-					"{in:'body',type:'string',description:'Test1.f'},",
-					"{name:'D',in:'header',type:'string',description:'Test1.g'},",
-					"{name:'a2',in:'path',type:'string',description:'Test1.h'},",
-					"{name:'b2',in:'query',type:'string',description:'Test1.i'},",
-					"{name:'D2',in:'header',type:'string',description:'Test1.j'}",
-				"],",
-				"responses:{",
-					"200: {description:'OK'},",
-					"201: {description:'Test1.l',headers:{bar:{description:'Test1.m',type:'string'}}}",
-				"}"
-			}
-			swagger=@MethodSwagger(
-				parameters={
-					"{name:'a',in:'path',type:'string',description:'Test1.d'},",
-					"{name:'b',in:'query',type:'string',description:'Test1.e'},",
-					"{in:'body',type:'string',description:'Test1.f'},",
-					"{name:'D',in:'header',type:'string',description:'Test1.g'},",
-					"{name:'a2',in:'path',type:'string',description:'Test1.h'},",
-					"{name:'b2',in:'query',type:'string',description:'Test1.i'},",
-					"{name:'D2',in:'header',type:'string',description:'Test1.j'}",
-				},
-				responses={
-					"200: {description:'OK'},",
-					"201: {description:'Test1.l',headers:{bar:{description:'Test1.m',type:'string'}}}",
-				}
-			)
-	 * 
-	 * 
 	 */
 	String[] value() default {};
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] summary() default {};
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] description() default {};
 
+	/**
+	 * {@link TODO}
+	 */
 	String operationId() default "";
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] schemes() default {};
 	
 	/**
@@ -111,8 +74,14 @@ public @interface MethodSwagger {
 	 */
 	String deprecated() default "";
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] consumes() default {};
 	
+	/**
+	 * {@link TODO}
+	 */
 	String[] produces() default {};
 
 	/**
