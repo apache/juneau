@@ -445,6 +445,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						response.appendIf(true, true, true, "headers", parseMap(pi2.getString("headers"), vr, false, true, "@Response/headers on class {0} method {1}", c, m));
 						response.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi2.getString("example"))));
 						response.appendIf(true, true, true, "examples", parseMap(pi2.getString("examples"), vr, false, true, "@Response/examples on class {0} method {1}", c, m));
+
+						Type type = mp.getType();
+						if (type instanceof ParameterizedType) {
+							ParameterizedType pt = (ParameterizedType)type;
+							if (pt.getRawType().equals(Value.class))
+								type = pt.getActualTypeArguments()[0];
+						}
+
+						response.put("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
 					}
 					
 				} else if (in == RESPONSE_STATUS) {

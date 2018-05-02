@@ -3069,7 +3069,76 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/query/schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// TODO
+	@RestResource()
+	public static class NT01 {
+		@RestMethod(name=GET,path="/path/{foo}/query")
+		public Foo doFoo(@Query("foo") Foo foo) {
+			return null;
+		}
+	}
+	
+	@Test
+	public void nt01_query_schema_default() throws Exception {
+		assertObjectEquals("{type:'object',properties:{id:{format:'int32',type:'integer'}}}", getSwagger(new NT01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+		assertObjectEquals("{'$ref':'#/definitions/Foo'}", getSwaggerWithFile(new NT01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+	}
+
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
+	public static class NT02 {		
+		@RestMethod(name=GET,path="/path/{foo}/query")
+		public Foo doFoo(@Query("foo") Foo foo) {
+			return null;
+		}
+	}
+	
+	@Test
+	public void nt02_query_schema_swaggerOnClass() throws Exception {
+		assertObjectEquals("{'$ref':'b'}", getSwagger(new NT02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+		assertObjectEquals("{'$ref':'b'}", getSwaggerWithFile(new NT02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+	}
+
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
+	public static class NT03 {		
+
+		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',schema:{$ref:'c'}}]"))
+		public Foo doFoo() {
+			return null;
+		}
+	}
+	
+	@Test
+	public void nt03_query_schema_swaggerOnMethnt() throws Exception {
+		assertObjectEquals("{'$ref':'c'}", getSwagger(new NT03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+		assertObjectEquals("{'$ref':'c'}", getSwaggerWithFile(new NT03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+	}
+
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',schema:{$ref:'c'}}]}}}"))
+	public static class NT04 {		
+		@RestMethod(name=GET,path="/path/{foo}/query")
+		public Foo doFoo(@Query(name="foo",schema="{$ref:'d'}") Foo foo) {
+			return null;
+		}
+	}
+
+	@Test
+	public void nt04_query_schema_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{'$ref':'d'}", getSwagger(new NT04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+		assertObjectEquals("{'$ref':'d'}", getSwaggerWithFile(new NT04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+	}
+
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',schema:{$ref:'c'}}]}}}"))
+	public static class NT05 {		
+		@RestMethod(name=GET,path="/path/{foo}/query")
+		public Foo doFoo(@Query(name="foo",schema="{$ref:'$L{foo}'}") Foo foo) {
+			return null;
+		}
+	}
+
+	@Test
+	public void nt05_query_schema_swaggerOnAnnotation_localized() throws Exception {
+		assertObjectEquals("{'$ref':'l-foo'}", getSwagger(new NT05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+		assertObjectEquals("{'$ref':'l-foo'}", getSwaggerWithFile(new NT05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	// /paths/<path>/<method>/responses/<response>/description
@@ -3371,6 +3440,76 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/schema
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class OE01 {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
+			return null;
+		}
+	}
+	
+	@Test
+	public void oe01_responses_100_schema_default() throws Exception {
+		assertObjectEquals("{type:'object',properties:{id:{format:'int32',type:'integer'}}}", getSwagger(new OE01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/Foo'}}", getSwaggerWithFile(new OE01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
+
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	public static class OE02 {		
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+			return null;
+		}
+	}
+	
+	@Test
+	public void oe02_response_100_schema_swaggerOnClass() throws Exception {
+		assertObjectEquals("{'$ref':'b'}", getSwagger(new OE02()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'b'}", getSwaggerWithFile(new OE02()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
+
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	public static class OE03 {		
+		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
+		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+			return null;
+		}
+	}
+	
+	@Test
+	public void oe03_response_100_schema_swaggerOnMethoe() throws Exception {
+		assertObjectEquals("{'$ref':'c'}", getSwagger(new OE03()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'c'}", getSwaggerWithFile(new OE03()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
+
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	public static class OE04 {		
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public Foo doFoo(@Response(code=100,schema="{$ref:'d'}") Value<Foo> foo) {
+			return null;
+		}
+	}
+
+	@Test
+	public void oe04_response_100_schema_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{'$ref':'d'}", getSwagger(new OE04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'d'}", getSwaggerWithFile(new OE04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
+
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	public static class OE05 {		
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public Foo doFoo(@Response(code=100,schema="{$ref:'$L{foo}'}") Value<Foo> foo) {
+			return null;
+		}
+	}
+
+	@Test
+	public void oe05_response_100_schema_swaggerOnAnnotation_loealized() throws Exception {
+		assertObjectEquals("{'$ref':'l-foo'}", getSwagger(new OE05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'l-foo'}", getSwaggerWithFile(new OE05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Header on POJO
 	//-----------------------------------------------------------------------------------------------------------------
@@ -3416,7 +3555,11 @@ public class BasicRestInfoProviderTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Response on parameter
+	// @Response on parameter of type Value
+	//-----------------------------------------------------------------------------------------------------------------
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Response on parameter of type other than Value
 	//-----------------------------------------------------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------------------------------------------------
