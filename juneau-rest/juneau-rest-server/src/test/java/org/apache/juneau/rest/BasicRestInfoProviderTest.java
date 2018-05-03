@@ -3594,7 +3594,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("A", getSwagger(new PA05()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getCollectionFormat());
 	}
 
-	@Header(name="H", _default="123")
+	@Header(name="H", description="a")
 	public static class PA06h {}
 	
 	@RestResource()
@@ -3606,8 +3606,349 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@Test
-	public void pa06_Header_onPojo_def() throws Exception {
-		assertEquals("123", getSwagger(new PA06()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDefault().toString());
+	public void pa06_Header_onPojo_description() throws Exception {
+		assertEquals("a", getSwagger(new PA06()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDescription());
+	}
+
+	@Header(name="H", description={"a","b"})
+	public static class PA07h {}
+	
+	@RestResource()
+	public static class PA07 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA07h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa07_Header_onPojo_description_multilines() throws Exception {
+		assertEquals("a\nb", getSwagger(new PA07()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDescription());
+	}
+	
+	@Header(name="H", example="a")
+	public static class PA08ah {
+		public PA08ah(String value) {}
+	}
+	
+	@RestResource()
+	public static class PA08a {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA08ah h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa08a_Header_onPojo_example_simpleString() throws Exception {
+		assertEquals("a", getSwagger(new PA08a()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExample());
+	}
+
+	
+	@Header(name="H", example="{f1:'a'}")
+	public static class PA08bh {
+		public String f1;
+	}
+	
+	@RestResource()
+	public static class PA08b {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA08bh h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa08b_Header_onPojo_example_bean() throws Exception {
+		assertObjectEquals("{f1:'a'}", getSwagger(new PA08b()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExample());
+	}
+	
+	@Header(name="H", exclusiveMaximum="true")
+	public static class PA09h {}
+	
+	@RestResource()
+	public static class PA09 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA09h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa09_Header_onPojo_exclusiveMaximum() throws Exception {
+		assertEquals(true, getSwagger(new PA09()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExclusiveMaximum());
+	}
+	
+	@Header(name="H", exclusiveMinimum="true")
+	public static class PA10h {}
+	
+	@RestResource()
+	public static class PA10 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA10h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa10_Header_onPojo_exclusiveMinimum() throws Exception {
+		assertEquals(true, getSwagger(new PA10()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExclusiveMinimum());
+	}
+
+	@Header(name="H", format="a")
+	public static class PA11h {}
+	
+	@RestResource()
+	public static class PA11 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA11h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa11_Header_onPojo_format() throws Exception {
+		assertEquals("a", getSwagger(new PA11()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getFormat());
+	}
+
+	@Header(name="H", items="{type:'a'}")
+	public static class PA12h {}
+	
+	@RestResource()
+	public static class PA12 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA12h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa12_Header_onPojo_items() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PA12()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getItems());
+	}
+
+	@Header(name="H", items=" type:'a' ")
+	public static class PA13h {}
+	
+	@RestResource()
+	public static class PA13 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA13h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa13_Header_onPojo_items() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PA13()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getItems());
+	}
+	
+	@Header(name="H", maximum="99")
+	public static class PA14h {}
+	
+	@RestResource()
+	public static class PA14 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA14h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa14_Header_onPojo_maximum() throws Exception {
+		assertObjectEquals("99", getSwagger(new PA14()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMaximum());
+	}
+
+	@Header(name="H", maxItems="99")
+	public static class PA15h {}
+	
+	@RestResource()
+	public static class PA15 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA15h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa15_Header_onPojo_maxItems() throws Exception {
+		assertObjectEquals("99", getSwagger(new PA15()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMaxItems());
+	}
+
+	@Header(name="H", maxLength="99")
+	public static class PA16h {}
+	
+	@RestResource()
+	public static class PA16 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA16h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa16_Header_onPojo_maxLength() throws Exception {
+		assertObjectEquals("99", getSwagger(new PA16()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMaxLength());
+	}
+
+	@Header(name="H", minimum="99")
+	public static class PA17h {}
+	
+	@RestResource()
+	public static class PA17 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA17h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa17_Header_onPojo_minimum() throws Exception {
+		assertObjectEquals("99", getSwagger(new PA17()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMinimum());
+	}
+
+	@Header(name="H", minItems="99")
+	public static class PA18h {}
+	
+	@RestResource()
+	public static class PA18 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA18h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa18_Header_onPojo_minItems() throws Exception {
+		assertObjectEquals("99", getSwagger(new PA18()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMinItems());
+	}
+
+	@Header(name="H", minLength="99")
+	public static class PA19h {}
+	
+	@RestResource()
+	public static class PA19 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA19h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa19_Header_onPojo_minLength() throws Exception {
+		assertObjectEquals("99", getSwagger(new PA19()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMinLength());
+	}
+
+	@Header(name="H", multipleOf="99")
+	public static class PA20h {}
+	
+	@RestResource()
+	public static class PA20 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA20h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa20_Header_onPojo_multipleOf() throws Exception {
+		assertObjectEquals("99", getSwagger(new PA20()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMultipleOf());
+	}
+
+	@Header(name="H", pattern="a")
+	public static class PA21h {}
+	
+	@RestResource()
+	public static class PA21 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA21h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa21_Header_onPojo_pattern() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new PA21()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getPattern());
+	}
+
+	@Header(name="H", required="true")
+	public static class PA22h {}
+	
+	@RestResource()
+	public static class PA22 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA22h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa22_Header_onPojo_required() throws Exception {
+		assertObjectEquals("true", getSwagger(new PA22()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getRequired());
+	}
+
+	@Header(name="H", schema="{type:'a'}")
+	public static class PA23h {}
+	
+	@RestResource()
+	public static class PA23 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA23h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa23_Header_onPojo_schema() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PA23()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getSchema());
+	}
+
+	@Header(name="H", schema=" type:'a' ")
+	public static class PA24h {}
+	
+	@RestResource()
+	public static class PA24 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA24h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa24_Header_onPojo_schema() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PA24()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getSchema());
+	}
+
+	@Header(name="H", type="a")
+	public static class PA25h {}
+	
+	@RestResource()
+	public static class PA25 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA25h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa25_Header_onPojo_type() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new PA25()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getType());
+	}
+
+	@Header(name="H", uniqueItems="true")
+	public static class PA26h {}
+	
+	@RestResource()
+	public static class PA26 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA26h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa26_Header_onPojo_uniqueItems() throws Exception {
+		assertObjectEquals("true", getSwagger(new PA26()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getUniqueItems());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
