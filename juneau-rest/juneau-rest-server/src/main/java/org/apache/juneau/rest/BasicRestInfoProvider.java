@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
 import static org.apache.juneau.rest.RestParamType.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 
 import java.lang.reflect.*;
@@ -243,7 +244,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		String s = mb.findFirstString(locale, "tags");
 		if (s != null) {
-			for (ObjectMap m : parseList(s, vr, true, false, "Messages/tags on class {0}", c).elements(ObjectMap.class)) {
+			for (ObjectMap m : parseListOrCdl(s, vr, true, false, "Messages/tags on class {0}", c).elements(ObjectMap.class)) {
 				String name = m.getString("name");
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c) ;
@@ -352,8 +353,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				param.appendIf(true, true, true, "exclusiveMinimum", vr.resolve(pi.getString("exclusiveMinimum")));
 				param.appendIf(true, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
 				param.appendIf(true, true, true, "schema", parseMap(pi.getString("schema"), vr, false, true, "ParameterInfo/schema on class {0} method {1}", c, m));
-				param.appendIf(true, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi.getString("default")), Object.class));
-				param.appendIf(true, true, true, "enum", parseList(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
+				param.appendIf(true, true, true, "default", parseAnything(vr.resolve(pi.getString("default"))));
+				param.appendIf(true, true, true, "enum", parseListOrCdl(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
 				param.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
 				param.appendIf(true, true, true, "x-examples", parseMap(pi.getString("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
 				param.appendIf(true, true, true, "items", parseMap(pi.getString("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
@@ -427,7 +428,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						header.appendIf(true, true, true, "exclusiveMinimum", vr.resolve(pi2.getString("exclusiveMinimum")));
 						header.appendIf(true, true, true, "uniqueItems", vr.resolve(pi2.getString("uniqueItems")));
 						header.appendIf(true, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi2.getString("default")), Object.class));
-						header.appendIf(true, true, true, "enum", parseList(pi2.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
+						header.appendIf(true, true, true, "enum", parseListOrCdl(pi2.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
 						header.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi2.getString("example"))));
 						header.appendIf(true, true, true, "examples", parseMap(pi2.getString("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
 						header.appendIf(true, true, true, "items", parseMap(pi2.getString("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
@@ -523,15 +524,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 //		JsonSerializer.DEFAULT_LAX_READABLE.println(swagger);
 		
 		return swagger;
-	}
-	
-	private Object parseAnything(String s) throws ParseException {
-		if (s == null)
-			return null;
-		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
-		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
-			return JsonParser.DEFAULT.parse(s, Object.class);
-		return s;
 	}
 	
 	private ObjectMap parseMap(String s, VarResolverSession vs, boolean ignoreCommentsAndWhitespace, boolean nullOnEmpty, String location, Object...locationArgs) throws ParseException {

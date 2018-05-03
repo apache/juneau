@@ -54,11 +54,6 @@ import org.apache.juneau.rest.*;
 public @interface Header {
 
 	/**
-	 * The default value for this header if it's not present in the request.
-	 */
-	String def() default "";
-
-	/**
 	 * HTTP header name.
 	 */
 	String name() default "";
@@ -358,6 +353,8 @@ public @interface Header {
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/default</code>.
+	 * 
+	 * {@link TODO Also used to set a default value in the request}
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>

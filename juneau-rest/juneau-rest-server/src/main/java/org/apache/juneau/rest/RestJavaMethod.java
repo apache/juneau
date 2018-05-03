@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -361,16 +362,16 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					for (Annotation a : pa[i]) {
 						if (a instanceof Header) {
 							Header h = (Header)a;
-							if (! h.def().isEmpty())
-								defaultRequestHeaders.put(firstNonEmpty(h.name(), h.value()), h.def());
+							if (h._default().length > 0)
+								defaultRequestHeaders.put(firstNonEmpty(h.name(), h.value()), parseAnything(joinnl(h._default())));
 						} else if (a instanceof Query) {
 							Query q = (Query)a;
-							if (! q.def().isEmpty())
-								defaultQuery.put(firstNonEmpty(q.name(), q.value()), q.def());
+							if (q._default().length > 0)
+								defaultQuery.put(firstNonEmpty(q.name(), q.value()), parseAnything(joinnl(q._default())));
 						} else if (a instanceof FormData) {
 							FormData f = (FormData)a;
-							if (! f.def().isEmpty())
-								defaultFormData.put(firstNonEmpty(f.name(), f.value()), f.def());
+							if (f._default().length > 0)
+								defaultFormData.put(firstNonEmpty(f.name(), f.value()), parseAnything(joinnl(f._default())));
 						}
 					}
 				}

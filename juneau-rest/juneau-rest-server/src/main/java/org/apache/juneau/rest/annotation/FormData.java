@@ -67,11 +67,6 @@ import org.apache.juneau.rest.*;
 public @interface FormData {
 
 	/**
-	 * The default value for this form-data parameter if it's not present in the request.
-	 */
-	String def() default "";
-
-	/**
 	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
 	 * 
 	 * <p>
@@ -385,6 +380,8 @@ public @interface FormData {
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/default</code>.
+	 * 
+	 * {@link TODO Also used to set a default value in the request}
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>

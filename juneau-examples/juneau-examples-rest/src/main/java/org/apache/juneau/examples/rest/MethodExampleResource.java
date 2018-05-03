@@ -86,11 +86,11 @@ public class MethodExampleResource extends BasicRestServlet {
 			@Path UUID p3,
 			@Query("q1") int q1,                    // Query parameters.
 			@Query("q2") String q2,
-			@Query(name="q3",def=SAMPLE_UUID_STRING) UUID q3,
+			@Query(name="q3",_default=SAMPLE_UUID_STRING) UUID q3,
 			@PathRemainder String remainder,        // Path remainder after pattern match.
 			@Header("Accept-Language") String lang, // Headers.
 			@Header("Accept") String accept,
-			@Header(name="DNT",def="1") Integer doNotTrack
+			@Header(name="DNT",_default="1") Integer doNotTrack
 		) {
 
 		// Send back a simple Map response

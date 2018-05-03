@@ -21,6 +21,8 @@ import java.util.regex.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
@@ -352,5 +354,21 @@ public final class RestUtils {
 		} else {
 			m.put(key, new String[]{val});
 		}
+	}
+	
+	/**
+	 * Parses a string that can consist of a simple string or JSON object/array.
+	 * 
+	 * @param s The string to parse.
+	 * @return The parsed value, or <jk>null</jk> if the input is null.
+	 * @throws ParseException
+	 */
+	public static Object parseAnything(String s) throws ParseException {
+		if (s == null)
+			return null;
+		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
+		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
+			return JsonParser.DEFAULT.parse(s, Object.class);
+		return s;
 	}
 }

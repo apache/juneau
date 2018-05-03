@@ -59,7 +59,7 @@ public class FormDataResource extends BasicRestServlet {
 	}
 
 	@RestMethod(name=POST, path="/annotatedFormDataDefault")
-	public ObjectMap annotatedFormDataDefault(@FormData(value="f1",def="1") String f1, @FormData(value="f2",def="2") String f2, @FormData(value="f3",def="3") String f3) {
+	public ObjectMap annotatedFormDataDefault(@FormData(value="f1",_default="1") String f1, @FormData(value="f2",_default="2") String f2, @FormData(value="f3",_default="3") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
 			.append("f2", f2)
@@ -67,7 +67,7 @@ public class FormDataResource extends BasicRestServlet {
 	}
 
 	@RestMethod(name=POST, path="/annotatedAndDefaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
-	public ObjectMap annotatedAndDefaultFormData(@FormData(value="f1",def="4") String f1, @FormData(value="f2",def="5") String f2, @FormData(value="f3",def="6") String f3) {
+	public ObjectMap annotatedAndDefaultFormData(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
 			.append("f2", f2)

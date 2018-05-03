@@ -228,7 +228,7 @@ public class HeadersResource extends RestServlet {
 	}
 
 	@RestMethod(name=GET, path="/annotatedHeadersDefault")
-	public ObjectMap annotatedHeadersDefault(@Header(value="h1",def="1") String h1, @Header(value="h2",def="2") String h2, @Header(value="h3",def="3") String h3) {
+	public ObjectMap annotatedHeadersDefault(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
 		return new ObjectMap()
 			.append("h1", h1)
 			.append("h2", h2)
@@ -236,7 +236,7 @@ public class HeadersResource extends RestServlet {
 	}
 
 	@RestMethod(name=GET, path="/annotatedAndDefaultHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-	public ObjectMap annotatedAndDefaultHeaders(@Header(value="h1",def="4") String h1, @Header(value="h2",def="5") String h2, @Header(value="h3",def="6") String h3) {
+	public ObjectMap annotatedAndDefaultHeaders(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
 		return new ObjectMap()
 			.append("h1", h1)
 			.append("h2", h2)

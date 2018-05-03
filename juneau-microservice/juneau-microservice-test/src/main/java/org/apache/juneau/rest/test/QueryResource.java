@@ -48,7 +48,7 @@ public class QueryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(name=GET, path="/annotatedQueryDefault")
-	public ObjectMap annotatedQueryDefault(@Query(value="f1",def="1") String f1, @Query(value="f2",def="2") String f2, @Query(value="f3",def="3") String f3) {
+	public ObjectMap annotatedQueryDefault(@Query(value="f1",_default="1") String f1, @Query(value="f2",_default="2") String f2, @Query(value="f3",_default="3") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
 			.append("f2", f2)
@@ -56,7 +56,7 @@ public class QueryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(name=GET, path="/annotatedAndDefaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
-	public ObjectMap annotatedAndDefaultQuery(@Query(value="f1",def="4") String f1, @Query(value="f2",def="5") String f2, @Query(value="f3",def="6") String f3) {
+	public ObjectMap annotatedAndDefaultQuery(@Query(value="f1",_default="4") String f1, @Query(value="f2",_default="5") String f2, @Query(value="f3",_default="6") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
 			.append("f2", f2)

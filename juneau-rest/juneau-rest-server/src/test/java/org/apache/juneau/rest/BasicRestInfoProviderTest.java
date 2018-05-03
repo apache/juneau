@@ -3513,6 +3513,102 @@ public class BasicRestInfoProviderTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Header on POJO
 	//-----------------------------------------------------------------------------------------------------------------
+	
+	@Header(name="H", _default="123")
+	public static class PA01h {}
+	
+	@RestResource()
+	public static class PA01 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA01h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa01_Header_onPojo_default() throws Exception {
+		assertObjectEquals("'123'", getSwagger(new PA01()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDefault());
+	}
+	
+	@Header(name="H", _enum="A,B,C")
+	public static class PA02h {}
+	
+	@RestResource()
+	public static class PA02 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA02h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa02_Header_onPojo_enum() throws Exception {
+		assertObjectEquals("['A','B','C']", getSwagger(new PA02()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getEnum());
+	}
+	
+	@Header(name="H", _enum="['A','B','C']")
+	public static class PA03h {}
+	
+	@RestResource()
+	public static class PA03 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA03h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa03_Header_onPojo_enum() throws Exception {
+		assertObjectEquals("['A','B','C']", getSwagger(new PA03()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getEnum());
+	}
+	
+	@Header(name="H", allowEmptyValue="true")
+	public static class PA04h {}
+	
+	@RestResource()
+	public static class PA04 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA04h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa04_Header_onPojo_enum() throws Exception {
+		assertEquals(true, getSwagger(new PA04()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getAllowEmptyValue());
+	}
+
+	@Header(name="H", collectionFormat="A")
+	public static class PA05h {}
+	
+	@RestResource()
+	public static class PA05 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA05h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa05_Header_onPojo_collectionFormat() throws Exception {
+		assertEquals("A", getSwagger(new PA05()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getCollectionFormat());
+	}
+
+	@Header(name="H", _default="123")
+	public static class PA06h {}
+	
+	@RestResource()
+	public static class PA06 {
+		@RestMethod(name=GET,path="/path/{foo}")
+		public Foo doFoo(PA06h h) {
+			return null;
+		}
+	}
+
+	@Test
+	public void pa06_Header_onPojo_def() throws Exception {
+		assertEquals("123", getSwagger(new PA06()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDefault().toString());
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Header on parameter
