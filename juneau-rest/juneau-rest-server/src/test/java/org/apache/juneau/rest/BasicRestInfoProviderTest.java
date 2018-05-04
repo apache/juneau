@@ -40,7 +40,7 @@ public class BasicRestInfoProviderTest {
 		return ip.getSwagger(req);
 	}
 
-	private Swagger getSwagger(Object resource) throws Exception {
+	private static Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).build();
 		RestRequest req = rc.getCallHandler().createRequest(new MockHttpServletRequest());
 		RestInfoProvider ip = rc.getInfoProvider();
@@ -3514,511 +3514,865 @@ public class BasicRestInfoProviderTest {
 	// @Header on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 	
-	@Header(name="H", _default="123")
-	public static class PA01h {}
-	
 	@RestResource()
-	public static class PA01 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA01h h) {
-			return null;
+	public static class PA {
+		@Header(name="H", _default="123")
+		public static class PA01h {}
+		
+		@RestMethod(name=GET,path="/_default")
+		public Foo pa01(PA01h h) { return null; }
+
+		@Header(name="H", _enum="A,B,C")
+		public static class PA02h {}
+		
+		@RestMethod(name=GET,path="/_enum1")
+		public Foo pa02(PA02h h) { return null; }
+		
+		@Header(name="H", _enum="['A','B','C']")
+		public static class PA03h {}
+		
+		@RestMethod(name=GET,path="/_enum2")
+		public Foo pa03(PA03h h) { return null; }
+		
+		@Header(name="H", allowEmptyValue="true")
+		public static class PA04h {}
+		
+		@RestMethod(name=GET,path="/allowEmptyValue")
+		public Foo pa04(PA04h h) { return null; }
+
+		@Header(name="H", collectionFormat="A")
+		public static class PA05h {}
+		
+		@RestMethod(name=GET,path="/collectionFormat")
+		public Foo pa05(PA05h h) { return null; }
+
+		@Header(name="H", description="a")
+		public static class PA06h {}
+		
+		@RestMethod(name=GET,path="/description1")
+		public Foo pa06(PA06h h) { return null; }
+
+		@Header(name="H", description={"a","b"})
+		public static class PA07h {}
+		
+		@RestMethod(name=GET,path="/description2")
+		public Foo pa07(PA07h h) { return null; }
+		
+		@Header(name="H", example="a")
+		public static class PA08ah {
+			public PA08ah(String value) {}
 		}
+		
+		@RestMethod(name=GET,path="/example1")
+		public Foo pa08a(PA08ah h) { return null; }
+		
+		@Header(name="H", example="{f1:'a'}")
+		public static class PA08bh {
+			public String f1;
+		}
+		
+		@RestMethod(name=GET,path="/example2")
+		public Foo pa08b(PA08bh h) { return null; }
+		
+		@Header(name="H", exclusiveMaximum="true")
+		public static class PA09h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public Foo pa09(PA09h h) { return null; }
+		
+		@Header(name="H", exclusiveMinimum="true")
+		public static class PA10h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public Foo pa10(PA10h h) { return null; }
+
+		@Header(name="H", format="a")
+		public static class PA11h {}
+		
+		@RestMethod(name=GET,path="/format")
+		public Foo pa11(PA11h h) { return null; }
+
+		@Header(name="H", items="{type:'a'}")
+		public static class PA12h {}
+		
+		@RestMethod(name=GET,path="/items1")
+		public Foo pa12(PA12h h) { return null; }
+
+		@Header(name="H", items=" type:'a' ")
+		public static class PA13h {}
+		
+		@RestMethod(name=GET,path="/items2")
+		public Foo pa13(PA13h h) { return null; }
+		
+		@Header(name="H", maximum="1")
+		public static class PA14h {}
+		
+		@RestMethod(name=GET,path="/maximum")
+		public Foo pa14(PA14h h) { return null; }
+
+		@Header(name="H", maxItems="1")
+		public static class PA15h {}
+		
+		@RestMethod(name=GET,path="/maxItems")
+		public Foo pa15(PA15h h) { return null; }
+
+		@Header(name="H", maxLength="1")
+		public static class PA16h {}
+		
+		@RestMethod(name=GET,path="/maxLength")
+		public Foo pa16(PA16h h) { return null; }
+
+		@Header(name="H", minimum="1")
+		public static class PA17h {}
+		
+		@RestMethod(name=GET,path="/minimum")
+		public Foo pa17(PA17h h) { return null; }
+
+		@Header(name="H", minItems="1")
+		public static class PA18h {}
+		
+		@RestMethod(name=GET,path="/minItems")
+		public Foo pa18(PA18h h) { return null; }
+
+		@Header(name="H", minLength="1")
+		public static class PA19h {}
+		
+		@RestMethod(name=GET,path="/minLength")
+		public Foo pa19(PA19h h) { return null; }
+
+		@Header(name="H", multipleOf="1")
+		public static class PA20h {}
+		
+		@RestMethod(name=GET,path="/multipleOf")
+		public Foo pa20(PA20h h) { return null; }
+
+		@Header(name="H", pattern="a")
+		public static class PA21h {}
+		
+		@RestMethod(name=GET,path="/pattern")
+		public Foo pa21(PA21h h) { return null; }
+
+		@Header(name="H", required="true")
+		public static class PA22h {}
+		
+		@RestMethod(name=GET,path="/required")
+		public Foo pa22(PA22h h) { return null; }
+
+		@Header(name="H", schema="{type:'a'}")
+		public static class PA23h {}
+		
+		@RestMethod(name=GET,path="/schema1")
+		public Foo pa23(PA23h h) { return null; }
+
+		@Header(name="H", schema=" type:'a' ")
+		public static class PA24h {}
+		
+		@RestMethod(name=GET,path="/schema2")
+		public Foo pa24(PA24h h) { return null; }
+
+		@Header(name="H", type="a")
+		public static class PA25h {}
+		
+		@RestMethod(name=GET,path="/type")
+		public Foo pa25(PA25h h) { return null; }
+
+		@Header(name="H", uniqueItems="true")
+		public static class PA26h {}
+		
+		@RestMethod(name=GET,path="/uniqueItems")
+		public Foo pa26(PA26h h) { return null; }
 	}
 
+	
+	
 	@Test
 	public void pa01_Header_onPojo_default() throws Exception {
-		assertObjectEquals("'123'", getSwagger(new PA01()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDefault());
+		assertObjectEquals("'123'", getSwagger(new PA()).getPaths().get("/_default").get("get").getParameter("header", "H").getDefault());
 	}
-	
-	@Header(name="H", _enum="A,B,C")
-	public static class PA02h {}
-	
-	@RestResource()
-	public static class PA02 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA02h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa02_Header_onPojo_enum() throws Exception {
-		assertObjectEquals("['A','B','C']", getSwagger(new PA02()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getEnum());
+		assertObjectEquals("['A','B','C']", getSwagger(new PA()).getPaths().get("/_enum1").get("get").getParameter("header", "H").getEnum());
 	}
-	
-	@Header(name="H", _enum="['A','B','C']")
-	public static class PA03h {}
-	
-	@RestResource()
-	public static class PA03 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA03h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa03_Header_onPojo_enum() throws Exception {
-		assertObjectEquals("['A','B','C']", getSwagger(new PA03()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getEnum());
+		assertObjectEquals("['A','B','C']", getSwagger(new PA()).getPaths().get("/_enum2").get("get").getParameter("header", "H").getEnum());
 	}
-	
-	@Header(name="H", allowEmptyValue="true")
-	public static class PA04h {}
-	
-	@RestResource()
-	public static class PA04 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA04h h) {
-			return null;
-		}
-	}
-
 	@Test
-	public void pa04_Header_onPojo_enum() throws Exception {
-		assertEquals(true, getSwagger(new PA04()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getAllowEmptyValue());
+	public void pa04_Header_onPojo_allowEmptyValue() throws Exception {
+		assertEquals(true, getSwagger(new PA()).getPaths().get("/allowEmptyValue").get("get").getParameter("header", "H").getAllowEmptyValue());
 	}
-
-	@Header(name="H", collectionFormat="A")
-	public static class PA05h {}
-	
-	@RestResource()
-	public static class PA05 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA05h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa05_Header_onPojo_collectionFormat() throws Exception {
-		assertEquals("A", getSwagger(new PA05()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getCollectionFormat());
+		assertEquals("A", getSwagger(new PA()).getPaths().get("/collectionFormat").get("get").getParameter("header", "H").getCollectionFormat());
 	}
-
-	@Header(name="H", description="a")
-	public static class PA06h {}
-	
-	@RestResource()
-	public static class PA06 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA06h h) {
-			return null;
-		}
-	}
-
 	@Test
-	public void pa06_Header_onPojo_description() throws Exception {
-		assertEquals("a", getSwagger(new PA06()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDescription());
+	public void pa06_Header_onPojo_description1() throws Exception {
+		assertEquals("a", getSwagger(new PA()).getPaths().get("/description1").get("get").getParameter("header", "H").getDescription());
 	}
-
-	@Header(name="H", description={"a","b"})
-	public static class PA07h {}
-	
-	@RestResource()
-	public static class PA07 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA07h h) {
-			return null;
-		}
-	}
-
 	@Test
-	public void pa07_Header_onPojo_description_multilines() throws Exception {
-		assertEquals("a\nb", getSwagger(new PA07()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getDescription());
+	public void pa07_Header_onPojo_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new PA()).getPaths().get("/description2").get("get").getParameter("header", "H").getDescription());
 	}
-	
-	@Header(name="H", example="a")
-	public static class PA08ah {
-		public PA08ah(String value) {}
-	}
-	
-	@RestResource()
-	public static class PA08a {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA08ah h) {
-			return null;
-		}
-	}
-
 	@Test
-	public void pa08a_Header_onPojo_example_simpleString() throws Exception {
-		assertEquals("a", getSwagger(new PA08a()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExample());
+	public void pa08a_Header_onPojo_example1() throws Exception {
+		assertEquals("a", getSwagger(new PA()).getPaths().get("/example1").get("get").getParameter("header", "H").getExample());
 	}
-
-	
-	@Header(name="H", example="{f1:'a'}")
-	public static class PA08bh {
-		public String f1;
-	}
-	
-	@RestResource()
-	public static class PA08b {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA08bh h) {
-			return null;
-		}
-	}
-
 	@Test
-	public void pa08b_Header_onPojo_example_bean() throws Exception {
-		assertObjectEquals("{f1:'a'}", getSwagger(new PA08b()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExample());
+	public void pa08b_Header_onPojo_example2() throws Exception {
+		assertObjectEquals("{f1:'a'}", getSwagger(new PA()).getPaths().get("/example2").get("get").getParameter("header", "H").getExample());
 	}
-	
-	@Header(name="H", exclusiveMaximum="true")
-	public static class PA09h {}
-	
-	@RestResource()
-	public static class PA09 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA09h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa09_Header_onPojo_exclusiveMaximum() throws Exception {
-		assertEquals(true, getSwagger(new PA09()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExclusiveMaximum());
+		assertEquals(true, getSwagger(new PA()).getPaths().get("/exclusiveMaximum").get("get").getParameter("header", "H").getExclusiveMaximum());
 	}
-	
-	@Header(name="H", exclusiveMinimum="true")
-	public static class PA10h {}
-	
-	@RestResource()
-	public static class PA10 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA10h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa10_Header_onPojo_exclusiveMinimum() throws Exception {
-		assertEquals(true, getSwagger(new PA10()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getExclusiveMinimum());
+		assertEquals(true, getSwagger(new PA()).getPaths().get("/exclusiveMinimum").get("get").getParameter("header", "H").getExclusiveMinimum());
 	}
-
-	@Header(name="H", format="a")
-	public static class PA11h {}
-	
-	@RestResource()
-	public static class PA11 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA11h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa11_Header_onPojo_format() throws Exception {
-		assertEquals("a", getSwagger(new PA11()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getFormat());
+		assertEquals("a", getSwagger(new PA()).getPaths().get("/format").get("get").getParameter("header", "H").getFormat());
 	}
-
-	@Header(name="H", items="{type:'a'}")
-	public static class PA12h {}
-	
-	@RestResource()
-	public static class PA12 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA12h h) {
-			return null;
-		}
-	}
-
 	@Test
-	public void pa12_Header_onPojo_items() throws Exception {
-		assertObjectEquals("{type:'a'}", getSwagger(new PA12()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getItems());
+	public void pa12_Header_onPojo_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PA()).getPaths().get("/items1").get("get").getParameter("header", "H").getItems());
 	}
-
-	@Header(name="H", items=" type:'a' ")
-	public static class PA13h {}
-	
-	@RestResource()
-	public static class PA13 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA13h h) {
-			return null;
-		}
-	}
-
 	@Test
-	public void pa13_Header_onPojo_items() throws Exception {
-		assertObjectEquals("{type:'a'}", getSwagger(new PA13()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getItems());
+	public void pa13_Header_onPojo_items2() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PA()).getPaths().get("/items2").get("get").getParameter("header", "H").getItems());
 	}
-	
-	@Header(name="H", maximum="99")
-	public static class PA14h {}
-	
-	@RestResource()
-	public static class PA14 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA14h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa14_Header_onPojo_maximum() throws Exception {
-		assertObjectEquals("99", getSwagger(new PA14()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMaximum());
+		assertObjectEquals("1", getSwagger(new PA()).getPaths().get("/maximum").get("get").getParameter("header", "H").getMaximum());
 	}
-
-	@Header(name="H", maxItems="99")
-	public static class PA15h {}
-	
-	@RestResource()
-	public static class PA15 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA15h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa15_Header_onPojo_maxItems() throws Exception {
-		assertObjectEquals("99", getSwagger(new PA15()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMaxItems());
+		assertObjectEquals("1", getSwagger(new PA()).getPaths().get("/maxItems").get("get").getParameter("header", "H").getMaxItems());
 	}
-
-	@Header(name="H", maxLength="99")
-	public static class PA16h {}
-	
-	@RestResource()
-	public static class PA16 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA16h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa16_Header_onPojo_maxLength() throws Exception {
-		assertObjectEquals("99", getSwagger(new PA16()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMaxLength());
+		assertObjectEquals("1", getSwagger(new PA()).getPaths().get("/maxLength").get("get").getParameter("header", "H").getMaxLength());
 	}
-
-	@Header(name="H", minimum="99")
-	public static class PA17h {}
-	
-	@RestResource()
-	public static class PA17 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA17h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa17_Header_onPojo_minimum() throws Exception {
-		assertObjectEquals("99", getSwagger(new PA17()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMinimum());
+		assertObjectEquals("1", getSwagger(new PA()).getPaths().get("/minimum").get("get").getParameter("header", "H").getMinimum());
 	}
-
-	@Header(name="H", minItems="99")
-	public static class PA18h {}
-	
-	@RestResource()
-	public static class PA18 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA18h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa18_Header_onPojo_minItems() throws Exception {
-		assertObjectEquals("99", getSwagger(new PA18()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMinItems());
+		assertObjectEquals("1", getSwagger(new PA()).getPaths().get("/minItems").get("get").getParameter("header", "H").getMinItems());
 	}
-
-	@Header(name="H", minLength="99")
-	public static class PA19h {}
-	
-	@RestResource()
-	public static class PA19 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA19h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa19_Header_onPojo_minLength() throws Exception {
-		assertObjectEquals("99", getSwagger(new PA19()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMinLength());
+		assertObjectEquals("1", getSwagger(new PA()).getPaths().get("/minLength").get("get").getParameter("header", "H").getMinLength());
 	}
-
-	@Header(name="H", multipleOf="99")
-	public static class PA20h {}
-	
-	@RestResource()
-	public static class PA20 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA20h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa20_Header_onPojo_multipleOf() throws Exception {
-		assertObjectEquals("99", getSwagger(new PA20()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getMultipleOf());
+		assertObjectEquals("1", getSwagger(new PA()).getPaths().get("/multipleOf").get("get").getParameter("header", "H").getMultipleOf());
 	}
-
-	@Header(name="H", pattern="a")
-	public static class PA21h {}
-	
-	@RestResource()
-	public static class PA21 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA21h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa21_Header_onPojo_pattern() throws Exception {
-		assertObjectEquals("'a'", getSwagger(new PA21()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getPattern());
+		assertObjectEquals("'a'", getSwagger(new PA()).getPaths().get("/pattern").get("get").getParameter("header", "H").getPattern());
 	}
-
-	@Header(name="H", required="true")
-	public static class PA22h {}
-	
-	@RestResource()
-	public static class PA22 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA22h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa22_Header_onPojo_required() throws Exception {
-		assertObjectEquals("true", getSwagger(new PA22()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getRequired());
+		assertObjectEquals("true", getSwagger(new PA()).getPaths().get("/required").get("get").getParameter("header", "H").getRequired());
 	}
-
-	@Header(name="H", schema="{type:'a'}")
-	public static class PA23h {}
-	
-	@RestResource()
-	public static class PA23 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA23h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa23_Header_onPojo_schema() throws Exception {
-		assertObjectEquals("{type:'a'}", getSwagger(new PA23()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getSchema());
+		assertObjectEquals("{type:'a'}", getSwagger(new PA()).getPaths().get("/schema1").get("get").getParameter("header", "H").getSchema());
 	}
-
-	@Header(name="H", schema=" type:'a' ")
-	public static class PA24h {}
-	
-	@RestResource()
-	public static class PA24 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA24h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa24_Header_onPojo_schema() throws Exception {
-		assertObjectEquals("{type:'a'}", getSwagger(new PA24()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getSchema());
+		assertObjectEquals("{type:'a'}", getSwagger(new PA()).getPaths().get("/schema2").get("get").getParameter("header", "H").getSchema());
 	}
-
-	@Header(name="H", type="a")
-	public static class PA25h {}
-	
-	@RestResource()
-	public static class PA25 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA25h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa25_Header_onPojo_type() throws Exception {
-		assertObjectEquals("'a'", getSwagger(new PA25()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getType());
+		assertObjectEquals("'a'", getSwagger(new PA()).getPaths().get("/type").get("get").getParameter("header", "H").getType());
 	}
-
-	@Header(name="H", uniqueItems="true")
-	public static class PA26h {}
-	
-	@RestResource()
-	public static class PA26 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo(PA26h h) {
-			return null;
-		}
-	}
-
 	@Test
 	public void pa26_Header_onPojo_uniqueItems() throws Exception {
-		assertObjectEquals("true", getSwagger(new PA26()).getPaths().get("/path/{foo}").get("get").getParameter("header", "H").getUniqueItems());
+		assertObjectEquals("true", getSwagger(new PA()).getPaths().get("/uniqueItems").get("get").getParameter("header", "H").getUniqueItems());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Header on parameter
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class PB {
+		@RestMethod(name=GET,path="/name")
+		public Foo pb01(@Header(name="H") String h) { return null; }
+		
+		@RestMethod(name=GET,path="/value")
+		public Foo pb02(@Header("H") String h) { return null; }
+		
+		@RestMethod(name=GET,path="/description1")
+		public Foo pb03a(@Header(name="H", description="a") String h) { return null; }
+		
+		@RestMethod(name=GET,path="/description2")
+		public Foo pb03b(@Header(name="H", description={"a","b"}) String h) { return null; }
+		
+		@RestMethod(name=GET,path="/type")
+		public Foo pb04(@Header(name="H", type="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/format")
+		public Foo pb05(@Header(name="H", format="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/pattern")
+		public Foo pb06(@Header(name="H", pattern="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/collectionFormat")
+		public Foo pb07(@Header(name="H", collectionFormat="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maximum")
+		public Foo pb08(@Header(name="H", maximum="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minimum")
+		public Foo pb09(@Header(name="H", minimum="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/multipleOf")
+		public Foo pb010(@Header(name="H", multipleOf="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maxLength")
+		public Foo pb11(@Header(name="H", maxLength="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minLength")
+		public Foo pb12(@Header(name="H", minLength="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maxItems")
+		public Foo pb13(@Header(name="H", maxItems="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minItems")
+		public Foo pb14(@Header(name="H", minItems="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/allowEmptyValue")
+		public Foo pb15(@Header(name="H", allowEmptyValue="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public Foo pb16(@Header(name="H", exclusiveMaximum="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public Foo pb17(@Header(name="H", exclusiveMinimum="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/uniqueItems")
+		public Foo pb18a(@Header(name="H", uniqueItems="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/schema1")
+		public Foo pb19a(@Header(name="H", schema=" {type:'a'} ") String h) { return null; }
+
+		@RestMethod(name=GET,path="/schema2")
+		public Foo pb19b(@Header(name="H", schema={" type:'b' "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/_default1")
+		public Foo pb20a(@Header(name="H", _default="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/_default2")
+		public Foo pb20b(@Header(name="H", _default= {"a","b"}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/_enum1")
+		public Foo pb21a(@Header(name="H", _enum="a,b") String h) { return null; }
+
+		@RestMethod(name=GET,path="/_enum2")
+		public Foo pb21b(@Header(name="H", _enum={"['a','b']"}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/items1")
+		public Foo pb22a(@Header(name="H", items=" {type:'a'} ") String h) { return null; }
+
+		@RestMethod(name=GET,path="/items2")
+		public Foo pb22b(@Header(name="H", items={" type:'b' "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/example1")
+		public Foo pb23a(@Header(name="H", example="a,b") String h) { return null; }
+
+		@RestMethod(name=GET,path="/example2")
+		public Foo pb23b(@Header(name="H", example={"a","b"}) String h) { return null; }
+	}
+
+	@Test
+	public void pb01_Header_onParameter_name() throws Exception {
+		assertEquals("H", getSwagger(new PB()).getPaths().get("/name").get("get").getParameter("header", "H").getName());
+	}
+	@Test
+	public void pb02_Header_onParameter_value() throws Exception {
+		assertEquals("H", getSwagger(new PB()).getPaths().get("/value").get("get").getParameter("header", "H").getName());
+	}
+	@Test
+	public void pb03a_Header_onParameter_description1() throws Exception {
+		assertEquals("a", getSwagger(new PB()).getPaths().get("/description1").get("get").getParameter("header", "H").getDescription());
+	}
+	@Test
+	public void pb03b_Header_onParameter_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new PB()).getPaths().get("/description2").get("get").getParameter("header", "H").getDescription());
+	}
+	@Test
+	public void pb04_Header_onParameter_type() throws Exception {
+		assertEquals("a", getSwagger(new PB()).getPaths().get("/type").get("get").getParameter("header", "H").getType());
+	}
+	@Test
+	public void pb05_Header_onParameter_format() throws Exception {
+		assertEquals("a", getSwagger(new PB()).getPaths().get("/format").get("get").getParameter("header", "H").getFormat());
+	}
+	@Test
+	public void pb06_Header_onParameter_pattern() throws Exception {
+		assertEquals("a", getSwagger(new PB()).getPaths().get("/pattern").get("get").getParameter("header", "H").getPattern());
+	}
+	@Test
+	public void pb07_Header_onParameter_collectionFormat() throws Exception {
+		assertEquals("a", getSwagger(new PB()).getPaths().get("/collectionFormat").get("get").getParameter("header", "H").getCollectionFormat());
+	}
+	@Test
+	public void pb08_Header_onParameter_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new PB()).getPaths().get("/maximum").get("get").getParameter("header", "H").getMaximum());
+	}
+	@Test
+	public void pb09_Header_onParameter_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new PB()).getPaths().get("/minimum").get("get").getParameter("header", "H").getMinimum());
+	}
+	@Test
+	public void pb10_Header_onParameter_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new PB()).getPaths().get("/multipleOf").get("get").getParameter("header", "H").getMultipleOf());
+	}
+	@Test
+	public void pb11_Header_onParameter_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new PB()).getPaths().get("/maxLength").get("get").getParameter("header", "H").getMaxLength());
+	}
+	@Test
+	public void pb12_Header_onParameter_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new PB()).getPaths().get("/minLength").get("get").getParameter("header", "H").getMinLength());
+	}
+	@Test
+	public void pb13_Header_onParameter_maxItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new PB()).getPaths().get("/maxItems").get("get").getParameter("header", "H").getMaxItems());
+	}
+	@Test
+	public void pb14_Header_onParameter_minItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new PB()).getPaths().get("/minItems").get("get").getParameter("header", "H").getMinItems());
+	}
+	@Test
+	public void pb15_Header_onParameter_allowEmptyValue() throws Exception {
+		assertObjectEquals("true", getSwagger(new PB()).getPaths().get("/allowEmptyValue").get("get").getParameter("header", "H").getAllowEmptyValue());
+	}
+	@Test
+	public void pb16_Header_onParameter_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new PB()).getPaths().get("/exclusiveMaximum").get("get").getParameter("header", "H").getExclusiveMaximum());
+	}
+	@Test
+	public void pb17_Header_onParameter_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new PB()).getPaths().get("/exclusiveMinimum").get("get").getParameter("header", "H").getExclusiveMinimum());
+	}
+	@Test
+	public void pb18_Header_onParameter_uniqueItems1() throws Exception {
+		assertObjectEquals("true", getSwagger(new PB()).getPaths().get("/uniqueItems").get("get").getParameter("header", "H").getUniqueItems());
+	}
+	@Test
+	public void pb19a_Header_onParameter_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PB()).getPaths().get("/schema1").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pb19b_Header_onParameter_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new PB()).getPaths().get("/schema2").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pb20a_Header_onParameter__default1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new PB()).getPaths().get("/_default1").get("get").getParameter("header", "H").getDefault());
+	}
+	@Test
+	public void pb20b_Header_onParameter__default2() throws Exception {
+		assertObjectEquals("'a\\nb'", getSwagger(new PB()).getPaths().get("/_default2").get("get").getParameter("header", "H").getDefault());
+	}
+	@Test
+	public void pb21a_Header_onParameter__enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new PB()).getPaths().get("/_enum1").get("get").getParameter("header", "H").getEnum());
+	}
+	@Test
+	public void pb21b_Header_onParameter__enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new PB()).getPaths().get("/_enum2").get("get").getParameter("header", "H").getEnum());
+	}
+	@Test
+	public void pb22a_Header_onParameter_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new PB()).getPaths().get("/items1").get("get").getParameter("header", "H").getItems());
+	}
+	@Test
+	public void pb22b_Header_onParameter_items2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new PB()).getPaths().get("/items2").get("get").getParameter("header", "H").getItems());
+	}
+	@Test
+	public void pb23a_Header_onParameter_example1() throws Exception {
+		assertEquals("a,b", getSwagger(new PB()).getPaths().get("/example1").get("get").getParameter("header", "H").getExample());
+	}
+	@Test
+	public void pb23b_Header_onParameter_example2() throws Exception {
+		assertEquals("a\nb", getSwagger(new PB()).getPaths().get("/example2").get("get").getParameter("header", "H").getExample());
+	}
+
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Query on POJO
 	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class QA {
 
+//	boolean multipart() default false;
+//	String name() default "";
+//	String value() default "";
+//	String[] description() default {};
+//	String required() default "";
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String collectionFormat() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String maxItems() default "";
+//	String minItems() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String uniqueItems() default "";
+//	String[] schema() default {};
+//	String[] _default() default {};
+//	String[] _enum() default {};
+//	String[] items() default {};	
+//	String[] example() default {};
+	}
+	
+		
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Query on parameter
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource()
+	public static class QB {
+//	boolean multipart() default false;
+//	String name() default "";
+//	String value() default "";
+//	String[] description() default {};
+//	String required() default "";
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String collectionFormat() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String maxItems() default "";
+//	String minItems() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String uniqueItems() default "";
+//	String[] schema() default {};
+//	String[] _default() default {};
+//	String[] _enum() default {};
+//	String[] items() default {};	
+//	String[] example() default {};
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @FormData on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 	
+	@RestResource()
+	public static class RA {
+//	boolean multipart() default false;
+//	String name() default "";
+//	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+//	String value() default "";
+//	String[] description() default {};
+//	String required() default "";
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String collectionFormat() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String maxItems() default "";
+//	String minItems() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String uniqueItems() default "";
+//	String[] schema() default {};
+//	String[] _default() default {};
+//	String[] _enum() default {};
+//	String[] items() default {};	
+//	String[] example() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @FormData on parameter
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class RB {
+//	boolean multipart() default false;
+//	String name() default "";
+//	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+//	String value() default "";
+//	String[] description() default {};
+//	String required() default "";
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String collectionFormat() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String maxItems() default "";
+//	String minItems() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String uniqueItems() default "";
+//	String[] schema() default {};
+//	String[] _default() default {};
+//	String[] _enum() default {};
+//	String[] items() default {};	
+//	String[] example() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Path on POJO
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource()
+	public static class SA {
+//	String name() default "";
+//	String value() default "";
+//	String[] description() default {};
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String[] schema() default {};
+//	String[] _enum() default {};
+//	String[] example() default {};
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Path on parameter
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class SB {
+//	String name() default "";
+//	String value() default "";
+//	String[] description() default {};
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String[] schema() default {};
+//	String[] _enum() default {};
+//	String[] example() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Body on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class TA {
+//	String[] description() default {};
+//	String required() default "";
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String collectionFormat() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String maxItems() default "";
+//	String minItems() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String uniqueItems() default "";
+//	String[] schema() default {};
+//	String[] _default() default {};
+//	String[] _enum() default {};
+//	String[] items() default {};	
+//	String[] example() default {};
+//	String[] examples() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Body on parameter
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class TB {
+//	String[] description() default {};
+//	String required() default "";
+//	String type() default "";
+//	String format() default "";
+//	String pattern() default "";
+//	String collectionFormat() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String maxItems() default "";
+//	String minItems() default "";
+//	String allowEmptyValue() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String uniqueItems() default "";
+//	String[] schema() default {};
+//	String[] _default() default {};
+//	String[] _enum() default {};
+//	String[] items() default {};	
+//	String[] example() default {};
+//	String[] examples() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Response on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class UA {
+//	int code() default 0;
+//	int value() default 0;
+//	String[] description() default {};
+//	String[] schema() default {};
+//	String[] headers() default {};
+//	String[] example() default {};
+//	String[] examples() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Response on parameter of type Value
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class UB {
+//	int code() default 0;
+//	int value() default 0;
+//	String[] description() default {};
+//	String[] schema() default {};
+//	String[] headers() default {};
+//	String[] example() default {};
+//	String[] examples() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Response on parameter of type other than Value
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class UC {
+//	int code() default 0;
+//	int value() default 0;
+//	String[] description() default {};
+//	String[] schema() default {};
+//	String[] headers() default {};
+//	String[] example() default {};
+//	String[] examples() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Response on throwable
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class UD {
+//	int code() default 0;
+//	int value() default 0;
+//	String[] description() default {};
+//	String[] schema() default {};
+//	String[] headers() default {};
+//	String[] example() default {};
+//	String[] examples() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Responses on POJO
 	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class UE {
+		
+	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @ResponseStatus on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@RestResource()
+	public static class VA {
+//	int code() default 0;
+//	int value() default 0;
+//	String[] description() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @ResponseStatuses on POJO
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource()
+	public static class VB {
+		
+	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @ResponseHeader on POJO
 	//-----------------------------------------------------------------------------------------------------------------
-
+	
+	@RestResource()
+	public static class WA {
+//	String code() default "";
+//	String name() default "";
+//	String value() default "";
+//	String[] description() default {};
+//	String type() default "";
+//	String format() default "";
+//	String collectionFormat() default "";
+//	String $ref() default "";
+//	String maximum() default "";
+//	String minimum() default "";
+//	String multipleOf() default "";
+//	String maxLength() default "";
+//	String minLength() default "";
+//	String maxItems() default "";
+//	String minItems() default "";
+//	String exclusiveMaximum() default "";
+//	String exclusiveMinimum() default "";
+//	String uniqueItems() default "";
+//	String[] items() default {};
+//	String[] _default() default {};
+//	String[] _enum() default {};
+//	String[] example() default {};
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// @ResponseHeaders on POJO
 	//-----------------------------------------------------------------------------------------------------------------
