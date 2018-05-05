@@ -108,7 +108,7 @@ public class ErrorConditionsResource extends BasicRestServlet {
 	// Test trying to set parameters to invalid types.
 	//====================================================================================================
 	@RestMethod(name=PUT, path="/testSetParameterToInvalidTypes/{a1}")
-	public String testSetParameterToInvalidTypes(@Query("p1") int t1, @Path int a1, @Header("h1") int h1) {
+	public String testSetParameterToInvalidTypes(@Query("p1") int t1, @Path("a1") int a1, @Header("h1") int h1) {
 		return "OK";
 	}
 

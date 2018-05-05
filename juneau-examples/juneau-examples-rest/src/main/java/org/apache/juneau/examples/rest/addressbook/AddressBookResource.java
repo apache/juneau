@@ -185,7 +185,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/people/{id}/*",
 		converters={Traversable.class,Introspectable.class}
 	)
-	public Person getPerson(@Path int id) throws Exception {
+	public Person getPerson(@Path("id") int id) throws Exception {
 		return findPerson(id);
 	}
 
@@ -213,7 +213,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/addresses/{id}/*",
 		converters={Traversable.class}
 	)
-	public Address getAddress(@Path int id) throws Exception {
+	public Address getAddress(@Path("id") int id) throws Exception {
 		return findAddress(id);
 	}
 
@@ -236,7 +236,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/people/{id}/addresses",
 		guards=AdminGuard.class
 	)
-	public Redirect createAddress(@Path int id, @Body CreateAddress ca) throws Exception {
+	public Redirect createAddress(@Path("id") int id, @Body CreateAddress ca) throws Exception {
 		Person p = findPerson(id);
 		Address a = p.createAddress(ca);
 		return new Redirect("addresses/{0}", a.id);
@@ -249,7 +249,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=DELETE, path="/people/{id}",
 		guards=AdminGuard.class
 	)
-	public String deletePerson(@Path int id) throws Exception {
+	public String deletePerson(@Path("id") int id) throws Exception {
 		addressBook.removePerson(id);
 		return "DELETE successful";
 	}
@@ -261,7 +261,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=DELETE, path="/addresses/{id}",
 		guards=AdminGuard.class
 	)
-	public String deleteAddress(@Path int addressId) throws NotFound {
+	public String deleteAddress(@Path("id") int addressId) throws NotFound {
 		Person p = addressBook.findPersonWithAddress(addressId);
 		if (p == null)
 			throw new NotFound("Person not found");
@@ -277,7 +277,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=PUT, path="/people/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updatePerson(RequestBody body, @Path int id, @PathRemainder String remainder) throws BadRequest {
+	public String updatePerson(RequestBody body, @Path("id") int id, @PathRemainder String remainder) throws BadRequest {
 		try {
 			Person p = findPerson(id);
 			PojoRest r = new PojoRest(p);
@@ -297,7 +297,7 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=PUT, path="/addresses/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updateAddress(RestRequest req, @Path int id, @PathRemainder String remainder) throws BadRequest {
+	public String updateAddress(RestRequest req, @Path("id") int id, @PathRemainder String remainder) throws BadRequest {
 		try {
 			Address a = findAddress(id);
 			PojoRest r = new PojoRest(a);

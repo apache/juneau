@@ -29,7 +29,7 @@ public class PathVariablesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name=GET, path="/test1/{x}/foo/{y}/bar/{z}/*")
-	public StringMessage test1(@Path String x, @Path int y, @Path boolean z) {
+	public StringMessage test1(@Path("x") String x, @Path("y") int y, @Path("z") boolean z) {
 		return new StringMessage("x={0},y={1},z={2}", x, y, z);
 	}
 
@@ -39,12 +39,12 @@ public class PathVariablesResource extends BasicRestServlet {
 	}
 
 	@RestMethod(name=GET, path="/test3/{0}/foo/{1}/bar/{2}/*")
-	public StringMessage test3(@Path String x, @Path int y, @Path boolean z) {
+	public StringMessage test3(@Path("0") String x, @Path("1") int y, @Path("2") boolean z) {
 		return new StringMessage("x={0},y={1},z={2}", x, y, z);
 	}
 
 	@RestMethod(name=GET, path="/test4/{2}/foo/{1}/bar/{0}/*")
-	public StringMessage test4(@Path String x, @Path int y, @Path boolean z) {
+	public StringMessage test4(@Path("0") String x, @Path("1") int y, @Path("2") boolean z) {
 		return new StringMessage("x={0},y={1},z={2}", x, y, z);
 	}
 }

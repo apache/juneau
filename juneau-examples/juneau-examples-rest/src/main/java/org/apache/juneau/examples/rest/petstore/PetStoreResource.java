@@ -149,7 +149,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Pet getPet(
-			@Path(description="ID of pet to return", example="123") long petId
+			@Path(name="petId", description="ID of pet to return", example="123") long petId
 		) throws IdNotFound, NotAcceptable {
 		
 		return store.getPet(petId);
@@ -206,7 +206,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Div editPetPage(
-			@Path(description="ID of pet to return", example="123") long petId
+			@Path(name="petId", description="ID of pet to return", example="123") long petId
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
 		Pet pet = getPet(petId);
@@ -328,7 +328,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	)
 	public Ok deletePet(
 			@Header(name="api_key", example="foobar") String apiKey, 
-			@Path(description="Pet id to delete", example="123") long petId
+			@Path(name="petId", description="Pet id to delete", example="123") long petId
 		) throws IdNotFound, NotAcceptable {
 		
 		store.removePet(petId);
@@ -347,7 +347,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok uploadImage(
-			@Path(description="ID of pet to update", example="123") long petId, 
+			@Path(name="petId", description="ID of pet to update", example="123") long petId, 
 			@FormData(name="additionalMetadata", description="Additional data to pass to server", example="Foobar") String additionalMetadata, 
 			@FormData(name="file", description="file to upload", required="true", type="file") byte[] file
 		) throws NotAcceptable, UnsupportedMediaType {
@@ -407,7 +407,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Order getOrder(
-			@Path(description="ID of order to fetch", maximum="1000", minimum="101", example="123") long orderId
+			@Path(name="orderId", description="ID of order to fetch", maximum="1000", minimum="101", example="123") long orderId
 		) throws InvalidId, IdNotFound, NotAcceptable {
 		
 		if (orderId < 101 || orderId > 1000)
@@ -448,7 +448,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok deletePurchaseOrder(
-			@Path(description="ID of the order that needs to be deleted", minimum="1", example="5") long orderId
+			@Path(name="orderId", description="ID of the order that needs to be deleted", minimum="1", example="5") long orderId
 		) throws InvalidId, IdNotFound, NotAcceptable {
 		
 		if (orderId < 0)
@@ -502,7 +502,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public User getUser(
-			@Path(description="The name that needs to be fetched. Use user1 for testing.") String username
+			@Path(name="username", description="The name that needs to be fetched. Use user1 for testing.") String username
 		) throws InvalidUsername, IdNotFound, NotAcceptable {
 		
 		return store.getUser(username);
@@ -552,7 +552,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok updateUser(
-			@Path(description="Name that need to be updated") String username, 
+			@Path(name="username", description="Name that need to be updated") String username, 
 			@Body(description="Updated user object") User user
 		) throws InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType {
 		
@@ -570,7 +570,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok deleteUser(
-			@Path(description="The name that needs to be deleted") String username
+			@Path(name="username", description="The name that needs to be deleted") String username
 		) throws InvalidUsername, IdNotFound, NotAcceptable {
 		
 		store.removeUser(username);

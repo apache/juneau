@@ -5067,23 +5067,222 @@ public class BasicRestInfoProviderTest {
 
 	@RestResource()
 	public static class SA {
-//	String name() default "";
-//	String value() default "";
-//	String[] description() default {};
-//	String type() default "";
-//	String format() default "";
-//	String pattern() default "";
-//	String maximum() default "";
-//	String minimum() default "";
-//	String multipleOf() default "";
-//	String maxLength() default "";
-//	String minLength() default "";
-//	String allowEmptyValue() default "";
-//	String exclusiveMaximum() default "";
-//	String exclusiveMinimum() default "";
-//	String[] schema() default {};
-//	String[] _enum() default {};
-//	String[] example() default {};
+
+		@Path(name="P")
+		public static class SA01h {}
+		
+		@RestMethod(name=GET,path="/name/{P}")
+		public Foo sa01(SA01h h) { return null; }
+
+		//	String value() default "";
+		@Path("P")
+		public static class SA02h {}
+		
+		@RestMethod(name=GET,path="/value/{P}")
+		public Foo sa02(SA02h h) { return null; }
+
+		@Path(name="P", description="a")
+		public static class SA03h {}
+		
+		@RestMethod(name=GET,path="/description1/{P}")
+		public Foo sa03(SA03h h) { return null; }
+
+		@Path(name="P", description={"a","b"})
+		public static class SA04h {}
+		
+		@RestMethod(name=GET,path="/description2/{P}")
+		public Foo sa04(SA04h h) { return null; }
+
+		@Path(name="P", type="a")
+		public static class SA05h {}
+		
+		@RestMethod(name=GET,path="/type/{P}")
+		public Foo sa05(SA05h h) { return null; }
+
+		@Path(name="P", format="a")
+		public static class SA06h {}
+		
+		@RestMethod(name=GET,path="/format/{P}")
+		public Foo sa06(SA06h h) { return null; }
+
+		@Path(name="P", pattern="a")
+		public static class SA07h {}
+		
+		@RestMethod(name=GET,path="/pattern/{P}")
+		public Foo sa07(SA07h h) { return null; }
+
+		@Path(name="P", maximum="1")
+		public static class SA08h {}
+		
+		@RestMethod(name=GET,path="/maximum/{P}")
+		public Foo sa08(SA08h h) { return null; }
+
+		@Path(name="P", minimum="1")
+		public static class SA09h {}
+		
+		@RestMethod(name=GET,path="/minimum/{P}")
+		public Foo sa09(SA09h h) { return null; }
+
+		@Path(name="P", multipleOf="1")
+		public static class SA10h {}
+		
+		@RestMethod(name=GET,path="/multipleOf/{P}")
+		public Foo sa10(SA10h h) { return null; }
+
+		@Path(name="P", maxLength="1")
+		public static class SA11h {}
+		
+		@RestMethod(name=GET,path="/maxLength/{P}")
+		public Foo sa11(SA11h h) { return null; }
+
+		@Path(name="P", minLength="1")
+		public static class SA12h {}
+		
+		@RestMethod(name=GET,path="/minLength/{P}")
+		public Foo sa12(SA12h h) { return null; }
+
+		@Path(name="P", allowEmptyValue="true")
+		public static class SA13h {}
+		
+		@RestMethod(name=GET,path="/allowEmptyValue/{P}")
+		public Foo sa13(SA13h h) { return null; }
+
+		@Path(name="P", exclusiveMaximum="true")
+		public static class SA14h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMaximum/{P}")
+		public Foo sa14(SA14h h) { return null; }
+
+		@Path(name="P", exclusiveMinimum="true")
+		public static class SA15h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMinimum/{P}")
+		public Foo sa15(SA15h h) { return null; }
+
+		@Path(name="P", schema=" {type:'a'} ")
+		public static class SA16h {}
+		
+		@RestMethod(name=GET,path="/schema1/{P}")
+		public Foo sa16(SA16h h) { return null; }
+
+		@Path(name="P", schema= {" type:'b' "})
+		public static class SA17h {}
+		
+		@RestMethod(name=GET,path="/schema2/{P}")
+		public Foo sa17(SA17h h) { return null; }
+
+		@Path(name="P", _enum="a,b")
+		public static class SA18h {}
+		
+		@RestMethod(name=GET,path="/_enum1/{P}")
+		public Foo sa18(SA18h h) { return null; }
+
+		@Path(name="P", _enum={" ['a','b'] "})
+		public static class SA19h {}
+		
+		@RestMethod(name=GET,path="/_enum2/{P}")
+		public Foo sa19(SA19h h) { return null; }
+
+		@Path(name="P", example="'a'")
+		public static class SA20h {
+			public SA20h(String value) {}
+		}
+		
+		@RestMethod(name=GET,path="/example1/{P}")
+		public Foo sa20(SA20h h) { return null; }
+
+		@Path(name="P", example={" {f1:'a'} "})
+		public static class SA21h {
+			public String f1;
+		}
+		
+		@RestMethod(name=GET,path="/example2/{P}")
+		public Foo sa21(SA21h h) { return null; }
+	}
+
+	@Test
+	public void sa01_Path_onPojo_name() throws Exception {
+		assertEquals("P", getSwagger(new SA()).getPaths().get("/name/{P}").get("get").getParameter("path", "P").getName());
+	}
+	@Test
+	public void sa02_Path_onPojo_value() throws Exception {
+		assertEquals("P", getSwagger(new SA()).getPaths().get("/value/{P}").get("get").getParameter("path", "P").getName());
+	}
+	@Test
+	public void sa03_Path_onPojo_description() throws Exception {
+		assertEquals("a", getSwagger(new SA()).getPaths().get("/description1/{P}").get("get").getParameter("path", "P").getDescription());
+	}
+	@Test
+	public void sa04_Path_onPojo_description() throws Exception {
+		assertEquals("a\nb", getSwagger(new SA()).getPaths().get("/description2/{P}").get("get").getParameter("path", "P").getDescription());
+	}
+	@Test
+	public void sa05_Path_onPojo_type() throws Exception {
+		assertEquals("a", getSwagger(new SA()).getPaths().get("/type/{P}").get("get").getParameter("path", "P").getType());
+	}
+	@Test
+	public void sa06_Path_onPojo_format() throws Exception {
+		assertEquals("a", getSwagger(new SA()).getPaths().get("/format/{P}").get("get").getParameter("path", "P").getFormat());
+	}
+	@Test
+	public void sa07_Path_onPojo_pattern() throws Exception {
+		assertEquals("a", getSwagger(new SA()).getPaths().get("/pattern/{P}").get("get").getParameter("path", "P").getPattern());
+	}
+	@Test
+	public void sa08_Path_onPojo_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new SA()).getPaths().get("/maximum/{P}").get("get").getParameter("path", "P").getMaximum());
+	}
+	@Test
+	public void sa09_Path_onPojo_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new SA()).getPaths().get("/minimum/{P}").get("get").getParameter("path", "P").getMinimum());
+	}
+	@Test
+	public void sa10_Path_onPojo_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new SA()).getPaths().get("/multipleOf/{P}").get("get").getParameter("path", "P").getMultipleOf());
+	}
+	@Test
+	public void sa11_Path_onPojo_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new SA()).getPaths().get("/maxLength/{P}").get("get").getParameter("path", "P").getMaxLength());
+	}
+	@Test
+	public void sa12_Path_onPojo_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new SA()).getPaths().get("/minLength/{P}").get("get").getParameter("path", "P").getMinLength());
+	}
+	@Test
+	public void sa13_Path_onPojo_allowEmptyValue() throws Exception {
+		assertObjectEquals("true", getSwagger(new SA()).getPaths().get("/allowEmptyValue/{P}").get("get").getParameter("path", "P").getAllowEmptyValue());
+	}
+	@Test
+	public void sa14_Path_onPojo_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new SA()).getPaths().get("/exclusiveMaximum/{P}").get("get").getParameter("path", "P").getExclusiveMaximum());
+	}
+	@Test
+	public void sa15_Path_onPojo_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new SA()).getPaths().get("/exclusiveMinimum/{P}").get("get").getParameter("path", "P").getExclusiveMinimum());
+	}
+	@Test
+	public void sa16_Path_onPojo_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new SA()).getPaths().get("/schema1/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sa17_Path_onPojo_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new SA()).getPaths().get("/schema2/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sa18_Path_onPojo__enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new SA()).getPaths().get("/_enum1/{P}").get("get").getParameter("path", "P").getEnum());
+	}
+	@Test
+	public void sa19_Path_onPojo__enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new SA()).getPaths().get("/_enum2/{P}").get("get").getParameter("path", "P").getEnum());
+	}
+	@Test
+	public void sa20_Path_onPojo_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new SA()).getPaths().get("/example1/{P}").get("get").getParameter("path", "P").getExample());
+	}
+	@Test
+	public void sa21_Path_onPojo_example2() throws Exception {
+		assertObjectEquals("{f1:'a'}", getSwagger(new SA()).getPaths().get("/example2/{P}").get("get").getParameter("path", "P").getExample());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -102,7 +102,7 @@ public class PhotosResource extends BasicRestServlet {
 
 	/** GET request handler for single photo */
 	@RestMethod(name=GET, path="/{id}", serializers=ImageSerializer.class, summary="Get a photo by ID")
-	public BufferedImage getPhoto(@Path String id) throws NotFound {
+	public BufferedImage getPhoto(@Path("id") String id) throws NotFound {
 		Photo p = photos.get(id);
 		if (p == null)
 			throw new NotFound("Photo not found");
@@ -111,7 +111,7 @@ public class PhotosResource extends BasicRestServlet {
 
 	/** PUT request handler */
 	@RestMethod(name=PUT, path="/{id}", parsers=ImageParser.class, summary="Add or overwrite a photo")
-	public String addPhoto(@Path String id, @Body BufferedImage image) throws Exception {
+	public String addPhoto(@Path("id") String id, @Body BufferedImage image) throws Exception {
 		photos.put(id, new Photo(id, image));
 		return "OK";
 	}
@@ -126,7 +126,7 @@ public class PhotosResource extends BasicRestServlet {
 
 	/** DELETE request handler */
 	@RestMethod(name=DELETE, path="/{id}", summary="Delete a photo by ID")
-	public String deletePhoto(@Path String id) throws NotFound {
+	public String deletePhoto(@Path("id") String id) throws NotFound {
 		Photo p = photos.remove(id);
 		if (p == null)
 			throw new NotFound("Photo not found");

@@ -28,43 +28,7 @@ import org.apache.juneau.rest.*;
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> UUID baz) {
- * 		...
- * 	}
- * </p>
- * 
- * <p>
- * The <ja>@Path</ja> annotation is optional if the parameters are specified immediately following the
- * <code>RestRequest</code> and <code>RestResponse</code> parameters, and are specified in the same order as the
- * variables in the URL path pattern.
- * The following example is equivalent to the previous example.
- * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			String foo, <jk>int</jk> bar, UUID baz) {
- * 		...
- * 	}
- * </p>
- * 
- * <p>
- * If the order of parameters is not the default order shown above, the attribute names must be specified (since
- * parameter names are lost during compilation).
- * The following example is equivalent to the previous example, except the parameter order has been switched, requiring
- * the use of the <ja>@Path</ja> annotations.
- * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			<ja>@Path</ja>(<js>"baz"</js>) UUID baz, <ja>@Path</ja>(<js>"foo"</js>) String foo, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar) {
- * 		...
- * 	}
- * </p>
- * 
- * <p>
- * You can also use <code>{#}</code> notation to specify path parameters without specifying names.
- * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> UUID baz) {
+ * 			<ja>@Path</ja>(<js>"foo"</js>) String foo, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Path</ja>(<js>"baz"</js>) UUID baz) {
  * 		...
  * 	}
  * </p>

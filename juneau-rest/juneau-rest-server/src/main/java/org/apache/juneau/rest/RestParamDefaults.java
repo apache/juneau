@@ -34,6 +34,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -545,10 +546,12 @@ class RestParamDefaults {
 	// Annotated retrievers
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static final class PathParameterObject extends RestMethodParam {
+	static final class PathObject extends RestMethodParam {
+		private final Method method;
 
-		protected PathParameterObject(String name, Path a, Type type) {
-			super(PATH, name, type, getMetaData(a));
+		protected PathObject(Method method, Path a, Type type, PropertyStore ps, RestMethodParam existing) {
+			super(PATH, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, PathObject.class)));
+			this.method = method;
 		}
 
 		@Override /* RestMethodParam */
@@ -556,10 +559,11 @@ class RestParamDefaults {
 			return req.getPathMatch().get(name, type);
 		}
 		
-		private static final ObjectMap getMetaData(Path a) {
+		private static final ObjectMap getMetaData(Path a, PathObject existing) {
+			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
-				return ObjectMap.EMPTY_MAP;
-			return new ObjectMap()
+				return om;
+			return om
 				.appendSkipEmpty("description", joinnl(a.description()))
 				.appendSkipEmpty("type", a.type())
 				.appendSkipEmpty("format", a.format())
@@ -576,6 +580,12 @@ class RestParamDefaults {
 				.appendSkipEmpty("enum", joinnl(a._enum()))
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
+		}
+		
+		@Override /* RestMethodParqm */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@Path used without name or value on method ''{0}''.", method);
 		}
 	}
 
@@ -623,10 +633,12 @@ class RestParamDefaults {
 	}
 
 	static final class HeaderObject extends RestMethodParam {
+		private final Method method;
 		private final HttpPartParser partParser;
 
 		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(HEADER, firstNonEmpty(a.name(), a.value()), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
+			super(HEADER, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
+			this.method = method;
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
@@ -664,13 +676,21 @@ class RestParamDefaults {
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
+		
+		@Override /* RestMethodParqm */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@Header used without name or value on method ''{0}''.", method);
+		}
 	}
 
 	static final class ResponseHeaderObject extends RestMethodParam {
+		private final Method method;
 		final HttpPartSerializer partSerializer;
 
 		protected ResponseHeaderObject(Method method, ResponseHeader a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(RESPONSE_HEADER, firstNonEmpty(a.name(), a.value(), "Unknown"), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
+			super(RESPONSE_HEADER, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
+			this.method = method;
 			this.partSerializer = a.serializer() == HttpPartSerializer.Null.class ? null : ClassUtils.newInstance(HttpPartSerializer.class, a.serializer(), true, ps);
 		}
 
@@ -736,6 +756,12 @@ class RestParamDefaults {
 				;
 			}
 			return om;
+		}
+		
+		@Override /* RestMethodParqm */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@ResponseHeader used without name or value on method ''{0}''.", method);
 		}
 	}
 
@@ -854,13 +880,15 @@ class RestParamDefaults {
 	}
 
 	static final class FormDataObject extends RestMethodParam {
+		private final Method method;
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
+		private final Type type;
 
-		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps, RestMethodParam existing) throws ServletException {
-			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
-			if (a.multipart() && ! isCollection(type))
-					throw new RestServletException("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
+		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps, RestMethodParam existing) {
+			super(FORM_DATA, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
+			this.method = method;
+			this.type = type;
 			this.multiPart = a.multipart();
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
@@ -901,16 +929,26 @@ class RestParamDefaults {
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
+		
+		@Override /* RestMethodParqm */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@FormData used without name or value on method ''{0}''.", method);
+			if (multiPart && ! isCollection(type))
+				throw new InternalServerError("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
+		}
 	}
 
 	static final class QueryObject extends RestMethodParam {
 		private final boolean multiPart;
+		private final Type type;
+		private final Method method;
 		private final HttpPartParser partParser;
 
-		protected QueryObject(Method method, Query a, Type type, PropertyStore ps, RestMethodParam existing) throws ServletException {
-			super(QUERY, firstNonEmpty(a.name(), a.value()), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
-			if (a.multipart() && ! isCollection(type))
-					throw new RestServletException("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
+		protected QueryObject(Method method, Query a, Type type, PropertyStore ps, RestMethodParam existing) {
+			super(QUERY, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
+			this.type = type;
+			this.method = method;
 			this.multiPart = a.multipart();
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
@@ -951,7 +989,14 @@ class RestParamDefaults {
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
-
+		
+		@Override /* RestMethodParqm */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@Query used without name or value on method ''{0}''.", method);
+			if (multiPart && ! isCollection(type))
+				throw new InternalServerError("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
+		}
 	}
 
 	static final class HasFormDataObject extends RestMethodParam {

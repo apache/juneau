@@ -4264,7 +4264,6 @@ public final class RestContext extends BeanContext {
 		Type[] pt = method.getGenericParameterTypes();
 		Annotation[][] pa = method.getParameterAnnotations();
 		RestMethodParam[] rp = new RestMethodParam[pt.length];
-		int attrIndex = 0;
 		PropertyStore ps = getPropertyStore();
 
 		for (int i = 0; i < pt.length; i++) {
@@ -4288,6 +4287,8 @@ public final class RestContext extends BeanContext {
 						rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
 					else if (a instanceof Body)
 						rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t, null);
+					else if (a instanceof Path)
+						rp[i] = new RestParamDefaults.PathObject(method, (Path)a, t, ps, rp[i]);					
 					else if (a instanceof PathRemainder)
 						rp[i] = new RestParamDefaults.PathRemainderObject(method, t);					
 					else if (a instanceof Response)
@@ -4323,6 +4324,8 @@ public final class RestContext extends BeanContext {
 					rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t, rp[i]);
 				else if (a instanceof org.apache.juneau.rest.annotation.Method)
 					rp[i] = new RestParamDefaults.MethodObject(method, t);
+				else if (a instanceof Path)
+					rp[i] = new RestParamDefaults.PathObject(method, (Path)a, t, ps, rp[i]);
 				else if (a instanceof PathRemainder)
 					rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
 				else if (a instanceof Response)
@@ -4343,33 +4346,10 @@ public final class RestContext extends BeanContext {
 			}
 
 			if (rp[i] == null) {
-
 				if (isPreOrPost)
 					throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", method, i);
-
-				Path p = null;
-				for (Annotation a : pa[i])
-					if (a instanceof Path)
-						p = (Path)a;
-
-				String name = (p == null ? "" : firstNonEmpty(p.name(), p.value()));
-
-				if (isEmpty(name)) {
-					int idx = attrIndex++;
-					String[] vars = pathPattern.getVars();
-					if (vars.length <= idx)
-						throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method);
-
-					// Check for {#} variables.
-					String idxs = String.valueOf(idx);
-					for (int j = 0; j < vars.length; j++)
-						if (isNumeric(vars[j]) && vars[j].equals(idxs))
-							name = vars[j];
-
-					if (isEmpty(name))
-						name = pathPattern.getVars()[idx];
-				}
-				rp[i] = new RestParamDefaults.PathParameterObject(name, p, t);
+			} else {
+				rp[i].validate();
 			}
 		}
 

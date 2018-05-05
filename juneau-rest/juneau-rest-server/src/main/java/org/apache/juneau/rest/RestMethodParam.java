@@ -25,6 +25,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -204,4 +205,11 @@ public abstract class RestMethodParam {
 	public Type getType() {
 		return type;
 	}
+	
+	/**
+	 * Performs validation on the parameter.
+	 * 
+	 * @throws InternalServerError
+	 */
+	public void validate() throws InternalServerError {}
 }

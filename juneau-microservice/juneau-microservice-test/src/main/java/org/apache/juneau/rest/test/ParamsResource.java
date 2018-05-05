@@ -63,17 +63,17 @@ public class ParamsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(name=GET, path="/get1/{foo}")
-	public void doGet1a(RestResponse res, String foo) {
+	public void doGet1a(RestResponse res, @Path("foo") String foo) {
 		res.setOutput("GET /get1a " + foo);
 	}
 
 	@RestMethod(name=GET, path="/get1/{foo}/{bar}")
-	public void doGet1b(RestResponse res, String foo, String bar) {
+	public void doGet1b(RestResponse res, @Path("foo") String foo, @Path("bar") String bar) {
 		res.setOutput("GET /get1b " + foo + "," + bar);
 	}
 
 	@RestMethod(name=GET, path="/get3/{foo}/{bar}/*")
-	public void doGet3(HttpServletRequest reqx, HttpServletResponse resx, String foo, int bar) {
+	public void doGet3(HttpServletRequest reqx, HttpServletResponse resx, @Path("foo") String foo, @Path("bar") int bar) {
 		RestRequest req = (RestRequest)reqx;
 		RestResponse res = (RestResponse)resx;
 		res.setOutput("GET /get3/"+foo+"/"+bar+" remainder="+req.getPathMatch().getRemainder());
@@ -93,25 +93,45 @@ public class ParamsResource extends BasicRestServlet {
 
 	// Bean parameter
 	@RestMethod(name=POST, path="/person/{person}")
-	public void doPost(RestRequest req, RestResponse res, Person p) {
+	public void doPost(RestRequest req, RestResponse res, @Path("person") Person p) {
 		res.setOutput("POST /person/{name="+p.name+",birthDate.year="+p.birthDate.get(Calendar.YEAR)+"} remainder="+req.getPathMatch().getRemainder());
 	}
 
 	// Various primitive types
 	@RestMethod(name=PUT, path="/primitives/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-	public void doPut1(RestResponse res, int xInt, short xShort, long xLong, char xChar, float xFloat, double xDouble, byte xByte, boolean xBoolean) {
+	public void doPut1(
+			RestResponse res, 
+			@Path("xInt") int xInt, 
+			@Path("xShort") short xShort, 
+			@Path("xLong") long xLong, 
+			@Path("xChar") char xChar, 
+			@Path("xFloat") float xFloat, 
+			@Path("xDouble") double xDouble, 
+			@Path("xByte") byte xByte, 
+			@Path("xBoolean") boolean xBoolean
+		) {
 		res.setOutput("PUT /primitives/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
 	}
 
 	// Various primitive objects
 	@RestMethod(name=PUT, path="/primitiveObjects/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-	public void doPut2(RestResponse res, Integer xInt, Short xShort, Long xLong, Character xChar, Float xFloat, Double xDouble, Byte xByte, Boolean xBoolean) {
+	public void doPut2(
+			RestResponse res, 
+			@Path("xInt") Integer xInt, 
+			@Path("xShort") Short xShort, 
+			@Path("xLong") Long xLong, 
+			@Path("xChar") Character xChar, 
+			@Path("xFloat") Float xFloat, 
+			@Path("xDouble") Double xDouble, 
+			@Path("xByte") Byte xByte, 
+			@Path("xBoolean") Boolean xBoolean
+		) {
 		res.setOutput("PUT /primitiveObjects/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
 	}
 
 	// Object with forString(String) method
 	@RestMethod(name=PUT, path="/uuid/{uuid}")
-	public void doPut1(RestResponse res, UUID uuid) {
+	public void doPut1(RestResponse res, @Path("uuid") UUID uuid) {
 		res.setOutput("PUT /uuid/"+uuid);
 	}
 

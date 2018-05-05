@@ -11562,9 +11562,9 @@
 		RestRequest req,
 		RestResponse res,
 		<ja>@Method</ja> String method,
-		<ja>@Path</ja> String a1,
-		<ja>@Path</ja> <jk>int</jk> a2,
-		<ja>@Path</ja> UUID a3,
+		<ja>@Path</ja>(<js>"a1"</js>) String a1,
+		<ja>@Path</ja>(<js>"a2"</js>) <jk>int</jk> a2,
+		<ja>@Path</ja>(<js>"a3"</js>) UUID a3,
 		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1,
 		<ja>@Query</ja>(<js>"p2"</js>) String p2,
 		<ja>@Query</ja>(<js>"p3"</js>) UUID p3,
@@ -11852,7 +11852,7 @@
 
 	<jc>// Method with path pattern with arguments</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
-	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyEnum baz, <ja>@Path</ja> UUID bing) {
+	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja>(<js>"foo"</js>) String foo, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Path</ja>(<js>"baz"</js>) MyEnum baz, <ja>@Path</ja>(<js>"bing"</js>) UUID bing) {
 		...
 	}
 			</p>
@@ -12045,14 +12045,14 @@
 			<p class='bcode w800'>
 	<jc>// Equivalent method 1</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
-	<jk>public</jk> Person doGet1(<ja>@Path</ja> UUID personId) {
+	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person p = getPersonById(personId);
 		<jk>return</jk> p;
 	}
 
 	<jc>// Equivalent method 2</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
-	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
+	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person p = getPersonById(personId);
 		res.setOutput(p);
 	}
@@ -12060,7 +12060,7 @@
 	<jc>// (Sorta) Equivalent method 3</jc>
 	<jc>// (Ignores any converters or method-level properties)</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
-	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja> UUID personId) {
+	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person p = getPersonById(personId);
 		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);
 		WriterSerializer s = res.getSerializerGroup().getWriterSerializer(accept);
@@ -12976,7 +12976,7 @@
 		name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>,
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
 	)
-	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) {
+	<jk>public</jk> Person getPerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) {
 		<jk>return</jk> findPerson(id);
 	}
 		</p>	
@@ -14651,7 +14651,7 @@
 		
 		<jd>/** GET request handler for single photo */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
-		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja> int id) <jk>throws</jk> Exception {
+		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) int id) <jk>throws</jk> Exception {
 			Photo p = photos.get(id);
 			if (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -14660,7 +14660,7 @@
 		
 		<jd>/** PUT request handler */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
+		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			photos.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
@@ -14676,7 +14676,7 @@
 		
 		<jd>/** DELETE request handler */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>)
-		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
+		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception {
 			Photo p = photos.remove(id);
 			if (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -17707,7 +17707,7 @@
 				<js>"}"</js>
 			}
 		)
-		<jk>public</jk> String getSystemProperty(<ja>@Path</ja> String propertyName) <jk>throws</jk> Throwable {
+		<jk>public</jk> String getSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName) <jk>throws</jk> Throwable {
 			<jk>return</jk> System.<jsm>getProperty</jsm>(propertyName);
 		}
 	
@@ -17727,7 +17727,7 @@
 				<js>"}"</js>
 			}
 		)
-		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja> String propertyName, <ja>@Body</ja> String value) {
+		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName, <ja>@Body</ja> String value) {
 			System.<jsm>setProperty</jsm>(propertyName, value);
 			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
 		}
@@ -17768,7 +17768,7 @@
 				<js>"}"</js>
 			}
 		)
-		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja> String propertyName) {
+		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName) {
 			System.<jsm>clearProperty</jsm>(propertyName);
 			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
 		}
@@ -17913,9 +17913,9 @@
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{p1}/{p2}/{p3}/*"</js>)
 		<jk>public</jk> String example1(
 				<ja>@Method</ja> String method,                  <jc>// HTTP method.</jc>
-				<ja>@Path</ja> String p1,                        <jc>// Path variables.</jc>
-				<ja>@Path</ja> <jk>int</jk> p2,
-				<ja>@Path</ja> UUID p3,
+				<ja>@Path</ja>(<js>"p1"</js>) String p1,                        <jc>// Path variables.</jc>
+				<ja>@Path</ja>(<js>"p2"</js>) <jk>int</jk> p2,
+				<ja>@Path</ja>(<js>"p3"</js>) UUID p3,
 				<ja>@Query</ja>(<js>"q1"</js>) <jk>int</jk> q1,                    <jc>// Query parameters.</jc>
 				<ja>@Query</ja>(<js>"q2"</js>) String q2,
 				<ja>@Query</ja>(<js>"q3"</js>) UUID q3,
@@ -18982,7 +18982,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
 		) 
-		<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> Person getPerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>return</jk> findPerson(id); 
 		} 
 		
@@ -19004,7 +19004,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/addresses/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
 		) 
-		<jk>public</jk> Address getAddress(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> Address getAddress(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>return</jk> findAddress(id); 
 		} 
 		
@@ -19027,7 +19027,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/people/{id}/addresses"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> Redirect createAddress(<ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> CreateAddress ca) <jk>throws</jk> Exception { 
+		<jk>public</jk> Redirect createAddress(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@Body</ja> CreateAddress ca) <jk>throws</jk> Exception { 
 			Person p = findPerson(id); 
 			Address a = p.createAddress(ca); 
 			<jk>return new</jk> Redirect(<js>"addresses/{0}"</js>, a.id); 
@@ -19040,7 +19040,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/people/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk>, 
 		) 
-		<jk>public</jk> String deletePerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String deletePerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jf>addressBook</jf>.removePerson(id); 
 			<jk>return</jk> <js>"DELETE successful"</js>; 
 		} 
@@ -19052,7 +19052,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/addresses/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String deleteAddress(<ja>@Path</ja> <jk>int</jk> addressId) <jk>throws</jk> Exception { 
+		<jk>public</jk> String deleteAddress(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> addressId) <jk>throws</jk> Exception { 
 			Person p = <jf>addressBook</jf>.findPersonWithAddress(addressId); 
 			<jk>if</jk> (p == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Person not found"</js>); 
@@ -19068,7 +19068,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> 
+		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@PathRemainder</ja> 
 				String remainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Person p = findPerson(id); 
@@ -19089,7 +19089,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/addresses/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, 
+		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, 
 				<ja>@PathRemainder</ja> String remainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Address a = findAddress(id); 
@@ -20109,7 +20109,7 @@
 	
 		<jd>/** GET request handler for single photo */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>, summary=<js>"Get a photo by ID"</js>)
-		<jk>public</jk> BufferedImage getPhoto(<ja>@Path</ja> String id) <jk>throws</jk> Exception {
+		<jk>public</jk> BufferedImage getPhoto(<ja>@Path</ja>(<js>"id"</js>) String id) <jk>throws</jk> Exception {
 			Photo p = <jf>photos</jf>.get(id);
 			<jk>if</jk> (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -20118,7 +20118,7 @@
 	
 		<jd>/** PUT request handler */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>, summary=<js>"Add or overwrite a photo"</js>)
-		<jk>public</jk> String addPhoto(<ja>@Path</ja> String id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
+		<jk>public</jk> String addPhoto(<ja>@Path</ja>(<js>"id"</js>) String id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			<jf>photos</jf>.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
@@ -20133,7 +20133,7 @@
 	
 		<jd>/** DELETE request handler */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>, summary=<js>"Delete a photo by ID"</js>)
-		<jk>public</jk> String deletePhoto(<ja>@Path</ja> String id) <jk>throws</jk> Exception {
+		<jk>public</jk> String deletePhoto(<ja>@Path</ja>(<js>"id"</js>) String id) <jk>throws</jk> Exception {
 			Photo p = <jf>photos</jf>.remove(id);
 			<jk>if</jk> (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -23066,9 +23066,9 @@
 	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>) 
 	<jk>public</jk> String example1( 
 		<ja>@Method</ja> String method, 
-		<ja>@Path</ja> String a1, 
-		<ja>@Path</ja> <jk>int</jk> a2, 
-		<ja>@Path</ja> UUID a3, 
+		<ja>@Path</ja>(<js>"a1"</js>) String a1, 
+		<ja>@Path</ja>(<js>"a2"</js>) <jk>int</jk> a2, 
+		<ja>@Path</ja>(<js>"a3"</js>) UUID a3, 
 		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
 		<ja>@Query</ja>(<js>"p2"</js>) String p2, 
 		<ja>@Query</ja>(<js>"p3"</js>) UUID p3, 
@@ -23424,15 +23424,6 @@
 				See {@link org.apache.juneau.rest.annotation.RestMethod#name() @RestMethod.name()} for more information.
 			<li>{@link org.apache.juneau.rest.RestRequest#toString()} can be called at any time to view the headers and content of the request
 				without affecting functionality.  Very useful for debugging.
-			<li>You can now use numeric values in path annotations.  
-				<br>When using numeric variable names, you don't need to specify the variable name in the <ja>@Path</ja> annoation:
-				<p class='bcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
-	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
-			<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> UUID baz) {
-		...
-	}
-				</p>
 			<li>{@link org.apache.juneau.rest.annotation.RestMethod#name() @RestMethod.name()} annotation is now optional.  Defaults to <js>"GET"</js>.
 		</ul>
 

@@ -123,7 +123,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		)
 	)
 	public String getSystemProperty(
-			@Path(description="The system property name.", example="PATH") String propertyName
+			@Path(name="propertyName", description="The system property name.", example="PATH") String propertyName
 		) throws NotAcceptable {
 		
 		return System.getProperty(propertyName);
@@ -136,7 +136,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public RedirectToServletRoot setSystemProperty(
-			@Path(description="The system property name") String propertyName, 
+			@Path(name="propertyName", description="The system property name") String propertyName, 
 			@Body(description="The new system property value") String value
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 		
@@ -165,7 +165,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public RedirectToServletRoot deleteSystemProperty(
-			@Path(description="The system property name", example="PATH") String propertyName
+			@Path(name="propertyName", description="The system property name", example="PATH") String propertyName
 		) throws UserNotAdminException, NotAcceptable {
 		
 		System.clearProperty(propertyName);

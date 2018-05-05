@@ -81,9 +81,9 @@ public class MethodExampleResource extends BasicRestServlet {
 	)
 	public Map<String,Object> example1(
 			@Method String method,                  // HTTP method.
-			@Path String p1,                        // Path variables.
-			@Path int p2,
-			@Path UUID p3,
+			@Path("p1") String p1,                        // Path variables.
+			@Path("p2") int p2,
+			@Path("p3") UUID p3,
 			@Query("q1") int q1,                    // Query parameters.
 			@Query("q2") String q2,
 			@Query(name="q3",_default=SAMPLE_UUID_STRING) UUID q3,
