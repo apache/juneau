@@ -3867,7 +3867,7 @@ public class BasicRestInfoProviderTest {
 		public Foo pb20a(@Header(name="H", _default="a") String h) { return null; }
 
 		@RestMethod(name=GET,path="/_default2")
-		public Foo pb20b(@Header(name="H", _default= {"a","b"}) String h) { return null; }
+		public Foo pb20b(@Header(name="H", _default={"a","b"}) String h) { return null; }
 
 		@RestMethod(name=GET,path="/_enum1")
 		public Foo pb21a(@Header(name="H", _enum="a,b") String h) { return null; }
@@ -4013,33 +4013,302 @@ public class BasicRestInfoProviderTest {
 	@RestResource()
 	public static class QA {
 
-//	boolean multipart() default false;
-//	String name() default "";
-//	String value() default "";
-//	String[] description() default {};
-//	String required() default "";
-//	String type() default "";
-//	String format() default "";
-//	String pattern() default "";
-//	String collectionFormat() default "";
-//	String maximum() default "";
-//	String minimum() default "";
-//	String multipleOf() default "";
-//	String maxLength() default "";
-//	String minLength() default "";
-//	String maxItems() default "";
-//	String minItems() default "";
-//	String allowEmptyValue() default "";
-//	String exclusiveMaximum() default "";
-//	String exclusiveMinimum() default "";
-//	String uniqueItems() default "";
-//	String[] schema() default {};
-//	String[] _default() default {};
-//	String[] _enum() default {};
-//	String[] items() default {};	
-//	String[] example() default {};
+		@Query("Q")
+		public static class QA01h {}
+		
+		@RestMethod(name=GET,path="/value")
+		public Foo qa01(QA01h h) { return null; }
+
+		//	String[] description() default {};
+		@Query(name="Q", description="a")
+		public static class QA02ah {}
+		
+		@RestMethod(name=GET,path="/description1")
+		public Foo qa02a(QA02ah h) { return null; }
+
+		@Query(name="Q", description= {"a","b"})
+		public static class QA02bh {}
+		
+		@RestMethod(name=GET,path="/description2")
+		public Foo qa02b(QA02bh h) { return null; }
+
+		@Query(name="Q", required="true")
+		public static class QA03h {}
+		
+		@RestMethod(name=GET,path="/required")
+		public Foo qa03(QA03h h) { return null; }
+
+		@Query(name="Q", type="a")
+		public static class QA04h {}
+		
+		@RestMethod(name=GET,path="/type")
+		public Foo qa04(QA04h h) { return null; }
+
+		@Query(name="Q", format="a")
+		public static class QA05h {}
+		
+		@RestMethod(name=GET,path="/format")
+		public Foo qa05(QA05h h) { return null; }
+
+		@Query(name="Q", pattern="a")
+		public static class QA06h {}
+		
+		@RestMethod(name=GET,path="/pattern")
+		public Foo qa06(QA06h h) { return null; }
+
+		@Query(name="Q", collectionFormat="a")
+		public static class QA07h {}
+		
+		@RestMethod(name=GET,path="/collectionFormat")
+		public Foo qa07(QA07h h) { return null; }
+
+		@Query(name="Q", maximum="1")
+		public static class QA08h {}
+		
+		@RestMethod(name=GET,path="/maximum")
+		public Foo qa08(QA08h h) { return null; }
+
+		@Query(name="Q", minimum="1")
+		public static class QA09h {}
+		
+		@RestMethod(name=GET,path="/minimum")
+		public Foo qa09(QA09h h) { return null; }
+
+		@Query(name="Q", multipleOf="1")
+		public static class QA10h {}
+		
+		@RestMethod(name=GET,path="/multipleOf")
+		public Foo qa10(QA10h h) { return null; }
+
+		@Query(name="Q", maxLength="1")
+		public static class QA11h {}
+		
+		@RestMethod(name=GET,path="/maxLength")
+		public Foo qa11(QA11h h) { return null; }
+
+		@Query(name="Q", minLength="1")
+		public static class QA12h {}
+		
+		@RestMethod(name=GET,path="/minLength")
+		public Foo qa12(QA12h h) { return null; }
+
+		@Query(name="Q", maxItems="1")
+		public static class QA13h {}
+		
+		@RestMethod(name=GET,path="/maxItems")
+		public Foo qa13(QA13h h) { return null; }
+
+		@Query(name="Q", minItems="1")
+		public static class QA14h {}
+		
+		@RestMethod(name=GET,path="/minItems")
+		public Foo qa14(QA14h h) { return null; }
+
+		@Query(name="Q", allowEmptyValue="true")
+		public static class QA15h {}
+		
+		@RestMethod(name=GET,path="/allowEmptyValue")
+		public Foo qa15(QA15h h) { return null; }
+
+		@Query(name="Q", exclusiveMaximum="true")
+		public static class QA16h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public Foo qa16(QA16h h) { return null; }
+
+		@Query(name="Q", exclusiveMinimum="true")
+		public static class QA17h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public Foo qa17(QA17h h) { return null; }
+
+		@Query(name="Q", uniqueItems="true")
+		public static class QA18h {}
+		
+		@RestMethod(name=GET,path="/uniqueItems")
+		public Foo qa18(QA18h h) { return null; }
+
+		@Query(name="Q", schema=" {type:'a'} ")
+		public static class QA19h {}
+		
+		@RestMethod(name=GET,path="/schema1")
+		public Foo qa19(QA19h h) { return null; }
+
+		@Query(name="Q", schema={" type:'b' "})
+		public static class QA20h {}
+		
+		@RestMethod(name=GET,path="/schema2")
+		public Foo qa20(QA20h h) { return null; }
+
+		@Query(name="Q", _default="a")
+		public static class QA21ah {}
+		
+		@RestMethod(name=GET,path="/_default1")
+		public Foo qa21a(QA21ah h) { return null; }
+
+		@Query(name="Q", _default={"a","b"})
+		public static class QA21bh {}
+		
+		@RestMethod(name=GET,path="/_default2")
+		public Foo qa21b(QA21bh h) { return null; }
+
+		@Query(name="Q", _enum=" a,b ")
+		public static class QA22ah {}
+		
+		@RestMethod(name=GET,path="/_enum1")
+		public Foo qa22a(QA22ah h) { return null; }
+
+		@Query(name="Q", _enum={" ['a','b'] "})
+		public static class QA22bh {}
+		
+		@RestMethod(name=GET,path="/_enum2")
+		public Foo qa22b(QA22bh h) { return null; }
+
+		@Query(name="Q", items=" {type:'a'} ")
+		public static class QA23ah {}
+		
+		@RestMethod(name=GET,path="/items1")
+		public Foo qa23a(QA23ah h) { return null; }
+
+		@Query(name="Q", items={" type: 'b' "})
+		public static class QA23bh {}
+		
+		@RestMethod(name=GET,path="/items2")
+		public Foo qa23b(QA23bh h) { return null; }
+
+		@Query(name="Q", example="'a'")
+		public static class QA24ah {
+			public QA24ah(String value) {}
+		}
+		
+		@RestMethod(name=GET,path="/example1")
+		public Foo qa24a(QA24ah h) { return null; }
+
+		@Query(name="Q", example={"{f1:'a'}"})
+		public static class QA24bh {
+			public String f1;
+		}
+		
+		@RestMethod(name=GET,path="/example2")
+		public Foo qa24b(QA24bh h) { return null; }
 	}
 	
+	@Test
+	public void qa01_Query_onPojo_value() throws Exception {
+		assertEquals("Q", getSwagger(new QA()).getPaths().get("/value").get("get").getParameter("query", "Q").getName());
+	}
+	@Test
+	public void qa02a_Query_onPojo_description1() throws Exception {
+		assertEquals("a", getSwagger(new QA()).getPaths().get("/description1").get("get").getParameter("query", "Q").getDescription());
+	}
+	@Test
+	public void qa02b_Query_onPojo_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new QA()).getPaths().get("/description2").get("get").getParameter("query", "Q").getDescription());
+	}
+	@Test
+	public void qa03_Query_onPojor_required() throws Exception {
+		assertObjectEquals("true", getSwagger(new QA()).getPaths().get("/required").get("get").getParameter("query", "Q").getRequired());
+	}
+	@Test
+	public void qa04_Query_onPojo_type() throws Exception {
+		assertEquals("a", getSwagger(new QA()).getPaths().get("/type").get("get").getParameter("query", "Q").getType());
+	}
+	@Test
+	public void qa05_Query_onPojo_format() throws Exception {
+		assertEquals("a", getSwagger(new QA()).getPaths().get("/format").get("get").getParameter("query", "Q").getFormat());
+	}
+	@Test
+	public void qa06_Query_onPojo_pattern() throws Exception {
+		assertEquals("a", getSwagger(new QA()).getPaths().get("/pattern").get("get").getParameter("query", "Q").getPattern());
+	}
+	@Test
+	public void qa07_Query_onPojo_collectionFormat() throws Exception {
+		assertEquals("a", getSwagger(new QA()).getPaths().get("/collectionFormat").get("get").getParameter("query", "Q").getCollectionFormat());
+	}
+	@Test
+	public void qa08_Query_onPojo_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new QA()).getPaths().get("/maximum").get("get").getParameter("query", "Q").getMaximum());
+	}
+	@Test
+	public void qa09_Query_onPojo_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new QA()).getPaths().get("/minimum").get("get").getParameter("query", "Q").getMinimum());
+	}
+	@Test
+	public void qa10_Query_onPojo_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new QA()).getPaths().get("/multipleOf").get("get").getParameter("query", "Q").getMultipleOf());
+	}
+	@Test
+	public void qa11_Query_onPojo_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new QA()).getPaths().get("/maxLength").get("get").getParameter("query", "Q").getMaxLength());
+	}
+	@Test
+	public void qa12_Query_onPojo_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new QA()).getPaths().get("/minLength").get("get").getParameter("query", "Q").getMinLength());
+	}
+	@Test
+	public void qa13_Query_onPojo_maxItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new QA()).getPaths().get("/maxItems").get("get").getParameter("query", "Q").getMaxItems());
+	}
+	@Test
+	public void qa14_Query_onPojo_minItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new QA()).getPaths().get("/minItems").get("get").getParameter("query", "Q").getMinItems());
+	}
+	@Test
+	public void qa15_Query_onPojo_allowEmptyValue() throws Exception {
+		assertObjectEquals("true", getSwagger(new QA()).getPaths().get("/allowEmptyValue").get("get").getParameter("query", "Q").getAllowEmptyValue());
+	}
+	@Test
+	public void qa16_Query_onPojo_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new QA()).getPaths().get("/exclusiveMaximum").get("get").getParameter("query", "Q").getExclusiveMaximum());
+	}
+	@Test
+	public void qa17_Query_onPojo_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new QA()).getPaths().get("/exclusiveMinimum").get("get").getParameter("query", "Q").getExclusiveMinimum());
+	}
+	@Test
+	public void qa18_Query_onPojo_uniqueItems() throws Exception {
+		assertObjectEquals("true", getSwagger(new QA()).getPaths().get("/uniqueItems").get("get").getParameter("query", "Q").getUniqueItems());
+	}
+	@Test
+	public void qa19_Query_onPojo_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new QA()).getPaths().get("/schema1").get("get").getParameter("query", "Q").getSchema());
+	}
+	@Test
+	public void qa20_Query_onPojo_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new QA()).getPaths().get("/schema2").get("get").getParameter("query", "Q").getSchema());
+	}
+	@Test
+	public void qa21a_Query_onPojo_default1() throws Exception {
+		assertEquals("a", getSwagger(new QA()).getPaths().get("/_default1").get("get").getParameter("query", "Q").getDefault());
+	}
+	@Test
+	public void qa21b_Query_onPojo_default2() throws Exception {
+		assertEquals("a\nb", getSwagger(new QA()).getPaths().get("/_default2").get("get").getParameter("query", "Q").getDefault());
+	}
+	@Test
+	public void qa22a_Query_onPojo_enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new QA()).getPaths().get("/_enum1").get("get").getParameter("query", "Q").getEnum());
+	}
+	@Test
+	public void qa22b_Query_onPojo_enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new QA()).getPaths().get("/_enum2").get("get").getParameter("query", "Q").getEnum());
+	}
+	@Test
+	public void qa23a_Query_onPojo_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new QA()).getPaths().get("/items1").get("get").getParameter("query", "Q").getItems());
+	}
+	@Test
+	public void qa23b_Query_onPojo_items2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new QA()).getPaths().get("/items2").get("get").getParameter("query", "Q").getItems());
+	}
+	@Test
+	public void qa24a_Query_onPojo_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new QA()).getPaths().get("/example1").get("get").getParameter("query", "Q").getExample());
+	}
+	@Test
+	public void qa24b_Query_onPojo_example2() throws Exception {
+		assertObjectEquals("{f1:'a'}", getSwagger(new QA()).getPaths().get("/example2").get("get").getParameter("query", "Q").getExample());
+	}
 		
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Query on parameter
@@ -4047,31 +4316,217 @@ public class BasicRestInfoProviderTest {
 
 	@RestResource()
 	public static class QB {
-//	boolean multipart() default false;
-//	String name() default "";
-//	String value() default "";
-//	String[] description() default {};
-//	String required() default "";
-//	String type() default "";
-//	String format() default "";
-//	String pattern() default "";
-//	String collectionFormat() default "";
-//	String maximum() default "";
-//	String minimum() default "";
-//	String multipleOf() default "";
-//	String maxLength() default "";
-//	String minLength() default "";
-//	String maxItems() default "";
-//	String minItems() default "";
-//	String allowEmptyValue() default "";
-//	String exclusiveMaximum() default "";
-//	String exclusiveMinimum() default "";
-//	String uniqueItems() default "";
-//	String[] schema() default {};
-//	String[] _default() default {};
-//	String[] _enum() default {};
-//	String[] items() default {};	
-//	String[] example() default {};
+		
+		@RestMethod(name=GET,path="/name")
+		public Foo qb01(@Query(name="Q") String h) { return null; }
+
+		@RestMethod(name=GET,path="/value")
+		public Foo qb02(@Query("Q") String h) { return null; }
+
+		@RestMethod(name=GET,path="/description1")
+		public Foo qb03a(@Query(name="Q", description="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/description2")
+		public Foo qb03b(@Query(name="Q", description= {"a","b"}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/required")
+		public Foo qb04(@Query(name="Q", required="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/type")
+		public Foo qb05(@Query(name="Q", type="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/format")
+		public Foo qb06(@Query(name="Q", format="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/pattern")
+		public Foo qb07(@Query(name="Q", pattern="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/collectionFormat")
+		public Foo qb08(@Query(name="Q", collectionFormat="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maximum")
+		public Foo qb09(@Query(name="Q", maximum="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minimum")
+		public Foo qb10(@Query(name="Q", minimum="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/multipleOf")
+		public Foo qb11(@Query(name="Q", multipleOf="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maxLength")
+		public Foo qb12(@Query(name="Q", maxLength="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minLength")
+		public Foo qb13(@Query(name="Q", minLength="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maxItems")
+		public Foo qb14(@Query(name="Q", maxItems="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minItems")
+		public Foo qb(@Query(name="Q", minItems="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/allowEmptyValue")
+		public Foo qb15(@Query(name="Q", allowEmptyValue="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public Foo qb16(@Query(name="Q", exclusiveMaximum="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public Foo qb17(@Query(name="Q", exclusiveMinimum="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/uniqueItems")
+		public Foo qb18(@Query(name="Q", uniqueItems="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/schema1")
+		public Foo qb19a(@Query(name="Q", schema=" {type:'a'} ") String h) { return null; }
+
+		@RestMethod(name=GET,path="/schema2")
+		public Foo qb19b(@Query(name="Q", schema={ " type: 'b' "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/_default1")
+		public Foo qb20a(@Query(name="Q", _default="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/_default2")
+		public Foo qb20b(@Query(name="Q", _default={"a","b"}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/_enum1")
+		public Foo qb21a(@Query(name="Q", _enum="a,b") String h) { return null; }
+
+		@RestMethod(name=GET,path="/_enum2")
+		public Foo qb21b(@Query(name="Q", _enum= {" ['a','b'] "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/items1")
+		public Foo qb22a(@Query(name="Q", items=" {type:'a'} ") String h) { return null; }
+
+		@RestMethod(name=GET,path="/items2")
+		public Foo qb22b(@Query(name="Q", items={" type:'b' "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/example1")
+		public Foo qb23a(@Query(name="Q", example="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/example2")
+		public Foo qb23b(@Query(name="Q", example={"a","b"}) String h) { return null; }
+	}
+	
+	@Test
+	public void qb01_Query_onParameter_name() throws Exception {
+		assertEquals("Q", getSwagger(new QB()).getPaths().get("/name").get("get").getParameter("query", "Q").getName());
+	}
+	@Test
+	public void qb02_Query_onParameter_value() throws Exception {
+		assertEquals("Q", getSwagger(new QB()).getPaths().get("/value").get("get").getParameter("query", "Q").getName());
+	}
+	@Test
+	public void qb03a_Query_onParameter_description1() throws Exception {
+		assertEquals("a", getSwagger(new QB()).getPaths().get("/description1").get("get").getParameter("query", "Q").getDescription());
+	}
+	@Test
+	public void qb03b_Query_onParameter_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new QB()).getPaths().get("/description2").get("get").getParameter("query", "Q").getDescription());
+	}
+	@Test
+	public void qb04_Query_onParameter_required() throws Exception {
+		assertObjectEquals("true", getSwagger(new QB()).getPaths().get("/required").get("get").getParameter("query", "Q").getRequired());
+	}
+	@Test
+	public void qb05_Query_onParameter_type() throws Exception {
+		assertEquals("a", getSwagger(new QB()).getPaths().get("/type").get("get").getParameter("query", "Q").getType());
+	}
+	@Test
+	public void qb06_Query_onParameter_format() throws Exception {
+		assertEquals("a", getSwagger(new QB()).getPaths().get("/format").get("get").getParameter("query", "Q").getFormat());
+	}
+	@Test
+	public void qb07_Query_onParameter_pattern() throws Exception {
+		assertEquals("a", getSwagger(new QB()).getPaths().get("/pattern").get("get").getParameter("query", "Q").getPattern());
+	}
+	@Test
+	public void qb08_Query_onParameter_collectionFormat() throws Exception {
+		assertEquals("a", getSwagger(new QB()).getPaths().get("/collectionFormat").get("get").getParameter("query", "Q").getCollectionFormat());
+	}
+	@Test
+	public void qb09_Query_onParameter_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new QB()).getPaths().get("/maximum").get("get").getParameter("query", "Q").getMaximum());
+	}
+	@Test
+	public void qb10_Query_onParameter_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new QB()).getPaths().get("/minimum").get("get").getParameter("query", "Q").getMinimum());
+	}
+	@Test
+	public void qb11_Query_onParameter_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new QB()).getPaths().get("/multipleOf").get("get").getParameter("query", "Q").getMultipleOf());
+	}
+	@Test
+	public void qb12_Query_onParameter_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new QB()).getPaths().get("/maxLength").get("get").getParameter("query", "Q").getMaxLength());
+	}
+	@Test
+	public void qb13_Query_onParameter_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new QB()).getPaths().get("/minLength").get("get").getParameter("query", "Q").getMinLength());
+	}
+	@Test
+	public void qb14a_Query_onParameter_maxItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new QB()).getPaths().get("/maxItems").get("get").getParameter("query", "Q").getMaxItems());
+	}
+	@Test
+	public void qb14b_Query_onParameter_minItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new QB()).getPaths().get("/minItems").get("get").getParameter("query", "Q").getMinItems());
+	}
+	@Test
+	public void qb15_Query_onParameter_allowEmptyValue() throws Exception {
+		assertObjectEquals("true", getSwagger(new QB()).getPaths().get("/allowEmptyValue").get("get").getParameter("query", "Q").getAllowEmptyValue());
+	}
+	@Test
+	public void qb16_Query_onParameter_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new QB()).getPaths().get("/exclusiveMaximum").get("get").getParameter("query", "Q").getExclusiveMaximum());
+	}
+	@Test
+	public void qb17_Query_onParameter_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new QB()).getPaths().get("/exclusiveMinimum").get("get").getParameter("query", "Q").getExclusiveMinimum());
+	}
+	@Test
+	public void qb18_Query_onParameter_uniqueItems() throws Exception {
+		assertObjectEquals("true", getSwagger(new QB()).getPaths().get("/uniqueItems").get("get").getParameter("query", "Q").getUniqueItems());
+	}
+	@Test
+	public void qb19a_Query_onParameter_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new QB()).getPaths().get("/schema1").get("get").getParameter("query", "Q").getSchema());
+	}
+	@Test
+	public void qb19b_Query_onParameter_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new QB()).getPaths().get("/schema2").get("get").getParameter("query", "Q").getSchema());
+	}
+	@Test
+	public void qb20a_Query_onParameter__default1() throws Exception {
+		assertEquals("a", getSwagger(new QB()).getPaths().get("/_default1").get("get").getParameter("query", "Q").getDefault());
+	}
+	@Test
+	public void qb20b_Query_onParameter__default2() throws Exception {
+		assertEquals("a\nb", getSwagger(new QB()).getPaths().get("/_default2").get("get").getParameter("query", "Q").getDefault());
+	}
+	@Test
+	public void qb21a_Query_onParameter__enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new QB()).getPaths().get("/_enum1").get("get").getParameter("query", "Q").getEnum());
+	}
+	@Test
+	public void qb21b_Query_onParameter__enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new QB()).getPaths().get("/_enum2").get("get").getParameter("query", "Q").getEnum());
+	}
+	@Test
+	public void qb22a_Query_onParameter_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new QB()).getPaths().get("/items1").get("get").getParameter("query", "Q").getItems());
+	}
+	@Test
+	public void qb22b_Query_onParameter_items2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new QB()).getPaths().get("/items2").get("get").getParameter("query", "Q").getItems());
+	}
+	@Test
+	public void qb23a_Query_onParameter_example1() throws Exception {
+		assertEquals("a", getSwagger(new QB()).getPaths().get("/example1").get("get").getParameter("query", "Q").getExample());
+	}
+	@Test
+	public void qb23b_Query_onParameter_example2() throws Exception {
+		assertEquals("a\nb", getSwagger(new QB()).getPaths().get("/example2").get("get").getParameter("query", "Q").getExample());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4080,32 +4535,311 @@ public class BasicRestInfoProviderTest {
 	
 	@RestResource()
 	public static class RA {
-//	boolean multipart() default false;
-//	String name() default "";
-//	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
-//	String value() default "";
-//	String[] description() default {};
-//	String required() default "";
-//	String type() default "";
-//	String format() default "";
-//	String pattern() default "";
-//	String collectionFormat() default "";
-//	String maximum() default "";
-//	String minimum() default "";
-//	String multipleOf() default "";
-//	String maxLength() default "";
-//	String minLength() default "";
-//	String maxItems() default "";
-//	String minItems() default "";
-//	String allowEmptyValue() default "";
-//	String exclusiveMaximum() default "";
-//	String exclusiveMinimum() default "";
-//	String uniqueItems() default "";
-//	String[] schema() default {};
-//	String[] _default() default {};
-//	String[] _enum() default {};
-//	String[] items() default {};	
-//	String[] example() default {};
+
+		@FormData(name="F")
+		public static class RA01h {}
+		
+		@RestMethod(name=GET,path="/name")
+		public Foo ra01(RA01h h) { return null; }
+
+		@FormData("F")
+		public static class RA02h {}
+		
+		@RestMethod(name=GET,path="/value")
+		public Foo ra02(RA02h h) { return null; }
+		
+		@FormData(name="F", description="a")
+		public static class RA03ah {}
+		
+		@RestMethod(name=GET,path="/description1")
+		public Foo ra03a(RA03ah h) { return null; }
+
+		@FormData(name="F", description= {"a","b"})
+		public static class RA03bh {}
+		
+		@RestMethod(name=GET,path="/description2")
+		public Foo ra03b(RA03bh h) { return null; }
+
+		@FormData(name="F", required="true")
+		public static class RA04h {}
+		
+		@RestMethod(name=GET,path="/required")
+		public Foo ra04(RA04h h) { return null; }
+
+		@FormData(name="F", type="a")
+		public static class RA05h {}
+		
+		@RestMethod(name=GET,path="/type")
+		public Foo ra05(RA05h h) { return null; }
+
+		@FormData(name="F", format="a")
+		public static class RA06h {}
+		
+		@RestMethod(name=GET,path="/format")
+		public Foo ra06(RA06h h) { return null; }
+
+		@FormData(name="F", pattern="a")
+		public static class RA07h {}
+		
+		@RestMethod(name=GET,path="/pattern")
+		public Foo ra07(RA07h h) { return null; }
+
+		@FormData(name="F", collectionFormat="a")
+		public static class RA08h {}
+		
+		@RestMethod(name=GET,path="/collectionFormat")
+		public Foo ra08(RA08h h) { return null; }
+
+		@FormData(name="F", maximum="1")
+		public static class RA09h {}
+		
+		@RestMethod(name=GET,path="/maximum")
+		public Foo ra09(RA09h h) { return null; }
+
+		@FormData(name="F", minimum="1")
+		public static class RA10h {}
+		
+		@RestMethod(name=GET,path="/minimum")
+		public Foo ra10(RA10h h) { return null; }
+
+		@FormData(name="F", multipleOf="1")
+		public static class RA11h {}
+		
+		@RestMethod(name=GET,path="/multipleOf")
+		public Foo ra11(RA11h h) { return null; }
+
+		@FormData(name="F", maxLength="1")
+		public static class RA12h {}
+		
+		@RestMethod(name=GET,path="/maxLength")
+		public Foo ra12(RA12h h) { return null; }
+
+		@FormData(name="F", minLength="1")
+		public static class RA13h {}
+		
+		@RestMethod(name=GET,path="/minLength")
+		public Foo ra13(RA13h h) { return null; }
+
+		@FormData(name="F", maxItems="1")
+		public static class RA14h {}
+		
+		@RestMethod(name=GET,path="/maxItems")
+		public Foo ra14(RA14h h) { return null; }
+
+		@FormData(name="F", minItems="1")
+		public static class RA15h {}
+		
+		@RestMethod(name=GET,path="/minItems")
+		public Foo ra15(RA15h h) { return null; }
+
+		@FormData(name="F", allowEmptyValue="true")
+		public static class RA16h {}
+		
+		@RestMethod(name=GET,path="/allowEmptyValue")
+		public Foo ra16(RA16h h) { return null; }
+
+		@FormData(name="F", exclusiveMaximum="true")
+		public static class RA17h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public Foo ra17(RA17h h) { return null; }
+
+		@FormData(name="F", exclusiveMinimum="true")
+		public static class RA18h {}
+		
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public Foo ra18(RA18h h) { return null; }
+
+		@FormData(name="F", uniqueItems="true")
+		public static class RA19h {}
+		
+		@RestMethod(name=GET,path="/uniqueItems")
+		public Foo ra19(RA19h h) { return null; }
+
+		@FormData(name="F", schema=" {type:'a'} ")
+		public static class RA20h {}
+		
+		@RestMethod(name=GET,path="/schema1")
+		public Foo ra20(RA20h h) { return null; }
+
+		@FormData(name="F", schema={" type:'b' "})
+		public static class RA21h {}
+		
+		@RestMethod(name=GET,path="/schema2")
+		public Foo ra21(RA21h h) { return null; }
+
+		@FormData(name="F", _default="a")
+		public static class RA22h {}
+		
+		@RestMethod(name=GET,path="/_default1")
+		public Foo ra22(RA22h h) { return null; }
+
+		@FormData(name="F", _default={"a","b"})
+		public static class RA23h {}
+		
+		@RestMethod(name=GET,path="/_default2")
+		public Foo ra23(RA23h h) { return null; }
+
+		@FormData(name="F", _enum=" a,b ")
+		public static class RA24h {}
+		
+		@RestMethod(name=GET,path="/_enum1")
+		public Foo ra24(RA24h h) { return null; }
+
+		@FormData(name="F", _enum={ "['a','b']" })
+		public static class RA25h {}
+		
+		@RestMethod(name=GET,path="/_enum2")
+		public Foo ra25(RA25h h) { return null; }
+
+		@FormData(name="F", items=" {type:'a'} ")
+		public static class RA26h {}
+		
+		@RestMethod(name=GET,path="/items1")
+		public Foo ra26(RA26h h) { return null; }
+
+		@FormData(name="F", items={" type:'b' "})
+		public static class RA27h {}
+		
+		@RestMethod(name=GET,path="/items2")
+		public Foo ra27(RA27h h) { return null; }
+
+		@FormData(name="F", example="a")
+		public static class RA28h {
+			public RA28h(String value) {}
+		}
+		
+		@RestMethod(name=GET,path="/example1")
+		public Foo ra28(RA28h h) { return null; }
+
+		@FormData(name="F", example={"{f1:'a'}"})
+		public static class RA29h {
+			public String f1;
+		}
+		
+		@RestMethod(name=GET,path="/example2")
+		public Foo ra29(RA29h h) { return null; }
+	}
+	
+	@Test
+	public void ra01_FormData_onPojo_name() throws Exception {
+		assertEquals("F", getSwagger(new RA()).getPaths().get("/name").get("get").getParameter("formData", "F").getName());
+	}
+	@Test
+	public void ra02_FormData_onPojo_value() throws Exception {
+		assertEquals("F", getSwagger(new RA()).getPaths().get("/value").get("get").getParameter("formData", "F").getName());
+	}
+	@Test
+	public void ra03a_FormData_onPojo_description1() throws Exception {
+		assertEquals("a", getSwagger(new RA()).getPaths().get("/description1").get("get").getParameter("formData", "F").getDescription());
+	}
+	@Test
+	public void ra03b_FormData_onPojo_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new RA()).getPaths().get("/description2").get("get").getParameter("formData", "F").getDescription());
+	}
+	@Test
+	public void ra04_FormData_onPojo_required() throws Exception {
+		assertObjectEquals("true", getSwagger(new RA()).getPaths().get("/required").get("get").getParameter("formData", "F").getRequired());
+	}
+	@Test
+	public void ra05_FormData_onPojo_type() throws Exception {
+		assertEquals("a", getSwagger(new RA()).getPaths().get("/type").get("get").getParameter("formData", "F").getType());
+	}
+	@Test
+	public void ra06_FormData_onPojo_format() throws Exception {
+		assertEquals("a", getSwagger(new RA()).getPaths().get("/format").get("get").getParameter("formData", "F").getFormat());
+	}
+	@Test
+	public void ra07_FormData_onPojo_pattern() throws Exception {
+		assertEquals("a", getSwagger(new RA()).getPaths().get("/pattern").get("get").getParameter("formData", "F").getPattern());
+	}
+	@Test
+	public void ra08_FormData_onPojo_collectionFormat() throws Exception {
+		assertEquals("a", getSwagger(new RA()).getPaths().get("/collectionFormat").get("get").getParameter("formData", "F").getCollectionFormat());
+	}
+	@Test
+	public void ra09_FormData_onPojo_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new RA()).getPaths().get("/maximum").get("get").getParameter("formData", "F").getMaximum());
+	}
+	@Test
+	public void ra10_FormData_onPojo_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new RA()).getPaths().get("/minimum").get("get").getParameter("formData", "F").getMinimum());
+	}
+	@Test
+	public void ra11_FormData_onPojo_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new RA()).getPaths().get("/multipleOf").get("get").getParameter("formData", "F").getMultipleOf());
+	}
+	@Test
+	public void ra12_FormData_onPojo_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new RA()).getPaths().get("/maxLength").get("get").getParameter("formData", "F").getMaxLength());
+	}
+	@Test
+	public void ra13_FormData_onPojo_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new RA()).getPaths().get("/minLength").get("get").getParameter("formData", "F").getMinLength());
+	}
+	@Test
+	public void ra14_FormData_onPojo_maxItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new RA()).getPaths().get("/maxItems").get("get").getParameter("formData", "F").getMaxItems());
+	}
+	@Test
+	public void ra15_FormData_onPojo_minItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new RA()).getPaths().get("/minItems").get("get").getParameter("formData", "F").getMinItems());
+	}
+	@Test
+	public void ra16_FormData_onPojo_allowEmptyValue() throws Exception {
+		assertObjectEquals("true", getSwagger(new RA()).getPaths().get("/allowEmptyValue").get("get").getParameter("formData", "F").getAllowEmptyValue());
+	}
+	@Test
+	public void ra17_FormData_onPojo_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new RA()).getPaths().get("/exclusiveMaximum").get("get").getParameter("formData", "F").getExclusiveMaximum());
+	}
+	@Test
+	public void ra18_FormData_onPojo_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new RA()).getPaths().get("/exclusiveMinimum").get("get").getParameter("formData", "F").getExclusiveMinimum());
+	}
+	@Test
+	public void ra19_FormData_onPojo_uniqueItems() throws Exception {
+		assertObjectEquals("true", getSwagger(new RA()).getPaths().get("/uniqueItems").get("get").getParameter("formData", "F").getUniqueItems());
+	}
+	@Test
+	public void ra20_FormData_onPojo_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new RA()).getPaths().get("/schema1").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void ra21_FormData_onPojo_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new RA()).getPaths().get("/schema2").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void ra22_FormData_onPojo__default1() throws Exception {
+		assertEquals("a", getSwagger(new RA()).getPaths().get("/_default1").get("get").getParameter("formData", "F").getDefault());
+	}
+	@Test
+	public void ra23_FormData_onPojo__default2() throws Exception {
+		assertEquals("a\nb", getSwagger(new RA()).getPaths().get("/_default2").get("get").getParameter("formData", "F").getDefault());
+	}
+	@Test
+	public void ra24_FormData_onPojo__enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new RA()).getPaths().get("/_enum1").get("get").getParameter("formData", "F").getEnum());
+	}
+	@Test
+	public void ra25_FormData_onPojo__enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new RA()).getPaths().get("/_enum2").get("get").getParameter("formData", "F").getEnum());
+	}
+	@Test
+	public void ra26_FormData_onPojo_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new RA()).getPaths().get("/items1").get("get").getParameter("formData", "F").getItems());
+	}
+	@Test
+	public void ra27_FormData_onPojo_items2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new RA()).getPaths().get("/items2").get("get").getParameter("formData", "F").getItems());
+	}
+	@Test
+	public void ra28_FormData_onPojo_example1() throws Exception {
+		assertEquals("a", getSwagger(new RA()).getPaths().get("/example1").get("get").getParameter("formData", "F").getExample());
+	}
+	@Test
+	public void ra29_FormData_onPojo_example2() throws Exception {
+		assertObjectEquals("{f1:'a'}", getSwagger(new RA()).getPaths().get("/example2").get("get").getParameter("formData", "F").getExample());
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4114,32 +4848,217 @@ public class BasicRestInfoProviderTest {
 
 	@RestResource()
 	public static class RB {
-//	boolean multipart() default false;
-//	String name() default "";
-//	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
-//	String value() default "";
-//	String[] description() default {};
-//	String required() default "";
-//	String type() default "";
-//	String format() default "";
-//	String pattern() default "";
-//	String collectionFormat() default "";
-//	String maximum() default "";
-//	String minimum() default "";
-//	String multipleOf() default "";
-//	String maxLength() default "";
-//	String minLength() default "";
-//	String maxItems() default "";
-//	String minItems() default "";
-//	String allowEmptyValue() default "";
-//	String exclusiveMaximum() default "";
-//	String exclusiveMinimum() default "";
-//	String uniqueItems() default "";
-//	String[] schema() default {};
-//	String[] _default() default {};
-//	String[] _enum() default {};
-//	String[] items() default {};	
-//	String[] example() default {};
+
+		@RestMethod(name=GET,path="/name")
+		public Foo rb01(@FormData(name="F") String h) { return null; }
+
+		@RestMethod(name=GET,path="/value")
+		public Foo rb02(@FormData("F") String h) { return null; }
+
+		@RestMethod(name=GET,path="/description1")
+		public Foo rb03(@FormData(name="F", description="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/description2")
+		public Foo rb04(@FormData(name="F", description={"a","b"}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/required")
+		public Foo rb05(@FormData(name="F", required="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/type")
+		public Foo rb06(@FormData(name="F", type="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/format")
+		public Foo rb07(@FormData(name="F", format="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/pattern")
+		public Foo rb08(@FormData(name="F", pattern="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/collectionFormat")
+		public Foo rb09(@FormData(name="F", collectionFormat="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maximum")
+		public Foo rb10(@FormData(name="F", maximum="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minimum")
+		public Foo rb11(@FormData(name="F", minimum="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/multipleOf")
+		public Foo rb12(@FormData(name="F", multipleOf="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maxLength")
+		public Foo rb13(@FormData(name="F", maxLength="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minLength")
+		public Foo rb14(@FormData(name="F", minLength="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/maxItems")
+		public Foo rb15(@FormData(name="F", maxItems="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/minItems")
+		public Foo rb16(@FormData(name="F", minItems="1") String h) { return null; }
+
+		@RestMethod(name=GET,path="/allowEmptyValue")
+		public Foo rb17(@FormData(name="F", allowEmptyValue="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public Foo rb18(@FormData(name="F", exclusiveMaximum="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public Foo rb19(@FormData(name="F", exclusiveMinimum="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/uniqueItems")
+		public Foo rb20(@FormData(name="F", uniqueItems="true") String h) { return null; }
+
+		@RestMethod(name=GET,path="/schema1")
+		public Foo rb21(@FormData(name="F", schema=" {type:'a'} ") String h) { return null; }
+
+		@RestMethod(name=GET,path="/schema2")
+		public Foo rb22(@FormData(name="F", schema= {" type:'b' "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/_default1")
+		public Foo rb23(@FormData(name="F", _default="a") String h) { return null; }
+
+		@RestMethod(name=GET,path="/_default2")
+		public Foo rb24(@FormData(name="F", _default={"a","b"}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/_enum1")
+		public Foo rb25(@FormData(name="F", _enum="a,b") String h) { return null; }
+
+		@RestMethod(name=GET,path="/_enum2")
+		public Foo rb26(@FormData(name="F", _enum={" ['a','b'] "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/items1")
+		public Foo rb27(@FormData(name="F", items=" {type:'a'} ") String h) { return null; }
+
+		@RestMethod(name=GET,path="/items2")
+		public Foo rb28(@FormData(name="F", items={" type:'b' "}) String h) { return null; }
+
+		@RestMethod(name=GET,path="/example1")
+		public Foo rb29(@FormData(name="F", example="'a'") String h) { return null; }
+
+		@RestMethod(name=GET,path="/example2")
+		public Foo rb30(@FormData(name="F", example="{f1:'a'}") String h) { return null; }
+	}
+
+	@Test
+	public void rb01_FormData_onParameter_name() throws Exception {
+		assertEquals("F", getSwagger(new RB()).getPaths().get("/name").get("get").getParameter("formData", "F").getName());
+	}
+	@Test
+	public void rb02_FormData_onParameter_value() throws Exception {
+		assertEquals("F", getSwagger(new RB()).getPaths().get("/value").get("get").getParameter("formData", "F").getName());
+	}
+	@Test
+	public void rb03_FormData_onParameter_description1() throws Exception {
+		assertEquals("a", getSwagger(new RB()).getPaths().get("/description1").get("get").getParameter("formData", "F").getDescription());
+	}
+	@Test
+	public void rb04_FormData_onParameter_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new RB()).getPaths().get("/description2").get("get").getParameter("formData", "F").getDescription());
+	}
+	@Test
+	public void rb05_FormData_onParameter_required() throws Exception {
+		assertObjectEquals("true", getSwagger(new RB()).getPaths().get("/required").get("get").getParameter("formData", "F").getRequired());
+	}
+	@Test
+	public void rb06_FormData_onParameter_type() throws Exception {
+		assertEquals("a", getSwagger(new RB()).getPaths().get("/type").get("get").getParameter("formData", "F").getType());
+	}
+	@Test
+	public void rb07_FormData_onParameter_format() throws Exception {
+		assertEquals("a", getSwagger(new RB()).getPaths().get("/format").get("get").getParameter("formData", "F").getFormat());
+	}
+	@Test
+	public void rb08_FormData_onParameter_pattern() throws Exception {
+		assertEquals("a", getSwagger(new RB()).getPaths().get("/pattern").get("get").getParameter("formData", "F").getPattern());
+	}
+	@Test
+	public void rb09_FormData_onParameter_collectionFormat() throws Exception {
+		assertEquals("a", getSwagger(new RB()).getPaths().get("/collectionFormat").get("get").getParameter("formData", "F").getCollectionFormat());
+	}
+	@Test
+	public void rb10_FormData_onParameter_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new RB()).getPaths().get("/maximum").get("get").getParameter("formData", "F").getMaximum());
+	}
+	@Test
+	public void rb11_FormData_onParameter_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new RB()).getPaths().get("/minimum").get("get").getParameter("formData", "F").getMinimum());
+	}
+	@Test
+	public void rb12_FormData_onParameter_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new RB()).getPaths().get("/multipleOf").get("get").getParameter("formData", "F").getMultipleOf());
+	}
+	@Test
+	public void rb13_FormData_onParameter_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new RB()).getPaths().get("/maxLength").get("get").getParameter("formData", "F").getMaxLength());
+	}
+	@Test
+	public void rb14_FormData_onParameter_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new RB()).getPaths().get("/minLength").get("get").getParameter("formData", "F").getMinLength());
+	}
+	@Test
+	public void rb15_FormData_onParameter_maxItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new RB()).getPaths().get("/maxItems").get("get").getParameter("formData", "F").getMaxItems());
+	}
+	@Test
+	public void rb16_FormData_onParameter_minItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new RB()).getPaths().get("/minItems").get("get").getParameter("formData", "F").getMinItems());
+	}
+	@Test
+	public void rb17_FormData_onParameter_allowEmptyValue() throws Exception {
+		assertObjectEquals("true", getSwagger(new RB()).getPaths().get("/allowEmptyValue").get("get").getParameter("formData", "F").getAllowEmptyValue());
+	}
+	@Test
+	public void rb18_FormData_onParameter_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new RB()).getPaths().get("/exclusiveMaximum").get("get").getParameter("formData", "F").getExclusiveMaximum());
+	}
+	@Test
+	public void rb19_FormData_onParameter_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new RB()).getPaths().get("/exclusiveMinimum").get("get").getParameter("formData", "F").getExclusiveMinimum());
+	}
+	@Test
+	public void rb20_FormData_onParameter_uniqueItems() throws Exception {
+		assertObjectEquals("true", getSwagger(new RB()).getPaths().get("/uniqueItems").get("get").getParameter("formData", "F").getUniqueItems());
+	}
+	@Test
+	public void rb21_FormData_onParameter_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new RB()).getPaths().get("/schema1").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void rb22_FormData_onParameter_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new RB()).getPaths().get("/schema2").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void rb23_FormData_onParameter__default1() throws Exception {
+		assertEquals("a", getSwagger(new RB()).getPaths().get("/_default1").get("get").getParameter("formData", "F").getDefault());
+	}
+	@Test
+	public void rb24_FormData_onParameter__default2() throws Exception {
+		assertEquals("a\nb", getSwagger(new RB()).getPaths().get("/_default2").get("get").getParameter("formData", "F").getDefault());
+	}
+	@Test
+	public void rb25_FormData_onParameter__enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new RB()).getPaths().get("/_enum1").get("get").getParameter("formData", "F").getEnum());
+	}
+	@Test
+	public void rb26_FormData_onParameter__enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new RB()).getPaths().get("/_enum2").get("get").getParameter("formData", "F").getEnum());
+	}
+	@Test
+	public void rb27_FormData_onParameter_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new RB()).getPaths().get("/items1").get("get").getParameter("formData", "F").getItems());
+	}
+	@Test
+	public void rb28_FormData_onParameter_items2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new RB()).getPaths().get("/items2").get("get").getParameter("formData", "F").getItems());
+	}
+	@Test
+	public void rb29_FormData_onParameter_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new RB()).getPaths().get("/example1").get("get").getParameter("formData", "F").getExample());
+	}
+	@Test
+	public void rb30_FormData_onParameter_example2() throws Exception {
+		assertObjectEquals("{f1:'a'}", getSwagger(new RB()).getPaths().get("/example2").get("get").getParameter("formData", "F").getExample());
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
