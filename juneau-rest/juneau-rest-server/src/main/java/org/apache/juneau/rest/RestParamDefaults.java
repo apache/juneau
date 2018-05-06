@@ -731,9 +731,15 @@ class RestParamDefaults {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;
-			String code = firstNonEmpty(a.code(), "200");
-			for (String c : StringUtils.split(code)) {
-				ObjectMap om2 = om.getObjectMap(c, true);
+			List<Integer> codes = new ArrayList<>();
+			if (a.code() != 0)
+				codes.add(a.code());
+			for (int i : a.codes())
+				codes.add(i);
+			if (codes.isEmpty())
+				codes.add(200);
+			for (int c : codes) {
+				ObjectMap om2 = om.getObjectMap(String.valueOf(c), true);
 				om2
 					.appendSkipEmpty("description", joinnl(a.description()))
 					.appendSkipEmpty("type", a.type())

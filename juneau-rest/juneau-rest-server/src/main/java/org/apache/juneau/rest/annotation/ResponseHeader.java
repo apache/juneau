@@ -77,8 +77,21 @@ public @interface ResponseHeader {
 	 * 		The default value is <js>"200"</js>.
 	 * </ul>
 	 */
-	String code() default "";
+	int code() default 0;
 	
+	/**
+	 * The HTTP status (or statuses) of the response.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of the value is a comma-delimited list of HTTP status codes that this header applies to.
+	 * 	<li>
+	 * 		The default value is <js>"200"</js>.
+	 * </ul>
+	 */
+	int[] codes() default {};
+
 	/**
 	 * The HTTP header name.
 	 * 

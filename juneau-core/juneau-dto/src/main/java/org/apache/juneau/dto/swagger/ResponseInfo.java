@@ -319,6 +319,16 @@ public class ResponseInfo extends SwaggerElement {
 	}
 
 	/**
+	 * Returns the header information with the specified name.
+	 * 
+	 * @param name The header name.
+	 * @return The header info, or <jk>null</jk> if not found.
+	 */
+	public HeaderInfo getHeader(String name) {
+		return getHeaders().get(name);
+	}
+
+	/**
 	 * Bean property getter:  <property>x-example</property>.
 	 * 
 	 * @return The property value, or <jk>null</jk> if it is not set.

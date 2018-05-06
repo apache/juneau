@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.apache.juneau.rest.TestUtils.*;
 import static org.apache.juneau.http.HttpMethodName.*;
@@ -6650,17 +6651,17 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@Test
-	public void va01_ResponseStatuses_onPojo_code() throws Exception {
+	public void va01_ResponseStatus_onPojo_code() throws Exception {
 		assertEquals("Continue", getSwagger(new VA()).getPaths().get("/code").get("get").getResponse(100).getDescription());
 		assertEquals("Switching Protocols", getSwagger(new VA()).getPaths().get("/code").get("get").getResponse(101).getDescription());
 	}
 	@Test
-	public void va02_ResponseStatuses_onPojo_value() throws Exception {
+	public void va02_ResponseStatus_onPojo_value() throws Exception {
 		assertEquals("Continue", getSwagger(new VA()).getPaths().get("/value").get("get").getResponse(100).getDescription());
 		assertEquals("Switching Protocols", getSwagger(new VA()).getPaths().get("/value").get("get").getResponse(101).getDescription());
 	}
 	@Test
-	public void va03_ResponseStatuses_onPojo_description() throws Exception {
+	public void va03_ResponseStatus_onPojo_description() throws Exception {
 		assertEquals("a", getSwagger(new VA()).getPaths().get("/description").get("get").getResponse(100).getDescription());
 		assertEquals("a\nb", getSwagger(new VA()).getPaths().get("/description").get("get").getResponse(101).getDescription());
 	}
@@ -6671,43 +6672,632 @@ public class BasicRestInfoProviderTest {
 
 	@RestResource()
 	public static class VB {
+		public static class VB01 {}
 		
+		@RestMethod(name=GET,path="/code")
+		public void vb01(
+				@ResponseStatus({
+					@Status(code=100),
+					@Status(code=101)
+				})
+				VB01 r
+			) {}
+
+		public static class VB02 {}
+		
+		@RestMethod(name=GET,path="/vblue")
+		public void vb02(
+				@ResponseStatus({
+					@Status(100),
+					@Status(101)
+				})
+				VB02 r
+			) {}
+
+		public static class VB03 {}
+		
+		@RestMethod(name=GET,path="/description")
+		public void vb03(
+				@ResponseStatus({
+					@Status(code=100, description="a"),
+					@Status(code=101, description="a\nb")
+				})
+				VB03 r
+			) {}
 	}
 	
+	@Test
+	public void vb01_ResponseStatus_onParameter_code() throws Exception {
+		assertEquals("Continue", getSwagger(new VB()).getPaths().get("/code").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new VB()).getPaths().get("/code").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void vb02_ResponseStatus_onParameter_vblue() throws Exception {
+		assertEquals("Continue", getSwagger(new VB()).getPaths().get("/vblue").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new VB()).getPaths().get("/vblue").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void vb03_ResponseStatus_onParameter_description() throws Exception {
+		assertEquals("a", getSwagger(new VB()).getPaths().get("/description").get("get").getResponse(100).getDescription());
+		assertEquals("a\nb", getSwagger(new VB()).getPaths().get("/description").get("get").getResponse(101).getDescription());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// @ResponseHeader on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 	
 	@RestResource()
 	public static class WA {
-//	String code() default "";
-//	String name() default "";
-//	String value() default "";
-//	String[] description() default {};
-//	String type() default "";
-//	String format() default "";
-//	String collectionFormat() default "";
-//	String $ref() default "";
-//	String maximum() default "";
-//	String minimum() default "";
-//	String multipleOf() default "";
-//	String maxLength() default "";
-//	String minLength() default "";
-//	String maxItems() default "";
-//	String minItems() default "";
-//	String exclusiveMaximum() default "";
-//	String exclusiveMinimum() default "";
-//	String uniqueItems() default "";
-//	String[] items() default {};
-//	String[] _default() default {};
-//	String[] _enum() default {};
-//	String[] example() default {};
+
+		@ResponseHeader(name="H", code=100)
+		public static class WA01 {}
+		
+		@RestMethod(name=GET,path="/code")
+		public void wa01(WA01 h) {}
+
+		@ResponseHeader(name="H", codes={100,101})
+		public static class WA02 {}
+		
+		@RestMethod(name=GET,path="/codes")
+		public void wa02(WA02 h) {}
+
+		@ResponseHeader(name="H", code=100,codes={101})
+		public static class WA03 {}
+		
+		@RestMethod(name=GET,path="/codeAndCodes")
+		public void wa03(WA03 h) {}
+
+		@ResponseHeader(name="H", description="a")
+		public static class WA04 {}
+		
+		@RestMethod(name=GET,path="/nocode")
+		public void wa04(WA04 h) {}
+
+		@ResponseHeader(name="H")
+		public static class WA05 {}
+		
+		@RestMethod(name=GET,path="/name")
+		public void wa05(WA05 h) {}
+
+		@ResponseHeader("H")
+		public static class WA06 {}
+		
+		@RestMethod(name=GET,path="/value")
+		public void wa06(WA06 h) {}
+
+		@ResponseHeader(name="H", description="a")
+		public static class WA07 {}
+		
+		@RestMethod(name=GET,path="/description1")
+		public void wa07(WA07 h) {}
+
+		@ResponseHeader(name="H", description={"a","b"})
+		public static class WA08 {}
+		
+		@RestMethod(name=GET,path="/description2")
+		public void wa08(WA08 h) {}
+
+		@ResponseHeader(name="H", type="a")
+		public static class WA09 {}
+		
+		@RestMethod(name=GET,path="/type")
+		public void wa09(WA09 h) {}
+
+		@ResponseHeader(name="H", format="a")
+		public static class WA10 {}
+		
+		@RestMethod(name=GET,path="/format")
+		public void wa10(WA10 h) {}
+
+		@ResponseHeader(name="H", collectionFormat="a")
+		public static class WA11 {}
+		
+		@RestMethod(name=GET,path="/collectionFormat")
+		public void wa11(WA11 h) {}
+
+		@ResponseHeader(name="H", maximum="1")
+		public static class WA12 {}
+		
+		@RestMethod(name=GET,path="/maximum")
+		public void wa12(WA12 h) {}
+
+		@ResponseHeader(name="H", minimum="1")
+		public static class WA13 {}
+		
+		@RestMethod(name=GET,path="/minimum")
+		public void wa13(WA13 h) {}
+
+		@ResponseHeader(name="H", multipleOf="1")
+		public static class WA14 {}
+		
+		@RestMethod(name=GET,path="/multipleOf")
+		public void wa14(WA14 h) {}
+
+		@ResponseHeader(name="H", maxLength="1")
+		public static class WA15 {}
+		
+		@RestMethod(name=GET,path="/maxLength")
+		public void wa15(WA15 h) {}
+
+		@ResponseHeader(name="H", minLength="1")
+		public static class WA16 {}
+		
+		@RestMethod(name=GET,path="/minLength")
+		public void wa16(WA16 h) {}
+
+		@ResponseHeader(name="H", maxItems="1")
+		public static class WA17 {}
+		
+		@RestMethod(name=GET,path="/maxItems")
+		public void wa17(WA17 h) {}
+
+		@ResponseHeader(name="H", minItems="1")
+		public static class WA18 {}
+		
+		@RestMethod(name=GET,path="/minItems")
+		public void wa18(WA18 h) {}
+
+		@ResponseHeader(name="H", exclusiveMaximum="true")
+		public static class WA19 {}
+		
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public void wa19(WA19 h) {}
+
+		@ResponseHeader(name="H", exclusiveMinimum="true")
+		public static class WA20 {}
+		
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public void wa20(WA20 h) {}
+
+		@ResponseHeader(name="H", uniqueItems="true")
+		public static class WA21 {}
+		
+		@RestMethod(name=GET,path="/uniqueItems")
+		public void wa21(WA21 h) {}
+
+		@ResponseHeader(name="H", items=" {type:'a'} ")
+		public static class WA22 {}
+		
+		@RestMethod(name=GET,path="/items1")
+		public void wa22(WA22 h) {}
+
+		@ResponseHeader(name="H", items={" type:'b' "})
+		public static class WA23 {}
+		
+		@RestMethod(name=GET,path="/items2")
+		public void wa23(WA23 h) {}
+
+		@ResponseHeader(name="H", _default="'a'")
+		public static class WA24 {}
+		
+		@RestMethod(name=GET,path="/_default1")
+		public void wa24(WA24 h) {}
+
+		@ResponseHeader(name="H", _default={" {f1:'b'} "})
+		public static class WA25 {}
+		
+		@RestMethod(name=GET,path="/_default2")
+		public void wa25(WA25 h) {}
+
+		@ResponseHeader(name="H", _enum=" a,b ")
+		public static class WA26 {}
+		
+		@RestMethod(name=GET,path="/_enum1")
+		public void wa26(WA26 h) {}
+
+		@ResponseHeader(name="H", _enum={" ['a','b'] "})
+		public static class WA27 {}
+		
+		@RestMethod(name=GET,path="/_enum2")
+		public void wa27(WA27 h) {}
+
+		@ResponseHeader(name="H", example="'a'")
+		public static class WA28 {}
+		
+		@RestMethod(name=GET,path="/example1")
+		public void wa28(WA28 h) {}
+
+		@ResponseHeader(name="H", example={" {f1:'b'} "})
+		public static class WA29 {}
+		
+		@RestMethod(name=GET,path="/example2")
+		public void wa29(WA29 h) {}
 	}
 	
+	@Test
+	public void wa01_ResponseHeader_onPojo_code() throws Exception {
+		assertNotNull(getSwagger(new WA()).getPaths().get("/code").get("get").getResponse(100).getHeader("H"));
+	}
+	@Test
+	public void wa02_ResponseHeader_onPojo_codes() throws Exception {
+		assertNotNull(getSwagger(new WA()).getPaths().get("/codes").get("get").getResponse(100).getHeader("H"));
+		assertNotNull(getSwagger(new WA()).getPaths().get("/codes").get("get").getResponse(101).getHeader("H"));
+	}
+	@Test
+	public void wa03_ResponseHeader_onPojo_codeAndCodes() throws Exception {
+		assertNotNull(getSwagger(new WA()).getPaths().get("/codeAndCodes").get("get").getResponse(100).getHeader("H"));
+		assertNotNull(getSwagger(new WA()).getPaths().get("/codeAndCodes").get("get").getResponse(101).getHeader("H"));
+	}
+	@Test
+	public void wa04_ResponseHeader_onPojo_nocode() throws Exception {
+		assertEquals("a", getSwagger(new WA()).getPaths().get("/nocode").get("get").getResponse(200).getHeader("H").getDescription());
+	}
+	@Test
+	public void wa05_ResponseHeader_onPojo_name() throws Exception {
+		assertNotNull(getSwagger(new WA()).getPaths().get("/name").get("get").getResponse(200).getHeader("H"));
+	}
+	@Test
+	public void wa06_ResponseHeader_onPojo_value() throws Exception {
+		assertNotNull(getSwagger(new WA()).getPaths().get("/value").get("get").getResponse(200).getHeader("H"));
+	}
+	@Test
+	public void wa07_ResponseHeader_onPojo_description1() throws Exception {
+		assertEquals("a", getSwagger(new WA()).getPaths().get("/description1").get("get").getResponse(200).getHeader("H").getDescription());
+	}
+	@Test
+	public void wa08_ResponseHeader_onPojo_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new WA()).getPaths().get("/description2").get("get").getResponse(200).getHeader("H").getDescription());
+	}
+	@Test
+	public void wa09_ResponseHeader_onPojo_type() throws Exception {
+		assertEquals("a", getSwagger(new WA()).getPaths().get("/type").get("get").getResponse(200).getHeader("H").getType());
+	}
+	@Test
+	public void wa10_ResponseHeader_onPojo_format() throws Exception {
+		assertEquals("a", getSwagger(new WA()).getPaths().get("/format").get("get").getResponse(200).getHeader("H").getFormat());
+	}
+	@Test
+	public void wa11_ResponseHeader_onPojo_collectionFormat() throws Exception {
+		assertEquals("a", getSwagger(new WA()).getPaths().get("/collectionFormat").get("get").getResponse(200).getHeader("H").getCollectionFormat());
+	}
+	@Test
+	public void wa12_ResponseHeader_onPojo_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new WA()).getPaths().get("/maximum").get("get").getResponse(200).getHeader("H").getMaximum());
+	}
+	@Test
+	public void wa13_ResponseHeader_onPojo_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new WA()).getPaths().get("/minimum").get("get").getResponse(200).getHeader("H").getMinimum());
+	}
+	@Test
+	public void wa14_ResponseHeader_onPojo_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new WA()).getPaths().get("/multipleOf").get("get").getResponse(200).getHeader("H").getMultipleOf());
+	}
+	@Test
+	public void wa15_ResponseHeader_onPojo_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new WA()).getPaths().get("/maxLength").get("get").getResponse(200).getHeader("H").getMaxLength());
+	}
+	@Test
+	public void wa16_ResponseHeader_onPojo_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new WA()).getPaths().get("/minLength").get("get").getResponse(200).getHeader("H").getMinLength());
+	}
+	@Test
+	public void wa17_ResponseHeader_onPojo_maxItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new WA()).getPaths().get("/maxItems").get("get").getResponse(200).getHeader("H").getMaxItems());
+	}
+	@Test
+	public void wa18_ResponseHeader_onPojo_minItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new WA()).getPaths().get("/minItems").get("get").getResponse(200).getHeader("H").getMinItems());
+	}
+	@Test
+	public void wa19_ResponseHeader_onPojo_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new WA()).getPaths().get("/exclusiveMaximum").get("get").getResponse(200).getHeader("H").getExclusiveMaximum());
+	}
+	@Test
+	public void wa20_ResponseHeader_onPojo_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new WA()).getPaths().get("/exclusiveMinimum").get("get").getResponse(200).getHeader("H").getExclusiveMinimum());
+	}
+	@Test
+	public void wa21_ResponseHeader_onPojo_uniqueItems() throws Exception {
+		assertObjectEquals("true", getSwagger(new WA()).getPaths().get("/uniqueItems").get("get").getResponse(200).getHeader("H").getUniqueItems());
+	}
+	@Test
+	public void wa22_ResponseHeader_onPojo_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new WA()).getPaths().get("/items1").get("get").getResponse(200).getHeader("H").getItems());
+	}
+	@Test
+	public void wa23_ResponseHeader_onPojo_items2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new WA()).getPaths().get("/items2").get("get").getResponse(200).getHeader("H").getItems());
+	}
+	@Test
+	public void wa24_ResponseHeader_onPojo__default() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new WA()).getPaths().get("/_default1").get("get").getResponse(200).getHeader("H").getDefault());
+	}
+	@Test
+	public void wa25_ResponseHeader_onPojo__default2() throws Exception {
+		assertObjectEquals("{f1:'b'}", getSwagger(new WA()).getPaths().get("/_default2").get("get").getResponse(200).getHeader("H").getDefault());
+	}
+	@Test
+	public void wa26_ResponseHeader_onPojo__enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new WA()).getPaths().get("/_enum1").get("get").getResponse(200).getHeader("H").getEnum());
+	}
+	@Test
+	public void wa27_ResponseHeader_onPojo__enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new WA()).getPaths().get("/_enum2").get("get").getResponse(200).getHeader("H").getEnum());
+	}
+	@Test
+	public void wa28_ResponseHeader_onPojo_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new WA()).getPaths().get("/example1").get("get").getResponse(200).getHeader("H").getExample());
+	}
+	@Test
+	public void wa29_ResponseHeader_onPojo_example2() throws Exception {
+		assertObjectEquals("{f1:'b'}", getSwagger(new WA()).getPaths().get("/example2").get("get").getResponse(200).getHeader("H").getExample());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @ResponseHeader on parameter
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource()
+	public static class WB {
+
+		public static class WB01 {}
+		
+		@RestMethod(name=GET,path="/code")
+		public void wb01(@ResponseHeader(name="H", code=100) WB01 h) {}
+
+		public static class WB02 {}
+		
+		@RestMethod(name=GET,path="/codes")
+		public void wb02(@ResponseHeader(name="H", codes={100,101}) WB02 h) {}
+
+		public static class WB03 {}
+		
+		@RestMethod(name=GET,path="/codeAndCodes")
+		public void wb03(@ResponseHeader(name="H", code=100,codes={101}) WB03 h) {}
+
+		public static class WB04 {}
+		
+		@RestMethod(name=GET,path="/nocode")
+		public void wb04(@ResponseHeader(name="H", description="a") WB04 h) {}
+
+		public static class WB05 {}
+		
+		@RestMethod(name=GET,path="/name")
+		public void wb05(@ResponseHeader(name="H") WB05 h) {}
+		
+		public static class WB06 {}
+		
+		@RestMethod(name=GET,path="/value")
+		public void wb06(@ResponseHeader("H") WB06 h) {}
+		
+		public static class WB07 {}
+		
+		@RestMethod(name=GET,path="/description1")
+		public void wb07(@ResponseHeader(name="H", description="a") WB07 h) {}
+		
+		public static class WB08 {}
+		
+		@RestMethod(name=GET,path="/description2")
+		public void wb08(@ResponseHeader(name="H", description={"a","b"}) WB08 h) {}
+		
+		public static class WB09 {}
+		
+		@RestMethod(name=GET,path="/type")
+		public void wb09(@ResponseHeader(name="H", type="a") WB09 h) {}
+		
+		public static class WB10 {}
+		
+		@RestMethod(name=GET,path="/format")
+		public void wb10(@ResponseHeader(name="H", format="a") WB10 h) {}
+		
+		public static class WB11 {}
+		
+		@RestMethod(name=GET,path="/collectionFormat")
+		public void wb11(@ResponseHeader(name="H", collectionFormat="a") WB11 h) {}
+		
+		public static class WB12 {}
+		
+		@RestMethod(name=GET,path="/maximum")
+		public void wb12(@ResponseHeader(name="H", maximum="1") WB12 h) {}
+		
+		public static class WB13 {}
+		
+		@RestMethod(name=GET,path="/minimum")
+		public void wb13(@ResponseHeader(name="H", minimum="1") WB13 h) {}
+		
+		public static class WB14 {}
+		
+		@RestMethod(name=GET,path="/multipleOf")
+		public void wb14(@ResponseHeader(name="H", multipleOf="1") WB14 h) {}
+		
+		public static class WB15 {}
+		
+		@RestMethod(name=GET,path="/maxLength")
+		public void wb15(@ResponseHeader(name="H", maxLength="1") WB15 h) {}
+		
+		public static class WB16 {}
+		
+		@RestMethod(name=GET,path="/minLength")
+		public void wb16(@ResponseHeader(name="H", minLength="1") WB16 h) {}
+		
+		public static class WB17 {}
+		
+		@RestMethod(name=GET,path="/maxItems")
+		public void wb17(@ResponseHeader(name="H", maxItems="1") WB17 h) {}
+		
+		public static class WB18 {}
+		
+		@RestMethod(name=GET,path="/minItems")
+		public void wb18(@ResponseHeader(name="H", minItems="1") WB18 h) {}
+		
+		public static class WB19 {}
+		
+		@RestMethod(name=GET,path="/exclusiveMaximum")
+		public void wb19(@ResponseHeader(name="H", exclusiveMaximum="true") WB19 h) {}
+		
+		public static class WB20 {}
+		
+		@RestMethod(name=GET,path="/exclusiveMinimum")
+		public void wb20(@ResponseHeader(name="H", exclusiveMinimum="true") WB20 h) {}
+		
+		public static class WB21 {}
+		
+		@RestMethod(name=GET,path="/uniqueItems")
+		public void wb21(@ResponseHeader(name="H", uniqueItems="true") WB21 h) {}
+		
+		public static class WB22 {}
+		
+		@RestMethod(name=GET,path="/items1")
+		public void wb22(@ResponseHeader(name="H", items=" {type:'a'} ") WB22 h) {}
+		
+		public static class WB23 {}
+		
+		@RestMethod(name=GET,path="/items2")
+		public void wb23(@ResponseHeader(name="H", items={" type:'b' "}) WB23 h) {}
+
+		public static class WB24 {}
+		
+		@RestMethod(name=GET,path="/_default1")
+		public void wb24(@ResponseHeader(name="H", _default="'a'") WB24 h) {}
+
+		public static class WB25 {}
+		
+		@RestMethod(name=GET,path="/_default2")
+		public void wb25(@ResponseHeader(name="H", _default={" {f1:'b'} "}) WB25 h) {}
+
+		public static class WB26 {}
+		
+		@RestMethod(name=GET,path="/_enum1")
+		public void wb26(@ResponseHeader(name="H", _enum=" a,b ") WB26 h) {}
+
+		public static class WB27 {}
+		
+		@RestMethod(name=GET,path="/_enum2")
+		public void wb27(@ResponseHeader(name="H", _enum={" ['a','b'] "}) WB27 h) {}
+
+		public static class WB28 {}
+		
+		@RestMethod(name=GET,path="/example1")
+		public void wb28(@ResponseHeader(name="H", example="'a'") WB28 h) {}
+
+		public static class WB29 {}
+		
+		@RestMethod(name=GET,path="/example2")
+		public void wb29(@ResponseHeader(name="H", example={" {f1:'b'} "}) WB29 h) {}
+	}
+	
+	@Test
+	public void wb01_ResponseHeader_onPojo_code() throws Exception {
+		assertNotNull(getSwagger(new WB()).getPaths().get("/code").get("get").getResponse(100).getHeader("H"));
+	}
+	@Test
+	public void wb02_ResponseHeader_onPojo_codes() throws Exception {
+		assertNotNull(getSwagger(new WB()).getPaths().get("/codes").get("get").getResponse(100).getHeader("H"));
+		assertNotNull(getSwagger(new WB()).getPaths().get("/codes").get("get").getResponse(101).getHeader("H"));
+	}
+	@Test
+	public void wb03_ResponseHeader_onPojo_codeAndCodes() throws Exception {
+		assertNotNull(getSwagger(new WB()).getPaths().get("/codeAndCodes").get("get").getResponse(100).getHeader("H"));
+		assertNotNull(getSwagger(new WB()).getPaths().get("/codeAndCodes").get("get").getResponse(101).getHeader("H"));
+	}
+	@Test
+	public void wb04_ResponseHeader_onPojo_nocode() throws Exception {
+		assertEquals("a", getSwagger(new WB()).getPaths().get("/nocode").get("get").getResponse(200).getHeader("H").getDescription());
+	}
+	@Test
+	public void wb05_ResponseHeader_onPojo_name() throws Exception {
+		assertNotNull(getSwagger(new WB()).getPaths().get("/name").get("get").getResponse(200).getHeader("H"));
+	}
+	@Test
+	public void wb06_ResponseHeader_onPojo_value() throws Exception {
+		assertNotNull(getSwagger(new WB()).getPaths().get("/value").get("get").getResponse(200).getHeader("H"));
+	}
+	@Test
+	public void wb07_ResponseHeader_onPojo_description1() throws Exception {
+		assertEquals("a", getSwagger(new WB()).getPaths().get("/description1").get("get").getResponse(200).getHeader("H").getDescription());
+	}
+	@Test
+	public void wb08_ResponseHeader_onPojo_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new WB()).getPaths().get("/description2").get("get").getResponse(200).getHeader("H").getDescription());
+	}
+	@Test
+	public void wb09_ResponseHeader_onPojo_type() throws Exception {
+		assertEquals("a", getSwagger(new WB()).getPaths().get("/type").get("get").getResponse(200).getHeader("H").getType());
+	}
+	@Test
+	public void wb10_ResponseHeader_onPojo_format() throws Exception {
+		assertEquals("a", getSwagger(new WB()).getPaths().get("/format").get("get").getResponse(200).getHeader("H").getFormat());
+	}
+	@Test
+	public void wb11_ResponseHeader_onPojo_collectionFormat() throws Exception {
+		assertEquals("a", getSwagger(new WB()).getPaths().get("/collectionFormat").get("get").getResponse(200).getHeader("H").getCollectionFormat());
+	}
+	@Test
+	public void wb12_ResponseHeader_onPojo_maximum() throws Exception {
+		assertObjectEquals("1", getSwagger(new WB()).getPaths().get("/maximum").get("get").getResponse(200).getHeader("H").getMaximum());
+	}
+	@Test
+	public void wb13_ResponseHeader_onPojo_minimum() throws Exception {
+		assertObjectEquals("1", getSwagger(new WB()).getPaths().get("/minimum").get("get").getResponse(200).getHeader("H").getMinimum());
+	}
+	@Test
+	public void wb14_ResponseHeader_onPojo_multipleOf() throws Exception {
+		assertObjectEquals("1", getSwagger(new WB()).getPaths().get("/multipleOf").get("get").getResponse(200).getHeader("H").getMultipleOf());
+	}
+	@Test
+	public void wb15_ResponseHeader_onPojo_maxLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new WB()).getPaths().get("/maxLength").get("get").getResponse(200).getHeader("H").getMaxLength());
+	}
+	@Test
+	public void wb16_ResponseHeader_onPojo_minLength() throws Exception {
+		assertObjectEquals("1", getSwagger(new WB()).getPaths().get("/minLength").get("get").getResponse(200).getHeader("H").getMinLength());
+	}
+	@Test
+	public void wb17_ResponseHeader_onPojo_maxItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new WB()).getPaths().get("/maxItems").get("get").getResponse(200).getHeader("H").getMaxItems());
+	}
+	@Test
+	public void wb18_ResponseHeader_onPojo_minItems() throws Exception {
+		assertObjectEquals("1", getSwagger(new WB()).getPaths().get("/minItems").get("get").getResponse(200).getHeader("H").getMinItems());
+	}
+	@Test
+	public void wb19_ResponseHeader_onPojo_exclusiveMaximum() throws Exception {
+		assertObjectEquals("true", getSwagger(new WB()).getPaths().get("/exclusiveMaximum").get("get").getResponse(200).getHeader("H").getExclusiveMaximum());
+	}
+	@Test
+	public void wb20_ResponseHeader_onPojo_exclusiveMinimum() throws Exception {
+		assertObjectEquals("true", getSwagger(new WB()).getPaths().get("/exclusiveMinimum").get("get").getResponse(200).getHeader("H").getExclusiveMinimum());
+	}
+	@Test
+	public void wb21_ResponseHeader_onPojo_uniqueItems() throws Exception {
+		assertObjectEquals("true", getSwagger(new WB()).getPaths().get("/uniqueItems").get("get").getResponse(200).getHeader("H").getUniqueItems());
+	}
+	@Test
+	public void wb22_ResponseHeader_onPojo_items1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new WB()).getPaths().get("/items1").get("get").getResponse(200).getHeader("H").getItems());
+	}
+	@Test
+	public void wb23_ResponseHeader_onPojo_items2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new WB()).getPaths().get("/items2").get("get").getResponse(200).getHeader("H").getItems());
+	}
+	@Test
+	public void wb24_ResponseHeader_onPojo__default() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new WB()).getPaths().get("/_default1").get("get").getResponse(200).getHeader("H").getDefault());
+	}
+	@Test
+	public void wb25_ResponseHeader_onPojo__default2() throws Exception {
+		assertObjectEquals("{f1:'b'}", getSwagger(new WB()).getPaths().get("/_default2").get("get").getResponse(200).getHeader("H").getDefault());
+	}
+	@Test
+	public void wb26_ResponseHeader_onPojo__enum1() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new WB()).getPaths().get("/_enum1").get("get").getResponse(200).getHeader("H").getEnum());
+	}
+	@Test
+	public void wb27_ResponseHeader_onPojo__enum2() throws Exception {
+		assertObjectEquals("['a','b']", getSwagger(new WB()).getPaths().get("/_enum2").get("get").getResponse(200).getHeader("H").getEnum());
+	}
+	@Test
+	public void wb28_ResponseHeader_onPojo_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new WB()).getPaths().get("/example1").get("get").getResponse(200).getHeader("H").getExample());
+	}
+	@Test
+	public void wb29_ResponseHeader_onPojo_example2() throws Exception {
+		assertObjectEquals("{f1:'b'}", getSwagger(new WB()).getPaths().get("/example2").get("get").getResponse(200).getHeader("H").getExample());
+	}
+
 	
 	@Bean(typeName="Foo")
 	public static class Foo {
 		public int id;
 	}
-
 }
