@@ -21383,8 +21383,11 @@
 			<li>
 				The {@link org.apache.juneau.rest.annotation.RestResource#nowrap()} annotation has been changed to a string with a default value of <js>"true"</js>.
 				<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
+			<li>
+				The {@link org.apache.juneau.rest.annotation.Path#name()} annotation parameter is now required.
 		</ul>
 	
+		<h5 class='topic w800'>juneau-rest-client</h5>
 		<ul class='spaced-list'>
 			<li>
 				Made improvements to the builder API for defining SSL support.
