@@ -819,7 +819,7 @@ class RestParamDefaults {
 
 	static final class ResponseStatusObject extends RestMethodParam {
 
-		protected ResponseStatusObject(Method method, ResponseStatus a, Type type, PropertyStore ps, RestMethodParam existing) {
+		protected ResponseStatusObject(Method method, Status a, Type type, PropertyStore ps, RestMethodParam existing) {
 			super(RESPONSE_STATUS, "", type, getMetaData(a, castOrNull(existing, ResponseStatusObject.class)));
 		}
 
@@ -845,14 +845,14 @@ class RestParamDefaults {
 							
 						return v;
 					} catch (Exception e) {
-						throw new RestException(500, "Invalid type {0} specified with @ResponseStatus annotation.  It must have a public no-arg constructor.", type);
+						throw new RestException(500, "Invalid type {0} specified with @Status annotation.  It must have a public no-arg constructor.", type);
 					}
 				}
 			}
-			throw new RestException(500, "Invalid type {0} specified with @ResponseStatus annotation.  It must be a subclass of Value.", type);
+			throw new RestException(500, "Invalid type {0} specified with @Status annotation.  It must be a subclass of Value.", type);
 		}
 		
-		private static ObjectMap getMetaData(ResponseStatus a, ResponseStatusObject existing) {
+		private static ObjectMap getMetaData(Status a, ResponseStatusObject existing) {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;

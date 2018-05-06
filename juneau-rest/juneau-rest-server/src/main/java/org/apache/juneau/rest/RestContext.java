@@ -4295,17 +4295,15 @@ public final class RestContext extends BeanContext {
 						rp[i] = new RestParamDefaults.ResponseObject(method, (Response)a, t, ps, rp[i]);					
 					else if (a instanceof ResponseHeader)
 						rp[i] = new RestParamDefaults.ResponseHeaderObject(method, (ResponseHeader)a, t, ps, rp[i]);					
-					else if (a instanceof ResponseStatus)
-						rp[i] = new RestParamDefaults.ResponseStatusObject(method, (ResponseStatus)a, t, ps, rp[i]);			
 					else if (a instanceof Responses) 
 						for (Response r : ((Responses)a).value())
 							rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
-					else if (a instanceof ResponseStatuses)
-						for (ResponseStatus rs : ((ResponseStatuses)a).value())
+					else if (a instanceof ResponseStatus) {
+						for (Status rs : ((ResponseStatus)a).value())
 							rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
-					else if (a instanceof ResponseHeaders)
-						for (ResponseHeader rh : ((ResponseHeaders)a).value())
-							rp[i] = new RestParamDefaults.ResponseHeaderObject(method, rh, t, ps, rp[i]);			
+						if (rp[i] == null)
+							rp[i] = new RestParamDefaults.ResponseStatusObject(method, null, t, ps, rp[i]);
+					}
 				}
 			}
 
@@ -4332,21 +4330,19 @@ public final class RestContext extends BeanContext {
 					rp[i] = new RestParamDefaults.ResponseObject(method, (Response)a, t, ps, rp[i]);
 				else if (a instanceof ResponseHeader)
 					rp[i] = new RestParamDefaults.ResponseHeaderObject(method, (ResponseHeader)a, t, ps, rp[i]);
-				else if (a instanceof ResponseStatus)
-					rp[i] = new RestParamDefaults.ResponseStatusObject(method, (ResponseStatus)a, t, ps, rp[i]);
 				else if (a instanceof Responses) 
 					for (Response r : ((Responses)a).value())
 						rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
-				else if (a instanceof ResponseStatuses)
-					for (ResponseStatus rs : ((ResponseStatuses)a).value())
-						rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
-				else if (a instanceof ResponseHeaders)
-					for (ResponseHeader rh : ((ResponseHeaders)a).value())
-						rp[i] = new RestParamDefaults.ResponseHeaderObject(method, rh, t, ps, rp[i]);			
+				else if (a instanceof ResponseStatus) {
+					for (Status rs : ((ResponseStatus)a).value())
+						rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);	
+					if (rp[i] == null)
+						rp[i] = new RestParamDefaults.ResponseStatusObject(method, null, t, ps, rp[i]);
+				}
 			}
 
 			if (rp[i] == null) {
-				if (isPreOrPost)
+				if (! isPreOrPost)
 					throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", method, i);
 			} else {
 				rp[i].validate();

@@ -5360,15 +5360,15 @@ public class BasicRestInfoProviderTest {
 		assertEquals("P", getSwagger(new SB()).getPaths().get("/name/{P}").get("get").getParameter("path", "P").getName());
 	}
 	@Test
-	public void sb02_Path_onParameter_() throws Exception {
+	public void sb02_Path_onParameter_value() throws Exception {
 		assertEquals("P", getSwagger(new SB()).getPaths().get("/value/{P}").get("get").getParameter("path", "P").getName());
 	}
 	@Test
-	public void sb03_Path_onParameter_() throws Exception {
+	public void sb03_Path_onParameter_description1() throws Exception {
 		assertEquals("a", getSwagger(new SB()).getPaths().get("/description1/{P}").get("get").getParameter("path", "P").getDescription());
 	}
 	@Test
-	public void sb04_Path_onParameter_() throws Exception {
+	public void sb04_Path_onParameter_description2() throws Exception {
 		assertEquals("a\nb", getSwagger(new SB()).getPaths().get("/description2/{P}").get("get").getParameter("path", "P").getDescription());
 	}
 	@Test
@@ -5384,7 +5384,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("a", getSwagger(new SB()).getPaths().get("/pattern/{P}").get("get").getParameter("path", "P").getPattern());
 	}
 	@Test
-	public void sb08_Path_onParameter_() throws Exception {
+	public void sb08_Path_onParameter_maximum() throws Exception {
 		assertObjectEquals("1", getSwagger(new SB()).getPaths().get("/maximum/{P}").get("get").getParameter("path", "P").getMaximum());
 	}
 	@Test
@@ -5392,11 +5392,11 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("1", getSwagger(new SB()).getPaths().get("/minimum/{P}").get("get").getParameter("path", "P").getMinimum());
 	}
 	@Test
-	public void sb10_Path_onParameter_() throws Exception {
+	public void sb10_Path_onParameter_multipleOf() throws Exception {
 		assertObjectEquals("1", getSwagger(new SB()).getPaths().get("/multipleOf/{P}").get("get").getParameter("path", "P").getMultipleOf());
 	}
 	@Test
-	public void sb11_Path_onParameter_() throws Exception {
+	public void sb11_Path_onParameter_maxLength() throws Exception {
 		assertObjectEquals("1", getSwagger(new SB()).getPaths().get("/maxLength/{P}").get("get").getParameter("path", "P").getMaxLength());
 	}
 	@Test
@@ -6023,82 +6023,650 @@ public class BasicRestInfoProviderTest {
 
 	@RestResource()
 	public static class UA {
-//	int code() default 0;
-//	int value() default 0;
-//	String[] description() default {};
-//	String[] schema() default {};
-//	String[] headers() default {};
-//	String[] example() default {};
-//	String[] examples() default {};
+
+		@Response(code=100)
+		public static class UA01 {}
+		
+		@RestMethod(name=GET,path="/code")
+		public void ua01(UA01 r) {}
+
+		@Response(100)
+		public static class UA02 {}
+		
+		@RestMethod(name=GET,path="/value")
+		public void ua02(UA02 r) {}
+
+		@Response(description="a")
+		public static class UA03a {}
+		
+		@RestMethod(name=GET,path="/description1")
+		public void ua03a(UA03a r) {}
+
+		@Response(description={"a","b"})
+		public static class UA03b {}
+		
+		@RestMethod(name=GET,path="/description2")
+		public void ua03b(UA03b r) {}
+
+		@Response(schema=" {type:'a'} ")
+		public static class UA04a {}
+		
+		@RestMethod(name=GET,path="/schema1")
+		public void ua04a(UA04a r) {}
+
+		@Response(schema={" type:'b' "})
+		public static class UA04b {}
+		
+		@RestMethod(name=GET,path="/schema2")
+		public void ua04b(UA04b r) {}
+
+		@Response(headers=" {foo:{type:'a'}} ")
+		public static class UA05a {}
+		
+		@RestMethod(name=GET,path="/headers1")
+		public void ua05a(UA05a r) {}
+
+		@Response(headers={" foo:{type:'b'} "})
+		public static class UA05b {}
+		
+		@RestMethod(name=GET,path="/headers2")
+		public void ua05b(UA05b r) {}
+
+		@Response(example="'a'")
+		public static class UA06a {}
+		
+		@RestMethod(name=GET,path="/example1")
+		public void ua06a(UA06a r) {}
+
+		@Response(example="{f1:'a'}")
+		public static class UA06b {}
+		
+		@RestMethod(name=GET,path="/example2")
+		public void ua06b(UA06b r) {}
+
+		@Response(examples=" {foo:'a'} ")
+		public static class UA07a {}
+		
+		@RestMethod(name=GET,path="/examples1")
+		public void ua07a(UA07a r) {}
+
+		@Response(examples={" foo:'b' "})
+		public static class UA07b {}
+		
+		@RestMethod(name=GET,path="/examples2")
+		public void ua07b(UA07b r) {}
+	}
+	
+	@Test
+	public void ua01_Response_onPojo_code() throws Exception {
+		assertEquals("Continue", getSwagger(new UA()).getPaths().get("/code").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void ua02_Response_onPojo_() throws Exception {
+		assertEquals("Continue", getSwagger(new UA()).getPaths().get("/value").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void ua03a_Response_onPojo_description1() throws Exception {
+		assertEquals("a", getSwagger(new UA()).getPaths().get("/description1").get("get").getResponse(200).getDescription());
+	}
+	@Test
+	public void ua03b_Response_onPojo_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new UA()).getPaths().get("/description2").get("get").getResponse(200).getDescription());
+	}
+	@Test
+	public void ua04a_Response_onPojo_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new UA()).getPaths().get("/schema1").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ua04b_Response_onPojo_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new UA()).getPaths().get("/schema2").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ua05a_Response_onPojo_headers1() throws Exception {
+		assertObjectEquals("{foo:{type:'a'}}", getSwagger(new UA()).getPaths().get("/headers1").get("get").getResponse(200).getHeaders());
+	}
+	@Test
+	public void ua05b_Response_onPojo_headers2() throws Exception {
+		assertObjectEquals("{foo:{type:'b'}}", getSwagger(new UA()).getPaths().get("/headers2").get("get").getResponse(200).getHeaders());
+	}
+	@Test
+	public void ua06a_Response_onPojo_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new UA()).getPaths().get("/example1").get("get").getResponse(200).getExample());
+	}
+	@Test
+	public void ua06b_Response_onPojo_example2() throws Exception {
+		assertObjectEquals("{f1:'a'}", getSwagger(new UA()).getPaths().get("/example2").get("get").getResponse(200).getExample());
+	}
+	@Test
+	public void ua07a_Response_onPojo_examples1() throws Exception {
+		assertObjectEquals("{foo:'a'}", getSwagger(new UA()).getPaths().get("/examples1").get("get").getResponse(200).getExamples());
+	}
+	@Test
+	public void ua07b_Response_onPojo_examples2() throws Exception {
+		assertObjectEquals("{foo:'b'}", getSwagger(new UA()).getPaths().get("/examples2").get("get").getResponse(200).getExamples());
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Response on parameter of type Value
+	// @Response on parameter
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource()
 	public static class UB {
-//	int code() default 0;
-//	int value() default 0;
-//	String[] description() default {};
-//	String[] schema() default {};
-//	String[] headers() default {};
-//	String[] example() default {};
-//	String[] examples() default {};
-	}
-	
-	//-----------------------------------------------------------------------------------------------------------------
-	// @Response on parameter of type other than Value
-	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource()
-	public static class UC {
-//	int code() default 0;
-//	int value() default 0;
-//	String[] description() default {};
-//	String[] schema() default {};
-//	String[] headers() default {};
-//	String[] example() default {};
-//	String[] examples() default {};
+		public static class UB01 {}
+
+		@RestMethod(name=GET,path="/code")
+		public void ub01(@Response(code=100) UB01 r) {}
+
+		public static class UB02 {}
+
+		@RestMethod(name=GET,path="/value")
+		public void ub02(@Response(100) UB02 r) {}
+
+		public static class UB03 {}
+
+		@RestMethod(name=GET,path="/description1")
+		public void ub03(@Response(description="a") UB03 r) {}
+
+		public static class UB04 {}
+
+		@RestMethod(name=GET,path="/description2")
+		public void ub04(@Response(description={"a","b"}) UB04 r) {}
+
+		public static class UB05 {}
+
+		@RestMethod(name=GET,path="/schema1")
+		public void ub05(@Response(schema=" {type:'a'} ") UB05 r) {}
+
+		public static class UB06 {}
+
+		@RestMethod(name=GET,path="/schema2")
+		public void ub06(@Response(schema={" type:'b' "}) UB06 r) {}
+
+		public static class UB07 {}
+
+		@RestMethod(name=GET,path="/headers1")
+		public void ub07(@Response(headers=" {foo:{type:'a'}} ") UB07 r) {}
+
+		public static class UB08 {}
+
+		@RestMethod(name=GET,path="/headers2")
+		public void ub08(@Response(headers={" foo:{type:'b'} "}) UB08 r) {}
+
+		public static class UB09 {}
+
+		@RestMethod(name=GET,path="/example1")
+		public void ub09(@Response(example=" 'a' ") UB09 r) {}
+
+		public static class UB10 {}
+
+		@RestMethod(name=GET,path="/example2")
+		public void ub10(@Response(example=" {f1:'b'} ") UB10 r) {}
+
+		public static class UB11 {}
+
+		@RestMethod(name=GET,path="/examples1")
+		public void ub11(@Response(examples=" {foo:'a'} ") UB11 r) {}
+
+		public static class UB12 {}
+
+		@RestMethod(name=GET,path="/examples2")
+		public void ub12(@Response(examples={" foo:'b' "}) UB12 r) {}
 	}
 	
+	@Test
+	public void ub01_Response_onParameter_code() throws Exception {
+		assertEquals("Continue", getSwagger(new UB()).getPaths().get("/code").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void ub02_Response_onParameter_value() throws Exception {
+		assertEquals("Continue", getSwagger(new UB()).getPaths().get("/value").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void ub03_Response_onParameter_description1() throws Exception {
+		assertEquals("a", getSwagger(new UB()).getPaths().get("/description1").get("get").getResponse(200).getDescription());
+	}
+	@Test
+	public void ub04_Response_onParameter_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new UB()).getPaths().get("/description2").get("get").getResponse(200).getDescription());
+	}
+	@Test
+	public void ub05_Response_onParameter_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new UB()).getPaths().get("/schema1").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ub06_Response_onParameter_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new UB()).getPaths().get("/schema2").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ub07_Response_onParameter_headers1() throws Exception {
+		assertObjectEquals("{foo:{type:'a'}}", getSwagger(new UB()).getPaths().get("/headers1").get("get").getResponse(200).getHeaders());
+	}
+	@Test
+	public void ub08_Response_onParameter_headers2() throws Exception {
+		assertObjectEquals("{foo:{type:'b'}}", getSwagger(new UB()).getPaths().get("/headers2").get("get").getResponse(200).getHeaders());
+	}
+	@Test
+	public void ub09_Response_onParameter_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new UB()).getPaths().get("/example1").get("get").getResponse(200).getExample());
+	}
+	@Test
+	public void ub10_Response_onParameter_example2() throws Exception {
+		assertObjectEquals("{f1:'b'}", getSwagger(new UB()).getPaths().get("/example2").get("get").getResponse(200).getExample());
+	}
+	@Test
+	public void ub11_Response_onParameter_examples1() throws Exception {
+		assertObjectEquals("{foo:'a'}", getSwagger(new UB()).getPaths().get("/examples1").get("get").getResponse(200).getExamples());
+	}
+	@Test
+	public void ub12_Response_onParameter_examples2() throws Exception {
+		assertObjectEquals("{foo:'b'}", getSwagger(new UB()).getPaths().get("/examples2").get("get").getResponse(200).getExamples());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Response on throwable
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource()
-	public static class UD {
-//	int code() default 0;
-//	int value() default 0;
-//	String[] description() default {};
-//	String[] schema() default {};
-//	String[] headers() default {};
-//	String[] example() default {};
-//	String[] examples() default {};
+	@SuppressWarnings({"unused","serial"})
+	public static class UC {		
+		
+		@Response(code=100)
+		public static class UC01 extends Throwable {}
+
+		@RestMethod(name=GET,path="/code")
+		public void uc01() throws UC01 {}
+
+		@Response(100)
+		public static class UC02 extends Throwable {}
+
+		@RestMethod(name=GET,path="/value")
+		public void uc02() throws UC02 {}
+
+		@Response(description="a")
+		public static class UC03 extends Throwable {}
+
+		@RestMethod(name=GET,path="/description1")
+		public void uc03() throws UC03 {}
+
+		@Response(description= {"a","b"})
+		public static class UC04 extends Throwable {}
+
+		@RestMethod(name=GET,path="/description2")
+		public void uc04() throws UC04 {}
+
+		@Response(schema=" {type:'a'} ")
+		public static class UC05 extends Throwable {}
+
+		@RestMethod(name=GET,path="/schema1")
+		public void uc05() throws UC05 {}
+
+		@Response(schema={" type:'b' "})
+		public static class UC06 extends Throwable {}
+
+		@RestMethod(name=GET,path="/schema2")
+		public void uc06() throws UC06 {}
+
+		@Response(headers=" {foo:{type:'a'}} ")
+		public static class UC07 extends Throwable {}
+
+		@RestMethod(name=GET,path="/headers1")
+		public void uc07() throws UC07 {}
+
+		@Response(headers={" foo:{type:'b'} "})
+		public static class UC08 extends Throwable {}
+
+		@RestMethod(name=GET,path="/headers2")
+		public void uc08() throws UC08 {}
+
+		@Response(example=" 'a' ")
+		public static class UC09 extends Throwable {}
+
+		@RestMethod(name=GET,path="/example1")
+		public void uc09() throws UC09 {}
+
+		@Response(example={" {f1:'b'} "})
+		public static class UC10 extends Throwable {}
+
+		@RestMethod(name=GET,path="/example2")
+		public void uc10() throws UC10 {}
+
+		@Response(examples=" {foo:'a'} ")
+		public static class UC11 extends Throwable {}
+
+		@RestMethod(name=GET,path="/examples1")
+		public void uc11() throws UC11 {}
+
+		@Response(examples={" foo:'b' "})
+		public static class UC12 extends Throwable {}
+
+		@RestMethod(name=GET,path="/examples2")
+		public void uc12() throws UC12 {}
 	}
 	
+	@Test
+	public void uc01_Response_onThrowable_code() throws Exception {
+		assertEquals("Continue", getSwagger(new UC()).getPaths().get("/code").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void uc02_Response_onThrowable_value() throws Exception {
+		assertEquals("Continue", getSwagger(new UC()).getPaths().get("/value").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void uc03_Response_onThrowable_description1() throws Exception {
+		assertEquals("a", getSwagger(new UC()).getPaths().get("/description1").get("get").getResponse(500).getDescription());
+	}
+	@Test
+	public void uc04_Response_onThrowable_description2() throws Exception {
+		assertEquals("a\nb", getSwagger(new UC()).getPaths().get("/description2").get("get").getResponse(500).getDescription());
+	}
+	@Test
+	public void uc05_Response_onThrowable_schema1() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new UC()).getPaths().get("/schema1").get("get").getResponse(500).getSchema());
+	}
+	@Test
+	public void uc06_Response_onThrowable_schema2() throws Exception {
+		assertObjectEquals("{type:'b'}", getSwagger(new UC()).getPaths().get("/schema2").get("get").getResponse(500).getSchema());
+	}
+	@Test
+	public void uc07_Response_onThrowable_headers1() throws Exception {
+		assertObjectEquals("{foo:{type:'a'}}", getSwagger(new UC()).getPaths().get("/headers1").get("get").getResponse(500).getHeaders());
+	}
+	@Test
+	public void uc08_Response_onThrowable_headers2() throws Exception {
+		assertObjectEquals("{foo:{type:'b'}}", getSwagger(new UC()).getPaths().get("/headers2").get("get").getResponse(500).getHeaders());
+	}
+	@Test
+	public void uc09_Response_onThrowable_example1() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new UC()).getPaths().get("/example1").get("get").getResponse(500).getExample());
+	}
+	@Test
+	public void uc10_Response_onThrowable_example2() throws Exception {
+		assertObjectEquals("{f1:'b'}", getSwagger(new UC()).getPaths().get("/example2").get("get").getResponse(500).getExample());
+	}
+	@Test
+	public void uc11_Response_onThrowable_examples1() throws Exception {
+		assertObjectEquals("{foo:'a'}", getSwagger(new UC()).getPaths().get("/examples1").get("get").getResponse(500).getExamples());
+	}
+	@Test
+	public void uc12_Response_onThrowable_examples2() throws Exception {
+		assertObjectEquals("{foo:'b'}", getSwagger(new UC()).getPaths().get("/examples2").get("get").getResponse(500).getExamples());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Responses on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 	
 	@RestResource()
-	public static class UE {
+	public static class UD {
+
+		@Responses({
+			@Response(code=100),
+			@Response(code=101)
+		})
+		public static class UD01 {}
 		
+		@RestMethod(name=GET,path="/code")
+		public void ud01(UD01 r) {}
+
+		@Responses({
+			@Response(100),
+			@Response(101)
+		})
+		public static class UD02 {}
+		
+		@RestMethod(name=GET,path="/value")
+		public void ud02(UD02 r) {}
+
+		@Responses({
+			@Response(code=100, description="a"),
+			@Response(code=101, description={"a","b"})
+		})
+		public static class UD03 {}
+		
+		@RestMethod(name=GET,path="/description")
+		public void ud03(UD03 r) {}
+
+		@Responses({
+			@Response(code=100, schema=" {type:'a'} "),
+			@Response(code=101, schema={" type:'b' "})
+		})
+		public static class UD04 {}
+		
+		@RestMethod(name=GET,path="/schema")
+		public void ud04(UD04 r) {}
+
+		@Responses({
+			@Response(code=100, headers=" {foo:{type:'a'}} "),
+			@Response(code=101, headers={" foo:{type:'b'} "})
+		})
+		public static class UD05 {}
+		
+		@RestMethod(name=GET,path="/headers")
+		public void ud05(UD05 r) {}
+
+		@Responses({
+			@Response(code=100, example="'a'"),
+			@Response(code=101, example="{f1:'a'}")
+		})
+		public static class UD06 {}
+		
+		@RestMethod(name=GET,path="/example")
+		public void ud06(UD06 r) {}
+
+		@Responses({
+			@Response(code=100, examples=" {foo:'a'} "),
+			@Response(code=101, examples={" foo:'b' "})
+		})
+		public static class UD07 {}
+		
+		@RestMethod(name=GET,path="/examples")
+		public void ud07(UD07 r) {}
 	}
 	
+	@Test
+	public void ud01_Responses_onPojo_code() throws Exception {
+		assertEquals("Continue", getSwagger(new UD()).getPaths().get("/code").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new UD()).getPaths().get("/code").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void ud02_Responses_onPojo_value() throws Exception {
+		assertEquals("Continue", getSwagger(new UD()).getPaths().get("/value").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new UD()).getPaths().get("/value").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void ud03_Responses_onPojo_description() throws Exception {
+		assertEquals("a", getSwagger(new UD()).getPaths().get("/description").get("get").getResponse(100).getDescription());
+		assertEquals("a\nb", getSwagger(new UD()).getPaths().get("/description").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void ud04_Responses_onPojo_schema() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new UD()).getPaths().get("/schema").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{type:'b'}", getSwagger(new UD()).getPaths().get("/schema").get("get").getResponse(101).getSchema());
+	}
+	@Test
+	public void ud05_Responses_onPojo_headers() throws Exception {
+		assertObjectEquals("{foo:{type:'a'}}", getSwagger(new UD()).getPaths().get("/headers").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{foo:{type:'b'}}", getSwagger(new UD()).getPaths().get("/headers").get("get").getResponse(101).getHeaders());
+	}
+	@Test
+	public void ud06_Responses_onPojo_example() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new UD()).getPaths().get("/example").get("get").getResponse(100).getExample());
+		assertObjectEquals("{f1:'a'}", getSwagger(new UD()).getPaths().get("/example").get("get").getResponse(101).getExample());
+	}
+	@Test
+	public void ud07_Responses_onPojo_examples() throws Exception {
+		assertObjectEquals("{foo:'a'}", getSwagger(new UD()).getPaths().get("/examples").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:'b'}", getSwagger(new UD()).getPaths().get("/examples").get("get").getResponse(101).getExamples());
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Responses on parameter
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource()
+	public static class UE {
+
+		public static class UE01 {}
+
+		@RestMethod(name=GET,path="/code")
+		public void ue01(
+			@Responses({
+				@Response(code=100),
+				@Response(code=101)
+			}) 
+			UE01 r) {}
+
+		public static class UE02 {}
+
+		@RestMethod(name=GET,path="/value")
+		public void ue02(
+			@Responses({
+				@Response(100),
+				@Response(101)
+			})
+			UE02 r) {}
+
+		public static class UE03 {}
+
+		@RestMethod(name=GET,path="/description")
+		public void ue03(
+			@Responses({
+				@Response(code=100, description="a"),
+				@Response(code=101, description={"a","b"})
+			})
+			UE03 r) {}
+
+		public static class UE04 {}
+
+		@RestMethod(name=GET,path="/schema")
+		public void ue04(
+			@Responses({
+				@Response(code=100, schema=" {type:'a'} "),
+				@Response(code=101, schema={" type:'b' "})
+			})
+			UE04 r) {}
+
+		public static class UE05 {}
+
+		@RestMethod(name=GET,path="/headers")
+		public void ue05(
+			@Responses({
+				@Response(code=100, headers=" {foo:{type:'a'}} "),
+				@Response(code=101, headers={" foo:{type:'b'} "})
+			})
+			UE05 r) {}
+
+		public static class UE06 {}
+
+		@RestMethod(name=GET,path="/example")
+		public void ue06(
+			@Responses({
+				@Response(code=100, example=" 'a' "),
+				@Response(code=101, example=" {f1:'b'} ")
+			})
+			UE06 r) {}
+
+		public static class UE07 {}
+
+		@RestMethod(name=GET,path="/examples")
+		public void ue07(
+			@Responses({
+				@Response(code=100, examples=" {foo:'a'} "),
+				@Response(code=101, examples={" foo:'b' "})
+			})
+			UE07 r) {}
+	}
+	
+	@Test
+	public void ue01_Responses_onParameter_code() throws Exception {
+		assertEquals("Continue", getSwagger(new UE()).getPaths().get("/code").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new UE()).getPaths().get("/code").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void ue02_Responses_onParameter_value() throws Exception {
+		assertEquals("Continue", getSwagger(new UE()).getPaths().get("/value").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new UE()).getPaths().get("/value").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void ue03_Responses_onParameter_description() throws Exception {
+		assertEquals("a", getSwagger(new UE()).getPaths().get("/description").get("get").getResponse(100).getDescription());
+		assertEquals("a\nb", getSwagger(new UE()).getPaths().get("/description").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void ue04_Responses_onParameter_schema() throws Exception {
+		assertObjectEquals("{type:'a'}", getSwagger(new UE()).getPaths().get("/schema").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{type:'b'}", getSwagger(new UE()).getPaths().get("/schema").get("get").getResponse(101).getSchema());
+	}
+	@Test
+	public void ue05_Responses_onParameter_headers() throws Exception {
+		assertObjectEquals("{foo:{type:'a'}}", getSwagger(new UE()).getPaths().get("/headers").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{foo:{type:'b'}}", getSwagger(new UE()).getPaths().get("/headers").get("get").getResponse(101).getHeaders());
+	}
+	@Test
+	public void ue06_Responses_onParameter_example() throws Exception {
+		assertObjectEquals("'a'", getSwagger(new UE()).getPaths().get("/example").get("get").getResponse(100).getExample());
+		assertObjectEquals("{f1:'b'}", getSwagger(new UE()).getPaths().get("/example").get("get").getResponse(101).getExample());
+	}
+	@Test
+	public void ue07_Responses_onParameter_examples() throws Exception {
+		assertObjectEquals("{foo:'a'}", getSwagger(new UE()).getPaths().get("/examples").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:'b'}", getSwagger(new UE()).getPaths().get("/examples").get("get").getResponse(101).getExamples());
+	}
+	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// @ResponseStatus on POJO
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource()
 	public static class VA {
-//	int code() default 0;
-//	int value() default 0;
-//	String[] description() default {};
+		@ResponseStatus({
+			@Status(code=100),
+			@Status(code=101)
+		})
+		public static class VA01 {}
+		
+		@RestMethod(name=GET,path="/code")
+		public void va01(VA01 r) {}
+
+		@ResponseStatus({
+			@Status(100),
+			@Status(101)
+		})
+		public static class VA02 {}
+		
+		@RestMethod(name=GET,path="/value")
+		public void va02(VA02 r) {}
+
+		@ResponseStatus({
+			@Status(code=100, description="a"),
+			@Status(code=101, description="a\nb")
+		})
+		public static class VA03 {}
+		
+		@RestMethod(name=GET,path="/description")
+		public void va03(VA03 r) {}
+	}
+
+	@Test
+	public void va01_ResponseStatuses_onPojo_code() throws Exception {
+		assertEquals("Continue", getSwagger(new VA()).getPaths().get("/code").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new VA()).getPaths().get("/code").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void va02_ResponseStatuses_onPojo_value() throws Exception {
+		assertEquals("Continue", getSwagger(new VA()).getPaths().get("/value").get("get").getResponse(100).getDescription());
+		assertEquals("Switching Protocols", getSwagger(new VA()).getPaths().get("/value").get("get").getResponse(101).getDescription());
+	}
+	@Test
+	public void va03_ResponseStatuses_onPojo_description() throws Exception {
+		assertEquals("a", getSwagger(new VA()).getPaths().get("/description").get("get").getResponse(100).getDescription());
+		assertEquals("a\nb", getSwagger(new VA()).getPaths().get("/description").get("get").getResponse(101).getDescription());
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
-	// @ResponseStatuses on POJO
+	// @ResponseStatus on parameter
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource()
@@ -6136,9 +6704,6 @@ public class BasicRestInfoProviderTest {
 //	String[] example() default {};
 	}
 	
-	//-----------------------------------------------------------------------------------------------------------------
-	// @ResponseHeaders on POJO
-	//-----------------------------------------------------------------------------------------------------------------
 	
 	@Bean(typeName="Foo")
 	public static class Foo {

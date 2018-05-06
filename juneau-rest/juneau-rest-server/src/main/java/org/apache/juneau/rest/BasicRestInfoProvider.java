@@ -64,7 +64,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BasicRestInfoProvider.ignoreTypes.b"</js>
+	 * 	<li><b>Name:</b>  <js>"BasicRestInfoProvider.ignoreTypes.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited)
 	 * 	<li><b>Default:</b>  <jk>null</jk>.
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>

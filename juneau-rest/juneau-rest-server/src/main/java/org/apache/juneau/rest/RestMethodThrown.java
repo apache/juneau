@@ -38,6 +38,7 @@ public class RestMethodThrown {
 			code = ObjectUtils.firstNonZero(ri.code(), ri.value(), code);
 			metaData.appendSkipEmpty("description", joinnl(ri.description()));
 			metaData.appendSkipEmpty("example", joinnl(ri.example()));
+			metaData.appendSkipEmpty("examples", joinnl(ri.examples()));
 			metaData.appendSkipEmpty("headers", joinnl(ri.headers()));
 			metaData.appendSkipEmpty("schema", joinnl(ri.schema()));
 		}
