@@ -24,14 +24,14 @@ import org.apache.juneau.internal.*;
 /**
  * An implementation of {@link HttpServletRequest} for testing purposes.
  */
-public class MockHttpServletRequest implements HttpServletRequest {
+public class MockServletRequest implements HttpServletRequest {
 	
 	private String method = "GET";
 	private Map<String,String[]> parameterMap = new LinkedHashMap<>();
 	private Map<String,String[]> headerMap = new LinkedHashMap<>();	
 	private Map<String,Object> attributeMap = new LinkedHashMap<>();
 	private String characterEncoding = "UTF-8";
-	private byte[] body;
+	private byte[] body = new byte[0];
 	private String protocol = "HTTP/1.1";
 	private String scheme = "http";
 	private String serverName = "localhost";
@@ -51,14 +51,52 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	private Cookie[] cookies;
 	private String pathInfo;
 	private String pathTranslated;
-	private String contextPath;
-	private String queryString;
+	private String contextPath = "";
+	private String queryString = "";
 	private String remoteUser;
 	private Principal userPrincipal;
 	private String requestedSessionId;
-	private String requestURI;
-	private String servletPath;
-	private HttpSession httpSession;
+	private String requestURI = "";
+	private String servletPath = "";
+	private HttpSession httpSession = MockHttpSession.create();
+	
+	/**
+	 * Creates a new servlet request.
+	 * 
+	 * Initialized with the following:
+	 * <ul>
+	 * 	<li><code>"Accept: text/json+simple"</code>
+	 * 	<li><code>"Content-Type: text/json"</code>
+	 * </ul>
+	 * 
+	 * @return A new request.
+	 */
+	public static MockServletRequest create() {
+		MockServletRequest r = new MockServletRequest();
+		r.header("Accept", "text/json+simple").header("Content-Type", "text/json");
+		return r;
+	}
+	
+	/**
+	 * Creates a new servlet request with the specified method name and request path.
+	 * 
+	 * Initialized with the following:
+	 * <ul>
+	 * 	<li><code>"Accept: text/json+simple"</code>
+	 * 	<li><code>"Content-Type: text/json"</code>
+	 * </ul>
+	 * 
+	 * @param method The HTTP method  name.
+	 * @param path The request path.
+	 * @param pathArgs Optional path arguments.
+	 * 
+	 * @return A new request.
+	 */
+	public static MockServletRequest create(String method, String path, Object...pathArgs) {
+		return create()
+			.method(method)
+			.requestURI(StringUtils.format(path, pathArgs));
+	}
 	
 	/**
 	 * Fluent setter.
@@ -66,7 +104,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The method name for this request.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest method(String value) {
+	public MockServletRequest method(String value) {
 		this.method = value;
 		return this;
 	}
@@ -78,7 +116,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value Query parameter values.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest param(String name, String[] value) {
+	public MockServletRequest param(String name, String[] value) {
 		this.parameterMap.put(name, value);
 		return this;
 	}
@@ -90,7 +128,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value Query parameter value.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest param(String name, String value) {
+	public MockServletRequest param(String name, String value) {
 		this.parameterMap.put(name, new String[] {value});
 		return this;
 	}
@@ -102,7 +140,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value Header value.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest header(String name, String value) {
+	public MockServletRequest header(String name, String value) {
 		this.headerMap.put(name, new String[] {value});
 		return this;
 	}
@@ -114,7 +152,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value Request attribute value.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest attribute(String name, Object value) {
+	public MockServletRequest attribute(String name, Object value) {
 		this.attributeMap.put(name, value);
 		return this;
 	}
@@ -125,7 +163,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The body of the request.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest body(Object value) {
+	public MockServletRequest body(Object value) {
 		try {
 			if (value instanceof byte[])
 				this.body = (byte[])value;
@@ -147,7 +185,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The character encoding.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest characterEncoding(String value) {
+	public MockServletRequest characterEncoding(String value) {
 		this.characterEncoding = value;
 		return this;
 	}
@@ -158,7 +196,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The protocol.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest protocol(String value) {
+	public MockServletRequest protocol(String value) {
 		this.protocol = value;
 		return this;
 	}
@@ -169,7 +207,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The scheme.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest scheme(String value) {
+	public MockServletRequest scheme(String value) {
 		this.scheme = value;
 		return this;
 	}
@@ -180,7 +218,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The server name.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest serverName(String value) {
+	public MockServletRequest serverName(String value) {
 		this.serverName = value;
 		return this;
 	}
@@ -191,7 +229,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The server port.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest serverPort(int value) {
+	public MockServletRequest serverPort(int value) {
 		this.serverPort = value;
 		return this;
 	}
@@ -202,7 +240,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The remote address.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest remoteAddr(String value) {
+	public MockServletRequest remoteAddr(String value) {
 		this.remoteAddr = value;
 		return this;
 	}
@@ -213,7 +251,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The remote port.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest remoteHost(String value) {
+	public MockServletRequest remoteHost(String value) {
 		this.remoteHost = value;
 		return this;
 	}
@@ -224,7 +262,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The locale.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest locale(Locale value) {
+	public MockServletRequest locale(Locale value) {
 		this.locale = value;
 		return this;
 	}
@@ -235,7 +273,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The real path.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest realPath(String value) {
+	public MockServletRequest realPath(String value) {
 		this.realPath = value;
 		return this;
 	}
@@ -246,7 +284,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The remote port.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest remotePort(int value) {
+	public MockServletRequest remotePort(int value) {
 		this.remotePort = value;
 		return this;
 	}
@@ -257,7 +295,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The local name.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest localName(String value) {
+	public MockServletRequest localName(String value) {
 		this.localName = value;
 		return this;
 	}
@@ -268,7 +306,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The local address.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest localAddr(String value) {
+	public MockServletRequest localAddr(String value) {
 		this.localAddr = value;
 		return this;
 	}
@@ -279,7 +317,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The local port.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest localPort(int value) {
+	public MockServletRequest localPort(int value) {
 		this.localPort = value;
 		return this;
 	}
@@ -290,7 +328,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The request dispatcher.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest requestDispatcher(RequestDispatcher value) {
+	public MockServletRequest requestDispatcher(RequestDispatcher value) {
 		this.requestDispatcher = value;
 		return this;
 	}
@@ -301,7 +339,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The servlet context.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest servletContext(ServletContext value) {
+	public MockServletRequest servletContext(ServletContext value) {
 		this.servletContext = value;
 		return this;
 	}
@@ -312,7 +350,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The dispatcher type.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest dispatcherType(DispatcherType value) {
+	public MockServletRequest dispatcherType(DispatcherType value) {
 		this.dispatcherType = value;
 		return this;
 	}
@@ -323,7 +361,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The auth type.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest authType(String value) {
+	public MockServletRequest authType(String value) {
 		this.authType = value;
 		return this;
 	}
@@ -334,7 +372,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The cookies.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest cookies(Cookie[] value) {
+	public MockServletRequest cookies(Cookie[] value) {
 		this.cookies = value;
 		return this;
 	}
@@ -345,7 +383,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The path info.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest pathInfo(String value) {
+	public MockServletRequest pathInfo(String value) {
 		this.pathInfo = value;
 		return this;
 	}
@@ -356,7 +394,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The path translated.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest pathTranslated(String value) {
+	public MockServletRequest pathTranslated(String value) {
 		this.pathTranslated = value;
 		return this;
 	}
@@ -367,7 +405,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The context path.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest contextPath(String value) {
+	public MockServletRequest contextPath(String value) {
 		this.contextPath = value;
 		return this;
 	}
@@ -378,7 +416,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The query string.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest queryString(String value) {
+	public MockServletRequest queryString(String value) {
 		this.queryString = value;
 		return this;
 	}
@@ -389,7 +427,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The remote user.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest remoteUser(String value) {
+	public MockServletRequest remoteUser(String value) {
 		this.remoteUser = value;
 		return this;
 	}
@@ -400,7 +438,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The user principal.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest userPrincipal(Principal value) {
+	public MockServletRequest userPrincipal(Principal value) {
 		this.userPrincipal = value;
 		return this;
 	}
@@ -411,7 +449,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The requested session ID.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest requestedSessionId(String value) {
+	public MockServletRequest requestedSessionId(String value) {
 		this.requestedSessionId = value;
 		return this;
 	}
@@ -422,7 +460,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The request URI.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest requestURI(String value) {
+	public MockServletRequest requestURI(String value) {
 		this.requestURI = value;
 		return this;
 	}
@@ -433,7 +471,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The servlet path.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest servletPath(String value) {
+	public MockServletRequest servletPath(String value) {
 		this.servletPath = value;
 		return this;
 	}
@@ -444,7 +482,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @param value The HTTP session.
 	 * @return This object (for method chaining).
 	 */
-	public MockHttpServletRequest httpSession(HttpSession value) {
+	public MockServletRequest httpSession(HttpSession value) {
 		this.httpSession = value;
 		return this;
 	}
@@ -795,5 +833,25 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	@Override /* HttpServletRequest */
 	public <T extends HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
 		return null;
+	}
+
+	/**
+	 * Specifies the <code>Content-Type</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest contentType(String value) {
+		return header("Content-Type", value);
+	}
+
+	/**
+	 * Specifies the <code>Accept</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest accept(String value) {
+		return header("Accept", value);
 	}
 }

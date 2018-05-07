@@ -2827,7 +2827,7 @@ public final class RestContext extends BeanContext {
 	 * @return A new builder object.
 	 * @throws ServletException Something bad happened.
 	 */
-	static RestContextBuilder create(Object resource) throws ServletException {
+	public static RestContextBuilder create(Object resource) throws ServletException {
 		return new RestContextBuilder(null, resource.getClass(), null).init(resource);
 	}
 	
@@ -3682,7 +3682,7 @@ public final class RestContext extends BeanContext {
 	 * 	The call handler for this resource.  
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	RestCallHandler getCallHandler() {
+	public RestCallHandler getCallHandler() {
 		return callHandler;
 	}
 

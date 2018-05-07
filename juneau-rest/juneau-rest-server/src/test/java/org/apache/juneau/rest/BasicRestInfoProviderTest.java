@@ -36,14 +36,14 @@ public class BasicRestInfoProviderTest {
 	
 	private Swagger getSwaggerWithFile(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).classpathResourceFinder(TestClasspathResourceFinder.class).build();
-		RestRequest req = rc.getCallHandler().createRequest(new MockHttpServletRequest());
+		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
 	}
 
 	private static Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.getCallHandler().createRequest(new MockHttpServletRequest());
+		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
 	}
@@ -3033,7 +3033,7 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	@Test
-	public void ns03_body_examples_swaggerOnMethns() throws Exception {
+	public void ns03_body_examples_swaggerOnMethods() throws Exception {
 		assertObjectEquals("{foo:'c'}", getSwagger(new NS03()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples());
 		assertObjectEquals("{foo:'c'}", getSwaggerWithFile(new NS03()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples());
 	}
@@ -3661,16 +3661,38 @@ public class BasicRestInfoProviderTest {
 		public void pa22(PA22 h) {}
 
 		@Header(name="H", schema="{type:'a'}")
-		public static class PA23 {}
+		public static class PA23a {}
 		
 		@RestMethod(name=GET,path="/schema1")
-		public void pa23(PA23 h) {}
+		public void pa23a(PA23a h) {}
 
 		@Header(name="H", schema=" type:'a' ")
-		public static class PA24 {}
+		public static class PA23b {}
 		
 		@RestMethod(name=GET,path="/schema2")
-		public void pa24(PA24 h) {}
+		public void pa23(PA23b h) {}
+
+		@Header(name="H")
+		public static class PA23c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void pa23c(PA23c b) {}
+
+		@Header(name="H")
+		public static class PA23d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void pa23d(PA23d b) {}
+
+		@Header(name="H")
+		public static class PA23e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void pa23e(PA23e b) {}
 
 		@Header(name="H", type="a")
 		public static class PA25 {}
@@ -3778,12 +3800,24 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new PA()).getPaths().get("/required").get("get").getParameter("header", "H").getRequired());
 	}
 	@Test
-	public void pa23_Header_onPojo_schema() throws Exception {
+	public void pa23a_Header_onPojo_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new PA()).getPaths().get("/schema1").get("get").getParameter("header", "H").getSchema());
 	}
 	@Test
-	public void pa24_Header_onPojo_schema() throws Exception {
+	public void pa23b_Header_onPojo_schema2() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new PA()).getPaths().get("/schema2").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pa23c_Header_onPojo_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new PA()).getPaths().get("/schema3").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pa23d_Header_onPojo_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new PA()).getPaths().get("/schema4").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pa23e_Header_onPojo_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new PA()).getPaths().get("/schema5").get("get").getParameter("header", "H").getSchema());
 	}
 	@Test
 	public void pa25_Header_onPojo_type() throws Exception {
@@ -3863,6 +3897,31 @@ public class BasicRestInfoProviderTest {
 
 		@RestMethod(name=GET,path="/schema2")
 		public void pb19b(@Header(name="H", schema={" type:'b' "}) String h) {}
+
+		public static class PB19c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void pb19c(@Header("H") PB19c b) {}
+
+		public static class PB19d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void pb19d(@Header("H") PB19d b) {}
+
+		public static class PB19e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void pb19e(@Header("H") PB19e b) {}
+
+		@RestMethod(name=GET,path="/schema6")
+		public void pb19f(@Header("H") Integer b) {}
+
+		@RestMethod(name=GET,path="/schema7")
+		public void pb19g(@Header("H") Boolean b) {}
 
 		@RestMethod(name=GET,path="/_default1")
 		public void pb20a(@Header(name="H", _default="a") String h) {}
@@ -3972,6 +4031,26 @@ public class BasicRestInfoProviderTest {
 	@Test
 	public void pb19b_Header_onParameter_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new PB()).getPaths().get("/schema2").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pb19c_Header_onParameter_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new PB()).getPaths().get("/schema3").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pb19d_Header_onParameter_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new PB()).getPaths().get("/schema4").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pb19e_Header_onParameter_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new PB()).getPaths().get("/schema5").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pb19f_Header_onParameter_schema6() throws Exception {
+		assertObjectEquals("{format:'int32',type:'integer'}", getSwagger(new PB()).getPaths().get("/schema6").get("get").getParameter("header", "H").getSchema());
+	}
+	@Test
+	public void pb19g_Header_onParameter_schema7() throws Exception {
+		assertObjectEquals("{type:'boolean'}", getSwagger(new PB()).getPaths().get("/schema7").get("get").getParameter("header", "H").getSchema());
 	}
 	@Test
 	public void pb20a_Header_onParameter__default1() throws Exception {
@@ -4130,17 +4209,39 @@ public class BasicRestInfoProviderTest {
 		public void qa18(QA18 q) {}
 
 		@Query(name="Q", schema=" {type:'a'} ")
-		public static class QA19 {}
+		public static class QA19a {}
 		
 		@RestMethod(name=GET,path="/schema1")
-		public void qa19(QA19 q) {}
+		public void qa19a(QA19a q) {}
 
 		@Query(name="Q", schema={" type:'b' "})
-		public static class QA20 {}
+		public static class QA19b {}
 		
 		@RestMethod(name=GET,path="/schema2")
-		public void qa20(QA20 q) {}
+		public void qa19b(QA19b q) {}
 
+		@Query("Q")
+		public static class QA19c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void qa19c(QA19c q) {}
+
+		@Query("Q")
+		public static class QA19d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void qa19d(QA19d q) {}
+
+		@Query("Q")
+		public static class QA19e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void qa19e(QA19e q) {}
+		
 		@Query(name="Q", _default="a")
 		public static class QA21a {}
 		
@@ -4271,12 +4372,24 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new QA()).getPaths().get("/uniqueItems").get("get").getParameter("query", "Q").getUniqueItems());
 	}
 	@Test
-	public void qa19_Query_onPojo_schema1() throws Exception {
+	public void qa19a_Query_onPojo_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new QA()).getPaths().get("/schema1").get("get").getParameter("query", "Q").getSchema());
 	}
 	@Test
-	public void qa20_Query_onPojo_schema2() throws Exception {
+	public void qa19b_Query_onPojo_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new QA()).getPaths().get("/schema2").get("get").getParameter("query", "Q").getSchema());
+	}
+	@Test
+	public void qa19c_Query_onPojo_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new QA()).getPaths().get("/schema3").get("get").getParameter("query", "Q").getSchema());
+	}
+	@Test
+	public void qa19d_Query_onPojo_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new QA()).getPaths().get("/schema4").get("get").getParameter("query", "Q").getSchema());
+	}
+	@Test
+	public void qa19e_Query_onPojo_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new QA()).getPaths().get("/schema5").get("get").getParameter("query", "Q").getSchema());
 	}
 	@Test
 	public void qa21a_Query_onPojo_default1() throws Exception {
@@ -4384,6 +4497,34 @@ public class BasicRestInfoProviderTest {
 		@RestMethod(name=GET,path="/schema2")
 		public void qb19b(@Query(name="Q", schema={ " type: 'b' "}) String q) {}
 
+		public static class TB18c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void tb18c(@Body TB18c b) {}
+
+		public static class TB18d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void tb18d(@Body TB18d b) {}
+
+		public static class TB18e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void tb18e(@Body TB18e b) {}
+
+		@RestMethod(name=GET,path="/schema6")
+		public void tb18f(@Body Integer b) {}
+
+		@RestMethod(name=GET,path="/schema7")
+		public void tb18g(@Body Boolean b) {}
+
+
+		
+		
 		@RestMethod(name=GET,path="/_default1")
 		public void qb20a(@Query(name="Q", _default="a") String q) {}
 
@@ -4658,16 +4799,38 @@ public class BasicRestInfoProviderTest {
 		public void ra19(RA19 f) {}
 
 		@FormData(name="F", schema=" {type:'a'} ")
-		public static class RA20 {}
+		public static class RA20a {}
 		
 		@RestMethod(name=GET,path="/schema1")
-		public void ra20(RA20 f) {}
+		public void ra20a(RA20a f) {}
 
 		@FormData(name="F", schema={" type:'b' "})
-		public static class RA21 {}
+		public static class RA20b {}
 		
 		@RestMethod(name=GET,path="/schema2")
-		public void ra21(RA21 f) {}
+		public void ra20b(RA20b f) {}
+
+		@FormData("F")
+		public static class RA20c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void ra20c(RA20c f) {}
+
+		@FormData("F")
+		public static class RA20d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void ra20d(RA20d f) {}
+
+		@FormData("F")
+		public static class RA20e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void ra20e(RA20e f) {}
 
 		@FormData(name="F", _default="a")
 		public static class RA22 {}
@@ -4803,12 +4966,24 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new RA()).getPaths().get("/uniqueItems").get("get").getParameter("formData", "F").getUniqueItems());
 	}
 	@Test
-	public void ra20_FormData_onPojo_schema1() throws Exception {
+	public void ra20a_FormData_onPojo_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new RA()).getPaths().get("/schema1").get("get").getParameter("formData", "F").getSchema());
 	}
 	@Test
-	public void ra21_FormData_onPojo_schema2() throws Exception {
+	public void ra20b_FormData_onPojo_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new RA()).getPaths().get("/schema2").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void ra20c_FormData_onPojo_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new RA()).getPaths().get("/schema3").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void ra20d_FormData_onPojo_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new RA()).getPaths().get("/schema4").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void ra20e_FormData_onPojo_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new RA()).getPaths().get("/schema5").get("get").getParameter("formData", "F").getSchema());
 	}
 	@Test
 	public void ra22_FormData_onPojo__default1() throws Exception {
@@ -4911,11 +5086,36 @@ public class BasicRestInfoProviderTest {
 		public void rb20(@FormData(name="F", uniqueItems="true") String f) {}
 
 		@RestMethod(name=GET,path="/schema1")
-		public void rb21(@FormData(name="F", schema=" {type:'a'} ") String f) {}
+		public void rb21a(@FormData(name="F", schema=" {type:'a'} ") String f) {}
 
 		@RestMethod(name=GET,path="/schema2")
-		public void rb22(@FormData(name="F", schema= {" type:'b' "}) String f) {}
+		public void rb21b(@FormData(name="F", schema= {" type:'b' "}) String f) {}
 
+		public static class RB21c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void rb21c(@FormData("F") RB21c b) {}
+
+		public static class RB21d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void rb21d(@FormData("F") RB21d b) {}
+
+		public static class RB21e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void rb21e(@FormData("F") RB21e b) {}
+
+		@RestMethod(name=GET,path="/schema6")
+		public void rb21f(@FormData("F") Integer b) {}
+
+		@RestMethod(name=GET,path="/schema7")
+		public void rb21g(@FormData("F") Boolean b) {}
+		
 		@RestMethod(name=GET,path="/_default1")
 		public void rb23(@FormData(name="F", _default="a") String f) {}
 
@@ -5022,12 +5222,32 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new RB()).getPaths().get("/uniqueItems").get("get").getParameter("formData", "F").getUniqueItems());
 	}
 	@Test
-	public void rb21_FormData_onParameter_schema1() throws Exception {
+	public void rb21a_FormData_onParameter_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new RB()).getPaths().get("/schema1").get("get").getParameter("formData", "F").getSchema());
 	}
 	@Test
-	public void rb22_FormData_onParameter_schema2() throws Exception {
+	public void rb21b_FormData_onParameter_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new RB()).getPaths().get("/schema2").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void rb21c_FormData_onParameter_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new RB()).getPaths().get("/schema3").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void rb21d_FormData_onParameter_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new RB()).getPaths().get("/schema4").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void rb21e_FormData_onParameter_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new RB()).getPaths().get("/schema5").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void rb21f_FormData_onParameter_schema6() throws Exception {
+		assertObjectEquals("{format:'int32',type:'integer'}", getSwagger(new RB()).getPaths().get("/schema6").get("get").getParameter("formData", "F").getSchema());
+	}
+	@Test
+	public void rb21g_FormData_onParameter_schema7() throws Exception {
+		assertObjectEquals("{type:'boolean'}", getSwagger(new RB()).getPaths().get("/schema7").get("get").getParameter("formData", "F").getSchema());
 	}
 	@Test
 	public void rb23_FormData_onParameter__default1() throws Exception {
@@ -5160,16 +5380,38 @@ public class BasicRestInfoProviderTest {
 		public void sa15(SA15 f) {}
 
 		@Path(name="P", schema=" {type:'a'} ")
-		public static class SA16 {}
+		public static class SA16a {}
 		
 		@RestMethod(name=GET,path="/schema1/{P}")
-		public void sa16(SA16 f) {}
+		public void sa16a(SA16a f) {}
 
 		@Path(name="P", schema= {" type:'b' "})
-		public static class SA17 {}
+		public static class SA16b {}
 		
 		@RestMethod(name=GET,path="/schema2/{P}")
-		public void sa17(SA17 f) {}
+		public void sa16b(SA16b f) {}
+
+		@Path("P")
+		public static class SA16c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3/{P}")
+		public void sa16c(SA16c b) {}
+
+		@Path("P")
+		public static class SA16d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4/{P}")
+		public void sa16d(SA16d b) {}
+
+		@Path("P")
+		public static class SA16e {}
+
+		@RestMethod(name=GET,path="/schema5/{P}")
+		public void sa16e(SA16e b) {}
 
 		@Path(name="P", _enum="a,b")
 		public static class SA18 {}
@@ -5261,12 +5503,24 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new SA()).getPaths().get("/exclusiveMinimum/{P}").get("get").getParameter("path", "P").getExclusiveMinimum());
 	}
 	@Test
-	public void sa16_Path_onPojo_schema1() throws Exception {
+	public void sa16a_Path_onPojo_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new SA()).getPaths().get("/schema1/{P}").get("get").getParameter("path", "P").getSchema());
 	}
 	@Test
-	public void sa17_Path_onPojo_schema2() throws Exception {
+	public void sa16b_Path_onPojo_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new SA()).getPaths().get("/schema2/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sa16c_Path_onPojo_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new SA()).getPaths().get("/schema3/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sa16d_Path_onPojo_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new SA()).getPaths().get("/schema4/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sa16e_Path_onPojo_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new SA()).getPaths().get("/schema5/{P}").get("get").getParameter("path", "P").getSchema());
 	}
 	@Test
 	public void sa18_Path_onPojo__enum1() throws Exception {
@@ -5338,11 +5592,36 @@ public class BasicRestInfoProviderTest {
 		public void sb15(@Path(name="P", exclusiveMinimum="true") String h) {}
 
 		@RestMethod(name=GET,path="/schema1/{P}")
-		public void sb16(@Path(name="P", schema=" {type:'a'} ") String h) {}
+		public void sb16a(@Path(name="P", schema=" {type:'a'} ") String h) {}
 
 		@RestMethod(name=GET,path="/schema2/{P}")
-		public void sb17(@Path(name="P", schema= {" type:'b' "}) String h) {}
+		public void sb16b(@Path(name="P", schema= {" type:'b' "}) String h) {}
 
+		public static class SB16c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3/{P}")
+		public void sb16c(@Path("P") SB16c b) {}
+
+		public static class SB16d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4/{P}")
+		public void sb16d(@Path("P") SB16d b) {}
+
+		public static class SB16e {}
+
+		@RestMethod(name=GET,path="/schema5/{P}")
+		public void sb16e(@Path("P") SB16e b) {}
+
+		@RestMethod(name=GET,path="/schema6/{P}")
+		public void sb16f(@Path("P") Integer b) {}
+
+		@RestMethod(name=GET,path="/schema7/{P}")
+		public void sb16g(@Path("P") Boolean b) {}
+		
 		@RestMethod(name=GET,path="/_enum1/{P}")
 		public void sb18(@Path(name="P", _enum=" a,b ") String h) {}
 
@@ -5417,12 +5696,32 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new SB()).getPaths().get("/exclusiveMinimum/{P}").get("get").getParameter("path", "P").getExclusiveMinimum());
 	}
 	@Test
-	public void sb16_Path_onParameter_schema1() throws Exception {
+	public void sb16a_Path_onParameter_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new SB()).getPaths().get("/schema1/{P}").get("get").getParameter("path", "P").getSchema());
 	}
 	@Test
-	public void sb17_Path_onParameter_schema2() throws Exception {
+	public void sb16b_Path_onParameter_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new SB()).getPaths().get("/schema2/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sb16c_Path_onParameter_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new SB()).getPaths().get("/schema3/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sb16d_Path_onParameter_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new SB()).getPaths().get("/schema4/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sb16e_Path_onParameter_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new SB()).getPaths().get("/schema5/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sb16f_Path_onParameter_schema6() throws Exception {
+		assertObjectEquals("{format:'int32',type:'integer'}", getSwagger(new SB()).getPaths().get("/schema6/{P}").get("get").getParameter("path", "P").getSchema());
+	}
+	@Test
+	public void sb16g_Path_onParameter_schema7() throws Exception {
+		assertObjectEquals("{type:'boolean'}", getSwagger(new SB()).getPaths().get("/schema7/{P}").get("get").getParameter("path", "P").getSchema());
 	}
 	@Test
 	public void sb18_Path_onParameter__enum1() throws Exception {
@@ -5551,16 +5850,38 @@ public class BasicRestInfoProviderTest {
 		public void ta17(TA17 h) {}
 
 		@Body(schema="{type:'a'}")
-		public static class TA18 {}
+		public static class TA18a {}
 		
 		@RestMethod(name=GET,path="/schema1")
-		public void ta18(TA18 h) {}
+		public void ta18a(TA18a h) {}
 
 		@Body(schema={" type:'b' "})
-		public static class TA19 {}
+		public static class TA18b {}
 		
 		@RestMethod(name=GET,path="/schema2")
-		public void ta19(TA19 h) {}
+		public void ta18b(TA18b h) {}
+
+		@Body
+		public static class TA18c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void ta18c(TA18c b) {}
+
+		@Body
+		public static class TA18d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void ta18d(TA18d b) {}
+
+		@Body
+		public static class TA18e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void ta18e(TA18e b) {}
 
 		@Body(_default="'a'")
 		public static class TA20 {}
@@ -5696,12 +6017,24 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new TA()).getPaths().get("/uniqueItems").get("get").getParameter("body", null).getUniqueItems());
 	}
 	@Test
-	public void ta18_Body_onPojo_schema1() throws Exception {
+	public void ta18a_Body_onPojo_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new TA()).getPaths().get("/schema1").get("get").getParameter("body", null).getSchema());
 	}
 	@Test
-	public void ta19_Body_onPojo_schema2() throws Exception {
+	public void ta18b_Body_onPojo_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new TA()).getPaths().get("/schema2").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void ta18c_Body_onPojo_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new TA()).getPaths().get("/schema3").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void ta18d_Body_onPojo_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new TA()).getPaths().get("/schema4").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void ta18e_Body_onPojo_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new TA()).getPaths().get("/schema5").get("get").getParameter("body", null).getSchema());
 	}
 	@Test
 	public void ta20_Body_onPojo__default() throws Exception {
@@ -5836,15 +6169,40 @@ public class BasicRestInfoProviderTest {
 		@RestMethod(name=GET,path="/uniqueItems")
 		public void tb17(@Body(uniqueItems="true") TB17 b) {}
 
-		public static class TB18 {}
+		public static class TB18a {}
 
 		@RestMethod(name=GET,path="/schema1")
-		public void tb18(@Body(schema=" {type:'a'} ") TB18 b) {}
+		public void tb18a(@Body(schema=" {type:'a'} ") TB18a b) {}
 
-		public static class TB19 {}
+		public static class TB18b {}
 
 		@RestMethod(name=GET,path="/schema2")
-		public void tb19(@Body(schema={" type:'b' "}) TB19 b) {}
+		public void tb18b(@Body(schema={" type:'b' "}) TB18b b) {}
+
+		public static class TB18c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void tb18c(@Body TB18c b) {}
+
+		public static class TB18d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void tb18d(@Body TB18d b) {}
+
+		public static class TB18e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void tb18e(@Body TB18e b) {}
+
+		@RestMethod(name=GET,path="/schema6")
+		public void tb18f(@Body Integer b) {}
+
+		@RestMethod(name=GET,path="/schema7")
+		public void tb18g(@Body Boolean b) {}
 
 		public static class TB20 {}
 
@@ -5970,12 +6328,32 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwagger(new TB()).getPaths().get("/uniqueItems").get("get").getParameter("body", null).getUniqueItems());
 	}
 	@Test
-	public void tb18_Body_onParameter_schema1() throws Exception {
+	public void tb18a_Body_onParameter_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new TB()).getPaths().get("/schema1").get("get").getParameter("body", null).getSchema());
 	}
 	@Test
-	public void tb19_Body_onParameter_schema2() throws Exception {
+	public void tb18b_Body_onParameter_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new TB()).getPaths().get("/schema2").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void tb18c_Body_onParameter_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new TB()).getPaths().get("/schema3").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void tb18d_Body_onParameter_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new TB()).getPaths().get("/schema4").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void tb18e_Body_onParameter_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new TB()).getPaths().get("/schema5").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void tb18e_Body_onParameter_schema6() throws Exception {
+		assertObjectEquals("{format:'int32',type:'integer'}", getSwagger(new TB()).getPaths().get("/schema6").get("get").getParameter("body", null).getSchema());
+	}
+	@Test
+	public void tb18e_Body_onParameter_schema7() throws Exception {
+		assertObjectEquals("{type:'boolean'}", getSwagger(new TB()).getPaths().get("/schema7").get("get").getParameter("body", null).getSchema());
 	}
 	@Test
 	public void tb20_Body_onParameter__default1() throws Exception {
@@ -6061,6 +6439,28 @@ public class BasicRestInfoProviderTest {
 		@RestMethod(name=GET,path="/schema2")
 		public void ua04b(UA04b r) {}
 
+		@Response
+		public static class UA04c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void ua04c(UA04c b) {}
+
+		@Response
+		public static class UA04d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void ua04d(UA04d b) {}
+
+		@Response
+		public static class UA04e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void ua04e(UA04e b) {}
+
 		@Response(headers=" {foo:{type:'a'}} ")
 		public static class UA05a {}
 		
@@ -6123,6 +6523,18 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{type:'b'}", getSwagger(new UA()).getPaths().get("/schema2").get("get").getResponse(200).getSchema());
 	}
 	@Test
+	public void ua04c_Response_onPojo_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new UA()).getPaths().get("/schema3").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ua04d_Response_onPojo_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new UA()).getPaths().get("/schema4").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ua04e_Response_onPojo_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new UA()).getPaths().get("/schema5").get("get").getResponse(200).getSchema());
+	}
+	@Test
 	public void ua05a_Response_onPojo_headers1() throws Exception {
 		assertObjectEquals("{foo:{type:'a'}}", getSwagger(new UA()).getPaths().get("/headers1").get("get").getResponse(200).getHeaders());
 	}
@@ -6174,15 +6586,40 @@ public class BasicRestInfoProviderTest {
 		@RestMethod(name=GET,path="/description2")
 		public void ub04(@Response(description={"a","b"}) UB04 r) {}
 
-		public static class UB05 {}
+		public static class UB05a {}
 
 		@RestMethod(name=GET,path="/schema1")
-		public void ub05(@Response(schema=" {type:'a'} ") UB05 r) {}
+		public void ub05a(@Response(schema=" {type:'a'} ") UB05a r) {}
 
-		public static class UB06 {}
+		public static class UB05b {}
 
 		@RestMethod(name=GET,path="/schema2")
-		public void ub06(@Response(schema={" type:'b' "}) UB06 r) {}
+		public void ub05b(@Response(schema={" type:'b' "}) UB05b r) {}
+
+		public static class UB05c {
+			public String f1;
+		}
+
+		@RestMethod(name=GET,path="/schema3")
+		public void ub05c(@Response UB05c b) {}
+
+		public static class UB05d extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+
+		@RestMethod(name=GET,path="/schema4")
+		public void ub05d(@Response UB05d b) {}
+
+		public static class UB05e {}
+
+		@RestMethod(name=GET,path="/schema5")
+		public void ub05e(@Response UB05e b) {}
+
+		@RestMethod(name=GET,path="/schema6")
+		public void ub05f(@Response Integer b) {}
+
+		@RestMethod(name=GET,path="/schema7")
+		public void ub05g(@Response Boolean b) {}
 
 		public static class UB07 {}
 
@@ -6232,12 +6669,32 @@ public class BasicRestInfoProviderTest {
 		assertEquals("a\nb", getSwagger(new UB()).getPaths().get("/description2").get("get").getResponse(200).getDescription());
 	}
 	@Test
-	public void ub05_Response_onParameter_schema1() throws Exception {
+	public void ub05a_Response_onParameter_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new UB()).getPaths().get("/schema1").get("get").getResponse(200).getSchema());
 	}
 	@Test
-	public void ub06_Response_onParameter_schema2() throws Exception {
+	public void ub05b_Response_onParameter_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new UB()).getPaths().get("/schema2").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ub05c_Response_onParameter_schema3() throws Exception {
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", getSwagger(new UB()).getPaths().get("/schema3").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ub05d_Response_onParameter_schema4() throws Exception {
+		assertObjectEquals("{type:'array',items:{type:'string'}}", getSwagger(new UB()).getPaths().get("/schema4").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ub05e_Response_onParameter_schema5() throws Exception {
+		assertObjectEquals("{type:'string'}", getSwagger(new UB()).getPaths().get("/schema5").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ub05f_Response_onParameter_schema6() throws Exception {
+		assertObjectEquals("{format:'int32',type:'integer'}", getSwagger(new UB()).getPaths().get("/schema6").get("get").getResponse(200).getSchema());
+	}
+	@Test
+	public void ub05g_Response_onParameter_schema7() throws Exception {
+		assertObjectEquals("{type:'boolean'}", getSwagger(new UB()).getPaths().get("/schema7").get("get").getResponse(200).getSchema());
 	}
 	@Test
 	public void ub07_Response_onParameter_headers1() throws Exception {
@@ -6297,16 +6754,16 @@ public class BasicRestInfoProviderTest {
 		public void uc04() throws UC04 {}
 
 		@Response(schema=" {type:'a'} ")
-		public static class UC05 extends Throwable {}
+		public static class UC05a extends Throwable {}
 
 		@RestMethod(name=GET,path="/schema1")
-		public void uc05() throws UC05 {}
+		public void uc05a() throws UC05a {}
 
 		@Response(schema={" type:'b' "})
-		public static class UC06 extends Throwable {}
+		public static class UC05b extends Throwable {}
 
 		@RestMethod(name=GET,path="/schema2")
-		public void uc06() throws UC06 {}
+		public void uc05b() throws UC05b {}
 
 		@Response(headers=" {foo:{type:'a'}} ")
 		public static class UC07 extends Throwable {}
@@ -6362,11 +6819,11 @@ public class BasicRestInfoProviderTest {
 		assertEquals("a\nb", getSwagger(new UC()).getPaths().get("/description2").get("get").getResponse(500).getDescription());
 	}
 	@Test
-	public void uc05_Response_onThrowable_schema1() throws Exception {
+	public void uc05a_Response_onThrowable_schema1() throws Exception {
 		assertObjectEquals("{type:'a'}", getSwagger(new UC()).getPaths().get("/schema1").get("get").getResponse(500).getSchema());
 	}
 	@Test
-	public void uc06_Response_onThrowable_schema2() throws Exception {
+	public void uc05b_Response_onThrowable_schema2() throws Exception {
 		assertObjectEquals("{type:'b'}", getSwagger(new UC()).getPaths().get("/schema2").get("get").getResponse(500).getSchema());
 	}
 	@Test

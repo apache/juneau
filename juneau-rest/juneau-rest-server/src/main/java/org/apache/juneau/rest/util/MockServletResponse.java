@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
 /**
  * An implementation of {@link HttpServletResponse} for testing purposes.
  */
-public class MockHttpServletResponse implements HttpServletResponse {
+public class MockServletResponse implements HttpServletResponse {
 
 	private String characterEncoding = "UTF-8";
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -34,6 +34,16 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	private String msg;
 	private Map<String,String[]> headerMap = new LinkedHashMap<>();
 	
+
+	/**
+	 * Creates a new servlet response.
+	 * 
+	 * @return A new response.
+	 */
+	public static MockServletResponse create() {
+		return new MockServletResponse();
+	}
+
 	/**
 	 * Returns the content length.
 	 * 
@@ -236,5 +246,18 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	@Override /* HttpServletResponse */
 	public Collection<String> getHeaderNames() {
 		return headerMap.keySet();
+	}
+
+	/**
+	 * Returns the body of the request as a string.
+	 * 
+	 * @return The body of the request as a string.
+	 */
+	public String getBodyAsString() {
+		try {
+			return baos.toString("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

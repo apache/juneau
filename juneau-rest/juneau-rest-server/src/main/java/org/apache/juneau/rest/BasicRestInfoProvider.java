@@ -390,15 +390,17 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			
 			ObjectMap rom = responses.getObjectMap(rStatus, true);
 
-			ObjectMap rmd = r.getMetaData();
-			rom.appendIf(true, true, true, "description", vr.resolve(rmd.getString("description")));
-			rom.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(rmd.getString("example"))));
-			rom.appendIf(true, true, true, "examples", parseMap(rmd.getString("examples"), vr, false, true, "RestMethodReturn/examples on class {0} method {1}", c, m));
-			rom.appendIf(true, true, true, "schema", parseMap(rmd.getString("schema"), vr, false, true, "RestMethodReturn/schema on class {0} method {1}", c, m));
-			rom.appendIf(true, true, true, "headers", parseMap(rmd.getString("headers"), vr, false, true, "RestMethodReturn/headers on class {0} method {1}", c, m));
-			
-			rom.put("schema", getSchema(req, rom.getObjectMap("schema", true), js, m.getGenericReturnType()));
-			addXExamples(req, sm, rom, "ok", js, m.getGenericReturnType());
+			if (r.getType() != void.class) {
+				ObjectMap rmd = r.getMetaData();
+				rom.appendIf(true, true, true, "description", vr.resolve(rmd.getString("description")));
+				rom.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(rmd.getString("example"))));
+				rom.appendIf(true, true, true, "examples", parseMap(rmd.getString("examples"), vr, false, true, "RestMethodReturn/examples on class {0} method {1}", c, m));
+				rom.appendIf(true, true, true, "schema", parseMap(rmd.getString("schema"), vr, false, true, "RestMethodReturn/schema on class {0} method {1}", c, m));
+				rom.appendIf(true, true, true, "headers", parseMap(rmd.getString("headers"), vr, false, true, "RestMethodReturn/headers on class {0} method {1}", c, m));
+				
+				rom.put("schema", getSchema(req, rom.getObjectMap("schema", true), js, m.getGenericReturnType()));
+				addXExamples(req, sm, rom, "ok", js, m.getGenericReturnType());
+			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
@@ -455,6 +457,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						}
 
 						response.put("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
+						
+//						if (response.containsKey("x-example"))
+//							addXExamples(req, sm, response, response.getString("x-example"), js, type);
 					}
 					
 				} else if (in == RESPONSE_STATUS) {
