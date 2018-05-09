@@ -30,6 +30,9 @@ import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
+/**
+ * Tests the {@link BasicRestInfoProvider} class.
+ */
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicRestInfoProviderTest {
@@ -6615,12 +6618,6 @@ public class BasicRestInfoProviderTest {
 		@RestMethod(name=GET,path="/schema5")
 		public void ub05e(@Response UB05e b) {}
 
-		@RestMethod(name=GET,path="/schema6")
-		public void ub05f(@Response Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7")
-		public void ub05g(@Response Boolean b) {}
-
 		public static class UB07 {}
 
 		@RestMethod(name=GET,path="/headers1")
@@ -6687,14 +6684,6 @@ public class BasicRestInfoProviderTest {
 	@Test
 	public void ub05e_Response_onParameter_schema5() throws Exception {
 		assertObjectEquals("{type:'string'}", getSwagger(new UB()).getPaths().get("/schema5").get("get").getResponse(200).getSchema());
-	}
-	@Test
-	public void ub05f_Response_onParameter_schema6() throws Exception {
-		assertObjectEquals("{format:'int32',type:'integer'}", getSwagger(new UB()).getPaths().get("/schema6").get("get").getResponse(200).getSchema());
-	}
-	@Test
-	public void ub05g_Response_onParameter_schema7() throws Exception {
-		assertObjectEquals("{type:'boolean'}", getSwagger(new UB()).getPaths().get("/schema7").get("get").getResponse(200).getSchema());
 	}
 	@Test
 	public void ub07_Response_onParameter_headers1() throws Exception {

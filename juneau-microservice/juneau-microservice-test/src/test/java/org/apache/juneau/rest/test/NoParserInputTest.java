@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.rest.client.*;
@@ -45,17 +43,10 @@ public class NoParserInputTest extends RestTestcase {
 
 	//====================================================================================================
 	// @Body annotated PushbackReader.
-	// This should always fail since the servlet reader is not a pushback reader.
 	//====================================================================================================
 	@Test
 	public void testPushbackReader() throws Exception {
-		try {
-			plainTextClient.doPut(URL + "/testPushbackReader?noTrace=true", "foo").getResponseAsString();
-			fail("Exception expected");
-		} catch (RestCallException e) {
-			checkErrorResponse(debug, e, SC_BAD_REQUEST,
-				"Invalid argument type passed to the following method:",
-				"'public java.lang.String org.apache.juneau.rest.test.NoParserInputResource.testPushbackReader(java.io.PushbackReader) throws java.lang.Exception'");
-		}
+		String r = plainTextClient.doPut(URL + "/testPushbackReader", "foo").getResponseAsString();
+		assertEquals("foo", r);
 	}
 }

@@ -1,0 +1,186 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              * 
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.internal;
+
+import java.util.concurrent.*;
+import java.lang.reflect.*;
+import java.util.*;
+
+/**
+ * Cache of object that convert POJOs to and from common types such as strings, readers, and input streams.
+ */
+public class TransformCache {
+	private static final ConcurrentHashMap<Class<?>,Map<Class<?>,Transform<?,?>>> CACHE = new ConcurrentHashMap<>();
+	
+	/**
+	 * Represents a non-existent transform.
+	 */
+	public static final Transform<Object,Object> NULL = new Transform<Object,Object>() {
+		@Override
+		public Object transform(Object in) {
+			return null;
+		}
+	};
+	
+	// Special cases.
+	static {
+		
+		// TimeZone doesn't follow any standard conventions.
+		add(String.class, TimeZone.class,
+			new Transform<String,TimeZone>() {
+				@Override public TimeZone transform(String in) {
+					return TimeZone.getTimeZone(in);
+				}
+			}
+		);
+		add(TimeZone.class, String.class, 
+			new Transform<TimeZone,String>() {
+				@Override public String transform(TimeZone in) {
+					return in.getID();
+				}
+			}
+		);
+		
+		// Locale(String) doesn't work on strings like "ja_JP".
+		add(String.class, Locale.class,
+			new Transform<String,Locale>() {
+				@Override
+				public Locale transform(String in) {
+					return Locale.forLanguageTag(in.replace('_', '-'));
+				}
+			}
+		);
+	}
+	
+	/**
+	 * Adds a transform for the specified input/output types.
+	 * 
+	 * @param ic The input type.
+	 * @param oc The output type.
+	 * @param t The transform for converting the input to the output.
+	 */
+	public static synchronized void add(Class<?> ic, Class<?> oc, Transform<?,?> t) {
+		Map<Class<?>,Transform<?,?>> m = CACHE.get(oc);
+		if (m == null) {
+			m = new ConcurrentHashMap<>();
+			CACHE.put(oc, m);
+		}
+		m.put(ic, t);
+	}
+	
+	/**
+	 * Returns the transform for converting the specified input type to the specified output type.
+	 * 
+	 * @param ic The input type.
+	 * @param oc The output type.
+	 * @return The transform for performing the conversion, or <jk>null</jk> if the conversion cannot be made.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I,O> Transform<I,O> get(final Class<I> ic, final Class<O> oc) {
+		
+		if (ic == null || oc == null)
+			return null;
+		
+		Map<Class<?>,Transform<?,?>> m = CACHE.get(oc);
+		if (m == null) {
+			m = new ConcurrentHashMap<>();
+			CACHE.putIfAbsent(oc, m);
+			m = CACHE.get(oc);
+		}
+		
+		Transform t = m.get(ic);
+		if (t != null)
+			return t == NULL ? null : t;
+
+		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(ic, false, true); i.hasNext(); ) {
+			Class pic = i.next();
+			t = m.get(pic);
+			if (t != null) {
+				m.put(pic, t);
+				return t == NULL ? null : t;
+			}
+		}
+		
+		if (ic == oc) {
+			t = new Transform<I,O>() {
+				@Override public O transform(I in) {
+					return (O)in;
+				}
+			};
+		} else if (ic == String.class) {
+			if (oc.isEnum()) {
+				t = new Transform<String,O>() {
+					@Override
+					public O transform(String in) {
+						return (O)Enum.valueOf((Class<? extends Enum>)oc, in);
+					}
+				};
+			} else {
+				final Method fromStringMethod = ClassUtils.findPublicFromStringMethod(oc);
+				if (fromStringMethod != null) {
+					t = new Transform<String,O>() {
+						@Override
+						public O transform(String in) {
+							try {
+								return (O)fromStringMethod.invoke(null, in);
+							} catch (Exception e) {
+								throw new RuntimeException(e);
+							}
+						}
+					};
+				}
+			}
+		}
+		
+		if (t == null) {
+			Method createMethod = ClassUtils.findPublicStaticCreateMethod(oc, ic, "create");
+			if (createMethod == null)
+				createMethod = ClassUtils.findPublicStaticCreateMethod(oc, ic, "from" + ic.getSimpleName());
+			if (createMethod != null) {
+				final Method cm = createMethod;
+				t = new Transform<I,O>() {
+					@Override
+					public O transform(I in) {
+						try {
+							return (O)cm.invoke(null, in);
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
+					}
+				};
+			} else {
+				final Constructor<?> c = ClassUtils.findPublicConstructor(oc, ic);
+				if (c != null && ! ClassUtils.isDeprecated(c)) {
+					t = new Transform<I,O>() {
+						@Override
+						public O transform(I in) {
+							try {
+								return (O)c.newInstance(in);
+							} catch (Exception e) {
+								throw new RuntimeException(e);
+							}
+						}
+					};
+				}
+				
+			}
+		}
+		
+		if (t == null)
+			t = NULL;
+		
+		m.put(ic, t);
+		
+		return t == NULL ? null : t;
+	}
+}

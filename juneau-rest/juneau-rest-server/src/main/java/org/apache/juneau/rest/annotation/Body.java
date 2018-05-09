@@ -21,13 +21,13 @@ import java.lang.annotation.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the HTTP
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method or POJO class to identify it as the HTTP
  * request body converted to a POJO.
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res, <ja>@Body</ja> Person person) {
+ * 	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {
  * 		...
  * 	}
  * </p>
@@ -36,7 +36,7 @@ import org.apache.juneau.rest.*;
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
+ * 	<jk>public void</jk> addPerson(RestRequest req, RestResponse res) {
  * 		Person person = req.getBody().asType(Person.<jk>class</jk>);
  * 		...
  * 	}

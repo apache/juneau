@@ -28,31 +28,6 @@ import org.apache.juneau.utils.*;
 public final class ClassUtils {
 
 	private static final Map<Class<?>,ConstructorCacheEntry> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
-	private static final Map<Class<?>,Stringify<?>> STRINGIFY_CACHE = new ConcurrentHashMap<>();
-	
-	// Special cases.
-	static {
-		
-		// TimeZone doesn't follow any standard conventions.
-		STRINGIFY_CACHE.put(TimeZone.class, new Stringify<TimeZone>(TimeZone.class){
-			@Override 
-			public TimeZone fromString(String s) {
-				return TimeZone.getTimeZone(s);
-			}
-			@Override 
-			public String toString(TimeZone tz) {
-				return tz.getID();
-			}
-		});
-		
-		// Locale(String) doesn't work on strings like "ja_JP".
-		STRINGIFY_CACHE.put(Locale.class, new Stringify<Locale>(Locale.class){
-			@Override 
-			public Locale fromString(String s) {
-				return Locale.forLanguageTag(s.replace('_', '-'));
-			}
-		});
-	}
 	
 	/**
 	 * Given the specified list of objects, return readable names for the class types of the objects.
@@ -1897,6 +1872,21 @@ public final class ClassUtils {
 	}
 	
 	/**
+	 * Find the public static creator method on the specified class.
+	 * 
+	 * @param oc The created type.
+	 * @param ic The argument type.
+	 * @param name The method name.
+	 * @return The static method, or <jk>null</jk> if it couldn't be found.
+	 */
+	public static Method findPublicStaticCreateMethod(Class<?> oc, Class<?> ic, String name) {
+		for (Method m : oc.getMethods()) 
+			if (isAll(m, STATIC, PUBLIC, NOT_DEPRECATED) && hasName(m, name) && hasReturnType(m, oc) && hasArgs(m, ic)) 
+				return m;
+		return null;
+	}
+
+	/**
 	 * Constructs a new instance of the specified class from the specified string.
 	 * 
 	 * <p>
@@ -1912,9 +1902,9 @@ public final class ClassUtils {
 	 * @param s The string to create the instance from.
 	 * @return A new object instance, or <jk>null</jk> if a method for converting the string to an object could not be found.
 	 */
-	@SuppressWarnings({ "unchecked" })
 	public static <T> T fromString(Class<T> c, String s) {
-		return (T)getStringify(c).fromString(s);
+		Transform<String,T> t = TransformCache.get(String.class, c);
+		return t == null ? null : t.transform(s);
 	}
 	
 	/**
@@ -1932,7 +1922,8 @@ public final class ClassUtils {
 	public static String toString(Object o) {
 		if (o == null)
 			return null;
-		return getStringify(o.getClass()).toString(o);
+		Transform<Object,String> t = (Transform<Object,String>)TransformCache.get(o.getClass(), String.class);
+		return t == null ? o.toString() : t.transform(o);
 	}
 	
 	/**
@@ -1989,57 +1980,6 @@ public final class ClassUtils {
 			if (ignoreExceptions)
 				return false;
 			throw new ClassMetaRuntimeException("Could not set accessibility to true on field ''{0}''", x); 
-		}
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Stringify getStringify(Class c) {
-		Stringify fs = STRINGIFY_CACHE.get(c);
-		if (fs == null) {
-			for (Iterator<Class<?>> i = getParentClasses(c, false, true); i.hasNext(); ) {
-				Class c2 = i.next();
-				fs = STRINGIFY_CACHE.get(c2);
-				if (fs != null) {
-					STRINGIFY_CACHE.put(c, fs);
-					break;
-				}
-			}
-			if (fs == null) {
-				fs = new Stringify(c);
-				STRINGIFY_CACHE.put(c, fs);
-			}
-		}
-		return fs;
-	}
-	
-	@SuppressWarnings({"unchecked","rawtypes"})
-	private static class Stringify<T> {
-		final Constructor<?> constructor;
-		final Method fromStringMethod;
-		final Class<? extends Enum> enumClass;
-		
-		Stringify(Class<?> c) {
-			enumClass = c.isEnum() ? (Class<? extends Enum>)c : null;
-			fromStringMethod = enumClass != null ? null : findPublicFromStringMethod(c);
-			constructor = enumClass != null || fromStringMethod != null ? null : findPublicConstructor(c, String.class);
-		}
-		
-		public T fromString(String s) {
-			try {
-				if (fromStringMethod != null)
-					return (T)fromStringMethod.invoke(null, s);
-				if (constructor != null)
-					return (T)constructor.newInstance(s);
-				if (enumClass != null)
-					return (T)Enum.valueOf(enumClass, s);
-				return null;
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		public String toString(T t) {
-			return t.toString(); 
 		}
 	}
 	

@@ -145,7 +145,7 @@ class RestParamDefaults {
 	static final class HttpServletRequestObject extends RestMethodParam {
 
 		protected HttpServletRequestObject() {
-			super(OTHER, null, HttpServletRequest.class);
+			super(OTHER, HttpServletRequest.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -157,7 +157,7 @@ class RestParamDefaults {
 	static final class HttpServletResponseObject extends RestMethodParam {
 
 		protected HttpServletResponseObject() {
-			super(OTHER, null, HttpServletResponse.class);
+			super(OTHER, HttpServletResponse.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -169,7 +169,7 @@ class RestParamDefaults {
 	static final class RestRequestObject extends RestMethodParam {
 
 		protected RestRequestObject() {
-			super(OTHER, null, RestRequest.class);
+			super(OTHER, RestRequest.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -181,7 +181,7 @@ class RestParamDefaults {
 	static final class RestResponseObject extends RestMethodParam {
 
 		protected RestResponseObject() {
-			super(OTHER, null, RestResponse.class);
+			super(OTHER, RestResponse.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -547,11 +547,15 @@ class RestParamDefaults {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static final class PathObject extends RestMethodParam {
-		private final Method method;
 
 		protected PathObject(Method method, Path a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(PATH, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, PathObject.class)));
-			this.method = method;
+			super(PATH, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, PathObject.class)));
+		}
+
+		@Override /* RestMethodParam */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@Path used without name or value on method ''{0}''.", method);
 		}
 
 		@Override /* RestMethodParam */
@@ -581,22 +585,25 @@ class RestParamDefaults {
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
-		
-		@Override /* RestMethodParqm */
-		public void validate() throws InternalServerError {
-			if (isEmpty(name))
-				throw new InternalServerError("@Path used without name or value on method ''{0}''.", method);
-		}
 	}
 
 	static final class BodyObject extends RestMethodParam {
+		
+		private final Transform<Reader,?> readerTransform;
+		private final Transform<InputStream,?> inputStreamTransform;
 
 		protected BodyObject(Method method, Body a, Type type, RestMethodParam existing) {
-			super(BODY, null, type, getMetaData(a, castOrNull(existing, BodyObject.class)));
+			super(BODY, method, null, type, getMetaData(a, castOrNull(existing, BodyObject.class)));
+			readerTransform = TransformCache.get(Reader.class, getTypeClass());
+			inputStreamTransform = TransformCache.get(InputStream.class, getTypeClass());
 		}
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			if (readerTransform != null)
+				return readerTransform.transform(req.getReader());  // Also passes Reader through.
+			if (inputStreamTransform != null)
+				return inputStreamTransform.transform(req.getInputStream());  // Also passes InputStream through.
 			return req.getBody().asType(type);
 		}
 		
@@ -633,13 +640,17 @@ class RestParamDefaults {
 	}
 
 	static final class HeaderObject extends RestMethodParam {
-		private final Method method;
 		private final HttpPartParser partParser;
 
 		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(HEADER, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
-			this.method = method;
+			super(HEADER, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+		}
+
+		@Override /* RestMethodParam */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@Header used without name or value on method ''{0}''.", method);
 		}
 
 		@Override /* RestMethodParam */
@@ -676,51 +687,42 @@ class RestParamDefaults {
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
-		
-		@Override /* RestMethodParqm */
-		public void validate() throws InternalServerError {
-			if (isEmpty(name))
-				throw new InternalServerError("@Header used without name or value on method ''{0}''.", method);
-		}
 	}
 
 	static final class ResponseHeaderObject extends RestMethodParam {
-		private final Method method;
 		final HttpPartSerializer partSerializer;
 
 		protected ResponseHeaderObject(Method method, ResponseHeader a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(RESPONSE_HEADER, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
-			this.method = method;
+			super(RESPONSE_HEADER, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
 			this.partSerializer = a.serializer() == HttpPartSerializer.Null.class ? null : ClassUtils.newInstance(HttpPartSerializer.class, a.serializer(), true, ps);
+		}
+
+		@Override /* RestMethodParam */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@ResponseHeader used without name or value on method ''{0}''.", method);
+			if (getTypeClass() == null) 
+				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must be a subclass of Value.", type);
+			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
+				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must have a public no-arg constructor.", type);
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
-			if (type instanceof Class) {
-				Class<?> c = (Class<?>)type;
-				if (ClassUtils.isParentClass(Value.class, c)) {
-					try {
-						Value<Object> v = (Value<Object>)c.newInstance();
-						v.listener(new ValueListener() {
-							@Override
-							public void onSet(Object newValue) {
-								res.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, newValue));
-							}
-						});
-						String def = getMetaData().getString("default");
-						if (def != null) {
-							Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
-							v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
-						}
-							
-						return v;
-					} catch (Exception e) {
-						throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must have a public no-arg constructor.", type);
-					}
+			Value<Object> v = (Value<Object>)getTypeClass().newInstance();
+			v.listener(new ValueListener() {
+				@Override
+				public void onSet(Object newValue) {
+					res.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, newValue));
 				}
+			});
+			String def = getMetaData().getString("default");
+			if (def != null) {
+				Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
+				v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
 			}
-			throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must be a subclass of Value.", type);
+			return v;
 		}
 		
 		public HttpPartSerializer getPartSerializer() {
@@ -763,47 +765,38 @@ class RestParamDefaults {
 			}
 			return om;
 		}
-		
-		@Override /* RestMethodParqm */
-		public void validate() throws InternalServerError {
-			if (isEmpty(name))
-				throw new InternalServerError("@ResponseHeader used without name or value on method ''{0}''.", method);
-		}
 	}
 
 	static final class ResponseObject extends RestMethodParam {
 
 		protected ResponseObject(Method method, Response a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(RESPONSE, "body", type, getMetaData(a, castOrNull(existing, ResponseObject.class)));
+			super(RESPONSE, method, "body", type, getMetaData(a, castOrNull(existing, ResponseObject.class)));
+		}
+
+		@Override /* RestMethodParam */
+		public void validate() throws InternalServerError {
+			if (getTypeClass() == null) 
+				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be a subclass of Value.", type);
+			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
+				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must have a public no-arg constructor.", type);
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
-			if (type instanceof Class) {
-				Class<?> c = (Class<?>)type;
-				if (ClassUtils.isParentClass(Value.class, c)) {
-					try {
-						Value<Object> v = (Value<Object>)c.newInstance();
-						v.listener(new ValueListener() {
-							@Override
-							public void onSet(Object newValue) {
-								res.setOutput(newValue);
-							}
-						});
-						String def = getMetaData().getString("default");
-						if (def != null) {
-							Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
-							v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
-						}
-							
-						return v;
-					} catch (Exception e) {
-						throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must have a public no-arg constructor.", type);
-					}
+			Value<Object> v = (Value<Object>)c.newInstance();
+			v.listener(new ValueListener() {
+				@Override
+				public void onSet(Object newValue) {
+					res.setOutput(newValue);
 				}
+			});
+			String def = getMetaData().getString("default");
+			if (def != null) {
+				Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
+				v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
 			}
-			throw new RestException(500, "Invalid type {0} specified with @ResponseHeader annotation.  It must be a subclass of Value.", type);
+			return v;
 		}
 		
 		private static ObjectMap getMetaData(Response a, ResponseObject existing) {
@@ -826,36 +819,33 @@ class RestParamDefaults {
 	static final class ResponseStatusObject extends RestMethodParam {
 
 		protected ResponseStatusObject(Method method, Status a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(RESPONSE_STATUS, "", type, getMetaData(a, castOrNull(existing, ResponseStatusObject.class)));
+			super(RESPONSE_STATUS, method, "", type, getMetaData(a, castOrNull(existing, ResponseStatusObject.class)));
+		}
+
+		@Override /* RestMethodParam */
+		public void validate() throws InternalServerError {
+			if (getTypeClass() == null) 
+				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must be a subclass of Value.", type);
+			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
+				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must have a public no-arg constructor.", type);
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
-			if (type instanceof Class) {
-				Class<?> c = (Class<?>)type;
-				if (ClassUtils.isParentClass(Value.class, c)) {
-					try {
-						Value<Object> v = (Value<Object>)c.newInstance();
-						v.listener(new ValueListener() {
-							@Override
-							public void onSet(Object newValue) {
-								res.setStatus(Integer.parseInt(newValue.toString()));
-							}
-						});
-						String def = getMetaData().getString("default");
-						if (def != null) {
-							Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
-							v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
-						}
-							
-						return v;
-					} catch (Exception e) {
-						throw new RestException(500, "Invalid type {0} specified with @Status annotation.  It must have a public no-arg constructor.", type);
-					}
+			Value<Object> v = (Value<Object>)c.newInstance();
+			v.listener(new ValueListener() {
+				@Override
+				public void onSet(Object newValue) {
+					res.setStatus(Integer.parseInt(newValue.toString()));
 				}
+			});
+			String def = getMetaData().getString("default");
+			if (def != null) {
+				Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
+				v.set(JsonParser.DEFAULT.parse(def, req.getBeanSession().getClassMeta(pc)));
 			}
-			throw new RestException(500, "Invalid type {0} specified with @Status annotation.  It must be a subclass of Value.", type);
+			return v;
 		}
 		
 		private static ObjectMap getMetaData(Status a, ResponseStatusObject existing) {
@@ -886,17 +876,21 @@ class RestParamDefaults {
 	}
 
 	static final class FormDataObject extends RestMethodParam {
-		private final Method method;
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
-		private final Type type;
 
 		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(FORM_DATA, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
-			this.method = method;
-			this.type = type;
+			super(FORM_DATA, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
 			this.multiPart = a.multipart();
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+		}
+		
+		@Override /* RestMethodParam */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@FormData used without name or value on method ''{0}''.", method);
+			if (multiPart && ! isCollection(type))
+				throw new InternalServerError("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
 		}
 
 		@Override /* RestMethodParam */
@@ -935,28 +929,24 @@ class RestParamDefaults {
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
-		
-		@Override /* RestMethodParqm */
-		public void validate() throws InternalServerError {
-			if (isEmpty(name))
-				throw new InternalServerError("@FormData used without name or value on method ''{0}''.", method);
-			if (multiPart && ! isCollection(type))
-				throw new InternalServerError("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
-		}
 	}
 
 	static final class QueryObject extends RestMethodParam {
 		private final boolean multiPart;
-		private final Type type;
-		private final Method method;
 		private final HttpPartParser partParser;
 
 		protected QueryObject(Method method, Query a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(QUERY, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
-			this.type = type;
-			this.method = method;
+			super(QUERY, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
 			this.multiPart = a.multipart();
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+		}
+
+		@Override /* RestMethodParam */
+		public void validate() throws InternalServerError {
+			if (isEmpty(name))
+				throw new InternalServerError("@Query used without name or value on method ''{0}''.", method);
+			if (multiPart && ! isCollection(type))
+				throw new InternalServerError("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
 		}
 
 		@Override /* RestMethodParam */
@@ -995,20 +985,12 @@ class RestParamDefaults {
 				.appendSkipEmpty("example", joinnl(a.example()))
 			;
 		}
-		
-		@Override /* RestMethodParqm */
-		public void validate() throws InternalServerError {
-			if (isEmpty(name))
-				throw new InternalServerError("@Query used without name or value on method ''{0}''.", method);
-			if (multiPart && ! isCollection(type))
-				throw new InternalServerError("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
-		}
 	}
 
 	static final class HasFormDataObject extends RestMethodParam {
 
 		protected HasFormDataObject(Method method, HasFormData a, Type type) throws ServletException {
-			super(FORM_DATA, firstNonEmpty(a.name(), a.value()), type);
+			super(FORM_DATA, method, firstNonEmpty(a.name(), a.value()), type);
 			if (type != Boolean.class && type != boolean.class)
 				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", method);
 	}
@@ -1023,7 +1005,7 @@ class RestParamDefaults {
 	static final class HasQueryObject extends RestMethodParam {
 
 		protected HasQueryObject(Method method, HasQuery a, Type type) throws ServletException {
-			super(QUERY, firstNonEmpty(a.name(), a.value()), type);
+			super(QUERY, method, firstNonEmpty(a.name(), a.value()), type);
 			if (type != Boolean.class && type != boolean.class)
 				throw new RestServletException("Use of @HasQuery annotation on parameter that is not a boolean on method ''{0}''", method);
 		}
@@ -1036,23 +1018,21 @@ class RestParamDefaults {
 	}
 
 	static final class PathRemainderObject extends RestMethodParam {
-
-		protected PathRemainderObject(Method method, Type type) throws ServletException {
-			super(OTHER, null, null);
-			if (type != String.class)
-				throw new RestServletException("Use of @PathRemainder annotation on parameter that is not a String on method ''{0}''", method);
+		
+		protected PathRemainderObject(Method method, Type type) {
+			super(OTHER, method, null, type);
 		}
-
+		
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getPathMatch().getRemainder();
+			return ClassUtils.fromString(getTypeClass(), req.getPathMatch().getRemainder());
 		}
 	}
 
 	static final class RestRequestPropertiesObject extends RestMethodParam {
 
 		protected RestRequestPropertiesObject() {
-			super(OTHER, null, RequestProperties.class);
+			super(OTHER, RequestProperties.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1068,7 +1048,7 @@ class RestParamDefaults {
 	static final class ResourceBundleObject extends RestMethodParam {
 
 		protected ResourceBundleObject() {
-			super(OTHER, null, ResourceBundle.class);
+			super(OTHER, ResourceBundle.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1080,7 +1060,7 @@ class RestParamDefaults {
 	static final class MessageBundleObject extends RestMethodParam {
 
 		protected MessageBundleObject() {
-			super(OTHER, null, MessageBundle.class);
+			super(OTHER, MessageBundle.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1092,7 +1072,7 @@ class RestParamDefaults {
 	static final class InputStreamObject extends RestMethodParam {
 
 		protected InputStreamObject() {
-			super(OTHER, null, InputStream.class);
+			super(OTHER, InputStream.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1104,7 +1084,7 @@ class RestParamDefaults {
 	static final class ServletInputStreamObject extends RestMethodParam {
 
 		protected ServletInputStreamObject() {
-			super(OTHER, null, ServletInputStream.class);
+			super(OTHER, ServletInputStream.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1116,7 +1096,7 @@ class RestParamDefaults {
 	static final class ReaderObject extends RestMethodParam {
 
 		protected ReaderObject() {
-			super(OTHER, null, Reader.class);
+			super(OTHER, Reader.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1128,7 +1108,7 @@ class RestParamDefaults {
 	static final class OutputStreamObject extends RestMethodParam {
 
 		protected OutputStreamObject() {
-			super(OTHER, null, OutputStream.class);
+			super(OTHER, OutputStream.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1140,7 +1120,7 @@ class RestParamDefaults {
 	static final class ServletOutputStreamObject extends RestMethodParam {
 
 		protected ServletOutputStreamObject() {
-			super(OTHER, null, ServletOutputStream.class);
+			super(OTHER, ServletOutputStream.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1152,7 +1132,7 @@ class RestParamDefaults {
 	static final class WriterObject extends RestMethodParam {
 
 		protected WriterObject() {
-			super(OTHER, null, Writer.class);
+			super(OTHER, Writer.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1164,7 +1144,7 @@ class RestParamDefaults {
 	static final class RequestHeadersObject extends RestMethodParam {
 
 		protected RequestHeadersObject() {
-			super(OTHER, null, RequestHeaders.class);
+			super(OTHER, RequestHeaders.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1176,7 +1156,7 @@ class RestParamDefaults {
 	static final class RequestQueryObject extends RestMethodParam {
 
 		protected RequestQueryObject() {
-			super(OTHER, null, RequestQuery.class);
+			super(OTHER, RequestQuery.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1188,7 +1168,7 @@ class RestParamDefaults {
 	static final class RequestFormDataObject extends RestMethodParam {
 
 		protected RequestFormDataObject() {
-			super(OTHER, null, RequestFormData.class);
+			super(OTHER, RequestFormData.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1200,7 +1180,7 @@ class RestParamDefaults {
 	static final class HttpMethodObject extends RestMethodParam {
 
 		protected HttpMethodObject() {
-			super(OTHER, null, HttpMethod.class);
+			super(OTHER, HttpMethod.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1212,7 +1192,7 @@ class RestParamDefaults {
 	static final class RestLoggerObject extends RestMethodParam {
 
 		protected RestLoggerObject() {
-			super(OTHER, null, RestLogger.class);
+			super(OTHER, RestLogger.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1224,7 +1204,7 @@ class RestParamDefaults {
 	static final class RestContextObject extends RestMethodParam {
 
 		protected RestContextObject() {
-			super(OTHER, null, RestContext.class);
+			super(OTHER, RestContext.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1236,7 +1216,7 @@ class RestParamDefaults {
 	static final class ParserObject extends RestMethodParam {
 
 		protected ParserObject() {
-			super(OTHER, null, Parser.class);
+			super(OTHER, Parser.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1248,7 +1228,7 @@ class RestParamDefaults {
 	static final class ReaderParserObject extends RestMethodParam {
 
 		protected ReaderParserObject() {
-			super(OTHER, null, ReaderParser.class);
+			super(OTHER, ReaderParser.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1260,7 +1240,7 @@ class RestParamDefaults {
 	static final class InputStreamParserObject extends RestMethodParam {
 
 		protected InputStreamParserObject() {
-			super(OTHER, null, InputStreamParser.class);
+			super(OTHER, InputStreamParser.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1272,7 +1252,7 @@ class RestParamDefaults {
 	static final class LocaleObject extends RestMethodParam {
 
 		protected LocaleObject() {
-			super(OTHER, null, Locale.class);
+			super(OTHER, Locale.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1284,7 +1264,7 @@ class RestParamDefaults {
 	static final class SwaggerObject extends RestMethodParam {
 
 		protected SwaggerObject() {
-			super(OTHER, null, Swagger.class);
+			super(OTHER, Swagger.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1296,7 +1276,7 @@ class RestParamDefaults {
 	static final class RequestPathMatchObject extends RestMethodParam {
 
 		protected RequestPathMatchObject() {
-			super(OTHER, null, RequestPathMatch.class);
+			super(OTHER, RequestPathMatch.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1308,7 +1288,7 @@ class RestParamDefaults {
 	static final class RequestBodyObject extends RestMethodParam {
 
 		protected RequestBodyObject() {
-			super(BODY, null, RequestBody.class);
+			super(BODY, RequestBody.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1320,7 +1300,7 @@ class RestParamDefaults {
 	static final class ConfigObject extends RestMethodParam {
 
 		protected ConfigObject() {
-			super(OTHER, null, Config.class);
+			super(OTHER, Config.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1332,7 +1312,7 @@ class RestParamDefaults {
 	static final class UriContextObject extends RestMethodParam {
 
 		protected UriContextObject() {
-			super(OTHER, null, UriContext.class);
+			super(OTHER, UriContext.class);
 		}
 
 		@Override /* RestMethodParam */
@@ -1344,7 +1324,7 @@ class RestParamDefaults {
 	static final class UriResolverObject extends RestMethodParam {
 
 		protected UriResolverObject() {
-			super(OTHER, null, UriResolver.class);
+			super(OTHER, UriResolver.class);
 		}
 
 		@Override /* RestMethodParam */

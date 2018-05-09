@@ -115,9 +115,41 @@ import org.apache.juneau.utils.*;
 public abstract class RestMethodParam {
 
 	final RestParamType paramType;
+	final Method method;
 	final String name;
 	final Type type;
+	final Class<?> c;
 	final ObjectMap metaData;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param paramType The Swagger parameter type.
+	 * @param method The method on which the parameter resides.
+	 * @param name
+	 * 	The parameter name.
+	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
+	 * @param type The object type to convert the parameter to.
+	 * @param metaData Swagger metadata.
+	 */
+	protected RestMethodParam(RestParamType paramType, Method method, String name, Type type, ObjectMap metaData) {
+		this.paramType = paramType;
+		this.method = method;
+		this.name = name;
+		this.type = type;
+		this.c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
+		this.metaData = metaData;
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param paramType The Swagger parameter type.
+	 * @param type The object type to convert the parameter to.
+	 */
+	protected RestMethodParam(RestParamType paramType, Type type) {
+		this(paramType, null, null, type, ObjectMap.EMPTY_MAP);
+	}
 
 	/**
 	 * Constructor.
@@ -129,24 +161,21 @@ public abstract class RestMethodParam {
 	 * @param type The object type to convert the parameter to.
 	 */
 	protected RestMethodParam(RestParamType paramType, String name, Type type) {
-		this(paramType, name, type, ObjectMap.EMPTY_MAP);
+		this(paramType, null, name, type, ObjectMap.EMPTY_MAP);
 	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param paramType The Swagger parameter type.
+	 * @param method The method on which the parameter resides.
 	 * @param name
 	 * 	The parameter name.
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
-	 * @param metaData Swagger metadata.
 	 */
-	protected RestMethodParam(RestParamType paramType, String name, Type type, ObjectMap metaData) {
-		this.paramType = paramType;
-		this.name = name;
-		this.type = type;
-		this.metaData = metaData;
+	protected RestMethodParam(RestParamType paramType, Method method, String name, Type type) {
+		this(paramType, method, name, type, ObjectMap.EMPTY_MAP);
 	}
 
 	/**
@@ -204,6 +233,15 @@ public abstract class RestMethodParam {
 	 */
 	public Type getType() {
 		return type;
+	}
+	
+	/**
+	 * Returns the parameter class type.
+	 * 
+	 * @return the parameter class type.
+	 */
+	public Class<?> getTypeClass() {
+		return c;
 	}
 	
 	/**
