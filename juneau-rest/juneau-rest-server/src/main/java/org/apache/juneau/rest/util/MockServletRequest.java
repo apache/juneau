@@ -20,6 +20,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.rest.*;
 
 /**
  * An implementation of {@link HttpServletRequest} for testing purposes.
@@ -59,6 +60,7 @@ public class MockServletRequest implements HttpServletRequest {
 	private String requestURI = "";
 	private String servletPath = "";
 	private HttpSession httpSession = MockHttpSession.create();
+	private RestContext restContext;
 	
 	/**
 	 * Creates a new servlet request.
@@ -98,6 +100,29 @@ public class MockServletRequest implements HttpServletRequest {
 			.requestURI(StringUtils.format(path, pathArgs));
 	}
 	
+	/**
+	 * Fluent setter.
+	 * 
+	 * @param restContext The rest context.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest restContext(RestContext restContext) {
+		this.restContext = restContext;
+		return this;
+	}
+	
+	/**
+	 * Executes this request and returns the response object.
+	 * 
+	 * @return The response object.
+	 * @throws Exception
+	 */
+	public MockServletResponse execute() throws Exception {
+		MockServletResponse res = MockServletResponse.create();
+		restContext.getCallHandler().service(this, res);
+		return res;
+	}
+
 	/**
 	 * Fluent setter.
 	 * 

@@ -54,7 +54,6 @@ import org.apache.juneau.rest.helper.*;
 		MessagesResource.class,
 		NlsResource.class,
 		NlsPropertyResource.class,
-		NoParserInputResource.class,
 		OnPostCallResource.class,
 		OnPreCallResource.class,
 		OptionsWithoutNlsResource.class,

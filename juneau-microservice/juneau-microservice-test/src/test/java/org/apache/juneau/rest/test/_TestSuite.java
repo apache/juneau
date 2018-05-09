@@ -47,7 +47,6 @@ import org.junit.runners.Suite.*;
 	MessagesTest.class,
 	NlsPropertyTest.class,
 	NlsTest.class,
-	NoParserInputTest.class,
 	OnPostCallTest.class,
 	OnPreCallTest.class,
 	OptionsWithoutNlsTest.class,
