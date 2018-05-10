@@ -42,15 +42,27 @@ import org.apache.juneau.rest.*;
  * 	}
  * </p>
  * 
- * <p>
- * {@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
- * When specified, any registered parsers are bypassed.
- * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPostPerson(<ja>@Header</ja>(<js>"Content-Type"</js>) String mediaType, <ja>@Body</ja> InputStream input) {
- * 		...
- * 	}
- * </p>
+ * Any of the following types can be used for the parameter:
+ * <ul>
+ * 	<li>{@link Reader}
+ * 	<li>{@link InputStream}
+ * 	<li>Primitives (e.g. <code>String</code>, <jk>int</jk>, <jk>boolean</jk>, etc...)
+ * 	<li>Beans
+ * 	<li>Maps, collections, or arrays of beans or primitives.
+ * 	<li>Any object convertible from a {@link Reader} by having one of the following methods:
+ * 		<ul>
+ * 			<li><code><jk>public</jk> T(Reader in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
+ * 		</ul>
+ * 	</ul>
+ * 	<li>Any object convertible from an {@link InputStream} by having one of the following methods:
+ * 		<ul>
+ * 			<li><code><jk>public</jk> T(InputStream in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
+ * 		</ul>
+ * </ul>
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
