@@ -306,8 +306,7 @@ public class JsonSerializer extends WriterSerializer {
 					.set(JSON_simpleMode, true)
 					.set(WSERIALIZER_quoteChar, '\'')
 					.build(),
-				"application/json",
-				"application/json+simple", "text/json+simple"
+				"application/json", "application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9"
 			);
 		}
 	}
@@ -373,7 +372,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	The property store containing all the settings for this object.
 	 */
 	public JsonSerializer(PropertyStore ps) {
-		this(ps, "application/json", "application/json", "text/json");
+		this(ps, "application/json", "application/json,text/json");
 	}
 
 	/**
@@ -394,14 +393,16 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
 	 * 	<p class='bcode'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
 	 * 	<p class='bcode'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
+	 * <p>
+	 * The accept value can also contain q-values.
 	 */
-	public JsonSerializer(PropertyStore ps, String produces, String...accept) {
+	public JsonSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 		
 		simpleMode = getBooleanProperty(JSON_simpleMode, false);

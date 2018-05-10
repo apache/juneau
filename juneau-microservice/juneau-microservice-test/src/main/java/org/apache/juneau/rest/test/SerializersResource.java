@@ -32,7 +32,7 @@ public class SerializersResource extends BasicRestServlet {
 	public static class TestSerializerA extends WriterSerializer {
 
 		public TestSerializerA(PropertyStore ps) {
-			super(ps, "text/a");
+			super(ps, "text/a", null);
 		}
 
 		@Override /* Serializer */
@@ -50,7 +50,7 @@ public class SerializersResource extends BasicRestServlet {
 	public static class TestSerializerB extends WriterSerializer {
 
 		public TestSerializerB(PropertyStore ps) {
-			super(ps, "text/b");
+			super(ps, "text/b", null);
 		}
 
 		@Override /* Serializer */
@@ -92,7 +92,7 @@ public class SerializersResource extends BasicRestServlet {
 	public static class TestSerializerC extends WriterSerializer {
 
 		public TestSerializerC(PropertyStore ps) {
-			super(ps, "text/a");
+			super(ps, "text/a", null);
 		}
 
 		@Override /* Serializer */
@@ -118,7 +118,7 @@ public class SerializersResource extends BasicRestServlet {
 	public static class TestSerializerD extends WriterSerializer {
 
 		public TestSerializerD(PropertyStore ps) {
-			super(ps, "text/d", "text/a", "text/d");
+			super(ps, "text/d", "text/a,text/d");
 		}
 
 		@Override /* Serializer */

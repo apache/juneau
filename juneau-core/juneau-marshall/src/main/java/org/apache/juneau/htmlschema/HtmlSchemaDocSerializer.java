@@ -66,14 +66,16 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
 	 * 	<p class='bcode'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
 	 * 	<p class='bcode'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
+	 * <p>
+	 * The accept value can also contain q-values.
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String...accept) {
+	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String accept) {
 		super(
 			ps.builder()
 				.set(SERIALIZER_detectRecursions, true)

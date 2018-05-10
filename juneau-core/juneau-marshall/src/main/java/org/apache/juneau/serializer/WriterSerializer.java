@@ -146,7 +146,7 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	public static final String WSERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
 
-	static final WriterSerializer DEFAULT = new WriterSerializer(PropertyStore.create().build(), "") {
+	static final WriterSerializer DEFAULT = new WriterSerializer(PropertyStore.create().build(), "", "") {
 		@Override
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -179,14 +179,16 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
 	 * 	<p class='bcode'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
 	 * 	<p class='bcode'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
+	 * <p>
+	 * The accept value can also contain q-values.
 	 */
-	protected WriterSerializer(PropertyStore ps, String produces, String...accept) {
+	protected WriterSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 		
 		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace, false);

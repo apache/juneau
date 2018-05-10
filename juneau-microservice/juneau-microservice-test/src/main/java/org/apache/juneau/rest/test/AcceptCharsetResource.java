@@ -73,7 +73,7 @@ public class AcceptCharsetResource extends RestServlet {
 	public static class TestSerializer extends OutputStreamSerializer {
 
 		public TestSerializer(PropertyStore ps) {
-			super(ps, "text/plain");
+			super(ps, "text/plain", null);
 		}
 
 		@Override /* Serializer */

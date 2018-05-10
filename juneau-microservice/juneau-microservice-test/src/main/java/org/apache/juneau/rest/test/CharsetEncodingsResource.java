@@ -54,7 +54,7 @@ public class CharsetEncodingsResource extends RestServlet {
 	public static class ASerializer extends WriterSerializer {
 
 		public ASerializer(PropertyStore ps) {
-			super(ps, "text/s");
+			super(ps, "text/s", null);
 		}
 
 		@Override /* Serializer */

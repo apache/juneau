@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 import java.util.Map.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
@@ -33,6 +34,8 @@ import org.apache.juneau.internal.*;
 public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	private static final MediaTypeRange[] DEFAULT = new MediaTypeRange[]{new MediaTypeRange("*/*")};
+	private static final boolean NOCACHE = Boolean.getBoolean("juneau.nocache");
+	private static final ConcurrentHashMap<String,MediaTypeRange[]> CACHE = new ConcurrentHashMap<>();
 
 	private final MediaType mediaType;
 	private final Float qValue;
@@ -72,22 +75,27 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 		if (value == null || value.length() == 0)
 			return DEFAULT;
-
-		if (value.indexOf(',') == -1)
-			return new MediaTypeRange[]{new MediaTypeRange(value)};
-
-		Set<MediaTypeRange> ranges = new TreeSet<>();
-
-		for (String r : StringUtils.split(value)) {
-			r = r.trim();
-
-			if (r.isEmpty())
-				continue;
-
-			ranges.add(new MediaTypeRange(r));
+		
+		MediaTypeRange[] mtr = CACHE.get(value);
+		if (mtr != null)
+			return mtr;
+		
+		if (value.indexOf(',') == -1) {
+			mtr = new MediaTypeRange[]{new MediaTypeRange(value)};
+		} else {
+			Set<MediaTypeRange> ranges = new TreeSet<>();
+			for (String r : StringUtils.split(value)) {
+				r = r.trim();
+				if (r.isEmpty())
+					continue;
+				ranges.add(new MediaTypeRange(r));
+			}
+			mtr = ranges.toArray(new MediaTypeRange[ranges.size()]);
 		}
-
-		return ranges.toArray(new MediaTypeRange[ranges.size()]);
+		if (NOCACHE)
+			return mtr;
+		CACHE.putIfAbsent(value, mtr);
+		return CACHE.get(value);
 	}
 
 	private MediaTypeRange(String token) {

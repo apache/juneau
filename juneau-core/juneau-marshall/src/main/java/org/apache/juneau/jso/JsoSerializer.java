@@ -46,7 +46,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public JsoSerializer(PropertyStore ps) {
-		super(ps, "application/x-java-serialized-object");
+		super(ps, "application/x-java-serialized-object", null);
 	}
 
 	@Override /* Context */

@@ -94,6 +94,6 @@ public class StringObject implements CharSequence, Writable {
 
 	@Override /* Writable */
 	public MediaType getMediaType() {
-		return s.getMediaTypes()[0];
+		return s.getPrimaryMediaType();
 	}
 }

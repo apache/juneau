@@ -68,9 +68,10 @@ public final class SerializerGroup extends BeanContext {
 	// Maps Accept headers to matching serializers.
 	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
 
-	private final MediaType[] mediaTypes;
+	private final MediaTypeRange[] mediaTypeRanges;
+	private final Serializer[] mediaTypeRangeSerializers;
+
 	private final List<MediaType> mediaTypesList;
-	private final Serializer[] mediaTypeSerializers;
 	private final List<Serializer> serializers;
 
 	/**
@@ -110,18 +111,21 @@ public final class SerializerGroup extends BeanContext {
 		super(ps);
 		this.serializers = immutableList(serializers);
 
-		List<MediaType> lmt = new ArrayList<>();
+		List<MediaTypeRange> lmtr = new ArrayList<>();
+		LinkedHashSet<MediaType> lmt = new LinkedHashSet<>();
 		List<Serializer> l = new ArrayList<>();
 		for (Serializer s : serializers) {
-			for (MediaType m: s.getMediaTypes()) {
-				lmt.add(m);
+			for (MediaTypeRange m: s.getMediaTypeRanges()) {
+				lmtr.add(m);
 				l.add(s);
 			}
+			for (MediaType mt : s.getAcceptMediaTypes())
+				lmt.add(mt);
 		}
 
-		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
-		this.mediaTypesList = unmodifiableList(lmt);
-		this.mediaTypeSerializers = l.toArray(new Serializer[l.size()]);
+		this.mediaTypeRanges = lmtr.toArray(new MediaTypeRange[lmt.size()]);
+		this.mediaTypesList = unmodifiableList(new ArrayList<>(lmt));
+		this.mediaTypeRangeSerializers = l.toArray(new Serializer[l.size()]);
 	}
 
 	/**
@@ -153,9 +157,9 @@ public final class SerializerGroup extends BeanContext {
 			return sm;
 
 		Accept a = Accept.forString(acceptHeader);
-		int match = a.findMatch(mediaTypes);
+		int match = a.findMatch(mediaTypeRanges);
 		if (match >= 0) {
-			sm = new SerializerMatch(mediaTypes[match], mediaTypeSerializers[match]);
+			sm = new SerializerMatch(mediaTypeRanges[match].getMediaType(), mediaTypeRangeSerializers[match]);
 			cache.putIfAbsent(acceptHeader, sm);
 		}
 

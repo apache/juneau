@@ -39,7 +39,7 @@ public class GroupsResource extends RestServlet {
 	public static class SSerializer extends WriterSerializer {
 
 		public SSerializer(PropertyStore ps) {
-			super(ps, "text/s1", "text/s1", "text/s2");
+			super(ps, "text/s1", "text/s1,text/s2");
 		}
 
 		@Override /* Serializer */

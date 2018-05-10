@@ -230,6 +230,47 @@ public final class Accept {
 	}
 
 	/**
+	 * Same as {@link #findMatch(MediaType[])} but matching against media type ranges.
+	 * 
+	 * <p>
+	 * Note that the q-types on both the <code>mediaTypeRanges</code> parameter and this header
+	 * are taken into account when trying to find the best match.
+	 * <br>When both this header and the matching range have q-values, the q-value for the match is the result of multiplying them.
+	 * <br>(e.g. Accept=<js>"text/html;q=0.9"</js> and mediaTypeRange=<js>"text/html;q=0.9"</js> ==>, q-value=<code>0.81</code>).
+	 * 
+	 * @param mediaTypeRanges The media type ranges to match against.
+	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.
+	 */
+	public int findMatch(MediaTypeRange[] mediaTypeRanges) {
+		float matchQuant = 0;
+		int matchIndex = -1;
+		float q = 0f;
+
+		// Media ranges are ordered by 'q'.
+		// So we only need to search until we've found a match.
+		for (MediaTypeRange mr : mediaRanges) {
+			float q2 = mr.getQValue();
+
+			if (q2 < q || q2 == 0)
+				break;
+
+			for (int i = 0; i < mediaTypeRanges.length; i++) {
+				MediaTypeRange mt = mediaTypeRanges[i];
+				float matchQuant2 = mr.getMediaType().match(mt.getMediaType(), false) * mt.getQValue();
+
+				if (matchQuant2 > matchQuant) {
+					matchIndex = i;
+					matchQuant = matchQuant2;
+					q = q2;
+				}
+			}
+		}
+
+		return matchIndex;
+	}
+	
+	
+	/**
 	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
 	 * presence of a subtype fragment.
 	 * 

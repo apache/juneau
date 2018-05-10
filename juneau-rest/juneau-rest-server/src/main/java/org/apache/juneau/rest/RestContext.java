@@ -2221,7 +2221,7 @@ public final class RestContext extends BeanContext {
 	 * <br>The serializer selected is based on the request <code>Accept</code> header matched against the values returned by the following method
 	 * using a best-match algorithm:
 	 * <ul>
-	 * 	<li class='jm'>{@link Serializer#getMediaTypes()}
+	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>

@@ -38,7 +38,7 @@ public final class CsvSerializer extends WriterSerializer {
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public CsvSerializer(PropertyStore ps) {
-		super(ps, "text/csv");
+		super(ps, "text/csv", null);
 	}
 
 	@Override /* Context */

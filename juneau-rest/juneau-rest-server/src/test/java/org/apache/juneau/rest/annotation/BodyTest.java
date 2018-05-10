@@ -21,7 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
 

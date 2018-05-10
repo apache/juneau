@@ -122,7 +122,7 @@ public class DefaultContentTypesResource extends RestServlet {
 		private String name;
 
 		private DummySerializer(PropertyStore ps, String name, String produces) {
-			super(ps, produces);
+			super(ps, produces, null);
 			this.name = name;
 		}
 

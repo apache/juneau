@@ -338,8 +338,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 				.set(SERIALIZER_detectRecursions, true)
 				.set(SERIALIZER_ignoreRecursions, true)
 				.build(),
-			"application/json",
-			"application/json+schema", "text/json+schema"
+			"application/json", "application/json+schema,text/json+schema"
 		);
 		
 		useBeanDefs = getBooleanProperty(JSONSCHEMA_useBeanDefs, false);

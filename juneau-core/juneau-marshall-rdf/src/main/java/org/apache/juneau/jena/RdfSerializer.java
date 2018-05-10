@@ -213,7 +213,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 				ps.builder()
 					.set(RDF_language, LANG_RDF_XML)
 					.build(), 
-				"text/xml+rdf"
+				"text/xml+rdf", "text/xml+rdf,text/xml+rdf+abbrev;q=0.9"
 			);
 		}
 	}
@@ -231,8 +231,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 				ps.builder()
 					.set(RDF_language, LANG_RDF_XML_ABBREV)
 					.build(), 
-				"text/xml+rdf", 
-				"text/xml+rdf+abbrev"
+				"text/xml+rdf", "text/xml+rdf+abbrev,text/xml+rdf;q=0.9"
 			);
 		}
 	}
@@ -250,7 +249,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 				ps.builder()
 					.set(RDF_language, LANG_NTRIPLE)
 					.build(), 
-				"text/n-triple"
+				"text/n-triple", null
 			);
 		}
 	}
@@ -268,7 +267,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 				ps.builder()
 					.set(RDF_language, LANG_TURTLE)
 					.build(), 
-				"text/turtle"
+				"text/turtle", null
 			);
 		}
 	}
@@ -286,7 +285,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 				ps.builder()
 					.set(RDF_language, LANG_N3)
 					.build(), 
-				"text/n3"
+				"text/n3", null
 			);
 		}
 	}
@@ -328,14 +327,16 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
 	 * 	<p class='bcode'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
 	 * 	<p class='bcode'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
+	 * <p>
+	 * The accept value can also contain q-values.
 	 */
-	public RdfSerializer(PropertyStore ps, String produces, String...accept) {
+	public RdfSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 		addLiteralTypes = getBooleanProperty(RDF_addLiteralTypes, false);
 		addRootProperty = getBooleanProperty(RDF_addRootProperty, false);
@@ -363,7 +364,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	The property store containing all the settings for this object.
 	 */
 	public RdfSerializer(PropertyStore ps) {
-		this(ps, "text/xml+rdf");
+		this(ps, "text/xml+rdf", null);
 	}
 	
 

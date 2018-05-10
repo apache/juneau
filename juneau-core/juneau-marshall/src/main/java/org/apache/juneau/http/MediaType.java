@@ -35,8 +35,8 @@ import org.apache.juneau.json.*;
 @BeanIgnore
 public class MediaType implements Comparable<MediaType> {
 
-	private static final boolean nocache = Boolean.getBoolean("juneau.nocache");
-	private static final ConcurrentHashMap<String,MediaType> cache = new ConcurrentHashMap<>();
+	private static final boolean NOCACHE = Boolean.getBoolean("juneau.nocache");
+	private static final ConcurrentHashMap<String,MediaType> CACHE = new ConcurrentHashMap<>();
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
@@ -92,14 +92,14 @@ public class MediaType implements Comparable<MediaType> {
 	public static MediaType forString(String s) {
 		if (isEmpty(s))
 			return null;
-		MediaType mt = cache.get(s);
-		if (mt == null) {
-			mt = new MediaType(s);
-			if (nocache)
-				return mt;
-			cache.putIfAbsent(s, mt);
-		}
-		return cache.get(s);
+		MediaType mt = CACHE.get(s);
+		if (mt != null)
+			return mt;
+		mt = new MediaType(s);
+		if (NOCACHE)
+			return mt;
+		CACHE.putIfAbsent(s, mt);
+		return CACHE.get(s);
 	}
 
 	/**
@@ -139,8 +139,11 @@ public class MediaType implements Comparable<MediaType> {
 
 		Builder(String mt) {
 			mt = mt.trim();
+			int i = mt.indexOf(',');
+			if (i != -1)
+				mt = mt.substring(0, i);
 
-			int i = mt.indexOf(';');
+			i = mt.indexOf(';');
 			if (i == -1) {
 				this.parameters = Collections.EMPTY_MAP;
 			} else {

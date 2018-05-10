@@ -644,7 +644,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
 						try {
 							String eVal = s2.createSession(args).serializeToString(example);
-							examples.put(s2.getMediaTypes()[0].toString(), eVal);
+							examples.put(s2.getPrimaryMediaType().toString(), eVal);
 						} catch (Exception e) {
 							System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());
 						}

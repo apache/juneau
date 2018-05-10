@@ -240,7 +240,7 @@ public class InheritanceResource extends RestServlet {
 	public static class DummySerializer extends WriterSerializer {
 
 		public DummySerializer(String produces) {
-			super(PropertyStore.DEFAULT, produces);
+			super(PropertyStore.DEFAULT, produces, null);
 		}
 
 		@Override /* Serializer */

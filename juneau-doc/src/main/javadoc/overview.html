@@ -21263,6 +21263,10 @@
 					<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
 					<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
 				</ul> 
+			<li>
+				Serializers now allow for q-values on the media types they handle.
+				<br>For example, the accept media type on <code>JsonSerializer.Simple</code> is <js>"application/json+simple,application/json;q=0.9"</js>.
+				<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>
@@ -21385,6 +21389,11 @@
 				<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
 			<li>
 				The {@link org.apache.juneau.rest.annotation.Path#name()} annotation parameter is now required.
+			<li>
+				New class for mock unit testing of REST resources:
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+				</ul>
 		</ul>
 	
 		<h5 class='topic w800'>juneau-rest-client</h5>

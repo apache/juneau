@@ -17,6 +17,7 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -831,7 +832,7 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";
 
 	
-	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "") {
+	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "", "") {
 		@Override
 		public SerializerSession createSession(SerializerSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -859,11 +860,12 @@ public abstract class Serializer extends BeanContext {
 	final UriRelativity uriRelativity;
 	final Class<? extends SerializerListener> listener;
 
-	private final MediaType[] accept;
+	private final MediaTypeRange[] accept;
+	private final MediaType[] accepts;
 	private final MediaType produces;
 
 	// Hidden constructors to force subclass from OuputStreamSerializer or WriterSerializer.
-	Serializer(PropertyStore ps, String produces, String...accept) {
+	Serializer(PropertyStore ps, String produces, String accept) {
 		super(ps);
 		
 		maxDepth = getIntegerProperty(SERIALIZER_maxDepth, 100);
@@ -884,14 +886,8 @@ public abstract class Serializer extends BeanContext {
 		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class, null);
 
 		this.produces = MediaType.forString(produces);
-		if (accept.length == 0) {
-			this.accept = new MediaType[]{this.produces};
-		} else {
-			this.accept = new MediaType[accept.length];
-			for (int i = 0; i < accept.length; i++) {
-				this.accept[i] = MediaType.forString(accept[i]);
-			}
-		}
+		this.accept = accept == null ? MediaTypeRange.parse(produces) : MediaTypeRange.parse(accept);
+		this.accepts = accept == null ? new MediaType[] {this.produces} : MediaType.forStrings(StringUtils.split(accept, ',')); 
 	}
 
 	@Override /* Context */
@@ -1005,10 +1001,37 @@ public abstract class Serializer extends BeanContext {
 	/**
 	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
 	 * 
+	 * <p>
+	 * Note that the order of these ranges are from high to low q-value.
+	 * 
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public final MediaType[] getMediaTypes() {
+	public final MediaTypeRange[] getMediaTypeRanges() {
 		return accept;
+	}
+	
+	/**
+	 * Returns the first entry in the <code>accept</code> parameter passed into the constructor.
+	 * 
+	 * <p>
+	 * This signifies the 'primary' media type for this serializer.
+	 * 
+	 * @return The media type.  Never <jk>null</jk>.
+	 */
+	public final MediaType getPrimaryMediaType() {
+		return accepts[0];
+	}
+
+	/**
+	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
+	 * 
+	 * <p>
+	 * The order of the media types are the same as those in the <code>accept</code> parameter.
+	 * 
+	 * @return The list of media types.  Never <jk>null</jk>.
+	 */
+	public final MediaType[] getAcceptMediaTypes() {
+		return accepts;
 	}
 
 	/**

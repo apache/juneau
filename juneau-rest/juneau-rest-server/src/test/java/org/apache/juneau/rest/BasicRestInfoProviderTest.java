@@ -25,7 +25,7 @@ import org.apache.juneau.xml.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;

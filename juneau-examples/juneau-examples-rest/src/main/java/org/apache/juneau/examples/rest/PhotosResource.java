@@ -141,7 +141,7 @@ public class PhotosResource extends BasicRestServlet {
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public ImageSerializer(PropertyStore ps) {
-			super(ps, null, "image/png", "image/jpeg");
+			super(ps, null, "image/png,image/jpeg");
 		}
 
 		@Override /* Serializer */ 

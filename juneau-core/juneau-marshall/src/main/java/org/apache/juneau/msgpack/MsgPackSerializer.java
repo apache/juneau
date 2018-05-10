@@ -119,7 +119,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public MsgPackSerializer(PropertyStore ps) {
-		super(ps, "octal/msgpack");
+		super(ps, "octal/msgpack", null);
 		this.addBeanTypes = getBooleanProperty(MSGPACK_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 	}
 

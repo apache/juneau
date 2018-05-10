@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.util;
+package org.apache.juneau.rest.mock;
 
 import java.util.*;
 
@@ -18,7 +18,12 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 /**
- * An implementation of {@link HttpSession} for testing purposes.
+ * An implementation of {@link HttpSession} for mocking purposes.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'>TODO
+ * </ul>
  */
 public class MockHttpSession implements HttpSession {
 	

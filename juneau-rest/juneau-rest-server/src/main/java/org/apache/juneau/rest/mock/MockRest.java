@@ -10,17 +10,46 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.util;
+package org.apache.juneau.rest.mock;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.rest.*;
 
 /**
  * Creates a mocked interface against a REST resource class.
+ * 
+ * <p>
+ * Allows you to test your REST resource classes without a running servlet container.
+ * 
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ *  <jk>public class</jk> MockTest {
+ *  	
+ *  	<jc>// Our REST resource to test.</jc>
+ *  	<ja>@RestResource</ja>(serializers=JsonSerializer.Simple.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
+ *  	<jk>public static class</jk> M {
+ *  		
+ *  		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
+ *  		<jk>public</jk> String echo(<ja>@Body</ja> String b) {
+ *  			<jk>return</jk> b;
+ *  		}
+ *  	}
+ *  
+ *  <ja>@Test</js>
+ *  <jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+ *  	<jsm>assertEquals</jsm>(<js>"'foo'"</js>, MockRest.<jsf>create</jsf>(M.<jk>class</jk>).request(<js>"PUT"</js>, <js>"/String"</js>).body(<js>"'foo'"</js>).execute().getBodyAsString());
+ *  }
+ * </p>
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'>TODO
+ * </ul>
  */
 public class MockRest {
-	private static Map<Class<?>,RestContext> CONTEXTS = new HashMap<>();
+	private static Map<Class<?>,RestContext> CONTEXTS = new ConcurrentHashMap<>();
 
 	private final RestContext rc;
 	
