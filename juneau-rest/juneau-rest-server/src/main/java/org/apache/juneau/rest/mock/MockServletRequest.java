@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.security.*;
 import java.util.*;
@@ -34,7 +36,7 @@ import org.apache.juneau.rest.util.*;
 public class MockServletRequest implements HttpServletRequest {
 	
 	private String method = "GET";
-	private Map<String,String[]> parameterMap = new LinkedHashMap<>();
+	private Map<String,String[]> parameterMap;
 	private Map<String,String[]> headerMap = new LinkedHashMap<>();	
 	private Map<String,Object> attributeMap = new LinkedHashMap<>();
 	private String characterEncoding = "UTF-8";
@@ -59,14 +61,15 @@ public class MockServletRequest implements HttpServletRequest {
 	private String pathInfo;
 	private String pathTranslated;
 	private String contextPath = "";
-	private String queryString = "";
+	private String queryString;
 	private String remoteUser;
 	private Principal userPrincipal;
 	private String requestedSessionId;
-	private String requestURI = "";
+	private String requestURI;
 	private String servletPath = "";
 	private HttpSession httpSession = MockHttpSession.create();
 	private RestContext restContext;
+	private String uri = "";
 	
 	/**
 	 * Creates a new servlet request.
@@ -103,7 +106,18 @@ public class MockServletRequest implements HttpServletRequest {
 	public static MockServletRequest create(String method, String path, Object...pathArgs) {
 		return create()
 			.method(method)
-			.requestURI(StringUtils.format(path, pathArgs));
+			.uri(StringUtils.format(path, pathArgs));
+	}
+	
+	/**
+	 * Fluent setter.
+	 * 
+	 * @param uri The URI of the request.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest uri(String uri) {
+		this.uri = uri;
+		return this;
 	}
 	
 	/**
@@ -560,22 +574,29 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public String getParameter(String name) {
-		String[] s = parameterMap.get(name);
+		String[] s = getParameterMap().get(name);
 		return s == null || s.length == 0 ? null : s[0];
 	}
 
 	@Override /* HttpServletRequest */
 	public Enumeration<String> getParameterNames() {
-		return Collections.enumeration(new ArrayList<>(parameterMap.keySet()));
+		return Collections.enumeration(new ArrayList<>(getParameterMap().keySet()));
 	}
 
 	@Override /* HttpServletRequest */
 	public String[] getParameterValues(String name) {
-		return parameterMap.get(name);
+		return getParameterMap().get(name);
 	}
 
 	@Override /* HttpServletRequest */
 	public Map<String,String[]> getParameterMap() {
+		if (parameterMap == null) {
+			try {
+				parameterMap = RestUtils.parseQuery(getQueryString());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
 		return parameterMap;
 	}
 
@@ -750,11 +771,20 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public String getPathInfo() {
+		if (pathInfo == null) {
+			pathInfo = getRequestURI();
+			if (! isEmpty(contextPath))
+				pathInfo = pathInfo.substring(contextPath.length());
+			if (! isEmpty(servletPath))
+				pathInfo = pathInfo.substring(servletPath.length());
+		}
 		return pathInfo;
 	}
 
 	@Override /* HttpServletRequest */
 	public String getPathTranslated() {
+		if (pathTranslated == null)
+			pathTranslated = "/mock-path" + getPathInfo();
 		return pathTranslated;
 	}
 
@@ -765,7 +795,15 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public String getQueryString() {
-		return queryString;
+		if (queryString == null) {
+			queryString = "";
+			if (uri.indexOf('?') != -1) {
+				queryString = uri.substring(uri.indexOf('?') + 1);
+			if (queryString.indexOf('#') != -1)
+				queryString = queryString.substring(0, queryString.indexOf('#'));
+			}
+		}
+		return isEmpty(queryString) ? null : queryString;
 	}
 
 	@Override /* HttpServletRequest */
@@ -790,12 +828,16 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public String getRequestURI() {
+		if (requestURI == null) {
+			requestURI = uri;
+			requestURI = requestURI.replaceAll("^\\w+\\:\\/\\/[^\\/]+", "").replaceAll("\\?.*$", "");
+		}
 		return requestURI;
 	}
 
 	@Override /* HttpServletRequest */
 	public StringBuffer getRequestURL() {
-		return new StringBuffer(requestURI);
+		return new StringBuffer(uri.replaceAll("\\?.*$", ""));
 	}
 
 	@Override /* HttpServletRequest */

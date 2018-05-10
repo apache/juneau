@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.util.*;
 

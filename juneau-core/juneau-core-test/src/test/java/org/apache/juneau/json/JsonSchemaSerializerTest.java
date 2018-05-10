@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 
@@ -1016,13 +1017,13 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void addDescription_ENUM() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("enum").build().createSession();
-		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.TestEnum'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.TestEnum'}", s.getSchema(TestEnum.class));
 	}
 
 	@Test
 	public void addDescription_ENUM_2darray() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("enum").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],description:'org.apache.juneau.TestEnum'}}}", s.getSchema(TestEnum[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.TestEnum'}}}", s.getSchema(TestEnum[][].class));
 	}
 
 	//====================================================================================================
@@ -1051,7 +1052,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'string',description:'java.lang.StringBuilder'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'string',description:'java.lang.Character'}", s.getSchema(Character.class));
 		assertObjectEquals("{type:'string',description:'char'}", s.getSchema(char.class));
-		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.TestEnum'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.TestEnum'}", s.getSchema(TestEnum.class));
 	}
 
 	//====================================================================================================

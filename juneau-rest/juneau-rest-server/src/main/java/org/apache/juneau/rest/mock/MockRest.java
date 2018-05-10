@@ -64,10 +64,15 @@ public class MockRest {
 	 * 
 	 * @param c The REST class.
 	 * @return A new mock interface.
-	 * @throws Exception
+	 * @throws RuntimeException 
+	 * 	For testing conveniences, this method wraps all exceptions in a RuntimeException so that you can easily define mocks as reusable fields. 
 	 */
-	public static MockRest create(Class<?> c) throws Exception {
-		return new MockRest(c);
+	public static MockRest create(Class<?> c) throws RuntimeException {
+		try {
+			return new MockRest(c);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**

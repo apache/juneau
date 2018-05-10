@@ -18,6 +18,7 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.test.pojos.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;

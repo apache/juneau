@@ -49,6 +49,8 @@ public class RequestBody {
 	private RequestHeaders headers;
 	private BeanSession beanSession;
 	private int contentLength = 0;
+	private MediaType mediaType;
+	private Parser parser;
 
 	RequestBody(RestRequest req) {
 		this.req = req;
@@ -79,7 +81,9 @@ public class RequestBody {
 		return this;
 	}
 
-	RequestBody load(byte[] body) {
+	RequestBody load(MediaType mediaType, Parser parser, byte[] body) {
+		this.mediaType = mediaType;
+		this.parser = parser;
 		this.body = body;
 		return this;
 	}
@@ -337,6 +341,8 @@ public class RequestBody {
 	 * 	Includes the matching media type.
 	 */
 	public ParserMatch getParserMatch() {
+		if (mediaType != null && parser != null)
+			return new ParserMatch(mediaType, parser);
 		MediaType mediaType = headers.getContentType();
 		if (isEmpty(mediaType)) {
 			if (body != null)
@@ -400,7 +406,7 @@ public class RequestBody {
 			TimeZone timeZone = headers.getTimeZone();
 			Locale locale = req.getLocale();
 			ParserMatch pm = getParserMatch();
-
+			
 			if (pm != null) {
 				Parser p = pm.getParser();
 				MediaType mediaType = pm.getMediaType();

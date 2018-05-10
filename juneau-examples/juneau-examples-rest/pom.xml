@@ -67,6 +67,13 @@
 			<artifactId>httpmime</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>

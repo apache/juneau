@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;

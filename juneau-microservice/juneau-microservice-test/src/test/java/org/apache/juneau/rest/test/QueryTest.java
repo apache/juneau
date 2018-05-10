@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.test.TestUtils.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.client.*;

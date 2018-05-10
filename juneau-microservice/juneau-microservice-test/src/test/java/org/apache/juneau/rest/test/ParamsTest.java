@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.rest.test.TestUtils.*;
+import static org.apache.juneau.microservice.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;

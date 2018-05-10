@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.config.ConfigMod.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;

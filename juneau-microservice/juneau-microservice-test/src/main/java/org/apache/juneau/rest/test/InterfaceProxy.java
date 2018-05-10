@@ -15,7 +15,7 @@ package org.apache.juneau.rest.test;
 import java.util.*;
 
 import org.apache.juneau.remoteable.*;
-import org.apache.juneau.rest.test.pojos.*;
+import org.apache.juneau.rest.testutils.*;
 
 /**
  * Interface proxy exposed in InterfaceProxyResource and tested in InterfaceProxyTest.

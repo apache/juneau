@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;

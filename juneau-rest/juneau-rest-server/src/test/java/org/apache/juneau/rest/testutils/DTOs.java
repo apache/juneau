@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.testutils;
 
 import java.util.*;
 
@@ -18,7 +18,8 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.utils.*;
 
-public class DTO2s {
+@SuppressWarnings("javadoc")
+public class DTOs {
 
 	@Bean(sort=true)
 	public static class A {
@@ -82,7 +83,7 @@ public class DTO2s {
 		public void setF19(A[][] f19) { this.f19 = f19; }
 		public void setF20(List<List<A>> f20) { this.f20 = f20; }
 
-		static B create() {
+		public static B create() {
 			B t = new B();
 			t.f01 = new String[]{"a","b"};
 			t.f02 = new AList<String>().append("c").append("d");
@@ -106,11 +107,13 @@ public class DTO2s {
 			t.setF20(new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create())));
 			return t;
 		}
+		
+		public static B INSTANCE = create();
 	}
 
 	@UrlEncoding(expandedParams=true)
 	public static class C extends B {
-		static C create() {
+		public static C create() {
 			C t = new C();
 			t.f01 = new String[]{"a","b"};
 			t.f02 = new AList<String>().append("c").append("d");
@@ -134,5 +137,7 @@ public class DTO2s {
 			t.setF20(new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create())));
 			return t;
 		}
+		
+		public static C INSTANCE = create();
 	}
 }

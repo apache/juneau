@@ -32,7 +32,6 @@ import org.apache.juneau.rest.helper.*;
 		ClientFuturesResource.class,
 		ClientVersionResource.class,
 		ConfigResource.class,
-		ContentResource.class,
 		DefaultContentTypesResource.class,
 		ErrorConditionsResource.class,
 		TransformsResource.class,
@@ -73,7 +72,6 @@ import org.apache.juneau.rest.helper.*;
 		StaticFilesResource.class,
 		ThirdPartyProxyResource.class,
 		UrisResource.class,
-		UrlContentResource.class,
 		ShutdownResource.class,
 	}
 )

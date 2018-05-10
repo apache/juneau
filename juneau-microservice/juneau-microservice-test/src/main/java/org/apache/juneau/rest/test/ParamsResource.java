@@ -32,6 +32,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -308,7 +309,7 @@ public class ParamsResource extends BasicRestServlet {
 			@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
 		}
 	)
-	public DTO2s.B testFormPostsWithMultiParamsViaProperty(@Body DTO2s.B content) throws Exception {
+	public DTOs.B testFormPostsWithMultiParamsViaProperty(@Body DTOs.B content) throws Exception {
 		return content;
 	}
 
@@ -318,7 +319,7 @@ public class ParamsResource extends BasicRestServlet {
 	// A simple round-trip test to verify that both serializing and parsing works.
 	//====================================================================================================
 	@RestMethod(name=POST, path="/testFormPostsWithMultiParamsUsingAnnotation")
-	public DTO2s.C testFormPostsWithMultiParamsUsingAnnotation(@Body DTO2s.C content) throws Exception {
+	public DTOs.C testFormPostsWithMultiParamsUsingAnnotation(@Body DTOs.C content) throws Exception {
 		return content;
 	}
 

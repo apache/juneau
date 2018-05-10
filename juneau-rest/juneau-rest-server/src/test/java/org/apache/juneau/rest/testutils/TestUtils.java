@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.rest.testutils;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -26,18 +26,20 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.ComparisonFailure;
 import org.w3c.dom.*;
 import org.w3c.dom.bootstrap.*;
 import org.w3c.dom.ls.*;
 import org.xml.sax.*;
 
-@SuppressWarnings({})
+@SuppressWarnings({"javadoc","resource"})
 public class TestUtils {
 
 	private static JsonSerializer js = JsonSerializer.create()
@@ -181,7 +183,7 @@ public class TestUtils {
 		if (xmlSchema.indexOf('\u0000') != -1) {
 
 			// Break it up into a map of namespaceURI->schema document
-			final Map<String,String> schemas = new HashMap<String,String>();
+			final Map<String,String> schemas = new HashMap<>();
 			String[] ss = xmlSchema.split("\u0000");
 			xmlSchema = ss[0];
 			for (String s : ss) {
@@ -312,14 +314,14 @@ public class TestUtils {
 	 */
 	private static class SortedNode implements Comparable<SortedNode> {
 		public String name, text="", attrs="";
-		public List<SortedNode> children = new LinkedList<SortedNode>();
+		public List<SortedNode> children = new LinkedList<>();
 
 		SortedNode(Element e) {
 			this.name = e.getNodeName();
 			NamedNodeMap attrs = e.getAttributes();
 			if (attrs != null) {
 				StringBuilder sb = new StringBuilder();
-				Set<String> attrNames = new TreeSet<String>();
+				Set<String> attrNames = new TreeSet<>();
 				for (int i = 0; i < attrs.getLength(); i++)
 					attrNames.add(attrs.item(i).getNodeName());
 				for (String n : attrNames) {
@@ -375,7 +377,7 @@ public class TestUtils {
 		}
 	}
 
-	private static StringBuilder indent(int depth, StringBuilder sb) {
+	static StringBuilder indent(int depth, StringBuilder sb) {
 		for (int i = 0; i < depth; i++)
 			sb.append("\t");
 		return sb;
@@ -444,8 +446,8 @@ public class TestUtils {
 		return o.toString();
 	}
 
-	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<TimeZone>();
-	private static ThreadLocal<Locale> systemLocale = new ThreadLocal<Locale>();
+	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<>();
+	private static ThreadLocal<Locale> systemLocale = new ThreadLocal<>();
 
 	/**
 	 * Temporarily sets the default system timezone to the specified timezone ID.
@@ -524,5 +526,20 @@ public class TestUtils {
 		if (o2 == null)
 			return false;
 		return o1.equals(o2);
+	}
+	
+	/**
+	 * Assert that the object is an instance of the specified class.
+	 */
+	public static void assertClass(Class<?> c, Object o) {
+		Assert.assertEquals(c, o == null ? null : o.getClass());
+	}
+
+	public static void dumpResponse(String r, String msg, Object...args) {
+		System.err.println("*** Failure ****************************************************************************************"); // NOT DEBUG
+		System.err.println(format(msg, args));
+		System.err.println("*** Response-Start *********************************************************************************"); // NOT DEBUG
+		System.err.println(r); // NOT DEBUG
+		System.err.println("*** Response-End ***********************************************************************************"); // NOT DEBUG
 	}
 }

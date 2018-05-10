@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 
@@ -23,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.test.TestUtils.*;
-import static org.apache.juneau.rest.test.pojos.Constants.*;
+import static org.apache.juneau.microservice.testutils.TestUtils.*;
+import static org.apache.juneau.rest.testutils.Constants.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -29,7 +29,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.test.ThirdPartyProxyTest.ThirdPartyProxy.*;
-import org.apache.juneau.rest.test.pojos.*;
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;

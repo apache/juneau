@@ -13,15 +13,15 @@
 package org.apache.juneau.rest.test;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.test.pojos.*;
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 

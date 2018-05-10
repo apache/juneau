@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import org.junit.*;
 

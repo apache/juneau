@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.parser.*;

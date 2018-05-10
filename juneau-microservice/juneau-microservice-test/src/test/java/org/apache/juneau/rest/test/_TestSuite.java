@@ -19,7 +19,7 @@ import org.junit.runners.Suite.*;
 
 /**
  * Runs all the testcases in this project.
- * Starts a REST service running org.apache.juneau.rest.test.Root on port 10001.
+ * Starts a REST service running org.apache.juneau.rest.testutils.Root on port 10001.
  * Stops the REST service after running the tests.
  */
 @RunWith(Suite.class)
@@ -31,7 +31,6 @@ import org.junit.runners.Suite.*;
 	ClientFuturesTest.class,
 	ClientVersionTest.class,
 	ConfigTest.class,
-	ContentTest.class,
 	DefaultContentTypesTest.class,
 	ErrorConditionsTest.class,
 	FormDataTest.class,
@@ -66,7 +65,6 @@ import org.junit.runners.Suite.*;
 	ThirdPartyProxyTest.class,
 	TransformsTest.class,
 	UrisTest.class,
-	UrlContentTest.class,
 	UrlPathPatternTest.class
 })
 public class _TestSuite {

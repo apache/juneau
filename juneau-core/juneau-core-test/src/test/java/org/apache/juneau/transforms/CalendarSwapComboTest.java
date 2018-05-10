@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;

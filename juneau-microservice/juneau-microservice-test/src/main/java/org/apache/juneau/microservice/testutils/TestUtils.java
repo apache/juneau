@@ -10,52 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.microservice.testutils;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.json.*;
-import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.*;
 
-/**
- * JUnit automated testcase resource.
- */
-@RestResource(
-	path="/testUrlContent",
-	serializers={PlainTextSerializer.class},
-	parsers={JsonParser.class}
-)
-public class UrlContentResource extends RestServlet {
-	private static final long serialVersionUID = 1L;
+import junit.framework.*;
 
-	@RestMethod(name=GET, path="/testString")
-	public String testString(@Body String content) {
-		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
-	}
+public class TestUtils extends org.apache.juneau.rest.testutils.TestUtils {
 
-	@RestMethod(name=GET, path="/testEnum")
-	public String testEnum(@Body TestEnum content) {
-		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
-	}
-
-	public static enum TestEnum {
-		X1
-	}
-
-	@RestMethod(name=GET, path="/testBean")
-	public String testBean(@Body TestBean content) throws Exception {
-		return String.format("class=%s, value=%s", content.getClass().getName(), JsonSerializer.DEFAULT_LAX.serialize(content));
-	}
-
-	public static class TestBean {
-		public int f1;
-		public String f2;
-	}
-
-	@RestMethod(name=GET, path="/testInt")
-	public String testString(@Body Integer content) {
-		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
+	public static void checkErrorResponse(boolean debug, RestCallException e, int status, String...contains) throws AssertionFailedError {
+		String r = e.getResponseMessage();
+		if (debug) {
+			System.err.println(r); // NOT DEBUG
+			e.printStackTrace();
+		}
+		if (status != e.getResponseCode()) {
+			dumpResponse(r, "Response status code was not correct.  Expected: ''{0}''.  Actual: ''{1}''", status, e.getResponseCode());
+			throw new AssertionFailedError(format("Response status code was not correct.  Expected: ''{0}''.  Actual: ''{1}''", status, e.getResponseCode()));
+		}
+		for (String s : contains) {
+			if (r == null || ! r.contains(s)) {
+				if (! debug)
+					dumpResponse(r, "Response did not have the following expected text: ''{0}''", s);
+				throw new AssertionFailedError(format("Response did not have the following expected text: ''{0}''", s));
+			}
+		}
 	}
 }

@@ -135,7 +135,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				String b = getQuery().getString("body");
 				if (b != null) {
 					headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
-					body.load(b.getBytes(UTF8));
+					body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));
 				}
 			}
 

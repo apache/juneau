@@ -10,8 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test.pojos;
+package org.apache.juneau.rest.testutils;
 
-public enum TestEnum {
-	ONE,TWO,THREE
+import org.apache.juneau.annotation.*;
+
+@Swap(SwappedPojoSwap.class)
+@SuppressWarnings("javadoc")
+public class SwappedPojo {
+	public boolean wasUnswapped;
 }

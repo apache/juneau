@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.testutils;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -38,7 +38,7 @@ import org.w3c.dom.bootstrap.*;
 import org.w3c.dom.ls.*;
 import org.xml.sax.*;
 
-@SuppressWarnings({"javadoc","resource"})
+@SuppressWarnings({})
 public class TestUtils {
 
 	private static JsonSerializer js = JsonSerializer.create()
@@ -182,7 +182,7 @@ public class TestUtils {
 		if (xmlSchema.indexOf('\u0000') != -1) {
 
 			// Break it up into a map of namespaceURI->schema document
-			final Map<String,String> schemas = new HashMap<>();
+			final Map<String,String> schemas = new HashMap<String,String>();
 			String[] ss = xmlSchema.split("\u0000");
 			xmlSchema = ss[0];
 			for (String s : ss) {
@@ -313,14 +313,14 @@ public class TestUtils {
 	 */
 	private static class SortedNode implements Comparable<SortedNode> {
 		public String name, text="", attrs="";
-		public List<SortedNode> children = new LinkedList<>();
+		public List<SortedNode> children = new LinkedList<SortedNode>();
 
 		SortedNode(Element e) {
 			this.name = e.getNodeName();
 			NamedNodeMap attrs = e.getAttributes();
 			if (attrs != null) {
 				StringBuilder sb = new StringBuilder();
-				Set<String> attrNames = new TreeSet<>();
+				Set<String> attrNames = new TreeSet<String>();
 				for (int i = 0; i < attrs.getLength(); i++)
 					attrNames.add(attrs.item(i).getNodeName());
 				for (String n : attrNames) {
@@ -376,7 +376,7 @@ public class TestUtils {
 		}
 	}
 
-	static StringBuilder indent(int depth, StringBuilder sb) {
+	private static StringBuilder indent(int depth, StringBuilder sb) {
 		for (int i = 0; i < depth; i++)
 			sb.append("\t");
 		return sb;
@@ -445,8 +445,8 @@ public class TestUtils {
 		return o.toString();
 	}
 
-	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<>();
-	private static ThreadLocal<Locale> systemLocale = new ThreadLocal<>();
+	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<TimeZone>();
+	private static ThreadLocal<Locale> systemLocale = new ThreadLocal<Locale>();
 
 	/**
 	 * Temporarily sets the default system timezone to the specified timezone ID.

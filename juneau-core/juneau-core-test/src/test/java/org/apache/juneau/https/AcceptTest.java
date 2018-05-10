@@ -14,9 +14,9 @@ package org.apache.juneau.https;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;

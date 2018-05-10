@@ -96,7 +96,7 @@ public class BpiResource extends BasicRestServletJena {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name=GET, path="/test/c2", bpi="org.apache.juneau.rest.test.BpIncludesResource$MyBeanA: a")
+	@RestMethod(name=GET, path="/test/c2", bpi="org.apache.juneau.rest.testutils.BpIncludesResource$MyBeanA: a")
 	public Object testC2() throws Exception {
 		return new MyBeanA().init();
 	}

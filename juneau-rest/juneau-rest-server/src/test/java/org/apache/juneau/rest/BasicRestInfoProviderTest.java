@@ -14,8 +14,8 @@ package org.apache.juneau.rest;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.apache.juneau.rest.TestUtils.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import java.io.*;
 import java.util.*;

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.util.*;
 

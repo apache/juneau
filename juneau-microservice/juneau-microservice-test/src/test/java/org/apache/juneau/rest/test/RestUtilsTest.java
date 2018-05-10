@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.*;
 

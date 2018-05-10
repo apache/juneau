@@ -10,11 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test.pojos;
+package org.apache.juneau.rest.testutils;
 
-import org.apache.juneau.annotation.*;
+@SuppressWarnings("javadoc")
+public class Constants {
 
-@Swap(SwappedPojoSwap.class)
-public class SwappedPojo {
-	public boolean wasUnswapped;
+	public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
+
 }

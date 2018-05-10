@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 import org.junit.runner.*;

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.math.*;
@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 

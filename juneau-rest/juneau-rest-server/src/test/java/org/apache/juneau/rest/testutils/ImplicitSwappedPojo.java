@@ -10,16 +10,27 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test.pojos;
+package org.apache.juneau.rest.testutils;
 
-/**
- * Description.
- * <p>
- * 
- * @author James Bognar (james.bognar@salesforce.com)
- */
-public class Constants {
+import static org.apache.juneau.rest.testutils.Constants.*;
 
-	public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
+import org.apache.juneau.annotation.*;
 
+@BeanIgnore
+@SuppressWarnings("javadoc")
+public class ImplicitSwappedPojo {
+	public boolean wasUnswapped;
+
+	@Override
+	public String toString() {
+		return SWAP;
+	}
+
+	public ImplicitSwappedPojo() {}
+
+
+	public ImplicitSwappedPojo(String fromString) {
+		if (fromString.equals(SWAP))
+			wasUnswapped = true;
+	}
 }

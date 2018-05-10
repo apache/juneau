@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.net.*;

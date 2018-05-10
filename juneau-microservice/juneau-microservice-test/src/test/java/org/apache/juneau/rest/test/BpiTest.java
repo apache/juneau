@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;

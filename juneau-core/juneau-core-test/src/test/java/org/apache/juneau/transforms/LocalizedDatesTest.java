@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 import org.junit.runner.*;

@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.test.TestUtils.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
