@@ -10,26 +10,15 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.test.pojos;
+package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.test.pojos.Constants.*;
+public class ABean {
+	public int a;
+	public String b;
 
-import org.apache.juneau.annotation.*;
-
-@BeanIgnore
-public class ImplicitSwappedPojo {
-	public boolean wasUnswapped;
-
-	@Override
-	public String toString() {
-		return SWAP;
-	}
-
-	public ImplicitSwappedPojo() {}
-
-
-	public ImplicitSwappedPojo(String fromString) {
-		if (fromString.equals(SWAP))
-			wasUnswapped = true;
+	public ABean init() {
+		this.a = 1;
+		this.b = "foo";
+		return this;
 	}
 }

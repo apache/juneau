@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testbeans.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 /**

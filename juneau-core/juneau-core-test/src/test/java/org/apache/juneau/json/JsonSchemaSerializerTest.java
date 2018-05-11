@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 
@@ -43,7 +43,7 @@ public class JsonSchemaSerializerTest {
 		assertEquals("{type:'string'}", s.serialize("foo"));
 		assertEquals("{type:'string'}", s.serialize(new StringBuilder("foo")));
 		assertEquals("{type:'string'}", s.serialize('c'));
-		assertEquals("{type:'string','enum':['one','two','three']}", s.serialize(TestEnum.ONE));
+		assertEquals("{type:'string','enum':['one','two','three']}", s.serialize(TestEnumToString.ONE));
 		assertEquals("{type:'object',properties:{f1:{type:'string'}}}", s.serialize(new SimpleBean()));
 	}
 
@@ -67,7 +67,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'string'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'string'}", s.getSchema(char.class));
 		assertObjectEquals("{type:'string'}", s.getSchema(Character.class));
-		assertObjectEquals("{type:'string','enum':['one','two','three']}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three']}", s.getSchema(TestEnumToString.class));
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", s.getSchema(SimpleBean.class));
 	}
 
@@ -99,7 +99,7 @@ public class JsonSchemaSerializerTest {
 		assertEquals("{type:'array',items:{type:'string'}}", s.serialize(new StringBuilder[]{new StringBuilder("foo")}));
 		assertEquals("{type:'array',items:{type:'string'}}", s.serialize(new char[]{'c'}));
 		assertEquals("{type:'array',items:{type:'string'}}", s.serialize(new Character[]{'c'}));
-		assertEquals("{type:'array',items:{type:'string','enum':['one','two','three']}}", s.serialize(new TestEnum[]{TestEnum.ONE}));
+		assertEquals("{type:'array',items:{type:'string','enum':['one','two','three']}}", s.serialize(new TestEnumToString[]{TestEnumToString.ONE}));
 		assertEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.serialize(new SimpleBean[]{new SimpleBean()}));
 	}
 
@@ -123,7 +123,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'array',items:{type:'string'}}", s.getSchema(StringBuilder[].class));
 		assertObjectEquals("{type:'array',items:{type:'string'}}", s.getSchema(char[].class));
 		assertObjectEquals("{type:'array',items:{type:'string'}}", s.getSchema(Character[].class));
-		assertObjectEquals("{type:'array',items:{type:'string','enum':['one','two','three']}}", s.getSchema(TestEnum[].class));
+		assertObjectEquals("{type:'array',items:{type:'string','enum':['one','two','three']}}", s.getSchema(TestEnumToString[].class));
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(SimpleBean[].class));
 	}
 	
@@ -147,7 +147,7 @@ public class JsonSchemaSerializerTest {
 		assertEquals("{type:'array',items:{type:'array',items:{type:'string'}}}", s.serialize(new StringBuilder[][]{{new StringBuilder("foo")}}));
 		assertEquals("{type:'array',items:{type:'array',items:{type:'string'}}}", s.serialize(new char[][]{{'c'}}));
 		assertEquals("{type:'array',items:{type:'array',items:{type:'string'}}}", s.serialize(new Character[][]{{'c'}}));
-		assertEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three']}}}", s.serialize(new TestEnum[][]{{TestEnum.ONE}}));
+		assertEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three']}}}", s.serialize(new TestEnumToString[][]{{TestEnumToString.ONE}}));
 		assertEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}}", s.serialize(new SimpleBean[][]{{new SimpleBean()}}));
 	}
 
@@ -171,7 +171,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string'}}}", s.getSchema(StringBuilder[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string'}}}", s.getSchema(char[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string'}}}", s.getSchema(Character[][].class));
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three']}}}", s.getSchema(TestEnum[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three']}}}", s.getSchema(TestEnumToString[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}}", s.getSchema(SimpleBean[][].class));
 	}
 	
@@ -823,37 +823,37 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void addExample_ENUM() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("enum").build().createSession();
-		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'one'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'one'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_wDefault() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("enum").example(TestEnum.class, TestEnum.TWO).build().createSession();
-		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'two'}", s.getSchema(TestEnum.class));
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
+		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'two'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_2darray() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("enum").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],'x-example':'one'}}}", s.getSchema(TestEnum[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],'x-example':'one'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 
 	@Test
 	public void addExample_ENUM_useEnumNames() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useEnumNames().addExamplesTo("enum").build().createSession();
-		assertObjectEquals("{type:'string','enum':['ONE','TWO','THREE'],'x-example':'ONE'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['ONE','TWO','THREE'],'x-example':'ONE'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_wDefault_useEnumNames() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useEnumNames().addExamplesTo("enum").example(TestEnum.class, TestEnum.TWO).build().createSession();
-		assertObjectEquals("{type:'string','enum':['ONE','TWO','THREE'],'x-example':'TWO'}", s.getSchema(TestEnum.class));
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useEnumNames().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
+		assertObjectEquals("{type:'string','enum':['ONE','TWO','THREE'],'x-example':'TWO'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_2darray_useEnumNames() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useEnumNames().addExamplesTo("enum").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['ONE','TWO','THREE'],'x-example':'ONE'}}}", s.getSchema(TestEnum[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['ONE','TWO','THREE'],'x-example':'ONE'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 
 	//====================================================================================================
@@ -881,7 +881,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'string','x-example':'foo'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'string','x-example':'a'}", s.getSchema(Character.class));
 		assertObjectEquals("{type:'string','x-example':'a'}", s.getSchema(char.class));
-		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'one'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'one'}", s.getSchema(TestEnumToString.class));
 	}
 	
 	//====================================================================================================
@@ -1017,13 +1017,13 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void addDescription_ENUM() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("enum").build().createSession();
-		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.TestEnum'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.pojos.TestEnumToString'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addDescription_ENUM_2darray() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("enum").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.TestEnum'}}}", s.getSchema(TestEnum[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.pojos.TestEnumToString'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 
 	//====================================================================================================
@@ -1052,7 +1052,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'string',description:'java.lang.StringBuilder'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'string',description:'java.lang.Character'}", s.getSchema(Character.class));
 		assertObjectEquals("{type:'string',description:'char'}", s.getSchema(char.class));
-		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.TestEnum'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.pojos.TestEnumToString'}", s.getSchema(TestEnumToString.class));
 	}
 
 	//====================================================================================================
@@ -1083,7 +1083,7 @@ public class JsonSchemaSerializerTest {
 			.defaultSchema(StringBuilder.class, new ObjectMap().append("type", "bar"))
 			.defaultSchema(Character.class, new ObjectMap().append("type", "bar"))
 			.defaultSchema(char.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(TestEnum.class, new ObjectMap().append("type", "bar"))
+			.defaultSchema(TestEnumToString.class, new ObjectMap().append("type", "bar"))
 			.build().createSession();
 		assertObjectEquals("{type:'bar'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'bar'}", s.getSchema(BeanMap.class));
@@ -1105,7 +1105,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'bar'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'bar'}", s.getSchema(Character.class));
 		assertObjectEquals("{type:'bar'}", s.getSchema(char.class));
-		assertObjectEquals("{type:'bar'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'bar'}", s.getSchema(TestEnumToString.class));
 	}
 	
 	// If default schema does not contain 'type', the value is augmented
@@ -1132,7 +1132,7 @@ public class JsonSchemaSerializerTest {
 			.defaultSchema(StringBuilder.class, new ObjectMap().append("foo", "bar"))
 			.defaultSchema(Character.class, new ObjectMap().append("foo", "bar"))
 			.defaultSchema(char.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(TestEnum.class, new ObjectMap().append("foo", "bar"))
+			.defaultSchema(TestEnumToString.class, new ObjectMap().append("foo", "bar"))
 			.build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'},foo:'bar'}", s.getSchema(BeanMap.class));
@@ -1154,7 +1154,7 @@ public class JsonSchemaSerializerTest {
 		assertObjectEquals("{type:'string',foo:'bar'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'string',foo:'bar'}", s.getSchema(Character.class));
 		assertObjectEquals("{type:'string',foo:'bar'}", s.getSchema(char.class));
-		assertObjectEquals("{type:'string','enum':['one','two','three'],foo:'bar'}", s.getSchema(TestEnum.class));
+		assertObjectEquals("{type:'string','enum':['one','two','three'],foo:'bar'}", s.getSchema(TestEnumToString.class));
 	}
 	
 	//====================================================================================================

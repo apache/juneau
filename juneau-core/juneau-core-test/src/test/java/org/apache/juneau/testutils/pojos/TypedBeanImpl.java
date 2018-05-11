@@ -10,16 +10,16 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.test.pojos;
+package org.apache.juneau.testutils.pojos;
 
-/**
- * Description.
- * <p>
- * 
- * @author James Bognar (james.bognar@salesforce.com)
- */
-public class Constants {
+@org.apache.juneau.annotation.Bean(typeName="TypedBeanImpl", sort=true)
+public class TypedBeanImpl implements TypedBean {
+	public int a;
+	public String b;
 
-	public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
-
+	public TypedBeanImpl init() {
+		this.a = 1;
+		this.b = "foo";
+		return this;
+	}
 }

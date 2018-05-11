@@ -19,7 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.testbeans.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @SuppressWarnings({"unchecked","rawtypes","serial"})

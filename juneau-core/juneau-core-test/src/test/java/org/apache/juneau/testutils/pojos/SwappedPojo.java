@@ -10,26 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.test.pojos;
+package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.test.pojos.Constants.*;
+import org.apache.juneau.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
-
-public class SwappedPojoSwap extends PojoSwap<SwappedPojo,String> {
-	@Override
-	public String swap(BeanSession session, SwappedPojo c) throws SerializeException {
-		return SWAP;
-	}
-
-	@Override
-	public SwappedPojo unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
-		SwappedPojo c = new SwappedPojo();
-		if (f.equals(SWAP))
-			c.wasUnswapped = true;
-		return c;
-	}
+@Swap(SwappedPojoSwap.class)
+public class SwappedPojo {
+	public boolean wasUnswapped;
 }
