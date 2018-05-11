@@ -64,7 +64,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 					}
 				}
 			},
@@ -98,7 +98,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A[] o) {
-						assertType(A.class, o[0]);
+						assertInstanceOf(A.class, o[0]);
 					}
 				}
 			},
@@ -132,7 +132,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A[][][] o) {
-						assertType(A.class, o[0][0][0]);
+						assertInstanceOf(A.class, o[0][0][0]);
 					}
 				}
 			},
@@ -166,7 +166,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(List<A[][][]> o) {
-						assertType(A.class, o.get(0)[0][0][0]);
+						assertInstanceOf(A.class, o.get(0)[0][0][0]);
 					}
 				}
 			},
@@ -200,7 +200,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,A[][][]> o) {
-						assertType(A.class, o.get("x")[0][0][0]);
+						assertInstanceOf(A.class, o.get("x")[0][0][0]);
 					}
 				}
 			},
@@ -234,7 +234,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,List<A[][][]>> o) {
-						assertType(A.class, o.get("x").get(0)[0][0][0]);
+						assertInstanceOf(A.class, o.get("x").get(0)[0][0][0]);
 					}
 				}
 			},
@@ -268,7 +268,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(IA o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 					}
 				}
 			},
@@ -302,7 +302,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(IA[] o) {
-						assertType(A.class, o[0]);
+						assertInstanceOf(A.class, o[0]);
 					}
 				}
 			},
@@ -336,7 +336,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(IA[][][] o) {
-						assertType(A.class, o[0][0][0]);
+						assertInstanceOf(A.class, o[0][0][0]);
 					}
 				}
 			},
@@ -370,7 +370,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(List<IA[][][]> o) {
-						assertType(A.class, o.get(0)[0][0][0]);
+						assertInstanceOf(A.class, o.get(0)[0][0][0]);
 					}
 				}
 			},
@@ -404,7 +404,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,IA[][][]> o) {
-						assertType(A.class, o.get("x")[0][0][0]);
+						assertInstanceOf(A.class, o.get("x")[0][0][0]);
 					}
 				}
 			},
@@ -438,7 +438,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,List<IA[][][]>> o) {
-						assertType(A.class, o.get("x").get(0)[0][0][0]);
+						assertInstanceOf(A.class, o.get("x").get(0)[0][0][0]);
 					}
 				}
 			},
@@ -472,7 +472,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(B o) {
-						assertType(B.class, o);
+						assertInstanceOf(B.class, o);
 					}
 				}
 			},
@@ -506,7 +506,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(B[] o) {
-						assertType(B.class, o[0]);
+						assertInstanceOf(B.class, o[0]);
 					}
 				}
 			},
@@ -540,7 +540,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(B[][][] o) {
-						assertType(B.class, o[0][0][0]);
+						assertInstanceOf(B.class, o[0][0][0]);
 					}
 				}
 			},
@@ -574,7 +574,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(List<B[][][]> o) {
-						assertType(B.class, o.get(0)[0][0][0]);
+						assertInstanceOf(B.class, o.get(0)[0][0][0]);
 					}
 				}
 			},
@@ -608,7 +608,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,B[][][]> o) {
-						assertType(B.class, o.get("x")[0][0][0]);
+						assertInstanceOf(B.class, o.get("x")[0][0][0]);
 					}
 				}
 			},
@@ -642,7 +642,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,List<B[][][]>> o) {
-						assertType(B.class, o.get("x").get(0)[0][0][0]);
+						assertInstanceOf(B.class, o.get("x").get(0)[0][0][0]);
 					}
 				}
 			},
@@ -676,7 +676,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(IB o) {
-						assertType(B.class, o);
+						assertInstanceOf(B.class, o);
 					}
 				}
 			},
@@ -710,7 +710,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(IB[] o) {
-						assertType(B.class, o[0]);
+						assertInstanceOf(B.class, o[0]);
 					}
 				}
 			},
@@ -744,7 +744,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(IB[][][] o) {
-						assertType(B.class, o[0][0][0]);
+						assertInstanceOf(B.class, o[0][0][0]);
 					}
 				}
 			},
@@ -778,7 +778,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(List<IB[][][]> o) {
-						assertType(B.class, o.get(0)[0][0][0]);
+						assertInstanceOf(B.class, o.get(0)[0][0][0]);
 					}
 				}
 			},
@@ -812,7 +812,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,IB[][][]> o) {
-						assertType(B.class, o.get("x")[0][0][0]);
+						assertInstanceOf(B.class, o.get("x")[0][0][0]);
 					}
 				}
 			},
@@ -846,7 +846,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,List<IB[][][]>> o) {
-						assertType(B.class, o.get("x").get(0)[0][0][0]);
+						assertInstanceOf(B.class, o.get("x").get(0)[0][0][0]);
 					}
 				}
 			},

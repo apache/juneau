@@ -62,7 +62,7 @@ public class Html5TemplateComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(FormTemplate o) {
-						assertType(FormTemplate.class, o);
+						assertInstanceOf(FormTemplate.class, o);
 					}
 				}
 			},

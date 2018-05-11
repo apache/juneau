@@ -41,7 +41,7 @@ public class SwaggerTest {
 		
 		t.swagger(new StringBuilder("foo"));
 		assertEquals("foo", t.getSwagger());
-		assertType(String.class, t.getSwagger());
+		assertInstanceOf(String.class, t.getSwagger());
 		
 		t.swagger(null);
 		assertNull(t.getSwagger());
@@ -59,7 +59,7 @@ public class SwaggerTest {
 		
 		t.info("{title:'foo',version:'bar'}");
 		assertObjectEquals("{title:'foo',version:'bar'}", t.getInfo());
-		assertType(Info.class, t.getInfo());
+		assertInstanceOf(Info.class, t.getInfo());
 
 		t.info(null);
 		assertNull(t.getInfo());
@@ -77,7 +77,7 @@ public class SwaggerTest {
 		
 		t.host(new StringBuilder("foo"));
 		assertEquals("foo", t.getHost());
-		assertType(String.class, t.getHost());
+		assertInstanceOf(String.class, t.getHost());
 		
 		t.host(null);
 		assertNull(t.getHost());
@@ -95,7 +95,7 @@ public class SwaggerTest {
 		
 		t.basePath(new StringBuilder("foo"));
 		assertEquals("foo", t.getBasePath());
-		assertType(String.class, t.getBasePath());
+		assertInstanceOf(String.class, t.getBasePath());
 		
 		t.basePath(null);
 		assertNull(t.getBasePath());
@@ -110,11 +110,11 @@ public class SwaggerTest {
 		
 		t.setSchemes(new ASet<String>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 		
 		t.setSchemes(new ASet<String>());
 		assertObjectEquals("[]", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 
 		t.setSchemes(null);
 		assertNull(t.getSchemes());
@@ -129,15 +129,15 @@ public class SwaggerTest {
 		
 		t.addSchemes(new ASet<String>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 		
 		t.addSchemes(new ASet<String>());
 		assertObjectEquals("['foo','bar']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 
 		t.addSchemes(null);
 		assertObjectEquals("['foo','bar']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 	}
 
 	/**
@@ -167,11 +167,11 @@ public class SwaggerTest {
 		
 		t.setConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 		
 		t.setConsumes(new ASet<MediaType>());
 		assertObjectEquals("[]", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 
 		t.setConsumes(null);
 		assertNull(t.getConsumes());
@@ -186,15 +186,15 @@ public class SwaggerTest {
 		
 		t.addConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 		
 		t.addConsumes(new ASet<MediaType>());
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 
 		t.addConsumes(null);
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 	}
 
 	/**
@@ -214,9 +214,9 @@ public class SwaggerTest {
 		t.consumes("[]");
 		t.consumes((Object)null);
 		assertObjectEquals("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 		for (MediaType mt : t.getConsumes())
-			assertType(MediaType.class, mt);
+			assertInstanceOf(MediaType.class, mt);
 	}
 
 	/**
@@ -228,11 +228,11 @@ public class SwaggerTest {
 		
 		t.setProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 		
 		t.setProduces(new ASet<MediaType>());
 		assertObjectEquals("[]", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 
 		t.setProduces(null);
 		assertNull(t.getProduces());
@@ -247,15 +247,15 @@ public class SwaggerTest {
 		
 		t.addProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 		
 		t.addProduces(new ASet<MediaType>());
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 
 		t.addProduces(null);
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 	}
 
 	/**
@@ -275,9 +275,9 @@ public class SwaggerTest {
 		t.produces("[]");
 		t.produces((Object)null);
 		assertObjectEquals("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 		for (MediaType mt : t.getProduces())
-			assertType(MediaType.class, mt);
+			assertInstanceOf(MediaType.class, mt);
 	}
 
 	/**
@@ -289,11 +289,11 @@ public class SwaggerTest {
 		
 		t.setPaths(new AMap<String,OperationMap>().append("foo", new OperationMap().append("bar",operation().summary("baz"))));
 		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
-		assertType(Map.class, t.getPaths());
+		assertInstanceOf(Map.class, t.getPaths());
 		
 		t.setPaths(new AMap<String,OperationMap>());
 		assertObjectEquals("{}", t.getPaths());
-		assertType(Map.class, t.getPaths());
+		assertInstanceOf(Map.class, t.getPaths());
 
 		t.setPaths(null);
 		assertNull(t.getPaths());
@@ -308,15 +308,15 @@ public class SwaggerTest {
 		
 		t.addPaths(new AMap<String,OperationMap>().append("foo", new OperationMap().append("bar",operation().summary("baz"))));
 		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
-		assertType(Map.class, t.getPaths());
+		assertInstanceOf(Map.class, t.getPaths());
 		
 		t.addPaths(new AMap<String,OperationMap>());
 		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
-		assertType(Map.class, t.getPaths());
+		assertInstanceOf(Map.class, t.getPaths());
 
 		t.addPaths(null);
 		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
-		assertType(Map.class, t.getPaths());
+		assertInstanceOf(Map.class, t.getPaths());
 	}
 
 	/**
@@ -349,7 +349,7 @@ public class SwaggerTest {
 		assertObjectEquals("{a:{a1:{operationId:'a2'}},b:{b1:{operationId:'b2'}},c:{c1:{operationId:'c2'}},d:{d1:{operationId:'d2'}}}", t.getPaths());
 		for (Map<String,Operation> m : t.getPaths().values()) {
 			for (Operation o : m.values()) {
-				assertType(Operation.class, o);
+				assertInstanceOf(Operation.class, o);
 			}
 		}
 	}
@@ -363,11 +363,11 @@ public class SwaggerTest {
 		
 		t.setDefinitions(new AMap<String,ObjectMap>().append("foo",new ObjectMap().append("type","bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
-		assertType(Map.class, t.getDefinitions());
+		assertInstanceOf(Map.class, t.getDefinitions());
 		
 		t.setDefinitions(new AMap<String,ObjectMap>());
 		assertObjectEquals("{}", t.getDefinitions());
-		assertType(Map.class, t.getDefinitions());
+		assertInstanceOf(Map.class, t.getDefinitions());
 
 		t.setDefinitions(null);
 		assertNull(t.getDefinitions());
@@ -382,15 +382,15 @@ public class SwaggerTest {
 		
 		t.addDefinitions(new AMap<String,ObjectMap>().append("foo", new ObjectMap().append("type", "bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
-		assertType(Map.class, t.getDefinitions());
+		assertInstanceOf(Map.class, t.getDefinitions());
 		
 		t.addDefinitions(new AMap<String,ObjectMap>());
 		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
-		assertType(Map.class, t.getDefinitions());
+		assertInstanceOf(Map.class, t.getDefinitions());
 
 		t.addDefinitions(null);
 		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
-		assertType(Map.class, t.getDefinitions());
+		assertInstanceOf(Map.class, t.getDefinitions());
 	}
 
 	/**
@@ -432,11 +432,11 @@ public class SwaggerTest {
 		
 		t.setParameters(new AMap<String,ParameterInfo>().append("foo",parameterInfo().name("bar")));
 		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
-		assertType(Map.class, t.getParameters());
+		assertInstanceOf(Map.class, t.getParameters());
 		
 		t.setParameters(new AMap<String,ParameterInfo>());
 		assertObjectEquals("{}", t.getParameters());
-		assertType(Map.class, t.getParameters());
+		assertInstanceOf(Map.class, t.getParameters());
 
 		t.setParameters(null);
 		assertNull(t.getParameters());
@@ -451,15 +451,15 @@ public class SwaggerTest {
 		
 		t.addParameters(new AMap<String,ParameterInfo>().append("foo",parameterInfo().name("bar")));
 		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
-		assertType(Map.class, t.getParameters());
+		assertInstanceOf(Map.class, t.getParameters());
 		
 		t.addParameters(new AMap<String,ParameterInfo>());
 		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
-		assertType(Map.class, t.getParameters());
+		assertInstanceOf(Map.class, t.getParameters());
 
 		t.addParameters(null);
 		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
-		assertType(Map.class, t.getParameters());
+		assertInstanceOf(Map.class, t.getParameters());
 	}
 
 	/**
@@ -501,11 +501,11 @@ public class SwaggerTest {
 		
 		t.setResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 		
 		t.setResponses(new AMap<String,ResponseInfo>());
 		assertObjectEquals("{}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 
 		t.setResponses(null);
 		assertNull(t.getResponses());
@@ -520,15 +520,15 @@ public class SwaggerTest {
 		
 		t.addResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 		
 		t.addResponses(new AMap<String,ResponseInfo>());
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 
 		t.addResponses(null);
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 	}
 
 	/**
@@ -560,7 +560,7 @@ public class SwaggerTest {
 		
 		assertObjectEquals("{a:{description:'a1'},b:{description:'b1'},c:{description:'c1'}}", t.getResponses());
 		for (ResponseInfo ri : t.getResponses().values())
-			assertType(ResponseInfo.class, ri);
+			assertInstanceOf(ResponseInfo.class, ri);
 	}
 
 	/**
@@ -572,11 +572,11 @@ public class SwaggerTest {
 		
 		t.setSecurityDefinitions(new AMap<String,SecurityScheme>().append("foo",securityScheme("bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
-		assertType(Map.class, t.getSecurityDefinitions());
+		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 		
 		t.setSecurityDefinitions(new AMap<String,SecurityScheme>());
 		assertObjectEquals("{}", t.getSecurityDefinitions());
-		assertType(Map.class, t.getSecurityDefinitions());
+		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 
 		t.setSecurityDefinitions(null);
 		assertNull(t.getSecurityDefinitions());
@@ -591,15 +591,15 @@ public class SwaggerTest {
 		
 		t.addSecurityDefinitions(new AMap<String,SecurityScheme>().append("foo",securityScheme("bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
-		assertType(Map.class, t.getSecurityDefinitions());
+		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 		
 		t.addSecurityDefinitions(new AMap<String,SecurityScheme>());
 		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
-		assertType(Map.class, t.getSecurityDefinitions());
+		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 
 		t.addSecurityDefinitions(null);
 		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
-		assertType(Map.class, t.getSecurityDefinitions());
+		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 	}
 
 	/**
@@ -631,7 +631,7 @@ public class SwaggerTest {
 		
 		assertObjectEquals("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}", t.getSecurityDefinitions());
 		for (SecurityScheme ss : t.getSecurityDefinitions().values())
-			assertType(SecurityScheme.class, ss);
+			assertInstanceOf(SecurityScheme.class, ss);
 	}
 
 	/**
@@ -643,11 +643,11 @@ public class SwaggerTest {
 		
 		t.setSecurity(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 		
 		t.setSecurity(new ASet<Map<String,List<String>>>());
 		assertObjectEquals("[]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 
 		t.setSecurity(null);
 		assertNull(t.getSecurity());
@@ -662,15 +662,15 @@ public class SwaggerTest {
 		
 		t.addSecurity(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 		
 		t.addSecurity(new ASet<Map<String,List<String>>>());
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 
 		t.addSecurity(null);
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 	}
 
 	/**
@@ -705,7 +705,7 @@ public class SwaggerTest {
 		t.securities("[]");
 		t.securities((Object)null);
 		assertObjectEquals("[{a1:['a2']},{b1:['b2']},{c1:['c2']},{d1:['d2']},{e1:['e2']},{f1:['f2']},{g1:['g2']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 	}
 
 	/**
@@ -717,11 +717,11 @@ public class SwaggerTest {
 		
 		t.setTags(new ASet<Tag>().appendAll(tag("foo")));
 		assertObjectEquals("[{name:'foo'}]", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 		
 		t.setTags(new ASet<Tag>());
 		assertObjectEquals("[]", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 
 		t.setTags(null);
 		assertNull(t.getTags());
@@ -736,15 +736,15 @@ public class SwaggerTest {
 		
 		t.addTags(new ASet<Tag>().appendAll(tag("foo")));
 		assertObjectEquals("[{name:'foo'}]", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 		
 		t.addTags(new ASet<Tag>());
 		assertObjectEquals("[{name:'foo'}]", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 
 		t.addTags(null);
 		assertObjectEquals("[{name:'foo'}]", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 	}
 
 	/**
@@ -764,9 +764,9 @@ public class SwaggerTest {
 		t.tags("[]");
 		t.tags((Object)null);
 		assertObjectEquals("[{name:'a'},{name:'b'},{name:'c'},{name:'d'},{name:'e'},{name:'f'},{name:'g'}]", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 		for (Tag tag : t.getTags())
-			assertType(Tag.class, tag);
+			assertInstanceOf(Tag.class, tag);
 	}
 
 	/**
@@ -781,7 +781,7 @@ public class SwaggerTest {
 		
 		t.externalDocs("{url:'foo'}");
 		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
-		assertType(ExternalDocumentation.class, t.getExternalDocs());
+		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
 
 		t.externalDocs(null);
 		assertNull(t.getExternalDocs());
@@ -871,29 +871,29 @@ public class SwaggerTest {
 		assertEquals("[{name:'o'}]", t.get("tags", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 	
-		assertType(String.class, t.get("basePath", Object.class));
-		assertType(List.class, t.get("consumes", Object.class));
-		assertType(MediaType.class, t.get("consumes", List.class).get(0));
-		assertType(Map.class, t.get("definitions", Object.class));
-		assertType(ObjectMap.class, t.get("definitions", Map.class).values().iterator().next());
-		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertType(String.class, t.get("host", Object.class));
-		assertType(Info.class, t.get("info", Object.class));
-		assertType(Map.class, t.get("parameters", Object.class));
-		assertType(ParameterInfo.class, t.get("parameters", Map.class).values().iterator().next());
-		assertType(Map.class, t.get("paths", Object.class));
-		assertType(List.class, t.get("produces", Object.class));
-		assertType(MediaType.class, t.get("consumes", List.class).get(0));
-		assertType(Map.class, t.get("responses", Object.class));
-		assertType(ResponseInfo.class, t.get("responses", Map.class).values().iterator().next());
-		assertType(List.class, t.get("schemes", Object.class));
-		assertType(List.class, t.get("security", Object.class));
-		assertType(Map.class, t.get("securityDefinitions", Object.class));
-		assertType(SecurityScheme.class, t.get("securityDefinitions", Map.class).values().iterator().next());
-		assertType(String.class, t.get("swagger", Object.class));
-		assertType(List.class, t.get("tags", Object.class));
-		assertType(Tag.class, t.get("tags", List.class).get(0));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertInstanceOf(String.class, t.get("basePath", Object.class));
+		assertInstanceOf(List.class, t.get("consumes", Object.class));
+		assertInstanceOf(MediaType.class, t.get("consumes", List.class).get(0));
+		assertInstanceOf(Map.class, t.get("definitions", Object.class));
+		assertInstanceOf(ObjectMap.class, t.get("definitions", Map.class).values().iterator().next());
+		assertInstanceOf(ExternalDocumentation.class, t.get("externalDocs", Object.class));
+		assertInstanceOf(String.class, t.get("host", Object.class));
+		assertInstanceOf(Info.class, t.get("info", Object.class));
+		assertInstanceOf(Map.class, t.get("parameters", Object.class));
+		assertInstanceOf(ParameterInfo.class, t.get("parameters", Map.class).values().iterator().next());
+		assertInstanceOf(Map.class, t.get("paths", Object.class));
+		assertInstanceOf(List.class, t.get("produces", Object.class));
+		assertInstanceOf(MediaType.class, t.get("consumes", List.class).get(0));
+		assertInstanceOf(Map.class, t.get("responses", Object.class));
+		assertInstanceOf(ResponseInfo.class, t.get("responses", Map.class).values().iterator().next());
+		assertInstanceOf(List.class, t.get("schemes", Object.class));
+		assertInstanceOf(List.class, t.get("security", Object.class));
+		assertInstanceOf(Map.class, t.get("securityDefinitions", Object.class));
+		assertInstanceOf(SecurityScheme.class, t.get("securityDefinitions", Map.class).values().iterator().next());
+		assertInstanceOf(String.class, t.get("swagger", Object.class));
+		assertInstanceOf(List.class, t.get("tags", Object.class));
+		assertInstanceOf(Tag.class, t.get("tags", List.class).get(0));
+		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
 	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

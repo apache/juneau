@@ -38,7 +38,7 @@ public class SecuritySchemeTest {
 		
 		t.type(new StringBuilder("foo"));
 		assertEquals("foo", t.getType());
-		assertType(String.class, t.getType());
+		assertInstanceOf(String.class, t.getType());
 		
 		t.type(null);
 		assertNull(t.getType());
@@ -56,7 +56,7 @@ public class SecuritySchemeTest {
 		
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertType(String.class, t.getDescription());
+		assertInstanceOf(String.class, t.getDescription());
 		
 		t.description(null);
 		assertNull(t.getDescription());
@@ -74,7 +74,7 @@ public class SecuritySchemeTest {
 		
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
-		assertType(String.class, t.getName());
+		assertInstanceOf(String.class, t.getName());
 		
 		t.name(null);
 		assertNull(t.getName());
@@ -92,7 +92,7 @@ public class SecuritySchemeTest {
 		
 		t.in(new StringBuilder("foo"));
 		assertEquals("foo", t.getIn());
-		assertType(String.class, t.getIn());
+		assertInstanceOf(String.class, t.getIn());
 		
 		t.in(null);
 		assertNull(t.getIn());
@@ -110,7 +110,7 @@ public class SecuritySchemeTest {
 		
 		t.flow(new StringBuilder("foo"));
 		assertEquals("foo", t.getFlow());
-		assertType(String.class, t.getFlow());
+		assertInstanceOf(String.class, t.getFlow());
 		
 		t.flow(null);
 		assertNull(t.getFlow());
@@ -128,7 +128,7 @@ public class SecuritySchemeTest {
 		
 		t.authorizationUrl(new StringBuilder("foo"));
 		assertEquals("foo", t.getAuthorizationUrl());
-		assertType(String.class, t.getAuthorizationUrl());
+		assertInstanceOf(String.class, t.getAuthorizationUrl());
 		
 		t.authorizationUrl(null);
 		assertNull(t.getAuthorizationUrl());
@@ -146,7 +146,7 @@ public class SecuritySchemeTest {
 		
 		t.tokenUrl(new StringBuilder("foo"));
 		assertEquals("foo", t.getTokenUrl());
-		assertType(String.class, t.getTokenUrl());
+		assertInstanceOf(String.class, t.getTokenUrl());
 		
 		t.tokenUrl(null);
 		assertNull(t.getTokenUrl());
@@ -161,11 +161,11 @@ public class SecuritySchemeTest {
 		
 		t.setScopes(new AMap<String,String>().append("foo","bar"));
 		assertObjectEquals("{foo:'bar'}", t.getScopes());
-		assertType(Map.class, t.getScopes());
+		assertInstanceOf(Map.class, t.getScopes());
 		
 		t.setScopes(new AMap<String,String>());
 		assertObjectEquals("{}", t.getScopes());
-		assertType(Map.class, t.getScopes());
+		assertInstanceOf(Map.class, t.getScopes());
 
 		t.setScopes(null);
 		assertNull(t.getScopes());
@@ -180,15 +180,15 @@ public class SecuritySchemeTest {
 		
 		t.addScopes(new AMap<String,String>().append("foo","bar"));
 		assertObjectEquals("{foo:'bar'}", t.getScopes());
-		assertType(Map.class, t.getScopes());
+		assertInstanceOf(Map.class, t.getScopes());
 		
 		t.addScopes(new AMap<String,String>());
 		assertObjectEquals("{foo:'bar'}", t.getScopes());
-		assertType(Map.class, t.getScopes());
+		assertInstanceOf(Map.class, t.getScopes());
 
 		t.addScopes(null);
 		assertObjectEquals("{foo:'bar'}", t.getScopes());
-		assertType(Map.class, t.getScopes());
+		assertInstanceOf(Map.class, t.getScopes());
 	}
 
 	/**
@@ -262,15 +262,15 @@ public class SecuritySchemeTest {
 		assertEquals("g", t.get("type", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 	
-		assertType(String.class, t.get("authorizationUrl", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(String.class, t.get("flow", Object.class));
-		assertType(String.class, t.get("in", Object.class));
-		assertType(String.class, t.get("name", Object.class));
-		assertType(Map.class, t.get("scopes", Object.class));
-		assertType(String.class, t.get("tokenUrl", Object.class));
-		assertType(String.class, t.get("type", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertInstanceOf(String.class, t.get("authorizationUrl", Object.class));
+		assertInstanceOf(String.class, t.get("description", Object.class));
+		assertInstanceOf(String.class, t.get("flow", Object.class));
+		assertInstanceOf(String.class, t.get("in", Object.class));
+		assertInstanceOf(String.class, t.get("name", Object.class));
+		assertInstanceOf(Map.class, t.get("scopes", Object.class));
+		assertInstanceOf(String.class, t.get("tokenUrl", Object.class));
+		assertInstanceOf(String.class, t.get("type", Object.class));
+		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
 	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

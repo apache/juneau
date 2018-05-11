@@ -64,7 +64,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithDynaField o) {
-						assertType(BeanWithDynaField.class, o);
+						assertInstanceOf(BeanWithDynaField.class, o);
 					}
 				}
 			},
@@ -98,7 +98,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithDynaMethods o) {
-						assertType(BeanWithDynaMethods.class, o);
+						assertInstanceOf(BeanWithDynaMethods.class, o);
 						Assert.assertTrue(o.setterCalled);
 					}
 				}
@@ -133,7 +133,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithDynaGetterOnly o) {
-						assertType(BeanWithDynaGetterOnly.class, o);
+						assertInstanceOf(BeanWithDynaGetterOnly.class, o);
 					}
 				}
 			},
@@ -167,8 +167,8 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithDynaFieldSwapped o) {
-						assertType(BeanWithDynaFieldSwapped.class, o);
-						assertType(Calendar.class, o.f1.get("f1a"));
+						assertInstanceOf(BeanWithDynaFieldSwapped.class, o);
+						assertInstanceOf(Calendar.class, o.f1.get("f1a"));
 					}
 				}
 			},
@@ -202,7 +202,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithDynaFieldStringList o) {
-						assertType(BeanWithDynaFieldStringList.class, o);
+						assertInstanceOf(BeanWithDynaFieldStringList.class, o);
 					}
 				}
 			},
@@ -236,7 +236,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithDynaMethodsAndExtraKeys o) {
-						assertType(BeanWithDynaMethodsAndExtraKeys.class, o);
+						assertInstanceOf(BeanWithDynaMethodsAndExtraKeys.class, o);
 						Assert.assertTrue(o.setterCalled);
 					}
 				}

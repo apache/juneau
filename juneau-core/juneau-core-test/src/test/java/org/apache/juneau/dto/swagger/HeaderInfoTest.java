@@ -39,7 +39,7 @@ public class HeaderInfoTest {
 		
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertType(String.class, t.getDescription());
+		assertInstanceOf(String.class, t.getDescription());
 		
 		t.description(null);
 		assertNull(t.getDescription());
@@ -57,7 +57,7 @@ public class HeaderInfoTest {
 		
 		t.type(new StringBuilder("foo"));
 		assertEquals("foo", t.getType());
-		assertType(String.class, t.getType());
+		assertInstanceOf(String.class, t.getType());
 		
 		t.type(null);
 		assertNull(t.getType());
@@ -75,7 +75,7 @@ public class HeaderInfoTest {
 		
 		t.format(new StringBuilder("foo"));
 		assertEquals("foo", t.getFormat());
-		assertType(String.class, t.getFormat());
+		assertInstanceOf(String.class, t.getFormat());
 		
 		t.format(null);
 		assertNull(t.getFormat());
@@ -93,7 +93,7 @@ public class HeaderInfoTest {
 		
 		t.items("{type:'foo'}");
 		assertObjectEquals("{type:'foo'}", t.getItems());
-		assertType(Items.class, t.getItems());
+		assertInstanceOf(Items.class, t.getItems());
 
 		t.items(null);
 		assertNull(t.getItems());
@@ -111,7 +111,7 @@ public class HeaderInfoTest {
 		
 		t.collectionFormat(new StringBuilder("foo"));
 		assertEquals("foo", t.getCollectionFormat());
-		assertType(String.class, t.getCollectionFormat());
+		assertInstanceOf(String.class, t.getCollectionFormat());
 		
 		t.collectionFormat(null);
 		assertNull(t.getCollectionFormat());
@@ -129,7 +129,7 @@ public class HeaderInfoTest {
 		
 		t._default(new StringBuilder("foo"));
 		assertEquals("foo", t.getDefault().toString());
-		assertType(StringBuilder.class, t.getDefault());
+		assertInstanceOf(StringBuilder.class, t.getDefault());
 		
 		t._default(null);
 		assertNull(t.getDefault());
@@ -144,19 +144,19 @@ public class HeaderInfoTest {
 		
 		t.maximum(123);
 		assertEquals(123, t.getMaximum());
-		assertType(Integer.class, t.getMaximum());
+		assertInstanceOf(Integer.class, t.getMaximum());
 		
 		t.maximum(123f);
 		assertEquals(123f, t.getMaximum());
-		assertType(Float.class, t.getMaximum());
+		assertInstanceOf(Float.class, t.getMaximum());
 
 		t.maximum("123");
 		assertEquals(123, t.getMaximum());
-		assertType(Integer.class, t.getMaximum());
+		assertInstanceOf(Integer.class, t.getMaximum());
 
 		t.maximum(new StringBuilder("123"));
 		assertEquals(123, t.getMaximum());
-		assertType(Integer.class, t.getMaximum());
+		assertInstanceOf(Integer.class, t.getMaximum());
 		
 		t.maximum(null);
 		assertNull(t.getMaximum());
@@ -171,15 +171,15 @@ public class HeaderInfoTest {
 		
 		t.exclusiveMaximum(true);
 		assertEquals(true, t.getExclusiveMaximum());
-		assertType(Boolean.class, t.getExclusiveMaximum());
+		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
 		
 		t.exclusiveMaximum("true");
 		assertEquals(true, t.getExclusiveMaximum());
-		assertType(Boolean.class, t.getExclusiveMaximum());
+		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
 
 		t.exclusiveMaximum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMaximum());
-		assertType(Boolean.class, t.getExclusiveMaximum());
+		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
 		
 		t.exclusiveMaximum(null);
 		assertNull(t.getExclusiveMaximum());
@@ -194,19 +194,19 @@ public class HeaderInfoTest {
 		
 		t.minimum(123);
 		assertEquals(123, t.getMinimum());
-		assertType(Integer.class, t.getMinimum());
+		assertInstanceOf(Integer.class, t.getMinimum());
 		
 		t.minimum(123f);
 		assertEquals(123f, t.getMinimum());
-		assertType(Float.class, t.getMinimum());
+		assertInstanceOf(Float.class, t.getMinimum());
 
 		t.minimum("123");
 		assertEquals(123, t.getMinimum());
-		assertType(Integer.class, t.getMinimum());
+		assertInstanceOf(Integer.class, t.getMinimum());
 
 		t.minimum(new StringBuilder("123"));
 		assertEquals(123, t.getMinimum());
-		assertType(Integer.class, t.getMinimum());
+		assertInstanceOf(Integer.class, t.getMinimum());
 		
 		t.minimum(null);
 		assertNull(t.getMinimum());
@@ -221,15 +221,15 @@ public class HeaderInfoTest {
 		
 		t.exclusiveMinimum(true);
 		assertEquals(true, t.getExclusiveMinimum());
-		assertType(Boolean.class, t.getExclusiveMinimum());
+		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
 		
 		t.exclusiveMinimum("true");
 		assertEquals(true, t.getExclusiveMinimum());
-		assertType(Boolean.class, t.getExclusiveMinimum());
+		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
 
 		t.exclusiveMinimum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMinimum());
-		assertType(Boolean.class, t.getExclusiveMinimum());
+		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
 		
 		t.exclusiveMinimum(null);
 		assertNull(t.getExclusiveMinimum());
@@ -244,19 +244,19 @@ public class HeaderInfoTest {
 		
 		t.maxLength(123);
 		assertEquals(123, t.getMaxLength().intValue());
-		assertType(Integer.class, t.getMaxLength());
+		assertInstanceOf(Integer.class, t.getMaxLength());
 		
 		t.maxLength(123f);
 		assertEquals(123, t.getMaxLength().intValue());
-		assertType(Integer.class, t.getMaxLength());
+		assertInstanceOf(Integer.class, t.getMaxLength());
 
 		t.maxLength("123");
 		assertEquals(123, t.getMaxLength().intValue());
-		assertType(Integer.class, t.getMaxLength());
+		assertInstanceOf(Integer.class, t.getMaxLength());
 
 		t.maxLength(new StringBuilder("123"));
 		assertEquals(123, t.getMaxLength().intValue());
-		assertType(Integer.class, t.getMaxLength());
+		assertInstanceOf(Integer.class, t.getMaxLength());
 		
 		t.maxLength(null);
 		assertNull(t.getMaxLength());
@@ -271,19 +271,19 @@ public class HeaderInfoTest {
 		
 		t.minLength(123);
 		assertEquals(123, t.getMinLength().intValue());
-		assertType(Integer.class, t.getMinLength());
+		assertInstanceOf(Integer.class, t.getMinLength());
 		
 		t.minLength(123f);
 		assertEquals(123, t.getMinLength().intValue());
-		assertType(Integer.class, t.getMinLength());
+		assertInstanceOf(Integer.class, t.getMinLength());
 
 		t.minLength("123");
 		assertEquals(123, t.getMinLength().intValue());
-		assertType(Integer.class, t.getMinLength());
+		assertInstanceOf(Integer.class, t.getMinLength());
 
 		t.minLength(new StringBuilder("123"));
 		assertEquals(123, t.getMinLength().intValue());
-		assertType(Integer.class, t.getMinLength());
+		assertInstanceOf(Integer.class, t.getMinLength());
 		
 		t.minLength(null);
 		assertNull(t.getMinLength());
@@ -301,7 +301,7 @@ public class HeaderInfoTest {
 		
 		t.pattern(new StringBuilder("foo"));
 		assertEquals("foo", t.getPattern());
-		assertType(String.class, t.getPattern());
+		assertInstanceOf(String.class, t.getPattern());
 		
 		t.pattern(null);
 		assertNull(t.getPattern());
@@ -316,19 +316,19 @@ public class HeaderInfoTest {
 		
 		t.maxItems(123);
 		assertEquals(123, t.getMaxItems().intValue());
-		assertType(Integer.class, t.getMaxItems());
+		assertInstanceOf(Integer.class, t.getMaxItems());
 		
 		t.maxItems(123f);
 		assertEquals(123, t.getMaxItems().intValue());
-		assertType(Integer.class, t.getMaxItems());
+		assertInstanceOf(Integer.class, t.getMaxItems());
 
 		t.maxItems("123");
 		assertEquals(123, t.getMaxItems().intValue());
-		assertType(Integer.class, t.getMaxItems());
+		assertInstanceOf(Integer.class, t.getMaxItems());
 
 		t.maxItems(new StringBuilder("123"));
 		assertEquals(123, t.getMaxItems().intValue());
-		assertType(Integer.class, t.getMaxItems());
+		assertInstanceOf(Integer.class, t.getMaxItems());
 		
 		t.maxItems(null);
 		assertNull(t.getMaxItems());
@@ -343,19 +343,19 @@ public class HeaderInfoTest {
 		
 		t.minItems(123);
 		assertEquals(123, t.getMinItems().intValue());
-		assertType(Integer.class, t.getMinItems());
+		assertInstanceOf(Integer.class, t.getMinItems());
 		
 		t.minItems(123f);
 		assertEquals(123, t.getMinItems().intValue());
-		assertType(Integer.class, t.getMinItems());
+		assertInstanceOf(Integer.class, t.getMinItems());
 
 		t.minItems("123");
 		assertEquals(123, t.getMinItems().intValue());
-		assertType(Integer.class, t.getMinItems());
+		assertInstanceOf(Integer.class, t.getMinItems());
 
 		t.minItems(new StringBuilder("123"));
 		assertEquals(123, t.getMinItems().intValue());
-		assertType(Integer.class, t.getMinItems());
+		assertInstanceOf(Integer.class, t.getMinItems());
 		
 		t.minItems(null);
 		assertNull(t.getMinItems());
@@ -370,15 +370,15 @@ public class HeaderInfoTest {
 		
 		t.uniqueItems(true);
 		assertEquals(true, t.getUniqueItems());
-		assertType(Boolean.class, t.getUniqueItems());
+		assertInstanceOf(Boolean.class, t.getUniqueItems());
 		
 		t.uniqueItems("true");
 		assertEquals(true, t.getUniqueItems());
-		assertType(Boolean.class, t.getUniqueItems());
+		assertInstanceOf(Boolean.class, t.getUniqueItems());
 
 		t.uniqueItems(new StringBuilder("true"));
 		assertEquals(true, t.getUniqueItems());
-		assertType(Boolean.class, t.getUniqueItems());
+		assertInstanceOf(Boolean.class, t.getUniqueItems());
 		
 		t.uniqueItems(null);
 		assertNull(t.getUniqueItems());
@@ -393,11 +393,11 @@ public class HeaderInfoTest {
 		
 		t.setEnum(new ASet<Object>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 		
 		t.setEnum(new ASet<Object>());
 		assertObjectEquals("[]", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 
 		t.setEnum(null);
 		assertNull(t.getEnum());
@@ -412,15 +412,15 @@ public class HeaderInfoTest {
 		
 		t.addEnum(new ASet<Object>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 		
 		t.addEnum(new ASet<Object>().appendAll("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 
 		t.addEnum(null);
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 	}
 
 	/**
@@ -432,20 +432,20 @@ public class HeaderInfoTest {
 		
 		t._enum(new ASet<Object>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 		
 		t._enum(new ASet<Object>().appendAll("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 
 		t._enum((Object[])null);
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 		
 		t.setEnum(null);
 		t._enum("foo")._enum(new StringBuilder("bar"))._enum("['baz','qux']")._enum((Object)new String[]{"quux"});
 		assertObjectEquals("['foo','bar','baz','qux','quux']", t.getEnum());
-		assertType(List.class, t.getEnum());
+		assertInstanceOf(List.class, t.getEnum());
 	}
 
 	/**
@@ -457,19 +457,19 @@ public class HeaderInfoTest {
 		
 		t.multipleOf(123);
 		assertEquals(123, t.getMultipleOf());
-		assertType(Integer.class, t.getMultipleOf());
+		assertInstanceOf(Integer.class, t.getMultipleOf());
 		
 		t.multipleOf(123f);
 		assertEquals(123f, t.getMultipleOf());
-		assertType(Float.class, t.getMultipleOf());
+		assertInstanceOf(Float.class, t.getMultipleOf());
 
 		t.multipleOf("123");
 		assertEquals(123, t.getMultipleOf());
-		assertType(Integer.class, t.getMultipleOf());
+		assertInstanceOf(Integer.class, t.getMultipleOf());
 
 		t.multipleOf(new StringBuilder("123"));
 		assertEquals(123, t.getMultipleOf());
-		assertType(Integer.class, t.getMultipleOf());
+		assertInstanceOf(Integer.class, t.getMultipleOf());
 		
 		t.multipleOf(null);
 		assertNull(t.getMultipleOf());
@@ -571,25 +571,25 @@ public class HeaderInfoTest {
 		assertEquals("true", t.get("uniqueItems", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 	
-		assertType(StringBuilder.class, t.get("default", Object.class));
-		assertType(List.class, t.get("enum", Object.class));
-		assertType(String.class, t.get("collectionFormat", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(Boolean.class, t.get("exclusiveMaximum", Object.class));
-		assertType(Boolean.class, t.get("exclusiveMinimum", Object.class));
-		assertType(String.class, t.get("format", Object.class));
-		assertType(Items.class, t.get("items", Object.class));
-		assertType(Float.class, t.get("maximum", Object.class));
-		assertType(Integer.class, t.get("maxItems", Object.class));
-		assertType(Integer.class, t.get("maxLength", Object.class));
-		assertType(Float.class, t.get("minimum", Object.class));
-		assertType(Integer.class, t.get("minItems", Object.class));
-		assertType(Integer.class, t.get("minLength", Object.class));
-		assertType(Float.class, t.get("multipleOf", Object.class));
-		assertType(String.class, t.get("pattern", Object.class));
-		assertType(String.class, t.get("type", Object.class));
-		assertType(Boolean.class, t.get("uniqueItems", Object.class));
-		assertType(String.class, t.get("$ref", Object.class));
+		assertInstanceOf(StringBuilder.class, t.get("default", Object.class));
+		assertInstanceOf(List.class, t.get("enum", Object.class));
+		assertInstanceOf(String.class, t.get("collectionFormat", Object.class));
+		assertInstanceOf(String.class, t.get("description", Object.class));
+		assertInstanceOf(Boolean.class, t.get("exclusiveMaximum", Object.class));
+		assertInstanceOf(Boolean.class, t.get("exclusiveMinimum", Object.class));
+		assertInstanceOf(String.class, t.get("format", Object.class));
+		assertInstanceOf(Items.class, t.get("items", Object.class));
+		assertInstanceOf(Float.class, t.get("maximum", Object.class));
+		assertInstanceOf(Integer.class, t.get("maxItems", Object.class));
+		assertInstanceOf(Integer.class, t.get("maxLength", Object.class));
+		assertInstanceOf(Float.class, t.get("minimum", Object.class));
+		assertInstanceOf(Integer.class, t.get("minItems", Object.class));
+		assertInstanceOf(Integer.class, t.get("minLength", Object.class));
+		assertInstanceOf(Float.class, t.get("multipleOf", Object.class));
+		assertInstanceOf(String.class, t.get("pattern", Object.class));
+		assertInstanceOf(String.class, t.get("type", Object.class));
+		assertInstanceOf(Boolean.class, t.get("uniqueItems", Object.class));
+		assertInstanceOf(String.class, t.get("$ref", Object.class));
 	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

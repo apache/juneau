@@ -28,25 +28,25 @@ public class SerializerGroupTest {
 	public void testSerializerGroupMatching() throws Exception {
 
 		SerializerGroup sg = SerializerGroup.create().append(SA1.class, SA2.class, SA3.class).build();
-		assertType(SA1.class, sg.getSerializer("text/foo"));
-		assertType(SA1.class, sg.getSerializer("text/foo_a"));
-		assertType(SA1.class, sg.getSerializer("text/xxx+foo_a"));
-		assertType(SA1.class, sg.getSerializer("text/foo_a+xxx"));
-		assertType(SA2.class, sg.getSerializer("text/foo+bar"));
-		assertType(SA2.class, sg.getSerializer("text/foo+bar_a"));
-		assertType(SA2.class, sg.getSerializer("text/bar+foo"));
-		assertType(SA2.class, sg.getSerializer("text/bar_a+foo"));
-		assertType(SA2.class, sg.getSerializer("text/bar+foo+xxx"));
-		assertType(SA2.class, sg.getSerializer("text/bar_a+foo+xxx"));
-		assertType(SA3.class, sg.getSerializer("text/baz"));
-		assertType(SA3.class, sg.getSerializer("text/baz_a"));
-		assertType(SA3.class, sg.getSerializer("text/baz+yyy"));
-		assertType(SA3.class, sg.getSerializer("text/baz_a+yyy"));
-		assertType(SA3.class, sg.getSerializer("text/yyy+baz"));
-		assertType(SA3.class, sg.getSerializer("text/yyy+baz_a"));
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo"));
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a"));
+		assertInstanceOf(SA1.class, sg.getSerializer("text/xxx+foo_a"));
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a+xxx"));
+		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar"));
+		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar_a"));
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo"));
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo"));
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo+xxx"));
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo+xxx"));
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz"));
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a"));
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz+yyy"));
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a+yyy"));
+		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz"));
+		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz_a"));
 
-		assertType(SA1.class, sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8"));
-		assertType(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9"));
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8"));
+		assertInstanceOf(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9"));
 	}
 
 
@@ -129,9 +129,9 @@ public class SerializerGroupTest {
 
 		gb = SerializerGroup.create().append(SC1.class, SC2.class, SC3.class);
 		g = gb.build();
-		assertType(SC1.class, g.getSerializer("text/foo"));
-		assertType(SC2.class, g.getSerializer("foo/json"));
-		assertType(SC3.class, g.getSerializer("foo/foo"));
+		assertInstanceOf(SC1.class, g.getSerializer("text/foo"));
+		assertInstanceOf(SC2.class, g.getSerializer("foo/json"));
+		assertInstanceOf(SC3.class, g.getSerializer("foo/foo"));
 	}
 
 	public static class SC1 extends JsonSerializer {

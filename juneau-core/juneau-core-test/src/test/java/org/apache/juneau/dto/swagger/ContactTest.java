@@ -37,7 +37,7 @@ public class ContactTest {
 		
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
-		assertType(String.class, t.getName());
+		assertInstanceOf(String.class, t.getName());
 		
 		t.name(null);
 		assertNull(t.getName());
@@ -55,7 +55,7 @@ public class ContactTest {
 		
 		t.url(new StringBuilder("foo"));
 		assertEquals("foo", t.getUrl().toString());
-		assertType(URI.class, t.getUrl());
+		assertInstanceOf(URI.class, t.getUrl());
 		
 		t.url(null);
 		assertNull(t.getUrl());
@@ -73,7 +73,7 @@ public class ContactTest {
 		
 		t.email(new StringBuilder("foo"));
 		assertEquals("foo", t.getEmail());
-		assertType(String.class, t.getEmail());
+		assertInstanceOf(String.class, t.getEmail());
 
 		t.email(null);
 		assertNull(t.getEmail());
@@ -107,10 +107,10 @@ public class ContactTest {
 		assertEquals("baz", t.get("email", String.class));
 		assertEquals("qux", t.get("$ref", String.class));
 
-		assertType(String.class, t.get("name", String.class));
-		assertType(URI.class, t.get("url", URI.class));
-		assertType(String.class, t.get("email", String.class));
-		assertType(String.class, t.get("$ref", String.class));
+		assertInstanceOf(String.class, t.get("name", String.class));
+		assertInstanceOf(URI.class, t.get("url", URI.class));
+		assertInstanceOf(String.class, t.get("email", String.class));
+		assertInstanceOf(String.class, t.get("$ref", String.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

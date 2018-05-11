@@ -77,7 +77,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar o) {
-						assertType(Calendar.class, o);
+						assertInstanceOf(Calendar.class, o);
 					}
 				}
 			},
@@ -112,7 +112,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar[] o) {
-						assertType(Calendar.class, o[0]);
+						assertInstanceOf(Calendar.class, o[0]);
 					}
 				}
 			},
@@ -147,7 +147,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Calendar.class, o.get("foo"));
+						assertInstanceOf(Calendar.class, o.get("foo"));
 					}
 				}
 			},
@@ -182,7 +182,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar o) {
-						assertType(Calendar.class, o);
+						assertInstanceOf(Calendar.class, o);
 					}
 				}
 			},
@@ -217,7 +217,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar[] o) {
-						assertType(Calendar.class, o[0]);
+						assertInstanceOf(Calendar.class, o[0]);
 					}
 				}
 			},
@@ -252,7 +252,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Calendar.class, o.get("foo"));
+						assertInstanceOf(Calendar.class, o.get("foo"));
 					}
 				}
 			},
@@ -287,7 +287,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar o) {
-						assertType(Calendar.class, o);
+						assertInstanceOf(Calendar.class, o);
 					}
 				}
 			},
@@ -322,7 +322,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar[] o) {
-						assertType(Calendar.class, o[0]);
+						assertInstanceOf(Calendar.class, o[0]);
 					}
 				}
 			},
@@ -357,7 +357,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Calendar.class, o.get("foo"));
+						assertInstanceOf(Calendar.class, o.get("foo"));
 					}
 				}
 			},
@@ -392,7 +392,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar o) {
-						assertType(Calendar.class, o);
+						assertInstanceOf(Calendar.class, o);
 					}
 				}
 			},
@@ -427,7 +427,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar[] o) {
-						assertType(Calendar.class, o[0]);
+						assertInstanceOf(Calendar.class, o[0]);
 					}
 				}
 			},
@@ -462,7 +462,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Calendar.class, o.get("foo"));
+						assertInstanceOf(Calendar.class, o.get("foo"));
 					}
 				}
 			},
@@ -497,7 +497,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar o) {
-						assertType(Calendar.class, o);
+						assertInstanceOf(Calendar.class, o);
 					}
 				}
 			},
@@ -532,7 +532,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar[] o) {
-						assertType(Calendar.class, o[0]);
+						assertInstanceOf(Calendar.class, o[0]);
 					}
 				}
 			},
@@ -567,7 +567,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Calendar.class, o.get("foo"));
+						assertInstanceOf(Calendar.class, o.get("foo"));
 					}
 				}
 			},
@@ -602,7 +602,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar o) {
-						assertType(Calendar.class, o);
+						assertInstanceOf(Calendar.class, o);
 					}
 				}
 			},
@@ -637,7 +637,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Calendar[] o) {
-						assertType(Calendar.class, o[0]);
+						assertInstanceOf(Calendar.class, o[0]);
 					}
 				}
 			},
@@ -672,7 +672,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Calendar.class, o.get("foo"));
+						assertInstanceOf(Calendar.class, o.get("foo"));
 					}
 				}
 			},

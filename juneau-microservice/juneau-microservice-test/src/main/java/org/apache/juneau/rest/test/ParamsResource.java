@@ -32,7 +32,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.testutils.*;
+import org.apache.juneau.rest.testutils.DTOs;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;

@@ -73,7 +73,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date o) {
-						assertType(Date.class, o);
+						assertInstanceOf(Date.class, o);
 					}
 				}
 			},
@@ -108,7 +108,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date[] o) {
-						assertType(Date.class, o[0]);
+						assertInstanceOf(Date.class, o[0]);
 					}
 				}
 			},
@@ -143,7 +143,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Date.class, o.get("foo"));
+						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
 			},
@@ -178,7 +178,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date o) {
-						assertType(Date.class, o);
+						assertInstanceOf(Date.class, o);
 					}
 				}
 			},
@@ -213,7 +213,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date[] o) {
-						assertType(Date.class, o[0]);
+						assertInstanceOf(Date.class, o[0]);
 					}
 				}
 			},
@@ -248,7 +248,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Date.class, o.get("foo"));
+						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
 			},
@@ -283,7 +283,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date o) {
-						assertType(Date.class, o);
+						assertInstanceOf(Date.class, o);
 					}
 				}
 			},
@@ -318,7 +318,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date[] o) {
-						assertType(Date.class, o[0]);
+						assertInstanceOf(Date.class, o[0]);
 					}
 				}
 			},
@@ -353,7 +353,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Date.class, o.get("foo"));
+						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
 			},
@@ -388,7 +388,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date o) {
-						assertType(Date.class, o);
+						assertInstanceOf(Date.class, o);
 					}
 				}
 			},
@@ -423,7 +423,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date[] o) {
-						assertType(Date.class, o[0]);
+						assertInstanceOf(Date.class, o[0]);
 					}
 				}
 			},
@@ -458,7 +458,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Date.class, o.get("foo"));
+						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
 			},
@@ -493,7 +493,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date o) {
-						assertType(Date.class, o);
+						assertInstanceOf(Date.class, o);
 					}
 				}
 			},
@@ -528,7 +528,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date[] o) {
-						assertType(Date.class, o[0]);
+						assertInstanceOf(Date.class, o[0]);
 					}
 				}
 			},
@@ -563,7 +563,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Date.class, o.get("foo"));
+						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
 			},
@@ -598,7 +598,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date o) {
-						assertType(Date.class, o);
+						assertInstanceOf(Date.class, o);
 					}
 				}
 			},
@@ -633,7 +633,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Date[] o) {
-						assertType(Date.class, o[0]);
+						assertInstanceOf(Date.class, o[0]);
 					}
 				}
 			},
@@ -668,7 +668,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(ObjectMap o) {
-						assertType(Date.class, o.get("foo"));
+						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
 			},

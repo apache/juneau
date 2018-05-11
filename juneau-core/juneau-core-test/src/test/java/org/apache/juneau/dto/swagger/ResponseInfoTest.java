@@ -39,7 +39,7 @@ public class ResponseInfoTest {
 		
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertType(String.class, t.getDescription());
+		assertInstanceOf(String.class, t.getDescription());
 		
 		t.description(null);
 		assertNull(t.getDescription());
@@ -57,7 +57,7 @@ public class ResponseInfoTest {
 		
 		t.schema("{title:'foo'}");
 		assertObjectEquals("{title:'foo'}", t.getSchema());
-		assertType(SchemaInfo.class, t.getSchema());
+		assertInstanceOf(SchemaInfo.class, t.getSchema());
 
 		t.schema(null);
 		assertNull(t.getSchema());
@@ -72,12 +72,12 @@ public class ResponseInfoTest {
 		
 		t.setHeaders(new AMap<String,HeaderInfo>().append("foo",headerInfo("bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
-		assertType(Map.class, t.getHeaders());
-		assertType(HeaderInfo.class, t.getHeaders().get("foo"));
+		assertInstanceOf(Map.class, t.getHeaders());
+		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 		
 		t.setHeaders(new AMap<String,HeaderInfo>());
 		assertObjectEquals("{}", t.getHeaders());
-		assertType(Map.class, t.getHeaders());
+		assertInstanceOf(Map.class, t.getHeaders());
 
 		t.setHeaders(null);
 		assertNull(t.getExamples());
@@ -92,18 +92,18 @@ public class ResponseInfoTest {
 		
 		t.addHeaders(new AMap<String,HeaderInfo>().append("foo",headerInfo("bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
-		assertType(Map.class, t.getHeaders());
-		assertType(HeaderInfo.class, t.getHeaders().get("foo"));
+		assertInstanceOf(Map.class, t.getHeaders());
+		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 		
 		t.addHeaders(new AMap<String,HeaderInfo>());
 		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
-		assertType(Map.class, t.getHeaders());
-		assertType(HeaderInfo.class, t.getHeaders().get("foo"));
+		assertInstanceOf(Map.class, t.getHeaders());
+		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 
 		t.addHeaders(null);
 		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
-		assertType(Map.class, t.getHeaders());
-		assertType(HeaderInfo.class, t.getHeaders().get("foo"));
+		assertInstanceOf(Map.class, t.getHeaders());
+		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 	}
 
 	/**
@@ -145,11 +145,11 @@ public class ResponseInfoTest {
 		
 		t.setExamples(new AMap<String,Object>().append("foo","bar").append("baz",new AList<String>().append("qux")));
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
-		assertType(Map.class, t.getExamples());
+		assertInstanceOf(Map.class, t.getExamples());
 		
 		t.setExamples(new AMap<String,Object>());
 		assertObjectEquals("{}", t.getExamples());
-		assertType(Map.class, t.getExamples());
+		assertInstanceOf(Map.class, t.getExamples());
 
 		t.setExamples(null);
 		assertNull(t.getExamples());
@@ -164,15 +164,15 @@ public class ResponseInfoTest {
 		
 		t.addExamples(new AMap<String,Object>().append("foo","bar").append("baz",new AList<String>().append("qux")));
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
-		assertType(Map.class, t.getExamples());
+		assertInstanceOf(Map.class, t.getExamples());
 		
 		t.addExamples(new AMap<String,Object>());
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
-		assertType(Map.class, t.getExamples());
+		assertInstanceOf(Map.class, t.getExamples());
 
 		t.addExamples(null);
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
-		assertType(Map.class, t.getExamples());
+		assertInstanceOf(Map.class, t.getExamples());
 	}
 
 	/**
@@ -244,12 +244,12 @@ public class ResponseInfoTest {
 		assertEquals("{type:'d'}", t.get("schema", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 	
-		assertType(String.class, t.get("description", Object.class));
-		assertType(Map.class, t.get("examples", Object.class));
-		assertType(Map.class, t.get("headers", Object.class));
-		assertType(HeaderInfo.class, t.get("headers", Map.class).values().iterator().next());
-		assertType(SchemaInfo.class, t.get("schema", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertInstanceOf(String.class, t.get("description", Object.class));
+		assertInstanceOf(Map.class, t.get("examples", Object.class));
+		assertInstanceOf(Map.class, t.get("headers", Object.class));
+		assertInstanceOf(HeaderInfo.class, t.get("headers", Map.class).values().iterator().next());
+		assertInstanceOf(SchemaInfo.class, t.get("schema", Object.class));
+		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
 	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

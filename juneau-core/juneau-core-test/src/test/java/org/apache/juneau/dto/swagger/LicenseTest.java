@@ -37,7 +37,7 @@ public class LicenseTest {
 		
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
-		assertType(String.class, t.getName());
+		assertInstanceOf(String.class, t.getName());
 		
 		t.name(null);
 		assertNull(t.getName());
@@ -55,7 +55,7 @@ public class LicenseTest {
 		
 		t.url("foo");
 		assertEquals("foo", t.getUrl().toString());
-		assertType(URI.class, t.getUrl());
+		assertInstanceOf(URI.class, t.getUrl());
 
 		t.url(null);
 		assertNull(t.getUrl());
@@ -93,9 +93,9 @@ public class LicenseTest {
 		assertEquals("b", t.get("url", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 	
-		assertType(String.class, t.get("name", Object.class));
-		assertType(URI.class, t.get("url", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertInstanceOf(String.class, t.get("name", Object.class));
+		assertInstanceOf(URI.class, t.get("url", Object.class));
+		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
 	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

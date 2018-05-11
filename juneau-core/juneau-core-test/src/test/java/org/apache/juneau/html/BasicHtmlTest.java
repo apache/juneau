@@ -53,7 +53,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(String o) {
-						assertType(String.class, o);
+						assertInstanceOf(String.class, o);
 					}
 				}
 			},
@@ -69,7 +69,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(Boolean o) {
-						assertType(Boolean.class, o);
+						assertInstanceOf(Boolean.class, o);
 					}
 				}
 			},
@@ -85,7 +85,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(Integer o) {
-						assertType(Integer.class, o);
+						assertInstanceOf(Integer.class, o);
 					}
 				}
 			},
@@ -101,7 +101,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(Float o) {
-						assertType(Float.class, o);
+						assertInstanceOf(Float.class, o);
 					}
 				}
 			},
@@ -127,7 +127,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(String[] o) {
-						assertType(String.class, o[0]);
+						assertInstanceOf(String.class, o[0]);
 					}
 				}
 			},
@@ -153,9 +153,9 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(Object[] o) {
-						assertType(String.class, o[0]);
-						assertType(Integer.class, o[1]);
-						assertType(Boolean.class, o[2]);
+						assertInstanceOf(String.class, o[0]);
+						assertInstanceOf(Integer.class, o[1]);
+						assertInstanceOf(Boolean.class, o[2]);
 					}
 				}
 			},
@@ -171,7 +171,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(int[] o) {
-						assertType(int[].class, o);
+						assertInstanceOf(int[].class, o);
 					}
 				}
 			},
@@ -187,7 +187,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(boolean[] o) {
-						assertType(boolean[].class, o);
+						assertInstanceOf(boolean[].class, o);
 					}
 				}
 			},
@@ -203,7 +203,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(String[][] o) {
-						assertType(String[][].class, o);
+						assertInstanceOf(String[][].class, o);
 					}
 				}
 			},
@@ -248,7 +248,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(Map<String,String> o) {
-						assertType(String.class, o.get("k1"));
+						assertInstanceOf(String.class, o.get("k1"));
 					}
 				}
 			},
@@ -305,7 +305,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(Map<String,Number> o) {
-						assertType(Number.class, o.get("k1"));
+						assertInstanceOf(Number.class, o.get("k1"));
 					}
 				}
 			},
@@ -386,10 +386,10 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(Map<String,Object> o) {
-						assertType(String.class, o.get("k1"));
-						assertType(Integer.class, o.get("k2"));
-						assertType(Float.class, o.get("k3"));
-						assertType(Boolean.class, o.get("k4"));
+						assertInstanceOf(String.class, o.get("k1"));
+						assertInstanceOf(Integer.class, o.get("k2"));
+						assertInstanceOf(Float.class, o.get("k3"));
+						assertInstanceOf(Boolean.class, o.get("k4"));
 					}
 				}
 			},
@@ -405,7 +405,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(List<String> o) {
-						assertType(String.class, o.get(0));
+						assertInstanceOf(String.class, o.get(0));
 					}
 				}
 			},
@@ -421,8 +421,8 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(List<Number> o) {
-						assertType(Integer.class, o.get(0));
-						assertType(Float.class, o.get(1));
+						assertInstanceOf(Integer.class, o.get(0));
+						assertInstanceOf(Float.class, o.get(1));
 					}
 				}
 			},
@@ -438,10 +438,10 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(List<Object> o) {
-						assertType(String.class, o.get(0));
-						assertType(Integer.class, o.get(1));
-						assertType(Float.class, o.get(2));
-						assertType(Boolean.class, o.get(3));
+						assertInstanceOf(String.class, o.get(0));
+						assertInstanceOf(Integer.class, o.get(1));
+						assertInstanceOf(Float.class, o.get(2));
+						assertInstanceOf(Boolean.class, o.get(3));
 					}
 				}
 			},
@@ -591,9 +591,9 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithNormalProperties o) {
-						assertType(String.class, o.c);
-						assertType(Integer.class, o.d);
-						assertType(Bean1a.class, o.e);
+						assertInstanceOf(String.class, o.c);
+						assertInstanceOf(Integer.class, o.d);
+						assertInstanceOf(Bean1a.class, o.e);
 					}
 				}
 			},
@@ -749,11 +749,11 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithMapProperties o) {
-						assertType(String.class, o.a.get("k1"));
-						assertType(Integer.class, o.b.get("k2"));
-						assertType(String.class, o.c.get("k3"));
-						assertType(Integer.class, o.c.get("k4"));
-						assertType(Boolean.class, o.c.get("k5"));
+						assertInstanceOf(String.class, o.a.get("k1"));
+						assertInstanceOf(Integer.class, o.b.get("k2"));
+						assertInstanceOf(String.class, o.c.get("k3"));
+						assertInstanceOf(Integer.class, o.c.get("k4"));
+						assertInstanceOf(Boolean.class, o.c.get("k5"));
 					}
 				}
 			},
@@ -798,7 +798,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithTypeName o) {
-						assertType(BeanWithTypeName.class, o);
+						assertInstanceOf(BeanWithTypeName.class, o);
 					}
 				}
 			},
@@ -885,7 +885,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWithTypeNames o) {
-						assertType(B.class, o.b2);
+						assertInstanceOf(B.class, o.b2);
 					}
 				}
 			},
@@ -1023,8 +1023,8 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWithArrayTypeNames o) {
-						assertType(B.class, o.b2[0]);
-						assertType(B.class, o.b3[0]);
+						assertInstanceOf(B.class, o.b2[0]);
+						assertInstanceOf(B.class, o.b3[0]);
 					}
 				}
 			},
@@ -1198,8 +1198,8 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWith2dArrayTypeNames o) {
-						assertType(B.class, o.b2[0][0]);
-						assertType(B.class, o.b3[0][0]);
+						assertInstanceOf(B.class, o.b2[0][0]);
+						assertInstanceOf(B.class, o.b3[0][0]);
 					}
 				}
 			},
@@ -1328,8 +1328,8 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWithMapTypeNames o) {
-						assertType(B.class, o.b1.get("k1"));
-						assertType(B.class, o.b2.get("k2"));
+						assertInstanceOf(B.class, o.b1.get("k1"));
+						assertInstanceOf(B.class, o.b2.get("k2"));
 					}
 				}
 			},
@@ -1345,7 +1345,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(LinkBean o) {
-						assertType(LinkBean.class, o);
+						assertInstanceOf(LinkBean.class, o);
 					}
 				}
 			},
@@ -1361,7 +1361,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(LinkBean[] o) {
-						assertType(LinkBean.class, o[0]);
+						assertInstanceOf(LinkBean.class, o[0]);
 					}
 				}
 			},
@@ -1377,7 +1377,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(List<LinkBean> o) {
-						assertType(LinkBean.class, o.get(0));
+						assertInstanceOf(LinkBean.class, o.get(0));
 					}
 				}
 			},
@@ -1467,9 +1467,9 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithLinkBeanProperties o) {
-						assertType(LinkBean.class, o.a);
-						assertType(LinkBean.class, o.b.get(0));
-						assertType(LinkBean.class, o.c.get("c1"));
+						assertInstanceOf(LinkBean.class, o.a);
+						assertInstanceOf(LinkBean.class, o.b.get(0));
+						assertInstanceOf(LinkBean.class, o.c.get("c1"));
 					}
 				}
 			},
@@ -1485,7 +1485,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithSpecialCharacters o) {
-						assertType(BeanWithSpecialCharacters.class, o);
+						assertInstanceOf(BeanWithSpecialCharacters.class, o);
 					}
 				}
 			},
@@ -1508,7 +1508,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithSpecialCharacters o) {
-						assertType(BeanWithSpecialCharacters.class, o);
+						assertInstanceOf(BeanWithSpecialCharacters.class, o);
 					}
 				}
 			},
@@ -1524,7 +1524,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithNullProperties o) {
-						assertType(BeanWithNullProperties.class, o);
+						assertInstanceOf(BeanWithNullProperties.class, o);
 					}
 				}
 			},
@@ -1677,10 +1677,10 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithAbstractFields o) {
-						assertType(A.class, o.a);
-						assertType(A.class, o.ia);
-						assertType(A.class, o.aa);
-						assertType(A.class, o.o);
+						assertInstanceOf(A.class, o.a);
+						assertInstanceOf(A.class, o.ia);
+						assertInstanceOf(A.class, o.aa);
+						assertInstanceOf(A.class, o.o);
 					}
 				}
 			},
@@ -1974,13 +1974,13 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithAbstractArrayFields o) {
-						assertType(A.class, o.a[0]);
-						assertType(A.class, o.ia1[0]);
-						assertType(A.class, o.ia2[0]);
-						assertType(A.class, o.aa1[0]);
-						assertType(A.class, o.aa2[0]);
-						assertType(A.class, o.o1[0]);
-						assertType(A.class, o.o2[0]);
+						assertInstanceOf(A.class, o.a[0]);
+						assertInstanceOf(A.class, o.ia1[0]);
+						assertInstanceOf(A.class, o.ia2[0]);
+						assertInstanceOf(A.class, o.aa1[0]);
+						assertInstanceOf(A.class, o.aa2[0]);
+						assertInstanceOf(A.class, o.o1[0]);
+						assertInstanceOf(A.class, o.o2[0]);
 					}
 				}
 			},
@@ -2163,9 +2163,9 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithAbstractMapFields o) {
-						assertType(A.class, o.a.get("k1"));
-						assertType(A.class, o.b.get("k2"));
-						assertType(A.class, o.c.get("k3"));
+						assertInstanceOf(A.class, o.a.get("k1"));
+						assertInstanceOf(A.class, o.b.get("k2"));
+						assertInstanceOf(A.class, o.c.get("k3"));
 					}
 				}
 			},
@@ -2181,7 +2181,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2197,7 +2197,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2213,7 +2213,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2229,7 +2229,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2245,7 +2245,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2261,7 +2261,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2277,7 +2277,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2293,7 +2293,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2309,7 +2309,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2325,7 +2325,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2341,7 +2341,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2357,7 +2357,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2373,7 +2373,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2389,7 +2389,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2405,7 +2405,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2421,7 +2421,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2437,7 +2437,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2453,7 +2453,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2469,7 +2469,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2485,7 +2485,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2501,7 +2501,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2517,7 +2517,7 @@ public class BasicHtmlTest {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},

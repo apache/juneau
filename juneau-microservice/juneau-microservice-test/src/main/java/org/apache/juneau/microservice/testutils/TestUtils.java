@@ -20,7 +20,7 @@ import junit.framework.*;
 
 public class TestUtils extends org.apache.juneau.rest.testutils.TestUtils {
 
-	public static void checkErrorResponse(boolean debug, RestCallException e, int status, String...contains) throws AssertionFailedError {
+	public static final void checkErrorResponse(boolean debug, RestCallException e, int status, String...contains) throws AssertionFailedError {
 		String r = e.getResponseMessage();
 		if (debug) {
 			System.err.println(r); // NOT DEBUG

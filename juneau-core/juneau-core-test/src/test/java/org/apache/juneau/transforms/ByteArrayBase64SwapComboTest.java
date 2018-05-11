@@ -63,7 +63,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(byte[] o) {
-						assertType(byte[].class, o);
+						assertInstanceOf(byte[].class, o);
 					}
 				}
 			},
@@ -97,7 +97,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(byte[][] o) {
-						assertType(byte[][].class, o);
+						assertInstanceOf(byte[][].class, o);
 					}
 				}
 			},
@@ -135,8 +135,8 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(List<byte[]> o) {
-						assertType(List.class, o);
-						assertType(byte[].class, o.get(0));
+						assertInstanceOf(List.class, o);
+						assertInstanceOf(byte[].class, o.get(0));
 					}
 				}
 			},
@@ -175,9 +175,9 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map<String,byte[]> o) {
-						assertType(Map.class, o);
-						assertType(String.class, o.keySet().iterator().next());
-						assertType(byte[].class, o.values().iterator().next());
+						assertInstanceOf(Map.class, o);
+						assertInstanceOf(String.class, o.keySet().iterator().next());
+						assertInstanceOf(byte[].class, o.values().iterator().next());
 					}
 				}
 			},
@@ -211,7 +211,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithByteArrayField o) {
-						assertType(BeanWithByteArrayField.class, o);
+						assertInstanceOf(BeanWithByteArrayField.class, o);
 					}
 				}
 			},
@@ -245,7 +245,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithByteArray2dField o) {
-						assertType(BeanWithByteArray2dField.class, o);
+						assertInstanceOf(BeanWithByteArray2dField.class, o);
 					}
 				}
 			},
@@ -279,7 +279,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithByteArrayNullField o) {
-						assertType(BeanWithByteArrayNullField.class, o);
+						assertInstanceOf(BeanWithByteArrayNullField.class, o);
 					}
 				}
 			},
@@ -313,7 +313,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithByteArrayListField o) {
-						assertType(BeanWithByteArrayListField.class, o);
+						assertInstanceOf(BeanWithByteArrayListField.class, o);
 					}
 				}
 			},
@@ -347,7 +347,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithByteArrayMapField o) {
-						assertType(BeanWithByteArrayMapField.class, o);
+						assertInstanceOf(BeanWithByteArrayMapField.class, o);
 					}
 				}
 			},
@@ -381,7 +381,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithByteArrayBeanListField o) {
-						assertType(BeanWithByteArrayBeanListField.class, o);
+						assertInstanceOf(BeanWithByteArrayBeanListField.class, o);
 					}
 				}
 			},
@@ -415,7 +415,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(BeanWithByteArrayBeanMapField o) {
-						assertType(BeanWithByteArrayBeanMapField.class, o);
+						assertInstanceOf(BeanWithByteArrayBeanMapField.class, o);
 					}
 				}
 			},

@@ -75,7 +75,7 @@ public class TestUtils {
 	 * Verifies that two objects are equivalent.
 	 * Does this by doing a string comparison after converting both to JSON.
 	 */
-	public static void assertEqualObjects(Object o1, Object o2) throws SerializeException {
+	public static final void assertEqualObjects(Object o1, Object o2) throws SerializeException {
 		assertEqualObjects(o1, o2, false);
 	}
 
@@ -84,7 +84,7 @@ public class TestUtils {
 	 * Does this by doing a string comparison after converting both to JSON.
 	 * @param sort If <jk>true</jk> sort maps and collections before comparison.
 	 */
-	public static void assertEqualObjects(Object o1, Object o2, boolean sort) throws SerializeException {
+	public static final void assertEqualObjects(Object o1, Object o2, boolean sort) throws SerializeException {
 		JsonSerializer s = (sort ? jsSorted : js);
 		String s1 = s.serialize(o1);
 		String s2 = s.serialize(o2);
@@ -96,7 +96,7 @@ public class TestUtils {
 	/**
 	 * Validates that the whitespace is correct in the specified XML.
 	 */
-	public static void checkXmlWhitespace(String out) throws SerializeException {
+	public static final void checkXmlWhitespace(String out) throws SerializeException {
 		if (out.indexOf('\u0000') != -1) {
 			for (String s : out.split("\u0000"))
 				checkXmlWhitespace(s);
@@ -161,7 +161,7 @@ public class TestUtils {
 		}
 	}
 
-	private static void printLines(String[] lines) {
+	private static final void printLines(String[] lines) {
 		for (int i = 0; i < lines.length; i++)
 			System.err.println(String.format("%4s:" + lines[i], i+1)); // NOT DEBUG
 	}
@@ -169,7 +169,7 @@ public class TestUtils {
 	/**
 	 * Validates that the specified XML conforms to the specified schema.
 	 */
-	private static void validateXml(String xml, String xmlSchema) throws Exception {
+	private static final void validateXml(String xml, String xmlSchema) throws Exception {
 		// parse an XML document into a DOM tree
 		DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
 		f.setNamespaceAware(true);
@@ -229,7 +229,7 @@ public class TestUtils {
 
 	private static Pattern pTargetNs = Pattern.compile("targetNamespace=['\"]([^'\"]+)['\"]");
 
-	public static void validateXml(Object o) throws Exception {
+	public static final void validateXml(Object o) throws Exception {
 		validateXml(o, XmlSerializer.DEFAULT_NS_SQ);
 	}
 
@@ -255,42 +255,14 @@ public class TestUtils {
 		}
 	}
 
-	/**
-	 * Reads the specified file at the specified path.
-	 * Removes '\r' characters.
-	 * Remove license headers.
-	 */
-	public static String readFile(String path) throws Exception {
-		InputStream is = TestUtils.class.getResourceAsStream(path);
-		if (is == null) {
-			is = new FileInputStream(path);
-		}
-		String e = read(is);
-		e = e.replaceAll("\r", "");
-		if (path.endsWith(".xml")) {
-			e = e.replaceAll("(?s)\\<\\!\\-\\-(.*)\\-\\-\\>\\s*", "");
-			e = e.replaceAll("\\<\\?.*\\?\\>\\s*", "");
-		} else if (path.endsWith(".json")) {
-			e = e.replaceAll("\\/\\/ \\*.*\\s*", "");
-		}
-		return e;
-	}
-
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-	public static String toHex(byte b) {
+	
+	public static final String toHex(byte b) {
 		char[] c = new char[2];
 		int v = b & 0xFF;
 		c[0] = hexArray[v >>> 4];
 		c[1] = hexArray[v & 0x0F];
 		return new String(c);
-	}
-
-	public static void debugOut(Object o) {
-		try {
-			System.err.println(decodeHex(JsonSerializer.DEFAULT_LAX.serialize(o))); // NOT DEBUG
-		} catch (SerializeException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -394,7 +366,7 @@ public class TestUtils {
 	/**
 	 * Assert that the object equals the specified string after running it through JsonSerializer.DEFAULT_LAX.toString().
 	 */
-	public static void assertObjectEquals(String s, Object o) {
+	public static final void assertObjectEquals(String s, Object o) {
 		assertObjectEquals(s, o, js2);
 	}
 
@@ -402,26 +374,26 @@ public class TestUtils {
 	 * Assert that the object equals the specified string after running it through JsonSerializer.DEFAULT_LAX.toString()
 	 * with BEAN_sortProperties set to true.
 	 */
-	public static void assertSortedObjectEquals(String s, Object o) {
+	public static final void assertSortedObjectEquals(String s, Object o) {
 		assertObjectEquals(s, o, js3);
 	}
 
 	/**
 	 * Assert that the object equals the specified string after running it through ws.toString().
 	 */
-	public static void assertObjectEquals(String s, Object o, WriterSerializer ws) {
+	public static final void assertObjectEquals(String s, Object o, WriterSerializer ws) {
 		Assert.assertEquals(s, ws.toString(o));
 	}
 
 	/**
 	 * Replaces all newlines with pipes, then compares the strings.
 	 */
-	public static void assertTextEquals(String s, Object o) {
+	public static final void assertTextEquals(String s, Object o) {
 		String s2 = o.toString().replaceAll("\\r?\\n", "|");
 		Assert.assertEquals(s, s2);
 	}
 
-	public static String toReadableBytes(byte[] b) {
+	public static final String toReadableBytes(byte[] b) {
 		StringBuilder sb = new StringBuilder();
 		for (byte b2 : b)
 			sb.append((b2 < ' ' || b2 > 'z') ? String.format("[%02X]", b2) : (char)b2 + "   ");
@@ -435,7 +407,7 @@ public class TestUtils {
 	 * Tries to turn the serialized output to a String.
 	 * If it's a byte[], convert it to a UTF-8 encoded String.
 	 */
-	public static String toString(Object o) {
+	public static final String toString(Object o) {
 		if (o == null)
 			return null;
 		if (o instanceof String)
@@ -454,12 +426,12 @@ public class TestUtils {
 	 * 
 	 * @param name
 	 */
-	public static void setTimeZone(String name) {
+	public static final void setTimeZone(String name) {
 		systemTimeZone.set(TimeZone.getDefault());
 		TimeZone.setDefault(TimeZone.getTimeZone(name));
 	}
 
-	public static void unsetTimeZone() {
+	public static final void unsetTimeZone() {
 		TimeZone.setDefault(systemTimeZone.get());
 	}
 
@@ -469,16 +441,16 @@ public class TestUtils {
 	 * 
 	 * @param name
 	 */
-	public static void setLocale(Locale locale) {
+	public static final void setLocale(Locale locale) {
 		systemLocale.set(Locale.getDefault());
 		Locale.setDefault(locale);
 	}
 
-	public static void unsetLocale() {
+	public static final void unsetLocale() {
 		Locale.setDefault(systemLocale.get());
 	}
 
-	public static void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
+	public static final void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
 		// Must work for windows too.
 		String[] e = expected.trim().split("[\r\n]+"), a = actual.trim().split("[\r\n]+");
 
@@ -496,7 +468,7 @@ public class TestUtils {
 	/**
 	 * Same as {@link Assert#assertEquals(String,String,String) except takes in a MessageFormat-style message.
 	 */
-	public static void assertEquals(Object expected, Object actual, String msg, Object...args) {
+	public static final void assertEquals(Object expected, Object actual, String msg, Object...args) {
 		if ("xxx".equals(expected))
 			System.err.println("actual=["+actual+"]");
 		if (! isEquals(expected, actual))
@@ -506,17 +478,24 @@ public class TestUtils {
 	/**
 	 * Creates a ClassMeta for the given types.
 	 */
-	public static Type getType(Type type, Type...args) {
+	public static final Type getType(Type type, Type...args) {
 		return beanSession.getClassMeta(type, args);
 	}
 
 	/**
 	 * Throws an AssertionError if the object isn't of the specified type.
 	 */
-	public static void assertType(Class<?> type, Object o) {
+	public static final void assertInstanceOf(Class<?> type, Object o) {
 		if (type.isInstance(o))
 			return;
 		throw new AssertionError(new StringMessage("Expected type {0} but was {1}", type, (o == null ? null : o.getClass())));
+	}
+
+	/**
+	 * Assert that the object is an instance of the specified class.
+	 */
+	public static final void assertClass(Class<?> c, Object o) {
+		Assert.assertEquals(c, o == null ? null : o.getClass());
 	}
 
 	private static boolean isEquals(Object o1, Object o2) {

@@ -37,11 +37,11 @@ public class OperationTest {
 		
 		t.setTags(new ASet<String>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 		
 		t.setTags(new ASet<String>());
 		assertObjectEquals("[]", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 
 		t.setTags(null);
 		assertNull(t.getTags());
@@ -56,15 +56,15 @@ public class OperationTest {
 
 		t.addTags(new ASet<String>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 		
 		t.addTags(new ASet<String>());
 		assertObjectEquals("['foo','bar']", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 
 		t.addTags(null);
 		assertObjectEquals("['foo','bar']", t.getTags());
-		assertType(List.class, t.getTags());
+		assertInstanceOf(List.class, t.getTags());
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class OperationTest {
 		t.tags((Object)null);
 		assertObjectEquals("['a','b','c','d','e','f']", t.getTags());
 		for (String s : t.getTags())
-			assertType(String.class, s);
+			assertInstanceOf(String.class, s);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class OperationTest {
 		
 		t.summary(new StringBuilder("foo"));
 		assertEquals("foo", t.getSummary());
-		assertType(String.class, t.getSummary());
+		assertInstanceOf(String.class, t.getSummary());
 		
 		t.summary(null);
 		assertNull(t.getSummary());
@@ -117,7 +117,7 @@ public class OperationTest {
 		
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertType(String.class, t.getDescription());
+		assertInstanceOf(String.class, t.getDescription());
 		
 		t.description(null);
 		assertNull(t.getDescription());
@@ -135,7 +135,7 @@ public class OperationTest {
 		
 		t.externalDocs("{url:'foo'}");
 		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
-		assertType(ExternalDocumentation.class, t.getExternalDocs());
+		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
 
 		t.externalDocs(null);
 		assertNull(t.getExternalDocs());
@@ -153,7 +153,7 @@ public class OperationTest {
 		
 		t.operationId(new StringBuilder("foo"));
 		assertEquals("foo", t.getOperationId());
-		assertType(String.class, t.getOperationId());
+		assertInstanceOf(String.class, t.getOperationId());
 		
 		t.operationId(null);
 		assertNull(t.getOperationId());
@@ -168,11 +168,11 @@ public class OperationTest {
 		
 		t.setConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 		
 		t.setConsumes(new ASet<MediaType>());
 		assertObjectEquals("[]", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 
 		t.setConsumes(null);
 		assertNull(t.getConsumes());
@@ -187,15 +187,15 @@ public class OperationTest {
 
 		t.addConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 		
 		t.addConsumes(new ASet<MediaType>());
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 
 		t.addConsumes(null);
 		assertObjectEquals("['text/foo']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 	}
 
 	/**
@@ -215,9 +215,9 @@ public class OperationTest {
 		t.consumes("[]");
 		t.consumes((Object)null);
 		assertObjectEquals("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']", t.getConsumes());
-		assertType(List.class, t.getConsumes());
+		assertInstanceOf(List.class, t.getConsumes());
 		for (MediaType mt : t.getConsumes())
-			assertType(MediaType.class, mt);
+			assertInstanceOf(MediaType.class, mt);
 	}
 
 	/**
@@ -229,11 +229,11 @@ public class OperationTest {
 		
 		t.setProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 		
 		t.setProduces(new ASet<MediaType>());
 		assertObjectEquals("[]", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 
 		t.setProduces(null);
 		assertNull(t.getProduces());
@@ -248,15 +248,15 @@ public class OperationTest {
 
 		t.addProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 		
 		t.addProduces(new ASet<MediaType>());
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 
 		t.addProduces(null);
 		assertObjectEquals("['text/foo']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 	}
 
 	/**
@@ -276,9 +276,9 @@ public class OperationTest {
 		t.produces("[]");
 		t.produces((Object)null);
 		assertObjectEquals("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']", t.getProduces());
-		assertType(List.class, t.getProduces());
+		assertInstanceOf(List.class, t.getProduces());
 		for (MediaType mt : t.getProduces())
-			assertType(MediaType.class, mt);
+			assertInstanceOf(MediaType.class, mt);
 	}
 
 	/**
@@ -290,11 +290,11 @@ public class OperationTest {
 		
 		t.setParameters(new ASet<ParameterInfo>().appendAll(parameterInfo("foo","bar")));
 		assertObjectEquals("[{'in':'foo',name:'bar'}]", t.getParameters());
-		assertType(List.class, t.getParameters());
+		assertInstanceOf(List.class, t.getParameters());
 		
 		t.setParameters(new ASet<ParameterInfo>());
 		assertObjectEquals("[]", t.getParameters());
-		assertType(List.class, t.getParameters());
+		assertInstanceOf(List.class, t.getParameters());
 
 		t.setParameters(null);
 		assertNull(t.getParameters());
@@ -309,15 +309,15 @@ public class OperationTest {
 
 		t.addParameters(new ASet<ParameterInfo>().appendAll(parameterInfo("foo","bar")));
 		assertObjectEquals("[{'in':'foo',name:'bar'}]", t.getParameters());
-		assertType(List.class, t.getParameters());
+		assertInstanceOf(List.class, t.getParameters());
 		
 		t.addParameters(new ASet<ParameterInfo>());
 		assertObjectEquals("[{'in':'foo',name:'bar'}]", t.getParameters());
-		assertType(List.class, t.getParameters());
+		assertInstanceOf(List.class, t.getParameters());
 
 		t.addParameters(null);
 		assertObjectEquals("[{'in':'foo',name:'bar'}]", t.getParameters());
-		assertType(List.class, t.getParameters());
+		assertInstanceOf(List.class, t.getParameters());
 	}
 
 	/**
@@ -337,9 +337,9 @@ public class OperationTest {
 		t.parameters("[]");
 		t.parameters((Object)null);
 		assertObjectEquals("[{'in':'a1',name:'a2'},{'in':'b1',name:'b2'},{'in':'c1',name:'c2'},{'in':'d1',name:'d2'},{'in':'e1',name:'e2'},{'in':'f1',name:'f2'},{'in':'g1',name:'g2'}]", t.getParameters());
-		assertType(List.class, t.getParameters());
+		assertInstanceOf(List.class, t.getParameters());
 		for (ParameterInfo pi : t.getParameters())
-			assertType(ParameterInfo.class, pi);
+			assertInstanceOf(ParameterInfo.class, pi);
 	}
 
 	/**
@@ -351,11 +351,11 @@ public class OperationTest {
 		
 		t.setResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 		
 		t.setResponses(new AMap<String,ResponseInfo>());
 		assertObjectEquals("{}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 
 		t.setResponses(null);
 		assertNull(t.getResponses());
@@ -370,15 +370,15 @@ public class OperationTest {
 
 		t.addResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 		
 		t.addResponses(new AMap<String,ResponseInfo>());
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 
 		t.addResponses(null);
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
-		assertType(Map.class, t.getResponses());
+		assertInstanceOf(Map.class, t.getResponses());
 	}
 
 	/**
@@ -409,8 +409,8 @@ public class OperationTest {
 		
 		assertObjectEquals("{'1':{description:'a'},'2':{description:'b'},'3':{description:'c'}}", t.getResponses());
 		for (Map.Entry<String,ResponseInfo> e : t.getResponses().entrySet()) {
-			assertType(String.class, e.getKey());
-			assertType(ResponseInfo.class, e.getValue());
+			assertInstanceOf(String.class, e.getKey());
+			assertInstanceOf(ResponseInfo.class, e.getValue());
 		}
 	}
 
@@ -423,11 +423,11 @@ public class OperationTest {
 
 		t.setSchemes(new ASet<String>().appendAll("foo"));
 		assertObjectEquals("['foo']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 		
 		t.setSchemes(new ASet<String>());
 		assertObjectEquals("[]", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 
 		t.setSchemes(null);
 		assertNull(t.getSchemes());
@@ -442,11 +442,11 @@ public class OperationTest {
 
 		t.setSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 		
 		t.setSecurity(new ASet<Map<String, List<String>>>());
 		assertObjectEquals("[]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 
 		t.setSecurity(null);
 		assertNull(t.getSecurity());
@@ -461,15 +461,15 @@ public class OperationTest {
 
 		t.addSchemes(new ASet<String>().appendAll("foo"));
 		assertObjectEquals("['foo']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 		
 		t.addSchemes(new ASet<String>());
 		assertObjectEquals("['foo']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 
 		t.addSchemes(null);
 		assertObjectEquals("['foo']", t.getSchemes());
-		assertType(List.class, t.getSchemes());
+		assertInstanceOf(List.class, t.getSchemes());
 	}
 
 	/**
@@ -489,7 +489,7 @@ public class OperationTest {
 		t.schemes((Object)null);
 		assertObjectEquals("['a','b','c','d','e','f']", t.getSchemes());
 		for (String s : t.getSchemes())
-			assertType(String.class, s);
+			assertInstanceOf(String.class, s);
 	}
 
 	/**
@@ -501,15 +501,15 @@ public class OperationTest {
 		
 		t.deprecated(true);
 		assertEquals(true, t.getDeprecated());
-		assertType(Boolean.class, t.getDeprecated());
+		assertInstanceOf(Boolean.class, t.getDeprecated());
 		
 		t.deprecated("true");
 		assertEquals(true, t.getDeprecated());
-		assertType(Boolean.class, t.getDeprecated());
+		assertInstanceOf(Boolean.class, t.getDeprecated());
 
 		t.deprecated(new StringBuilder("true"));
 		assertEquals(true, t.getDeprecated());
-		assertType(Boolean.class, t.getDeprecated());
+		assertInstanceOf(Boolean.class, t.getDeprecated());
 		
 		t.deprecated(null);
 		assertNull(t.getDeprecated());
@@ -524,15 +524,15 @@ public class OperationTest {
 
 		t.addSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 		
 		t.addSecurity(new ASet<Map<String, List<String>>>());
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 
 		t.addSecurity(null);
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 	}
 
 	/**
@@ -567,7 +567,7 @@ public class OperationTest {
 		t.securities("[]");
 		t.securities((Object)null);
 		assertObjectEquals("[{a1:['a2']},{b1:['b2']},{c1:['c2']},{d1:['d2']},{e1:['e2']},{f1:['f2']},{g1:['g2']}]", t.getSecurity());
-		assertType(List.class, t.getSecurity());
+		assertInstanceOf(List.class, t.getSecurity());
 	}
 
 	/**
@@ -642,24 +642,24 @@ public class OperationTest {
 		assertEquals("['k']", t.get("tags", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 	
-		assertType(List.class, t.get("consumes", Object.class));
-		assertType(MediaType.class, t.get("consumes", List.class).get(0));
-		assertType(Boolean.class, t.get("deprecated", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertType(String.class, t.get("operationId", Object.class));
-		assertType(List.class, t.get("parameters", Object.class));
-		assertType(ParameterInfo.class, t.get("parameters", List.class).get(0));
-		assertType(List.class, t.get("produces", Object.class));
-		assertType(MediaType.class, t.get("produces", List.class).get(0));
-		assertType(Map.class, t.get("responses", Object.class));
-		assertType(String.class, t.get("responses", Map.class).keySet().iterator().next());
-		assertType(ResponseInfo.class, t.get("responses", Map.class).values().iterator().next());
-		assertType(List.class, t.get("schemes", Object.class));
-		assertType(List.class, t.get("security", Object.class));
-		assertType(String.class, t.get("summary", Object.class));
-		assertType(List.class, t.get("tags", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertInstanceOf(List.class, t.get("consumes", Object.class));
+		assertInstanceOf(MediaType.class, t.get("consumes", List.class).get(0));
+		assertInstanceOf(Boolean.class, t.get("deprecated", Object.class));
+		assertInstanceOf(String.class, t.get("description", Object.class));
+		assertInstanceOf(ExternalDocumentation.class, t.get("externalDocs", Object.class));
+		assertInstanceOf(String.class, t.get("operationId", Object.class));
+		assertInstanceOf(List.class, t.get("parameters", Object.class));
+		assertInstanceOf(ParameterInfo.class, t.get("parameters", List.class).get(0));
+		assertInstanceOf(List.class, t.get("produces", Object.class));
+		assertInstanceOf(MediaType.class, t.get("produces", List.class).get(0));
+		assertInstanceOf(Map.class, t.get("responses", Object.class));
+		assertInstanceOf(String.class, t.get("responses", Map.class).keySet().iterator().next());
+		assertInstanceOf(ResponseInfo.class, t.get("responses", Map.class).values().iterator().next());
+		assertInstanceOf(List.class, t.get("schemes", Object.class));
+		assertInstanceOf(List.class, t.get("security", Object.class));
+		assertInstanceOf(String.class, t.get("summary", Object.class));
+		assertInstanceOf(List.class, t.get("tags", Object.class));
+		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

@@ -36,7 +36,7 @@ public class InfoTest {
 		
 		t.title(new StringBuilder("foo"));
 		assertEquals("foo", t.getTitle());
-		assertType(String.class, t.getTitle());
+		assertInstanceOf(String.class, t.getTitle());
 		
 		t.title(null);
 		assertNull(t.getTitle());
@@ -54,7 +54,7 @@ public class InfoTest {
 		
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertType(String.class, t.getDescription());
+		assertInstanceOf(String.class, t.getDescription());
 		
 		t.description(null);
 		assertNull(t.getDescription());
@@ -72,7 +72,7 @@ public class InfoTest {
 		
 		t.termsOfService(new StringBuilder("foo"));
 		assertEquals("foo", t.getTermsOfService());
-		assertType(String.class, t.getTermsOfService());
+		assertInstanceOf(String.class, t.getTermsOfService());
 		
 		t.termsOfService(null);
 		assertNull(t.getTermsOfService());
@@ -90,7 +90,7 @@ public class InfoTest {
 		
 		t.contact("{name:'foo'}");
 		assertObjectEquals("{name:'foo'}", t.getContact());
-		assertType(Contact.class, t.getContact());
+		assertInstanceOf(Contact.class, t.getContact());
 
 		t.contact(null);
 		assertNull(t.getContact());
@@ -108,7 +108,7 @@ public class InfoTest {
 		
 		t.license("{name:'foo'}");
 		assertObjectEquals("{name:'foo'}", t.getLicense());
-		assertType(License.class, t.getLicense());
+		assertInstanceOf(License.class, t.getLicense());
 
 		t.license(null);
 		assertNull(t.getLicense());
@@ -126,7 +126,7 @@ public class InfoTest {
 		
 		t.version(new StringBuilder("foo"));
 		assertEquals("foo", t.getVersion());
-		assertType(String.class, t.getVersion());
+		assertInstanceOf(String.class, t.getVersion());
 		
 		t.version(null);
 		assertNull(t.getVersion());
@@ -180,13 +180,13 @@ public class InfoTest {
 		assertEquals("f", t.get("version", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 	
-		assertType(Contact.class, t.get("contact", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(License.class, t.get("license", Object.class));
-		assertType(String.class, t.get("termsOfService", Object.class));
-		assertType(String.class, t.get("title", Object.class));
-		assertType(String.class, t.get("version", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertInstanceOf(Contact.class, t.get("contact", Object.class));
+		assertInstanceOf(String.class, t.get("description", Object.class));
+		assertInstanceOf(License.class, t.get("license", Object.class));
+		assertInstanceOf(String.class, t.get("termsOfService", Object.class));
+		assertInstanceOf(String.class, t.get("title", Object.class));
+		assertInstanceOf(String.class, t.get("version", Object.class));
+		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
 	
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

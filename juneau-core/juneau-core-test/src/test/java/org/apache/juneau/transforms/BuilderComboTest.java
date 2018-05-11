@@ -64,7 +64,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 						assertTrue(o.createdByBuilder);
 					}
 				}
@@ -99,7 +99,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(B o) {
-						assertType(B.class, o);
+						assertInstanceOf(B.class, o);
 						assertTrue(o.createdByBuilder);
 					}
 				}
@@ -134,7 +134,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(C o) {
-						assertType(C.class, o);
+						assertInstanceOf(C.class, o);
 						assertTrue(o.createdByBuilder);
 					}
 				}
@@ -169,7 +169,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(D o) {
-						assertType(D.class, o);
+						assertInstanceOf(D.class, o);
 						assertTrue(o.createdByBuilder);
 					}
 				}
@@ -204,7 +204,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(E o) {
-						assertType(E.class, o);
+						assertInstanceOf(E.class, o);
 						assertTrue(o.createdByBuilder);
 					}
 				}
@@ -239,7 +239,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(H o) {
-						assertType(H.class, o);
+						assertInstanceOf(H.class, o);
 						assertTrue(o.createdByBuilder);
 					}
 				}

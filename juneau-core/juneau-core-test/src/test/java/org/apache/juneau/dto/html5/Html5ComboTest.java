@@ -63,7 +63,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 					}
 				}
 			},
@@ -97,7 +97,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 					}
 				}
 			},
@@ -131,7 +131,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 					}
 				}
 			},
@@ -165,7 +165,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 					}
 				}
 			},
@@ -199,7 +199,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(A o) {
-						assertType(A.class, o);
+						assertInstanceOf(A.class, o);
 					}
 				}
 			},
@@ -233,7 +233,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Abbr o) {
-						assertType(Abbr.class, o);
+						assertInstanceOf(Abbr.class, o);
 					}
 				}
 			},
@@ -267,7 +267,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Abbr o) {
-						assertType(Abbr.class, o);
+						assertInstanceOf(Abbr.class, o);
 					}
 				}
 			},
@@ -301,7 +301,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Address o) {
-						assertType(Address.class, o);
+						assertInstanceOf(Address.class, o);
 					}
 				}
 			},
@@ -335,7 +335,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Address o) {
-						assertType(Address.class, o);
+						assertInstanceOf(Address.class, o);
 					}
 				}
 			},
@@ -369,9 +369,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Address o) {
-						assertType(Address.class, o);
-						assertType(A.class, o.getChild(1));
-						assertType(A.class, o.getChild(2));
+						assertInstanceOf(Address.class, o);
+						assertInstanceOf(A.class, o.getChild(1));
+						assertInstanceOf(A.class, o.getChild(2));
 					}
 				}
 			},
@@ -407,9 +407,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Aside o) {
-						assertType(Aside.class, o);
-						assertType(H1.class, o.getChild(0));
-						assertType(P.class, o.getChild(1));
+						assertInstanceOf(Aside.class, o);
+						assertInstanceOf(H1.class, o.getChild(0));
+						assertInstanceOf(P.class, o.getChild(1));
 					}
 				}
 			},
@@ -446,9 +446,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Audio o) {
-						assertType(Audio.class, o);
-						assertType(Source.class, o.getChild(0));
-						assertType(Source.class, o.getChild(1));
+						assertInstanceOf(Audio.class, o);
+						assertInstanceOf(Source.class, o.getChild(0));
+						assertInstanceOf(Source.class, o.getChild(1));
 					}
 				}
 			},
@@ -482,8 +482,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Bdi.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Bdi.class, o.getChild(1));
 					}
 				}
 			},
@@ -517,8 +517,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Bdo.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Bdo.class, o.getChild(1));
 					}
 				}
 			},
@@ -552,7 +552,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Blockquote o) {
-						assertType(Blockquote.class, o);
+						assertInstanceOf(Blockquote.class, o);
 					}
 				}
 			},
@@ -586,7 +586,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Br o) {
-						assertType(Br.class, o);
+						assertInstanceOf(Br.class, o);
 					}
 				}
 			},
@@ -620,8 +620,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Br.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Br.class, o.getChild(0));
 					}
 				}
 			},
@@ -655,7 +655,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Button o) {
-						assertType(Button.class, o);
+						assertInstanceOf(Button.class, o);
 					}
 				}
 			},
@@ -689,7 +689,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Canvas o) {
-						assertType(Canvas.class, o);
+						assertInstanceOf(Canvas.class, o);
 					}
 				}
 			},
@@ -723,8 +723,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Cite.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Cite.class, o.getChild(0));
 					}
 				}
 			},
@@ -758,7 +758,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Code o) {
-						assertType(Code.class, o);
+						assertInstanceOf(Code.class, o);
 					}
 				}
 			},
@@ -795,9 +795,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Datalist o) {
-						assertType(Datalist.class, o);
-						assertType(Option.class, o.getChild(0));
-						assertType(Option.class, o.getChild(1));
+						assertInstanceOf(Datalist.class, o);
+						assertInstanceOf(Option.class, o.getChild(0));
+						assertInstanceOf(Option.class, o.getChild(1));
 					}
 				}
 			},
@@ -834,9 +834,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Dl o) {
-						assertType(Dl.class, o);
-						assertType(Dt.class, o.getChild(0));
-						assertType(Dd.class, o.getChild(1));
+						assertInstanceOf(Dl.class, o);
+						assertInstanceOf(Dt.class, o.getChild(0));
+						assertInstanceOf(Dd.class, o.getChild(1));
 					}
 				}
 			},
@@ -870,10 +870,10 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Del.class, o.getChild(0));
-						assertType(B.class, o.getChild(Del.class, 0).getChild(1));
-						assertType(Ins.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Del.class, o.getChild(0));
+						assertInstanceOf(B.class, o.getChild(Del.class, 0).getChild(1));
+						assertInstanceOf(Ins.class, o.getChild(1));
 					}
 				}
 			},
@@ -907,8 +907,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Dfn.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Dfn.class, o.getChild(0));
 					}
 				}
 			},
@@ -942,8 +942,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Div o) {
-						assertType(Div.class, o);
-						assertType(B.class, o.getChild(1));
+						assertInstanceOf(Div.class, o);
+						assertInstanceOf(B.class, o.getChild(1));
 					}
 				}
 			},
@@ -977,8 +977,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Em.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Em.class, o.getChild(1));
 					}
 				}
 			},
@@ -1012,7 +1012,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Embed o) {
-						assertType(Embed.class, o);
+						assertInstanceOf(Embed.class, o);
 					}
 				}
 			},
@@ -1054,15 +1054,15 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Form o) {
-						assertType(Form.class, o);
-						assertType(Fieldset.class, o.getChild(0));
-						assertType(Legend.class, o.getChild(0,0));
-						assertType(Input.class, o.getChild(0,2));
-						assertType(Br.class, o.getChild(0,3));
-						assertType(Input.class, o.getChild(0,5));
-						assertType(Br.class, o.getChild(0,6));
-						assertType(Keygen.class, o.getChild(0,8));
-						assertType(Label.class, o.getChild(0,9));
+						assertInstanceOf(Form.class, o);
+						assertInstanceOf(Fieldset.class, o.getChild(0));
+						assertInstanceOf(Legend.class, o.getChild(0,0));
+						assertInstanceOf(Input.class, o.getChild(0,2));
+						assertInstanceOf(Br.class, o.getChild(0,3));
+						assertInstanceOf(Input.class, o.getChild(0,5));
+						assertInstanceOf(Br.class, o.getChild(0,6));
+						assertInstanceOf(Keygen.class, o.getChild(0,8));
+						assertInstanceOf(Label.class, o.getChild(0,9));
 					}
 				}
 			},
@@ -1099,9 +1099,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Figure o) {
-						assertType(Figure.class, o);
-						assertType(Img.class, o.getChild(0));
-						assertType(Figcaption.class, o.getChild(1));
+						assertInstanceOf(Figure.class, o);
+						assertInstanceOf(Img.class, o.getChild(0));
+						assertInstanceOf(Figcaption.class, o.getChild(1));
 					}
 				}
 			},
@@ -1137,13 +1137,13 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Div o) {
-						assertType(Div.class, o);
-						assertType(H1.class, o.getChild(0));
-						assertType(H2.class, o.getChild(1));
-						assertType(H3.class, o.getChild(2));
-						assertType(H4.class, o.getChild(3));
-						assertType(H5.class, o.getChild(4));
-						assertType(H6.class, o.getChild(5));
+						assertInstanceOf(Div.class, o);
+						assertInstanceOf(H1.class, o.getChild(0));
+						assertInstanceOf(H2.class, o.getChild(1));
+						assertInstanceOf(H3.class, o.getChild(2));
+						assertInstanceOf(H4.class, o.getChild(3));
+						assertInstanceOf(H5.class, o.getChild(4));
+						assertInstanceOf(H6.class, o.getChild(5));
 					}
 				}
 			},
@@ -1177,8 +1177,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Hr.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Hr.class, o.getChild(0));
 					}
 				}
 			},
@@ -1240,13 +1240,13 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Html o) {
-						assertType(Html.class, o);
-						assertType(Head.class, o.getChild(0));
-						assertType(Title.class, o.getChild(0,0));
-						assertType(Base.class, o.getChild(0,1));
-						assertType(Link.class, o.getChild(0,2));
-						assertType(Meta.class, o.getChild(0,3));
-						assertType(Body.class, o.getChild(1));
+						assertInstanceOf(Html.class, o);
+						assertInstanceOf(Head.class, o.getChild(0));
+						assertInstanceOf(Title.class, o.getChild(0,0));
+						assertInstanceOf(Base.class, o.getChild(0,1));
+						assertInstanceOf(Link.class, o.getChild(0,2));
+						assertInstanceOf(Meta.class, o.getChild(0,3));
+						assertInstanceOf(Body.class, o.getChild(1));
 					}
 				}
 			},
@@ -1280,8 +1280,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(I.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(I.class, o.getChild(0));
 					}
 				}
 			},
@@ -1315,7 +1315,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Iframe o) {
-						assertType(Iframe.class, o);
+						assertInstanceOf(Iframe.class, o);
 					}
 				}
 			},
@@ -1349,8 +1349,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Kbd.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Kbd.class, o.getChild(0));
 					}
 				}
 			},
@@ -1390,15 +1390,15 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Main o) {
-						assertType(Main.class, o);
-						assertType(Article.class, o.getChild(0));
-						assertType(Header.class, o.getChild(0,0));
-						assertType(H1.class, o.getChild(0,0,0));
-						assertType(P.class, o.getChild(0,0,1));
-						assertType(P.class, o.getChild(0,1));
-						assertType(Footer.class, o.getChild(0,2));
-						assertType(H2.class, o.getChild(0,2,0));
-						assertType(P.class, o.getChild(0,2,1));
+						assertInstanceOf(Main.class, o);
+						assertInstanceOf(Article.class, o.getChild(0));
+						assertInstanceOf(Header.class, o.getChild(0,0));
+						assertInstanceOf(H1.class, o.getChild(0,0,0));
+						assertInstanceOf(P.class, o.getChild(0,0,1));
+						assertInstanceOf(P.class, o.getChild(0,1));
+						assertInstanceOf(Footer.class, o.getChild(0,2));
+						assertInstanceOf(H2.class, o.getChild(0,2,0));
+						assertInstanceOf(P.class, o.getChild(0,2,1));
 					}
 				}
 			},
@@ -1432,8 +1432,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Map o) {
-						assertType(Map.class, o);
-						assertType(Area.class, o.getChild(0));
+						assertInstanceOf(Map.class, o);
+						assertInstanceOf(Area.class, o.getChild(0));
 					}
 				}
 			},
@@ -1467,8 +1467,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Mark.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Mark.class, o.getChild(0));
 					}
 				}
 			},
@@ -1502,7 +1502,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Meter o) {
-						assertType(Meter.class, o);
+						assertInstanceOf(Meter.class, o);
 					}
 				}
 			},
@@ -1536,8 +1536,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Nav o) {
-						assertType(Nav.class, o);
-						assertType(A.class, o.getChild(0));
+						assertInstanceOf(Nav.class, o);
+						assertInstanceOf(A.class, o.getChild(0));
 					}
 				}
 			},
@@ -1571,7 +1571,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Noscript o) {
-						assertType(Noscript.class, o);
+						assertInstanceOf(Noscript.class, o);
 					}
 				}
 			},
@@ -1605,8 +1605,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Object2 o) {
-						assertType(Object2.class, o);
-						assertType(Param.class, o.getChild(0));
+						assertInstanceOf(Object2.class, o);
+						assertInstanceOf(Param.class, o.getChild(0));
 					}
 				}
 			},
@@ -1640,8 +1640,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Ol o) {
-						assertType(Ol.class, o);
-						assertType(Li.class, o.getChild(0));
+						assertInstanceOf(Ol.class, o);
+						assertInstanceOf(Li.class, o.getChild(0));
 					}
 				}
 			},
@@ -1679,10 +1679,10 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Form o) {
-						assertType(Form.class, o);
-						assertType(Input.class, o.getChild(1));
-						assertType(Input.class, o.getChild(3));
-						assertType(Output.class, o.getChild(5));
+						assertInstanceOf(Form.class, o);
+						assertInstanceOf(Input.class, o.getChild(1));
+						assertInstanceOf(Input.class, o.getChild(3));
+						assertInstanceOf(Output.class, o.getChild(5));
 					}
 				}
 			},
@@ -1716,7 +1716,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
+						assertInstanceOf(P.class, o);
 					}
 				}
 			},
@@ -1750,7 +1750,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Pre o) {
-						assertType(Pre.class, o);
+						assertInstanceOf(Pre.class, o);
 					}
 				}
 			},
@@ -1784,7 +1784,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Progress o) {
-						assertType(Progress.class, o);
+						assertInstanceOf(Progress.class, o);
 					}
 				}
 			},
@@ -1818,8 +1818,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Q.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Q.class, o.getChild(1));
 					}
 				}
 			},
@@ -1855,10 +1855,10 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Ruby o) {
-						assertType(Ruby.class, o);
-						assertType(Rb.class, o.getChild(1));
-						assertType(Rtc.class, o.getChild(3));
-						assertType(Rp.class, o.getChild(3,1));
+						assertInstanceOf(Ruby.class, o);
+						assertInstanceOf(Rb.class, o.getChild(1));
+						assertInstanceOf(Rtc.class, o.getChild(3));
+						assertInstanceOf(Rp.class, o.getChild(3,1));
 					}
 				}
 			},
@@ -1892,8 +1892,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(S.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(S.class, o.getChild(1));
 					}
 				}
 			},
@@ -1927,7 +1927,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Samp o) {
-						assertType(Samp.class, o);
+						assertInstanceOf(Samp.class, o);
 					}
 				}
 			},
@@ -1961,7 +1961,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Script o) {
-						assertType(Script.class, o);
+						assertInstanceOf(Script.class, o);
 					}
 				}
 			},
@@ -1995,9 +1995,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Section o) {
-						assertType(Section.class, o);
-						assertType(H1.class, o.getChild(0));
-						assertType(P.class, o.getChild(1));
+						assertInstanceOf(Section.class, o);
+						assertInstanceOf(H1.class, o.getChild(0));
+						assertInstanceOf(P.class, o.getChild(1));
 					}
 				}
 			},
@@ -2031,9 +2031,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Select o) {
-						assertType(Select.class, o);
-						assertType(Optgroup.class, o.getChild(0));
-						assertType(Option.class, o.getChild(0,0));
+						assertInstanceOf(Select.class, o);
+						assertInstanceOf(Optgroup.class, o.getChild(0));
+						assertInstanceOf(Option.class, o.getChild(0,0));
 					}
 				}
 			},
@@ -2067,8 +2067,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Small.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Small.class, o.getChild(0));
 					}
 				}
 			},
@@ -2102,8 +2102,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Span.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Span.class, o.getChild(1));
 					}
 				}
 			},
@@ -2137,8 +2137,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Strong.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Strong.class, o.getChild(0));
 					}
 				}
 			},
@@ -2172,8 +2172,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Head o) {
-						assertType(Head.class, o);
-						assertType(Style.class, o.getChild(0));
+						assertInstanceOf(Head.class, o);
+						assertInstanceOf(Style.class, o.getChild(0));
 					}
 				}
 			},
@@ -2207,8 +2207,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Sub.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Sub.class, o.getChild(0));
 					}
 				}
 			},
@@ -2242,8 +2242,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Sup.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Sup.class, o.getChild(0));
 					}
 				}
 			},
@@ -2461,23 +2461,23 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Table o) {
-						assertType(Table.class, o);
-						assertType(Caption.class, o.getChild(0));
-						assertType(Colgroup.class, o.getChild(1));
-						assertType(Col.class, o.getChild(1,0));
-						assertType(Col.class, o.getChild(1,1));
-						assertType(Thead.class, o.getChild(2));
-						assertType(Tr.class, o.getChild(2,0));
-						assertType(Th.class, o.getChild(2,0,0));
-						assertType(Th.class, o.getChild(2,0,1));
-						assertType(Tbody.class, o.getChild(3));
-						assertType(Tr.class, o.getChild(3,0));
-						assertType(Td.class, o.getChild(3,0,0));
-						assertType(Td.class, o.getChild(3,0,1));
-						assertType(Tfoot.class, o.getChild(4));
-						assertType(Tr.class, o.getChild(4,0));
-						assertType(Td.class, o.getChild(4,0,0));
-						assertType(Td.class, o.getChild(4,0,1));
+						assertInstanceOf(Table.class, o);
+						assertInstanceOf(Caption.class, o.getChild(0));
+						assertInstanceOf(Colgroup.class, o.getChild(1));
+						assertInstanceOf(Col.class, o.getChild(1,0));
+						assertInstanceOf(Col.class, o.getChild(1,1));
+						assertInstanceOf(Thead.class, o.getChild(2));
+						assertInstanceOf(Tr.class, o.getChild(2,0));
+						assertInstanceOf(Th.class, o.getChild(2,0,0));
+						assertInstanceOf(Th.class, o.getChild(2,0,1));
+						assertInstanceOf(Tbody.class, o.getChild(3));
+						assertInstanceOf(Tr.class, o.getChild(3,0));
+						assertInstanceOf(Td.class, o.getChild(3,0,0));
+						assertInstanceOf(Td.class, o.getChild(3,0,1));
+						assertInstanceOf(Tfoot.class, o.getChild(4));
+						assertInstanceOf(Tr.class, o.getChild(4,0));
+						assertInstanceOf(Td.class, o.getChild(4,0,0));
+						assertInstanceOf(Td.class, o.getChild(4,0,1));
 					}
 				}
 			},
@@ -2511,8 +2511,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Template o) {
-						assertType(Template.class, o);
-						assertType(Div.class, o.getChild(0));
+						assertInstanceOf(Template.class, o);
+						assertInstanceOf(Div.class, o.getChild(0));
 					}
 				}
 			},
@@ -2546,7 +2546,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Textarea o) {
-						assertType(Textarea.class, o);
+						assertInstanceOf(Textarea.class, o);
 					}
 				}
 			},
@@ -2580,8 +2580,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Time.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Time.class, o.getChild(1));
 					}
 				}
 			},
@@ -2615,8 +2615,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(U.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(U.class, o.getChild(0));
 					}
 				}
 			},
@@ -2650,8 +2650,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Ul o) {
-						assertType(Ul.class, o);
-						assertType(Li.class, o.getChild(0));
+						assertInstanceOf(Ul.class, o);
+						assertInstanceOf(Li.class, o.getChild(0));
 					}
 				}
 			},
@@ -2685,8 +2685,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Var.class, o.getChild(0));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Var.class, o.getChild(0));
 					}
 				}
 			},
@@ -2723,9 +2723,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(Video o) {
-						assertType(Video.class, o);
-						assertType(Source.class, o.getChild(0));
-						assertType(Track.class, o.getChild(1));
+						assertInstanceOf(Video.class, o);
+						assertInstanceOf(Source.class, o.getChild(0));
+						assertInstanceOf(Track.class, o.getChild(1));
 					}
 				}
 			},
@@ -2759,8 +2759,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				{
 					@Override
 					public void verify(P o) {
-						assertType(P.class, o);
-						assertType(Wbr.class, o.getChild(1));
+						assertInstanceOf(P.class, o);
+						assertInstanceOf(Wbr.class, o.getChild(1));
 					}
 				}
 			},

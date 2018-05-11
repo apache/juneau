@@ -28,20 +28,20 @@ public class ParserGroupTest {
 	public void testParserGroupMatching() throws Exception {
 
 		ParserGroup g = ParserGroup.create().append(Parser1.class, Parser2.class, Parser3.class).build();
-		assertType(Parser1.class, g.getParser("text/foo"));
-		assertType(Parser1.class, g.getParser("text/foo_a"));
-		assertType(Parser1.class, g.getParser("text/foo_a+xxx"));
-		assertType(Parser1.class, g.getParser("text/xxx+foo_a"));
-		assertType(Parser2.class, g.getParser("text/foo+bar"));
-		assertType(Parser2.class, g.getParser("text/foo+bar_a"));
-		assertType(Parser2.class, g.getParser("text/bar+foo"));
-		assertType(Parser2.class, g.getParser("text/bar+foo+xxx"));
-		assertType(Parser3.class, g.getParser("text/baz"));
-		assertType(Parser3.class, g.getParser("text/baz_a"));
-		assertType(Parser3.class, g.getParser("text/baz+yyy"));
-		assertType(Parser3.class, g.getParser("text/baz_a+yyy"));
-		assertType(Parser3.class, g.getParser("text/yyy+baz"));
-		assertType(Parser3.class, g.getParser("text/yyy+baz_a"));
+		assertInstanceOf(Parser1.class, g.getParser("text/foo"));
+		assertInstanceOf(Parser1.class, g.getParser("text/foo_a"));
+		assertInstanceOf(Parser1.class, g.getParser("text/foo_a+xxx"));
+		assertInstanceOf(Parser1.class, g.getParser("text/xxx+foo_a"));
+		assertInstanceOf(Parser2.class, g.getParser("text/foo+bar"));
+		assertInstanceOf(Parser2.class, g.getParser("text/foo+bar_a"));
+		assertInstanceOf(Parser2.class, g.getParser("text/bar+foo"));
+		assertInstanceOf(Parser2.class, g.getParser("text/bar+foo+xxx"));
+		assertInstanceOf(Parser3.class, g.getParser("text/baz"));
+		assertInstanceOf(Parser3.class, g.getParser("text/baz_a"));
+		assertInstanceOf(Parser3.class, g.getParser("text/baz+yyy"));
+		assertInstanceOf(Parser3.class, g.getParser("text/baz_a+yyy"));
+		assertInstanceOf(Parser3.class, g.getParser("text/yyy+baz"));
+		assertInstanceOf(Parser3.class, g.getParser("text/yyy+baz_a"));
 	}
 
 

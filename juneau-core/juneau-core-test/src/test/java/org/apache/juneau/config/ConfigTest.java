@@ -529,29 +529,29 @@ public class ConfigTest {
 		
 		Map<String,Integer> a1 = c.getObject("a1", Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		List<Map<String,Integer>> a2a = c.getObject("a2", List.class, Map.class, String.class, Integer.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		List<ABean> a2b = c.getObject("a2", List.class, ABean.class);
 		assertObjectEquals("[{foo:'123'}]", a2b);
-		assertType(ABean.class, a2b.get(0));
+		assertInstanceOf(ABean.class, a2b.get(0));
 		
 		Map<String,Integer> a3 = c.getObject("a3", Map.class, String.class, Integer.class);
 		assertNull(a3);
 		
 		Map<String,Integer> a4a = c.getObject("a4", Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		ABean a4b = c.getObject("a4", ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -570,29 +570,29 @@ public class ConfigTest {
 		
 		Map<String,Integer> a1 = c.getObject("a1", UonParser.DEFAULT, Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		List<Map<String,Integer>> a2a = c.getObject("a2", UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		List<ABean> a2b = c.getObject("a2", UonParser.DEFAULT, List.class, ABean.class);
 		assertObjectEquals("[{foo:'123'}]", a2b);
-		assertType(ABean.class, a2b.get(0));
+		assertInstanceOf(ABean.class, a2b.get(0));
 		
 		Map<String,Integer> a3 = c.getObject("a3", UonParser.DEFAULT, Map.class, String.class, Integer.class);
 		assertNull(a3);
 		
 		Map<String,Integer> a4a = c.getObject("a4", UonParser.DEFAULT, Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		ABean a4b = c.getObject("a4", UonParser.DEFAULT, ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -612,25 +612,25 @@ public class ConfigTest {
 		
 		Map a1 = c.getObject("a1", Map.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		List a2a = c.getObject("a2", List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		Map a3 = c.getObject("a3", Map.class);
 		assertNull(a3);
 		
 		Map a4a = c.getObject("a4", Map.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		ABean a4b = c.getObject("a4", ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -650,25 +650,25 @@ public class ConfigTest {
 		
 		Map a1 = c.getObject("a1", UonParser.DEFAULT, Map.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		List a2a = c.getObject("a2", UonParser.DEFAULT, List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		Map a3 = c.getObject("a3", UonParser.DEFAULT, Map.class);
 		assertNull(a3);
 		
 		Map a4a = c.getObject("a4", UonParser.DEFAULT, Map.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		ABean a4b = c.getObject("a4", UonParser.DEFAULT, ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -688,16 +688,16 @@ public class ConfigTest {
 		
 		Map a1 = c.getObjectWithDefault("a1", new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		Map a1b = c.getObjectWithDefault("a1b", new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a1b);
 
 		List a2a = c.getObjectWithDefault("a2", new ObjectList(), List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		List a2b = c.getObjectWithDefault("a2b", new ObjectList(), List.class);
 		assertObjectEquals("[]", a2b);
@@ -707,15 +707,15 @@ public class ConfigTest {
 		
 		Map a4a = c.getObjectWithDefault("a4", new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		Map a4b = c.getObjectWithDefault("a4b", new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a4b);
 
 		ABean a4c = c.getObjectWithDefault("a4c", new ABean().init(), ABean.class);
 		assertObjectEquals("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
@@ -735,16 +735,16 @@ public class ConfigTest {
 		
 		Map a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		Map a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a1b);
 
 		List a2a = c.getObjectWithDefault("a2", UonParser.DEFAULT, new ObjectList(), List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		List a2b = c.getObjectWithDefault("a2b", UonParser.DEFAULT, new ObjectList(), List.class);
 		assertObjectEquals("[]", a2b);
@@ -754,15 +754,15 @@ public class ConfigTest {
 		
 		Map a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		Map a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a4b);
 
 		ABean a4c = c.getObjectWithDefault("a4c", UonParser.DEFAULT, new ABean().init(), ABean.class);
 		assertObjectEquals("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
@@ -781,16 +781,16 @@ public class ConfigTest {
 		
 		Map<String,Integer> a1 = c.getObjectWithDefault("a1", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		Map<String,Integer> a1b = c.getObjectWithDefault("a1b", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a1b);
 
 		List<Map<String,Integer>> a2a = c.getObjectWithDefault("a2", new ArrayList<Map<String,Integer>>(), List.class, Map.class, String.class, Integer.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		List<ABean> a2b = c.getObjectWithDefault("a2b", new ArrayList<ABean>(), List.class, ABean.class);
 		assertObjectEquals("[]", a2b);
@@ -800,15 +800,15 @@ public class ConfigTest {
 		
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		Map<String,Integer> a4b = c.getObjectWithDefault("a4b", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a4b);
 
 		ABean a4c = c.getObjectWithDefault("a4c", new ABean().init(), ABean.class);
 		assertObjectEquals("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
@@ -827,16 +827,16 @@ public class ConfigTest {
 		
 		Map<String,Integer> a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 		
 		Map<String,Integer> a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a1b);
 
 		List<Map<String,Integer>> a2a = c.getObjectWithDefault("a2", UonParser.DEFAULT, new ArrayList<Map<String,Integer>>(), List.class, Map.class, String.class, Integer.class);
 		assertObjectEquals("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		List<ABean> a2b = c.getObjectWithDefault("a2b", UonParser.DEFAULT, new ArrayList<ABean>(), List.class, ABean.class);
 		assertObjectEquals("[]", a2b);
@@ -846,15 +846,15 @@ public class ConfigTest {
 		
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 		
 		Map<String,Integer> a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a4b);
 
 		ABean a4c = c.getObjectWithDefault("a4c", UonParser.DEFAULT, new ABean().init(), ABean.class);
 		assertObjectEquals("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
