@@ -13,27 +13,13 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.internal.IOUtils.*;
 
-import java.io.*;
-import java.util.*;
-
-import javax.servlet.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.config.*;
-import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.testutils.DTOs;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 
 /**
  * JUnit automated testcase resource.
@@ -47,78 +33,6 @@ import org.apache.juneau.utils.*;
 )
 public class ParamsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
-
-	//====================================================================================================
-	// @FormData annotation - GET
-	//====================================================================================================
-	@RestMethod(name=GET, path="/testParamGet/*")
-	public String testParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
-		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
-	}
-
-	//====================================================================================================
-	// @FormData annotation - POST
-	//====================================================================================================
-	@RestMethod(name=POST, path="/testParamPost/*")
-	public String testParamPost(RestRequest req, @FormData("p1") String p1, @FormData("p2") int p2) throws Exception {
-		RequestFormData f = req.getFormData();
-		return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData().getString("p2")+","+f.get("p2", int.class)+"]";
-	}
-
-	//====================================================================================================
-	// @Query annotation - GET
-	//====================================================================================================
-	@RestMethod(name=GET, path="/testQParamGet/*")
-	public String testQParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
-		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
-	}
-
-	//====================================================================================================
-	// @Query annotation - POST
-	//====================================================================================================
-	@RestMethod(name=POST, path="/testQParamPost/*")
-	public String testQParamPost(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
-		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
-	}
-
-	//====================================================================================================
-	// @FormData(format=PLAIN) annotation - GET
-	//====================================================================================================
-	@RestMethod(name=GET, path="/testPlainParamGet/*")
-	public String testPlainParamGet(RestRequest req, @Query(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
-		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
-	}
-
-	//====================================================================================================
-	// @FormData(format=PLAIN) annotation - POST
-	//====================================================================================================
-	@RestMethod(name=POST, path="/testPlainParamPost/*")
-	public String testPlainParamPost(RestRequest req, @FormData(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
-		RequestFormData f = req.getFormData();
-		return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
-	}
-
-	//====================================================================================================
-	// @Query(format=PLAIN) annotation - GET
-	//====================================================================================================
-	@RestMethod(name=GET, path="/testPlainQParamGet/*")
-	public String testPlainQParamGet(RestRequest req, @Query(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
-		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
-	}
-
-	//====================================================================================================
-	// @Query(format=PLAIN) annotation - POST
-	//====================================================================================================
-	@RestMethod(name=POST, path="/testPlainQParamPost/*")
-	public String testPlainQParamPost(RestRequest req, @Query(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
-		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
-	}
 
 	//====================================================================================================
 	// @HasQuery annotation - GET
@@ -157,45 +71,6 @@ public class ParamsResource extends BasicRestServlet {
 	}
 
 	//====================================================================================================
-	// Test @FormData and @Query annotations when using multi-part parameters (e.g. &key=val1,&key=val2).
-	//====================================================================================================
-	@RestMethod(name=GET, path="/testMultiPartParams")
-	public String testMultiPartParams(
-			@Query(value="p1",multipart=true) String[] p1,
-			@Query(value="p2",multipart=true) int[] p2,
-			@Query(value="p3",multipart=true) List<String> p3,
-			@Query(value="p4",multipart=true) List<Integer> p4,
-			@Query(value="p5",multipart=true) String[] p5,
-			@Query(value="p6",multipart=true) int[] p6,
-			@Query(value="p7",multipart=true) List<String> p7,
-			@Query(value="p8",multipart=true) List<Integer> p8,
-			@Query(value="p9",multipart=true) A[] p9,
-			@Query(value="p10",multipart=true) List<A> p10,
-			@Query(value="p11",multipart=true) A[] p11,
-			@Query(value="p12",multipart=true) List<A> p12) throws Exception {
-		ObjectMap m = new ObjectMap()
-			.append("p1", p1)
-			.append("p2", p2)
-			.append("p3", p3)
-			.append("p4", p4)
-			.append("p5", p5)
-			.append("p6", p6)
-			.append("p7", p7)
-			.append("p8", p8)
-			.append("p9", p9)
-			.append("p10", p10)
-			.append("p11", p11)
-			.append("p12", p12);
-		return JsonSerializer.DEFAULT_LAX.toString(m);
-	}
-
-	public static class A {
-		public String a;
-		public int b;
-		public boolean c;
-	}
-
-	//====================================================================================================
 	// Test multi-part parameter keys on bean properties of type array/Collection (i.e. &key=val1,&key=val2)
 	// using URLENC_expandedParams property.
 	// A simple round-trip test to verify that both serializing and parsing works.
@@ -218,113 +93,5 @@ public class ParamsResource extends BasicRestServlet {
 	@RestMethod(name=POST, path="/testFormPostsWithMultiParamsUsingAnnotation")
 	public DTOs.C testFormPostsWithMultiParamsUsingAnnotation(@Body DTOs.C content) throws Exception {
 		return content;
-	}
-
-	//====================================================================================================
-	// Test other available object types as parameters.
-	//====================================================================================================
-
-	@RestMethod(name=GET, path="/otherObjects/ResourceBundle")
-	public String testOtherResourceBundle(ResourceBundle t) {
-		if (t != null)
-			return t.getString("foo");
-		return null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/MessageBundle")
-	public String testOtherMessages(MessageBundle t) {
-		if (t != null)
-			return t.getString("foo");
-		return null;
-	}
-
-	@RestMethod(name=POST, path="/otherObjects/InputStream")
-	public String testOtherInputStream(InputStream t) throws IOException {
-		return read(t);
-	}
-
-	@RestMethod(name=POST, path="/otherObjects/ServletInputStream")
-	public String testOtherServletInputStream(ServletInputStream t) throws IOException {
-		return read(t);
-	}
-
-	@RestMethod(name=POST, path="/otherObjects/Reader")
-	public String testOtherReader(Reader t) throws IOException {
-		return read(t);
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/OutputStream")
-	public void testOtherOutputStream(OutputStream t) throws IOException {
-		t.write("OK".getBytes());
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/ServletOutputStream")
-	public void testOtherServletOutputStream(ServletOutputStream t) throws IOException {
-		t.write("OK".getBytes());
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/Writer")
-	public void testOtherWriter(Writer t) throws IOException {
-		t.write("OK");
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/RequestHeaders")
-	public boolean testOtherRequestHeaders(RequestHeaders t) {
-		return t != null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/RequestQuery")
-	public boolean testOtherRequestQueryParams(RequestQuery t) {
-		return t != null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/RequestFormData")
-	public boolean testOtherRequestFormData(RequestFormData t) {
-		return t != null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/HttpMethod")
-	public String testOtherHttpMethod(HttpMethod t) {
-		return t.toString();
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/RestLogger")
-	public boolean testOtherLogger(RestLogger t) {
-		return t != null;
-	}
-	
-	@RestMethod(name=GET, path="/otherObjects/RestContext")
-	public boolean testOtherRestContext(RestContext t) {
-		return t != null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/Parser",parsers={JsonParser.class})
-	public String testOtherParser(Parser t) {
-		return t.getClass().getName();
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/Locale")
-	public String testOtherLocale(Locale t) {
-		return t.toString();
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/Swagger")
-	public boolean testOtherSwagger(Swagger t) {
-		return t != null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/RequestPathMatch")
-	public boolean testOtherRequestPathMatch(RequestPathMatch t) {
-		return t != null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/RequestBody")
-	public boolean testOtherRequestBody(RequestBody t) {
-		return t != null;
-	}
-
-	@RestMethod(name=GET, path="/otherObjects/Config")
-	public boolean testOtherConfig(Config t) {
-		return t != null;
 	}
 }

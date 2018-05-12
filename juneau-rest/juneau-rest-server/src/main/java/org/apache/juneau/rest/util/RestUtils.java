@@ -289,7 +289,7 @@ public final class RestUtils {
 			
 			final int S1=1; // Looking for attrName start.
 			final int S2=2; // Found attrName start, looking for = or & or end.
-			final int S3=3; // Found =, looking for valStart.
+			final int S3=3; // Found =, looking for valStart or &.
 			final int S4=4; // Found valStart, looking for & or end.
 
 			try (UonReader r = new UonReader(p, true)) {
@@ -320,6 +320,7 @@ public final class RestUtils {
 					} else if (state == S3) {
 						if (c == -1 || c == '\u0001') {
 							add(m, currAttr, "");
+							state = S1;
 						} else {
 							if (c == '\u0002')
 								r.replace('=');

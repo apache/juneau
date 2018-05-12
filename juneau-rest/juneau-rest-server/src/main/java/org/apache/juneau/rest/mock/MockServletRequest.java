@@ -668,7 +668,11 @@ public class MockServletRequest implements HttpServletRequest {
 	public Map<String,String[]> getParameterMap() {
 		if (parameterMap == null) {
 			try {
-				parameterMap = RestUtils.parseQuery(getQueryString());
+				if ("POST".equalsIgnoreCase(method)) {
+					parameterMap = RestUtils.parseQuery(IOUtils.read(body));
+				} else {
+					parameterMap = RestUtils.parseQuery(getQueryString());
+				}
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -1002,5 +1006,15 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest accept(String value) {
 		return header("Accept", value);
+	}
+
+	/**
+	 * Specifies the <code>Accept-Language</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest acceptLanguage(String value) {
+		return header("Accept-Language", value);
 	}
 }
