@@ -32,7 +32,6 @@ import org.apache.juneau.rest.helper.*;
 		ClientFuturesResource.class,
 		ClientVersionResource.class,
 		ConfigResource.class,
-		DefaultContentTypesResource.class,
 		ErrorConditionsResource.class,
 		TransformsResource.class,
 		FormDataResource.class,

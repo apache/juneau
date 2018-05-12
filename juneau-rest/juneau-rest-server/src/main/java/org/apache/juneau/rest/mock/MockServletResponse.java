@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
+import java.text.*;
 import java.util.*;
 
 import javax.servlet.*;
@@ -265,5 +268,46 @@ public class MockServletResponse implements HttpServletResponse {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * Throws an {@link AssertionError} if the response status does not match the expected status.
+	 * 
+	 * @param status The expected status.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if status does not match.
+	 */
+	public MockServletResponse assertStatus(int status) throws AssertionError {
+		if (getStatus() != status)
+			throw new AssertionError(MessageFormat.format("Response did not have the expected status. expected=[{0}], actual=[{1}]", status, getStatus()));
+		return this;
+	}
+	
+	/**
+	 * Throws an {@link AssertionError} if the response body does not contain all of the expected substrings.
+	 * 
+	 * @param substrings The expected substrings.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the body does not contain one or more of the expected substrings.
+	 */
+	public MockServletResponse assertBodyContains(String...substrings) throws AssertionError {
+		String text = getBodyAsString(); 
+		for (String substring : substrings) 
+			if (! contains(text, substring))
+				throw new AssertionError(MessageFormat.format("Response did not have the expected substring. expected=[{0}], body=[{1}]", substring, text));
+		return this;
+	}
+
+	/**
+	 * Throws an {@link AssertionError} if the response body does not contain the expected text.
+	 * 
+	 * @param text The expected text of the body.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the body does not contain the expected text.
+	 */
+	public MockServletResponse assertBody(String text) throws AssertionError {
+		if (! StringUtils.isEquals(text, getBodyAsString()))
+			throw new AssertionError(MessageFormat.format("Response did not have the expected text. expected=[{0}], actual=[{1}]", text, getBodyAsString()));
+		return this;
 	}
 }

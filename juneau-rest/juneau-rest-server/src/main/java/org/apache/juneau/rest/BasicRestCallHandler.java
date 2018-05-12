@@ -167,6 +167,9 @@ public class BasicRestCallHandler implements RestCallHandler {
 				// If not invoked above, see if it's an OPTIONs request
 				if (rc != SC_OK)
 					handleNotFound(rc, req, res);
+				
+				if (res.getStatus() == 0)
+					res.setStatus(rc);
 			}
 
 			if (res.hasOutput()) {

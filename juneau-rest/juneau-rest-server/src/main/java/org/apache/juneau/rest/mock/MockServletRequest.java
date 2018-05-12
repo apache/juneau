@@ -84,7 +84,6 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public static MockServletRequest create() {
 		MockServletRequest r = new MockServletRequest();
-		r.header("Accept", "text/json+simple").header("Content-Type", "text/json");
 		return r;
 	}
 	
@@ -109,6 +108,78 @@ public class MockServletRequest implements HttpServletRequest {
 			.uri(StringUtils.format(path, pathArgs));
 	}
 	
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest json() {
+		return header("Accept", "application/json").header("Content-Type", "application/json");
+	}
+
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/xml"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest xml() {
+		return header("Accept", "text/xml").header("Content-Type", "text/xml");
+	}
+	
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/html"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest html() {
+		return header("Accept", "text/html").header("Content-Type", "text/html");
+	}
+	
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/plain"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest plainText() {
+		return header("Accept", "text/plain").header("Content-Type", "text/plain");
+	}
+	
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"octal/msgpack"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest msgpack() {
+		return header("Accept", "octal/msgpack").header("Content-Type", "octal/msgpack");
+	}
+	
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/uon"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest uon() {
+		return header("Accept", "text/uon").header("Content-Type", "text/uon");
+	}
+	
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/x-www-form-urlencoded"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest urlEnc() {
+		return header("Accept", "application/x-www-form-urlencoded").header("Content-Type", "application/x-www-form-urlencoded");
+	}
+	
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/yaml"</js>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest yaml() {
+		return header("Accept", "text/yaml").header("Content-Type", "text/yaml");
+	}
+
 	/**
 	 * Fluent setter.
 	 * 
@@ -140,6 +211,11 @@ public class MockServletRequest implements HttpServletRequest {
 	public MockServletResponse execute() throws Exception {
 		MockServletResponse res = MockServletResponse.create();
 		restContext.getCallHandler().service(this, res);
+		
+		// If the status isn't set, something's broken.
+		if (res.getStatus() == 0)
+			throw new RuntimeException("Response status was 0.");
+		
 		return res;
 	}
 

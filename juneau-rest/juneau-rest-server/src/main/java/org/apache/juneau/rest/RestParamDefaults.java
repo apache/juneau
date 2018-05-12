@@ -589,21 +589,12 @@ class RestParamDefaults {
 
 	static final class BodyObject extends RestMethodParam {
 		
-		private final Transform<Reader,?> readerTransform;
-		private final Transform<InputStream,?> inputStreamTransform;
-
 		protected BodyObject(Method method, Body a, Type type, RestMethodParam existing) {
 			super(BODY, method, null, type, getMetaData(a, castOrNull(existing, BodyObject.class)));
-			readerTransform = TransformCache.get(Reader.class, getTypeClass());
-			inputStreamTransform = TransformCache.get(InputStream.class, getTypeClass());
 		}
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			if (readerTransform != null)
-				return readerTransform.transform(req.getReader());  // Also passes Reader through.
-			if (inputStreamTransform != null)
-				return inputStreamTransform.transform(req.getInputStream());  // Also passes InputStream through.
 			return req.getBody().asType(type);
 		}
 		

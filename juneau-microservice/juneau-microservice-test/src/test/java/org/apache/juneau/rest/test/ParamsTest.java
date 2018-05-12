@@ -811,7 +811,7 @@ public class ParamsTest extends RestTestcase {
 
 	@Test
 	public void testOtherParser() throws Exception {
-		String r = CLIENT.doGet(URL + "/otherObjects/Parser").getResponseAsString();
+		String r = CLIENT.doGet(URL + "/otherObjects/Parser").contentType("application/json").getResponseAsString();
 		assertEquals("\"org.apache.juneau.json.JsonParser\"", r);
 	}
 

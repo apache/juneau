@@ -343,16 +343,19 @@ public class RequestBody {
 	public ParserMatch getParserMatch() {
 		if (mediaType != null && parser != null)
 			return new ParserMatch(mediaType, parser);
-		MediaType mediaType = headers.getContentType();
-		if (isEmpty(mediaType)) {
-			if (body != null)
-				mediaType = MediaType.UON;
-			else
-				mediaType = MediaType.JSON;
-		}
-		return parsers.getParserMatch(mediaType);
+		MediaType mt = getMediaType();
+		return mt == null ? null : parsers.getParserMatch(mt);
 	}
-
+	
+	private MediaType getMediaType() {
+		if (mediaType != null)
+			return mediaType;
+		MediaType mediaType = headers.getContentType();
+		if (mediaType == null && body != null) 
+			return MediaType.UON;
+		return mediaType;
+	}
+	
 	/**
 	 * Returns the parser matching the request <code>Content-Type</code> header.
 	 * 
@@ -423,7 +426,17 @@ public class RequestBody {
 					);
 				}
 			}
+			
+			if (cm.hasReaderTransform())
+				return cm.getReaderTransform().transform(getReader());
 
+			if (cm.hasInputStreamTransform())
+				return cm.getInputStreamTransform().transform(getInputStream());
+			
+			MediaType mt = getMediaType();
+			if ((isEmpty(mt) || mt.toString().equals("text/plain")) && cm.hasStringTransform())
+				return cm.getStringTransform().transform(asString());
+			
 			throw new UnsupportedMediaType(
 				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
 				headers.getContentType(), req.getParsers().getSupportedMediaTypes()

@@ -3029,10 +3029,16 @@ public final class RestContext extends BeanContext {
 											try {
 												// Parse the args and invoke the method.
 												Parser p = req.getBody().getParser();
-												try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {
-													Object output = m.invoke(o, p.parseArgs(in, m.getGenericParameterTypes()));
-													res.setOutput(output);
+												Object[] args = null;
+												if (m.getGenericParameterTypes().length == 0)
+													args = new Object[0];
+												else {
+													try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {
+														args = p.parseArgs(in, m.getGenericParameterTypes());
+													}
 												}
+												Object output = m.invoke(o, args);
+												res.setOutput(output);
 												return SC_OK;
 											} catch (Exception e) {
 												throw new InternalServerError(e);

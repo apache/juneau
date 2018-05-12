@@ -17,15 +17,19 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.io.*;
 import java.lang.annotation.*;
+import java.nio.charset.*;
+import java.util.logging.*;
 
 import org.apache.juneau.rest.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method or POJO class to identify it as the HTTP
- * request body converted to a POJO.
+ * REST request body annotation.
+ * 
+ * <p>
+ * Identifies a POJO to be used as the body of an HTTP request.
  * 
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {
  * 		...
@@ -34,35 +38,80 @@ import org.apache.juneau.rest.*;
  * 
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> addPerson(RestRequest req, RestResponse res) {
+ * 	<jk>public void</jk> addPerson(RestRequest req) {
  * 		Person person = req.getBody().asType(Person.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
  * 
+ * <p>
+ * This annotation can be applied to the following:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Parameters on a  {@link RestMethod @RestMethod}.
+ * 	<li>
+ * 		POJO classes.
+ * </ul>
+ * 
+ * <p>
  * Any of the following types can be used for the parameter:
- * <ul>
- * 	<li>{@link Reader}
- * 	<li>{@link InputStream}
- * 	<li>Primitives (e.g. <code>String</code>, <jk>int</jk>, <jk>boolean</jk>, etc...)
- * 	<li>Beans
- * 	<li>Maps, collections, or arrays of beans or primitives.
- * 	<li>Any object convertible from a {@link Reader} by having one of the following methods:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		{@link Reader}
+ * 		<br><ja>@Body</ja> annotation is optional.
+ * 		<br><code>Content-Type</code> is always ignored.
+ * 	<li>
+ * 		{@link InputStream} 
+ * 		<br><ja>@Body</ja> annotation is optional.
+ * 		<br><code>Content-Type</code> is always ignored.
+ * 	<li>
+ * 		Any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.PojoCategories'>parsable</a> POJO type.
+ * 		<br><code>Content-Type</code> is required to identify correct parser.
+ * 	<li>
+ * 		Objects convertible from {@link Reader} by having one of the following non-deprecated methods:
  * 		<ul>
  * 			<li><code><jk>public</jk> T(Reader in) {...}</code>
  * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
  * 			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
  * 		</ul>
- * 	</ul>
- * 	<li>Any object convertible from an {@link InputStream} by having one of the following methods:
+ * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+ * 	<li>
+ * 		Objects convertible from {@link InputStream} by having one of the following non-deprecated methods:
  * 		<ul>
  * 			<li><code><jk>public</jk> T(InputStream in) {...}</code>
  * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
  * 			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
  * 		</ul>
+ * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+ * 	<li>
+ * 		Objects convertible from {@link String} (including <code>String</code> itself) by having one of the following non-deprecated methods:
+ * 		<ul>
+ * 			<li><code><jk>public</jk> T(String in) {...}</code> (e.g. {@link Integer}, {@link Boolean})
+ * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code> 
+ * 			<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>fromValue</jsm>(String in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>valueOf</jsm>(String in) {...}</code> (e.g. enums)
+ * 			<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code> (e.g. {@link Level})
+ * 			<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code> (e.g. {@link Class}, {@link Charset})
+ * 			<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
+ * 		</ul>
+ * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
  * </ul>
+ * 
+ * 
+ * <h5 class='section'>Notes:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
+ * 		<br>Values on child classes override values on parent classes.
+ * 	<li>
+ * 		Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
+ * 		<br>Values on methods override values on POJO classes.
+ * </ul>
+ * 
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>

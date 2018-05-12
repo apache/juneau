@@ -474,6 +474,12 @@ public class TestUtils {
 		if (! isEquals(expected, actual))
 			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));
 	}
+	
+	public static final void assertContains(Object value, String...substrings) {
+		for (String substring : substrings) 
+			if (! contains(toString(value), substring))
+				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));
+	}
 
 	/**
 	 * Creates a ClassMeta for the given types.

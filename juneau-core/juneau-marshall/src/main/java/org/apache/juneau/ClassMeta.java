@@ -119,6 +119,9 @@ public final class ClassMeta<T> implements Type {
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
 	private final Object example;                          // Example object.
+	private final Transform<Reader,T> readerTransform;
+	private final Transform<InputStream,T> inputStreamTransform;
+	private final Transform<String,T> stringTransform;
 	
 	private ReadWriteLock lock = new ReentrantReadWriteLock(false);
 	private Lock rLock = lock.readLock(), wLock = lock.writeLock();
@@ -198,6 +201,9 @@ public final class ClassMeta<T> implements Type {
 			this.exampleField = builder.exampleField;
 			this.example = builder.example;
 			this.args = null;
+			this.readerTransform = builder.readerTransform;
+			this.inputStreamTransform = builder.inputStreamTransform;
+			this.stringTransform = builder.stringTransform;
 		} finally {
 			wLock.unlock();
 		}
@@ -260,6 +266,9 @@ public final class ClassMeta<T> implements Type {
 		this.exampleField = mainType.exampleField;
 		this.example = mainType.example;
 		this.args = null;
+		this.readerTransform = mainType.readerTransform;
+		this.inputStreamTransform = mainType.inputStreamTransform;
+		this.stringTransform = mainType.stringTransform;
 	}
 
 	/**
@@ -309,6 +318,9 @@ public final class ClassMeta<T> implements Type {
 		this.exampleMethod = null;
 		this.exampleField = null;
 		this.example = null;
+		this.readerTransform = null;
+		this.inputStreamTransform = null;
+		this.stringTransform = null;
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes","hiding"})
@@ -361,6 +373,9 @@ public final class ClassMeta<T> implements Type {
 		Method exampleMethod;
 		Field exampleField;
 		Object example;
+		Transform<Reader,T> readerTransform;
+		Transform<InputStream,T> inputStreamTransform;
+		Transform<String,T> stringTransform;
 
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 			this.innerClass = innerClass;
@@ -451,6 +466,7 @@ public final class ClassMeta<T> implements Type {
 					}
 				}
 			}
+			// TODO - should use transforms for above code.
 
 			// Special cases
 			try {
@@ -748,6 +764,10 @@ public final class ClassMeta<T> implements Type {
 			}
 			
 			this.example = example;
+			
+			this.readerTransform = TransformCache.get(Reader.class, c);
+			this.inputStreamTransform = TransformCache.get(InputStream.class, c);
+			this.stringTransform = TransformCache.get(String.class, c);
 		}
 
 		private BeanFilter findBeanFilter() {
@@ -2025,5 +2045,59 @@ public final class ClassMeta<T> implements Type {
 	@Override /* Object */
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
+	 * 
+	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
+	 */
+	public boolean hasReaderTransform() {
+		return readerTransform != null;
+	}
+	
+	/**
+	 * Returns the transform for this class for creating instances from a Reader.
+	 * 
+	 * @return The transform, or <jk>null</jk> if no such transform exists.
+	 */
+	public Transform<Reader,T> getReaderTransform() {
+		return readerTransform;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
+	 * 
+	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
+	 */
+	public boolean hasInputStreamTransform() {
+		return inputStreamTransform != null;
+	}
+
+	/**
+	 * Returns the transform for this class for creating instances from an InputStream.
+	 * 
+	 * @return The transform, or <jk>null</jk> if no such transform exists.
+	 */
+	public Transform<InputStream,T> getInputStreamTransform() {
+		return inputStreamTransform;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.
+	 * 
+	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.
+	 */
+	public boolean hasStringTransform() {
+		return stringTransform != null;
+	}
+
+	/**
+	 * Returns the transform for this class for creating instances from a String.
+	 * 
+	 * @return The transform, or <jk>null</jk> if no such transform exists.
+	 */
+	public Transform<String,T> getStringTransform() {
+		return stringTransform;
 	}
 }

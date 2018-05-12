@@ -401,7 +401,7 @@ public class ParamsResource extends BasicRestServlet {
 		return t != null;
 	}
 
-	@RestMethod(name=GET, path="/otherObjects/Parser")
+	@RestMethod(name=GET, path="/otherObjects/Parser",parsers={JsonParser.class})
 	public String testOtherParser(Parser t) {
 		return t.getClass().getName();
 	}
