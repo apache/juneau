@@ -56,7 +56,6 @@ import org.apache.juneau.rest.helper.*;
 		OnPreCallResource.class,
 		OptionsWithoutNlsResource.class,
 		OverlappingMethodsResource.class,
-		ParamsResource.class,
 		ParsersResource.class,
 		PathResource.class,
 		PathsResource.class,

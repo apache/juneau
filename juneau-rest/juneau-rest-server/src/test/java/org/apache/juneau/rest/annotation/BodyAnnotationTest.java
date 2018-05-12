@@ -21,7 +21,9 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.testutils.*;
+import org.apache.juneau.rest.testutils.DTOs;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -668,5 +670,92 @@ public class BodyAnnotationTest {
 		f.request("POST", "/").body("{}").json().execute().assertBody("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
 		f.request("POST", "?p1=p3&p2=4").body("{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 		f.request("POST", "?p1=p3&p2=4").body("{}").json().execute().assertBody("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+	}
+	
+
+	//====================================================================================================
+	// Test multi-part parameter keys on bean properties of type array/Collection (i.e. &key=val1,&key=val2)
+	// using @UrlEncoding(expandedParams=true) annotation on bean.
+	// A simple round-trip test to verify that both serializing and parsing works.
+	//====================================================================================================
+	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
+	public static class G {
+		@RestMethod(name=POST)
+		public DTOs.C g(@Body DTOs.C content) throws Exception {
+			return content;
+		}
+	}	
+	static MockRest g = MockRest.create(G.class);
+	
+	@Test
+	public void g01() throws Exception {
+		String in = ""
+			+ "f01=a&f01=b"
+			+ "&f02=c&f02=d"
+			+ "&f03=1&f03=2"
+			+ "&f04=3&f04=4"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
+			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
+			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
+			+ "&f11=a&f11=b"
+			+ "&f12=c&f12=d"
+			+ "&f13=1&f13=2"
+			+ "&f14=3&f14=4"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
+			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
+			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		g.request("POST", "/").body(in).urlEnc().execute().assertBody(in);
+	}
+	
+
+	//====================================================================================================
+	// Test multi-part parameter keys on bean properties of type array/Collection (i.e. &key=val1,&key=val2)
+	// using URLENC_expandedParams property.
+	// A simple round-trip test to verify that both serializing and parsing works.
+	//====================================================================================================
+	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
+	public static class H {
+		@RestMethod(name=POST,
+			properties={
+				@Property(name=UrlEncodingSerializer.URLENC_expandedParams, value="true"),
+				@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
+			}
+		)
+		public DTOs.B g(@Body DTOs.B content) throws Exception {
+			return content;
+		}
+	}
+	static MockRest h = MockRest.create(H.class);
+	
+	@Test
+	public void h01() throws Exception {
+		String in = ""
+			+ "f01=a&f01=b"
+			+ "&f02=c&f02=d"
+			+ "&f03=1&f03=2"
+			+ "&f04=3&f04=4"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
+			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
+			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
+			+ "&f11=a&f11=b"
+			+ "&f12=c&f12=d"
+			+ "&f13=1&f13=2"
+			+ "&f14=3&f14=4"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
+			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
+			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		h.request("POST", "/").body(in).urlEnc().execute().assertBody(in);
 	}
 }

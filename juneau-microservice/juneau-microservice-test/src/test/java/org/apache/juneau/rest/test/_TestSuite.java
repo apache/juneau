@@ -49,7 +49,6 @@ import org.junit.runners.Suite.*;
 	OnPreCallTest.class,
 	OptionsWithoutNlsTest.class,
 	OverlappingMethodsTest.class,
-	ParamsTest.class,
 	ParsersTest.class,
 	PathsTest.class,
 	PathTest.class,
