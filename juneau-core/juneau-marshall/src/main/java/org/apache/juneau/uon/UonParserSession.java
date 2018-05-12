@@ -186,8 +186,7 @@ public class UonParserSession extends ReaderParserSession {
 		} else if (sType.isCharSequence()) {
 			o = parseString(r, isUrlParamValue);
 		} else if (sType.isChar()) {
-			String s = parseString(r, isUrlParamValue);
-			o = s == null ? null : s.charAt(0);
+			o = parseCharacter(parseString(r, isUrlParamValue));
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {

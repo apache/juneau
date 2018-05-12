@@ -38,71 +38,57 @@ public class BodyAnnotationTest {
 	
 	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
 	public static class A {
-		
 		@RestMethod(name=PUT, path="/String")
 		public String a01(@Body String b) {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/Integer")
 		public Integer a02(@Body Integer b) {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/int")
 		public Integer a03(@Body int b) {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/Boolean")
 		public Boolean a04(@Body Boolean b) {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/boolean")
 		public Boolean a05(@Body boolean b) {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/float")
 		public float a06(@Body float f) {
 			return f;
 		}
-
 		@RestMethod(name=PUT, path="/Float")
 		public Float a07(@Body Float f) {
 			return f;
 		}
-		
 		@RestMethod(name=PUT, path="/Map")
 		public TreeMap<String,Integer> a08(@Body TreeMap<String,Integer> m) {
 			return m;
 		}
-
 		@RestMethod(name=PUT, path="/enum")
 		public TestEnum a09(@Body TestEnum e) {
 			return e;
 		}
-
 		public static class A11 {
 			public String f1;
 		}
-		
 		@RestMethod(name=PUT, path="/Bean")
 		public A11 a11(@Body A11 b) {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/InputStream")
 		public String a12(@Body InputStream b) throws Exception {
 			return IOUtils.read(b);
 		}
-
 		@RestMethod(name=PUT, path="/Reader")
 		public String a13(@Body Reader b) throws Exception {
 			return IOUtils.read(b);
 		}
-
 		@RestMethod(name=PUT, path="/InputStreamTransform")
 		public A14 a14(@Body A14 b) throws Exception {
 			return b;
@@ -112,7 +98,6 @@ public class BodyAnnotationTest {
 			public A14(InputStream in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		
 		@RestMethod(name=PUT, path="/ReaderTransform")
 		public A15 a15(@Body A15 b) throws Exception {
 			return b;
@@ -122,7 +107,6 @@ public class BodyAnnotationTest {
 			public A15(Reader in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		
 		@RestMethod(name=PUT, path="/StringTransform")
 		public A16 a16(@Body A16 b) throws Exception { return b; }
 		public static class A16 {
@@ -130,9 +114,7 @@ public class BodyAnnotationTest {
 			public A16(String s) throws Exception { this.s = s; }
 			@Override public String toString() { return s; }
 		}
-		
 	}
-	
 	private static MockRest a = MockRest.create(A.class);
 	
 	@Test
@@ -279,7 +261,6 @@ public class BodyAnnotationTest {
 	
 	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
 	public static class B {
-		
 		@RestMethod(name=PUT, path="/StringTransform")
 		public B01 b01(B01 b) {
 			return b;
@@ -290,7 +271,6 @@ public class BodyAnnotationTest {
 			public B01(String val) { this.val = val; }
 			@Override public String toString() { return val; }
 		}
-		
 		@RestMethod(name=PUT, path="/Bean")
 		public B02 b02(B02 b) {
 			return b;
@@ -299,14 +279,12 @@ public class BodyAnnotationTest {
 		public static class B02 {
 			public String f1;
 		}
-		
 		@RestMethod(name=PUT, path="/BeanList")
 		public B03 b03(B03 b) {
 			return b;
 		}
 		@Body
 		public static class B03 extends LinkedList<B02> {}
-		
 		@RestMethod(name=PUT, path="/InputStreamTransform")
 		public B04 b04(B04 b) throws Exception {
 			return b;
@@ -317,7 +295,6 @@ public class BodyAnnotationTest {
 			public B04(InputStream in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		
 		@RestMethod(name=PUT, path="/ReaderTransform")
 		public B05 b05(B05 b) throws Exception {
 			return b;
@@ -328,9 +305,7 @@ public class BodyAnnotationTest {
 			public B05(Reader in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		
 	}
-	
 	private static MockRest b = MockRest.create(B.class);
 
 	@Test
@@ -481,22 +456,18 @@ public class BodyAnnotationTest {
 	
 	@RestResource
 	public static class D {
-		
 		@RestMethod(name=PUT, path="/String")
 		public Reader d01(@Body Reader b) throws Exception {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/InputStream")
 		public InputStream d02(@Body InputStream b) throws Exception {
 			return b;
 		}
-
 		@RestMethod(name=PUT, path="/Reader")
 		public Reader d03(@Body Reader b) throws Exception {
 			return b;
 		}
-		
 		@RestMethod(name=PUT, path="/StringTransform")
 		public Reader d04(@Body D04 b) throws Exception {
 			return new StringReader(b.toString());
@@ -506,7 +477,6 @@ public class BodyAnnotationTest {
 			public D04(String in) throws Exception { this.s = in; }
 			@Override public String toString() { return s; }
 		}
-		
 		@RestMethod(name=PUT, path="/InputStreamTransform")
 		public Reader d05(@Body D05 b) throws Exception {
 			return new StringReader(b.toString());
@@ -516,7 +486,6 @@ public class BodyAnnotationTest {
 			public D05(InputStream in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		
 		@RestMethod(name=PUT, path="/ReaderTransform")
 		public Reader d06(@Body D06 b) throws Exception {
 			return new StringReader(b.toString());
@@ -526,7 +495,6 @@ public class BodyAnnotationTest {
 			public D06(Reader in) throws Exception{ this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		
 		@RestMethod(name=PUT, path="/StringTransformBodyOnPojo")
 		public Reader d07(D07 b) throws Exception {
 			return new StringReader(b.toString());
@@ -537,7 +505,6 @@ public class BodyAnnotationTest {
 			public D07(String in) throws Exception { this.s = in; }
 			@Override public String toString() { return s; }
 		}
-		
 		@RestMethod(name=PUT, path="/InputStreamTransformBodyOnPojo")
 		public Reader d08(D08 b) throws Exception {
 			return new StringReader(b.toString());
@@ -560,7 +527,6 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	
 	private static MockRest d = MockRest.create(D.class);
 	
 	@Test
@@ -643,18 +609,15 @@ public class BodyAnnotationTest {
 	
 	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
 	public static class E {
-	
 		@RestMethod(name=PUT, path="/B")
 		public DTOs.B testPojo1(@Body DTOs.B b) {
 			return b;
 		}
-	
 		@RestMethod(name=PUT, path="/C")
 		public DTOs.C testPojo2(@Body DTOs.C c) {
 			return c;
 		}
 	}
-	
 	private static MockRest e = MockRest.create(E.class);
 	
 	@Test
@@ -676,5 +639,34 @@ public class BodyAnnotationTest {
 	public void e04_complexPojos_C_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e.request("PUT", "/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE)).body("a").execute().assertBody(expected);
+	}
+	
+	
+	//====================================================================================================
+	// Form POSTS with @Body parameter
+	//====================================================================================================
+	
+	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
+	public static class F {
+		@RestMethod(name=POST, path="/*")
+		public Reader formPostAsContent(
+				@Body F01 bean,
+				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
+				@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
+			return new StringReader("bean=["+JsonSerializer.DEFAULT_LAX.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
+		}
+		public static class F01 {
+			public String p1;
+			public int p2;
+		}
+	}
+	static MockRest f = MockRest.create(F.class);
+
+	@Test
+	public void f01_formPostAsContent() throws Exception {
+		f.request("POST", "/").body("{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+		f.request("POST", "/").body("{}").json().execute().assertBody("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+		f.request("POST", "?p1=p3&p2=4").body("{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+		f.request("POST", "?p1=p3&p2=4").body("{}").json().execute().assertBody("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 	}
 }

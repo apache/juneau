@@ -19,12 +19,10 @@ import java.io.*;
 import java.util.*;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
@@ -49,92 +47,6 @@ import org.apache.juneau.utils.*;
 )
 public class ParamsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
-
-	//====================================================================================================
-	// Basic tests
-	//====================================================================================================
-	@RestMethod(name=GET, path="/")
-	public void doGet(RestResponse res) {
-		res.setOutput(GET);
-	}
-
-	@RestMethod(name=GET, path="/get1")
-	public String doGet1() {
-		return "GET /get1";
-	}
-
-	@RestMethod(name=GET, path="/get1/{foo}")
-	public void doGet1a(RestResponse res, @Path("foo") String foo) {
-		res.setOutput("GET /get1a " + foo);
-	}
-
-	@RestMethod(name=GET, path="/get1/{foo}/{bar}")
-	public void doGet1b(RestResponse res, @Path("foo") String foo, @Path("bar") String bar) {
-		res.setOutput("GET /get1b " + foo + "," + bar);
-	}
-
-	@RestMethod(name=GET, path="/get3/{foo}/{bar}/*")
-	public void doGet3(HttpServletRequest reqx, HttpServletResponse resx, @Path("foo") String foo, @Path("bar") int bar) {
-		RestRequest req = (RestRequest)reqx;
-		RestResponse res = (RestResponse)resx;
-		res.setOutput("GET /get3/"+foo+"/"+bar+" remainder="+req.getPathMatch().getRemainder());
-	}
-
-	// Test method name with overlapping name, remainder allowed.
-	@RestMethod(name="GET2")
-	public void get2(RestRequest req, RestResponse res) {
-		res.setOutput("GET2 remainder="+req.getPathMatch().getRemainder());
-	}
-
-	// Default POST
-	@RestMethod(name=POST)
-	public void doPost(RestRequest req, RestResponse res) {
-		res.setOutput("POST remainder="+req.getPathMatch().getRemainder());
-	}
-
-	// Bean parameter
-	@RestMethod(name=POST, path="/person/{person}")
-	public void doPost(RestRequest req, RestResponse res, @Path("person") Person p) {
-		res.setOutput("POST /person/{name="+p.name+",birthDate.year="+p.birthDate.get(Calendar.YEAR)+"} remainder="+req.getPathMatch().getRemainder());
-	}
-
-	// Various primitive types
-	@RestMethod(name=PUT, path="/primitives/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-	public void doPut1(
-			RestResponse res, 
-			@Path("xInt") int xInt, 
-			@Path("xShort") short xShort, 
-			@Path("xLong") long xLong, 
-			@Path("xChar") char xChar, 
-			@Path("xFloat") float xFloat, 
-			@Path("xDouble") double xDouble, 
-			@Path("xByte") byte xByte, 
-			@Path("xBoolean") boolean xBoolean
-		) {
-		res.setOutput("PUT /primitives/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-	}
-
-	// Various primitive objects
-	@RestMethod(name=PUT, path="/primitiveObjects/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-	public void doPut2(
-			RestResponse res, 
-			@Path("xInt") Integer xInt, 
-			@Path("xShort") Short xShort, 
-			@Path("xLong") Long xLong, 
-			@Path("xChar") Character xChar, 
-			@Path("xFloat") Float xFloat, 
-			@Path("xDouble") Double xDouble, 
-			@Path("xByte") Byte xByte, 
-			@Path("xBoolean") Boolean xBoolean
-		) {
-		res.setOutput("PUT /primitiveObjects/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-	}
-
-	// Object with forString(String) method
-	@RestMethod(name=PUT, path="/uuid/{uuid}")
-	public void doPut1(RestResponse res, @Path("uuid") UUID uuid) {
-		res.setOutput("PUT /uuid/"+uuid);
-	}
 
 	//====================================================================================================
 	// @FormData annotation - GET
@@ -242,21 +154,6 @@ public class ParamsResource extends BasicRestServlet {
 	public String testHasQParamPost_post(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 		RequestQuery q = req.getQuery();
 		return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";
-	}
-
-	//====================================================================================================
-	// Form POSTS with @Body parameter
-	//====================================================================================================
-	@RestMethod(name=POST, path="/testFormPostAsContent/*")
-	public String testFormPostAsContent(@Body Test6Bean bean,
-			@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
-			@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
-		return "bean=["+JsonSerializer.DEFAULT_LAX.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]";
-	}
-
-	public static class Test6Bean {
-		public String p1;
-		public int p2;
 	}
 
 	//====================================================================================================

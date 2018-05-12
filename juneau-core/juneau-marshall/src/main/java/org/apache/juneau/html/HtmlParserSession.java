@@ -135,7 +135,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
 			else if (sType.isChar())
-				o = text.charAt(0);
+				o = parseCharacter(text);
 			else if (sType.isBoolean())
 				o = Boolean.parseBoolean(text);
 			else if (sType.isNumber())
@@ -153,7 +153,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
 			else if (sType.isChar())
-				o = text.charAt(0);
+				o = parseCharacter(text);
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
 			else if (sType.canCreateNewInstanceFromNumber(outer))

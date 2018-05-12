@@ -148,7 +148,7 @@ public final class YamlParserSession extends ReaderParserSession {
 			} else if (c == '\'' || c == '"') {
 				o = parseString(r);
 				if (sType.isChar())
-					o = o.toString().charAt(0);
+					o = parseCharacter(o);
 			} else if (c >= '0' && c <= '9' || c == '-' || c == '.') {
 				o = parseNumber(r, null);
 			} else if (c == 't') {
@@ -163,7 +163,7 @@ public final class YamlParserSession extends ReaderParserSession {
 		} else if (sType.isCharSequence()) {
 			o = parseString(r);
 		} else if (sType.isChar()) {
-			o = parseString(r).charAt(0);
+			o = parseCharacter(parseString(r));
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {

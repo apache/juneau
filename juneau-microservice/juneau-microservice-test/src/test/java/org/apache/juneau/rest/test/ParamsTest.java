@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.microservice.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -30,147 +28,8 @@ import org.junit.*;
 public class ParamsTest extends RestTestcase {
 
 	private static String URL = "/testParams";
-	private static boolean debug = false;
 
 	private static RestClient CLIENT = TestMicroservice.DEFAULT_CLIENT;
-
-	//====================================================================================================
-	// Basic tests
-	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT;
-		RestCall r;
-
-		//		@Override
-		//		@RestMethod(name=GET,pattern="/")
-		//		public void doGet(RestRequest req, RestResponse res) {
-		//			res.setOutput("No args");
-		//		}
-		r = client.doGet(URL);
-		assertEquals("GET", r.getResponse(String.class));
-
-		r = client.doGet(URL + "/getx?noTrace=true");
-		try {
-			r.connect();
-			fail("Connection should have failed.");
-		} catch (RestCallException e) {
-			checkErrorResponse(debug, e, SC_NOT_FOUND, "Method 'GET' not found on resource with matching pattern on path '/getx'");
-		}
-
-		//	@RestMethod(name=GET,pattern="/get1")
-		//	public void doGet1(RestRequest req, RestResponse res) {
-		//		res.setOutput("/get1");
-		//	}
-		r = client.doGet(URL + "/get1");
-		assertEquals("GET /get1", r.getResponse(String.class));
-
-		r = client.doGet(URL + "/get1a?noTrace=true");
-		try {
-			r.connect();
-			fail("Connection should have failed.");
-		} catch (RestCallException e) {
-			checkErrorResponse(debug, e, SC_NOT_FOUND, "Method 'GET' not found on resource with matching pattern on path '/get1a'");
-		}
-
-		//	@RestMethod(name=GET,pattern="/get1/{foo}")
-		//	public void doGet(RestRequest req, RestResponse res, String foo) {
-		//		res.setOutput("/get1/" + foo);
-		//	}
-		r = client.doGet(URL + "/get1/foo");
-		assertEquals("GET /get1a foo", r.getResponse(String.class));
-
-		// URL-encoded part should not get decoded before finding method to invoke.
-		// This should match /get1/{foo} and not /get1/{foo}/{bar}
-		// NOTE:  When testing on Tomcat, must specify the following system property:
-		// -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
-		String x = "x%2Fy";  // [x/y]
-		r = client.doGet(URL + "/get1/"+x);
-		assertEquals("GET /get1a x/y", r.getResponse(String.class));
-
-		r = client.doGet(URL + "/get1/"+x+"/"+x);
-		assertEquals("GET /get1b x/y,x/y", r.getResponse(String.class));
-
-		r = client.doGet(URL + "/get1/foo");
-		assertEquals("GET /get1a foo", r.getResponse(String.class));
-
-		r = client.doGet(URL + "/get1/foo/bar/baz?noTrace=true");
-		try {
-			r.connect();
-			fail("Connection should have failed.");
-		} catch (RestCallException e) {
-			checkErrorResponse(debug, e, SC_NOT_FOUND, "Method 'GET' not found on resource with matching pattern on path '/get1/foo/bar/baz'");
-		}
-
-		//	@RestMethod(name=GET,pattern="/get3/{foo}/{bar}/*")
-		//	public void doGet3(RestRequest req, RestResponse res, String foo, int bar) {
-		//		res.setOutput("/get3/"+foo+"/"+bar+", remainder="+req.getRemainder());
-		//	}
-		r = client.doGet(URL + "/get3/foo/123");
-		assertEquals("GET /get3/foo/123 remainder=null", r.getResponse(String.class));
-
-		r = client.doGet(URL + "/get3/foo/123/xxx");
-		assertEquals("GET /get3/foo/123 remainder=xxx", r.getResponse(String.class));
-
-		//	// Test method name with overlapping name, remainder allowed.
-		//	@RestMethod(name="GET2")
-		//	public void get2(RestRequest req, RestResponse res) {
-		//		res.setOutput("GET2, remainder="+req.getRemainder());
-		//	}
-		r = client.doGet(URL + "?method=get2");
-		assertEquals("GET2 remainder=null", r.getResponse(String.class));
-		r = client.doGet(URL + "/foo/bar?method=get2");
-		assertEquals("GET2 remainder=foo/bar", r.getResponse(String.class));
-		r = client.doGet(URL + "/foo/bar?method=GET2");
-		assertEquals("GET2 remainder=foo/bar", r.getResponse(String.class));
-
-		//	// Default POST
-		//	@Override
-		//	public void doPost(RestRequest req, RestResponse res) {
-		//		res.setOutput("POST, remainder="+req.getRemainder());
-		//	}
-		r = client.doPost(URL, "");
-		assertEquals("POST remainder=null", r.getResponse(String.class));
-		r = client.doPost(URL + "/foo", "");
-		assertEquals("POST remainder=foo", r.getResponse(String.class));
-
-		//	// Bunch of different argument types
-		//	@RestMethod(name=POST,pattern="/person/{person}")
-		//	public void doPost(RestRequest req, RestResponse res, Person p) {
-		//		res.setOutput("POST, /person, name="+p.name+", age="+p.age+" remainder="+req.getRemainder());
-		//	}
-		r = client.doPost(URL + "/person/(name='John+Smith',birthDate='Jan+12,+1952')", "");
-		assertEquals("POST /person/{name=John Smith,birthDate.year=1952} remainder=null", r.getResponse(String.class));
-
-		// Fall through to top-level POST
-		r = client.doPost(URL + "/person/(name:'John+Smith',age:123)/foo", "");
-		assertEquals("POST remainder=person/(name:'John Smith',age:123)/foo", r.getResponse(String.class));
-
-		//	// Various primitive types
-		//	@RestMethod(name=PUT,pattern="/primitives/{xInt}.{xShort},{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-		//	public void doPut1(RestRequest req, RestResponse res, int xInt, short xShort, long xLong, char xChar, float xFloat, double xDouble, byte xByte, boolean xBoolean) {
-		//		res.setOutput("PUT, /primitives/"+xInt+"."+xShort+","+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-		//	}
-		r = client.doPut(URL + "/primitives/1/2/3/x/4/5/6/true", "");
-		assertEquals("PUT /primitives/1/2/3/x/4.0/5.0/6/true", r.getResponse(String.class));
-
-		//	// Various primitive objects
-		//	@RestMethod(name=PUT,pattern="/primitiveObjects/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-		//	public void doPut1(RestRequest req, RestResponse res, Integer xInt, Short xShort, Long xLong, Character xChar, Float xFloat, Double xDouble, Byte xByte, Boolean xBoolean) {
-		//		res.setOutput("PUT /primitives/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-		//	}
-		r = client.doPut(URL + "/primitiveObjects/1/2/3/x/4/5/6/true", "");
-		assertEquals("PUT /primitiveObjects/1/2/3/x/4.0/5.0/6/true", r.getResponse(String.class));
-
-		//	// Object with forString(String) method
-		//	@RestMethod(name=PUT,pattern="/uuid/{uuid}")
-		//	public void doPut1(RestRequest req, RestResponse res, UUID uuid) {
-		//		res.setOutput("PUT /uuid/"+uuid);
-		//	}
-		UUID uuid = UUID.randomUUID();
-		r = client.doPut(URL + "/uuid/"+uuid, "");
-		assertEquals("PUT /uuid/"+uuid, r.getResponse(String.class));
-	}
 
 	//====================================================================================================
 	// @FormData annotation - GET
@@ -526,29 +385,6 @@ public class ParamsTest extends RestTestcase {
 		client.closeQuietly();
 	}
 
-	//====================================================================================================
-	// Form POSTS with @Body parameter
-	//====================================================================================================
-	@Test
-	public void testFormPostAsContent() throws Exception {
-		RestClient client = TestMicroservice.client().accept("text/plain").build();
-		String r;
-		String url = URL + "/testFormPostAsContent";
-
-		r = client.doFormPost(url, new ObjectMap("{p1:'p1',p2:2}")).getResponseAsString();
-		assertEquals("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]", r);
-
-		r = client.doFormPost(url, new ObjectMap("{}")).getResponseAsString();
-		assertEquals("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]", r);
-
-		r = client.doFormPost(url+"?p1=p3&p2=4", new ObjectMap("{p1:'p1',p2:2}")).getResponseAsString();
-		assertEquals("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]", r);
-
-		r = client.doFormPost(url+"?p1=p3&p2=4", new ObjectMap("{}")).getResponseAsString();
-		assertEquals("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]", r);
-
-		client.closeQuietly();
-	}
 
 	//====================================================================================================
 	// Test @FormData and @Query annotations when using multi-part parameters (e.g. &key=val1,&key=val2).

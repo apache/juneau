@@ -13,6 +13,9 @@
 package org.apache.juneau.internal;
 
 import java.util.concurrent.*;
+
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -27,7 +30,7 @@ public class TransformCache {
 	 */
 	public static final Transform<Object,Object> NULL = new Transform<Object,Object>() {
 		@Override
-		public Object transform(Object in) {
+		public Object transform(Object outer, Object in) {
 			return null;
 		}
 	};
@@ -38,14 +41,14 @@ public class TransformCache {
 		// TimeZone doesn't follow any standard conventions.
 		add(String.class, TimeZone.class,
 			new Transform<String,TimeZone>() {
-				@Override public TimeZone transform(String in) {
+				@Override public TimeZone transform(Object outer, String in) {
 					return TimeZone.getTimeZone(in);
 				}
 			}
 		);
 		add(TimeZone.class, String.class, 
 			new Transform<TimeZone,String>() {
-				@Override public String transform(TimeZone in) {
+				@Override public String transform(Object outer, TimeZone in) {
 					return in.getID();
 				}
 			}
@@ -55,7 +58,7 @@ public class TransformCache {
 		add(String.class, Locale.class,
 			new Transform<String,Locale>() {
 				@Override
-				public Locale transform(String in) {
+				public Locale transform(Object outer, String in) {
 					return Locale.forLanguageTag(in.replace('_', '-'));
 				}
 			}
@@ -113,7 +116,7 @@ public class TransformCache {
 		
 		if (ic == oc) {
 			t = new Transform<I,O>() {
-				@Override public O transform(I in) {
+				@Override public O transform(Object outer, I in) {
 					return (O)in;
 				}
 			};
@@ -121,7 +124,7 @@ public class TransformCache {
 			if (oc.isEnum()) {
 				t = new Transform<String,O>() {
 					@Override
-					public O transform(String in) {
+					public O transform(Object outer, String in) {
 						return (O)Enum.valueOf((Class<? extends Enum>)oc, in);
 					}
 				};
@@ -130,7 +133,7 @@ public class TransformCache {
 				if (fromStringMethod != null) {
 					t = new Transform<String,O>() {
 						@Override
-						public O transform(String in) {
+						public O transform(Object outer, String in) {
 							try {
 								return (O)fromStringMethod.invoke(null, in);
 							} catch (Exception e) {
@@ -150,7 +153,7 @@ public class TransformCache {
 				final Method cm = createMethod;
 				t = new Transform<I,O>() {
 					@Override
-					public O transform(I in) {
+					public O transform(Object context, I in) {
 						try {
 							return (O)cm.invoke(null, in);
 						} catch (Exception e) {
@@ -160,11 +163,14 @@ public class TransformCache {
 				};
 			} else {
 				final Constructor<?> c = ClassUtils.findPublicConstructor(oc, ic);
+				final boolean isMemberClass = oc.isMemberClass() && ! isStatic(oc);
 				if (c != null && ! ClassUtils.isDeprecated(c)) {
 					t = new Transform<I,O>() {
 						@Override
-						public O transform(I in) {
+						public O transform(Object outer, I in) {
 							try {
+								if (isMemberClass)
+									return (O)c.newInstance(outer, in);
 								return (O)c.newInstance(in);
 							} catch (Exception e) {
 								throw new RuntimeException(e);

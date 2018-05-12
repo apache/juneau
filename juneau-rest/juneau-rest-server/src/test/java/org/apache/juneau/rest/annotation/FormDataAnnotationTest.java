@@ -10,32 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau.rest.annotation;
+
+import org.junit.*;
+import org.junit.runners.*;
 
 /**
- * An interface for creating objects from other objects such as a <code>String</code> or <code>Reader</code>.
- * 
- * @param <I> Input type.
- * @param <O> Output type.
+ * Tests related to @FormData annotation.
  */
-public abstract class Transform<I,O> {
-	
-	/**
-	 * Method for instantiating an object from another object.
-	 * 
-	 * @param in The input object.
-	 * @return The output object.
-	 */
-	public O transform(I in) {
-		return transform(null, in);
-	}
-
-	/**
-	 * Method for instantiating an object from another object.
-	 * 
-	 * @param outer The context object. 
-	 * @param in The input object.
-	 * @return The output object.
-	 */
-	public abstract O transform(Object outer, I in);
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class FormDataAnnotationTest {
 }

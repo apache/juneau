@@ -423,8 +423,7 @@ public class BeanSession extends Session {
 						}
 					}
 				} else if (type.isChar()) {
-					String s = value.toString();
-					return (T)Character.valueOf(s.length() == 0 ? 0 : s.charAt(0));
+					return (T)parseCharacter(value);
 				} else if (type.isBoolean()) {
 					if (value instanceof Number) {
 						int i = ((Number)value).intValue();
@@ -495,9 +494,9 @@ public class BeanSession extends Session {
 				}
 			}
 
-			if (type.isChar()) {
+			if (type.isChar() && value.toString().length() == 1) {
 				String s = value.toString();
-				return (T)Character.valueOf(s.length() == 0 ? 0 : s.charAt(0));
+				return (T)Character.valueOf(s.charAt(0));
 			}
 
 			// Handle setting of array properties

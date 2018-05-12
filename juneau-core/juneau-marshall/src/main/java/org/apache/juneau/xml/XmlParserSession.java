@@ -334,7 +334,7 @@ public class XmlParserSession extends ReaderParserSession {
 			else if (jsonType == STRING) {
 				o = getElementText(r);
 				if (sType.isChar())
-					o = o.toString().charAt(0);
+					o = parseCharacter(o);
 			}
 			else if (jsonType == NUMBER)
 				o = parseNumber(getElementText(r), null);
@@ -347,8 +347,7 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.isCharSequence()) {
 			o = getElementText(r);
 		} else if (sType.isChar()) {
-			String s = getElementText(r);
-			o = s.length() == 0 ? 0 : s.charAt(0);
+			o = parseCharacter(getElementText(r));
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(this));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);

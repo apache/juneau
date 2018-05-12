@@ -15,6 +15,7 @@ package org.apache.juneau.rest.response;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
@@ -48,6 +49,7 @@ public class DefaultHandler implements ResponseHandler {
 		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
+		
 		if (sm != null) {
 			Serializer s = sm.getSerializer();
 			MediaType mediaType = res.getMediaType();
@@ -95,6 +97,16 @@ public class DefaultHandler implements ResponseHandler {
 			} catch (SerializeException e) {
 				throw new InternalServerError(e);
 			}
+		
+		// Non-existent Accept or plain/text can just be serialized as-is.
+		} else if ("".equals(accept) || "plain/text".equals(accept)) {
+			FinishablePrintWriter w = res.getNegotiatedWriter();
+			ClassMeta<?> cm = req.getBeanSession().getClassMetaForObject(output);
+			if (cm != null) 
+				w.append(cm.toString(output));
+			w.flush();
+			w.finish();
+		
 		} else {
 			throw new NotAcceptable(
 				"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",

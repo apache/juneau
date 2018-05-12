@@ -1277,8 +1277,12 @@ public final class ClassUtils {
 			return (Constructor<T>)bestMatch;
 		} 
 		
+		final boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
 		for (Constructor<?> n : c.getConstructors()) {
-			if (argsMatch(n.getParameterTypes(), argTypes) && vis.isVisible(n)) {
+			Class<?>[] paramTypes = n.getParameterTypes();
+			if (isMemberClass)
+				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
+			if (argsMatch(paramTypes, argTypes) && vis.isVisible(n)) {
 				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
 				return (Constructor<T>)n;
 			}

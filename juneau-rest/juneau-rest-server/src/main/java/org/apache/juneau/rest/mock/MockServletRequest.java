@@ -187,7 +187,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest uri(String uri) {
-		this.uri = uri;
+		this.uri = emptyIfNull(uri);
 		return this;
 	}
 	

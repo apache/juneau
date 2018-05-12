@@ -10,32 +10,45 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau.rest.annotation;
+
+import static org.apache.juneau.http.HttpMethodName.*;
+
+import org.apache.juneau.rest.mock.*;
+import org.junit.*;
+import org.junit.runners.*;
 
 /**
- * An interface for creating objects from other objects such as a <code>String</code> or <code>Reader</code>.
- * 
- * @param <I> Input type.
- * @param <O> Output type.
+ * Tests related to @PathREmainder annotation.
  */
-public abstract class Transform<I,O> {
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class PathRemainderAnnotationTest {
 	
-	/**
-	 * Method for instantiating an object from another object.
-	 * 
-	 * @param in The input object.
-	 * @return The output object.
-	 */
-	public O transform(I in) {
-		return transform(null, in);
-	}
+	//=================================================================================================================
+	// Simple tests
+	//=================================================================================================================
 
-	/**
-	 * Method for instantiating an object from another object.
-	 * 
-	 * @param outer The context object. 
-	 * @param in The input object.
-	 * @return The output object.
-	 */
-	public abstract O transform(Object outer, I in);
+	@RestResource
+	public static class A  {
+		@RestMethod(name=GET, path="/*")
+		public String b(@PathRemainder String remainder) {
+			return remainder;
+		}
+	}
+	
+	static MockRest a = MockRest.create(A.class); 
+	
+	@Test
+	public void a01_withoutRemainder() throws Exception {
+		a.request("GET", "/").execute().assertBody("");
+	}
+	@Test
+	public void a02_withRemainder() throws Exception {
+		a.request("GET", "/foo").execute().assertBody("foo");
+	}
+	@Test
+	public void a03_withRemainder2() throws Exception {
+		a.request("GET", "/foo/bar").execute().assertBody("foo/bar");
+	}
 }

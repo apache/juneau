@@ -211,7 +211,25 @@ public final class StringUtils {
 	private static final Pattern fpRegex = Pattern.compile(
 		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"
 	);
-
+	
+	/**
+	 * Converts a <code>String</code> to a <code>Character</code>
+	 * 
+	 * @param o The string to convert.
+	 * @return The first character of the string if the string is of length 0, or <jk>null</jk> if the string is <jk>null</jk> or empty.
+	 * @throws ParseException If string has a length greater than 1.
+	 */
+	public static Character parseCharacter(Object o) throws ParseException {
+		if (o == null)
+			return null;
+		String s = o.toString();
+		if (s.length() == 0)
+			return null;
+		if (s.length() == 1)
+			return s.charAt(0);
+		throw new ParseException("Invalid character: ''{0}''", s);
+	}
+	
 	/**
 	 * Returns <jk>true</jk> if this string can be parsed by {@link #parseNumber(String, Class)}.
 	 * 

@@ -301,7 +301,7 @@ public class RdfParserSession extends ReaderParserSession {
 		} else if (sType.isCharSequence()) {
 			o = decodeString(getValue(n, outer));
 		} else if (sType.isChar()) {
-			o = decodeString(getValue(n, outer)).charAt(0);
+			o = parseCharacter(decodeString(getValue(n, outer)));
 		} else if (sType.isNumber()) {
 			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {

@@ -12,37 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
-import java.io.*;
-
-import org.apache.juneau.rest.mock.*;
 import org.junit.*;
+import org.junit.runners.*;
 
 /**
- * Validates that the correct status codes are returned on REST requests.
+ * Tests related to @Query annotation.
  */
-@SuppressWarnings("javadoc")
-public class StatusCodesTest {
-
-	//=================================================================================================================
-	// OK
-	//=================================================================================================================
-	
-	@RestResource
-	public static class A {
-		@RestMethod(name=PUT)
-		public Reader a01(@Body String b) {
-			return new StringReader(b);
-		}
-	}
-	
-	private static MockRest a = MockRest.create(A.class);
-	
-	@Test
-	public void a01a_OK() throws Exception {
-		a.request("PUT", "/").body("foo").execute().assertStatus(200);
-	}
-	
-	// TODO - Test all the status codes
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class QueryAnnotationTest {
 }

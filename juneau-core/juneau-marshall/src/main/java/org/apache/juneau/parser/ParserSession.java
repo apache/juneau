@@ -693,7 +693,7 @@ public abstract class ParserSession extends BeanSession {
 
 		Object o = s;
 		if (sType.isChar())
-			o = s.charAt(0);
+			o = parseCharacter(s);
 		else if (sType.isNumber())
 			if (type.canCreateNewInstanceFromNumber(outer))
 				o = type.newInstanceFromNumber(this, outer, parseNumber(s, type.getNewInstanceFromNumberClass()));
