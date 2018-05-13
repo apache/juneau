@@ -55,7 +55,7 @@ public class MockRest {
 	
 	private MockRest(Class<?> c) throws Exception {
 		if (! CONTEXTS.containsKey(c))
-			CONTEXTS.put(c, RestContext.create(c.newInstance()).build());
+			CONTEXTS.put(c, RestContext.create(c.newInstance()).build().postInit().postInitChildFirst());
 		rc = CONTEXTS.get(c);
 	}
 	

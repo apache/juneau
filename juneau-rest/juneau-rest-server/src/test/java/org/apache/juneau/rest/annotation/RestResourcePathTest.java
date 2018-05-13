@@ -10,41 +10,57 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.rest.mock.*;
+import org.junit.*;
+import org.junit.runners.*;
 
 /**
- * JUnit automated testcase resource.
- * Tests the <code>@RestMethod.path()</code> annotation.
+ * Tests that validate the behavior of @RestResource(path).
  */
-@RestResource(
-	path="/testPathVariables"
-)
-public class PathVariablesResource extends BasicRestServlet {
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class RestResourcePathTest {
 
-	@RestMethod(name=GET, path="/test1/{x}/foo/{y}/bar/{z}/*")
-	public StringMessage test1(@Path("x") String x, @Path("y") int y, @Path("z") boolean z) {
-		return new StringMessage("x={0},y={1},z={2}", x, y, z);
+	//====================================================================================================
+	// Nested children.
+	//====================================================================================================
+
+	@RestResource(path="/p0", children={A01.class})
+	public static class A  {
+		@RestMethod(name=GET, path="/")
+		public String doGet(RestContext c) {
+			return "A-" + c.getPath();
+		}
 	}
-
-	@RestMethod(name=GET, path="/test2/{z}/foo/{y}/bar/{x}/*")
-	public StringMessage test2(@Path("x") String x, @Path("y") int y, @Path("z") boolean z) {
-		return new StringMessage("x={0},y={1},z={2}", x, y, z);
+	@RestResource(path="/p1", children={A02.class})
+	public static class A01 {
+		@RestMethod(name=GET, path="/")
+		public String doGet(RestContext c) {
+			return "A01-" + c.getPath();
+		}
 	}
-
-	@RestMethod(name=GET, path="/test3/{0}/foo/{1}/bar/{2}/*")
-	public StringMessage test3(@Path("0") String x, @Path("1") int y, @Path("2") boolean z) {
-		return new StringMessage("x={0},y={1},z={2}", x, y, z);
+	public static class A02a  {
+		@RestMethod(name=GET, path="/")
+		public String doGet(RestContext c) {
+			return "A02a-" + c.getPath();
+		}
 	}
+	@RestResource(path="/p2")
+	public static class A02 extends A02a {}
 
-	@RestMethod(name=GET, path="/test4/{2}/foo/{1}/bar/{0}/*")
-	public StringMessage test4(@Path("0") String x, @Path("1") int y, @Path("2") boolean z) {
-		return new StringMessage("x={0},y={1},z={2}", x, y, z);
+	static MockRest a = MockRest.create(A.class);
+	
+	@Test
+	public void a01_nestedChildren() throws Exception {
+		// Since we're not running from a servlet container, we access A directly with no path.
+		// However, the path is still reflected in RestContext.getPath().
+		a.request("GET", "/").execute().assertBody("A-p0");
+		a.request("GET", "/p1").execute().assertBody("A01-p0/p1");
+		a.request("GET", "/p1/p2").execute().assertBody("A02a-p0/p1/p2");
 	}
 }

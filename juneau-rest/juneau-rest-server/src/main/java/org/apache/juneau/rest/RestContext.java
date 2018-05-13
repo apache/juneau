@@ -4435,24 +4435,32 @@ public final class RestContext extends BeanContext {
 		}
 	}
 
-	/*
-	 * Calls all @RestHook(POST_INIT) methods.
+	/**
+	 * Calls all @RestHook(POST_INIT) methods in parent-to-child order.
+	 * 
+	 * @return This object (for method chaining). 
+	 * @throws ServletException 
 	 */
-	void postInit() throws ServletException {
+	public RestContext postInit() throws ServletException {
 		for (int i = 0; i < postInitMethods.length; i++)
 			postInitOrDestroy(resource, postInitMethods[i], postInitMethodParams[i]);
 		for (RestContext childContext : this.childResources.values())
 			childContext.postInit();
+		return this;
 	}
 
-	/*
-	 * Calls all @RestHook(POST_INIT_CHILD_FIRST) methods.
+	/**
+	 * Calls all @RestHook(POST_INIT_CHILD_FIRST) methods in child-to-parent order.
+	 * 
+	 * @return This object (for method chaining). 
+	 * @throws ServletException 
 	 */
-	void postInitChildFirst() throws ServletException {
+	public RestContext postInitChildFirst() throws ServletException {
 		for (RestContext childContext : this.childResources.values())
 			childContext.postInitChildFirst();
 		for (int i = 0; i < postInitChildFirstMethods.length; i++)
 			postInitOrDestroy(resource, postInitChildFirstMethods[i], postInitChildFirstMethodParams[i]);
+		return this;
 	}
 
 	private void postInitOrDestroy(Object r, Method m, Class<?>[] p) {
