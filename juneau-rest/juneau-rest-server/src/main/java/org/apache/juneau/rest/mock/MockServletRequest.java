@@ -264,8 +264,8 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param value Header value.
 	 * @return This object (for method chaining).
 	 */
-	public MockServletRequest header(String name, String value) {
-		this.headerMap.put(name, new String[] {value});
+	public MockServletRequest header(String name, Object value) {
+		this.headerMap.put(name, new String[] {asString(value)});
 		return this;
 	}
 	
@@ -996,76 +996,10 @@ public class MockServletRequest implements HttpServletRequest {
 		return null;
 	}
 
-	/**
-	 * Specifies the <code>Content-Type</code> header value on the request.
-	 * 
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest contentType(String value) {
-		return header("Content-Type", value);
-	}
-
-	/**
-	 * Specifies the <code>Accept</code> header value on the request.
-	 * 
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest accept(String value) {
-		return header("Accept", value);
-	}
-
-	/**
-	 * Specifies the <code>Accept-Language</code> header value on the request.
-	 * 
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest acceptLanguage(String value) {
-		return header("Accept-Language", value);
-	}
-
-	/**
-	 * Specifies the <code>Accept-Charset</code> header value on the request.
-	 * 
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest acceptCharset(String value) {
-		return header("Accept-Charset", value);
-	}
-
-	/**
-	 * Specifies the <code>Accept-Encoding</code> header value on the request.
-	 * 
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest acceptEncoding(String value) {
-		return header("Accept-Encoding", value);
-	}
-
-	/**
-	 * Specifies the <code>X-Client-Version</code> header value on the request.
-	 * 
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest clientVersion(String value) {
-		return header("X-Client-Version", value);
-	}
-
-	/**
-	 * Specifies the <code>Content-Encoding</code> header value on the request.
-	 * 
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest contentEncoding(String value) {
-		return header("Content-Encoding", value);
-	}
-
+	//=================================================================================================================
+	// Convenience methods - query and form data
+	//=================================================================================================================
+	
 	/**
 	 * Adds a form data entry to this request.
 	 * 
@@ -1104,5 +1038,299 @@ public class MockServletRequest implements HttpServletRequest {
 			existing = new AList<>().appendAll(Arrays.asList(existing)).append(s).toArray(new String[0]);
 		queryData.put(key, existing);
 		return this;
+	}
+
+	//=================================================================================================================
+	// Convenience methods - headers
+	//=================================================================================================================
+	
+	/**
+	 * Specifies the <code>Accept</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest accept(Object value) {
+		return header("Accept", value);
+	}
+
+	/**
+	 * Specifies the <code>Accept-Charset</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest acceptCharset(Object value) {
+		return header("Accept-Charset", value);
+	}
+
+	/**
+	 * Specifies the <code>Accept-Encoding</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest acceptEncoding(Object value) {
+		return header("Accept-Encoding", value);
+	}
+
+	/**
+	 * Specifies the <code>Accept-Language</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest acceptLanguage(Object value) {
+		return header("Accept-Language", value);
+	}
+
+	/**
+	 * Specifies the <code>Authorization</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest authorization(Object value) {
+		return header("Authorization", value);
+	}
+
+	/**
+	 * Specifies the <code>Cache-Control</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest cacheControl(Object value) {
+		return header("Cache-Control", value);
+	}
+
+	/**
+	 * Specifies the <code>X-Client-Version</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest clientVersion(Object value) {
+		return header("X-Client-Version", value);
+	}
+
+	/**
+	 * Specifies the <code>Connection</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest connection(Object value) {
+		return header("Connection", value);
+	}
+
+	/**
+	 * Specifies the <code>Content-Encoding</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest contentEncoding(Object value) {
+		return header("Content-Encoding", value);
+	}
+
+	/**
+	 * Specifies the <code>Content-Length</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest contentLength(Object value) {
+		return header("Content-Length", value);
+	}
+
+	/**
+	 * Specifies the <code>Content-Type</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest contentType(Object value) {
+		return header("Content-Type", value);
+	}
+
+	/**
+	 * Specifies the <code>Date</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest date(Object value) {
+		return header("Date", value);
+	}
+
+	/**
+	 * Specifies the <code>Expect</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest expect(Object value) {
+		return header("Expect", value);
+	}
+
+	/**
+	 * Specifies the <code>From</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest from(Object value) {
+		return header("From", value);
+	}
+
+	/**
+	 * Specifies the <code>Host</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest host(Object value) {
+		return header("Host", value);
+	}
+
+	/**
+	 * Specifies the <code>If-Match</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest ifMatch(Object value) {
+		return header("If-Match", value);
+	}
+
+	/**
+	 * Specifies the <code>If-Modified-Since</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest ifModifiedSince(Object value) {
+		return header("If-Modified-Since", value);
+	}
+
+	/**
+	 * Specifies the <code>If-None-Match</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest ifNoneMatch(Object value) {
+		return header("If-None-Match", value);
+	}
+
+	/**
+	 * Specifies the <code>If-Range</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest ifRange(Object value) {
+		return header("If-Range", value);
+	}
+
+	/**
+	 * Specifies the <code>If-Unmodified-Since</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest ifUnmodifiedSince(Object value) {
+		return header("If-Unmodified-Since", value);
+	}
+
+	/**
+	 * Specifies the <code>Max-Forwards</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest maxForwards(Object value) {
+		return header("Max-Forwards", value);
+	}
+
+	/**
+	 * Specifies the <code>Pragma</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest pragma(Object value) {
+		return header("Pragma", value);
+	}
+
+	/**
+	 * Specifies the <code>Proxy-Authorization</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest proxyAuthorization(Object value) {
+		return header("Proxy-Authorization", value);
+	}
+
+	/**
+	 * Specifies the <code>Range</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest range(Object value) {
+		return header("Range", value);
+	}
+
+	/**
+	 * Specifies the <code>Referer</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest referer(Object value) {
+		return header("Referer", value);
+	}
+
+	/**
+	 * Specifies the <code>TE</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest te(Object value) {
+		return header("TE", value);
+	}
+
+	/**
+	 * Specifies the <code>Upgrade</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest upgrade(Object value) {
+		return header("Upgrade", value);
+	}
+
+	/**
+	 * Specifies the <code>User-Agent</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest userAgent(Object value) {
+		return header("User-Agent", value);
+	}
+
+	/**
+	 * Specifies the <code>Warning</code> header value on the request.
+	 * 
+	 * @param value The new value for the header.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest warning(Object value) {
+		return header("Warning", value);
 	}
 }

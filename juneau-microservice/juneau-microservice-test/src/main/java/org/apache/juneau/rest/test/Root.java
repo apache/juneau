@@ -31,7 +31,6 @@ import org.apache.juneau.rest.test.client.*;
 		ConfigResource.class,
 		TransformsResource.class,
 		FormDataResource.class,
-		HeadersResource.class,
 		HtmlDocResource.class,
 		HtmlDocLinksResource.class,
 		InheritanceResource.TestEncoders.class,
