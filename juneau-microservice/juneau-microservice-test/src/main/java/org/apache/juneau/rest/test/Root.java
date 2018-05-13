@@ -56,7 +56,6 @@ import org.apache.juneau.rest.helper.*;
 		PathsResource.class,
 		PathVariablesResource.class,
 		PropertiesResource.class,
-		QueryResource.class,
 		RequestBeanProxyResource.class,
 		RestClient2Resource.class,
 		RestHooksInitResource.class,

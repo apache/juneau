@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
 public class MockServletRequest implements HttpServletRequest {
 	
 	private String method = "GET";
-	private Map<String,String[]> parameterMap;
+	private Map<String,String[]> queryData;
 	private Map<String,String[]> formDataMap;
 	private Map<String,String[]> headerMap = new LinkedHashMap<>();	
 	private Map<String,Object> attributeMap = new LinkedHashMap<>();
@@ -241,7 +241,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest param(String name, String[] value) {
-		this.parameterMap.put(name, value);
+		this.queryData.put(name, value);
 		return this;
 	}
 	
@@ -253,7 +253,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest param(String name, String value) {
-		this.parameterMap.put(name, new String[] {value});
+		this.queryData.put(name, new String[] {value});
 		return this;
 	}
 
@@ -671,21 +671,21 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public Map<String,String[]> getParameterMap() {
-		if (parameterMap == null) {
+		if (queryData == null) {
 			try {
 				if ("POST".equalsIgnoreCase(method)) {
 					if (formDataMap != null)
-						parameterMap = formDataMap;
+						queryData = formDataMap;
 					else
-						parameterMap = RestUtils.parseQuery(IOUtils.read(body));
+						queryData = RestUtils.parseQuery(IOUtils.read(body));
 				} else {
-					parameterMap = RestUtils.parseQuery(getQueryString());
+					queryData = RestUtils.parseQuery(getQueryString());
 				}
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return parameterMap;
+		return queryData;
 	}
 
 	@Override /* HttpServletRequest */
@@ -1063,6 +1063,26 @@ public class MockServletRequest implements HttpServletRequest {
 		else
 			existing = new AList<>().appendAll(Arrays.asList(existing)).append(s).toArray(new String[0]);
 		formDataMap.put(key, existing);
+		return this;
+	}
+
+	/**
+	 * Adds a query data entry to this request.
+	 * 
+	 * @param key 
+	 * @param value 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest query(String key, Object value) {
+		if (queryData == null)
+			queryData = new LinkedHashMap<>();
+		String s = asString(value);
+		String[] existing = queryData.get(key);
+		if (existing == null)
+			existing = new String[]{s};
+		else
+			existing = new AList<>().appendAll(Arrays.asList(existing)).append(s).toArray(new String[0]);
+		queryData.put(key, existing);
 		return this;
 	}
 }

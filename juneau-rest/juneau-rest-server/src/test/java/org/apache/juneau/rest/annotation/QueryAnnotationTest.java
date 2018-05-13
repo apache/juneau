@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
@@ -176,5 +177,66 @@ public class QueryAnnotationTest {
 	public void c06_ListOfBeans() throws Exception {
 		c.request("GET", "/ListOfBeans?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
 		c.request("GET", "/ListOfBeans?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+	}
+	
+	//====================================================================================================
+	// Default values.
+	//====================================================================================================
+	
+	@RestResource
+	public static class D {
+		@RestMethod(name=GET, path="/defaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+		public ObjectMap d01(RequestQuery query) {
+			return new ObjectMap()
+				.append("f1", query.getString("f1"))
+				.append("f2", query.getString("f2"))
+				.append("f3", query.getString("f3"));
+		}
+		@RestMethod(name=GET, path="/annotatedQuery")
+		public ObjectMap d02(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
+			return new ObjectMap()
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
+		}
+		@RestMethod(name=GET, path="/annotatedQueryDefault")
+		public ObjectMap d03(@Query(value="f1",_default="1") String f1, @Query(value="f2",_default="2") String f2, @Query(value="f3",_default="3") String f3) {
+			return new ObjectMap()
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
+		}
+		@RestMethod(name=GET, path="/annotatedAndDefaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+		public ObjectMap d04(@Query(value="f1",_default="4") String f1, @Query(value="f2",_default="5") String f2, @Query(value="f3",_default="6") String f3) {
+			return new ObjectMap()
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
+		}
+	}
+	static MockRest d = MockRest.create(D.class);
+
+	@Test
+	public void d01_defaultQuery() throws Exception {
+		d.request("GET", "/defaultQuery").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
+		d.request("GET", "/defaultQuery").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+	}
+
+	@Test
+	public void d02_annotatedQuery() throws Exception {
+		d.request("GET", "/annotatedQuery").execute().assertBody("{f1:null,f2:null,f3:null}");
+		d.request("GET", "/annotatedQuery").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+	}
+
+	@Test
+	public void d03_annotatedQueryDefault() throws Exception {
+		d.request("GET", "/annotatedQueryDefault").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
+		d.request("GET", "/annotatedQueryDefault").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+	}
+
+	@Test
+	public void d04_annotatedAndDefaultQuery() throws Exception {
+		d.request("GET", "/annotatedAndDefaultQuery").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.request("GET", "/annotatedAndDefaultQuery").query("f1",7).query("f2",8).query("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
 	}
 }

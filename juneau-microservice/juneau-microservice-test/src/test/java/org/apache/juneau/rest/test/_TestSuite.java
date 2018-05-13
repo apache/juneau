@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import org.apache.juneau.rest.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -49,7 +50,6 @@ import org.junit.runners.Suite.*;
 	PathTest.class,
 	PathVariableTest.class,
 	PropertiesTest.class,
-	QueryTest.class,
 	RequestBeanProxyTest.class,
 	RestClientTest.class,
 	RestUtilsTest.class,

@@ -10,19 +10,25 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.*;
+import org.junit.runners.*;
 
-public class RestUtilsTest extends RestTestcase {
+/**
+ * Tests for the RestUtils class.
+ */
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class RestUtilsTest {
 
 	//====================================================================================================
 	// decode(String)
@@ -230,7 +236,7 @@ public class RestUtilsTest extends RestTestcase {
 
 		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
 		m = parseQuery(s);
-		TestUtils.assertObjectEquals("{f1:null,f2:['abc','def']}", m);
+		assertObjectEquals("{f1:null,f2:['abc','def']}", m);
 	}
 
 	@Test
