@@ -10,34 +10,69 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest;
 
-import static org.junit.Assert.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.serializer.*;
 import org.junit.*;
+import org.junit.runners.*;
 
-public class NlsPropertyTest extends RestTestcase {
-
-	private static String URL = "/testNlsProperty";
+/**
+ * Tests various aspects of localization support.
+ */
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class NlsTest {
 
 	//====================================================================================================
-	// Test getting an NLS property defined on a class.
+	// Test getting an NLS property defined on a class or method.
 	//====================================================================================================
-	@Test
-	public void testInheritedFromClass() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
-		String r = client.doGet(URL + "/testInheritedFromClass").getResponseAsString();
-		assertEquals("value1", r);
+
+	@RestResource(
+		serializers={A01.class},
+		properties={@Property(name="TestProperty",value="$L{key1}")},
+		messages="NlsTest"
+	)
+	public static class A {
+		@RestMethod(name=GET, path="/fromClass")
+		public String a01() {
+			return null;
+		}
+		@RestMethod(name=GET, path="/fromMethod",
+			properties={@Property(name="TestProperty",value="$L{key2}")}
+		)
+		public String a02() {
+			return null;
+		}
+	}
+	static MockRest a = MockRest.create(A.class);
+
+	public static class A01 extends WriterSerializer {
+		public A01(PropertyStore ps) {
+			super(ps, "text/plain", null);
+		}
+		@Override /* Serializer */
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write(getProperty("TestProperty", String.class));
+				}
+			};
+		}
 	}
 
-	//====================================================================================================
-	// Test getting an NLS property defined on a method.
-	//====================================================================================================
 	@Test
-	public void testInheritedFromMethod() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
-		String r = client.doGet(URL + "/testInheritedFromMethod").getResponseAsString();
-		assertEquals("value2", r);
+	public void a01_fromClass() throws Exception {
+		a.request("GET", "/fromClass").execute().assertBody("value1");
+	}
+
+	@Test
+	public void a02_fromMethod() throws Exception {
+		a.request("GET", "/fromMethod").execute().assertBody("value2");
 	}
 }
