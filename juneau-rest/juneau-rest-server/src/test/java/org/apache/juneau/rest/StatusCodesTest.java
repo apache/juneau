@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -27,9 +28,8 @@ import org.junit.*;
 public class StatusCodesTest {
 
 	//=================================================================================================================
-	// OK
+	// OK (200)
 	//=================================================================================================================
-	
 	@RestResource
 	public static class A {
 		@RestMethod(name=PUT)
@@ -37,7 +37,6 @@ public class StatusCodesTest {
 			return new StringReader(b);
 		}
 	}
-	
 	private static MockRest a = MockRest.create(A.class);
 	
 	@Test
@@ -45,5 +44,199 @@ public class StatusCodesTest {
 		a.request("PUT", "/").body("foo").execute().assertStatus(200);
 	}
 	
-	// TODO - Test all the status codes
+
+	//====================================================================================================
+	// Bad Request (400) 
+	//====================================================================================================
+	@RestResource(parsers=JsonParser.class)
+	public static class B {
+		@RestMethod(name=PUT, path="/nonExistentBeanProperties")
+		public String b01(@Body B01 in) {
+			return "OK";
+		}
+		public static class B01 {
+			public String f1;
+		}
+		@RestMethod(name=PUT, path="/wrongDataType")
+		public String b02(@Body B02 in) {
+			return "OK";
+		}
+		public static class B02 {
+			public int f1;
+		}
+		@RestMethod(name=PUT, path="/parseIntoNonConstructableBean")
+		public String b03(@Body B03 in) {
+			return "OK";
+		}
+		public static class B03 {
+			public int f1;
+			private B03(){}
+		}
+		@RestMethod(name=PUT, path="/parseIntoNonStaticInnerClass")
+		public String b04(@Body B04 in) {
+			return "OK";
+		}
+		public class B04 {
+			public B04(){}
+		}
+		@RestMethod(name=PUT, path="/parseIntoNonPublicInnerClass")
+		public String b05(@Body B05 in) {
+			return "OK";
+		}
+		static class B05 {
+			public B05(){}
+		}
+		@RestMethod(name=PUT, path="/thrownConstructorException")
+		public String b06(@Body B06 in) {
+			return "OK";
+		}
+		public static class B06 {
+			public int f1;
+			private B06(){}
+			public static B06 valueOf(String s) {
+				throw new RuntimeException("Test error");
+			}
+		}
+		@RestMethod(name=PUT, path="/setParameterToInvalidTypes/{a1}")
+		public String b07(@Query("p1") int t1, @Path("a1") int a1, @Header("h1") int h1) {
+			return "OK";
+		}
+	}
+	private static MockRest b = MockRest.create(B.class);
+	
+	@Test
+	public void b01a_nonExistentBeanProperties() throws Exception {
+		b.request("PUT", "/nonExistentBeanProperties?noTrace=true").body("{f2:'foo'}").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Unknown property 'f2' encountered while trying to parse into class 'org.apache.juneau.rest.StatusCodesTest$B$B01'"
+			);
+	}
+	@Test
+	public void b01b_nonExistentBeanProperties() throws Exception {
+		b.request("PUT", "/nonExistentBeanProperties?noTrace=true").body("{f1:'foo', f2:'foo'}").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Unknown property 'f2' encountered while trying to parse into class 'org.apache.juneau.rest.StatusCodesTest$B$B01'"
+			);
+	}
+	@Test
+	public void b02_wrongDataType() throws Exception {
+		b.request("PUT", "/wrongDataType?noTrace=true").body("{f1:'foo'}").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Invalid number"
+			);
+	}
+	@Test
+	public void b03_parseIntoNonConstructableBean() throws Exception {
+		b.request("PUT", "/parseIntoNonConstructableBean?noTrace=true").body("{f1:1}").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"could not be instantiated"
+			);
+	}
+	@Test
+	public void b04_parseIntoNonStaticInnerClass() throws Exception {
+		b.request("PUT", "/parseIntoNonStaticInnerClass?noTrace=true").body("{f1:1}").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"could not be instantiated"
+			);
+	}
+	@Test
+	public void b05_parseIntoNonStaticInnerClass() throws Exception {
+		b.request("PUT", "/parseIntoNonPublicInnerClass?noTrace=true").body("{f1:1}").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Class is not public"
+			);
+	}
+	@Test
+	public void b06_thrownConstructorException() throws Exception {
+		b.request("PUT", "/thrownConstructorException?noTrace=true").body("'foo'").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Test error"
+			);
+	}
+	@Test
+	public void b07a_setParameterToInvalidTypes_Query() throws Exception {
+		b.request("PUT", "/setParameterToInvalidTypes/123?noTrace=true&p1=foo").body("'foo'").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Could not convert QUERY 'p1' to type 'int'"
+			);
+	}
+	@Test
+	public void b07a_setParameterToInvalidTypes_Path() throws Exception {
+		b.request("PUT", "/setParameterToInvalidTypes/foo?noTrace=true&p1=1").body("'foo'").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Could not convert PATH 'a1' to type 'int'"
+			);
+	}
+	@Test
+	public void b07a_setParameterToInvalidTypes_Header() throws Exception {
+		b.request("PUT", "/setParameterToInvalidTypes/123?noTrace=true&p1=1").header("h1", "foo").body("'foo'").json().execute()
+			.assertStatus(400)
+			.assertBodyContains(
+				"Could not convert HEADER 'h1' to type 'int'"
+			);
+	}
+	
+	//====================================================================================================
+	// Not Found (404) and Method Not Allowed (405) 
+	//====================================================================================================
+	@RestResource
+	public static class C {
+		@RestMethod(name=GET, path="/")
+		public String c() {
+			return "OK";
+		}
+	}
+	private static MockRest c = MockRest.create(C.class);
+	
+	@Test
+	public void c01_badPath() throws Exception {
+		c.request("GET", "/bad?noTrace=true").execute()
+			.assertStatus(404)
+			.assertBodyContains(
+				"Method 'GET' not found on resource with matching pattern on path '/bad'"
+			);
+	}
+	public void c02_badMethod() throws Exception {
+		c.request("PUT", "?noTrace=true").execute()
+			.assertStatus(405)
+			.assertBodyContains(
+				"Method 'PUT' not found on resource."
+			);
+	}
+
+	//====================================================================================================
+	// Precondition Failed (412) 
+	//====================================================================================================
+	@RestResource
+	public static class D {
+		@RestMethod(name=GET, matchers=NeverMatcher.class)
+		public String d() {
+			return "OK";
+		}
+		public static class NeverMatcher extends RestMatcher {
+			@Override /* RestMatcher */
+			public boolean matches(RestRequest req) {
+				return false;
+			}
+		}
+	}
+	private static MockRest d = MockRest.create(D.class);
+	
+	@Test
+	public void d01() throws Exception {
+		d.request("GET", "/?noTrace=true").execute()
+			.assertStatus(412)
+			.assertBodyContains(
+				"Method 'GET' not found on resource on path '/' with matching matcher."
+			);
+	}
 }

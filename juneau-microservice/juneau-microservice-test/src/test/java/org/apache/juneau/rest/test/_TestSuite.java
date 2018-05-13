@@ -31,7 +31,6 @@ import org.junit.runners.Suite.*;
 	ClientFuturesTest.class,
 	ClientVersionTest.class,
 	ConfigTest.class,
-	ErrorConditionsTest.class,
 	FormDataTest.class,
 	GroupsTest.class,
 	GzipTest.class,
