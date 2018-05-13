@@ -40,7 +40,6 @@ import org.apache.juneau.rest.test.client.*;
 		RequestBeanProxyResource.class,
 		RestClient2Resource.class,
 		SerializersResource.class,
-		StaticFilesResource.class,
 		ThirdPartyProxyResource.class,
 		UrisResource.class,
 		ShutdownResource.class,

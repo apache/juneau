@@ -39,7 +39,6 @@ import org.junit.runners.Suite.*;
 	RequestBeanProxyTest.class,
 	RestClientTest.class,
 	SerializersTest.class,
-	StaticFilesTest.class,
 	ThirdPartyProxyTest.class,
 	TransformsTest.class,
 })
