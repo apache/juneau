@@ -18,6 +18,7 @@ import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.test.client.*;
 
 @RestResource(
 	path="/",
@@ -30,8 +31,6 @@ import org.apache.juneau.rest.helper.*;
 		ConfigResource.class,
 		TransformsResource.class,
 		FormDataResource.class,
-		GzipResource.TestGzipOff.class,
-		GzipResource.TestGzipOn.class,
 		HeadersResource.class,
 		HtmlDocResource.class,
 		HtmlDocLinksResource.class,

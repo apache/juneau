@@ -12,10 +12,41 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.testutils;
 
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+
+import java.io.*;
+import java.util.zip.*;
 
 @SuppressWarnings({"javadoc"})
 public class TestUtils extends org.apache.juneau.testutils.TestUtils {
+
+	/**
+	 * Converts string into a GZipped input stream.
+	 * 
+	 * @param contents The contents to compress.
+	 * @return The input stream converted to GZip.
+	 * @throws Exception
+	 */
+	public static final byte[] compress(String contents) throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(contents.length()>>1);
+		try (GZIPOutputStream gos = new GZIPOutputStream(baos)) {
+			gos.write(contents.getBytes());
+			gos.finish();
+		}
+		return baos.toByteArray();
+	}
+
+	/**
+	 * Converts a GZipped input stream into a string.
+	 * 
+	 * @param is The contents to decompress.
+	 * @return The string.
+	 * @throws Exception
+	 */
+	public static final String decompress(byte[] is) throws Exception {
+		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
+	}
 
 	public static final void dumpResponse(String r, String msg, Object...args) {
 		System.err.println("*** Failure ****************************************************************************************"); // NOT DEBUG

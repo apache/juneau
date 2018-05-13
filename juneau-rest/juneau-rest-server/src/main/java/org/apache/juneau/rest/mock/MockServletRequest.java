@@ -1037,6 +1037,16 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	/**
+	 * Specifies the <code>Accept-Encoding</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest acceptEncoding(String value) {
+		return header("Accept-Encoding", value);
+	}
+
+	/**
 	 * Specifies the <code>X-Client-Version</code> header value on the request.
 	 * 
 	 * @param value The new value.
@@ -1044,6 +1054,16 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest clientVersion(String value) {
 		return header("X-Client-Version", value);
+	}
+
+	/**
+	 * Specifies the <code>Content-Encoding</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest contentEncoding(String value) {
+		return header("Content-Encoding", value);
 	}
 
 	/**

@@ -284,6 +284,19 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 	
 	/**
+	 * Throws an {@link AssertionError} if the response body does not contain the expected text.
+	 * 
+	 * @param text The expected text of the body.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the body does not contain the expected text.
+	 */
+	public MockServletResponse assertBody(String text) throws AssertionError {
+		if (! StringUtils.isEquals(text, getBodyAsString()))
+			throw new AssertionError(MessageFormat.format("Response did not have the expected text. expected=[{0}], actual=[{1}]", text, getBodyAsString()));
+		return this;
+	}
+
+	/**
 	 * Throws an {@link AssertionError} if the response body does not contain all of the expected substrings.
 	 * 
 	 * @param substrings The expected substrings.
@@ -299,19 +312,6 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	/**
-	 * Throws an {@link AssertionError} if the response body does not contain the expected text.
-	 * 
-	 * @param text The expected text of the body.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the body does not contain the expected text.
-	 */
-	public MockServletResponse assertBody(String text) throws AssertionError {
-		if (! StringUtils.isEquals(text, getBodyAsString()))
-			throw new AssertionError(MessageFormat.format("Response did not have the expected text. expected=[{0}], actual=[{1}]", text, getBodyAsString()));
-		return this;
-	}
-
-	/**
 	 * Throws an {@link AssertionError} if the response does not contain the expected character encoding.
 	 * 
 	 * @param value The expected character encoding.
@@ -322,5 +322,44 @@ public class MockServletResponse implements HttpServletResponse {
 		if (! StringUtils.isEquals(value, getCharacterEncoding()))
 			throw new AssertionError(MessageFormat.format("Response did not have the expected character encoding. expected=[{0}], actual=[{1}]", value, getBodyAsString()));
 		return this;
+	}
+
+	/**
+	 * Throws an {@link AssertionError} if the response does not contain the expected header value.
+	 * 
+	 * @param name The header name. 
+	 * @param value The expected header value.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the response does not contain the expected header value.
+	 */
+	public MockServletResponse assertHeader(String name, String value) {
+		if (! StringUtils.isEquals(value, getHeader(name)))
+			throw new AssertionError(MessageFormat.format("Response did not have the expected value for header {0}. expected=[{1}], actual=[{2}]", name, value, getHeader(name)));
+		return this;
+	}
+
+	/**
+	 * Throws an {@link AssertionError} if the response header does not contain all of the expected substrings.
+	 * 
+	 * @param name The header name. 
+	 * @param substrings The expected substrings.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the header does not contain one or more of the expected substrings.
+	 */
+	public MockServletResponse assertHeaderContains(String name, String...substrings) {
+		String text = getHeader(name); 
+		for (String substring : substrings) 
+			if (! contains(text, substring))
+				throw new AssertionError(MessageFormat.format("Response did not have the expected substring in header {0}. expected=[{1}], header=[{2}]", name, substring, text));
+		return this;
+	}
+
+	/**
+	 * Returns the body of the request.
+	 * 
+	 * @return The body of the request.
+	 */
+	public byte[] getBody() {
+		return baos.toByteArray();
 	}
 }

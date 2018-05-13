@@ -10,13 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.test.client;
 
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import java.util.*;
+import java.io.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -24,32 +24,17 @@ import org.apache.juneau.rest.annotation.*;
  * JUnit automated testcase resource.
  */
 @RestResource(
-	path="/testCallback"
+	path="/testFormData"
 )
-public class CallbackStringsResource extends BasicRestServlet {
+public class FormDataResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================
-	// Test GET
+	// Basic tests
 	//====================================================================================================
-	@RestMethod(name=GET, path="/")
-	public ObjectMap test1(RestRequest req) throws Exception {
-		return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
+	@RestMethod(name=POST, path="/*")
+	public Reader test(RestRequest req) throws IOException {
+		return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
 	}
 
-	//====================================================================================================
-	// Test PUT
-	//====================================================================================================
-	@RestMethod(name=PUT, path="/")
-	public ObjectMap testCharsetOnResponse(RestRequest req) throws Exception {
-		return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
-	}
-
-	private Map<String,Object> getFooHeaders(RestRequest req) {
-		Map<String,Object> m = new TreeMap<String,Object>();
-		for (Map.Entry<String,String[]> e : req.getHeaders().entrySet())
-			if (e.getKey().startsWith("Foo-"))
-				m.put(e.getKey(), e.getValue()[0]);
-		return m;
-	}
 }
