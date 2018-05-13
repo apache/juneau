@@ -34,8 +34,6 @@ import org.junit.runners.Suite.*;
 	InterfaceProxyTest.class,
 	JacocoDummyTest.class,
 	LargePojosTest.class,
-	OnPostCallTest.class,
-	OnPreCallTest.class,
 	OptionsWithoutNlsTest.class,
 	OverlappingMethodsTest.class,
 	ParsersTest.class,
