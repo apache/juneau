@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.headers;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -26,9 +26,9 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ClientVersionTest {
 
-	//====================================================================================================
+	//=================================================================================================================
 	// Basic tests - default X-Client-Version header.
-	//====================================================================================================
+	//=================================================================================================================
 
 	@RestResource
 	public static class A {
@@ -69,9 +69,9 @@ public class ClientVersionTest {
 		}
 	}
 
-	//====================================================================================================
+	//=================================================================================================================
 	// Basic tests - Custom-Client-Version header.
-	//====================================================================================================
+	//=================================================================================================================
 
 	@RestResource(clientVersionHeader="Custom-Client-Version")
 	public static class B {

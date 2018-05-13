@@ -30,7 +30,6 @@ import org.apache.juneau.rest.helper.*;
 		ConfigResource.class,
 		TransformsResource.class,
 		FormDataResource.class,
-		GroupsResource.class,
 		GzipResource.TestGzipOff.class,
 		GzipResource.TestGzipOn.class,
 		HeadersResource.class,

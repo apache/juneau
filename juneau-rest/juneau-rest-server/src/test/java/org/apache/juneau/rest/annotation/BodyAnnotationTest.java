@@ -256,7 +256,6 @@ public class BodyAnnotationTest {
 		a.request("PUT", "/StringTransform").body("'a'").execute().assertBody("'\\'a\\''");
 	}
 	
-	
 	//=================================================================================================================
 	// @Body on POJO
 	//=================================================================================================================
@@ -354,7 +353,6 @@ public class BodyAnnotationTest {
 		b.request("PUT", "/ReaderTransform?noTrace=true").body("a").json().execute().assertBodyContains("Bad Request");
 	}
 
-	
 	//=================================================================================================================
 	// Basic tests using @Body parameter
 	//=================================================================================================================
@@ -450,7 +448,6 @@ public class BodyAnnotationTest {
 	}
 	
 	// It's not currently possible to pass in a &body parameter for InputStream/Reader transforms.
-
 	
 	//=================================================================================================================
 	// No serializers or parsers needed when using only streams and readers.
@@ -604,7 +601,6 @@ public class BodyAnnotationTest {
 		d.request("PUT", "/ReaderTransformBodyOnPojo").body("a").json().execute().assertBody("a");
 	}
 	
-	
 	//=================================================================================================================
 	// Complex POJOs
 	//=================================================================================================================
@@ -643,10 +639,9 @@ public class BodyAnnotationTest {
 		e.request("PUT", "/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE)).body("a").execute().assertBody(expected);
 	}
 	
-	
-	//====================================================================================================
+	//=================================================================================================================
 	// Form POSTS with @Body parameter
-	//====================================================================================================
+	//=================================================================================================================
 	
 	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class F {
@@ -672,12 +667,12 @@ public class BodyAnnotationTest {
 		f.request("POST", "?p1=p3&p2=4").body("{}").json().execute().assertBody("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 	}
 	
-
-	//====================================================================================================
+	//=================================================================================================================
 	// Test multi-part parameter keys on bean properties of type array/Collection (i.e. &key=val1,&key=val2)
 	// using @UrlEncoding(expandedParams=true) annotation on bean.
 	// A simple round-trip test to verify that both serializing and parsing works.
-	//====================================================================================================
+	//=================================================================================================================
+
 	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class G {
 		@RestMethod(name=POST)
@@ -713,12 +708,12 @@ public class BodyAnnotationTest {
 		g.request("POST", "/").body(in).urlEnc().execute().assertBody(in);
 	}
 	
-
-	//====================================================================================================
+	//=================================================================================================================
 	// Test multi-part parameter keys on bean properties of type array/Collection (i.e. &key=val1,&key=val2)
 	// using URLENC_expandedParams property.
 	// A simple round-trip test to verify that both serializing and parsing works.
-	//====================================================================================================
+	//=================================================================================================================
+
 	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class H {
 		@RestMethod(name=POST,

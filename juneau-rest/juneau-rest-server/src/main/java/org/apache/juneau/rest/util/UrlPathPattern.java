@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -81,7 +81,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 * 	An array of values matched against <js>"{var}"</js> variable in the pattern, or an empty array if the
 	 * 	pattern matched but no vars were present, or <jk>null</jk> if the specified path didn't match the pattern.
 	 */
-	protected String[] match(String path) {
+	public String[] match(String path) {
 
 		if (isOnlyDotAll) {
 			// Remainder always gets leading slash trimmed.

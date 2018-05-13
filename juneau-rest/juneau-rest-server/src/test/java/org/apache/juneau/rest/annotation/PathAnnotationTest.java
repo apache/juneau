@@ -150,7 +150,7 @@ public class PathAnnotationTest {
 	}
 	@Test
 	public void b04_char() throws Exception {
-//		b.request("GET", "/char/c/foo").execute().assertBody("c");
+		b.request("GET", "/char/c/foo").execute().assertBody("c");
 		b.request("GET", "/char/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
@@ -275,118 +275,4 @@ public class PathAnnotationTest {
 		UUID uuid = UUID.randomUUID();
 		d.request("GET", "/uuid/" + uuid).execute().assertBody(uuid.toString());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//=================================================================================================================
-	// Overlapping method names
-	//=================================================================================================================
-
-//
-//		//	// Bunch of different argument types
-//		//	@RestMethod(name=POST,pattern="/person/{person}")
-//		//	public void doPost(RestRequest req, RestResponse res, Person p) {
-//		//		res.setOutput("POST, /person, name="+p.name+", age="+p.age+" remainder="+req.getRemainder());
-//		//	}
-//		r = client.doPost(URL + "/person/(name='John+Smith',birthDate='Jan+12,+1952')", "");
-//		assertEquals("POST /person/{name=John Smith,birthDate.year=1952} remainder=null", r.getResponse(String.class));
-//
-//		// Fall through to top-level POST
-//		r = client.doPost(URL + "/person/(name:'John+Smith',age:123)/foo", "");
-//		assertEquals("POST remainder=person/(name:'John Smith',age:123)/foo", r.getResponse(String.class));
-//
-//		//	// Various primitive types
-//		//	@RestMethod(name=PUT,pattern="/primitives/{xInt}.{xShort},{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-//		//	public void doPut1(RestRequest req, RestResponse res, int xInt, short xShort, long xLong, char xChar, float xFloat, double xDouble, byte xByte, boolean xBoolean) {
-//		//		res.setOutput("PUT, /primitives/"+xInt+"."+xShort+","+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-//		//	}
-//		r = client.doPut(URL + "/primitives/1/2/3/x/4/5/6/true", "");
-//		assertEquals("PUT /primitives/1/2/3/x/4.0/5.0/6/true", r.getResponse(String.class));
-//
-//		//	// Various primitive objects
-//		//	@RestMethod(name=PUT,pattern="/primitiveObjects/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-//		//	public void doPut1(RestRequest req, RestResponse res, Integer xInt, Short xShort, Long xLong, Character xChar, Float xFloat, Double xDouble, Byte xByte, Boolean xBoolean) {
-//		//		res.setOutput("PUT /primitives/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-//		//	}
-//		r = client.doPut(URL + "/primitiveObjects/1/2/3/x/4/5/6/true", "");
-//		assertEquals("PUT /primitiveObjects/1/2/3/x/4.0/5.0/6/true", r.getResponse(String.class));
-//
-//		//	// Object with forString(String) method
-//		//	@RestMethod(name=PUT,pattern="/uuid/{uuid}")
-//		//	public void doPut1(RestRequest req, RestResponse res, UUID uuid) {
-//		//		res.setOutput("PUT /uuid/"+uuid);
-//		//	}
-//		UUID uuid = UUID.randomUUID();
-//		r = client.doPut(URL + "/uuid/"+uuid, "");
-//		assertEquals("PUT /uuid/"+uuid, r.getResponse(String.class));
-	}
-	
-	
-		
-//
-//		// Test method name with overlapping name, remainder allowed.
-//		@RestMethod(name="GET2")
-//		public void get2(RestRequest req, RestResponse res) {
-//			res.setOutput("GET2 remainder="+req.getPathMatch().getRemainder());
-//		}
-//
-//		// Default POST
-//		@RestMethod(name=POST)
-//		public void doPost(RestRequest req, RestResponse res) {
-//			res.setOutput("POST remainder="+req.getPathMatch().getRemainder());
-//		}
-//
-//		// Bean parameter
-//		@RestMethod(name=POST, path="/person/{person}")
-//		public void doPost(RestRequest req, RestResponse res, @Path("person") Person p) {
-//			res.setOutput("POST /person/{name="+p.name+",birthDate.year="+p.birthDate.get(Calendar.YEAR)+"} remainder="+req.getPathMatch().getRemainder());
-//		}
-//
-//		// Various primitive types
-//		@RestMethod(name=PUT, path="/primitives/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-//		public void doPut1(
-//				RestResponse res, 
-//				@Path("xInt") int xInt, 
-//				@Path("xShort") short xShort, 
-//				@Path("xLong") long xLong, 
-//				@Path("xChar") char xChar, 
-//				@Path("xFloat") float xFloat, 
-//				@Path("xDouble") double xDouble, 
-//				@Path("xByte") byte xByte, 
-//				@Path("xBoolean") boolean xBoolean
-//			) {
-//			res.setOutput("PUT /primitives/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-//		}
-//
-//		// Various primitive objects
-//		@RestMethod(name=PUT, path="/primitiveObjects/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
-//		public void doPut2(
-//				RestResponse res, 
-//				@Path("xInt") Integer xInt, 
-//				@Path("xShort") Short xShort, 
-//				@Path("xLong") Long xLong, 
-//				@Path("xChar") Character xChar, 
-//				@Path("xFloat") Float xFloat, 
-//				@Path("xDouble") Double xDouble, 
-//				@Path("xByte") Byte xByte, 
-//				@Path("xBoolean") Boolean xBoolean
-//			) {
-//			res.setOutput("PUT /primitiveObjects/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
-//		}
-//
-//		// Object with forString(String) method
-//		@RestMethod(name=PUT, path="/uuid/{uuid}")
-//		public void doPut1(RestResponse res, @Path("uuid") UUID uuid) {
-//			res.setOutput("PUT /uuid/"+uuid);
-//		}
-//	}
+}

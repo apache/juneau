@@ -30,9 +30,9 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BeanContextPropertiesTest  {
 
-	//====================================================================================================
+	//=================================================================================================================
 	// Validate that transforms defined on class transform to underlying bean context.
-	//====================================================================================================
+	//=================================================================================================================
 
 	@RestResource(pojoSwaps=DateSwap.ISO8601DTZ.class)
 	public static class A {

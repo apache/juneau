@@ -36,7 +36,6 @@ public class PathRemainderAnnotationTest {
 			return remainder;
 		}
 	}
-	
 	static MockRest a = MockRest.create(A.class); 
 	
 	@Test

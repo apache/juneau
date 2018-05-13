@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.headers;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -23,16 +23,18 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
+import org.junit.runners.*;
 
 /**
  * Validates the handling of the Accept-Charset header.
  */
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AcceptCharsetTest {
 
-	//====================================================================================================
+	//=================================================================================================================
 	// Test that Q-values are being resolved correctly.
-	//====================================================================================================
+	//=================================================================================================================
 
 	@RestResource(defaultCharset="utf-8",serializers=PlainTextSerializer.class)
 	public static class A {
@@ -58,9 +60,9 @@ public class AcceptCharsetTest {
 		a.request("GET", "/").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.1,*;q=0.5").execute().assertCharset("utf-8");
 	}
 
-	//====================================================================================================
+	//=================================================================================================================
 	// Validate various Accept-Charset variations.
-	//====================================================================================================
+	//=================================================================================================================
 
 	@RestResource(defaultCharset="utf-8")
 	public static class B {

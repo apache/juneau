@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.test.client.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -29,7 +29,6 @@ import org.junit.runners.Suite.*;
 	ClientFuturesTest.class,
 	ConfigTest.class,
 	FormDataTest.class,
-	GroupsTest.class,
 	GzipTest.class,
 	HeadersTest.class,
 	HtmlDocTest.class,
@@ -52,13 +51,10 @@ import org.junit.runners.Suite.*;
 	PropertiesTest.class,
 	RequestBeanProxyTest.class,
 	RestClientTest.class,
-	RestUtilsTest.class,
 	SerializersTest.class,
 	StaticFilesTest.class,
 	ThirdPartyProxyTest.class,
 	TransformsTest.class,
-	UrisTest.class,
-	UrlPathPatternTest.class
 })
 public class _TestSuite {
 
