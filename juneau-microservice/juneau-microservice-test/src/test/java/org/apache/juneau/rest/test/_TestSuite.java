@@ -31,7 +31,6 @@ import org.junit.runners.Suite.*;
 	FormDataTest.class,
 	HtmlDocTest.class,
 	HtmlDocLinksTest.class,
-	InheritanceTest.class,
 	InterfaceProxyTest.class,
 	JacocoDummyTest.class,
 	LargePojosTest.class,
