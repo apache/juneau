@@ -24,6 +24,8 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpServletRequest} for mocking purposes.
@@ -37,6 +39,7 @@ public class MockServletRequest implements HttpServletRequest {
 	
 	private String method = "GET";
 	private Map<String,String[]> parameterMap;
+	private Map<String,String[]> formDataMap;
 	private Map<String,String[]> headerMap = new LinkedHashMap<>();	
 	private Map<String,Object> attributeMap = new LinkedHashMap<>();
 	private String characterEncoding = "UTF-8";
@@ -645,6 +648,8 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public ServletInputStream getInputStream() throws IOException {
+		if (formDataMap != null)
+			body = UrlEncodingSerializer.DEFAULT.toString(formDataMap).getBytes();
 		return new BoundedServletInputStream(new ByteArrayInputStream(body), Integer.MAX_VALUE);
 	}
 
@@ -669,7 +674,10 @@ public class MockServletRequest implements HttpServletRequest {
 		if (parameterMap == null) {
 			try {
 				if ("POST".equalsIgnoreCase(method)) {
-					parameterMap = RestUtils.parseQuery(IOUtils.read(body));
+					if (formDataMap != null)
+						parameterMap = formDataMap;
+					else
+						parameterMap = RestUtils.parseQuery(IOUtils.read(body));
 				} else {
 					parameterMap = RestUtils.parseQuery(getQueryString());
 				}
@@ -702,7 +710,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public BufferedReader getReader() throws IOException {
-		return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(body), characterEncoding));
+		return new BufferedReader(new InputStreamReader(getInputStream(), characterEncoding));
 	}
 
 	@Override /* HttpServletRequest */
@@ -1026,5 +1034,35 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest acceptCharset(String value) {
 		return header("Accept-Charset", value);
+	}
+
+	/**
+	 * Specifies the <code>X-Client-Version</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest clientVersion(String value) {
+		return header("X-Client-Version", value);
+	}
+
+	/**
+	 * Adds a form data entry to this request.
+	 * 
+	 * @param key 
+	 * @param value 
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest formData(String key, Object value) {
+		if (formDataMap == null)
+			formDataMap = new LinkedHashMap<>();
+		String s = asString(value);
+		String[] existing = formDataMap.get(key);
+		if (existing == null)
+			existing = new String[]{s};
+		else
+			existing = new AList<>().appendAll(Arrays.asList(existing)).append(s).toArray(new String[0]);
+		formDataMap.put(key, existing);
+		return this;
 	}
 }

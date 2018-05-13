@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -103,37 +101,5 @@ public class FormDataTest extends RestTestcase {
 		} finally {
 			c.close();
 		}
-	}
-
-	//====================================================================================================
-	// Default values.
-	//====================================================================================================
-
-	@Test
-	public void defaultFormData() throws Exception {
-		assertObjectEquals("{f1:'1',f2:'2',f3:'3'}", client.doPost(URL + "/defaultFormData").getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'4',f2:'5',f3:'6'}", client.doPost(URL + "/defaultFormData").formData("f1",4).formData("f2",5).formData("f3",6).getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'4',f2:'5',f3:'6'}", client.doPost(URL + "/defaultFormData").formData("f1",4).formData("f2",5).formData("f3",6).getResponse(ObjectMap.class));
-	}
-
-	@Test
-	public void annotatedFormData() throws Exception {
-		assertObjectEquals("{f1:null,f2:null,f3:null}", client.doPost(URL + "/annotatedFormData").getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'4',f2:'5',f3:'6'}", client.doPost(URL + "/annotatedFormData").formData("f1",4).formData("f2",5).formData("f3",6).getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'4',f2:'5',f3:'6'}", client.doPost(URL + "/annotatedFormData").formData("f1",4).formData("f2",5).formData("f3",6).getResponse(ObjectMap.class));
-	}
-
-	@Test
-	public void annotatedFormDataDefault() throws Exception {
-		assertObjectEquals("{f1:'1',f2:'2',f3:'3'}", client.doPost(URL + "/annotatedFormDataDefault").getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'4',f2:'5',f3:'6'}", client.doPost(URL + "/annotatedFormDataDefault").formData("f1",4).formData("f2",5).formData("f3",6).getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'4',f2:'5',f3:'6'}", client.doPost(URL + "/annotatedFormDataDefault").formData("f1",4).formData("f2",5).formData("f3",6).getResponse(ObjectMap.class));
-	}
-
-	@Test
-	public void annotatedAndDefaultFormData() throws Exception {
-		assertObjectEquals("{f1:'4',f2:'5',f3:'6'}", client.doPost(URL + "/annotatedAndDefaultFormData").getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'7',f2:'8',f3:'9'}", client.doPost(URL + "/annotatedAndDefaultFormData").formData("f1",7).formData("f2",8).formData("f3",9).getResponse(ObjectMap.class));
-		assertObjectEquals("{f1:'7',f2:'8',f3:'9'}", client.doPost(URL + "/annotatedAndDefaultFormData").formData("f1",7).formData("f2",8).formData("f3",9).getResponse(ObjectMap.class));
 	}
 }

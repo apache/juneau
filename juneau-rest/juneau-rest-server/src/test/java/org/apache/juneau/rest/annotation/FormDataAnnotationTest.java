@@ -14,6 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
@@ -74,5 +75,66 @@ public class FormDataAnnotationTest {
 	public void b01() throws Exception {
 		b.request("POST", "").body("p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
 		b.request("POST", "").body("p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=['p1','p1',p1]");
+	}
+	
+	//====================================================================================================
+	// Default values.
+	//====================================================================================================
+
+	@RestResource
+	public static class C {
+		@RestMethod(name=POST, path="/defaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+		public ObjectMap c01(RequestFormData formData) {
+			return new ObjectMap()
+				.append("f1", formData.getString("f1"))
+				.append("f2", formData.getString("f2"))
+				.append("f3", formData.getString("f3"));
+		}
+		@RestMethod(name=POST, path="/annotatedFormData")
+		public ObjectMap c02(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
+			return new ObjectMap()
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
+		}
+		@RestMethod(name=POST, path="/annotatedFormDataDefault")
+		public ObjectMap c03(@FormData(value="f1",_default="1") String f1, @FormData(value="f2",_default="2") String f2, @FormData(value="f3",_default="3") String f3) {
+			return new ObjectMap()
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
+		}
+		@RestMethod(name=POST, path="/annotatedAndDefaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+		public ObjectMap c04(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
+			return new ObjectMap()
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
+		}
+	}
+	static MockRest c = MockRest.create(C.class);
+
+	@Test
+	public void c01_defaultFormData() throws Exception {
+		c.request("POST", "/defaultFormData").contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
+		c.request("POST", "/defaultFormData").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+	}
+
+	@Test
+	public void c02_annotatedFormData() throws Exception {
+		c.request("POST", "/annotatedFormData").contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:null,f2:null,f3:null}");
+		c.request("POST", "/annotatedFormData").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+	}
+
+	@Test
+	public void c03_annotatedFormDataDefault() throws Exception {
+		c.request("POST", "/annotatedFormDataDefault").contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
+		c.request("POST", "/annotatedFormDataDefault").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+	}
+
+	@Test
+	public void c04_annotatedAndDefaultFormData() throws Exception {
+		c.request("POST", "/annotatedAndDefaultFormData").contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		c.request("POST", "/annotatedAndDefaultFormData").contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
 	}
 }
