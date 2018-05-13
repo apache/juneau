@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -32,7 +32,7 @@ import org.junit.runners.*;
  */
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class InheritanceTest {
+public class RestMethodInheritTest {
 
 	//=================================================================================================================
 	// Setup classes

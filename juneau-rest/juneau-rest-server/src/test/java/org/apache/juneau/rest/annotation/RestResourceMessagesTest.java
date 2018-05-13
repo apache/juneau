@@ -10,35 +10,66 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.rest.testutils.TestUtils.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
+import org.junit.runners.*;
 
 /**
- * Validates that resource bundles can be defined on both parent and child classes.
+ * Tests that validate the behavior of @RestMethod(messages).
  */
-public class MessagesTest extends RestTestcase {
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class RestResourceMessagesTest {
 
 	//====================================================================================================
-	// Return contents of resource bundle.
+	// Setup
 	//====================================================================================================
-	@SuppressWarnings("rawtypes")
+	
+	static ObjectMap convertToMap(ResourceBundle rb) {
+		ObjectMap m = new ObjectMap();
+		for (String k : rb.keySet())
+			m.put(k, rb.getString(k));
+		return m;
+	}
+	
+	//====================================================================================================
+	// Basic tests
+	//====================================================================================================
+
+	@RestResource(messages="RestResourceMessagesTest1")
+	public static class A {
+		@RestMethod(name=GET)
+		public ObjectMap test(ResourceBundle rb) {
+			return convertToMap(rb);
+		}
+	}
+	static MockRest a = MockRest.create(A.class);
+
 	@Test
-	public void test() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT;
-
+	public void a01() throws Exception {
 		// Parent resource should just pick up values from its bundle.
-		TreeMap r = client.doGet("/testMessages/test").getResponse(TreeMap.class);
-		assertObjectEquals("{key1:'value1a',key2:'value2a'}", r);
-
+		a.request("GET", "/").execute().assertBody("{key1:'value1a',key2:'value2a'}");
+	}
+	
+	//====================================================================================================
+	// Overridden on subclass.
+	//====================================================================================================
+	
+	@RestResource(messages="RestResourceMessagesTest2")
+	public static class B extends A {}
+	static MockRest b = MockRest.create(B.class);
+	
+	@Test
+	public void b01() throws Exception {
 		// Child resource should pick up values from both parent and child,
 		// ordered child before parent.
-		r = client.doGet("/testMessages2/test").getResponse(TreeMap.class);
-		assertObjectEquals("{key1:'value1a',key2:'value2b',key3:'value3b'}", r);
+		b.request("GET", "/").execute().assertBody("{key1:'value1a',key2:'value2b',key3:'value3b'}");
 	}
 }

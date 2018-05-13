@@ -35,8 +35,6 @@ import org.apache.juneau.rest.test.client.*;
 		HtmlDocLinksResource.class,
 		InterfaceProxyResource.class,
 		LargePojosResource.class,
-		MessagesResource.Messages2Resource.class,
-		MessagesResource.class,
 		NlsResource.class,
 		NlsPropertyResource.class,
 		OnPostCallResource.class,
