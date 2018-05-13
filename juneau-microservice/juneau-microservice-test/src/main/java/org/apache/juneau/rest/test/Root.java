@@ -35,8 +35,6 @@ import org.apache.juneau.rest.test.client.*;
 		HtmlDocLinksResource.class,
 		InterfaceProxyResource.class,
 		LargePojosResource.class,
-		OptionsWithoutNlsResource.class,
-		OverlappingMethodsResource.class,
 		ParsersResource.class,
 		PathResource.class,
 		PathsResource.class,

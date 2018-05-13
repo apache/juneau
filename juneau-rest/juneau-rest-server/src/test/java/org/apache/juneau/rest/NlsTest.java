@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
@@ -28,9 +29,9 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class NlsTest {
 
-	//====================================================================================================
+	//=================================================================================================================
 	// Test getting an NLS property defined on a class or method.
-	//====================================================================================================
+	//=================================================================================================================
 
 	@RestResource(
 		serializers={A01.class},
@@ -74,5 +75,43 @@ public class NlsTest {
 	@Test
 	public void a02_fromMethod() throws Exception {
 		a.request("GET", "/fromMethod").execute().assertBody("value2");
+	}
+	
+	//=================================================================================================================
+	// Test OPTIONS pages without NLS
+	//=================================================================================================================
+	
+	@RestResource(title="test")
+	public static class B {
+		@RestMethod(name=OPTIONS, description="foo")
+		public Swagger testOptions(RestRequest req) {
+			// Should get to the options page without errors
+			return req.getSwagger();
+		}
+	}
+	static MockRest b = MockRest.create(B.class);
+	
+	@Test
+	public void b01_optionsPageWithoutNls() throws Exception {
+		b.request("OPTIONS", "/").execute().assertBodyContains("foo");
+	}
+
+	//=================================================================================================================
+	// Test Missing resource bundles.
+	//=================================================================================================================
+	
+	@RestResource
+	public static class C {
+		@RestMethod(name=GET)
+		public String test(RestRequest req) {
+			// Missing resource bundle should cause {!!x} string.
+			return req.getMessage("bad", 1, 2, 3);
+		}
+	}
+	static MockRest c = MockRest.create(C.class);
+
+	@Test
+	public void c01_missingResourceBundle() throws Exception {
+		c.request("GET", "/").execute().assertBody("{!!bad}");
 	}
 }
