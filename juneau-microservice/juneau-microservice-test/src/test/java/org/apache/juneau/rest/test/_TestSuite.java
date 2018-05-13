@@ -40,7 +40,6 @@ import org.junit.runners.Suite.*;
 	RestClientTest.class,
 	SerializersTest.class,
 	ThirdPartyProxyTest.class,
-	TransformsTest.class,
 })
 public class _TestSuite {
 

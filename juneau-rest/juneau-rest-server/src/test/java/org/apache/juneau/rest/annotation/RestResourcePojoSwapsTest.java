@@ -10,60 +10,29 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.junit.*;
+import org.junit.runners.*;
 
 /**
- * JUnit automated testcase resource.
+ * Tests that validate the behavior of @RestResource(pojoSwaps).
  */
-@RestResource(
-	path="/testTransforms",
-	pojoSwaps={TransformsResource.SwapA2.class}
-)
-public class TransformsResource extends TransformsParentResource {
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class RestResourcePojoSwapsTest {
 
-	//====================================================================================================
-	// Test class transform overrides parent class transform
-	// Should return "A2-1".
-	//====================================================================================================
-	@RestMethod(name=GET, path="/testClassTransformOverridesParentClassTransform")
-	public A test1a() {
-		return new A();
-	}
-	@RestMethod(name=PUT, path="/testClassTransformOverridesParentClassTransform")
-	public A test1b(@Body A a) {
-		return a;
-	}
-	@RestMethod(name=PUT, path="/testClassTransformOverridesParentClassTransform/{a}")
-	public A test1c(@Path("a") A a) {
-		return a;
-	}
-
-	//====================================================================================================
-	// Test method transform overrides class transform
-	// Should return "A3-1".
-	//====================================================================================================
-	@RestMethod(name=GET, path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
-	public A test2a() {
-		return new A();
-	}
-	@RestMethod(name=PUT, path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
-	public A test2b(@Body A a) {
-		return a;
-	}
-	@RestMethod(name=PUT, path="/testMethodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
-	public A test2c(@Path("a") A a) {
-		return a;
-	}
-
+	//=================================================================================================================
+	// Basic tests
+	//=================================================================================================================
 
 	public static class A {
 		public int f1;
@@ -112,5 +81,52 @@ public class TransformsResource extends TransformsParentResource {
 			a.f1 = Integer.parseInt(in.substring(3));
 			return a;
 		}
+	}
+	
+	@RestResource(pojoSwaps={SwapA1.class}, serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
+	public static class A01_Parent {}
+
+	@RestResource(pojoSwaps={SwapA2.class})
+	public static class A01 extends A01_Parent {
+
+		@RestMethod(name=GET, path="/classTransformOverridesParentClassTransform")
+		public A a01a() {
+			return new A(); // Should return "A2-1".
+		}
+		@RestMethod(name=PUT, path="/classTransformOverridesParentClassTransform")
+		public A a01b(@Body A a) {
+			return a; // Should return "A2-1".
+		}
+		@RestMethod(name=PUT, path="/classTransformOverridesParentClassTransform/{a}")
+		public A a01c(@Path("a") A a) {
+			return a; // Should return "A2-1".
+		}
+		@RestMethod(name=GET, path="/methodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
+		public A a02a() {
+			return new A(); // Should return "A3-1".
+		}
+		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
+		public A a02b(@Body A a) {
+			return a; // Should return "A3-1".
+		} 
+		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
+		public A a02c(@Path("a") A a) {
+			return a; // Should return "A3-1".
+		}
+	}
+	static MockRest a = MockRest.create(A01.class);
+
+	@Test
+	public void a01_classTransformOverridesParentClassTransform() throws Exception {
+		a.request("GET", "/classTransformOverridesParentClassTransform").json().execute().assertBody("'A2-0'");
+		a.request("PUT", "/classTransformOverridesParentClassTransform").json().body("'A2-1'").execute().assertBody("'A2-1'");
+		a.request("PUT", "/classTransformOverridesParentClassTransform/A2-2").json().execute().assertBody("'A2-2'");
+	}
+
+	@Test
+	public void a02_methodTransformOverridesClassTransform() throws Exception {
+		a.request("GET", "/methodTransformOverridesClassTransform").json().execute().assertBody("'A3-0'");
+		a.request("PUT", "/methodTransformOverridesClassTransform").json().body("'A3-1'").execute().assertBody("'A3-1'");
+		a.request("PUT", "/methodTransformOverridesClassTransform/A3-2").json().execute().assertBody("'A3-2'");
 	}
 }

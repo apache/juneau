@@ -29,7 +29,6 @@ import org.apache.juneau.rest.test.client.*;
 		CallbackStringsResource.class,
 		ClientFuturesResource.class,
 		ConfigResource.class,
-		TransformsResource.class,
 		FormDataResource.class,
 		HtmlDocResource.class,
 		HtmlDocLinksResource.class,
