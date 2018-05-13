@@ -310,4 +310,17 @@ public class MockServletResponse implements HttpServletResponse {
 			throw new AssertionError(MessageFormat.format("Response did not have the expected text. expected=[{0}], actual=[{1}]", text, getBodyAsString()));
 		return this;
 	}
+
+	/**
+	 * Throws an {@link AssertionError} if the response does not contain the expected character encoding.
+	 * 
+	 * @param value The expected character encoding.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the response does not contain the expected character encoding.
+	 */
+	public MockServletResponse assertCharset(String value) {
+		if (! StringUtils.isEquals(value, getCharacterEncoding()))
+			throw new AssertionError(MessageFormat.format("Response did not have the expected character encoding. expected=[{0}], actual=[{1}]", value, getBodyAsString()));
+		return this;
+	}
 }

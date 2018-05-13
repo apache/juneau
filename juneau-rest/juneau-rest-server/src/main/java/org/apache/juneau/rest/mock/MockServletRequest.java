@@ -1017,4 +1017,14 @@ public class MockServletRequest implements HttpServletRequest {
 	public MockServletRequest acceptLanguage(String value) {
 		return header("Accept-Language", value);
 	}
+
+	/**
+	 * Specifies the <code>Accept-Charset</code> header value on the request.
+	 * 
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest acceptCharset(String value) {
+		return header("Accept-Charset", value);
+	}
 }

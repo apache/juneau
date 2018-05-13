@@ -24,8 +24,6 @@ import org.junit.runners.Suite.*;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	AcceptCharsetTest.class,
-	BeanContextPropertiesTest.class,
 	CallbackStringsTest.class,
 	CharsetEncodingsTest.class,
 	ClientFuturesTest.class,

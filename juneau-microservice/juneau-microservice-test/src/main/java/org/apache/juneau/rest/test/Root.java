@@ -24,8 +24,6 @@ import org.apache.juneau.rest.helper.*;
 	children={
 		DebugResource.class,
 		LogsResource.class,
-		AcceptCharsetResource.class,
-		BeanContextPropertiesResource.class,
 		BpiResource.class,
 		CallbackStringsResource.class,
 		CharsetEncodingsResource.class,

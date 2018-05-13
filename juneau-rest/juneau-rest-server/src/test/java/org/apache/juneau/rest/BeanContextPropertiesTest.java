@@ -10,25 +10,44 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest;
 
-import static org.junit.Assert.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.rest.client.*;
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.transforms.*;
 import org.junit.*;
+import org.junit.runners.*;
 
-public class BeanContextPropertiesTest extends RestTestcase {
-
-	boolean debug = false;
+/**
+ * Tests related bean context properties in REST resources.
+ */
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class BeanContextPropertiesTest  {
 
 	//====================================================================================================
-	// Validate that filters defined on class filter to underlying bean context.
+	// Validate that transforms defined on class transform to underlying bean context.
 	//====================================================================================================
+
+	@RestResource(pojoSwaps=DateSwap.ISO8601DTZ.class)
+	public static class A {
+		@RestMethod(name=GET, path="/{d1}")
+		public String testClassTransforms(@Path("d1") Date d1, @Query("d2") Date d2, @Header("X-D3") Date d3) throws Exception {
+			DateSwap df = DateSwap.ISO8601DTZ.class.newInstance();
+			BeanSession session = BeanContext.DEFAULT.createSession();
+			return "d1="+df.swap(session, d1)+",d2="+df.swap(session, d2)+",d3="+df.swap(session, d3)+"";
+		}
+	}
+	static MockRest a = MockRest.create(A.class);
+		
 	@Test
-	public void testClassTransforms() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT;
-		String r;
-		r = client.doGet("/testBeanContext/testClassTransforms/2001-07-04T15:30:45Z?d2=2001-07-05T15:30:45Z").header("X-D3", "2001-07-06T15:30:45Z").getResponseAsString();
-		assertEquals("d1=2001-07-04T15:30:45Z,d2=2001-07-05T15:30:45Z,d3=2001-07-06T15:30:45Z", r);
+	public void a01_testClassTransforms() throws Exception {
+		a.request("GET", "/2001-07-04T15:30:45Z?d2=2001-07-05T15:30:45Z").header("X-D3", "2001-07-06T15:30:45Z").execute()
+			.assertBody("d1=2001-07-04T15:30:45Z,d2=2001-07-05T15:30:45Z,d3=2001-07-06T15:30:45Z");
 	}
 }

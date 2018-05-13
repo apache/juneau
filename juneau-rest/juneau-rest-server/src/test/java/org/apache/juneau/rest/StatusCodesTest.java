@@ -20,11 +20,13 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
+import org.junit.runners.*;
 
 /**
  * Validates that the correct status codes are returned on REST requests.
  */
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"javadoc"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StatusCodesTest {
 
 	//=================================================================================================================
