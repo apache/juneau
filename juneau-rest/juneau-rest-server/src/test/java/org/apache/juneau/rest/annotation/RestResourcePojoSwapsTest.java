@@ -119,14 +119,14 @@ public class RestResourcePojoSwapsTest {
 	@Test
 	public void a01_classTransformOverridesParentClassTransform() throws Exception {
 		a.request("GET", "/classTransformOverridesParentClassTransform").json().execute().assertBody("'A2-0'");
-		a.request("PUT", "/classTransformOverridesParentClassTransform").json().body("'A2-1'").execute().assertBody("'A2-1'");
+		a.request("PUT", "/classTransformOverridesParentClassTransform", "'A2-1'").json().execute().assertBody("'A2-1'");
 		a.request("PUT", "/classTransformOverridesParentClassTransform/A2-2").json().execute().assertBody("'A2-2'");
 	}
 
 	@Test
 	public void a02_methodTransformOverridesClassTransform() throws Exception {
 		a.request("GET", "/methodTransformOverridesClassTransform").json().execute().assertBody("'A3-0'");
-		a.request("PUT", "/methodTransformOverridesClassTransform").json().body("'A3-1'").execute().assertBody("'A3-1'");
+		a.request("PUT", "/methodTransformOverridesClassTransform", "'A3-1'").json().execute().assertBody("'A3-1'");
 		a.request("PUT", "/methodTransformOverridesClassTransform/A3-2").json().execute().assertBody("'A3-2'");
 	}
 }

@@ -121,139 +121,139 @@ public class BodyAnnotationTest {
 	
 	@Test
 	public void a01a_onParameter_String() throws Exception {
-		a.request("PUT", "/String").body("'foo'").json().execute().assertBody("'foo'");
+		a.request("PUT", "/String", "'foo'").json().execute().assertBody("'foo'");
 	}
 	@Test
 	public void a01b_onParameter_String_noContentType() throws Exception {
 		// If no Content-Type specified, should be treated as plain-text.
-		a.request("PUT", "/String").body("'foo'").execute().assertBody("'\\'foo\\''");
+		a.request("PUT", "/String", "'foo'").execute().assertBody("'\\'foo\\''");
 	}
 	@Test
 	public void a01c_onParameter_String_noContentType_other() throws Exception {
 		// If Content-Type not matched, should be treated as plain-text.
-		a.request("PUT", "/String").body("'foo'").contentType("").execute().assertBody("'\\'foo\\''");
-		a.request("PUT", "/String").body("'foo'").contentType("text/plain").execute().assertBody("'\\'foo\\''");
+		a.request("PUT", "/String", "'foo'").contentType("").execute().assertBody("'\\'foo\\''");
+		a.request("PUT", "/String", "'foo'").contentType("text/plain").execute().assertBody("'\\'foo\\''");
 	}
 	@Test
 	public void a02a_onParameter_Integer() throws Exception {
-		a.request("PUT", "/Integer").body("123").json().execute().assertBody("123");
+		a.request("PUT", "/Integer", "123").json().execute().assertBody("123");
 	}
 	@Test
 	public void a02b_onParameter_Integer_noContentType() throws Exception {
 		// Integer takes in a String arg, so it can be parsed without Content-Type.
-		a.request("PUT", "/Integer").body("123").execute().assertBody("123");
+		a.request("PUT", "/Integer", "123").execute().assertBody("123");
 	}
 	@Test
 	public void a03a_onParameter_int() throws Exception {
-		a.request("PUT", "/int").body("123").json().execute().assertBody("123");
+		a.request("PUT", "/int", "123").json().execute().assertBody("123");
 	}
 	@Test
 	public void a03b_onParameter_int_noContentType() throws Exception {
-		a.request("PUT", "/int?noTrace=true").body("123").execute().assertBodyContains("Unsupported Media Type");
+		a.request("PUT", "/int?noTrace=true", "123").execute().assertBodyContains("Unsupported Media Type");
 	}
 	@Test
 	public void a04a_onParameter_Boolean() throws Exception {
-		a.request("PUT", "/Boolean").body("true").json().execute().assertBody("true");
+		a.request("PUT", "/Boolean", "true").json().execute().assertBody("true");
 	}
 	@Test
 	public void a04b_onParameter_Boolean_noContentType() throws Exception {
 		// Boolean takes in a String arg, so it can be parsed without Content-Type.
-		a.request("PUT", "/Boolean").body("true").execute().assertBody("true");
+		a.request("PUT", "/Boolean", "true").execute().assertBody("true");
 	}
 	@Test
 	public void a05a_onParameter_boolean() throws Exception {
-		a.request("PUT", "/boolean").body("true").json().execute().assertBody("true");
+		a.request("PUT", "/boolean", "true").json().execute().assertBody("true");
 	}
 	@Test
 	public void a05b_onParameter_boolean_noContentType() throws Exception {
-		a.request("PUT", "/boolean?noTrace=true").body("true").execute().assertBodyContains("Unsupported Media Type");
+		a.request("PUT", "/boolean?noTrace=true", "true").execute().assertBodyContains("Unsupported Media Type");
 	}
 	@Test
 	public void a06a_onParameter_float() throws Exception {
-		a.request("PUT", "/float").body("1.23").json().execute().assertBody("1.23");
+		a.request("PUT", "/float", "1.23").json().execute().assertBody("1.23");
 	}
 	@Test
 	public void a06b_onParameter_float_noContentType() throws Exception {
-		a.request("PUT", "/float?noTrace=true").body("1.23").execute().assertBodyContains("Unsupported Media Type");
+		a.request("PUT", "/float?noTrace=true", "1.23").execute().assertBodyContains("Unsupported Media Type");
 	}
 	@Test
 	public void a07a_onParameter_Float() throws Exception {
-		a.request("PUT", "/Float").body("1.23").json().execute().assertBody("1.23");
+		a.request("PUT", "/Float", "1.23").json().execute().assertBody("1.23");
 	}
 	@Test
 	public void a07b_onParameter_Float_noContentType() throws Exception {
 		// Float takes in a String arg, so it can be parsed without Content-Type.
-		a.request("PUT", "/Float").body("1.23").execute().assertBody("1.23");
+		a.request("PUT", "/Float", "1.23").execute().assertBody("1.23");
 	}
 	@Test
 	public void a08a_onParameter_Map() throws Exception {
-		a.request("PUT", "/Map").body("{foo:123}").json().execute().assertBody("{foo:123}");
+		a.request("PUT", "/Map", "{foo:123}").json().execute().assertBody("{foo:123}");
 	}
 	@Test
 	public void a08b_onParameter_Map_noContentType() throws Exception {
-		a.request("PUT", "/Map?noTrace=true").body("{foo:123}").execute().assertBodyContains("Unsupported Media Type");
+		a.request("PUT", "/Map?noTrace=true", "{foo:123}").execute().assertBodyContains("Unsupported Media Type");
 	}
 	@Test
 	public void a09a_onParameter_enum() throws Exception {
-		a.request("PUT", "/enum").body("'ONE'").json().execute().assertBody("'ONE'");
+		a.request("PUT", "/enum", "'ONE'").json().execute().assertBody("'ONE'");
 	}
 	@Test
 	public void a09b_onParameter_enum_noContentType() throws Exception {
-		a.request("PUT", "/enum").body("ONE").execute().assertBody("'ONE'");
+		a.request("PUT", "/enum", "ONE").execute().assertBody("'ONE'");
 	}
 	@Test
 	public void a11a_onParameter_Bean() throws Exception {
-		a.request("PUT", "/Bean").body("{f1:'a'}").json().execute().assertBody("{f1:'a'}");
+		a.request("PUT", "/Bean", "{f1:'a'}").json().execute().assertBody("{f1:'a'}");
 	}
 	@Test
 	public void a11b_onParameter_Bean_noContentType() throws Exception {
-		a.request("PUT", "/Bean?noTrace=true").body("{f1:'a'}").execute().assertBodyContains("Unsupported Media Type");
+		a.request("PUT", "/Bean?noTrace=true", "{f1:'a'}").execute().assertBodyContains("Unsupported Media Type");
 	}
 	@Test
 	public void a12a_onParameter_InputStream() throws Exception {
 		// Content-Type should always be ignored.
-		a.request("PUT", "/InputStream").body("'a'").json().execute().assertBody("'\\'a\\''");
+		a.request("PUT", "/InputStream", "'a'").json().execute().assertBody("'\\'a\\''");
 	}
 	@Test
 	public void a12b_onParameter_InputStream_noContentType() throws Exception {
-		a.request("PUT", "/InputStream").body("'a'").execute().assertBody("'\\'a\\''");
+		a.request("PUT", "/InputStream", "'a'").execute().assertBody("'\\'a\\''");
 	}
 	@Test
 	public void a13a_onParameter_Reader() throws Exception {
 		// Content-Type should always be ignored.
-		a.request("PUT", "/Reader").body("'a'").json().execute().assertBody("'\\'a\\''");
+		a.request("PUT", "/Reader", "'a'").json().execute().assertBody("'\\'a\\''");
 	}
 	@Test
 	public void a13b_onParameter_Reader_noContentType() throws Exception {
-		a.request("PUT", "/Reader").body("'a'").execute().assertBody("'\\'a\\''");
+		a.request("PUT", "/Reader", "'a'").execute().assertBody("'\\'a\\''");
 	}
 	@Test
 	public void a14a_onParameter_InputStreamTransform() throws Exception {
 		// Input stream transform requests must not specify Content-Type or else gets resolved as POJO.
-		a.request("PUT", "/InputStreamTransform?noTrace=true").body("'a'").json().execute().assertBodyContains("Bad Request");
+		a.request("PUT", "/InputStreamTransform?noTrace=true", "'a'").json().execute().assertBodyContains("Bad Request");
 	}
 	@Test
 	public void a14b_onParameter_InputStreamTransform_noContentType() throws Exception {
-		a.request("PUT", "/InputStreamTransform").body("'a'").execute().assertBody("'\\'a\\''");
+		a.request("PUT", "/InputStreamTransform", "'a'").execute().assertBody("'\\'a\\''");
 	}
 	@Test
 	public void a15a_onParameter_ReaderTransform() throws Exception {
 		// Reader transform requests must not specify Content-Type or else gets resolved as POJO.
-		a.request("PUT", "/ReaderTransform?noTrace=true").body("'a'").json().execute().assertBodyContains("Bad Request");
+		a.request("PUT", "/ReaderTransform?noTrace=true", "'a'").json().execute().assertBodyContains("Bad Request");
 	}
 	@Test
 	public void a15b_onParameter_ReaderTransform_noContentType() throws Exception {
-		a.request("PUT", "/ReaderTransform").body("'a'").execute().assertBody("'\\'a\\''");
+		a.request("PUT", "/ReaderTransform", "'a'").execute().assertBody("'\\'a\\''");
 	}
 	@Test
 	public void a16a_onParameter_StringTransform() throws Exception {
 		// When Content-Type specified and matched, treated as a parsed POJO.
-		a.request("PUT", "/StringTransform").body("'a'").json().execute().assertBody("'a'");
+		a.request("PUT", "/StringTransform", "'a'").json().execute().assertBody("'a'");
 	}
 	@Test
 	public void a16b_onParameter_StringTransform_noContentType() throws Exception {
 		// When Content-Type not matched, treated as plain text.
-		a.request("PUT", "/StringTransform").body("'a'").execute().assertBody("'\\'a\\''");
+		a.request("PUT", "/StringTransform", "'a'").execute().assertBody("'\\'a\\''");
 	}
 	
 	//=================================================================================================================
@@ -311,46 +311,46 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void b01a_onPojo_StringTransform() throws Exception {
-		b.request("PUT", "/StringTransform").body("'foo'").json().execute().assertBody("'foo'");
+		b.request("PUT", "/StringTransform", "'foo'").json().execute().assertBody("'foo'");
 	}
 	@Test
 	public void b01b_onPojo_StringTransform_noContentType() throws Exception {
 		// When Content-Type not matched, treated as plain text.
-		b.request("PUT", "/StringTransform").body("'foo'").execute().assertBody("'\\'foo\\''");
+		b.request("PUT", "/StringTransform", "'foo'").execute().assertBody("'\\'foo\\''");
 	}
 	@Test
 	public void b02a_onPojo_Bean() throws Exception {
-		b.request("PUT", "/Bean").body("{f1:'a'}").json().execute().assertBody("{f1:'a'}");
+		b.request("PUT", "/Bean", "{f1:'a'}").json().execute().assertBody("{f1:'a'}");
 	}
 	@Test
 	public void b02b_onPojo_Bean_noContentType() throws Exception {
-		b.request("PUT", "/Bean?noTrace=true").body("{f1:'a'}").execute().assertBodyContains("Unsupported Media Type");
+		b.request("PUT", "/Bean?noTrace=true", "{f1:'a'}").execute().assertBodyContains("Unsupported Media Type");
 	}
 	@Test
 	public void b03a_onPojo_BeanList() throws Exception {
-		b.request("PUT", "/BeanList").body("[{f1:'a'}]").json().execute().assertBody("[{f1:'a'}]");
+		b.request("PUT", "/BeanList", "[{f1:'a'}]").json().execute().assertBody("[{f1:'a'}]");
 	}
 	@Test
 	public void b03b_onPojo_BeanList_noContentType() throws Exception {
-		b.request("PUT", "/BeanList?noTrace=true").body("[{f1:'a'}]").execute().assertBodyContains("Unsupported Media Type");
+		b.request("PUT", "/BeanList?noTrace=true", "[{f1:'a'}]").execute().assertBodyContains("Unsupported Media Type");
 	}
 	@Test
 	public void b04a_onPojo_InputStreamTransform() throws Exception {
-		b.request("PUT", "/InputStreamTransform").body("a").execute().assertBody("'a'");
+		b.request("PUT", "/InputStreamTransform", "a").execute().assertBody("'a'");
 	}
 	@Test
 	public void b04b_onPojo_InputStreamTransform_withContentType() throws Exception {
 		// When Content-Type matched, treated as parsed POJO.
-		b.request("PUT", "/InputStreamTransform?noTrace=true").body("a").json().execute().assertBodyContains("Bad Request");
+		b.request("PUT", "/InputStreamTransform?noTrace=true", "a").json().execute().assertBodyContains("Bad Request");
 	}
 	@Test
 	public void b05a_onPojo_ReaderTransform() throws Exception {
-		b.request("PUT", "/ReaderTransform").body("a").execute().assertBody("'a'");
+		b.request("PUT", "/ReaderTransform", "a").execute().assertBody("'a'");
 	}
 	@Test
 	public void b05b_onPojo_ReaderTransform_withContentType() throws Exception {
 		// When Content-Type matched, treated as parsed POJO.
-		b.request("PUT", "/ReaderTransform?noTrace=true").body("a").json().execute().assertBodyContains("Bad Request");
+		b.request("PUT", "/ReaderTransform?noTrace=true", "a").json().execute().assertBodyContains("Bad Request");
 	}
 
 	//=================================================================================================================
@@ -530,75 +530,75 @@ public class BodyAnnotationTest {
 	
 	@Test
 	public void d01a_noMediaTypes_String() throws Exception {
-		d.request("PUT", "/String").body("a").execute().assertBody("a");
+		d.request("PUT", "/String", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d01b_noMediaTypes_String_withContentType() throws Exception {
-		d.request("PUT", "/String").body("a").json().execute().assertBody("a");
+		d.request("PUT", "/String", "a").json().execute().assertBody("a");
 	}
 	@Test
 	public void d02a_noMediaTypes_InputStream() throws Exception {
-		d.request("PUT", "/InputStream").body("a").execute().assertBody("a");
+		d.request("PUT", "/InputStream", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d02b_noMediaTypes_InputStream_withContentType() throws Exception {
-		d.request("PUT", "/InputStream").body("a").json().execute().assertBody("a");
+		d.request("PUT", "/InputStream", "a").json().execute().assertBody("a");
 	}
 	@Test
 	public void d03a_noMediaTypes_Reader() throws Exception {
-		d.request("PUT", "/Reader").body("a").execute().assertBody("a");
+		d.request("PUT", "/Reader", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d03b_noMediaTypes_Reader_withContentType() throws Exception {
-		d.request("PUT", "/Reader").body("a").json().execute().assertBody("a");
+		d.request("PUT", "/Reader", "a").json().execute().assertBody("a");
 	}
 	@Test
 	public void d04a_noMediaTypes_StringTransform() throws Exception {
-		d.request("PUT", "/StringTransform").body("a").execute().assertBody("a");
+		d.request("PUT", "/StringTransform", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d04b_noMediaTypes_StringTransform_withContentType() throws Exception {
-		d.request("PUT", "/StringTransform?noTrace=true").body("a").json().execute().assertStatus(415);
+		d.request("PUT", "/StringTransform?noTrace=true", "a").json().execute().assertStatus(415);
 	}
 	@Test
 	public void d05a_noMediaTypes_InputStreamTransform() throws Exception {
-		d.request("PUT", "/InputStreamTransform").body("a").execute().assertBody("a");
+		d.request("PUT", "/InputStreamTransform", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d05b_noMediaTypes_InputStreamTransform_withContentType() throws Exception {
-		d.request("PUT", "/InputStreamTransform").body("a").json().execute().assertBody("a");
+		d.request("PUT", "/InputStreamTransform", "a").json().execute().assertBody("a");
 	}
 	@Test
 	public void d06a_noMediaTypes_ReaderTransform() throws Exception {
-		d.request("PUT", "/ReaderTransform").body("a").execute().assertBody("a");
+		d.request("PUT", "/ReaderTransform", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d06b_noMediaTypes_ReaderTransform_withContentType() throws Exception {
-		d.request("PUT", "/ReaderTransform").body("a").json().execute().assertBody("a");
+		d.request("PUT", "/ReaderTransform", "a").json().execute().assertBody("a");
 	}
 	@Test
 	public void d07a_noMediaTypes_StringTransformBodyOnPojo() throws Exception {
-		d.request("PUT", "/StringTransformBodyOnPojo").body("a").execute().assertBody("a");
+		d.request("PUT", "/StringTransformBodyOnPojo", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d07b_noMediaTypes_StringTransformBodyOnPojo_withContentType() throws Exception {
-		d.request("PUT", "/StringTransformBodyOnPojo?noTrace=true").body("a").json().execute().assertStatus(415);
+		d.request("PUT", "/StringTransformBodyOnPojo?noTrace=true", "a").json().execute().assertStatus(415);
 	}
 	@Test
 	public void d08a_noMediaTypes_InputStreamTransformBodyOnPojo() throws Exception {
-		d.request("PUT", "/InputStreamTransformBodyOnPojo").body("a").execute().assertBody("a");
+		d.request("PUT", "/InputStreamTransformBodyOnPojo", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d08b_noMediaTypes_InputStreamTransformBodyOnPojo_withContentType() throws Exception {
-		d.request("PUT", "/InputStreamTransformBodyOnPojo").body("a").json().execute().assertBody("a");
+		d.request("PUT", "/InputStreamTransformBodyOnPojo", "a").json().execute().assertBody("a");
 	}
 	@Test
 	public void d09a_noMediaTypes_ReaderTransformBodyOnPojo() throws Exception {
-		d.request("PUT", "/ReaderTransformBodyOnPojo").body("a").execute().assertBody("a");
+		d.request("PUT", "/ReaderTransformBodyOnPojo", "a").execute().assertBody("a");
 	}
 	@Test
 	public void d09b_noMediaTypes_ReaderTransformBodyOnPojo_withContentType() throws Exception {
-		d.request("PUT", "/ReaderTransformBodyOnPojo").body("a").json().execute().assertBody("a");
+		d.request("PUT", "/ReaderTransformBodyOnPojo", "a").json().execute().assertBody("a");
 	}
 	
 	//=================================================================================================================
@@ -621,22 +621,22 @@ public class BodyAnnotationTest {
 	@Test
 	public void e01_complexPojos_B_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.request("PUT", "/B").body(JsonSerializer.DEFAULT_LAX.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
+		e.request("PUT", "/B", JsonSerializer.DEFAULT_LAX.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
 	}
 	@Test
 	public void e02_complexPojos_B_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.request("PUT", "/B?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE)).body("a").execute().assertBody(expected);
+		e.request("PUT", "/B?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a").execute().assertBody(expected);
 	}
 	@Test
 	public void e03_complexPojos_C_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.request("PUT", "/C").body(JsonSerializer.DEFAULT_LAX.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
+		e.request("PUT", "/C", JsonSerializer.DEFAULT_LAX.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
 	}
 	@Test
 	public void e04_complexPojos_C_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.request("PUT", "/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE)).body("a").execute().assertBody(expected);
+		e.request("PUT", "/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a").execute().assertBody(expected);
 	}
 	
 	//=================================================================================================================
@@ -661,10 +661,10 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void f01_formPostAsContent() throws Exception {
-		f.request("POST", "/").body("{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
-		f.request("POST", "/").body("{}").json().execute().assertBody("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
-		f.request("POST", "?p1=p3&p2=4").body("{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
-		f.request("POST", "?p1=p3&p2=4").body("{}").json().execute().assertBody("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+		f.request("POST", "/", "{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+		f.request("POST", "/", "{}").json().execute().assertBody("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+		f.request("POST", "?p1=p3&p2=4", "{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+		f.request("POST", "?p1=p3&p2=4", "{}").json().execute().assertBody("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 	}
 	
 	//=================================================================================================================
@@ -705,7 +705,7 @@ public class BodyAnnotationTest {
 			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
-		g.request("POST", "/").body(in).urlEnc().execute().assertBody(in);
+		g.request("POST", "/", in).urlEnc().execute().assertBody(in);
 	}
 	
 	//=================================================================================================================
@@ -751,6 +751,6 @@ public class BodyAnnotationTest {
 			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
-		h.request("POST", "/").body(in).urlEnc().execute().assertBody(in);
+		h.request("POST", "/", in).urlEnc().execute().assertBody(in);
 	}
 }

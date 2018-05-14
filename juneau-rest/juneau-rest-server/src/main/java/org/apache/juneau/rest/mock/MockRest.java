@@ -80,11 +80,23 @@ public class MockRest {
 	 * 
 	 * @param method The HTTP method
 	 * @param path The URI path.
-	 * @param pathArgs Optional path arguments.
+	 * @param body The body of the request.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
-	public MockServletRequest request(String method, String path, Object...pathArgs) throws Exception {
-		return MockServletRequest.create(method, path, pathArgs).restContext(rc);
+	public MockServletRequest request(String method, String path, Object body) throws Exception {
+		return MockServletRequest.create(method, path).body(body).restContext(rc);
+	}
+	
+	/**
+	 * Performs a REST request against the REST interface.
+	 * 
+	 * @param method The HTTP method
+	 * @param path The URI path.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest request(String method, String path) throws Exception {
+		return request(method, path, null);
 	}
 }

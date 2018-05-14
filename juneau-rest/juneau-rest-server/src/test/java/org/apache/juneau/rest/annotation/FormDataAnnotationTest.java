@@ -45,18 +45,18 @@ public class FormDataAnnotationTest {
 	
 	@Test
 	public void a01() throws Exception {
-		a.request("POST", "").body("p1=p1&p2=2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1],p2=[2,2,2]");
-		a.request("POST", "").body("p1&p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.request("POST", "").body("p1=&p2=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[,,],p2=[0,,0]");
+		a.request("POST", "", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1],p2=[2,2,2]");
+		a.request("POST", "", "p1&p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
+		a.request("POST", "", "p1=&p2=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[,,],p2=[0,,0]");
 		a.request("POST", "").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.request("POST", "").body("p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.request("POST", "").body("p1=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[,,],p2=[0,null,0]");
-		a.request("POST", "").body("p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.request("POST", "").body("p2=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,,0]");
-		a.request("POST", "").body("p1=foo&p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[foo,foo,foo],p2=[0,null,0]");
-		a.request("POST", "").body("p1&p2=1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[1,1,1]");
+		a.request("POST", "", "p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
+		a.request("POST", "", "p1=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[,,],p2=[0,null,0]");
+		a.request("POST", "", "p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
+		a.request("POST", "", "p2=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,,0]");
+		a.request("POST", "", "p1=foo&p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[foo,foo,foo],p2=[0,null,0]");
+		a.request("POST", "", "p1&p2=1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[1,1,1]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.request("POST", "").body("p1="+x+"&p2=1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
+		a.request("POST", "", "p1="+x+"&p2=1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
 	
 	//=================================================================================================================
@@ -75,8 +75,8 @@ public class FormDataAnnotationTest {
 	
 	@Test
 	public void b01() throws Exception {
-		b.request("POST", "").body("p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
-		b.request("POST", "").body("p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=['p1','p1',p1]");
+		b.request("POST", "", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
+		b.request("POST", "", "p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=['p1','p1',p1]");
 	}
 	
 	//=================================================================================================================

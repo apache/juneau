@@ -43,7 +43,7 @@ public class StatusCodesTest {
 	
 	@Test
 	public void a01a_OK() throws Exception {
-		a.request("PUT", "/").body("foo").execute().assertStatus(200);
+		a.request("PUT", "/", "foo").execute().assertStatus(200);
 	}
 	
 	//=================================================================================================================
@@ -108,7 +108,7 @@ public class StatusCodesTest {
 	
 	@Test
 	public void b01a_nonExistentBeanProperties() throws Exception {
-		b.request("PUT", "/nonExistentBeanProperties?noTrace=true").body("{f2:'foo'}").json().execute()
+		b.request("PUT", "/nonExistentBeanProperties?noTrace=true", "{f2:'foo'}").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Unknown property 'f2' encountered while trying to parse into class 'org.apache.juneau.rest.StatusCodesTest$B$B01'"
@@ -116,7 +116,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b01b_nonExistentBeanProperties() throws Exception {
-		b.request("PUT", "/nonExistentBeanProperties?noTrace=true").body("{f1:'foo', f2:'foo'}").json().execute()
+		b.request("PUT", "/nonExistentBeanProperties?noTrace=true", "{f1:'foo', f2:'foo'}").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Unknown property 'f2' encountered while trying to parse into class 'org.apache.juneau.rest.StatusCodesTest$B$B01'"
@@ -124,7 +124,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b02_wrongDataType() throws Exception {
-		b.request("PUT", "/wrongDataType?noTrace=true").body("{f1:'foo'}").json().execute()
+		b.request("PUT", "/wrongDataType?noTrace=true", "{f1:'foo'}").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Invalid number"
@@ -132,7 +132,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b03_parseIntoNonConstructableBean() throws Exception {
-		b.request("PUT", "/parseIntoNonConstructableBean?noTrace=true").body("{f1:1}").json().execute()
+		b.request("PUT", "/parseIntoNonConstructableBean?noTrace=true", "{f1:1}").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"could not be instantiated"
@@ -140,7 +140,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b04_parseIntoNonStaticInnerClass() throws Exception {
-		b.request("PUT", "/parseIntoNonStaticInnerClass?noTrace=true").body("{f1:1}").json().execute()
+		b.request("PUT", "/parseIntoNonStaticInnerClass?noTrace=true", "{f1:1}").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"could not be instantiated"
@@ -148,7 +148,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b05_parseIntoNonStaticInnerClass() throws Exception {
-		b.request("PUT", "/parseIntoNonPublicInnerClass?noTrace=true").body("{f1:1}").json().execute()
+		b.request("PUT", "/parseIntoNonPublicInnerClass?noTrace=true", "{f1:1}").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Class is not public"
@@ -156,7 +156,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b06_thrownConstructorException() throws Exception {
-		b.request("PUT", "/thrownConstructorException?noTrace=true").body("'foo'").json().execute()
+		b.request("PUT", "/thrownConstructorException?noTrace=true", "'foo'").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Test error"
@@ -164,7 +164,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b07a_setParameterToInvalidTypes_Query() throws Exception {
-		b.request("PUT", "/setParameterToInvalidTypes/123?noTrace=true&p1=foo").body("'foo'").json().execute()
+		b.request("PUT", "/setParameterToInvalidTypes/123?noTrace=true&p1=foo", "'foo'").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Could not convert QUERY 'p1' to type 'int'"
@@ -172,7 +172,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b07a_setParameterToInvalidTypes_Path() throws Exception {
-		b.request("PUT", "/setParameterToInvalidTypes/foo?noTrace=true&p1=1").body("'foo'").json().execute()
+		b.request("PUT", "/setParameterToInvalidTypes/foo?noTrace=true&p1=1", "'foo'").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Could not convert PATH 'a1' to type 'int'"
@@ -180,7 +180,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b07a_setParameterToInvalidTypes_Header() throws Exception {
-		b.request("PUT", "/setParameterToInvalidTypes/123?noTrace=true&p1=1").header("h1", "foo").body("'foo'").json().execute()
+		b.request("PUT", "/setParameterToInvalidTypes/123?noTrace=true&p1=1", "'foo'").header("h1", "foo").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
 				"Could not convert HEADER 'h1' to type 'int'"

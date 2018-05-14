@@ -139,15 +139,15 @@ public class RestParamsTest {
 	}
 	@Test
 	public void a03_InputStream() throws Exception {
-		a.request("POST", "/InputStream").body("foo").execute().assertBody("foo");
+		a.request("POST", "/InputStream", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a04_ServletInputStream() throws Exception {
-		a.request("POST", "/ServletInputStream").body("foo").execute().assertBody("foo");
+		a.request("POST", "/ServletInputStream", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a05_Reader() throws Exception {
-		a.request("POST", "/Reader").body("foo").execute().assertBody("foo");
+		a.request("POST", "/Reader", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a06_OutputStream() throws Exception {

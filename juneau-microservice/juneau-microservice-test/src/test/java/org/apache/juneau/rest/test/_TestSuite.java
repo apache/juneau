@@ -32,13 +32,10 @@ import org.junit.runners.Suite.*;
 	HtmlDocTest.class,
 	HtmlDocLinksTest.class,
 	InterfaceProxyTest.class,
-	JacocoDummyTest.class,
 	LargePojosTest.class,
-	ParsersTest.class,
 	PathsTest.class,
 	RequestBeanProxyTest.class,
 	RestClientTest.class,
-	SerializersTest.class,
 	ThirdPartyProxyTest.class,
 })
 public class _TestSuite {

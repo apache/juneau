@@ -54,13 +54,13 @@ public class ContentEncodingTest {
 
 	@Test
 	public void a01_noCompression() throws Exception {
-		a.request("PUT", "/").body("foo").execute().assertBody("foo");
-		a.request("PUT", "/").body("foo").contentEncoding("").execute().assertBody("foo");
-		a.request("PUT", "/").body("foo").contentEncoding("identity").execute().assertBody("foo");
+		a.request("PUT", "/", "foo").execute().assertBody("foo");
+		a.request("PUT", "/", "foo").contentEncoding("").execute().assertBody("foo");
+		a.request("PUT", "/", "foo").contentEncoding("identity").execute().assertBody("foo");
 	}
 	@Test
 	public void a02_noCompression_invalid() throws Exception {
-		a.request("PUT", "?noTrace=true").body(compress("foo")).contentEncoding("mycoding").execute()
+		a.request("PUT", "?noTrace=true", compress("foo")).contentEncoding("mycoding").execute()
 			.assertStatus(415)
 			.assertBodyContains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
@@ -83,12 +83,12 @@ public class ContentEncodingTest {
 	
 	@Test
 	public void b01_withCompression_identity() throws Exception {
-		b.request("PUT", "/").body("foo").execute().assertBody("foo");
-		b.request("PUT", "/").body("foo").contentEncoding("").execute().assertBody("foo");
-		b.request("PUT", "/").body("foo").contentEncoding("identity").execute().assertBody("foo");
+		b.request("PUT", "/", "foo").execute().assertBody("foo");
+		b.request("PUT", "/", "foo").contentEncoding("").execute().assertBody("foo");
+		b.request("PUT", "/", "foo").contentEncoding("identity").execute().assertBody("foo");
 	}
 	@Test
 	public void b02_withCompression_gzip() throws Exception {
-		b.request("PUT", "/").body(compress("foo")).contentEncoding("mycoding").execute().assertBody("foo");
+		b.request("PUT", "/", compress("foo")).contentEncoding("mycoding").execute().assertBody("foo");
 	}
 }
