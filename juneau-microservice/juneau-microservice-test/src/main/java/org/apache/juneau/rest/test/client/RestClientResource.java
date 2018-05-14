@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/testRestClient"
 )
-public class RestClient2Resource extends BasicRestServlet {
+public class RestClientResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

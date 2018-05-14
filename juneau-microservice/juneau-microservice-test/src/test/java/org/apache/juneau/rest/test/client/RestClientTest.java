@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -20,6 +20,7 @@ import java.util.regex.*;
 
 import org.apache.http.entity.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.test.*;
 import org.junit.*;
 
 public class RestClientTest extends RestTestcase {

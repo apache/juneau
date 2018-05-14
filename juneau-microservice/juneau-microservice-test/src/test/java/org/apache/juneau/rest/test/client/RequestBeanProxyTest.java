@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -24,6 +24,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.test.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.rest.testutils.Constants.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
@@ -23,6 +23,7 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
