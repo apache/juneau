@@ -2286,4 +2286,26 @@ public final class StringUtils {
 			return 0;
 		return s.charAt(0);
 	}
+	
+	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 * 
+	 * @param s The string to create a pattern from.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern(String s) {
+		if (s == null)
+			return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("\\Q");
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == '*')
+				sb.append("\\E").append(".*").append("\\Q");
+			else
+				sb.append(c);
+		}
+		sb.append("\\E");
+		return Pattern.compile(sb.toString());
+	}
 }

@@ -1697,7 +1697,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder staticFiles(Class<?> baseClass, String mappingString) {
-		return staticFiles(new StaticFileMapping(baseClass, mappingString));
+		if (! isEmpty(mappingString))
+			staticFiles(new StaticFileMapping(baseClass, mappingString));
+		return this;
 	}
 	
 	/**

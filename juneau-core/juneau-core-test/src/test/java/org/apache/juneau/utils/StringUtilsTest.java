@@ -888,4 +888,14 @@ public class StringUtilsTest {
 		assertTrue(compare("b",null) > 0);
 		assertTrue(compare(null,null) == 0);
 	}	
+
+	//====================================================================================================
+	// matchPattern(String)
+	//====================================================================================================
+	@Test
+	public void testGetMatchPattern() throws Exception {
+		assertTrue(getMatchPattern("a").matcher("a").matches());
+		assertTrue(getMatchPattern("*a*").matcher("aaa").matches());
+		assertFalse(getMatchPattern("*b*").matcher("aaa").matches());
+	}
 }

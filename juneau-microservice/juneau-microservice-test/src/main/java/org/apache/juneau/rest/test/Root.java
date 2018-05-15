@@ -30,8 +30,6 @@ import org.apache.juneau.rest.test.client.*;
 		ClientFuturesResource.class,
 		ConfigResource.class,
 		FormDataResource.class,
-		HtmlDocResource.class,
-		HtmlDocLinksResource.class,
 		InterfaceProxyResource.class,
 		LargePojosResource.class,
 		PathsResource.class,

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import java.util.regex.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -279,7 +280,7 @@ public class MockServletResponse implements HttpServletResponse {
 	 */
 	public MockServletResponse assertStatus(int status) throws AssertionError {
 		if (getStatus() != status)
-			throw new AssertionError(MessageFormat.format("Response did not have the expected status. expected=[{0}], actual=[{1}]", status, getStatus()));
+			throw new MockAssertionError("Response did not have the expected status.\n\tExpected=[{0}]\n\tActual=[{1}]", status, getStatus());
 		return this;
 	}
 	
@@ -292,7 +293,7 @@ public class MockServletResponse implements HttpServletResponse {
 	 */
 	public MockServletResponse assertBody(String text) throws AssertionError {
 		if (! StringUtils.isEquals(text, getBodyAsString()))
-			throw new AssertionError(MessageFormat.format("Response did not have the expected text. expected=[{0}], actual=[{1}]", text, getBodyAsString()));
+			throw new MockAssertionError("Response did not have the expected text.\n\tExpected=[{0}]\n\tActual=[{1}]", text, getBodyAsString());
 		return this;
 	}
 
@@ -307,7 +308,41 @@ public class MockServletResponse implements HttpServletResponse {
 		String text = getBodyAsString(); 
 		for (String substring : substrings) 
 			if (! contains(text, substring))
-				throw new AssertionError(MessageFormat.format("Response did not have the expected substring. expected=[{0}], body=[{1}]", substring, text));
+				throw new MockAssertionError("Response did not have the expected substring.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
+		return this;
+	}
+
+	/**
+	 * Throws an {@link AssertionError} if the response body does not match the specified pattern.
+	 * 
+	 * <p>
+	 * A pattern is a simple string containing <js>"*"</js> to represent zero or more arbitrary characters.
+	 * 
+	 * @param pattern The pattern to match against.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the body does not match the specified pattern.
+	 */
+	public MockServletResponse assertBodyMatches(String pattern) throws AssertionError {
+		String text = getBodyAsString();
+		if (! getMatchPattern(pattern).matcher(text).matches())
+			throw new MockAssertionError("Response did not match expected pattern.\n\tPattern=[{0}]\n\tBody=[{1}]", pattern, text);
+		return this;
+	}
+
+	/**
+	 * Throws an {@link AssertionError} if the response body does not match the specified regular expression.
+	 * 
+	 * <p>
+	 * A pattern is a simple string containing <js>"*"</js> to represent zero or more arbitrary characters.
+	 * 
+	 * @param regExp The regular expression to match against.
+	 * @return This object (for method chaining).
+	 * @throws AssertionError Thrown if the body does not match the specified regular expression.
+	 */
+	public MockServletResponse assertBodyMatchesRE(String regExp) throws AssertionError {
+		String text = getBodyAsString(); 
+		if (! Pattern.compile(regExp).matcher(text).matches())
+			throw new MockAssertionError("Response did not match expected regular expression.\n\tRegExp=[{0}]\n\tBody=[{1}]", regExp, text);
 		return this;
 	}
 
@@ -320,7 +355,7 @@ public class MockServletResponse implements HttpServletResponse {
 	 */
 	public MockServletResponse assertCharset(String value) {
 		if (! StringUtils.isEquals(value, getCharacterEncoding()))
-			throw new AssertionError(MessageFormat.format("Response did not have the expected character encoding. expected=[{0}], actual=[{1}]", value, getBodyAsString()));
+			throw new MockAssertionError("Response did not have the expected character encoding.\n\tExpected=[{0}]\n\tActual=[{1}]", value, getBodyAsString());
 		return this;
 	}
 
@@ -334,7 +369,7 @@ public class MockServletResponse implements HttpServletResponse {
 	 */
 	public MockServletResponse assertHeader(String name, String value) {
 		if (! StringUtils.isEquals(value, getHeader(name)))
-			throw new AssertionError(MessageFormat.format("Response did not have the expected value for header {0}. expected=[{1}], actual=[{2}]", name, value, getHeader(name)));
+			throw new MockAssertionError("Response did not have the expected value for header {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", name, value, getHeader(name));
 		return this;
 	}
 
@@ -350,7 +385,7 @@ public class MockServletResponse implements HttpServletResponse {
 		String text = getHeader(name); 
 		for (String substring : substrings) 
 			if (! contains(text, substring))
-				throw new AssertionError(MessageFormat.format("Response did not have the expected substring in header {0}. expected=[{1}], header=[{2}]", name, substring, text));
+				throw new MockAssertionError("Response did not have the expected substring in header {0}.\n\tExpected=[{1}]\n\tHeader=[{2}]", name, substring, text);
 		return this;
 	}
 
@@ -361,5 +396,14 @@ public class MockServletResponse implements HttpServletResponse {
 	 */
 	public byte[] getBody() {
 		return baos.toByteArray();
+	}
+	
+	private static class MockAssertionError extends AssertionError {
+		private static final long serialVersionUID = 1L;
+
+		MockAssertionError(String msg, Object...args) {
+			super(MessageFormat.format(msg, args));
+			System.err.println(getMessage());
+		}
 	}
 }

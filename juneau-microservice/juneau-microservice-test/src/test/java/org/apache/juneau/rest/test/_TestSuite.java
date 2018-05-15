@@ -29,8 +29,6 @@ import org.junit.runners.Suite.*;
 	ClientFuturesTest.class,
 	ConfigTest.class,
 	FormDataTest.class,
-	HtmlDocTest.class,
-	HtmlDocLinksTest.class,
 	InterfaceProxyTest.class,
 	LargePojosTest.class,
 	PathsTest.class,

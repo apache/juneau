@@ -113,14 +113,14 @@ public class StaticFileMapping {
 		this.resourceClass = resourceClass;
 		String[] parts = StringUtils.split(mappingString, ':', 3);
 		if (parts == null || parts.length <= 1)
-			throw new FormattedRuntimeException("Invalid mapping string format: ''{0}''", mappingString);
+			throw new FormattedRuntimeException("Invalid mapping string format: ''{0}'' on resource class ''{1}''", mappingString, resourceClass.getName());
 		this.path = StringUtils.trimSlashes(parts[0]); 
 		this.location = StringUtils.trimSlashes(parts[1]); 
 		if (parts.length == 3) {
 			try {
 				responseHeaders = unmodifiableMap(new ObjectMap(parts[2]));
 			} catch (ParseException e) {
-				throw new FormattedRuntimeException(e, "Invalid mapping string format: ''{0}''", mappingString);
+				throw new FormattedRuntimeException(e, "Invalid mapping string format: ''{0}'' on resource class ''{1}''", mappingString, resourceClass.getName());
 			}
 		} else {
 			responseHeaders = null;
