@@ -71,14 +71,14 @@ public class AcceptTest {
 	
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
-		a.request("PUT", "/").execute().assertBody("s2");
-		a.request("PUT", "/").accept("text/s1").execute().assertBody("s1");
-		a.request("PUT", "/").accept("text/s2").execute().assertBody("s2");
+		a.put("/", null).execute().assertBody("s2");
+		a.put("/", null).accept("text/s1").execute().assertBody("s1");
+		a.put("/", null).accept("text/s2").execute().assertBody("s2");
 	}
 
 	@Test
 	public void a02_defaultHeadersOnServletAnnotation_invalid() throws Exception {
-		a.request("PUT", "?noTrace=true").accept("text/s3").execute().assertStatus(406).assertBodyContains("Unsupported media-type in request header 'Accept': 'text/s3'");
+		a.put("?noTrace=true", null).accept("text/s3").execute().assertStatus(406).assertBodyContains("Unsupported media-type in request header 'Accept': 'text/s3'");
 	}
 
 	//=================================================================================================================
@@ -100,12 +100,12 @@ public class AcceptTest {
 	
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
-		b.request("PUT", "/").accept("text/s3").execute().assertBody("s3");
+		b.put("/", null).accept("text/s3").execute().assertBody("s3");
 	}
 
 	@Test
 	public void b02_restMethodWithParsersSerializers_invalid() throws Exception {
-		b.request("PUT", "?noTrace=true").accept("text/s4").execute()
+		b.put("?noTrace=true", null).accept("text/s4").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
@@ -132,15 +132,15 @@ public class AcceptTest {
 
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
-		c.request("PUT", "/").execute().assertBody("s2");
-		c.request("PUT", "/").accept("text/s1").execute().assertBody("s1");
-		c.request("PUT", "/").accept("text/s2").execute().assertBody("s2");
-		c.request("PUT", "/").accept("text/s3").execute().assertBody("s3");
+		c.put("/", null).execute().assertBody("s2");
+		c.put("/", null).accept("text/s1").execute().assertBody("s1");
+		c.put("/", null).accept("text/s2").execute().assertBody("s2");
+		c.put("/", null).accept("text/s3").execute().assertBody("s3");
 	}
 	
 	@Test
 	public void c02_restMethodAddParsersSerializersInherit_invalid() throws Exception {
-		c.request("PUT", "?noTrace=true").accept("text/s4").execute()
+		c.put("?noTrace=true", null).accept("text/s4").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
@@ -167,17 +167,17 @@ public class AcceptTest {
 	@Test
 	public void d01_accept_valid() throws Exception {
 		// "*/*" should match the first serializer, not the default serializer.
-		d.request("PUT", "/").accept("*/*").execute().assertBody("s1");
+		d.put("/", null).accept("*/*").execute().assertBody("s1");
 		// "text/*" should match the first serializer, not the default serializer.
-		d.request("PUT", "/").accept("text/*").execute().assertBody("s1");
-		d.request("PUT", "/").accept("bad/*,text/*").execute().assertBody("s1");
-		d.request("PUT", "/").accept("text/*,bad/*").execute().assertBody("s1");
-		d.request("PUT", "/").accept("text/s1;q=0.5,text/s2").execute().assertBody("s2");
-		d.request("PUT", "/").accept("text/s1,text/s2;q=0.5").execute().assertBody("s1");
+		d.put("/", null).accept("text/*").execute().assertBody("s1");
+		d.put("/", null).accept("bad/*,text/*").execute().assertBody("s1");
+		d.put("/", null).accept("text/*,bad/*").execute().assertBody("s1");
+		d.put("/", null).accept("text/s1;q=0.5,text/s2").execute().assertBody("s2");
+		d.put("/", null).accept("text/s1,text/s2;q=0.5").execute().assertBody("s1");
 	}
 	@Test
 	public void d02_accept_invalid() throws Exception {
-		d.request("PUT", "?noTrace=true").accept("bad/*").execute()
+		d.put("?noTrace=true", null).accept("bad/*").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'bad/*'",
@@ -204,18 +204,18 @@ public class AcceptTest {
 
 	@Test
 	public void e01_restMethodParserSerializerAnnotations_valid() throws Exception {
-		e.request("PUT", "/").execute().assertBody("s3");
-		e.request("PUT", "/").accept("text/s3").execute().assertBody("s3");
+		e.put("/", null).execute().assertBody("s3");
+		e.put("/", null).accept("text/s3").execute().assertBody("s3");
 	}
 	@Test
 	public void e02_restMethodParserSerializerAnnotations_invalid() throws Exception {
-		e.request("PUT", "?noTrace=true").accept("text/s1").execute()
+		e.put("?noTrace=true", null).accept("text/s1").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s1'",
 				"Supported media-types: ['text/s3']"
 			);
-		e.request("PUT", "?noTrace=true").accept("text/s2").execute()
+		e.put("?noTrace=true", null).accept("text/s2").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s2'",
@@ -242,9 +242,9 @@ public class AcceptTest {
 
 	@Test
 	public void f01_restMethodAddParsersSerializersAnnotations_valid() throws Exception {
-		f.request("PUT", "/").execute().assertBody("s3");
-		f.request("PUT", "/").accept("text/s1").execute().assertBody("s1");
-		f.request("PUT", "/").accept("text/s2").execute().assertBody("s2");
-		f.request("PUT", "/").accept("text/s3").execute().assertBody("s3");
+		f.put("/", null).execute().assertBody("s3");
+		f.put("/", null).accept("text/s1").execute().assertBody("s1");
+		f.put("/", null).accept("text/s2").execute().assertBody("s2");
+		f.put("/", null).accept("text/s3").execute().assertBody("s3");
 	}
 }

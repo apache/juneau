@@ -12303,7 +12303,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				Parameters on a  {@link RestMethod @RestMethod}.
+				Parameters on a  {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}.
 			<li>
 				POJO classes.
 		</ul>
@@ -12313,18 +12313,18 @@
 		</p>
 		<ol class='spaced-list'>
 			<li>
-				{@link Reader}
+				{@link java.util.Reader}
 				<br><ja>@Body</ja> annotation is optional.
 				<br><code>Content-Type</code> is ignored.
 			<li>
-				{@link InputStream} 
+				{@link java.util.InputStream} 
 				<br><ja>@Body</ja> annotation is optional.
 				<br><code>Content-Type</code> is ignored.
 			<li>
 				Any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.PojoCategories'>parsable</a> POJO type.
 				<br><code>Content-Type</code> is required to identify correct parser.
 			<li>
-				Objects convertible from {@link Reader} by having one of the following non-deprecated methods:
+				Objects convertible from {@link java.util.Reader} by having one of the following non-deprecated methods:
 				<ul>
 					<li><code><jk>public</jk> T(Reader in) {...}</code>
 					<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
@@ -12332,7 +12332,7 @@
 				</ul>
 				<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
 			<li>
-				Objects convertible from {@link InputStream} by having one of the following non-deprecated methods:
+				Objects convertible from {@link java.util.InputStream} by having one of the following non-deprecated methods:
 				<ul>
 					<li><code><jk>public</jk> T(InputStream in) {...}</code>
 					<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
@@ -12340,22 +12340,22 @@
 				</ul>
 				<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
 			<li>
-				Objects convertible from {@link String} (including <code>String</code> itself) by having one of the following non-deprecated methods:
+				Objects convertible from {@link java.lang.String} (including <code>String</code> itself) by having one of the following non-deprecated methods:
 				<ul>
-					<li><code><jk>public</jk> T(String in) {...}</code> (e.g. {@link Integer}, {@link Boolean})
+					<li><code><jk>public</jk> T(String in) {...}</code> (e.g. {@link java.lang.Integer}, {@link java.lang.Boolean})
 					<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code> 
 					<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
 					<li><code><jk>public static</jk> T <jsm>fromValue</jsm>(String in) {...}</code>
 					<li><code><jk>public static</jk> T <jsm>valueOf</jsm>(String in) {...}</code> (e.g. enums)
-					<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code> (e.g. {@link Level})
+					<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code> (e.g. {@link java.util.logging.Level})
 					<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
-					<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code> (e.g. {@link Class}, {@link Charset})
+					<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code> (e.g. {@link java.lang.Class}, {@link java.util.Charset})
 					<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
 				</ul>
 				<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
 		</ol>
 		<p>
-			Special note should be taken on using {@link String} as the body object:
+			Special note should be taken on using {@link java.lang.String} as the body object:
 		</p>
 		<p class='bcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
@@ -12697,7 +12697,7 @@
 		</p>
 		<p>
 			The servlet will pick which serializer to use by matching the request <l>Accept</l> header with the
-			media types defined through the {@link org.apache.juneau.serializer.Serializer#getMediaTypes()} method.
+			media types defined through the {@link org.apache.juneau.serializer.Serializer#getMediaTypeRanges()} method.
 		</p>
 		<p>
 			Serializers can be associated with REST servlets in the following ways:
@@ -21517,7 +21517,7 @@
 				<br>It should be noted that you cannot use the <code>$F</code> variable to retrieve localized versions of files (since you're not within
 				the scope of a client request.
 			<li>
-				The {@link org.apache.juneau.rest.annotation.RestResource#nowrap()} annotation has been changed to a string with a default value of <js>"true"</js>.
+				The <code><del>RestResource.nowrap()</del></code> annotation has been changed to a string with a default value of <js>"true"</js>.
 				<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
 			<li>
 				The {@link org.apache.juneau.rest.annotation.Path#name()} annotation parameter is now required.
@@ -21533,18 +21533,40 @@
 			<li>
 				Made improvements to the builder API for defining SSL support.
 				<br>New methods added:
-			<ul class='doctree'>
+				<ul class='doctree'>
+					<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
+						<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
+						<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+						<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+						<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#trustManagers(TrustManager...)}
+						<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#secureRandom(SecureRandom)}
+						<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
+					</ul>
+				</ul>
+			<li>
+				Clients no longer have JSON defined as the default serializer and parser.
+				<br>Instead, the clients can now be used with no serializer/parser if you're working with InputStreams/Readers or
+				POJOs that can be converted to Strings and converted from Strings/InputStreams/Readers.
+			<li>
+				Methods added to client builder to make it easy to define the transport language:
 				<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
-					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
-					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
-					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
-					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#trustManagers(TrustManager...)}
-					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#secureRandom(SecureRandom)}
-					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#json() json()}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#xml() xml()}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#html() html()}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#uon() uon()}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#urlEnc() urlEnc()}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#msgpack() msgpack()}
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#plainText() plainText()}
 				</ul>
-			</ul>
+			<li>
+				New method added for allowing serverless client testing against REST interfaces.
+				<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection() mockHttpConnection(MockHttpConnection)}
+				</ul>
 		</ul>
 
 		<h5 class='topic w800'>juneau-rest-microservice</h5>
@@ -22016,8 +22038,8 @@
 				</ul>
 			<li>
 				{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} now returns a 
-				{@link org.apache.juneau.rest.FinishableServletOutputStream} and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
-				now returns a {@link org.apache.juneau.rest.FinishablePrintWriter} that allows you to finish the output
+				<code><del>FinishableServletOutputStream</del></code> and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
+				now returns a <code><del>FinishablePrintWriter</del></code> that allows you to finish the output
 				without closing the stream.
 				<br>The {@link org.apache.juneau.rest.response.DefaultHandler} class now calls <code>finish()</code>
 				instead of <code>close()</code> on the stream.
@@ -23247,9 +23269,9 @@
 			<li>
 				Default values on header, query, and form-data annotations:
 				<ul>
-					<li>{@link org.apache.juneau.rest.annotation.Header#def @Header.def()} - Default header value.
-					<li>{@link org.apache.juneau.rest.annotation.Query#def @Query.def()} - Default query parameter value.
-					<li>{@link org.apache.juneau.rest.annotation.FormData#def @FormData.def()} - Default form data parameter value.
+					<li><code><del>@Header.def()</del></code> - Default header value.
+					<li><code><del>@Query.def()</del></code> - Default query parameter value.
+					<li><code><del>@FormData.def()</del></code> - Default form data parameter value.
 				</ul>
 			<li>
 				New attributes on {@link org.apache.juneau.rest.annotation.RestResource @RestResource}:
@@ -24292,7 +24314,7 @@
 					<li>{@link org.apache.juneau.internal.StringUtils#base64Decode(String)}
 					<li>{@link org.apache.juneau.internal.StringUtils#generateUUID(int)}
 					<li>{@link org.apache.juneau.internal.StringUtils#trim(String)}
-					<li>{@link org.apache.juneau.internal.StringUtils#parseISO8601Date(String)}
+					<li><code><del>StringUtils.parseISO8601Date(String)</del></code>
 					<li>{@link org.apache.juneau.internal.StringUtils#replaceVars(String,Map)}
 					<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String)}
 					<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String[])}
@@ -24507,7 +24529,7 @@
 			<li>New DevOps stylesheet.
 			<li>Servlet initialization and HTTP requests are now logged at <JSF>FINE</JSF> level.
 			<li>Added <jk>abstract</jk> modifier on various <l>RestServlet</l> subclasses to indicate that they're meant to be subclassed.
-			<li>New {@link org.apache.juneau.rest.RestUtils#trimPathInfo(StringBuffer,String,String)} method.
+			<li>New <code><del>RestUtils.trimPathInfo(StringBuffer,String,String)</del></code> method.
 		</ul>
 
 		<h5 class='topic w800'>Microservice</h5>

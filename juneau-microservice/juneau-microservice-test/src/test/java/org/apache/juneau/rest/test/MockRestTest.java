@@ -10,44 +10,49 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.junit.Assert.*;
 
+import org.apache.juneau.json.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
 
-/**
- * Tests related to @PathREmainder annotation.
- */
-@SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class PathRemainderAnnotationTest {
+public class MockRestTest {
 	
 	//=================================================================================================================
-	// Simple tests
+	// Basic tests
 	//=================================================================================================================
+	
+	@RestResource 
+	public static class A {
+		@RestMethod(name=PUT, path="/a01")
+		public String a01(@Body String body) {
+			return body;
+		}
 
-	@RestResource
-	public static class A  {
-		@RestMethod(name=GET, path="/*")
-		public String b(@PathRemainder String remainder) {
-			return remainder;
+		@RestMethod(name=PUT, path="/a02", serializers=JsonSerializer.class, parsers=JsonParser.class)
+		public String a02(@Body String body) {
+			return body;
 		}
 	}
-	static MockRest a = MockRest.create(A.class); 
-	
+
 	@Test
-	public void a01_withoutRemainder() throws Exception {
-		a.get("/").execute().assertBody("");
+	public void a01() throws Exception {
+		MockRest a = MockRest.create(A.class);
+		RestClient rc = RestClient.create().mockHttpConnection(a).build();
+		assertEquals("OK", rc.doPut("/a01", "OK").getResponseAsString());
 	}
+
 	@Test
-	public void a02_withRemainder() throws Exception {
-		a.get("/foo").execute().assertBody("foo");
-	}
-	@Test
-	public void a03_withRemainder2() throws Exception {
-		a.get("/foo/bar").execute().assertBody("foo/bar");
+	public void a02() throws Exception {
+		MockRest a = MockRest.create(A.class);
+		RestClient rc = RestClient.create().json().mockHttpConnection(a).build();
+		assertEquals("OK", rc.doPut("/a02", "OK").getResponse(String.class));
 	}
 }

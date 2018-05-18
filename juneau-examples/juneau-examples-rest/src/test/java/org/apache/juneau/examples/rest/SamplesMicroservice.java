@@ -17,7 +17,6 @@ import java.util.*;
 
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
 
@@ -46,8 +45,8 @@ public class SamplesMicroservice {
 			Locale.setDefault(Locale.US);
 			microservice = new RestMicroservice().setConfig("examples.cfg", false);
 			microserviceURI = microservice.start().getURI();
-			DEFAULT_CLIENT = client().build();
-			DEFAULT_CLIENT_PLAINTEXT = client(PlainTextSerializer.class, PlainTextParser.class).build();
+			DEFAULT_CLIENT = client().json().build();
+			DEFAULT_CLIENT_PLAINTEXT = client().plainText().build();
 			return true;
 		} catch (Throwable e) {
 			// Probably already started.

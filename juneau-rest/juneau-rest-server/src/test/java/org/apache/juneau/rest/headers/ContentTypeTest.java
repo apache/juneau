@@ -73,14 +73,14 @@ public class ContentTypeTest {
 	
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
-		a.request("PUT", "/").execute().assertBody("p2");
-		a.request("PUT", "/").contentType("text/p1").execute().assertBody("p1");
-		a.request("PUT", "/").contentType("text/p2").execute().assertBody("p2");
+		a.put("/", null).execute().assertBody("p2");
+		a.put("/", null).contentType("text/p1").execute().assertBody("p1");
+		a.put("/", null).contentType("text/p2").execute().assertBody("p2");
 	}
 
 	@Test
 	public void a02_defaultHeadersOnServletAnnotation_invalid() throws Exception {
-		a.request("PUT", "?noTrace=true").contentType("text/p3").execute().assertStatus(415).assertBodyContains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
+		a.put("?noTrace=true", null).contentType("text/p3").execute().assertStatus(415).assertBodyContains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
 	}
 
 	//=================================================================================================================
@@ -102,24 +102,24 @@ public class ContentTypeTest {
 	
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
-		b.request("PUT", "/").contentType("text/p3").execute().assertBody("p3");
+		b.put("/", null).contentType("text/p3").execute().assertBody("p3");
 	}
 
 	@Test
 	public void b02_restMethodWithParsersSerializers_invalid() throws Exception {
-		b.request("PUT", "?noTrace=true").execute()
+		b.put("?noTrace=true", null).execute()
 			.assertStatus(415)
 			.assertBodyContains( 
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
-		b.request("PUT", "?noTrace=true").contentType("text/p1").execute()
+		b.put("?noTrace=true", null).contentType("text/p1").execute()
 			.assertStatus(415)
 			.assertBodyContains( 
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
-		b.request("PUT", "?noTrace=true").contentType("text/p2").execute()
+		b.put("?noTrace=true", null).contentType("text/p2").execute()
 			.assertStatus(415)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
@@ -146,15 +146,15 @@ public class ContentTypeTest {
 
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
-		c.request("PUT", "/").execute().assertBody("p2");
-		c.request("PUT", "/").contentType("text/p1").execute().assertBody("p1");
-		c.request("PUT", "/").contentType("text/p2").execute().assertBody("p2");
-		c.request("PUT", "/").contentType("text/p3").execute().assertBody("p3");
+		c.put("/", null).execute().assertBody("p2");
+		c.put("/", null).contentType("text/p1").execute().assertBody("p1");
+		c.put("/", null).contentType("text/p2").execute().assertBody("p2");
+		c.put("/", null).contentType("text/p3").execute().assertBody("p3");
 	}
 	
 	@Test
 	public void c02_restMethodAddParsersSerializersInherit_invalid() throws Exception {
-		c.request("PUT", "?noTrace=true").contentType("text/p4").execute()
+		c.put("?noTrace=true", null).contentType("text/p4").execute()
 			.assertStatus(415)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p4'",
@@ -181,18 +181,18 @@ public class ContentTypeTest {
 
 	@Test
 	public void e01_restMethodParserSerializerAnnotations_valid() throws Exception {
-		e.request("PUT", "/").execute().assertBody("p3");
-		e.request("PUT", "/").contentType("text/p3").execute().assertBody("p3");
+		e.put("/", null).execute().assertBody("p3");
+		e.put("/", null).contentType("text/p3").execute().assertBody("p3");
 	}
 	@Test
 	public void e02_restMethodParserSerializerAnnotations_invalid() throws Exception {
-		e.request("PUT", "?noTrace=true").contentType("text/p1").execute()
+		e.put("?noTrace=true", null).contentType("text/p1").execute()
 			.assertStatus(415)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
-		e.request("PUT", "?noTrace=true").contentType("text/p2").execute()
+		e.put("?noTrace=true", null).contentType("text/p2").execute()
 			.assertStatus(415)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
@@ -220,9 +220,9 @@ public class ContentTypeTest {
 
 	@Test
 	public void f01_restMethodAddParsersSerializersAnnotations_valid() throws Exception {
-		f.request("PUT", "/").execute().assertBody("p3");
-		f.request("PUT", "/").contentType("text/p1").execute().assertBody("p1");
-		f.request("PUT", "/").contentType("text/p2").execute().assertBody("p2");
-		f.request("PUT", "/").contentType("text/p3").execute().assertBody("p3");
+		f.put("/", null).execute().assertBody("p3");
+		f.put("/", null).contentType("text/p1").execute().assertBody("p1");
+		f.put("/", null).contentType("text/p2").execute().assertBody("p2");
+		f.put("/", null).contentType("text/p3").execute().assertBody("p3");
 	}
 }

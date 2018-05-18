@@ -35,7 +35,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>TODO
  * </ul>
  */
-public class MockServletRequest implements HttpServletRequest {
+public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	
 	private String method = "GET";
 	private Map<String,String[]> queryData;
@@ -189,6 +189,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param uri The URI of the request.
 	 * @return This object (for method chaining).
 	 */
+	@Override /* MockHttpRequest */
 	public MockServletRequest uri(String uri) {
 		this.uri = emptyIfNull(uri);
 		return this;
@@ -211,6 +212,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return The response object.
 	 * @throws Exception
 	 */
+	@Override /* MockHttpRequest */
 	public MockServletResponse execute() throws Exception {
 		MockServletResponse res = MockServletResponse.create();
 		restContext.getCallHandler().service(this, res);
@@ -228,6 +230,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param value The method name for this request.
 	 * @return This object (for method chaining).
 	 */
+	@Override /* MockHttpRequest */
 	public MockServletRequest method(String value) {
 		this.method = value;
 		return this;
@@ -264,6 +267,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param value Header value.
 	 * @return This object (for method chaining).
 	 */
+	@Override /* MockHttpRequest */
 	public MockServletRequest header(String name, Object value) {
 		this.headerMap.put(name, new String[] {asString(value)});
 		return this;
@@ -287,6 +291,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param value The body of the request.
 	 * @return This object (for method chaining).
 	 */
+	@Override /* MockHttpRequest */
 	public MockServletRequest body(Object value) {
 		try {
 			if (value instanceof byte[])

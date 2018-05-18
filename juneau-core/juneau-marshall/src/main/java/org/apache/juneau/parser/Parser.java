@@ -812,4 +812,18 @@ public abstract class Parser extends BeanContext {
 				.append("listener", listener)
 			);
 	}
+
+	/**
+	 * Returns <jk>true</jk> if this parser can handle the specified content type.
+	 * 
+	 * @param contentType The content type to test.
+	 * @return <jk>true</jk> if this parser can handle the specified content type.
+	 */
+	public boolean canHandle(String contentType) {
+		if (contentType != null)
+			for (MediaType mt : getMediaTypes())
+				if (contentType.equals(mt.toString()))
+					return true;
+		return false;
+	}
 }

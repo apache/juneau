@@ -57,15 +57,15 @@ public class ClientVersionTest {
 	
 	@Test
 	public void a01_defaultHeader() throws Exception {
-		a.request("GET", "/").execute().assertBody("no-version");
+		a.get("/").execute().assertBody("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			a.request("GET", "/").clientVersion(s).execute().assertBody("[1.0,1.0]");
+			a.get("/").clientVersion(s).execute().assertBody("[1.0,1.0]");
 		}
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			a.request("GET", "/").clientVersion(s).execute().assertBody("[1.1,2)");
+			a.get("/").clientVersion(s).execute().assertBody("[1.1,2)");
 		}
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			a.request("GET", "/").clientVersion(s).execute().assertBody("2");
+			a.get("/").clientVersion(s).execute().assertBody("2");
 		}
 	}
 
@@ -100,18 +100,18 @@ public class ClientVersionTest {
 	
 	@Test
 	public void b01_testCustomHeader() throws Exception {
-		b.request("GET", "/").execute().assertBody("no-version");
+		b.get("/").execute().assertBody("no-version");
 		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
-			b.request("GET", "/").header("Custom-Client-Version", s).execute().assertBody("[0.0,1.0)");
+			b.get("/").header("Custom-Client-Version", s).execute().assertBody("[0.0,1.0)");
 		}
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			b.request("GET", "/").header("Custom-Client-Version", s).execute().assertBody("[1.0,1.0]");
+			b.get("/").header("Custom-Client-Version", s).execute().assertBody("[1.0,1.0]");
 		}
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			b.request("GET", "/").header("Custom-Client-Version", s).execute().assertBody("[1.1,2)");
+			b.get("/").header("Custom-Client-Version", s).execute().assertBody("[1.1,2)");
 		}
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			b.request("GET", "/").header("Custom-Client-Version", s).execute().assertBody("2");
+			b.get("/").header("Custom-Client-Version", s).execute().assertBody("2");
 		}
 	}
 }

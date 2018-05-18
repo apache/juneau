@@ -55,23 +55,23 @@ public class HtmlDocHeaderTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.request("GET", "/a01").accept("text/html").execute().assertBodyContains("<header>a01a a01b</header>");
+		a.get("/a01").accept("text/html").execute().assertBodyContains("<header>a01a a01b</header>");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.request("GET", "/a02").accept("text/html").execute().assertBodyContains("<header>a02a a02b</header>");
+		a.get("/a02").accept("text/html").execute().assertBodyContains("<header>a02a a02b</header>");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.request("GET", "/a03").accept("text/html").execute().assertBodyContains("<header>a01a a01b a03a a03b</header>");
+		a.get("/a03").accept("text/html").execute().assertBodyContains("<header>a01a a01b a03a a03b</header>");
 	}
 	@Test
 	public void a04() throws Exception {
-		a.request("GET", "/a04").accept("text/html").execute().assertBodyContains("<header>a04a a01a a01b a04b</header>");
+		a.get("/a04").accept("text/html").execute().assertBodyContains("<header>a04a a01a a01b a04b</header>");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.request("GET", "/a05").accept("text/html").execute().assertBodyContains("<header>a05a a05b a01a a01b</header>");
+		a.get("/a05").accept("text/html").execute().assertBodyContains("<header>a05a a05b a01a a01b</header>");
 	}
 
 	//=================================================================================================================
@@ -105,22 +105,22 @@ public class HtmlDocHeaderTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.request("GET", "/b01").accept("text/html").execute().assertBodyContains("<header>b01a b01b a01a a01b</header>");
+		b.get("/b01").accept("text/html").execute().assertBodyContains("<header>b01a b01b a01a a01b</header>");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.request("GET", "/b02").accept("text/html").execute().assertBodyContains("<header>b02a b02b</header>");
+		b.get("/b02").accept("text/html").execute().assertBodyContains("<header>b02a b02b</header>");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.request("GET", "/b03").accept("text/html").execute().assertBodyContains("<header>b01a b01b a01a a01b b03a b03b</header>");
+		b.get("/b03").accept("text/html").execute().assertBodyContains("<header>b01a b01b a01a a01b b03a b03b</header>");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.request("GET", "/b04").accept("text/html").execute().assertBodyContains("<header>b04a b01a b01b a01a a01b b04b</header>");
+		b.get("/b04").accept("text/html").execute().assertBodyContains("<header>b04a b01a b01b a01a a01b b04b</header>");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.request("GET", "/b05").accept("text/html").execute().assertBodyContains("<header>b05a b05b b01a b01b a01a a01b</header>");
+		b.get("/b05").accept("text/html").execute().assertBodyContains("<header>b05a b05b b01a b01b a01a a01b</header>");
 	}
 }

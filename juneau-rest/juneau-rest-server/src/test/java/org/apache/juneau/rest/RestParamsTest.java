@@ -129,85 +129,85 @@ public class RestParamsTest {
 
 	@Test
 	public void a01_ResourceBundle() throws Exception {
-		a.request("GET", "/ResourceBundle").acceptLanguage("en-US").execute().assertBody("bar");
-		a.request("GET", "/ResourceBundle").acceptLanguage("ja-JP").execute().assertBody("baz");
+		a.get("/ResourceBundle").acceptLanguage("en-US").execute().assertBody("bar");
+		a.get("/ResourceBundle").acceptLanguage("ja-JP").execute().assertBody("baz");
 	}
 	@Test
 	public void a02_MessageBundle() throws Exception {
-		a.request("GET", "/MessageBundle").acceptLanguage("en-US").execute().assertBody("bar");
-		a.request("GET", "/MessageBundle").acceptLanguage("ja-JP").execute().assertBody("baz");
+		a.get("/MessageBundle").acceptLanguage("en-US").execute().assertBody("bar");
+		a.get("/MessageBundle").acceptLanguage("ja-JP").execute().assertBody("baz");
 	}
 	@Test
 	public void a03_InputStream() throws Exception {
-		a.request("POST", "/InputStream", "foo").execute().assertBody("foo");
+		a.post("/InputStream", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a04_ServletInputStream() throws Exception {
-		a.request("POST", "/ServletInputStream", "foo").execute().assertBody("foo");
+		a.post("/ServletInputStream", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a05_Reader() throws Exception {
-		a.request("POST", "/Reader", "foo").execute().assertBody("foo");
+		a.post("/Reader", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a06_OutputStream() throws Exception {
-		a.request("GET", "/OutputStream").execute().assertBody("OK");
+		a.get("/OutputStream").execute().assertBody("OK");
 	}
 	@Test
 	public void a07_ServletOutputStream() throws Exception {
-		a.request("GET", "/ServletOutputStream").execute().assertBody("OK");
+		a.get("/ServletOutputStream").execute().assertBody("OK");
 	}
 	@Test
 	public void a08_Writer() throws Exception {
-		a.request("GET", "/Writer").execute().assertBody("OK");
+		a.get("/Writer").execute().assertBody("OK");
 	}
 	@Test
 	public void a09_RequestHeaders() throws Exception {
-		a.request("GET", "/RequestHeaders").execute().assertBody("true");
+		a.get("/RequestHeaders").execute().assertBody("true");
 	}
 	@Test
 	public void a10_RequestQuery() throws Exception {
-		a.request("GET", "/RequestQuery").execute().assertBody("true");
+		a.get("/RequestQuery").execute().assertBody("true");
 	}
 	@Test
 	public void a11_RequestFormData() throws Exception {
-		a.request("GET", "/RequestFormData").execute().assertBody("true");
+		a.get("/RequestFormData").execute().assertBody("true");
 	}
 	@Test
 	public void a12_HttpMethod() throws Exception {
-		a.request("GET", "/HttpMethod").execute().assertBody("GET");
+		a.get("/HttpMethod").execute().assertBody("GET");
 	}
 	@Test
 	public void a13_RestLogger() throws Exception {
-		a.request("GET", "/RestLogger").execute().assertBody("true");
+		a.get("/RestLogger").execute().assertBody("true");
 	}
 	@Test
 	public void a14_RestContext() throws Exception {
-		a.request("GET", "/RestContext").execute().assertBody("true");
+		a.get("/RestContext").execute().assertBody("true");
 	}
 	@Test
 	public void a15_Parser() throws Exception {
-		a.request("GET", "/Parser").contentType("application/json").execute().assertBody("org.apache.juneau.json.JsonParser");
+		a.get("/Parser").contentType("application/json").execute().assertBody("org.apache.juneau.json.JsonParser");
 	}
 	@Test
 	public void a16_Locale() throws Exception {
-		a.request("GET", "/Locale").acceptLanguage("en-US").execute().assertBody("en_US");
-		a.request("GET", "/Locale").acceptLanguage("ja-JP").execute().assertBody("ja_JP");
+		a.get("/Locale").acceptLanguage("en-US").execute().assertBody("en_US");
+		a.get("/Locale").acceptLanguage("ja-JP").execute().assertBody("ja_JP");
 	}
 	@Test
 	public void a17_Swagger() throws Exception {
-		a.request("GET", "/Swagger").execute().assertBody("true");
+		a.get("/Swagger").execute().assertBody("true");
 	}
 	@Test
 	public void a18_RequestPathMatch() throws Exception {
-		a.request("GET", "/RequestPathMatch").execute().assertBody("true");
+		a.get("/RequestPathMatch").execute().assertBody("true");
 	}
 	@Test
 	public void a19_RequestBody() throws Exception {
-		a.request("GET", "/RequestBody").execute().assertBody("true");
+		a.get("/RequestBody").execute().assertBody("true");
 	}
 	@Test
 	public void a20_Config() throws Exception {
-		a.request("GET", "/Config").execute().assertBody("true");
+		a.get("/Config").execute().assertBody("true");
 	}
 }

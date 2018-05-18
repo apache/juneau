@@ -20,8 +20,6 @@ import java.text.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.transforms.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.xml.*;
 import org.junit.*;
 
 public class SampleRemoteableServicesResourceTest extends RestTestcase {
@@ -34,13 +32,16 @@ public class SampleRemoteableServicesResourceTest extends RestTestcase {
 	public static void beforeClass() throws Exception {
 		clients = new RestClient[] {
 			SamplesMicroservice.client()
+				.json()
 				.pojoSwaps(CalendarSwap.DateMedium.class)
 				.build(),
-			SamplesMicroservice.client(XmlSerializer.class, XmlParser.class)
+			SamplesMicroservice.client()
+				.xml()
 				.pojoSwaps(CalendarSwap.DateMedium.class)
 				.set(XML_autoDetectNamespaces, true)
 				.build(),
-			SamplesMicroservice.client(UonSerializer.class, UonParser.class)
+			SamplesMicroservice.client()
+				.uon()
 				.pojoSwaps(CalendarSwap.DateMedium.class)
 				.build(),
 		};

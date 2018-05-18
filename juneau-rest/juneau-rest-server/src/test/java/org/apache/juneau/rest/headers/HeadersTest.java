@@ -174,234 +174,234 @@ public class HeadersTest {
 	
 	@Test
 	public void a01a_accept() throws Exception {
-		a.request("GET", "/accept").accept("text/foo").execute().assertBody("text/foo");
-		a.request("GET", "/accept").accept("text/foo+bar").execute().assertBody("text/foo+bar");
-		a.request("GET", "/accept").accept("text/*").execute().assertBody("text/*");
-		a.request("GET", "/accept").accept("*/foo").execute().assertBody("*/foo");
+		a.get("/accept").accept("text/foo").execute().assertBody("text/foo");
+		a.get("/accept").accept("text/foo+bar").execute().assertBody("text/foo+bar");
+		a.get("/accept").accept("text/*").execute().assertBody("text/*");
+		a.get("/accept").accept("*/foo").execute().assertBody("*/foo");
 	}
 	@Test
 	public void a01b_accept_qValues() throws Exception {
-		a.request("GET", "/accept").accept("text/foo;q=1.0").execute().assertBody("text/foo");
-		a.request("GET", "/accept").accept("text/foo;q=0.9").execute().assertBody("text/foo;q=0.9");
-		a.request("GET", "/accept").accept("text/foo;x=X;q=0.9;y=Y").execute().assertBody("text/foo;x=X;q=0.9;y=Y");
+		a.get("/accept").accept("text/foo;q=1.0").execute().assertBody("text/foo");
+		a.get("/accept").accept("text/foo;q=0.9").execute().assertBody("text/foo;q=0.9");
+		a.get("/accept").accept("text/foo;x=X;q=0.9;y=Y").execute().assertBody("text/foo;x=X;q=0.9;y=Y");
 	}
 	@Test
 	public void a01b_accept_query() throws Exception {
-		a.request("GET", "/accept?Accept=text/foo").execute().assertBody("text/foo");
+		a.get("/accept?Accept=text/foo").execute().assertBody("text/foo");
 	}
 	@Test
 	public void a02a_acceptCharset() throws Exception {
-		a.request("GET", "/acceptCharset").acceptCharset("UTF-8").execute().assertBody("UTF-8");
+		a.get("/acceptCharset").acceptCharset("UTF-8").execute().assertBody("UTF-8");
 	}
 	@Test
 	public void a02b_acceptCharset_query() throws Exception {
-		a.request("GET", "/acceptCharset?Accept-Charset=UTF-8").execute().assertBody("UTF-8");
+		a.get("/acceptCharset?Accept-Charset=UTF-8").execute().assertBody("UTF-8");
 	}
 	@Test
 	public void a03a_acceptEncoding() throws Exception {
-		a.request("GET", "/acceptEncoding").acceptEncoding("foo").execute().assertBody("foo");
-		a.request("GET", "/acceptEncoding").acceptEncoding("*").execute().assertBody("*");
+		a.get("/acceptEncoding").acceptEncoding("foo").execute().assertBody("foo");
+		a.get("/acceptEncoding").acceptEncoding("*").execute().assertBody("*");
 	}
 	@Test
 	public void a03b_acceptEncoding_query() throws Exception {
-		a.request("GET", "/acceptEncoding?Accept-Encoding=*").execute().assertBody("*");
+		a.get("/acceptEncoding?Accept-Encoding=*").execute().assertBody("*");
 	}
 	@Test
 	public void a04a_acceptLanguage() throws Exception {
-		a.request("GET", "/acceptLanguage").acceptLanguage("foo").execute().assertBody("foo");
+		a.get("/acceptLanguage").acceptLanguage("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a04b_acceptLanguage_query() throws Exception {
-		a.request("GET", "/acceptLanguage?Accept-Language=foo").acceptLanguage("foo").execute().assertBody("foo");
+		a.get("/acceptLanguage?Accept-Language=foo").acceptLanguage("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a05a_authorization() throws Exception {
-		a.request("GET", "/authorization").authorization("foo").execute().assertBody("foo");
+		a.get("/authorization").authorization("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a05b_authorization_query() throws Exception {
-		a.request("GET", "/authorization?Authorization=foo").execute().assertBody("foo");
+		a.get("/authorization?Authorization=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a06a_cacheControl() throws Exception {
-		a.request("GET", "/cacheControl").cacheControl("foo").execute().assertBody("foo");
+		a.get("/cacheControl").cacheControl("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a06b_cacheControl_query() throws Exception {
-		a.request("GET", "/cacheControl?Cache-Control=foo").execute().assertBody("foo");
+		a.get("/cacheControl?Cache-Control=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a07a_connection() throws Exception {
-		a.request("GET", "/connection").connection("foo").execute().assertBody("foo");
+		a.get("/connection").connection("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a07b_connection_query() throws Exception {
-		a.request("GET", "/connection?Connection=foo").execute().assertBody("foo");
+		a.get("/connection?Connection=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a08a_contentLength() throws Exception {
-		a.request("GET", "/contentLength").contentLength(0).execute().assertBody("0");
+		a.get("/contentLength").contentLength(0).execute().assertBody("0");
 	}
 	@Test
 	public void a08b_contentLength_query() throws Exception {
-		a.request("GET", "/contentLength?Content-Length=0").execute().assertBody("0");
+		a.get("/contentLength?Content-Length=0").execute().assertBody("0");
 	}
 	@Test
 	public void a09a_contentType() throws Exception {
-		a.request("GET", "/contentType").contentType("text/foo").execute().assertBody("text/foo");
+		a.get("/contentType").contentType("text/foo").execute().assertBody("text/foo");
 	}
 	@Test
 	public void a09b_contentType_query() throws Exception {
-		a.request("GET", "/contentType?Content-Type=text/foo").execute().assertBody("text/foo");
+		a.get("/contentType?Content-Type=text/foo").execute().assertBody("text/foo");
 	}
 	@Test
 	public void a10a_date() throws Exception {
-		a.request("GET", "/date").date("foo").execute().assertBody("foo");
+		a.get("/date").date("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a10b_date_query() throws Exception {
-		a.request("GET", "/date?Date=foo").execute().assertBody("foo");
+		a.get("/date?Date=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a11a_expect() throws Exception {
-		a.request("GET", "/expect").expect("100-continue").execute().assertBody("100-continue");
+		a.get("/expect").expect("100-continue").execute().assertBody("100-continue");
 	}
 	@Test
 	public void a11b_expect_query() throws Exception {
-		a.request("GET", "/expect?Expect=100-continue").execute().assertBody("100-continue");
+		a.get("/expect?Expect=100-continue").execute().assertBody("100-continue");
 	}
 	@Test
 	public void a12a_from() throws Exception {
-		a.request("GET", "/from").from("foo").execute().assertBody("foo");
+		a.get("/from").from("foo").execute().assertBody("foo");
 	}
 	public void a12b_from_query() throws Exception {
-		a.request("GET", "/from?From=foo").execute().assertBody("foo");
+		a.get("/from?From=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a13a_host() throws Exception {
-		a.request("GET", "/host").host("localhost").execute().assertBody("localhost");
+		a.get("/host").host("localhost").execute().assertBody("localhost");
 	}
 	@Test
 	public void a13b_host_query() throws Exception {
-		a.request("GET", "/host?Host=localhost").execute().assertBody("localhost");
+		a.get("/host?Host=localhost").execute().assertBody("localhost");
 	}
 	@Test
 	public void a14a_ifMatch() throws Exception {
-		a.request("GET", "/ifMatch").ifMatch("foo").execute().assertBody("\"foo\"");
-		a.request("GET", "/ifMatch").ifMatch("\"foo\"").execute().assertBody("\"foo\"");
-		a.request("GET", "/ifMatch").ifMatch("W/\"foo\"").execute().assertBody("W/\"foo\"");
-		a.request("GET", "/ifMatch").ifMatch("W/\"foo\",\"bar\"").execute().assertBody("W/\"foo\", \"bar\"");
+		a.get("/ifMatch").ifMatch("foo").execute().assertBody("\"foo\"");
+		a.get("/ifMatch").ifMatch("\"foo\"").execute().assertBody("\"foo\"");
+		a.get("/ifMatch").ifMatch("W/\"foo\"").execute().assertBody("W/\"foo\"");
+		a.get("/ifMatch").ifMatch("W/\"foo\",\"bar\"").execute().assertBody("W/\"foo\", \"bar\"");
 	}
 	@Test
 	public void a14b_ifMatch_query() throws Exception {
-		a.request("GET", "/ifMatch?If-Match=foo").execute().assertBody("\"foo\"");
+		a.get("/ifMatch?If-Match=foo").execute().assertBody("\"foo\"");
 	}
 	@Test
 	public void a15a_ifModifiedSince() throws Exception {
-		a.request("GET", "/ifModifiedSince").ifModifiedSince("foo").execute().assertBody("foo");
+		a.get("/ifModifiedSince").ifModifiedSince("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a15b_ifModifiedSince_query() throws Exception {
-		a.request("GET", "/ifModifiedSince?If-Modified-Since=foo").execute().assertBody("foo");
+		a.get("/ifModifiedSince?If-Modified-Since=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a16a_ifNoneMatch() throws Exception {
-		a.request("GET", "/ifNoneMatch").ifNoneMatch("foo").execute().assertBody("\"foo\"");
-		a.request("GET", "/ifNoneMatch").ifNoneMatch("\"foo\"").execute().assertBody("\"foo\"");
-		a.request("GET", "/ifNoneMatch").ifNoneMatch("W/\"foo\"").execute().assertBody("W/\"foo\"");
-		a.request("GET", "/ifNoneMatch").ifNoneMatch("W/\"foo\",\"bar\"").execute().assertBody("W/\"foo\", \"bar\"");
+		a.get("/ifNoneMatch").ifNoneMatch("foo").execute().assertBody("\"foo\"");
+		a.get("/ifNoneMatch").ifNoneMatch("\"foo\"").execute().assertBody("\"foo\"");
+		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\"").execute().assertBody("W/\"foo\"");
+		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\",\"bar\"").execute().assertBody("W/\"foo\", \"bar\"");
 	}
 	@Test
 	public void a16b_ifNoneMatch_query() throws Exception {
-		a.request("GET", "/ifNoneMatch?If-None-Match=foo").execute().assertBody("\"foo\"");
+		a.get("/ifNoneMatch?If-None-Match=foo").execute().assertBody("\"foo\"");
 	}
 	@Test
 	public void a17a_ifRange() throws Exception {
-		a.request("GET", "/ifRange").ifRange("foo").execute().assertBody("foo");
+		a.get("/ifRange").ifRange("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a17b_ifRange_query() throws Exception {
-		a.request("GET", "/ifRange?If-Range=foo").execute().assertBody("foo");
+		a.get("/ifRange?If-Range=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a18a_ifUnmodifiedSince() throws Exception {
-		a.request("GET", "/ifUnmodifiedSince").ifUnmodifiedSince("foo").execute().assertBody("foo");
+		a.get("/ifUnmodifiedSince").ifUnmodifiedSince("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a18b_ifUnmodifiedSince_query() throws Exception {
-		a.request("GET", "/ifUnmodifiedSince?If-Unmodified-Since=foo").execute().assertBody("foo");
+		a.get("/ifUnmodifiedSince?If-Unmodified-Since=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a19a_maxForwards() throws Exception {
-		a.request("GET", "/maxForwards").maxForwards(123).execute().assertBody("123");
+		a.get("/maxForwards").maxForwards(123).execute().assertBody("123");
 	}
 	@Test
 	public void a19b_maxForwards_query() throws Exception {
-		a.request("GET", "/maxForwards?Max-Forwards=123").execute().assertBody("123");
+		a.get("/maxForwards?Max-Forwards=123").execute().assertBody("123");
 	}
 	@Test
 	public void a20a_pragma() throws Exception {
-		a.request("GET", "/pragma").pragma("foo").execute().assertBody("foo");
+		a.get("/pragma").pragma("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a20b_pragma_query() throws Exception {
-		a.request("GET", "/pragma?Pragma=foo").execute().assertBody("foo");
+		a.get("/pragma?Pragma=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a21a_proxyAuthorization() throws Exception {
-		a.request("GET", "/proxyAuthorization").proxyAuthorization("foo").execute().assertBody("foo");
+		a.get("/proxyAuthorization").proxyAuthorization("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a21b_proxyAuthorization_query() throws Exception {
-		a.request("GET", "/proxyAuthorization?Proxy-Authorization=foo").execute().assertBody("foo");
+		a.get("/proxyAuthorization?Proxy-Authorization=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a22a_range() throws Exception {
-		a.request("GET", "/range").range("foo").execute().assertBody("foo");
+		a.get("/range").range("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a22b_range_query() throws Exception {
-		a.request("GET", "/range?Range=foo").execute().assertBody("foo");
+		a.get("/range?Range=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a23a_referer() throws Exception {
-		a.request("GET", "/referer").referer("foo").execute().assertBody("foo");
+		a.get("/referer").referer("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a23b_referer_query() throws Exception {
-		a.request("GET", "/referer?Referer=foo").execute().assertBody("foo");
+		a.get("/referer?Referer=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a24a_te() throws Exception {
-		a.request("GET", "/te").te("foo").execute().assertBody("foo");
+		a.get("/te").te("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a24b_te_query() throws Exception {
-		a.request("GET", "/te?TE=foo").execute().assertBody("foo");
+		a.get("/te?TE=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a25a_upgrade() throws Exception {
-		a.request("GET", "/upgrade").upgrade("foo").execute().assertBody("foo");
+		a.get("/upgrade").upgrade("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a25b_upgrade_query() throws Exception {
-		a.request("GET", "/upgrade?Upgrade=foo").execute().assertBody("foo");
+		a.get("/upgrade?Upgrade=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a26a_userAgent() throws Exception {
-		a.request("GET", "/userAgent").userAgent("foo").execute().assertBody("foo");
+		a.get("/userAgent").userAgent("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a26b_userAgent_query() throws Exception {
-		a.request("GET", "/userAgent?User-Agent=foo").execute().assertBody("foo");
+		a.get("/userAgent?User-Agent=foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a27a_warning() throws Exception {
-		a.request("GET", "/warning").warning("foo").execute().assertBody("foo");
+		a.get("/warning").warning("foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a27b_warning_query() throws Exception {
-		a.request("GET", "/warning?Warning=foo").execute().assertBody("foo");
+		a.get("/warning?Warning=foo").execute().assertBody("foo");
 	}
 	
 	//====================================================================================================
@@ -440,11 +440,11 @@ public class HeadersTest {
 	
 	@Test
 	public void b01a_customHeader() throws Exception {
-		b.request("GET", "/").header("Custom", "foo").execute().assertBody("foo");
+		b.get("/").header("Custom", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void b01b_customHeader_query() throws Exception {
-		b.request("GET", "?Custom=foo").execute().assertBody("foo");
+		b.get("?Custom=foo").execute().assertBody("foo");
 	}
 	
 	//====================================================================================================
@@ -465,15 +465,15 @@ public class HeadersTest {
 	
 	@Test
 	public void c01_defaultRequestHeaders_default() throws Exception {
-		c.request("GET", "/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		c.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void c02_defaultRequestHeaders_override() throws Exception {
-		c.request("GET", "/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		c.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void c03_defaultRequestHeaders_override_caseInsensitive() throws Exception {
-		c.request("GET", "/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		c.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -494,15 +494,15 @@ public class HeadersTest {
 	
 	@Test
 	public void d01_defaultRequestHeadersCaseInsensitive_default() throws Exception {
-		d.request("GET", "/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		d.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void d02_defaultRequestHeadersCaseInsensitive_override() throws Exception {
-		d.request("GET", "/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		d.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void d03_defaultRequestHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
-		d.request("GET", "/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		d.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -523,15 +523,15 @@ public class HeadersTest {
 	
 	@Test
 	public void e01_annotatedHeaders_default() throws Exception {
-		e.request("GET", "/").execute().assertBody("{h1:null,h2:null,h3:null}");
+		e.get("/").execute().assertBody("{h1:null,h2:null,h3:null}");
 	}
 	@Test
 	public void e02_annotatedHeaders_override() throws Exception {
-		e.request("GET", "/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		e.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void e03_annotatedHeaders_override_caseInsensitive() throws Exception {
-		e.request("GET", "/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		e.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -552,15 +552,15 @@ public class HeadersTest {
 	
 	@Test
 	public void f01_annotatedHeadersCaseInsensitive_default() throws Exception {
-		f.request("GET", "/").execute().assertBody("{h1:null,h2:null,h3:null}");
+		f.get("/").execute().assertBody("{h1:null,h2:null,h3:null}");
 	}
 	@Test
 	public void f02_annotatedHeadersCaseInsensitive_override() throws Exception {
-		f.request("GET", "/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		f.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void f03_annotatedHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
-		f.request("GET", "/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		f.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -581,15 +581,15 @@ public class HeadersTest {
 	
 	@Test
 	public void g01_annotatedHeadersDefault_default() throws Exception {
-		g.request("GET", "/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		g.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void g02_annotatedHeadersDefault_override() throws Exception {
-		g.request("GET", "/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		g.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void g03_annotatedHeadersDefault_override_caseInsensitive() throws Exception {
-		g.request("GET", "/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		g.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	
 	//====================================================================================================
@@ -610,14 +610,14 @@ public class HeadersTest {
 	
 	@Test
 	public void h01_annotatedAndDefaultHeaders_default() throws Exception {
-		h.request("GET", "/").execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		h.get("/").execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void h02_annotatedAndDefaultHeaders_override() throws Exception {
-		h.request("GET", "/").header("H1",7).header("H2",8).header("H3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
+		h.get("/").header("H1",7).header("H2",8).header("H3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
 	}
 	@Test
 	public void h03_annotatedAndDefaultHeaders_override_caseInsensitive() throws Exception {
-		h.request("GET", "/").header("h1",7).header("h2",8).header("h3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
+		h.get("/").header("h1",7).header("h2",8).header("h3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
 	}
 }

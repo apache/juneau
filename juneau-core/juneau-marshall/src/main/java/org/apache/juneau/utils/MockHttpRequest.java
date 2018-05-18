@@ -10,44 +10,56 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
-
-import static org.apache.juneau.http.HttpMethodName.*;
-
-import org.apache.juneau.rest.mock.*;
-import org.junit.*;
-import org.junit.runners.*;
+package org.apache.juneau.utils;
 
 /**
- * Tests related to @PathREmainder annotation.
+ * Represent the basic interface for an HTTP rquest.
+ * 
+ * <p>
+ * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
+ * class to send and receive mocked requests using the <code>MockRest</code> interface.
  */
-@SuppressWarnings({"javadoc"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class PathRemainderAnnotationTest {
+public interface MockHttpRequest {
 	
-	//=================================================================================================================
-	// Simple tests
-	//=================================================================================================================
+	/**
+	 * Sets the URI of the request.
+	 * 
+	 * @param uri The URI of the request.
+	 * @return This object (for method chaining).
+	 */
+	MockHttpRequest uri(String uri);
 
-	@RestResource
-	public static class A  {
-		@RestMethod(name=GET, path="/*")
-		public String b(@PathRemainder String remainder) {
-			return remainder;
-		}
-	}
-	static MockRest a = MockRest.create(A.class); 
+	/**
+	 * Sets the URI of the request.
+	 * 
+	 * @param method The URI of the request.
+	 * @return This object (for method chaining).
+	 */
+	MockHttpRequest method(String method);
 	
-	@Test
-	public void a01_withoutRemainder() throws Exception {
-		a.get("/").execute().assertBody("");
-	}
-	@Test
-	public void a02_withRemainder() throws Exception {
-		a.get("/foo").execute().assertBody("foo");
-	}
-	@Test
-	public void a03_withRemainder2() throws Exception {
-		a.get("/foo/bar").execute().assertBody("foo/bar");
-	}
+	/**
+	 * Sets a header on the request.
+	 * 
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 */
+	MockHttpRequest header(String name, Object value);
+
+	/**
+	 * Sets the body of the request.
+	 * 
+	 * @param body The body of the request.
+	 * @return This object (for method chaining).
+	 */
+	MockHttpRequest body(Object body);
+	
+	/**
+	 * Executes the request and returns the response.
+	 * 
+	 * @return The response for the request.
+	 * @throws Exception 
+	 */
+	MockHttpResponse execute() throws Exception;
+	
 }

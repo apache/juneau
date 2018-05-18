@@ -69,12 +69,12 @@ public class NlsTest {
 
 	@Test
 	public void a01_fromClass() throws Exception {
-		a.request("GET", "/fromClass").execute().assertBody("value1");
+		a.get("/fromClass").execute().assertBody("value1");
 	}
 
 	@Test
 	public void a02_fromMethod() throws Exception {
-		a.request("GET", "/fromMethod").execute().assertBody("value2");
+		a.get("/fromMethod").execute().assertBody("value2");
 	}
 	
 	//=================================================================================================================
@@ -93,7 +93,7 @@ public class NlsTest {
 	
 	@Test
 	public void b01_optionsPageWithoutNls() throws Exception {
-		b.request("OPTIONS", "/").execute().assertBodyContains("foo");
+		b.options("/").execute().assertBodyContains("foo");
 	}
 
 	//=================================================================================================================
@@ -112,6 +112,6 @@ public class NlsTest {
 
 	@Test
 	public void c01_missingResourceBundle() throws Exception {
-		c.request("GET", "/").execute().assertBody("{!!bad}");
+		c.get("/").execute().assertBody("{!!bad}");
 	}
 }

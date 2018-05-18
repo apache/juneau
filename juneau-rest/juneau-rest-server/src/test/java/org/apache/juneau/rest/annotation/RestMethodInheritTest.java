@@ -156,15 +156,15 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void a01_serializers_default() throws Exception {
-		a.request("GET", "/default").execute().assertBody("['text/s3','text/s4','text/s1','text/s2']");
+		a.get("/default").execute().assertBody("['text/s3','text/s4','text/s1','text/s2']");
 	}
 	@Test
 	public void a02_serializers_onMethod() throws Exception {
-		a.request("GET", "/onMethod").execute().assertBody("['text/s5']");
+		a.get("/onMethod").execute().assertBody("['text/s5']");
 	}
 	@Test
 	public void a03_serializers_onMethodInherit() throws Exception {
-		a.request("GET", "/onMethodInherit").execute().assertBody("['text/s5','text/s3','text/s4','text/s1','text/s2']");
+		a.get("/onMethodInherit").execute().assertBody("['text/s5','text/s3','text/s4','text/s1','text/s2']");
 	}
 
 	//=================================================================================================================
@@ -199,15 +199,15 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void b01_parsers_default() throws Exception {
-		b.request("GET", "/default").execute().assertBody("['text/p3','text/p4','text/p1','text/p2']");
+		b.get("/default").execute().assertBody("['text/p3','text/p4','text/p1','text/p2']");
 	}
 	@Test
 	public void b02_parsers_onMethod() throws Exception {
-		b.request("GET", "/onMethod").execute().assertBody("['text/p5']");
+		b.get("/onMethod").execute().assertBody("['text/p5']");
 	}
 	@Test
 	public void b03_parsers_onMethodInherit() throws Exception {
-		b.request("GET", "/onMethodInherit").execute().assertBody("['text/p5','text/p3','text/p4','text/p1','text/p2']");
+		b.get("/onMethodInherit").execute().assertBody("['text/p5','text/p3','text/p4','text/p1','text/p2']");
 	}
 
 	//=================================================================================================================
@@ -232,7 +232,7 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void c01_encoders() throws Exception {
-		c.request("GET", "/").execute().assertBody("['e3','e4','e1','e2','identity']");
+		c.get("/").execute().assertBody("['e3','e4','e1','e2','identity']");
 	}
 
 	//=================================================================================================================
@@ -273,19 +273,19 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void d01_transforms_default() throws Exception {
-		d.request("GET", "/default").json().execute().assertBody("['F1','F2','Foo3']");
+		d.get("/default").json().execute().assertBody("['F1','F2','Foo3']");
 	}
 	@Test
 	public void d02_transforms_inheritTransforms() throws Exception {
-		d.request("GET", "/inheritTransforms").json().execute().assertBody("['F1','F2','F3']");
+		d.get("/inheritTransforms").json().execute().assertBody("['F1','F2','F3']");
 	}
 	@Test
 	public void d03_transforms_overrideSerializer() throws Exception {
-		d.request("GET", "/overrideSerializer").json().execute().assertBody("['Foo1','Foo2','F3']");
+		d.get("/overrideSerializer").json().execute().assertBody("['Foo1','Foo2','F3']");
 	}
 	@Test
 	public void d04_transforms_overrideSerializerInheritTransforms() throws Exception {
-		d.request("GET", "/overrideSerializerInheritTransforms").json().execute().assertBody("['F1','F2','F3']");
+		d.get("/overrideSerializerInheritTransforms").json().execute().assertBody("['F1','F2','F3']");
 	}
 
 	//=================================================================================================================
@@ -332,14 +332,14 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void e01_properties_default() throws Exception {
-		e.request("GET", "/default").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		e.get("/default").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
 	}
 	@Test
 	public void e02_properties_override_false() throws Exception {
-		e.request("GET", "/override").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+		e.get("/override").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
 	}
 	@Test
 	public void e03_properties_override_true() throws Exception {
-		e.request("GET", "/override?override").execute().assertBody("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+		e.get("/override?override").execute().assertBody("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 	}
 }

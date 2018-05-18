@@ -20,11 +20,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.examples.addressbook.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.transforms.*;
-import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
@@ -38,25 +36,23 @@ public class AddressBookResourceTest extends RestTestcase {
 	public static void beforeClass() throws Exception {
 		clients = new RestClient[] {
 			SamplesMicroservice.client()
+				.json()
 				.pojoSwaps(CalendarSwap.DateMedium.class)
 				.set(XML_autoDetectNamespaces, true)
 				.build(),
 			SamplesMicroservice.client()
-				.serializer(XmlSerializer.class)
-				.parser(XmlParser.class)
+				.xml()
 				.pojoSwaps(CalendarSwap.DateMedium.class)
 				.set(XML_autoDetectNamespaces, true)
 				.build(),
 			SamplesMicroservice.client()
-				.serializer(HtmlSerializer.class)
-				.parser(HtmlParser.class)
+				.html()
 				.accept("text/html+stripped")
 				.pojoSwaps(CalendarSwap.DateMedium.class)
 				.set(XML_autoDetectNamespaces, true)
 				.build(),
 			SamplesMicroservice.client()
-				.serializer(XmlSerializer.class)
-				.parser(HtmlParser.class)
+				.html()
 				.accept("text/html+stripped")
 				.pojoSwaps(CalendarSwap.DateMedium.class)
 				.set(XML_autoDetectNamespaces, true)

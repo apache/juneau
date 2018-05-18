@@ -123,8 +123,8 @@ public class RestResourceSerializersTest {
 	
 	@Test
 	public void a01_serializerOnClass() throws Exception {
-		a.request("GET", "/serializerOnClass").accept("text/a").execute().assertBody("text/a - test1");
-		a.request("GET", "/serializerOnClass?noTrace=true").accept("text/b").execute()
+		a.get("/serializerOnClass").accept("text/a").execute().assertBody("text/a - test1");
+		a.get("/serializerOnClass?noTrace=true").accept("text/b").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/b'",
@@ -133,7 +133,7 @@ public class RestResourceSerializersTest {
 	}
 	@Test
 	public void a02_serializerOnMethod() throws Exception {
-		a.request("GET", "/serializerOnMethod?noTrace=true").accept("text/a").execute()
+		a.get("/serializerOnMethod?noTrace=true").accept("text/a").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/a'",
@@ -142,17 +142,17 @@ public class RestResourceSerializersTest {
 	}
 	@Test
 	public void a03_serializerOverriddenOnMethod() throws Exception {
-		a.request("GET", "/serializerOverriddenOnMethod").accept("text/a").execute().assertBody("text/c - test3");
-		a.request("GET", "/serializerOverriddenOnMethod").accept("text/b").execute().assertBody("text/b - test3");
+		a.get("/serializerOverriddenOnMethod").accept("text/a").execute().assertBody("text/c - test3");
+		a.get("/serializerOverriddenOnMethod").accept("text/b").execute().assertBody("text/b - test3");
 	}
 	@Test
 	public void a04_serializerWithDifferentMediaTypes() throws Exception {
-		a.request("GET", "/serializerWithDifferentMediaTypes").accept("text/a").execute().assertBody("text/d - test4");
-		a.request("GET", "/serializerWithDifferentMediaTypes").accept("text/d").execute().assertBody("text/d - test4");
+		a.get("/serializerWithDifferentMediaTypes").accept("text/a").execute().assertBody("text/d - test4");
+		a.get("/serializerWithDifferentMediaTypes").accept("text/d").execute().assertBody("text/d - test4");
 	}
 	@Test
 	public void a05_validErrorResponse() throws Exception {
-		a.request("GET", "/validErrorResponse?noTrace=true").accept("text/bad").execute()
+		a.get("/validErrorResponse?noTrace=true").accept("text/bad").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/bad'",

@@ -59,8 +59,8 @@ public class RestResourcePathTest {
 	public void a01_nestedChildren() throws Exception {
 		// Since we're not running from a servlet container, we access A directly with no path.
 		// However, the path is still reflected in RestContext.getPath().
-		a.request("GET", "/").execute().assertBody("A-p0");
-		a.request("GET", "/p1").execute().assertBody("A01-p0/p1");
-		a.request("GET", "/p1/p2").execute().assertBody("A02a-p0/p1/p2");
+		a.get("/").execute().assertBody("A-p0");
+		a.get("/p1").execute().assertBody("A01-p0/p1");
+		a.get("/p1/p2").execute().assertBody("A02a-p0/p1/p2");
 	}
 }

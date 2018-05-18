@@ -45,13 +45,21 @@ import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.plaintext.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
+import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.proto.*;
 
 /**
  * Builder class for the {@link RestClient} class.
@@ -103,6 +111,103 @@ public class RestClientBuilder extends BeanContextBuilder {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Convenience method for specifying JSON as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(JsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder json() {
+		return serializer(JsonSerializer.class).parser(JsonParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying XML as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(XmlSerializer.<jk>class</jk>).parser(XmlParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder xml() {
+		return serializer(XmlSerializer.class).parser(XmlParser.class);
+	}
+	
+	/**
+	 * Convenience method for specifying HTML as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(HtmlSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder html() {
+		return serializer(HtmlSerializer.class).parser(HtmlParser.class);
+	}
+	
+	/**
+	 * Convenience method for specifying plain-text as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(PlainTextSerializer.<jk>class</jk>).parser(PlainTextParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder plainText() {
+		return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
+	}
+	
+	/**
+	 * Convenience method for specifying MessagePack as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder msgpack() {
+		return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
+	}
+	
+	/**
+	 * Convenience method for specifying UON as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(UonSerializer.<jk>class</jk>).parser(UonParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder uon() {
+		return serializer(UonSerializer.class).parser(UonParser.class);
+	}
+	
+	/**
+	 * Convenience method for specifying URL-Encoding as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(UrlEncodingSerializer.<jk>class</jk>).parser(UrlEncodingParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder urlEnc() {
+		return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
+	}
+	
+	/**
+	 * Convenience method for specifying YAML as the transmission media type.
+	 * 
+	 * <p>
+	 * Identical to calling <code>serializer(YamlSerializer.<jk>class</jk>).parser(YamlParser.<jk>class</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder yaml() {
+		return serializer(YamlSerializer.class).parser(YamlParser.class);
+	}
+
 
 	/**
 	 * Creates an instance of an {@link HttpClient} to be used to handle all HTTP communications with the target server.
@@ -126,6 +231,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 		// Don't call createConnectionManager() if RestClient.setConnectionManager() was called.
 		if (httpClientConnectionManager == null)
 			httpClientBuilder.setConnectionManager(createConnectionManager());
+		else
+			httpClientBuilder.setConnectionManager(httpClientConnectionManager);
 		return httpClientBuilder.build();
 	}
 
@@ -441,10 +548,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param httpClientConnectionManager The HTTP client connection manager.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder httpClientConnectionManager(	HttpClientConnectionManager httpClientConnectionManager) {
+	public RestClientBuilder httpClientConnectionManager(HttpClientConnectionManager httpClientConnectionManager) {
 		this.httpClientConnectionManager = httpClientConnectionManager;
 		return this;
 	}
+	
+	/**
+	 * Sets a mock connection used to construct a connection manager for working against mocked REST interfaces.
+	 * 
+	 * TODO - Describe how to use this.
+	 * 
+	 * @param c The mock connection.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder mockHttpConnection(MockHttpConnection c) {
+		rootUrl("http://localhost");
+		return httpClientConnectionManager(new MockHttpClientConnectionManager(c));
+	}
+	
 
 	//--------------------------------------------------------------------------------
 	// HTTP headers

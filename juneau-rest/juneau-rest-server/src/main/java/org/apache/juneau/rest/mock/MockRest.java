@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Creates a mocked interface against a REST resource class.
@@ -48,7 +49,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'>TODO
  * </ul>
  */
-public class MockRest {
+public class MockRest implements MockHttpConnection {
 	private static Map<Class<?>,RestContext> CONTEXTS = new ConcurrentHashMap<>();
 
 	private final RestContext rc;
@@ -84,6 +85,7 @@ public class MockRest {
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
+	@Override /* MockHttpConnection */
 	public MockServletRequest request(String method, String path, Object body) throws Exception {
 		return MockServletRequest.create(method, path).body(body).restContext(rc);
 	}
@@ -98,5 +100,62 @@ public class MockRest {
 	 */
 	public MockServletRequest request(String method, String path) throws Exception {
 		return request(method, path, null);
+	}
+
+	/**
+	 * Perform a GET request.
+	 * 
+	 * @param path The URI path.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest get(String path) throws Exception {
+		return request("GET", path, null);
+	}
+
+	/**
+	 * Perform a PUT request.
+	 * 
+	 * @param path The URI path.
+	 * @param body The body of the request.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest put(String path, Object body) throws Exception {
+		return request("PUT", path, body);
+	}
+
+	/**
+	 * Perform a POST request.
+	 * 
+	 * @param path The URI path.
+	 * @param body The body of the request.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest post(String path, Object body) throws Exception {
+		return request("POST", path, body);
+	}
+
+	/**
+	 * Perform a DELETE request.
+	 * 
+	 * @param path The URI path.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest delete(String path) throws Exception {
+		return request("DELETE", path, null);
+	}
+
+	/**
+	 * Perform an OPTIONS request.
+	 * 
+	 * @param path The URI path.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest options(String path) throws Exception {
+		return request("OPTIONS", path, null);
 	}
 }

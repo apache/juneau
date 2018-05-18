@@ -76,12 +76,12 @@ public class RestMethodPathTest {
 		// [/{id}/*] = [test5f]
 		// [/{id}/foo] = [test5g]
 		// [/{id}/foo/*] = [test5h]
-		a.request("GET", "/").execute().assertBody("a");
-		a.request("GET", "/foo").execute().assertBody("c");
-		a.request("GET", "/foo/x").execute().assertBody("d");
-		a.request("GET", "/x").execute().assertBody("e");
-		a.request("GET", "/x/x").execute().assertBody("f");
-		a.request("GET", "/x/foo").execute().assertBody("g");
-		a.request("GET", "/x/foo/x").execute().assertBody("h");
+		a.get("/").execute().assertBody("a");
+		a.get("/foo").execute().assertBody("c");
+		a.get("/foo/x").execute().assertBody("d");
+		a.get("/x").execute().assertBody("e");
+		a.get("/x/x").execute().assertBody("f");
+		a.get("/x/foo").execute().assertBody("g");
+		a.get("/x/foo/x").execute().assertBody("h");
 	}
 }

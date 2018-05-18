@@ -27,7 +27,6 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
 
@@ -60,9 +59,9 @@ public class TestMicroservice {
 					"Test-Entry: test-value"
 				);
 			microserviceURI = microservice.start().getURI();
-			DEFAULT_CLIENT = client().build();
-			DEFAULT_CLIENT_DEBUG = client().debug().build();
-			DEFAULT_CLIENT_PLAINTEXT = client(PlainTextSerializer.class, PlainTextParser.class).build();
+			DEFAULT_CLIENT = client().json().build();
+			DEFAULT_CLIENT_DEBUG = client().json().debug().build();
+			DEFAULT_CLIENT_PLAINTEXT = client().plainText().build();
 			return true;
 		} catch (Throwable e) {
 			System.err.println(e); // NOT DEBUG
@@ -103,6 +102,7 @@ public class TestMicroservice {
 			final RequestLine[] currentRequest = new RequestLine[1];
 			final StatusLine[] currentResponse = new StatusLine[1];
 			return RestClient.create()
+				.json()
 				.rootUrl(microserviceURI)
 				.retryHandler(
 					new HttpRequestRetryHandler() {

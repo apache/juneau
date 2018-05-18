@@ -57,15 +57,15 @@ public class RestMethodGuardsTest {
 	
 	@Test
 	public void a01_overlappingOneGuard() throws Exception {
-		a.request("GET", "/overlappingOneGuard?t1=1").execute().assertBody("OK1");
-		a.request("GET", "/overlappingOneGuard?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/overlappingOneGuard?t1=1").execute().assertBody("OK1");
+		a.get("/overlappingOneGuard?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
 	}
 
 	@Test
 	public void a01_overlappingTwoGuards() throws Exception {
-		a.request("GET", "/overlappingTwoGuards?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
-		a.request("GET", "/overlappingTwoGuards?noTrace=true&t1=1").execute().assertStatus(403).assertBodyContains("Access denied by guard");
-		a.request("GET", "/overlappingTwoGuards?noTrace=true&t2=2").execute().assertStatus(403).assertBodyContains("Access denied by guard");
-		a.request("GET", "/overlappingTwoGuards?t1=1&t2=2").execute().assertBody("OK2");
+		a.get("/overlappingTwoGuards?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/overlappingTwoGuards?noTrace=true&t1=1").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/overlappingTwoGuards?noTrace=true&t2=2").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/overlappingTwoGuards?t1=1&t2=2").execute().assertBody("OK2");
 	}
 }

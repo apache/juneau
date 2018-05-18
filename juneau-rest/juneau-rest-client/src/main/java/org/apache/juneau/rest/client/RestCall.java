@@ -35,6 +35,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -477,6 +478,8 @@ public final class RestCall extends BeanSession implements Closeable {
 
 	/**
 	 * Sets the input for this REST call.
+	 * 
+	 * TODO - Describe allowed input if serializer not defined.
 	 * 
 	 * @param input
 	 * 	The input to be sent to the REST resource (only valid for PUT and POST) requests. <br>
@@ -1494,8 +1497,10 @@ public final class RestCall extends BeanSession implements Closeable {
 					entity = new UrlEncodedFormEntity((NameValuePairs)input);
 				else if (input instanceof HttpEntity)
 					entity = (HttpEntity)input;
-				else
-					entity = new RestRequestEntity(input, getSerializer());
+				else if (serializer != null)
+					entity = new RestRequestEntity(input, serializer);
+				else 
+					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input));
 
 				if (retries > 1 && ! entity.isRepeatable())
 					throw new RestCallException("Rest call set to retryable, but entity is not repeatable.");
@@ -1647,30 +1652,6 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (capturedResponse == null && capturedResponseWriter != null && capturedResponseWriter.getBuffer().length() > 0)
 			capturedResponse = capturedResponseWriter.toString();
 		return capturedResponse;
-	}
-
-	/**
-	 * Returns the parser specified on the client to use for parsing HTTP response bodies.
-	 * 
-	 * @return The parser.
-	 * @throws RestCallException If no parser was defined on the client.
-	 */
-	protected Parser getParser() throws RestCallException {
-		if (parser == null)
-			throw new RestCallException(0, "No parser defined on client", request.getMethod(), request.getURI(), null);
-		return parser;
-	}
-
-	/**
-	 * Returns the serializer specified on the client to use for serializing HTTP request bodies.
-	 * 
-	 * @return The serializer.
-	 * @throws RestCallException If no serializer was defined on the client.
-	 */
-	protected Serializer getSerializer() throws RestCallException {
-		if (serializer == null)
-			throw new RestCallException(0, "No serializer defined on client", request.getMethod(), request.getURI(), null);
-		return serializer;
 	}
 
 	/**
@@ -1863,7 +1844,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws IOException If a connection error occurred.
 	 */
 	public <T> T getResponse(Class<T> type) throws IOException, ParseException {
-		BeanContext bc = getParser();
+		BeanContext bc = parser;
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return getResponse(bc.getClassMeta(type));
@@ -1926,6 +1907,8 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 * 
+	 * TODO - Describe allowed POJOs when parser is not defined.
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -1954,7 +1937,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	public <T> T getResponse(Type type, Type...args) throws IOException, ParseException {
-		BeanContext bc = getParser();
+		BeanContext bc = parser;
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return (T)getResponse(bc.getClassMeta(type, args));
@@ -2023,16 +2006,36 @@ public final class RestCall extends BeanSession implements Closeable {
 
 	<T> T getResponse(ClassMeta<T> type) throws IOException, ParseException {
 		try {
-			if (type.getInnerClass().equals(HttpResponse.class))
+			Class<?> ic = type.getInnerClass();
+		
+			if (ic.equals(HttpResponse.class))
 				return (T)response;
-			if (type.getInnerClass().equals(Reader.class))
+			if (ic.equals(Reader.class))
 				return (T)getReader();
-			if (type.getInnerClass().equals(InputStream.class))
+			if (ic.equals(InputStream.class))
 				return (T)getInputStream();
-			Parser p = getParser();
-			try (Closeable in = p.isReaderParser() ? getReader() : getInputStream()) {
-				return p.parse(in, type);
+		
+			if (parser != null) {
+				try (Closeable in = parser.isReaderParser() ? getReader() : getInputStream()) {
+					return parser.parse(in, type);
+				}
 			}
+
+			if (type.hasReaderTransform())
+				return type.getReaderTransform().transform(getReader());
+
+			if (type.hasInputStreamTransform())
+				return type.getInputStreamTransform().transform(getInputStream());
+			
+			MediaType mt = getMediaType();
+			if ((isEmpty(mt) || mt.toString().equals("text/plain")) && type.hasStringTransform())
+				return type.getStringTransform().transform(getResponseAsString());
+			
+			throw new ParseException(
+				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
+				getResponseHeader("Content-Type"), parser == null ? null : parser.getMediaTypes()
+			);
+			
 		} catch (ParseException e) {
 			isFailed = true;
 			throw e;
@@ -2044,8 +2047,8 @@ public final class RestCall extends BeanSession implements Closeable {
 		}
 	}
 
-	BeanContext getBeanContext() throws RestCallException {
-		BeanContext bc = getParser();
+	BeanContext getBeanContext() {
+		BeanContext bc = parser;
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return bc;

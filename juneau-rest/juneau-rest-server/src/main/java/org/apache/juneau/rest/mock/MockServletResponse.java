@@ -24,6 +24,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpServletResponse} for mocking purposes.
@@ -33,7 +34,7 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='link'>TODO
  * </ul>
 */
-public class MockServletResponse implements HttpServletResponse {
+public class MockServletResponse implements HttpServletResponse, MockHttpResponse {
 
 	private String characterEncoding = "UTF-8";
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -68,6 +69,7 @@ public class MockServletResponse implements HttpServletResponse {
 	 * 
 	 * @return The response message.
 	 */
+	@Override /* MockHttpResponse */
 	public String getMessage() {
 		return msg;
 	}
@@ -394,10 +396,16 @@ public class MockServletResponse implements HttpServletResponse {
 	 * 
 	 * @return The body of the request.
 	 */
+	@Override /* MockHttpResponse */
 	public byte[] getBody() {
 		return baos.toByteArray();
 	}
 	
+	@Override /* MockHttpResponse */
+	public Map<String,String[]> getHeaders() {
+		return headerMap;
+	}
+
 	private static class MockAssertionError extends AssertionError {
 		private static final long serialVersionUID = 1L;
 

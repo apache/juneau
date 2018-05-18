@@ -25,7 +25,6 @@ import org.apache.juneau.rest.test.client.*;
 	children={
 		DebugResource.class,
 		LogsResource.class,
-		BpiResource.class,
 		CallbackStringsResource.class,
 		ClientFuturesResource.class,
 		ConfigResource.class,

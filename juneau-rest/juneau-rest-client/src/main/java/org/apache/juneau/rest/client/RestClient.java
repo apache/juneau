@@ -461,22 +461,22 @@ public class RestClient extends BeanContext implements Closeable {
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
 		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		
-		Object o = getProperty(RESTCLIENT_serializer, Object.class, JsonSerializer.class);
+		Object o = getProperty(RESTCLIENT_serializer, Object.class, null);
 		if (o instanceof Serializer) {
 			this.serializer = ((Serializer)o).builder().apply(ps).build();
 		} else if (o instanceof Class) {
 			this.serializer = ContextCache.INSTANCE.create((Class<? extends Serializer>)o, ps);
 		} else {
-			throw new ContextRuntimeException("Invalid object type found for property ''{0}'':  ''{1}''", RESTCLIENT_serializer, o.getClass());
+			this.serializer = null;
 		}
 		
-		o = getProperty(RESTCLIENT_parser, Object.class, JsonParser.class);
+		o = getProperty(RESTCLIENT_parser, Object.class, null);
 		if (o instanceof Parser) {
 			this.parser = ((Parser)o).builder().apply(ps).build();
 		} else if (o instanceof Class) {
 			this.parser = ContextCache.INSTANCE.create((Class<? extends Parser>)o, ps);
 		} else {
-			throw new ContextRuntimeException("Invalid object type found for property ''{0}'':  ''{1}''", RESTCLIENT_parser, o.getClass());
+			this.parser = null;
 		}
 
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);

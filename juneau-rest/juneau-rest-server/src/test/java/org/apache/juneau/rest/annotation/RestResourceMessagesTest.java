@@ -55,7 +55,7 @@ public class RestResourceMessagesTest {
 	@Test
 	public void a01() throws Exception {
 		// Parent resource should just pick up values from its bundle.
-		a.request("GET", "/").execute().assertBody("{key1:'value1a',key2:'value2a'}");
+		a.get("/").execute().assertBody("{key1:'value1a',key2:'value2a'}");
 	}
 	
 	//====================================================================================================
@@ -70,6 +70,6 @@ public class RestResourceMessagesTest {
 	public void b01() throws Exception {
 		// Child resource should pick up values from both parent and child,
 		// ordered child before parent.
-		b.request("GET", "/").execute().assertBody("{key1:'value1a',key2:'value2b',key3:'value3b'}");
+		b.get("/").execute().assertBody("{key1:'value1a',key2:'value2b',key3:'value3b'}");
 	}
 }

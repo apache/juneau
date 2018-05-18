@@ -434,7 +434,7 @@ public class RequestBody {
 				return cm.getInputStreamTransform().transform(getInputStream());
 			
 			MediaType mt = getMediaType();
-			if ((isEmpty(mt) || mt.toString().equals("text/plain")) && cm.hasStringTransform())
+			if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringTransform())
 				return cm.getStringTransform().transform(asString());
 			
 			throw new UnsupportedMediaType(

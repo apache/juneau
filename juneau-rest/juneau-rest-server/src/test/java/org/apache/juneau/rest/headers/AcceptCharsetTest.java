@@ -47,17 +47,17 @@ public class AcceptCharsetTest {
 
 	@Test
 	public void a01_qValues() throws Exception {
-		a.request("GET", "/").accept("text/plain").acceptCharset("utf-8").execute().assertCharset("utf-8");
-		a.request("GET", "/").accept("text/plain").acceptCharset("iso-8859-1").execute().assertCharset("iso-8859-1");
-		a.request("GET", "/").accept("text/plain").acceptCharset("bad,utf-8").execute().assertCharset("utf-8");
-		a.request("GET", "/").accept("text/plain").acceptCharset("utf-8,bad").execute().assertCharset("utf-8");
-		a.request("GET", "/").accept("text/plain").acceptCharset("bad;q=0.9,utf-8;q=0.1").execute().assertCharset("utf-8");
-		a.request("GET", "/").accept("text/plain").acceptCharset("bad;q=0.1,utf-8;q=0.9").execute().assertCharset("utf-8");
-		a.request("GET", "/").accept("text/plain").acceptCharset("utf-8;q=0.9,iso-8859-1;q=0.1").execute().assertCharset("utf-8");
-		a.request("GET", "/").accept("text/plain").acceptCharset("utf-8;q=0.1,iso-8859-1;q=0.9").execute().assertCharset("iso-8859-1");
-		a.request("GET", "/").accept("text/plain").acceptCharset("*").execute().assertCharset("utf-8");
-		a.request("GET", "/").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.5,*;q=0.1").execute().assertCharset("iso-8859-1");
-		a.request("GET", "/").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.1,*;q=0.5").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("utf-8").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("iso-8859-1").execute().assertCharset("iso-8859-1");
+		a.get("/").accept("text/plain").acceptCharset("bad,utf-8").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("utf-8,bad").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("bad;q=0.9,utf-8;q=0.1").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("bad;q=0.1,utf-8;q=0.9").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("utf-8;q=0.9,iso-8859-1;q=0.1").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("utf-8;q=0.1,iso-8859-1;q=0.9").execute().assertCharset("iso-8859-1");
+		a.get("/").accept("text/plain").acceptCharset("*").execute().assertCharset("utf-8");
+		a.get("/").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.5,*;q=0.1").execute().assertCharset("iso-8859-1");
+		a.get("/").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.1,*;q=0.5").execute().assertCharset("utf-8");
 	}
 
 	//=================================================================================================================
@@ -109,12 +109,12 @@ public class AcceptCharsetTest {
 	
 	@Test
 	public void b01_testCharsetOnResponse() throws Exception {
-		b.request("PUT", "/").plainText().execute().assertBody("utf-8/utf-8");
-		b.request("PUT", "/").plainText().acceptCharset("Shift_JIS").execute().assertBody("utf-8/Shift_JIS");
-		b.request("PUT", "?noTrace=true").plainText().acceptCharset("BAD").execute().assertStatus(406).assertBodyContains("No supported charsets in header 'Accept-Charset': 'BAD'");
-		b.request("PUT", "/").plainText().acceptCharset("UTF-8").execute().assertBody("utf-8/UTF-8");
-		b.request("PUT", "/").plainText().acceptCharset("bad,iso-8859-1").execute().assertBody("utf-8/iso-8859-1");
-		b.request("PUT", "/").plainText().acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").execute().assertBody("utf-8/iso-8859-1");
-		b.request("PUT", "/").plainText().acceptCharset("bad;q=0.1,iso-8859-1;q=0.9").execute().assertBody("utf-8/iso-8859-1");
+		b.put("/", null).plainText().execute().assertBody("utf-8/utf-8");
+		b.put("/", null).plainText().acceptCharset("Shift_JIS").execute().assertBody("utf-8/Shift_JIS");
+		b.put("?noTrace=true", null).plainText().acceptCharset("BAD").execute().assertStatus(406).assertBodyContains("No supported charsets in header 'Accept-Charset': 'BAD'");
+		b.put("/", null).plainText().acceptCharset("UTF-8").execute().assertBody("utf-8/UTF-8");
+		b.put("/", null).plainText().acceptCharset("bad,iso-8859-1").execute().assertBody("utf-8/iso-8859-1");
+		b.put("/", null).plainText().acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").execute().assertBody("utf-8/iso-8859-1");
+		b.put("/", null).plainText().acceptCharset("bad;q=0.1,iso-8859-1;q=0.9").execute().assertBody("utf-8/iso-8859-1");
 	}
 }

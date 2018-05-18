@@ -40,13 +40,13 @@ public class RestResourceStaticFilesTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.request("GET", "/xdocs/test.txt").execute().assertBodyContains("OK-1");
-		a.request("GET", "/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-2");
+		a.get("/xdocs/test.txt").execute().assertBodyContains("OK-1");
+		a.get("/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-2");
 	}
 	@Test
 	public void a02_preventPathTraversals() throws Exception {
-		a.request("GET", "/xdocs/xsubdocs/../test.txt?noTrace=true").execute().assertStatus(404);
-		a.request("GET", "/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").execute().assertStatus(404);
+		a.get("/xdocs/xsubdocs/../test.txt?noTrace=true").execute().assertStatus(404);
+		a.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").execute().assertStatus(404);
 	}
 
 	//====================================================================================================
@@ -64,6 +64,6 @@ public class RestResourceStaticFilesTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.request("GET", "/xdocs/test.txt").execute().assertHeader("Foo","Bar").assertBodyContains("OK-1");
+		b.get("/xdocs/test.txt").execute().assertHeader("Foo","Bar").assertBodyContains("OK-1");
 	}
 }

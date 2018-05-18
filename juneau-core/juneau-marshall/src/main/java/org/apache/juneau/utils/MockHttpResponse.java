@@ -10,44 +10,44 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.utils;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
-import org.apache.juneau.rest.mock.*;
-import org.junit.*;
-import org.junit.runners.*;
+import java.util.*;
 
 /**
- * Tests related to @PathREmainder annotation.
+ * Represent the basic interface for an HTTP response.
+ * 
+ * <p>
+ * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
+ * class to send and receive mocked requests using the <code>MockRest</code> interface.
  */
-@SuppressWarnings({"javadoc"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class PathRemainderAnnotationTest {
+public interface MockHttpResponse {
 	
-	//=================================================================================================================
-	// Simple tests
-	//=================================================================================================================
-
-	@RestResource
-	public static class A  {
-		@RestMethod(name=GET, path="/*")
-		public String b(@PathRemainder String remainder) {
-			return remainder;
-		}
-	}
-	static MockRest a = MockRest.create(A.class); 
+	/**
+	 * Returns the status code of the response.
+	 * 
+	 * @return The status code of the response.
+	 */
+	int getStatus();
 	
-	@Test
-	public void a01_withoutRemainder() throws Exception {
-		a.get("/").execute().assertBody("");
-	}
-	@Test
-	public void a02_withRemainder() throws Exception {
-		a.get("/foo").execute().assertBody("foo");
-	}
-	@Test
-	public void a03_withRemainder2() throws Exception {
-		a.get("/foo/bar").execute().assertBody("foo/bar");
-	}
+	/**
+	 * Returns the status message of the response.
+	 *  
+	 * @return The status message of the response.
+	 */
+	String getMessage();
+	
+	/**
+	 * Returns the headers of the response.
+	 *  
+	 * @return The headers of the response.
+	 */
+	Map<String,String[]> getHeaders();
+	
+	/**
+	 * Returns the body of the response.
+	 * 
+	 * @return The body of the response.
+	 */
+	byte[] getBody();
 }

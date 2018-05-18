@@ -101,14 +101,14 @@ public class RestHookTest {
 
 	@Test
 	public void a01_preCall_propertiesOverriddenByAnnotation() throws Exception {
-		a.request("PUT", "/propertiesOverriddenByAnnotation").contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a1");
-		a.request("PUT", "/propertiesOverriddenByAnnotation").contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a2");
+		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a1");
+		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a2");
 	}
 
 	@Test
 	public void a02_preCall_propertiesOverriddenProgrammatically() throws Exception {
-		a.request("PUT", "/propertiesOverriddenProgrammatically").contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a1");
-		a.request("PUT", "/propertiesOverriddenProgrammatically").contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a2");
+		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a1");
+		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a2");
 	}
 
 	//=================================================================================================================
@@ -187,27 +187,27 @@ public class RestHookTest {
 
 	@Test
 	public void b01a_postCall_propertiesOverridenByAnnotation() throws Exception {
-		b.request("PUT", "/propertiesOverridenByAnnotation").accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1");
-		b.request("PUT", "/propertiesOverridenByAnnotation").accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.request("PUT", "/propertiesOverridenByAnnotation").accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1");
 	}
 	@Test
 	public void b01b_postCall_propertiesOverridenByAnnotation_defaultAccept() throws Exception {
-		b.request("PUT", "/propertiesOverridenByAnnotation").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.request("PUT", "/propertiesOverridenByAnnotation").header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s3");
-		b.request("PUT", "/propertiesOverridenByAnnotation").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverridenByAnnotation", null).execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverridenByAnnotation", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s3");
+		b.put("/propertiesOverridenByAnnotation", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
 	}
 	@Test
 	public void b02a_postCall_propertiesOverriddenProgramatically() throws Exception {
-		b.request("PUT", "/propertiesOverriddenProgramatically").accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1");
-		b.request("PUT", "/propertiesOverriddenProgramatically").accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.request("PUT", "/propertiesOverriddenProgramatically").accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1");
 	}
 	@Test
 	public void b02b_postCall_propertiesOverriddenProgramatically_defaultAccept() throws Exception {
-		b.request("PUT", "/propertiesOverriddenProgramatically").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.request("PUT", "/propertiesOverriddenProgramatically").header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s3");
-		b.request("PUT", "/propertiesOverriddenProgramatically").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverriddenProgramatically", null).execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverriddenProgramatically", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s3");
+		b.put("/propertiesOverriddenProgramatically", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
 	}
 	
 	//====================================================================================================
@@ -281,9 +281,9 @@ public class RestHookTest {
 
 	@Test
 	public void c01_init() throws Exception {
-		c.request("GET", "/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		c.request("GET", "/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		c.request("GET", "/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		c.get("/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
+		c.get("/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		c.get("/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 
 	//====================================================================================================
@@ -369,13 +369,13 @@ public class RestHookTest {
 
 	@Test
 	public void d01_postInit() throws Exception {
-		d.request("GET", "/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		d.request("GET", "/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		d.request("GET", "/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		d.get("/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
+		d.get("/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		d.get("/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 	@Test
 	public void d02_postInit_order() throws Exception {
-		d.request("GET", "/sub/lastCalled").execute().assertBody("CHILD");
+		d.get("/sub/lastCalled").execute().assertBody("CHILD");
 	}
 
 	//====================================================================================================
@@ -467,13 +467,13 @@ public class RestHookTest {
 
 	@Test
 	public void e01_postInitChildFirst() throws Exception {
-		e.request("GET", "/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		e.request("GET", "/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		e.request("GET", "/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		e.get("/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
+		e.get("/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		e.get("/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 	@Test
 	public void e02_postInitChildFirst_order() throws Exception {
-		e.request("GET", "/sub/lastCalled").execute().assertBody("PARENT");
+		e.get("/sub/lastCalled").execute().assertBody("PARENT");
 	}
 
 	//====================================================================================================
@@ -524,7 +524,7 @@ public class RestHookTest {
 
 	@Test
 	public void f01_startCall() throws Exception {
-		f.request("GET", "/").execute().assertBody("{'1':'true','2':'true','3':'true','4':'true'}");
+		f.get("/").execute().assertBody("{'1':'true','2':'true','3':'true','4':'true'}");
 	}
 
 	//====================================================================================================
@@ -575,7 +575,7 @@ public class RestHookTest {
 	
 	@Test
 	public void g01_preCall() throws Exception {
-		g.request("GET", "/").execute().assertBody("{'1':'true','2':'true','3':'true','4':'true'}");
+		g.get("/").execute().assertBody("{'1':'true','2':'true','3':'true','4':'true'}");
 	}
 
 	//====================================================================================================
@@ -622,7 +622,7 @@ public class RestHookTest {
 
 	@Test
 	public void h01_postCall() throws Exception {
-		h.request("GET", "/").execute()
+		h.get("/").execute()
 			.assertHeader("post1-called", "true")
 			.assertHeader("post2-called", "true")
 			.assertHeader("post3-called", "true")

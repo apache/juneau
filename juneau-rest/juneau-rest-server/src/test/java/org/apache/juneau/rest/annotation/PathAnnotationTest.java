@@ -59,28 +59,28 @@ public class PathAnnotationTest {
 	
 	@Test
 	public void a00_nonExistentPath() throws Exception {
-		a.request("GET", "/bad?noTrace=true").execute().assertStatus(404);
+		a.get("/bad?noTrace=true").execute().assertStatus(404);
 	}
 	@Test
 	public void a01_noPath() throws Exception {
-		a.request("GET", null).execute().assertBody("GET");
-		a.request("GET", "").execute().assertBody("GET");
+		a.get(null).execute().assertBody("GET");
+		a.get("").execute().assertBody("GET");
 	}
 	@Test
 	public void a02_simplePath() throws Exception {
-		a.request("GET", "/a").execute().assertBody("GET /a");
+		a.get("/a").execute().assertBody("GET /a");
 	}
 	@Test
 	public void a03_simplePathOneVar() throws Exception {
-		a.request("GET", "/a/foo").execute().assertBody("GET /a foo");
+		a.get("/a/foo").execute().assertBody("GET /a foo");
 	}
 	@Test
 	public void a04_simplePathTwoVars() throws Exception {
-		a.request("GET", "/a/foo/bar").execute().assertBody("GET /a foo,bar");
+		a.get("/a/foo/bar").execute().assertBody("GET /a foo,bar");
 	}
 	@Test
 	public void a05_simplePathWithRemainder() throws Exception {
-		a.request("GET", "/a/foo/123/baz").execute().assertBody("GET /a foo,123,r=baz");
+		a.get("/a/foo/123/baz").execute().assertBody("GET /a foo,123,r=baz");
 	}
 	@Test
 	public void a06_urlEncodedPathPart() throws Exception {
@@ -88,8 +88,8 @@ public class PathAnnotationTest {
 		// This should match /get1/{foo} and not /get1/{foo}/{bar}
 		// NOTE:  When testing on Tomcat, must specify the following system property:
 		// -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
-		a.request("GET", "/a/x%2Fy").execute().assertBody("GET /a x/y");
-		a.request("GET", "/a/x%2Fy/x%2Fy").execute().assertBody("GET /a x/y,x/y");
+		a.get("/a/x%2Fy").execute().assertBody("GET /a x/y");
+		a.get("/a/x%2Fy/x%2Fy").execute().assertBody("GET /a x/y,x/y");
 	}
 
 	//=================================================================================================================
@@ -135,43 +135,43 @@ public class PathAnnotationTest {
 
 	@Test
 	public void b01_int() throws Exception {
-		b.request("GET", "/int/123/foo").execute().assertBody("123");
-		b.request("GET", "/int/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/int/123/foo").execute().assertBody("123");
+		b.get("/int/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void b02_short() throws Exception {
-		b.request("GET", "/short/123/foo").execute().assertBody("123");
-		b.request("GET", "/short/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/short/123/foo").execute().assertBody("123");
+		b.get("/short/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void b03_long() throws Exception {
-		b.request("GET", "/long/123/foo").execute().assertBody("123");
-		b.request("GET", "/long/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/long/123/foo").execute().assertBody("123");
+		b.get("/long/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void b04_char() throws Exception {
-		b.request("GET", "/char/c/foo").execute().assertBody("c");
-		b.request("GET", "/char/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/char/c/foo").execute().assertBody("c");
+		b.get("/char/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void b05_float() throws Exception {
-		b.request("GET", "/float/1.23/foo").execute().assertBody("1.23");
-		b.request("GET", "/float/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/float/1.23/foo").execute().assertBody("1.23");
+		b.get("/float/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void b06_double() throws Exception {
-		b.request("GET", "/double/1.23/foo").execute().assertBody("1.23");
-		b.request("GET", "/double/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/double/1.23/foo").execute().assertBody("1.23");
+		b.get("/double/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void b07_byte() throws Exception {
-		b.request("GET", "/byte/123/foo").execute().assertBody("123");
-		b.request("GET", "/byte/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/byte/123/foo").execute().assertBody("123");
+		b.get("/byte/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void b08_boolean() throws Exception {
-		b.request("GET", "/boolean/true/foo").execute().assertBody("true");
-		b.request("GET", "/boolean/bad/foo?noTrace=true").execute().assertStatus(400);
+		b.get("/boolean/true/foo").execute().assertBody("true");
+		b.get("/boolean/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	
 	//=================================================================================================================
@@ -217,43 +217,43 @@ public class PathAnnotationTest {
 
 	@Test
 	public void c01_Integer() throws Exception {
-		c.request("GET", "/Integer/123/foo").execute().assertBody("123");
-		c.request("GET", "/Integer/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Integer/123/foo").execute().assertBody("123");
+		c.get("/Integer/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void c02_Short() throws Exception {
-		c.request("GET", "/Short/123/foo").execute().assertBody("123");
-		c.request("GET", "/Short/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Short/123/foo").execute().assertBody("123");
+		c.get("/Short/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void c03_Long() throws Exception {
-		c.request("GET", "/Long/123/foo").execute().assertBody("123");
-		c.request("GET", "/Long/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Long/123/foo").execute().assertBody("123");
+		c.get("/Long/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void c04_Char() throws Exception {
-		c.request("GET", "/Character/c/foo").execute().assertBody("c");
-		c.request("GET", "/Character/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Character/c/foo").execute().assertBody("c");
+		c.get("/Character/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void c05_Float() throws Exception {
-		c.request("GET", "/Float/1.23/foo").execute().assertBody("1.23");
-		c.request("GET", "/Float/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Float/1.23/foo").execute().assertBody("1.23");
+		c.get("/Float/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void c06_Double() throws Exception {
-		c.request("GET", "/Double/1.23/foo").execute().assertBody("1.23");
-		c.request("GET", "/Double/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Double/1.23/foo").execute().assertBody("1.23");
+		c.get("/Double/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void c07_Byte() throws Exception {
-		c.request("GET", "/Byte/123/foo").execute().assertBody("123");
-		c.request("GET", "/Byte/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Byte/123/foo").execute().assertBody("123");
+		c.get("/Byte/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 	@Test
 	public void c08_Boolean() throws Exception {
-		c.request("GET", "/Boolean/true/foo").execute().assertBody("true");
-		c.request("GET", "/Boolean/bad/foo?noTrace=true").execute().assertStatus(400);
+		c.get("/Boolean/true/foo").execute().assertBody("true");
+		c.get("/Boolean/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
 
 	//=================================================================================================================
@@ -273,6 +273,6 @@ public class PathAnnotationTest {
 	@Test
 	public void d01_uuid() throws Exception {
 		UUID uuid = UUID.randomUUID();
-		d.request("GET", "/uuid/" + uuid).execute().assertBody(uuid.toString());
+		d.get("/uuid/" + uuid).execute().assertBody(uuid.toString());
 	}
 }

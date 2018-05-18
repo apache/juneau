@@ -55,23 +55,23 @@ public class HtmlDocScriptTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.request("GET", "/a01").accept("text/html").execute().assertBodyContains("<script>a01a\n a01b\n</script>");
+		a.get("/a01").accept("text/html").execute().assertBodyContains("<script>a01a\n a01b\n</script>");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.request("GET", "/a02").accept("text/html").execute().assertBodyContains("<script>a02a\n a02b\n</script>");
+		a.get("/a02").accept("text/html").execute().assertBodyContains("<script>a02a\n a02b\n</script>");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.request("GET", "/a03").accept("text/html").execute().assertBodyContains("<script>a01a\n a01b\n a03a\n a03b\n</script>");
+		a.get("/a03").accept("text/html").execute().assertBodyContains("<script>a01a\n a01b\n a03a\n a03b\n</script>");
 	}
 	@Test
 	public void a04() throws Exception {
-		a.request("GET", "/a04").accept("text/html").execute().assertBodyContains("<script>a04a\n a01a\n a01b\n a04b\n</script>");
+		a.get("/a04").accept("text/html").execute().assertBodyContains("<script>a04a\n a01a\n a01b\n a04b\n</script>");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.request("GET", "/a05").accept("text/html").execute().assertBodyContains("<script>a05a\n a05b\n a01a\n a01b\n</script>");
+		a.get("/a05").accept("text/html").execute().assertBodyContains("<script>a05a\n a05b\n a01a\n a01b\n</script>");
 	}
 
 	//=================================================================================================================
@@ -105,22 +105,22 @@ public class HtmlDocScriptTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.request("GET", "/b01").accept("text/html").execute().assertBodyContains("<script>b01a\n b01b\n</script>");
+		b.get("/b01").accept("text/html").execute().assertBodyContains("<script>b01a\n b01b\n</script>");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.request("GET", "/b02").accept("text/html").execute().assertBodyContains("<script>b02a\n b02b\n</script>");
+		b.get("/b02").accept("text/html").execute().assertBodyContains("<script>b02a\n b02b\n</script>");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.request("GET", "/b03").accept("text/html").execute().assertBodyContains("<script>b01a\n b01b\n b03a\n b03b\n</script>");
+		b.get("/b03").accept("text/html").execute().assertBodyContains("<script>b01a\n b01b\n b03a\n b03b\n</script>");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.request("GET", "/b04").accept("text/html").execute().assertBodyContains("<script>b04a\n b01a\n b01b\n b04b\n</script>");
+		b.get("/b04").accept("text/html").execute().assertBodyContains("<script>b04a\n b01a\n b01b\n b04b\n</script>");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.request("GET", "/b05").accept("text/html").execute().assertBodyContains("<script>b05a\n b05b\n b01a\n b01b\n</script>");
+		b.get("/b05").accept("text/html").execute().assertBodyContains("<script>b05a\n b05b\n b01a\n b01b\n</script>");
 	}
 }

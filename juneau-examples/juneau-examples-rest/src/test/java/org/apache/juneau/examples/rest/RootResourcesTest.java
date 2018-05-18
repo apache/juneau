@@ -20,7 +20,6 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.helper.*;
-import org.apache.juneau.xml.*;
 import org.junit.*;
 
 public class RootResourcesTest extends RestTestcase {
@@ -56,7 +55,7 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testXml() throws Exception {
-		try (RestClient client = SamplesMicroservice.client().parser(XmlParser.DEFAULT).build()) {
+		try (RestClient client = SamplesMicroservice.client().xml().build()) {
 
 			try (RestCall r = client.doGet("")) {
 				ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
