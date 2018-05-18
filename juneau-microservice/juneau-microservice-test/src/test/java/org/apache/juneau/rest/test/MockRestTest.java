@@ -56,3 +56,4 @@ public class MockRestTest {
 		assertEquals("OK", rc.doPut("/a02", "OK").getResponse(String.class));
 	}
 }
+

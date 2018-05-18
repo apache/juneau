@@ -30,8 +30,6 @@ import org.junit.runners.Suite.*;
 	ConfigTest.class,
 	FormDataTest.class,
 	InterfaceProxyTest.class,
-	LargePojosTest.class,
-	PathsTest.class,
 	RequestBeanProxyTest.class,
 	RestClientTest.class,
 	ThirdPartyProxyTest.class,

@@ -25,17 +25,12 @@ import org.apache.juneau.rest.test.client.*;
 	children={
 		DebugResource.class,
 		LogsResource.class,
-		CallbackStringsResource.class,
-		ClientFuturesResource.class,
 		ConfigResource.class,
-		FormDataResource.class,
 		InterfaceProxyResource.class,
 		LargePojosResource.class,
-		PathsResource.class,
 		RequestBeanProxyResource.class,
 		RestClientResource.class,
 		ThirdPartyProxyResource.class,
-		UrisResource.class,
 		ShutdownResource.class,
 	}
 )

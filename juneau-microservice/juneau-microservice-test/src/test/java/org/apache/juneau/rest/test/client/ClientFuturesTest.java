@@ -12,34 +12,45 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
+import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.test.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
+import org.junit.runners.*;
 
-public class ClientFuturesTest extends RestTestcase {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class ClientFuturesTest {
 
-	private static String URL = "/testClientFutures";
-
-	//====================================================================================================
+	//=================================================================================================================
 	// Basic tests
-	//====================================================================================================
-	@Test
-	public void test() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT;
+	//=================================================================================================================
 
-		Future<Integer> f = client.doGet(URL).runFuture();
+	@RestResource
+	public static class A {
+		@RestMethod(name=GET)
+		public ObjectMap get(RestRequest req) throws Exception {
+			return new ObjectMap().append("foo","bar");
+		}
+	}
+	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
+	
+	@Test
+	public void a01() throws Exception {
+		Future<Integer> f = a.doGet("").runFuture();
 		assertEquals(200, f.get().intValue());
 
-		Future<ObjectMap> f2 = client.doGet(URL).getResponseFuture(ObjectMap.class);
+		Future<ObjectMap> f2 = a.doGet("").getResponseFuture(ObjectMap.class);
 		assertObjectEquals("{foo:'bar'}", f2.get());
 
-		Future<String> f3 = client.doGet(URL).getResponseAsStringFuture();
-		assertObjectEquals("'{\"foo\":\"bar\"}'", f3.get());
+		Future<String> f3 = a.doGet("").getResponseAsStringFuture();
+		assertObjectEquals("'{foo:\\'bar\\'}'", f3.get());
 	}
 }

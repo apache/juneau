@@ -12,13 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
 
+import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.test.*;
-import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -27,47 +32,37 @@ import org.junit.*;
  */
 public class FormDataTest extends RestTestcase {
 
-	private static String URL = "/testFormData";
-	RestClient client = TestMicroservice.DEFAULT_CLIENT;
+	//=================================================================================================================
+	// Basic tests
+	//=================================================================================================================
 
-	//====================================================================================================
-	// Form data tests using RestCall.formData() method.
-	//====================================================================================================
+	public static class A {
+		@RestMethod(name=POST)
+		public Reader test(RestRequest req) throws IOException {
+			return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
+		}
+	}
+	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
+	
 	@Test
-	public void testFormDataMethod() throws Exception {
-		RestClient c = TestMicroservice.DEFAULT_CLIENT;
-		String r;
-
-		r = c.doPost(URL)
+	public void a01_formDataMethod() throws Exception {
+		String r = a.doPost("")
 			.formData("foo", 123)
 			.formData("bar", "baz")
 			.getResponseAsString();
 		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=123&bar=baz]", r);
 	}
 
-	//====================================================================================================
-	// Form data tests using RestClient.doPost(NameValuePairs).
-	//====================================================================================================
 	@Test
-	public void testDoPostNameValuePairs() throws Exception {
-		RestClient c = TestMicroservice.DEFAULT_CLIENT;
-		String r;
-
-		r = c.doPost(URL, new NameValuePairs().append("foo",123).append("bar","baz"))
+	public void a02_nameValuePairs() throws Exception {
+		String r = a.doPost("", new NameValuePairs().append("foo",123).append("bar","baz"))
 			.getResponseAsString();
 		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=123&bar=baz]", r);
 	}
 
-	public static class A {
-		public int f1 = 1;
-	}
-
-	//====================================================================================================
-	// Form data tests using RestClientBuilder.plainTextParams().
-	//====================================================================================================
 	@Test
-	public void testPlainTextParams() throws Exception {
-		RestClient c = TestMicroservice.client(UrlEncodingSerializer.class, UrlEncodingParser.class).paramFormatPlain().build();
+	public void a03_plainTextParams() throws Exception {
+		RestClient c = RestClient.create().mockHttpConnection(MockRest.create(A.class)).urlEnc().paramFormatPlain().build();
 		try {
 			String r;
 
@@ -77,11 +72,11 @@ public class FormDataTest extends RestTestcase {
 				.append("(foo)", "(foo)")
 				.append("@(foo)", "@(foo)");
 
-			r = c.doPost(URL, m).getResponseAsString();
+			r = c.doPost("", m).getResponseAsString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)]", r);
 
 			List<String> l = new AList<String>().appendAll("foo", "'foo'", "(foo)", "@(foo)");
-			r = c.doPost(URL, l).getResponseAsString();
+			r = c.doPost("", l).getResponseAsString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[0=foo&1='foo'&2=(foo)&3=@(foo)]", r);
 
 			NameValuePairs nvp = new NameValuePairs()
@@ -89,10 +84,10 @@ public class FormDataTest extends RestTestcase {
 				.append("'foo'", "'foo'")
 				.append("(foo)", "(foo)")
 				.append("@(foo)", "@(foo)");
-			r = c.doPost(URL, nvp).getResponseAsString();
+			r = c.doPost("", nvp).getResponseAsString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
 
-			r = c.doPost(URL)
+			r = c.doPost("")
 				.formData("foo", "foo")
 				.formData("'foo'", "'foo'")
 				.formData("(foo)", "(foo)")
