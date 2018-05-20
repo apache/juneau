@@ -89,7 +89,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 
 	@Override /* HttpClientConnection */
 	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
-		req.body(IOUtils.read(request.getEntity().getContent()));
+		req.body(request.getEntity() == null ? "" : IOUtils.readBytes(request.getEntity().getContent(), 1024));
 	}
 
 	@Override /* HttpClientConnection */
