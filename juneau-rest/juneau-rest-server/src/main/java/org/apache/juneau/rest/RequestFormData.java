@@ -509,7 +509,8 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 		Map<String,Object> m = (sorted ? new TreeMap<String,Object>() : new LinkedHashMap<String,Object>());
 		for (Map.Entry<String,String[]> e : this.entrySet()) {
 			String[] v = e.getValue();
-			m.put(e.getKey(), v.length == 1 ? v[0] : v);
+			if (v != null)
+				m.put(e.getKey(), v.length == 1 ? v[0] : v);
 		}
 		return JsonSerializer.DEFAULT_LAX.toString(m);
 	}

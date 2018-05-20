@@ -1497,6 +1497,10 @@ public final class RestCall extends BeanSession implements Closeable {
 					entity = new UrlEncodedFormEntity((NameValuePairs)input);
 				else if (input instanceof HttpEntity)
 					entity = (HttpEntity)input;
+				else if (input instanceof Reader)
+					entity = new StringEntity(IOUtils.read((Reader)input));
+				else if (input instanceof InputStream)
+					entity = new InputStreamEntity((InputStream)input);
 				else if (serializer != null)
 					entity = new RestRequestEntity(input, serializer);
 				else 

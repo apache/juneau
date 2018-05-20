@@ -28,7 +28,6 @@ import org.apache.juneau.rest.test.client.*;
 		ConfigResource.class,
 		InterfaceProxyResource.class,
 		LargePojosResource.class,
-		RequestBeanProxyResource.class,
 		RestClientResource.class,
 		ThirdPartyProxyResource.class,
 		ShutdownResource.class,
