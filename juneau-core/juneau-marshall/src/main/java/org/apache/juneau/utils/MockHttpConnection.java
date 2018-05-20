@@ -31,5 +31,4 @@ public interface MockHttpConnection {
 	 * @throws Exception
 	 */
 	MockHttpRequest request(String method, String path, Object body) throws Exception;
-
 }

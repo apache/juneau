@@ -24,13 +24,13 @@ import org.apache.juneau.utils.*;
  * <p>
  * Allows you to test your REST resource classes without a running servlet container.
  * 
- * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
  *  <jk>public class</jk> MockTest {
  *  	
  *  	<jc>// Our REST resource to test.</jc>
  *  	<ja>@RestResource</ja>(serializers=JsonSerializer.Simple.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
- *  	<jk>public static class</jk> M {
+ *  	<jk>public static class</jk> MyRest {
  *  		
  *  		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
  *  		<jk>public</jk> String echo(<ja>@Body</ja> String b) {
@@ -38,15 +38,15 @@ import org.apache.juneau.utils.*;
  *  		}
  *  	}
  *  
- *  <ja>@Test</js>
+ *  <ja>@Test</ja>
  *  <jk>public void</jk> testEcho() <jk>throws</jk> Exception {
- *  	<jsm>assertEquals</jsm>(<js>"'foo'"</js>, MockRest.<jsf>create</jsf>(M.<jk>class</jk>).request(<js>"PUT"</js>, <js>"/String"</js>).body(<js>"'foo'"</js>).execute().getBodyAsString());
+ *  	MockRest.<jsf>create</jsf>(MyRest.<jk>class</jk>).put(<js>"/String"</js>, <js>"'foo'"</js>).execute().assertStatus(200).assertBody(<js>"'foo'"</js>));
  *  }
  * </p>
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>TODO
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
  * </ul>
  */
 public class MockRest implements MockHttpConnection {

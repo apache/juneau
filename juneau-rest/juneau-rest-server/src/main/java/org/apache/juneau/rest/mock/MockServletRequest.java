@@ -239,78 +239,6 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Fluent setter.
 	 * 
-	 * @param name Query parameter name. 
-	 * @param value Query parameter values.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest param(String name, String[] value) {
-		this.queryData.put(name, value);
-		return this;
-	}
-	
-	/**
-	 * Fluent setter.
-	 * 
-	 * @param name Query parameter name. 
-	 * @param value Query parameter value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest param(String name, String value) {
-		this.queryData.put(name, new String[] {value});
-		return this;
-	}
-
-	/**
-	 * Fluent setter.
-	 * 
-	 * @param name Header name. 
-	 * @param value Header value.
-	 * @return This object (for method chaining).
-	 */
-	@Override /* MockHttpRequest */
-	public MockServletRequest header(String name, Object value) {
-		this.headerMap.put(name, new String[] {asString(value)});
-		return this;
-	}
-	
-	/**
-	 * Fluent setter.
-	 * 
-	 * @param name Request attribute name. 
-	 * @param value Request attribute value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest attribute(String name, Object value) {
-		this.attributeMap.put(name, value);
-		return this;
-	}
-
-	/**
-	 * Fluent setter.
-	 * 
-	 * @param value The body of the request.
-	 * @return This object (for method chaining).
-	 */
-	@Override /* MockHttpRequest */
-	public MockServletRequest body(Object value) {
-		try {
-			if (value instanceof byte[])
-				this.body = (byte[])value;
-			if (value instanceof Reader)
-				this.body = IOUtils.read((Reader)value).getBytes();
-			if (value instanceof InputStream)
-				this.body = IOUtils.readBytes((InputStream)value, 1024);
-			if (value instanceof CharSequence)
-				this.body = ((CharSequence)value).toString().getBytes();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return this;
-	}
-
-	/**
-	 * Fluent setter.
-	 * 
 	 * @param value The character encoding.
 	 * @return This object (for method chaining).
 	 */
@@ -1002,14 +930,73 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	//=================================================================================================================
-	// Convenience methods - query and form data
+	// Convenience methods 
 	//=================================================================================================================
 	
 	/**
+	 * Fluent setter.
+	 * 
+	 * @param name Header name. 
+	 * @param value 
+	 * 	Header value.
+	 * 	<br>The value is converted to a simple string using {@link Object#toString()}.
+	 * @return This object (for method chaining).
+	 */
+	@Override /* MockHttpRequest */
+	public MockServletRequest header(String name, Object value) {
+		this.headerMap.put(name, new String[] {asString(value)});
+		return this;
+	}
+	
+	/**
+	 * Fluent setter.
+	 * 
+	 * @param name Request attribute name. 
+	 * @param value Request attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest attribute(String name, Object value) {
+		this.attributeMap.put(name, value);
+		return this;
+	}
+
+	/**
+	 * Fluent setter.
+	 * 
+	 * @param value 
+	 * 	The body of the request.
+	 * 	<br>Can be any of the following data types:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@Override /* MockHttpRequest */
+	public MockServletRequest body(Object value) {
+		try {
+			if (value instanceof byte[])
+				this.body = (byte[])value;
+			if (value instanceof Reader)
+				this.body = IOUtils.read((Reader)value).getBytes();
+			if (value instanceof InputStream)
+				this.body = IOUtils.readBytes((InputStream)value, 1024);
+			if (value instanceof CharSequence)
+				this.body = ((CharSequence)value).toString().getBytes();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return this;
+	}
+
+	/**
 	 * Adds a form data entry to this request.
 	 * 
-	 * @param key 
-	 * @param value 
+	 * @param key The form data key.
+	 * @param value The form data value.
+	 * 	<br>The value is converted to a simple string using {@link Object#toString()}.
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest formData(String key, Object value) {
@@ -1028,8 +1015,9 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Adds a query data entry to this request.
 	 * 
-	 * @param key 
-	 * @param value 
+	 * @param key The query key.
+	 * @param value The query value.
+	 * 	<br>The value is converted to a simple string using {@link Object#toString()}.
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest query(String key, Object value) {
