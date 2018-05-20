@@ -31,9 +31,15 @@ import org.apache.juneau.rest.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {
- * 		...
- * 	}
+ * 	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {...}
+ * 
+ * 	<jc>// ...or...</jc>
+ * 
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> addPerson(Person person) {...}
+ * 
+ * 	<ja>@Body</ja>
+ * 	<jk>public class</jk> Person {...}
  * </p>
  * 
  * <p>
@@ -56,8 +62,8 @@ import org.apache.juneau.rest.*;
  * </ul>
  * 
  * <p>
- * Any of the following types can be used for the parameter:
- * <ul class='spaced-list'>
+ * Any of the following types can be used as an annotated parameter (matched in the specified order):
+ * <ol class='spaced-list'>
  * 	<li>
  * 		{@link Reader}
  * 		<br><ja>@Body</ja> annotation is optional.
@@ -99,7 +105,7 @@ import org.apache.juneau.rest.*;
  * 			<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
  * 		</ul>
  * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
- * </ul>
+ * </ol>
  * 
  * 
  * <h5 class='section'>Notes:</h5>

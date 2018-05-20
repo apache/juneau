@@ -12285,9 +12285,15 @@
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) { 
-		... 
-	}
+	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {... }
+	
+	<jc>// ...or...</jc>
+	
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> addPerson(Person person) {...}
+	
+	<ja>@Body</ja>
+	<jk>public class</jk> Person {...}
 		</p>
 		<p>
 			This is functionally equivalent to the following code...
@@ -12310,7 +12316,7 @@
 		</ul>
 		
 		<p>
-			Any of the following types can be used for the parameter or POJO class:
+			Any of the following types can be used for the parameter or POJO class (matched in the specified order):
 		</p>
 		<ol class='spaced-list'>
 			<li>
@@ -12371,7 +12377,7 @@
 			<js>"foo"</js>.
 		</p>
 		<p>
-			When the <code>Content-Type</code> header is not present or match a parser, the body is pass as-is using rule #6 above.
+			When the <code>Content-Type</code> header is not present or is <code>text/plain</code>, the body is pass as-is using rule #6 above.
 			<br>For example, passing in a body of <js>"'foo'"</js> with no <code>Content-Type</code> header will result in the body being populated with
 			<js>"'foo'"</js>.
 		</p>
@@ -12383,9 +12389,9 @@
 		<h5 class='figure'>Examples:</h5>
 		<p class='bcode w800'>
 	<ja>@Body</ja>(description=<js>"POJO convertible from String"</js>)</ja>
-	<jk>public static class</jk> A {
+	<jk>public static class</jk> MyPojo {
 		<jk>private</jk> String <jf>val</jf>;
-		<jk>public</jk> A(String val) {
+		<jk>public</jk> MyPojo(String val) {
 			<jk>this</jk>.<jf>val</jf> = val;
 		}
 		<jk>public</jk> String toString() {
@@ -12393,36 +12399,36 @@
 		}
 	}
 
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/testPojoFromString"</js>)
-	<jk>public</jk> A testPojoFromString(A a) {
-		<jk>return</jk> a;
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
+	<jk>public</jk> MyPojo echo(MyPojo p) {
+		<jk>return</jk> p;
 	}
 		</p>
 		<p class='bcode w800'>
 	<ja>@Body</ja>(description=<js>"Bean POJO"</js>)</ja>
-	<jk>public static class</jk> B {
+	<jk>public static class</jk> MyBean {
 		<jk>public</jk> String <jf>f1</jf>;
 	}
 
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/testBean"</js>)
-	<jk>public</jk> B testBean(B b) {
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBean"</js>)
+	<jk>public</jk> MyBean echo(MyBean b) {
 		<jk>return</jk> b;
 	}
 		</p>
 		<p class='bcode w800'>
 	<ja>@Body</ja>(description=<js>"Bean list"</js>)</ja>
-	<jk>public static class</jk> C extends LinkedList&lt;B&gt; {}
+	<jk>public static class</jk> MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
 	
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/testBeanList"</js>)
-	<jk>public</jk> C testString(C c) {
-		<jk>return</jk> c;
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBeanList"</js>)
+	<jk>public</jk> MyBeanList echo(MyBeanList l) {
+		<jk>return</jk> l;
 	}
 		</p>
 		<p class='bcode w800'>
 	<ja>@Body</ja>(description=<js>"POJO convertible from input stream"</js>)</ja>
-	<jk>public static class</jk> D {
+	<jk>public static class</jk> MyPojo {
 		<jk>private</jk> String <jf>val</jf>;
-		<jk>public</jk> D(InputStream is) {
+		<jk>public</jk> MyPojo(InputStream is) {
 			<jk>this</jk>.<jf>val</jf> = IOUtils.<jsm>read</jsm>(is);
 		}
 		<jk>public</jk> String toString() {
@@ -12430,11 +12436,44 @@
 		}
 	}
 
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/testPojoFromInputStream"</js>)
-	<jk>public</jk> D testPojoFromInputStream(D d) {
-		<jk>return</jk> d;
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
+	<jk>public</jk> MyPojo echo(MyPojo p) {
+		<jk>return</jk> p;
 	}
 		</p>
+		
+		<p>
+			Several of the attributes on the <ja>@Body</ja> annotation are used for specifying additional information for the auto-generated Swagger documentation.
+			<br>These do not have any affects on the running code except for the generated Swagger:
+		</p>
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.Body}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#description() description()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#required() required()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#type() type()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#format() format()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#pattern() pattern()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#collectionFormat() collectionFormat()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#maximum() maximum()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#minimum() minimum()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#multipleOf() multipleOf()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#maxLength() maxLength()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#minLength() minLength()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#maxItems() maxItems()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#minItems() minItems()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#allowEmptyValue() allowEmptyValue()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#exclusiveMaximum() exclusiveMaximum()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#exclusiveMinimum() exclusiveMinimum()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#uniqueItems() uniqueItems()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#schema() schema()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#_default() _default()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#_enum() _enum()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#items() items()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#example() example()}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#examples() examples()}
+			</ul>
+		</ul>
 		
 		<h5 class='section'>Notes:</h5>
 		<ul class='spaced-list'>
@@ -12444,6 +12483,8 @@
 			<li>
 				Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
 				<br>Values on methods override values on POJO classes.
+			<li>
+				A future feature enhancement exists for enabling Swagger validation of the request body using the annotation values above.
 		</ul>
 		
 		<h5 class='section'>See Also:</h5>
