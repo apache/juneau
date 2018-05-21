@@ -22,7 +22,6 @@ package org.apache.juneau.rest.annotation;
  */
 public @interface MethodSwagger {
 	
-
 	/**
 	 * Swagger JSON.
 	 * 

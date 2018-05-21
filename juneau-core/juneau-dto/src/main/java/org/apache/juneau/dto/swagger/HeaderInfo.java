@@ -189,6 +189,11 @@ public class HeaderInfo extends SwaggerElement {
 	 * <p>
 	 * The type of the object.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
@@ -249,8 +254,8 @@ public class HeaderInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned <code>type</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
 	 * 
 	 * @param value 
@@ -728,6 +733,9 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
+	 * 
+	 * <p>
+	 * This string SHOULD be a valid regular expression.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

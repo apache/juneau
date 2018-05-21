@@ -133,6 +133,19 @@ public @interface Body {
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/description</code>.
 	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(description=<js>"A description"</js>) MyBean input) {...}
+	 * </p>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(MyBean input) {...}
+	 * 
+	 * 	<ja>@Body</ja>(description=<js>"A description"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -148,6 +161,19 @@ public @interface Body {
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/required</code>.
 	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(required=<js>"true"</js>) MyBean input) {...}
+	 * </p>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(MyBean input) {...}
+	 * 
+	 * 	<ja>@Body</ja>(required=<js>"true"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -162,11 +188,25 @@ public @interface Body {
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/type</code>.
 	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(type=<js>"object"</js>) MyBean input) {...}
+	 * </p>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(MyBean input) {...}
+	 * 
+	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The possible values are:
 	 * 		<ul>
+	 * 			<li><js>"object"</js>
 	 * 			<li><js>"string"</js>
 	 * 			<li><js>"number"</js>
 	 * 			<li><js>"integer"</js>
@@ -178,11 +218,30 @@ public @interface Body {
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
+	 * 
 	 */
 	String type() default "";
 	
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/format</code>.
+	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(type=<js>"object"</js>) MyBean input) {...}
+	 * </p>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(MyBean input) {...}
+	 * 
+	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -191,6 +250,24 @@ public @interface Body {
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Formats defined by the OAS include:
+	 * 		<ul>
+	 * 			<li><js>"int32"</js>
+	 * 			<li><js>"int64"</js>
+	 * 			<li><js>"float"</js>
+	 * 			<li><js>"double"</js>
+	 * 			<li><js>"byte"</js>
+	 * 			<li><js>"binary"</js>
+	 * 			<li><js>"date"</js>
+	 * 			<li><js>"date-time"</js>
+	 * 			<li><js>"password"</js>
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
 	 */
 	String format() default "";
@@ -198,10 +275,18 @@ public @interface Body {
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/pattern</code>.
 	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String input) {...}
+	 * </p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of the value is plain-text.
+	 * 	<li>
+	 * 		This string SHOULD be a valid regular expression.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -211,6 +296,12 @@ public @interface Body {
 
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/collectionFormat</code>.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(type=<js>"array"</js>,collectionFormat=<js>"csv"</js>) String input) {...}
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>

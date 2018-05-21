@@ -135,9 +135,6 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The type of the security scheme.
 	 * 
-	 * <p>
-	 * Valid values are .
-	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Valid values:

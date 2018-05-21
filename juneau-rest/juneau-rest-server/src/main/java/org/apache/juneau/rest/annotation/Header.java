@@ -123,6 +123,11 @@ public @interface Header {
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
 	 */
 	String type() default "";
 	
@@ -137,6 +142,11 @@ public @interface Header {
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
 	 */
 	String format() default "";
 	
@@ -147,6 +157,8 @@ public @interface Header {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of the value is plain-text.
+	 * 	<li>
+	 * 		This string SHOULD be a valid regular expression.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -354,7 +366,8 @@ public @interface Header {
 	/**
 	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/default</code>.
 	 * 
-	 * {@link TODO Also used to set a default value in the request}
+	 * <p>
+	 * Additionally, this method can be used to define a default value for a missing header entry.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>

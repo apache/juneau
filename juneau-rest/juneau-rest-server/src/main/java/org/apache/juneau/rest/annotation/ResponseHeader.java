@@ -166,6 +166,11 @@ public @interface ResponseHeader {
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
 	 */
 	String type() default "";
 	
@@ -179,6 +184,11 @@ public @interface ResponseHeader {
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
 	 */
 	String format() default "";

@@ -546,6 +546,11 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The type of the parameter.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
@@ -620,8 +625,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned type.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
 	 * 
 	 * @param value The new value for this property.
@@ -1140,6 +1145,9 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
+	 * 
+	 * <p>
+	 * This string SHOULD be a valid regular expression.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

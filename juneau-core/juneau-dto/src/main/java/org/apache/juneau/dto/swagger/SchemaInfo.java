@@ -175,13 +175,25 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property setter:  <property>format</property>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
 	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Formats defined by the OAS include:
+	 * 	<ul>
+	 * 		<li><js>"int32"</js>
+	 * 		<li><js>"int64"</js>
+	 * 		<li><js>"float"</js>
+	 * 		<li><js>"double"</js>
+	 * 		<li><js>"byte"</js>
+	 * 		<li><js>"binary"</js>
+	 * 		<li><js>"date"</js>
+	 * 		<li><js>"date-time"</js>
+	 * 		<li><js>"password"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setFormat(String value) {
@@ -568,6 +580,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>pattern</property>.
 	 * 
+	 * <p>
+	 * This string SHOULD be a valid regular expression.
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -922,9 +937,24 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Possible values include:
+	 * 	<ul>
+	 * 		<li><js>"object"</js>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 		<li><js>"file"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setType(String value) {

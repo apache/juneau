@@ -146,6 +146,11 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * The internal type of the array.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * </ul>
+	 * 
 	 * @param value 
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
@@ -703,6 +708,9 @@ public class Items extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
+	 * 
+	 * <p>
+	 * This string SHOULD be a valid regular expression.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
