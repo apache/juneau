@@ -146,7 +146,7 @@ public class RestMethodInheritTest {
 			// Should show ['text/s5']
 			return new ObjectList(res.getSupportedMediaTypes());
 		}
-		@RestMethod(path="/onMethodInherit", serializers=S5.class, inherit="SERIALIZERS")
+		@RestMethod(path="/onMethodInherit", serializers={S5.class,Inherit.class})
 		public ObjectList a03(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
 			return new ObjectList(res.getSupportedMediaTypes());
@@ -189,7 +189,7 @@ public class RestMethodInheritTest {
 			// Should show ['text/p5']
 			return new ObjectList(req.getConsumes());
 		}
-		@RestMethod(path="/onMethodInherit", parsers=P5.class, inherit="PARSERS")
+		@RestMethod(path="/onMethodInherit", parsers={P5.class,Inherit.class})
 		public ObjectList bo3(RestRequest req) {
 			// Should show ['text/p5','text/p3','text/p4','text/p1','text/p2']
 			return new ObjectList(req.getConsumes());
@@ -211,31 +211,6 @@ public class RestMethodInheritTest {
 	}
 
 	//=================================================================================================================
-	// Test encoder inheritance.
-	//=================================================================================================================
-	
-	@RestResource(encoders={E1.class,E2.class})
-	public static class C {}
-
-	@RestResource(encoders={E3.class,E4.class})
-	public static class C01 extends C {}
-
-	@RestResource
-	public static class C02 extends C01 {
-		@RestMethod(name=GET, inherit="ENCODERS")
-		public ObjectList test(RestResponse res) throws RestServletException {
-			// Should show ['e3','e4','e1','e2','identity']
-			return new ObjectList(res.getSupportedEncodings());
-		}
-	}
-	static MockRest c = MockRest.create(C02.class);
-
-	@Test
-	public void c01_encoders() throws Exception {
-		c.get("/").execute().assertBody("['e3','e4','e1','e2','identity']");
-	}
-
-	//=================================================================================================================
 	// Test filter inheritance.
 	//=================================================================================================================
 	
@@ -252,7 +227,7 @@ public class RestMethodInheritTest {
 			// Should show ['F1','F2','Foo3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
-		@RestMethod(name=GET, path="/inheritTransforms", pojoSwaps=F3Swap.class, inherit="TRANSFORMS")
+		@RestMethod(name=GET, path="/inheritTransforms", pojoSwaps={F3Swap.class,Inherit.class})
 		public Object[] d02() {
 			// Should show ['F1','F2','F3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
@@ -263,7 +238,7 @@ public class RestMethodInheritTest {
 			// Overriding serializer does not have parent filters applied.
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
-		@RestMethod(name=GET, path="/overrideSerializerInheritTransforms", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class, inherit="TRANSFORMS")
+		@RestMethod(name=GET, path="/overrideSerializerInheritTransforms", serializers=JsonSerializer.Simple.class, pojoSwaps={F3Swap.class,Inherit.class})
 		public Object[] d04() {
 			// Should show ['F1','F2','F3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};

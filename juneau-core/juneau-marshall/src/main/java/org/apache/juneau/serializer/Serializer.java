@@ -863,9 +863,35 @@ public abstract class Serializer extends BeanContext {
 	private final MediaTypeRange[] accept;
 	private final MediaType[] accepts;
 	private final MediaType produces;
-
-	// Hidden constructors to force subclass from OuputStreamSerializer or WriterSerializer.
-	Serializer(PropertyStore ps, String produces, String accept) {
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param ps
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<p class='bcode'>
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
+	 * 	</p>
+	 * 	<br>...or...
+	 * 	<p class='bcode'>
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
+	 * 	</p>
+	 * <p>
+	 * The accept value can also contain q-values.
+	 */
+	protected Serializer(PropertyStore ps, String produces, String accept) {
 		super(ps);
 		
 		maxDepth = getIntegerProperty(SERIALIZER_maxDepth, 100);

@@ -23,38 +23,113 @@ package org.apache.juneau.rest.annotation;
 public @interface MethodSwagger {
 	
 	/**
-	 * Swagger JSON.
+	 * Defines the swagger field <code>/paths/{path}/{method}</code>.
 	 * 
 	 * <p>
-	 * Used for free-form Swagger documentation of a REST resource.
+	 * Used for free-form Swagger documentation of a REST Java method.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			<js>"tags:['pet'],"</js>,
+	 * 			<js>"security:[ { petstore_auth:['write:pets','read:pets'] } ]"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		<br>Comments and whitespace are ignored.
+	 * 		<br>The leading and trailing <js>'{'</js>/<js>'}'</js> characters are optional.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		
+	 * </ul>
 	 */
 	String[] value() default {};
 	
 	/**
-	 * {@link TODO}
+	 * Defines the swagger field <code>/paths/{path}/{method}/summary</code>.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		If not specified, the value is pulled from {@link RestMethod#summary()}.
+	 * </ul>
 	 */
 	String[] summary() default {};
 	
 	/**
-	 * {@link TODO}
+	 * Defines the swagger field <code>/paths/{path}/{method}/description</code>.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		If not specified, the value is pulled from {@link RestMethod#description()}.
+	 * </ul>
 	 */
 	String[] description() default {};
 
 	/**
-	 * {@link TODO}
+	 * Defines the swagger field <code>/paths/{path}/{method}/operationId</code>.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		If not specified, the value used is the Java method name.
+	 * </ul>
 	 */
 	String operationId() default "";
 	
 	/**
-	 * {@link TODO}
+	 * Defines the swagger field <code>/paths/{path}/{method}/schemes</code>.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is either a comma-delimited list of simple strings or a JSON array.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * </ul>
 	 */
 	String[] schemes() default {};
 	
 	/**
-	 * Optional deprecated flag for the exposed API.
-	 * 
-	 * <p>
-	 * Used to populate the Swagger deprecated field.
+	 * Defines the swagger field <code>/paths/{path}/{method}/deprecated</code>.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -68,26 +143,58 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
+	 * 		The format is boolean.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		If not specified, set to <js>"true"</js> if the method is annotated with {@link Deprecated @Deprecated}
 	 * </ul>
 	 */
 	String deprecated() default "";
 	
 	/**
-	 * {@link TODO}
+	 * Defines the swagger field <code>/paths/{path}/{method}/consumes</code>.
+	 * 
+	 * <p>
+	 * Use this value to override the supported <code>Content-Type</code> media types defined by the parsers defined via {@link RestMethod#parsers()}.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is either a comma-delimited list of simple strings or a JSON array.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * </ul>
 	 */
 	String[] consumes() default {};
 	
 	/**
-	 * {@link TODO}
+	 * Defines the swagger field <code>/paths/{path}/{method}/consumes</code>.
+	 * 
+	 * <p>
+	 * Use this value to override the supported <code>CAccept/code> media types defined by the serializers defined via {@link RestMethod#serializers()}.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is either a comma-delimited list of simple strings or a JSON array.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * </ul>
 	 */
 	String[] produces() default {};
 
 	/**
-	 * Optional external documentation information for the exposed API.
-	 * 
-	 * <p>
-	 * Used to populate the Swagger external documentation field.
+	 * Defines the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
 	 * 
 	 * <p>
 	 * A simplified JSON string with the following fields:
@@ -110,16 +217,21 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		<br>Comments and whitespace are ignored.
+	 * 		<br>The leading and trailing <js>'{'</js>/<js>'}'</js> characters are optional.
+	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
 	 */
 	String[] externalDocs() default {};
 
 	/**
-	 * Optional parameter descriptions.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters</code>.
 	 * 
 	 * <p>
 	 * This annotation is provided for documentation purposes and is used to populate the method <js>"parameters"</js>
@@ -147,13 +259,12 @@ public @interface MethodSwagger {
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/parameters</code>.
 	 * </ul>
 	 */
 	String[] parameters() default {};
 
 	/**
-	 * Optional output description.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses</code>.
 	 * 
 	 * <p>
 	 * This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js>
@@ -183,8 +294,6 @@ public @interface MethodSwagger {
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/responses</code>.
 	 * </ul>
 	 */
 	String[] responses() default {};

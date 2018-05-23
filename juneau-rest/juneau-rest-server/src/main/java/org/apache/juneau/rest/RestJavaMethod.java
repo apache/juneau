@@ -39,7 +39,6 @@ import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
@@ -167,16 +166,22 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 				}
 
-				ASet<String> inherit = new ASet<String>().appendAll(StringUtils.split(m.inherit()));
-				if (inherit.contains("*")) 
-					inherit.appendAll("SERIALIZERS","PARSERS","TRANSFORMS","PROPERTIES","ENCODERS");
+//				ASet<String> inherit = new ASet<String>().appendAll(StringUtils.split(m.inherit()));
+//				if (inherit.contains("*")) 
+//					inherit.appendAll("SERIALIZERS","PARSERS","TRANSFORMS","PROPERTIES","ENCODERS");
 
 				SerializerGroupBuilder sgb = null;
 				ParserGroupBuilder pgb = null;
 				ParserBuilder uepb = null;
 				BeanContextBuilder bcb = null;
 				PropertyStore cps = context.getPropertyStore();
-
+				
+				
+				Object[] mSerializers = resolve(cps.getArrayProperty(REST_serializers, Object.class), m.serializers());
+				Object[] mParsers = resolve(cps.getArrayProperty(REST_parsers, Object.class), m.parsers());
+				Object[] mPojoSwaps = resolve(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
+				Object[] mBeanFilters = resolve(cps.getArrayProperty(BEAN_beanFilters, Object.class), m.beanFilters());
+				
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
 						|| m.bpx().length > 0) {
@@ -184,12 +189,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					pgb = ParserGroup.create();
 					uepb = Parser.create();
 					bcb = beanContext.builder();
-
-					if (inherit.contains("SERIALIZERS") || m.serializers().length == 0)
-						sgb.append(cps.getArrayProperty(REST_serializers, Object.class));
-
-					if (inherit.contains("PARSERS") || m.parsers().length == 0)
-						pgb.append(cps.getArrayProperty(REST_parsers, Object.class));
+					sgb.append(mSerializers);
+					pgb.append(mParsers);
 				}
 
 				httpMethod = m.name().toUpperCase(Locale.ENGLISH);
@@ -227,16 +228,10 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
 				PropertyStore ps = context.getPropertyStore();
-				if (! inherit.contains("TRANSFORMS"))
-					ps = ps.builder().set(BEAN_beanFilters, null).set(BEAN_pojoSwaps, null).build();
+				ps = ps.builder().set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps).build();
 				
 				if (sgb != null) {
-					sgb.append(m.serializers());
-				
-					if (! inherit.contains("PROPERTIES"))
-						sgb.beanFilters((Object[])ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
-					else
-						sgb.apply(ps);
+					sgb.apply(ps);
 					for (Property p1 : m.properties())
 						sgb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
@@ -267,22 +262,18 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 						}
 						sgb.excludeProperties(bpxMap);
 					}
-					sgb.beanFilters((Object[])m.beanFilters());
-					sgb.pojoSwaps(m.pojoSwaps());
+					sgb.beanFilters(mBeanFilters);
+					sgb.pojoSwaps(mPojoSwaps);
 				}
 
 				if (pgb != null) {
-					pgb.append(m.parsers());
-					if (! inherit.contains("PROPERTIES"))
-						pgb.beanFilters((Object[])ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
-					else
-						pgb.apply(ps);
+					pgb.apply(ps);
 					for (Property p1 : m.properties())
 						pgb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
 						pgb.set(p1, true);
-					pgb.beanFilters((Object[])m.beanFilters());
-					pgb.pojoSwaps(m.pojoSwaps());
+					pgb.beanFilters(mBeanFilters);
+					pgb.pojoSwaps(mPojoSwaps);
 				}
 
 				if (uepb != null) {
@@ -291,8 +282,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 						uepb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
 						uepb.set(p1, true);
-					uepb.beanFilters((Object[])m.beanFilters());
-					uepb.pojoSwaps(m.pojoSwaps());
+					uepb.beanFilters(mBeanFilters);
+					uepb.pojoSwaps(mPojoSwaps);
 				}
 				
 				if (bcb != null) {
@@ -301,8 +292,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 						bcb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
 						bcb.set(p1, true);
-					bcb.beanFilters((Object[])m.beanFilters());
-					bcb.pojoSwaps(m.pojoSwaps());
+					bcb.beanFilters(mBeanFilters);
+					bcb.pojoSwaps(mPojoSwaps);
 				}
 				
 				if (m.properties().length > 0 || m.flags().length > 0) {
@@ -315,10 +306,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				if (m.encoders().length > 0) {
 					EncoderGroupBuilder g = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
-					if (inherit.contains("ENCODERS"))
-						g.append(encoders);
-
-					for (Class<? extends Encoder> c : m.encoders()) {
+					for (Class<?> c : m.encoders()) {
 						try {
 							g.append(c);
 						} catch (Exception e) {
@@ -414,6 +402,27 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				throw new RestServletException("Exception occurred while initializing method ''{0}''", sig).initCause(e);
 			}
 		}
+	}
+	
+	static Object[] resolve(Object[] fromClass, Object[] fromAnnotation) {
+		
+		if (ArrayUtils.contains(None.class, fromAnnotation)) 
+			return ArrayUtils.remove(None.class, fromAnnotation);
+		
+		if (fromAnnotation.length == 0)
+			return fromClass;
+		
+		if (! ArrayUtils.contains(Inherit.class, fromAnnotation))
+			return fromAnnotation;
+		
+		List<Object> l = new ArrayList<>(fromClass.length + fromAnnotation.length);
+		for (Object o : fromAnnotation) {
+			if (o == Inherit.class)
+				l.addAll(Arrays.asList(fromClass));
+			else
+				l.add(o);
+		}
+		return l.toArray(new Object[l.size()]);
 	}
 
 	/**

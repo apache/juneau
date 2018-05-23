@@ -15,6 +15,7 @@ package org.apache.juneau.rest.headers;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
@@ -123,7 +124,7 @@ public class AcceptTest {
 		serializers={S1.class,S2.class}
 	)
 	public static class C {
-		@RestMethod(name=PUT, serializers=S3.class, inherit="SERIALIZERS")
+		@RestMethod(name=PUT, serializers={S3.class,Inherit.class})
 		public String c(@Body String in) {
 			return in;
 		}
@@ -233,7 +234,7 @@ public class AcceptTest {
 		serializers={S1.class,S2.class}
 	)
 	public static class F {
-		@RestMethod(name=PUT, defaultRequestHeaders={"Accept: text/s3"}, serializers=S3.class, inherit="SERIALIZERS")
+		@RestMethod(name=PUT, defaultRequestHeaders={"Accept: text/s3"}, serializers={Inherit.class, S3.class})
 		public String f(@Body String in) {
 			return in;
 		}

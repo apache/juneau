@@ -474,4 +474,22 @@ public final class ArrayUtils {
 			Array.set(a, --j, i.next());
 		return (T[])a;
 	}
+
+	/**
+	 * Removes the specified element from the specified array.
+	 * 
+	 * @param element The element to remove from the array.
+	 * @param array The array to remove the element from.
+	 * @return A new array with the element removed, or the original array if the array did not contain the element.
+	 */
+	public static Object[] remove(Object element, Object[] array) {
+		if (! contains(element, array))
+			return array;
+		List<Object> l = new ArrayList<>(array.length);
+		for (Object o2 : array) {
+			if (! element.equals(o2))
+				l.add(o2);
+		}
+		return l.toArray(new Object[l.size()]);
+	}
 }

@@ -18,11 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
@@ -39,7 +36,17 @@ import org.apache.juneau.serializer.*;
 public @interface RestMethod {
 
 	/**
-	 * Appends the specified bean filters to all serializers and parsers used by this method.
+	 * Sets the bean filters for the serializers and parsers defined on this method.
+	 * 
+	 * <p>
+	 * If no value is specified, the bean filters are inherited from the class.
+	 * <br>Otherwise, this value overrides the bean filters defined on the class.
+	 * 
+	 * <p>
+	 * Use {@link Inherit} to inherit bean filters defined on the class.
+	 * 
+	 * <p>
+	 * Use {@link None} to suppress inheriting bean filters defined on the class.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -392,7 +399,7 @@ public @interface RestMethod {
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
 	 * </ul>
 	 */
-	Class<? extends Encoder>[] encoders() default {};
+	Class<?>[] encoders() default {};
 
 	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
@@ -428,32 +435,6 @@ public @interface RestMethod {
 	 */
 	HtmlDoc htmldoc() default @HtmlDoc;
 
-	/**
-	 * Identifies what class-level properties are inherited by the serializers and parsers defined on the method.
-	 * 
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"SERIALIZERS"</js> - Inherit class-level serializers.
-	 * 	<li><js>"PARSERS"</js> - Inherit class-level parsers.
-	 * 	<li><js>"TRANSFORMS"</js> - Inherit class-level bean properties and pojo-swaps.
-	 * 	<li><js>"PROPERTIES"</js> - Inherit class-level properties (other than transforms).
-	 * 	<li><js>"ENCODERS"</js> - Inherit class-level encoders.
-	 * 	<li><js>"*"</js> - Inherit everything.
-	 * </ul>
-	 * 
-	 * <p>
-	 * For example, to inherit all parsers, properties, and transforms from the servlet class:
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		path=<js>"/foo"</js>,
-	 * 		parsers=MySpecialParser.<jk>class</jk>,
-	 * 		inherit=<js>"PARSERS,PROPERTIES,TRANSFORMS"</js>
-	 * 	)
-	 * </p>
-	 */
-	String inherit() default "";
-	
 	/**
 	 * Method matchers.
 	 * 
@@ -549,14 +530,14 @@ public @interface RestMethod {
 	 * Parsers. 
 	 * 
 	 * <p>
-	 * Overrides the list of parsers assigned at the method level.
+	 * If no value is specified, the parsers are inherited from the class.
+	 * <br>Otherwise, this value overrides the parsers defined on the class.
 	 * 
 	 * <p>
-	 * Use this annotation when the list of parsers assigned to a method differs from the list of parsers assigned at
-	 * the servlet level.
+	 * Use {@link Inherit} to inherit parsers defined on the class.
 	 * 
 	 * <p>
-	 * To append to the list of parsers assigned at the servlet level, use <code>inherit=<js>"PARSERS"</js></code>.
+	 * Use {@link None} to suppress inheriting parsers defined on the class.
 	 * 
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
@@ -564,8 +545,7 @@ public @interface RestMethod {
 	 * 		<ja>@RestMethod</ja>(
 	 * 			name=<jsf>PUT</jsf>,
 	 * 			path=<js>"/foo"</js>,
-	 * 			parsers=MySpecialParser.<jk>class</jk>,
-	 * 			inherit=<js>"PARSERS"</js>
+	 * 			parsers=MySpecialParser.<jk>class</jk>
 	 * 		)
 	 * 		<jk>public</jk> Object doGetWithSpecialAcceptType() {
 	 * 			<jc>// Handle request for special Accept type</jc>
@@ -578,7 +558,7 @@ public @interface RestMethod {
 	 * 	<li class='jf'>{@link RestContext#REST_parsers}
 	 * </ul>
 	 */
-	Class<? extends Parser>[] parsers() default {};
+	Class<?>[] parsers() default {};
 
 	/**
 	 * Optional path pattern for the specified method.
@@ -606,7 +586,17 @@ public @interface RestMethod {
 	String path() default "/*";
 
 	/**
-	 * Appends the specified POJO swaps to all serializers and parsers used by this method.
+	 * Sets the POJO swaps for the serializers and parsers defined on this method.
+	 * 
+	 * <p>
+	 * If no value is specified, the POJO swaps are inherited from the class.
+	 * <br>Otherwise, this value overrides the POJO swaps defined on the class.
+	 * 
+	 * <p>
+	 * Use {@link Inherit} to inherit POJO swaps defined on the class.
+	 * 
+	 * <p>
+	 * Use {@link None} to suppress inheriting POJO swaps defined on the class.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -642,11 +632,14 @@ public @interface RestMethod {
 	 * Overrides the list of serializers assigned at the method level.
 	 * 
 	 * <p>
-	 * Use this annotation when the list of serializers assigned to a method differs from the list of serializers
-	 * assigned at the servlet level.
+	 * If no value is specified, the serializers are inherited from the class.
+	 * <br>Otherwise, this value overrides the serializers defined on the class.
 	 * 
 	 * <p>
-	 * To append to the list of serializers assigned at the servlet level, use <code>inherit=<js>"SERIALIZERS"</js></code>.
+	 * Use {@link Inherit} to inherit serializers defined on the class.
+	 * 
+	 * <p>
+	 * Use {@link None} to suppress inheriting serializers defined on the class.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -655,8 +648,7 @@ public @interface RestMethod {
 	 * 		<ja>@RestMethod</ja>(
 	 * 			name=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
-	 * 			serializers=MySpecialSerializer.<jk>class</jk>,
-	 * 			inherit=<js>"SERIALIZERS"</js>
+	 * 			serializers=MySpecialSerializer.<jk>class</jk>
 	 * 		)
 	 * 		<jk>public</jk> Object doGetWithSpecialAcceptType() {
 	 * 			<jc>// Handle request for special Accept type</jc>
@@ -669,7 +661,7 @@ public @interface RestMethod {
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * </ul>
 	 */
-	Class<? extends Serializer>[] serializers() default {};
+	Class<?>[] serializers() default {};
 
 	/**
 	 * Optional summary for the exposed API.

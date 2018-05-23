@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -110,11 +111,11 @@ public class RestResourceParsersTest {
 		public String a02(@Body String in) {
 			return in;
 		}
-		@RestMethod(name=PUT, path="/parserOverriddenOnMethod", parsers={PB.class,PC.class}, inherit="PARSERS")
+		@RestMethod(name=PUT, path="/parserOverriddenOnMethod", parsers={Inherit.class, PB.class,PC.class})
 		public String a03(@Body String in) {
 			return in;
 		}
-		@RestMethod(name=PUT, path="/parserWithDifferentMediaTypes", parsers={PD.class}, inherit="PARSERS")
+		@RestMethod(name=PUT, path="/parserWithDifferentMediaTypes", parsers={Inherit.class, PD.class})
 		public String a04(@Body String in) {
 			return in;
 		}

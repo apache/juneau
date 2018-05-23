@@ -15,6 +15,7 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -106,11 +107,11 @@ public class RestResourceSerializersTest {
 		public String a02() {
 			return "test2";
 		}
-		@RestMethod(name=GET, path="/serializerOverriddenOnMethod", serializers={SB.class,SC.class}, inherit="SERIALIZERS")
+		@RestMethod(name=GET, path="/serializerOverriddenOnMethod", serializers={SB.class,SC.class,Inherit.class})
 		public String a03() {
 			return "test3";
 		}
-		@RestMethod(name=GET, path="/serializerWithDifferentMediaTypes", serializers={SD.class}, inherit="SERIALIZERS")
+		@RestMethod(name=GET, path="/serializerWithDifferentMediaTypes", serializers={SD.class,Inherit.class})
 		public String a04() {
 			return "test4";
 		}

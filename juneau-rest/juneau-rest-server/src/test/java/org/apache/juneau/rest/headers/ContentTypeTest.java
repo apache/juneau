@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -137,7 +138,7 @@ public class ContentTypeTest {
 		parsers={P1.class,P2.class}
 	)
 	public static class C {
-		@RestMethod(name=PUT, parsers=P3.class, inherit="PARSERS")
+		@RestMethod(name=PUT, parsers={P3.class,Inherit.class})
 		public String c(@Body String in) {
 			return in;
 		}
@@ -210,7 +211,7 @@ public class ContentTypeTest {
 		parsers={P1.class,P2.class}
 	)
 	public static class F {
-		@RestMethod(name=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers=P3.class, inherit="PARSERS")
+		@RestMethod(name=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
 		public String f(@Body String in) {
 			return in;
 		}

@@ -479,8 +479,13 @@ public abstract class Parser extends BeanContext {
 	/** General parser properties currently set on this parser. */
 	private final MediaType[] consumes;
 
-	// Hidden constructor to force subclass from InputStreamParser or ReaderParser.
-	Parser(PropertyStore ps, String...consumes) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param ps The property store containing all the settings for this object.
+	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
+	 */
+	protected Parser(PropertyStore ps, String...consumes) {
 		super(ps);
 
 		trimStrings = getBooleanProperty(PARSER_trimStrings, false);
