@@ -542,14 +542,21 @@ public @interface RestResource {
 	 * Parsers. 
 	 * 
 	 * <p>
-	 * Adds class-level parsers to this resource.
+	 * If no value is specified, the parsers are inherited from parent class.
+	 * <br>Otherwise, this value overrides the parsers defined on the parent class.
+	 * 
+	 * <p>
+	 * Use {@link Inherit} to inherit parsers defined on the parent class.
+	 * 
+	 * <p>
+	 * Use {@link None} to suppress inheriting parsers defined on the parent class.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_parsers}
 	 * </ul>
 	 */
-	Class<? extends Parser>[] parsers() default {};
+	Class<?>[] parsers() default {};
 
 	/**
 	 * HTTP part parser. 
@@ -709,14 +716,21 @@ public @interface RestResource {
 	 * Serializers. 
 	 * 
 	 * <p>
-	 * Adds class-level serializers to this resource.
+	 * If no value is specified, the serializers are inherited from parent class.
+	 * <br>Otherwise, this value overrides the serializers defined on the parent class.
+	 * 
+	 * <p>
+	 * Use {@link Inherit} to inherit serializers defined on the parent class.
+	 * 
+	 * <p>
+	 * Use {@link None} to suppress inheriting serializers defined on the parent class.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * </ul>
 	 */
-	Class<? extends Serializer>[] serializers() default {};
+	Class<?>[] serializers() default {};
 
 	/**
 	 * Optional site name.

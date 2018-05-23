@@ -629,9 +629,6 @@ public @interface RestMethod {
 	 * Serializers. 
 	 * 
 	 * <p>
-	 * Overrides the list of serializers assigned at the method level.
-	 * 
-	 * <p>
 	 * If no value is specified, the serializers are inherited from the class.
 	 * <br>Otherwise, this value overrides the serializers defined on the class.
 	 * 

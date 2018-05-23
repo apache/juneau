@@ -131,7 +131,7 @@ public class RestMethodInheritTest {
 	@RestResource(serializers={S1.class,S2.class})
 	public static class A {}
 	
-	@RestResource(serializers={S3.class,S4.class})
+	@RestResource(serializers={S3.class,S4.class,Inherit.class})
 	public static class A01 extends A {}
 
 	@RestResource
@@ -174,7 +174,7 @@ public class RestMethodInheritTest {
 	@RestResource(parsers={P1.class,P2.class})
 	public static class B {}
 
-	@RestResource(parsers={P3.class,P4.class})
+	@RestResource(parsers={P3.class,P4.class,Inherit.class})
 	public static class B01 extends B {}
 
 	@RestResource
@@ -217,7 +217,7 @@ public class RestMethodInheritTest {
 	@RestResource(pojoSwaps={F1Swap.class})
 	public static class D {}
 
-	@RestResource(pojoSwaps={F2Swap.class})
+	@RestResource(pojoSwaps={F2Swap.class,Inherit.class})
 	public static class D01 extends D {}
 
 	@RestResource(serializers=JsonSerializer.Simple.class)

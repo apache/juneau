@@ -20,6 +20,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.util.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -166,21 +167,16 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 				}
 
-//				ASet<String> inherit = new ASet<String>().appendAll(StringUtils.split(m.inherit()));
-//				if (inherit.contains("*")) 
-//					inherit.appendAll("SERIALIZERS","PARSERS","TRANSFORMS","PROPERTIES","ENCODERS");
-
 				SerializerGroupBuilder sgb = null;
 				ParserGroupBuilder pgb = null;
 				ParserBuilder uepb = null;
 				BeanContextBuilder bcb = null;
 				PropertyStore cps = context.getPropertyStore();
 				
-				
-				Object[] mSerializers = resolve(cps.getArrayProperty(REST_serializers, Object.class), m.serializers());
-				Object[] mParsers = resolve(cps.getArrayProperty(REST_parsers, Object.class), m.parsers());
-				Object[] mPojoSwaps = resolve(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
-				Object[] mBeanFilters = resolve(cps.getArrayProperty(BEAN_beanFilters, Object.class), m.beanFilters());
+				Object[] mSerializers = merge(cps.getArrayProperty(REST_serializers, Object.class), m.serializers());
+				Object[] mParsers = merge(cps.getArrayProperty(REST_parsers, Object.class), m.parsers());
+				Object[] mPojoSwaps = merge(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
+				Object[] mBeanFilters = merge(cps.getArrayProperty(BEAN_beanFilters, Object.class), m.beanFilters());
 				
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
@@ -404,27 +400,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		}
 	}
 	
-	static Object[] resolve(Object[] fromClass, Object[] fromAnnotation) {
-		
-		if (ArrayUtils.contains(None.class, fromAnnotation)) 
-			return ArrayUtils.remove(None.class, fromAnnotation);
-		
-		if (fromAnnotation.length == 0)
-			return fromClass;
-		
-		if (! ArrayUtils.contains(Inherit.class, fromAnnotation))
-			return fromAnnotation;
-		
-		List<Object> l = new ArrayList<>(fromClass.length + fromAnnotation.length);
-		for (Object o : fromAnnotation) {
-			if (o == Inherit.class)
-				l.addAll(Arrays.asList(fromClass));
-			else
-				l.add(o);
-		}
-		return l.toArray(new Object[l.size()]);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this Java method has any guards or matchers.
 	 */

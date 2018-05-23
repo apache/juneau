@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.rest.util.Utils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.lang.reflect.Method;
@@ -165,8 +166,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
 					set(p, true);
-				serializers(r.serializers());
-				parsers(r.parsers());
+				serializers(false, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), r.serializers()));
+				parsers(false, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), r.parsers()));
 				encoders(r.encoders());
 				if (r.produces().length > 0)
 					produces(false, resolveVars(vr, r.produces()));
@@ -178,8 +179,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				converters(r.converters());
 				guards(reverse(r.guards()));
 				children(r.children());
-				beanFilters((Object[])r.beanFilters());
-				pojoSwaps(r.pojoSwaps());
+				beanFilters(false, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), r.beanFilters()));
+				pojoSwaps(false, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), r.pojoSwaps()));
 				paramResolvers(r.paramResolvers());
 				if (r.serializerListener() != SerializerListener.Null.class)
 					serializerListener(r.serializerListener());

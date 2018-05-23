@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -23,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 @SuppressWarnings("serial")
 @RestResource(
 	serializers={
-		HtmlDocSerializer.class,  // HTML must be listed first because Internet Explore does not include text/html in their Accept header.
+		Inherit.class,
 		RdfSerializer.Xml.class,
 		RdfSerializer.XmlAbbrev.class,
 		RdfSerializer.Turtle.class,
@@ -31,6 +30,7 @@ import org.apache.juneau.rest.annotation.*;
 		RdfSerializer.N3.class
 	},
 	parsers={
+		Inherit.class,
 		RdfParser.Xml.class,
 		RdfParser.Turtle.class,
 		RdfParser.NTriple.class,

@@ -21765,6 +21765,18 @@
 					<li class='jc'>{@link org.apache.juneau.rest.Inherit}
 					<li class='jc'>{@link org.apache.juneau.rest.None}
 				</ul>
+				<br>These can be used in the following locations:
+				<ul>
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#serializers()}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#parsers()}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters()}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps()}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializers()}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsers()}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters()}
+					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps()}
+				</ul>
+				<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <code>Inherit</code> class. 
 		</ul>
 	
 		<h5 class='topic w800'>juneau-rest-client</h5>
