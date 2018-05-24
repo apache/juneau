@@ -754,7 +754,20 @@ public @interface RestMethod {
 	 * 		}
 	 * 	)
 	 * </p>
-	 * {@link TODO}
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is JSON.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
+	 * 	<li>
+	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

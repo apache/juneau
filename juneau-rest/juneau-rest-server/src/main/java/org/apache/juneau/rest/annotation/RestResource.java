@@ -325,7 +325,8 @@ public @interface RestResource {
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/info/description</code>.
+	 * 		The format is plain-text.
+	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -333,7 +334,7 @@ public @interface RestResource {
 	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
 	 * </ul>
 	 */
-	String description() default "";
+	String[] description() default {};
 
 	/**
 	 * Compression encoders. 
@@ -853,27 +854,22 @@ public @interface RestResource {
 	 * <p>
 	 * Used to populate the auto-generated OPTIONS swagger documentation.
 	 * 
-	 * <p>
-	 * The format of this annotation is JSON when all individual parts are concatenated.
-	 * <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/addressBook"</js>,
 	 * 
 	 * 		<jc>// Swagger info.</jc>
-	 * 		swagger={
+	 * 		swagger=@ResourceSwagger({
 	 * 			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
 	 * 			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
 	 * 			<js>"version:'2.0',</js>,
 	 * 			<js>"termsOfService:'You are on your own.',"</js>,
 	 * 			<js>"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}],"</js>,
 	 * 			<js>"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"</js>
-	 * 		}
+	 * 		})
 	 * 	)
 	 * </p>
-	 * {@link TODO}
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -903,7 +899,7 @@ public @interface RestResource {
 	 * 	<li class='jm'>{@link RestInfoProvider#getTitle(RestRequest)}
 	 * </ul>
 	 */
-	String title() default "";
+	String[] title() default {};
 
 	/**
 	 * Configuration property:  Use classpath resource caching. 

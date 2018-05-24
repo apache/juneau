@@ -128,10 +128,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			for (RestResource r : restResourceAnnotationsParentFirst.values()) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
-				if (! r.title().isEmpty())
-					title = r.title();
-				if (! r.description().isEmpty())
-					description = r.description();
+				if (r.title().length > 0)
+					title = joinnl(r.title());
+				if (r.description().length > 0)
+					description = joinnl(r.description());
 			}
 		}
 	}
@@ -188,10 +188,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		for (Map.Entry<Class<?>,RestResource> e : findAnnotationsMapParentFirst(RestResource.class, resource.getClass()).entrySet()) {
 			RestResource rr = e.getValue();
 
-			if (! rr.title().isEmpty())
-				omSwagger.getObjectMap("info", true).appendIf(false, true, true, "title", vr.resolve(rr.title()));
-			if (! rr.description().isEmpty())
-				omSwagger.getObjectMap("info", true).appendIf(false, true, true, "description", vr.resolve(rr.description()));
+			if (rr.title().length > 0)
+				omSwagger.getObjectMap("info", true).appendIf(false, true, true, "title", vr.resolve(joinnl(rr.title())));
+			if (rr.description().length > 0)
+				omSwagger.getObjectMap("info", true).appendIf(false, true, true, "description", vr.resolve(joinnl(rr.description())));
 			
 			ResourceSwagger r = rr.swagger();
 			
