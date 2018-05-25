@@ -28,26 +28,27 @@ import org.apache.juneau.rest.*;
  * <p>
  * Identifies a POJO to be used as the body of an HTTP request.
  * 
- * <h5 class='section'>Example:</h5>
+ * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
+ * 	<jc>// Used on parameter</jc>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {...}
- * 
- * 	<jc>// ...or...</jc>
- * 
+ * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Used on class</jc>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> addPerson(Person person) {...}
+ * 	<jk>public void</jk> addPet(Pet pet) {...}
  * 
  * 	<ja>@Body</ja>
- * 	<jk>public class</jk> Person {...}
+ * 	<jk>public class</jk> Pet {...}
  * </p>
  * 
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> addPerson(RestRequest req) {
- * 		Person person = req.getBody().asType(Person.<jk>class</jk>);
+ * 	<jk>public void</jk> addPet(RestRequest req) {
+ * 		Pet pet = req.getBody().asType(Pet.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
@@ -56,21 +57,21 @@ import org.apache.juneau.rest.*;
  * This annotation can be applied to the following:
  * <ul class='spaced-list'>
  * 	<li>
- * 		Parameters on a  {@link RestMethod @RestMethod}.
+ * 		Parameters on a  {@link RestMethod @RestMethod}-annotated method.
  * 	<li>
  * 		POJO classes.
  * </ul>
  * 
  * <p>
- * Any of the following types can be used as an annotated parameter (matched in the specified order):
+ * Any of the following types can be used (matched in the specified order):
  * <ol class='spaced-list'>
  * 	<li>
  * 		{@link Reader}
- * 		<br><ja>@Body</ja> annotation is optional.
+ * 		<br><ja>@Body</ja> annotation is optional (it's inferred from the class type).
  * 		<br><code>Content-Type</code> is always ignored.
  * 	<li>
  * 		{@link InputStream} 
- * 		<br><ja>@Body</ja> annotation is optional.
+ * 		<br><ja>@Body</ja> annotation is optional (it's inferred from the class type).
  * 		<br><code>Content-Type</code> is always ignored.
  * 	<li>
  * 		Any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.PojoCategories'>parsable</a> POJO type.
@@ -111,11 +112,12 @@ import org.apache.juneau.rest.*;
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
- * 		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
- * 		<br>Values on child classes override values on parent classes.
- * 	<li>
- * 		Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
- * 		<br>Values on methods override values on POJO classes.
+ * 		Annotation values are coalesced from multiple sources in the following order of precedence:
+ * 		<ol>
+ * 			<li><ja>@Body</ja> annotation on parameter.
+ * 			<li><ja>@Body</ja> annotation on class.
+ * 			<li><ja>@Body</ja> annotation on parent classes and interfaces.
+ * 		</ol>
  * </ul>
  * 
  * 
@@ -131,53 +133,70 @@ import org.apache.juneau.rest.*;
 public @interface Body {
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/description</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/description</code>.
+	 * 
+	 * <p>
+	 * A brief description of the body. This could contain examples of use.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(description=<js>"A description"</js>) MyBean input) {...}
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
+	 * 	) {...}
 	 * </p>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(MyBean input) {...}
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 * 
-	 * 	<ja>@Body</ja>(description=<js>"A description"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
+	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		TODO - Future support for MarkDown.
 	 * </ul>
 	 */
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/required</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/required</code>.
 	 * 
+	 * <p>
+	 * 	Determines whether this parameter is mandatory. 
+	 *  <br>The property MAY be included and its default value is false.
+	 *  
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(required=<js>"true"</js>) MyBean input) {...}
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(required=<js>"true"</js>) Pet input
+	 * 	) {...}
 	 * </p>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(MyBean input) {...}
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 * 
 	 * 	<ja>@Body</ja>(required=<js>"true"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -186,23 +205,101 @@ public @interface Body {
 	String required() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/type</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/schema</code>.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<ul>
+	 * 			<li><code>schema=<js>"{type:'string',format:'binary'}"</js></code>
+	 * 			<li><code>schema=<js>"type:'string',format:'binary'"</js></code>
+	 * 		<ul>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String[] schema() default {};
+	
+	/**
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/schema/$ref</code>.
+	 * 
+	 * <p>
+	 * 	A JSON reference to the schema definition.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String $ref() default "";
+	
+	/**
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/schema/format</code>.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
+	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(type=<js>"object"</js>) MyBean input) {...}
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(MyBean input) {...}
-	 * 
-	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public void</jk> setAge(
+	 * 		<ja>@Body</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String input
+	 * 	) {...}
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
+	 * </ul>
+	 */
+	String format() default "";
+	
+	
+	
+	
+	
+	
+	/**
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/type</code>.
+	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode'>
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 * 
+	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
+	 * 	<jk>public class</jk> Pet {...}
+	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		The possible values are:
 	 * 		<ul>
@@ -228,52 +325,7 @@ public @interface Body {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/format</code>.
-	 * 
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(type=<js>"object"</js>) MyBean input) {...}
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(MyBean input) {...}
-	 * 
-	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
-	 * </p>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format of the value is plain-text:
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Formats defined by the OAS include:
-	 * 		<ul>
-	 * 			<li><js>"int32"</js>
-	 * 			<li><js>"int64"</js>
-	 * 			<li><js>"float"</js>
-	 * 			<li><js>"double"</js>
-	 * 			<li><js>"byte"</js>
-	 * 			<li><js>"binary"</js>
-	 * 			<li><js>"date"</js>
-	 * 			<li><js>"date-time"</js>
-	 * 			<li><js>"password"</js>
-	 * 		</ul>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
-	 * </ul>
-	 */
-	String format() default "";
-	
-	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/pattern</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/pattern</code>.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -284,7 +336,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		This string SHOULD be a valid regular expression.
 	 * 	<li>
@@ -295,7 +347,7 @@ public @interface Body {
 	String pattern() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/collectionFormat</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/collectionFormat</code>.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -322,12 +374,12 @@ public @interface Body {
 	String collectionFormat() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/maximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -336,12 +388,12 @@ public @interface Body {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/minimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -350,12 +402,12 @@ public @interface Body {
 	String minimum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/multipleOf</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/multipleOf</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -364,12 +416,12 @@ public @interface Body {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maxLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/maxLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -378,12 +430,12 @@ public @interface Body {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/minLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -392,12 +444,12 @@ public @interface Body {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maxItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/maxItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -406,12 +458,12 @@ public @interface Body {
 	String maxItems() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/minItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -420,12 +472,12 @@ public @interface Body {
 	String minItems() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/allowEmptyVals</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/allowEmptyVals</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -434,12 +486,12 @@ public @interface Body {
 	String allowEmptyValue() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMaximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/exclusiveMaximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -448,12 +500,12 @@ public @interface Body {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMinimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/exclusiveMinimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -462,12 +514,12 @@ public @interface Body {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/uniqueItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/uniqueItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -476,34 +528,12 @@ public @interface Body {
 	String uniqueItems() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/schema</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/default</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
-	 * 		<br>The following two example are considered equivalent:
-	 * 		<ul>
-	 * 			<li><code>schema=<js>"{type:'string',format:'binary'}"</js></code>
-	 * 			<li><code>schema=<js>"type:'string',format:'binary'"</js></code>
-	 * 		<ul>
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] schema() default {};
-	
-	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/default</code>.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format of the value is JSON.
+	 * 		The format is any JSON.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -513,12 +543,12 @@ public @interface Body {
 	String[] _default() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/enum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/enum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON array or comma-delimited list.
+	 * 		The format is a JSON array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -528,12 +558,12 @@ public @interface Body {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/items</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/items</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -543,7 +573,7 @@ public @interface Body {
 	String[] items() default {};	
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-example</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/x-example</code>.
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the body value that is used by {@link BasicRestInfoProvider} to construct
@@ -552,7 +582,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object or plain-text string.
+	 * 		The format is a JSON object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -562,7 +592,7 @@ public @interface Body {
 	String[] example() default {};
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-examples</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/x-examples</code>.
 	 * 
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
@@ -570,7 +600,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 

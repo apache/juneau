@@ -771,6 +771,7 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
+	 * 	<li class='ja'>{@link MethodSwagger}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
 	 * </ul>
 	 */

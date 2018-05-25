@@ -154,7 +154,7 @@ public @interface RestResource {
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.Null.class;
 
 	/**
-	 * Children.
+	 * REST children.
 	 * 
 	 * <p>
 	 * Defines children of this resource.
@@ -873,6 +873,7 @@ public @interface RestResource {
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
+	 * 	<li class='ja'>{@link ResourceSwagger}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
 	 * </ul>
 	 */

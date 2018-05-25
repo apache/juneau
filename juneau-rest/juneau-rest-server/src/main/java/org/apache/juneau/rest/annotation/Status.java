@@ -116,12 +116,12 @@ public @interface Status {
 	int value() default 0;
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/description</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/description</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 

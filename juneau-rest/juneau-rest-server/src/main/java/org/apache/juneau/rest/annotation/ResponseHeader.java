@@ -72,7 +72,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a comma-delimited list of HTTP status codes that this header applies to.
+	 * 		The is a comma-delimited list of HTTP status codes that this header applies to.
 	 * 	<li>
 	 * 		The default value is <js>"200"</js>.
 	 * </ul>
@@ -85,7 +85,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a comma-delimited list of HTTP status codes that this header applies to.
+	 * 		The format is a comma-delimited list of HTTP status codes that this header applies to.
 	 * 	<li>
 	 * 		The default value is <js>"200"</js>.
 	 * </ul>
@@ -134,12 +134,12 @@ public @interface ResponseHeader {
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/description</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/description</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -149,10 +149,12 @@ public @interface ResponseHeader {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/type</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/type</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		The possible values are:
 	 * 		<ul>
@@ -175,12 +177,12 @@ public @interface ResponseHeader {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/format</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/format</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text:
+	 * 		The format is plain text:
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -194,10 +196,12 @@ public @interface ResponseHeader {
 	String format() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/collectionFormat</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/collectionFormat</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text:
 	 * 	<li>
 	 * 		The possible value are:
 	 * 		<ul>
@@ -215,7 +219,7 @@ public @interface ResponseHeader {
 	String collectionFormat() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/$ref</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/$ref</code>.
 	 * 
 	 * <p>
 	 * Denotes a reference to a definition object.
@@ -223,7 +227,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text:
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -232,12 +236,12 @@ public @interface ResponseHeader {
 	String $ref() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -246,12 +250,12 @@ public @interface ResponseHeader {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -260,12 +264,12 @@ public @interface ResponseHeader {
 	String minimum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/multipleOf</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/multipleOf</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -274,12 +278,12 @@ public @interface ResponseHeader {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maxLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maxLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -288,12 +292,12 @@ public @interface ResponseHeader {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -302,12 +306,12 @@ public @interface ResponseHeader {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maxItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maxItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -316,12 +320,12 @@ public @interface ResponseHeader {
 	String maxItems() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -330,12 +334,12 @@ public @interface ResponseHeader {
 	String minItems() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMaximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMaximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -344,12 +348,12 @@ public @interface ResponseHeader {
 	String exclusiveMaximum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMinimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMinimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -358,12 +362,12 @@ public @interface ResponseHeader {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/uniqueItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/uniqueItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -372,12 +376,12 @@ public @interface ResponseHeader {
 	String uniqueItems() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/items</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/items</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -387,12 +391,12 @@ public @interface ResponseHeader {
 	String[] items() default {};
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/default</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/default</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is JSON.
+	 * 		The format is any JSON.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -402,12 +406,12 @@ public @interface ResponseHeader {
 	String[] _default() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/enum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/enum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON array or comma-delimited list.
+	 * 		The format is a JSON array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -417,7 +421,7 @@ public @interface ResponseHeader {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/x-example</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/x-example</code>.
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the body value that is used by {@link BasicRestInfoProvider} to construct
@@ -426,7 +430,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object or plain-text string.
+	 * 		The format is a JSON object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 

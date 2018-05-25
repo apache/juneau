@@ -70,12 +70,12 @@ public @interface Path {
 	String value() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/description</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/description</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -85,10 +85,12 @@ public @interface Path {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/type</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/type</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		The possible values are:
 	 * 		<ul>
@@ -112,12 +114,12 @@ public @interface Path {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/format</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/format</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text:
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -131,12 +133,12 @@ public @interface Path {
 	String format() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/pattern</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/pattern</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		This string SHOULD be a valid regular expression.
 	 * 	<li>
@@ -147,12 +149,12 @@ public @interface Path {
 	String pattern() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/maximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -161,12 +163,12 @@ public @interface Path {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/minimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -175,12 +177,12 @@ public @interface Path {
 	String minimum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/multipleOf</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/multipleOf</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -189,12 +191,12 @@ public @interface Path {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maxLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/maxLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -203,12 +205,12 @@ public @interface Path {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/minLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -217,12 +219,12 @@ public @interface Path {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/allowEmptyValue</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/allowEmptyValue</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -231,12 +233,12 @@ public @interface Path {
 	String allowEmptyValue() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMaximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/exclusiveMaximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -245,12 +247,12 @@ public @interface Path {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMinimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/exclusiveMinimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -259,12 +261,12 @@ public @interface Path {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/schema</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/schema</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
@@ -281,12 +283,12 @@ public @interface Path {
 	String[] schema() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/enum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/enum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON array or comma-delimited list.
+	 * 		The format is a JSON array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -296,7 +298,7 @@ public @interface Path {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-example</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/x-example</code>.
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
@@ -305,7 +307,7 @@ public @interface Path {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object or plain-text string.
+	 * 		The format is a JSON object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 

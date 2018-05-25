@@ -73,7 +73,7 @@ public @interface ResourceSwagger {
 	String[] value() default {};
 	
 	/**
-	 * Defines the swagger value <code>/info/title</code>.
+	 * Defines the swagger field <code>/info/title</code>.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -106,7 +106,7 @@ public @interface ResourceSwagger {
 	String[] title() default {};
 	
 	/**
-	 * Defines the swagger value <code>/info/description</code>.
+	 * Defines the swagger field <code>/info/description</code>.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -123,7 +123,7 @@ public @interface ResourceSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The precedence of lookup for this field is:
@@ -142,7 +142,7 @@ public @interface ResourceSwagger {
 	String[] description() default {};
 
 	/**
-	 * Defines the swagger value <code>/info/contact</code>.
+	 * Defines the swagger field <code>/info/contact</code>.
 	 * 
 	 * <p>
 	 * A simplified JSON string with the following fields:
@@ -198,7 +198,7 @@ public @interface ResourceSwagger {
 	String[] contact() default {};
 
 	/**
-	 * Defines the swagger value <code>/externalDocs</code>.
+	 * Defines the swagger field <code>/externalDocs</code>.
 	 * 
 	 * <p>
 	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
@@ -239,7 +239,7 @@ public @interface ResourceSwagger {
 	String[] externalDocs() default {};
 
 	/**
-	 * Defines the swagger value <code>/info/license</code>.
+	 * Defines the swagger field <code>/info/license</code>.
 	 * 
 	 * <p>
 	 * It is used to populate the Swagger license field and to display on HTML pages.
@@ -280,7 +280,7 @@ public @interface ResourceSwagger {
 	String[] license() default {};
 
 	/**
-	 * Defines the swagger value <code>/tags</code>.
+	 * Defines the swagger field <code>/tags</code>.
 	 * 
 	 * 
 	 * Optional tagging information for the exposed API.
@@ -330,7 +330,7 @@ public @interface ResourceSwagger {
 	String[] tags() default {};
 	
 	/**
-	 * Defines the swagger value <code>/info/termsOfService</code>.
+	 * Defines the swagger field <code>/info/termsOfService</code>.
 	 * 
 	 * 
 	 * Optional servlet terms-of-service for this API.
@@ -355,7 +355,7 @@ public @interface ResourceSwagger {
 	String[] termsOfService() default {};
 
 	/**
-	 * Defines the swagger value <code>/info/version</code>.
+	 * Defines the swagger field <code>/info/version</code>.
 	 * 
 	 * 
 	 * 

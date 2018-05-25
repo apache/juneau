@@ -103,12 +103,12 @@ public @interface FormData {
 	String value() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/description</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/description</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -118,12 +118,12 @@ public @interface FormData {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/required</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/required</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -132,7 +132,7 @@ public @interface FormData {
 	String required() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/type</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/type</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -159,12 +159,12 @@ public @interface FormData {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/format</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/format</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text:
+	 * 		The format is plain-text.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -178,12 +178,12 @@ public @interface FormData {
 	String format() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/pattern</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/pattern</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 	<li>
 	 * 		This string SHOULD be a valid regular expression.
 	 * 	<li>
@@ -194,7 +194,7 @@ public @interface FormData {
 	String pattern() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/collectionFormat</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/collectionFormat</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -215,12 +215,12 @@ public @interface FormData {
 	String collectionFormat() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/maximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -229,12 +229,12 @@ public @interface FormData {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/minimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -243,12 +243,12 @@ public @interface FormData {
 	String minimum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/multipleOf</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/multipleOf</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -257,12 +257,12 @@ public @interface FormData {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maxLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/maxLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -271,12 +271,12 @@ public @interface FormData {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minLength</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/minLength</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -285,12 +285,12 @@ public @interface FormData {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/maxItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/maxItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -299,12 +299,12 @@ public @interface FormData {
 	String maxItems() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/minItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/minItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -313,12 +313,12 @@ public @interface FormData {
 	String minItems() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/allowEmptyValue</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/allowEmptyValue</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -327,12 +327,12 @@ public @interface FormData {
 	String allowEmptyValue() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMaximum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/exclusiveMaximum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -341,12 +341,12 @@ public @interface FormData {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/exclusiveMinimum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/exclusiveMinimum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is numeric.
+	 * 		The format is numeric.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -355,12 +355,12 @@ public @interface FormData {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/uniqueItems</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/uniqueItems</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is boolean.
+	 * 		The format is boolean.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -369,12 +369,12 @@ public @interface FormData {
 	String uniqueItems() default "";
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/schema</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/schema</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
@@ -391,7 +391,7 @@ public @interface FormData {
 	String[] schema() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/default</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/default</code>.
 	 * 
 	 * <p>
 	 * Additionally, this method can be used to define a default value for a missing form data entry.
@@ -399,7 +399,7 @@ public @interface FormData {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is JSON.
+	 * 		The format is any JSON.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -409,12 +409,12 @@ public @interface FormData {
 	String[] _default() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/enum</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/enum</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON array or comma-delimited list.
+	 * 		The format is a JSON array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -424,12 +424,12 @@ public @interface FormData {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/items</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/items</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -439,7 +439,7 @@ public @interface FormData {
 	String[] items() default {};	
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/parameters/#/x-example</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/x-example</code>.
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
@@ -448,7 +448,7 @@ public @interface FormData {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object or plain-text string.
+	 * 		The format is a JSON object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 

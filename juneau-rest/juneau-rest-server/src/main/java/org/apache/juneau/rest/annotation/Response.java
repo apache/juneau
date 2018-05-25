@@ -117,12 +117,12 @@ public @interface Response {
 	int value() default 0;
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/description</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/description</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is plain-text.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -132,12 +132,12 @@ public @interface Response {
 	String[] description() default {};
 
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/schema</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/schema</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
@@ -154,12 +154,12 @@ public @interface Response {
 	String[] schema() default {};
 	
 	/**
-	 * Defines the swagger value <code>/paths/{path}/{method}/responses/{status-code}/headers</code>.
+	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers</code>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
@@ -176,7 +176,7 @@ public @interface Response {
 	String[] headers() default {};
 	
 	/**
-	 * Used for populating the Swagger field <code>/paths/{path}/{method}/responses/{status-code}/x-examples</code>.
+	 * Used for populating the swagger field <code>/paths/{path}/{method}/responses/{status-code}/x-examples</code>.
 	 * 
 	 * <p>
 	 * The format of the example should be a JSON representation of the POJO being serialized.
@@ -186,7 +186,7 @@ public @interface Response {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is any valid JSON.
+	 * 		The format is any JSON.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
@@ -203,7 +203,7 @@ public @interface Response {
 	String[] example() default {};
 	
 	/**
-	 * Used for populating the Swagger field <code>/paths/{path}/{method}/responses/{status-code}/examples</code>.
+	 * Used for populating the swagger field <code>/paths/{path}/{method}/responses/{status-code}/examples</code>.
 	 * 
 	 * <p>
 	 * The format is a JSON object with keys as media types and values as string representations of the body response.
@@ -211,7 +211,7 @@ public @interface Response {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format of the value is a JSON object.
+	 * 		The format is a JSON object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
