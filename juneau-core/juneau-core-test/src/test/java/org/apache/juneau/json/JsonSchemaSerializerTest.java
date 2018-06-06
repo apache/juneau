@@ -1170,7 +1170,7 @@ public class JsonSchemaSerializerTest {
 			.addExamplesTo("collection,bean")
 			.build().createSession();
 		
-		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{}},'x-example':[]}", s.getSchema(BeanList.class));
+		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanList.class));
 	}
 	
 	@Test
@@ -1181,7 +1181,7 @@ public class JsonSchemaSerializerTest {
 			.addExamplesTo("collection,bean")
 			.build().createSession();
 		
-		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[]}", s.getSchema(BeanList.class));
+		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanList.class));
 	}
 
 	//====================================================================================================

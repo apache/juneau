@@ -319,7 +319,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	public ObjectMap appendIf(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
 		if (value == null && skipNullValue)
 			return this;
-		if (StringUtils.isEmpty(value) && skipEmptyValue)
+		if (skipEmptyValue && ObjectUtils.isEmpty(value)) 
 			return this;
 		Object current = get(key);
 		if (current == null || overwrite) 
@@ -335,16 +335,14 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Equivalent to calling {@code put(key, value)}, but returns this map so that the method can be chained.
 	 * 
 	 * <p>
-	 * <jk>null</jk> and empty string values are skipped.
+	 * <jk>null</jk> and empty string/map/collection values are skipped.
 	 * 
 	 * @param key The key.
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public ObjectMap appendSkipEmpty(String key, String value) {
-		if (! StringUtils.isEmpty(value))
-			append(key, value);
-		return this;
+	public ObjectMap appendSkipEmpty(String key, Object value) {
+		return appendIf(true, true, true, key, value);
 	}
 	
 	/**

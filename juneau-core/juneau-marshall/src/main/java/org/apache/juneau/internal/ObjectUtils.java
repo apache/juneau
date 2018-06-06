@@ -336,4 +336,18 @@ public final class ObjectUtils {
 				return i;
 		return 0;
 	}
+	
+	/**
+	 * Returns the first non-empty value in the list of objects.
+	 * 
+	 * @param o The objects to check.
+	 * @return The first object whose call to {@link #isEmpty(Object)} returns <jk>false</jk>, otherwise <jk>null</jk>.
+	 */
+	@SafeVarargs
+	public static <T> T firstNonEmpty(T...o) {
+		for (T oo : o)
+			if (! isEmpty(oo))
+				return oo;
+		return null;
+	}
 }
