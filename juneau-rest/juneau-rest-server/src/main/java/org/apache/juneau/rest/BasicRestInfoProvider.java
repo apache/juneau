@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
 import static org.apache.juneau.rest.RestParamType.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.util.AnnotationUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 
 import java.lang.reflect.*;

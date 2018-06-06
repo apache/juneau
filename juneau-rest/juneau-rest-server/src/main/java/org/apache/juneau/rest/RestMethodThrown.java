@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.util.AnnotationUtils.*;
 
 import java.lang.reflect.*;
 

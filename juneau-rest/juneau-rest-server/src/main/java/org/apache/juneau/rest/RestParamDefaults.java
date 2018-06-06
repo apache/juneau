@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.util.AnnotationUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
 import java.io.*;
