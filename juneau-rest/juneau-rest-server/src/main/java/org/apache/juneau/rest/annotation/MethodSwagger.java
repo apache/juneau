@@ -196,31 +196,16 @@ public @interface MethodSwagger {
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
 	 * 
-	 * <p>
-	 * A simplified JSON string with the following fields:
-	 * <p class='bcode'>
-	 * 	{
-	 * 		description: string,
-	 * 		url: string
-	 * 	}
-	 * </p>
-	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
-	 * 			<js>"{url:'http://juneau.apache.org'}"</js>
+	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
 	 * 		)
 	 * 	)
 	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 		<br>Comments and whitespace are ignored.
-	 * 		<br>The leading and trailing <js>'{'</js>/<js>'}'</js> characters are optional.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -228,7 +213,7 @@ public @interface MethodSwagger {
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
 	 */
-	String[] externalDocs() default {};
+	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/parameters</code>.

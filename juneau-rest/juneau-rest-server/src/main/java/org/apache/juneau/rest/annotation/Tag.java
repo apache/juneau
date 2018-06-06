@@ -10,45 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.jsonschema;
+package org.apache.juneau.rest.annotation;
 
-import java.util.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
 
 /**
- * Represents a list of {@link Schema} objects.
+ * Swagger schema annotation.
  * 
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
- * </ul>
+ * <p>
+ * The Schema Object allows the definition of input and output data types. 
+ * These types can be objects, but also primitives and arrays. 
+ * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it. 
+ * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
  */
-public class SchemaArray extends LinkedList<Schema> {
-
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Default constructor.
-	 */
-	public SchemaArray() {}
-
-	/**
-	 * Constructor with predefined types to add to this list.
-	 * 
-	 * @param schemas The list of schemas in this array.
-	 */
-	public SchemaArray(Schema...schemas) {
-		addAll(schemas);
-	}
-
-	/**
-	 * Convenience method for adding one or more {@link Schema} objects to this array.
-	 * 
-	 * @param schemas The {@link Schema} objects to add to this array.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaArray addAll(Schema...schemas) {
-		for (Schema s : schemas)
-			add(s);
-		return this;
-	}
+@Documented
+@Target({PARAMETER,TYPE})
+@Retention(RUNTIME)
+@Inherited
+public @interface Tag {
+	
+	String[] value() default {};
+	
+	String name() default "";
+	String[] description() default {};
+	ExternalDocs externalDocs() default @ExternalDocs;
 }

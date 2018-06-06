@@ -10,42 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.jsonschema;
+package org.apache.juneau.rest.annotation;
 
-import java.net.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import org.apache.juneau.*;
+import java.lang.annotation.*;
 
 /**
- * Convenience class for representing a schema reference such as <js>"{'$ref':'/url/to/ref'}"</js>.
+ * Swagger schema annotation.
  * 
  * <p>
- * An instance of this object is equivalent to calling...
- * 
- * <p class='bcode'>
- * 	Schema s = <jk>new</jk> Schema().setRef(uri);
- * </p>
- * 
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
- * </ul>
+ * The Schema Object allows the definition of input and output data types. 
+ * These types can be objects, but also primitives and arrays. 
+ * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it. 
+ * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
  */
-public class SchemaRef extends Schema {
-
-	/**
-	 * Constructor.
-	 * 
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 * 
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
-	 * @param uri The URI of the target reference.  Can be <jk>null</jk>.
-	 */
-	public SchemaRef(Object uri) {
-		this.setRef(uri);
-	}
+@Documented
+@Target({PARAMETER,TYPE})
+@Retention(RUNTIME)
+@Inherited
+public @interface License {
+	
+	String[] value() default {};
+	
+	String name() default "";
+	String url() default "";
+	
+	
 }

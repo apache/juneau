@@ -13,37 +13,37 @@
 package org.apache.juneau.dto.jsonschema;
 
 /**
- * Convenience class for representing a property that's an array of simple types.
- * 
- * <p>
- * An instance of this object is equivalent to calling...
- * 
- * <p class='bcode'>
- * 	SchemaProperty p = <jk>new</jk> SchemaProperty(name)
- * 		.setType(JsonType.<jsf>ARRAY</jsf>)
- * 		.setItems(
- * 			<jk>new</jk> Schema().setType(elementType)
- * 		);
- * </p>
+ * Represents a JSON property in the JSON-Schema core specification.
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
  * </ul>
  */
-public class SchemaPropertySimpleArray extends SchemaProperty {
+public class JsonSchemaProperty extends JsonSchema {
 
 	/**
-	 * Constructor.
-	 * 
-	 * @param name The name of the schema property.
-	 * @param elementType The JSON type of the elements in the array.
+	 * Default constructor.
 	 */
-	public SchemaPropertySimpleArray(String name, JsonType elementType) {
+	public JsonSchemaProperty() {}
+
+	/**
+	 * Convenience constructor.
+	 * 
+	 * @param name The name of this property.
+	 */
+	public JsonSchemaProperty(String name) {
 		setName(name);
-		setType(JsonType.ARRAY);
-		setItems(
-			new Schema().setType(elementType)
-		);
+	}
+
+	/**
+	 * Convenience constructor.
+	 * 
+	 * @param name The name of this property.
+	 * @param type The JSON type of this property.
+	 */
+	public JsonSchemaProperty(String name, JsonType type) {
+		setName(name);
+		setType(type);
 	}
 }

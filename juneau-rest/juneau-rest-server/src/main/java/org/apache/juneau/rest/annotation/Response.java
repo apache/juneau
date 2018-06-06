@@ -103,18 +103,7 @@ public @interface Response {
 	 */
 	int code() default 0;
 	
-	/**
-	 * A synonym to {@link #code()}.
-	 * 
-	 * <p>
-	 * Useful if you only want to specify a code only.
-	 * 
-	 * <p class='bcode'>
-	 * 	<ja>@Response</ja>(200)
-	 * 	<jk>public class</jk> Ok {...}
-	 * </p>
-	 */
-	int value() default 0;
+	String[] api() default {};
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/description</code>.
@@ -133,25 +122,8 @@ public @interface Response {
 
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/schema</code>.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
-	 * 		<br>The following two example are considered equivalent:
-	 * 		<ul>
-	 * 			<li><code>schema=<js>"{type:'string',format:'binary'}"</js></code>
-	 * 			<li><code>schema=<js>"type:'string',format:'binary'"</js></code>
-	 * 		<ul>
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
 	 */
-	String[] schema() default {};
+	Schema schema() default @Schema;
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers</code>.
@@ -173,7 +145,7 @@ public @interface Response {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] headers() default {};
+	ResponseHeader[] headers() default {};
 	
 	/**
 	 * Used for populating the swagger field <code>/paths/{path}/{method}/responses/{status-code}/x-examples</code>.

@@ -10,40 +10,40 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.a.rttests;
-
-import static org.apache.juneau.testutils.TestUtils.*;
-
-import org.apache.juneau.dto.jsonschema.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+package org.apache.juneau.dto.jsonschema;
 
 /**
- * Tests designed to serialize and parse objects to make sure we end up
- * with the same objects for all serializers and parsers.
+ * Convenience class for representing a property that's an array of simple types.
+ * 
+ * <p>
+ * An instance of this object is equivalent to calling...
+ * 
+ * <p class='bcode'>
+ * 	SchemaProperty p = <jk>new</jk> SchemaProperty(name)
+ * 		.setType(JsonType.<jsf>ARRAY</jsf>)
+ * 		.setItems(
+ * 			<jk>new</jk> Schema().setType(elementType)
+ * 		);
+ * </p>
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
+ * </ul>
  */
-@SuppressWarnings({})
-public class RoundTripDTOsTest extends RoundTripTest {
+public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 
-	public RoundTripDTOsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
-
-	//====================================================================================================
-	// org.apache.juneau.test.dto.jsonschema
-	//====================================================================================================
-	@Test
-	public void testJsonSchema1() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest1();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEqualObjects(s, s2);
-	}
-
-	@Test
-	public void testJsonSchema2() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest2();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEqualObjects(s, s2);
+	/**
+	 * Constructor.
+	 * 
+	 * @param name The name of the schema property.
+	 * @param elementType The JSON type of the elements in the array.
+	 */
+	public JsonSchemaPropertySimpleArray(String name, JsonType elementType) {
+		setName(name);
+		setType(JsonType.ARRAY);
+		setItems(
+			new JsonSchema().setType(elementType)
+		);
 	}
 }

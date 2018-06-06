@@ -20,7 +20,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import static org.apache.juneau.rest.util.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;

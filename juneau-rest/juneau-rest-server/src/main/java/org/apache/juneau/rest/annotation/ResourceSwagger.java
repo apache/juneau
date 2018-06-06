@@ -195,23 +195,14 @@ public @interface ResourceSwagger {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] contact() default {};
+	Contact contact() default @Contact;
 
 	/**
 	 * Defines the swagger field <code>/externalDocs</code>.
 	 * 
 	 * <p>
 	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
-	 * 
-	 * <p>
-	 * A simplified JSON string with the following fields:
-	 * <p class='bcode'>
-	 * 	{
-	 * 		description: string,
-	 * 		url: string
-	 * 	}
-	 * </p>
-	 * 
+	 * 	 * 
 	 * <p>
 	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
@@ -221,22 +212,12 @@ public @interface ResourceSwagger {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
-	 * 			externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>
+	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
 	 */
-	String[] externalDocs() default {};
+	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
 	 * Defines the swagger field <code>/info/license</code>.
@@ -277,7 +258,7 @@ public @interface ResourceSwagger {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] license() default {};
+	License license() default @License;
 
 	/**
 	 * Defines the swagger field <code>/tags</code>.
@@ -327,7 +308,7 @@ public @interface ResourceSwagger {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] tags() default {};
+	Tag[] tags() default {};
 	
 	/**
 	 * Defines the swagger field <code>/info/termsOfService</code>.

@@ -10,40 +10,45 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.jsonschema;
+package org.apache.juneau.rest.annotation;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
 
 /**
- * Represents a JSON property in the JSON-Schema core specification.
+ * Swagger schema annotation.
  * 
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
- * </ul>
+ * <p>
+ * The Schema Object allows the definition of input and output data types. 
+ * These types can be objects, but also primitives and arrays. 
+ * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it. 
+ * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
  */
-public class SchemaProperty extends Schema {
-
-	/**
-	 * Default constructor.
-	 */
-	public SchemaProperty() {}
-
-	/**
-	 * Convenience constructor.
-	 * 
-	 * @param name The name of this property.
-	 */
-	public SchemaProperty(String name) {
-		setName(name);
-	}
-
-	/**
-	 * Convenience constructor.
-	 * 
-	 * @param name The name of this property.
-	 * @param type The JSON type of this property.
-	 */
-	public SchemaProperty(String name, JsonType type) {
-		setName(name);
-		setType(type);
-	}
+@Documented
+@Target({PARAMETER,TYPE})
+@Retention(RUNTIME)
+@Inherited
+public @interface Items {
+	
+	String[] value() default {};
+	
+	String type() default "";
+	String format() default "";
+	String collectionFormat() default "";
+	String pattern() default "";
+	String $ref() default "";
+	String maximum() default "";
+	String minimum() default "";
+	String multipleOf() default "";
+	String maxLength() default "";
+	String minLength() default "";
+	String maxItems() default "";
+	String minItems() default "";
+	String exclusiveMaximum() default "";
+	String exclusiveMinimum() default "";
+	String uniqueItems() default "";
+	String[] _default() default {};
+	String[] _enum() default {};
 }

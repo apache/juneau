@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 @Bean(properties="name,description", fluentSetters=true)
-@Response(schema="IGNORE")
+@Response(schema=@Schema(ignore=true))
 public final class ResourceDescription implements Comparable<ResourceDescription> {
 
 	private String name, description;

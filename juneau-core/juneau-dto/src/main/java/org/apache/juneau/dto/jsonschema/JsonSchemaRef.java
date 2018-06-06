@@ -10,40 +10,42 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.a.rttests;
+package org.apache.juneau.dto.jsonschema;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import java.net.*;
 
-import org.apache.juneau.dto.jsonschema.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.apache.juneau.*;
 
 /**
- * Tests designed to serialize and parse objects to make sure we end up
- * with the same objects for all serializers and parsers.
+ * Convenience class for representing a schema reference such as <js>"{'$ref':'/url/to/ref'}"</js>.
+ * 
+ * <p>
+ * An instance of this object is equivalent to calling...
+ * 
+ * <p class='bcode'>
+ * 	Schema s = <jk>new</jk> Schema().setRef(uri);
+ * </p>
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
+ * </ul>
  */
-@SuppressWarnings({})
-public class RoundTripDTOsTest extends RoundTripTest {
+public class JsonSchemaRef extends JsonSchema {
 
-	public RoundTripDTOsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
-
-	//====================================================================================================
-	// org.apache.juneau.test.dto.jsonschema
-	//====================================================================================================
-	@Test
-	public void testJsonSchema1() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest1();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEqualObjects(s, s2);
-	}
-
-	@Test
-	public void testJsonSchema2() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest2();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEqualObjects(s, s2);
+	/**
+	 * Constructor.
+	 * 
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * 
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 * 
+	 * @param uri The URI of the target reference.  Can be <jk>null</jk>.
+	 */
+	public JsonSchemaRef(Object uri) {
+		this.setRef(uri);
 	}
 }

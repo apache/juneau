@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 
 /**
- * A container for retrieving JSON {@link Schema} objects by URI.
+ * A container for retrieving JSON {@link JsonSchema} objects by URI.
  * 
  * <p>
  * Subclasses must implement one of the following methods to load schemas from external sources:
@@ -29,7 +29,7 @@ import org.apache.juneau.json.*;
  * 	<li>
  * 		{@link #getReader(URI)} - If schemas should be loaded from readers and automatically parsed.
  * 	<li>
- * 		{@link #load(URI)} - If you want control over construction of {@link Schema} objects.
+ * 		{@link #load(URI)} - If you want control over construction of {@link JsonSchema} objects.
  * </ul>
  * 
  * <h5 class='section'>See Also:</h5>
@@ -37,12 +37,12 @@ import org.apache.juneau.json.*;
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
  * </ul>
  */
-public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
+public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Return the {@link Schema} object at the specified URI.
+	 * Return the {@link JsonSchema} object at the specified URI.
 	 * 
 	 * <p>
 	 * If this schema object has not been loaded yet, calls {@link #load(URI)}.
@@ -58,9 +58,9 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 	 * @return The Schema, or <jk>null</jk> if schema was not located and could not be loaded.
 	 */
 	@Override /* Map */
-	public Schema get(Object uri) {
+	public JsonSchema get(Object uri) {
 		URI u = toURI(uri);
-		Schema s = super.get(u);
+		JsonSchema s = super.get(u);
 		if (s != null)
 			return s;
 		synchronized(this) {
@@ -84,8 +84,8 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 	 * @return This object (for method chaining).
 	 * @throws RuntimeException If one or more schema objects did not have their ID property set.
 	 */
-	public SchemaMap add(Schema...schemas) {
-		for (Schema schema : schemas) {
+	public JsonSchemaMap add(JsonSchema...schemas) {
+		for (JsonSchema schema : schemas) {
 			if (schema.getId() == null)
 				throw new RuntimeException("Schema with no ID passed to SchemaMap.add(Schema...)");
 			put(schema.getId(), schema);
@@ -108,11 +108,11 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 	 * @param uri The URI to load the schema from.
 	 * @return The parsed schema.
 	 */
-	public Schema load(URI uri) {
+	public JsonSchema load(URI uri) {
 		try (Reader r = getReader(uri)) {
 			if (r == null)
 				return null;
-			return JsonParser.DEFAULT.parse(r, Schema.class);
+			return JsonParser.DEFAULT.parse(r, JsonSchema.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

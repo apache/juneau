@@ -249,7 +249,7 @@ public class LogsResource extends BasicRestServlet {
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Response(schema="{schema:{type:'string',format:'binary'}}", description="Contents of file")
+	@Response(schema=@Schema(type="string",format="binary"), description="Contents of file")
 	static class FileContents extends FileInputStream {
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);

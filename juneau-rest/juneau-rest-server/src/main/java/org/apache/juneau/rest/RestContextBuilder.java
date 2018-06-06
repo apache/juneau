@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
-import static org.apache.juneau.rest.util.Utils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.lang.reflect.Method;

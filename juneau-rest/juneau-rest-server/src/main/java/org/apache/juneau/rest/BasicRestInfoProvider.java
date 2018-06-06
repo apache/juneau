@@ -34,6 +34,9 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Contact;
+import org.apache.juneau.rest.annotation.License;
+import org.apache.juneau.rest.annotation.Tag;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -197,21 +200,18 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			
 			omSwagger.putAll(parseMap(joinnl(r.value()), vr, true, false, "@ResourceSwagger(value) on class {0}", c));
 			
-			if (r.title().length + r.description().length + r.version().length() + r.contact().length + r.license().length + r.termsOfService().length > 0) {
+			if (! empty(r)) {
 				ObjectMap info = omSwagger.getObjectMap("info", true);
 				info.appendIf(true, true, true, "title", vr.resolve(joinnl(r.title())));
 				info.appendIf(true, true, true, "description", vr.resolve(joinnl(r.description())));
 				info.appendIf(true, true, true, "version", vr.resolve(r.version()));
 				info.appendIf(true, true, true, "termsOfService", vr.resolve(joinnl(r.termsOfService())));
-				info.appendIf(true, true, true, "contact", parseMap(joinnl(r.contact()), vr, false, true, "@ResourceSwagger(contact) on class {0}", c));
-				info.appendIf(true, true, true, "license", parseMap(joinnl(r.license()), vr, false, true, "@ResourceSwagger(license) on class {0}", c));
+				info.appendIf(true, true, true, "contact", merge(info.getObjectMap("contact"), r.contact(), vr, "@ResourceSwagger(contact) on class {0}", c));
+				info.appendIf(true, true, true, "license", merge(info.getObjectMap("license"), r.license(), vr, "@ResourceSwagger(license) on class {0}", c));
 			}
 
-			omSwagger.appendIf(true, true, true, "externalDocs", parseMap(joinnl(r.externalDocs()), vr, false, true, "@ResourceSwagger(externalDocs) on class {0}", c));
-			
-			ObjectList tags = parseList(joinnl(r.tags()), vr, false, true, "@ResourceSwagger(tags) on class {0}", c);
-			if (tags != null)
-				omSwagger.getObjectList("tags", true).addAll(tags);
+			omSwagger.appendIf(true, true, true, "externalDocs", merge(omSwagger.getObjectMap("externalDocs"), r.externalDocs(), vr, "@ResourceSwagger(externalDocs) on class {0}", c));
+			omSwagger.appendIf(true, true, true, "tags", merge(omSwagger.getObjectList("tags"), r.tags(), vr, "@ResourceSwagger(tags) on class {0}", c));
 		}
 
 		omSwagger.appendIf(true, true, true, "externalDocs", parseMap(mb.findFirstString(locale, "externalDocs"), vr, false, true, "Messages/externalDocs on class {0}", c));
@@ -284,13 +284,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			op.appendIf(false, true, true, "description", vr.resolve(joinnl(rm.description())));
 			op.appendIf(true, true, true, "description", vr.resolve(joinnl(ms.description())));
 			op.appendIf(true, true, true, "deprecated", vr.resolve(ms.deprecated()));
-			op.appendIf(true, true, true, "externalDocs", parseMap(joinnl(ms.externalDocs()), vr, false, true, "@MethodSwagger(externalDocs) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "tags", parseListOrCdl(joinnl(ms.tags()), vr, false, true, "@MethodSwagger(tags) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "schemes", parseListOrCdl(joinnl(ms.schemes()), vr, false, true, "@MethodSwagger(schemes) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "consumes", parseListOrCdl(joinnl(ms.consumes()), vr, false, true, "@MethodSwagger(consumes) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "produces", parseListOrCdl(joinnl(ms.produces()), vr, false, true, "@MethodSwagger(produces) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "parameters", parseList(joinnl(ms.parameters()), vr, false, true, "@MethodSwagger(parameters) on class {0} method {1}", c, m));
 			op.appendIf(true, true, true, "responses", parseMap(joinnl(ms.responses()), vr, false, true, "@MethodSwagger(responses) on class {0} method {1}", c, m));
+			op.appendIf(true, true, true, "externalDocs", merge(op.getObjectMap("externalDocs"), ms.externalDocs(), vr, "@MethodSwagger(externalDocs) on class {0} method {1}", c, m));
 			
 			op.putIfNotExists("operationId", mn);
 			
@@ -335,34 +335,48 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					param.append("name", mp.name);
 				
 				ObjectMap pi = mp.getMetaData();
-				param.appendIf(true, true, true, "required", vr.resolve(pi.getString("required")));
+				if (pi.containsKey("_api"))
+					param.putAll(parseMap(pi.getString("_api"), vr, true, false, "@Body(api) on class {0} method {1}"));
+
+				// Common to all
 				param.appendIf(true, true, true, "description", vr.resolve(pi.getString("description")));
-				param.appendIf(true, true, true, "type", vr.resolve(pi.getString("type")));
-				param.appendIf(true, true, true, "format", vr.resolve(pi.getString("format")));
-				param.appendIf(true, true, true, "pattern", vr.resolve(pi.getString("pattern")));
-				param.appendIf(true, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
-				param.appendIf(true, true, true, "maximum", vr.resolve(pi.getString("maximum")));
-				param.appendIf(true, true, true, "minimum", vr.resolve(pi.getString("minimum")));
-				param.appendIf(true, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
-				param.appendIf(true, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
-				param.appendIf(true, true, true, "minLength", vr.resolve(pi.getString("minLength")));
-				param.appendIf(true, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
-				param.appendIf(true, true, true, "minItems", vr.resolve(pi.getString("minItems")));
-				param.appendIf(true, true, true, "allowEmptyValue", vr.resolve(pi.getString("allowEmptyValue")));
-				param.appendIf(true, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
-				param.appendIf(true, true, true, "exclusiveMinimum", vr.resolve(pi.getString("exclusiveMinimum")));
-				param.appendIf(true, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
-				param.appendIf(true, true, true, "schema", parseMap(pi.getString("schema"), vr, false, true, "ParameterInfo/schema on class {0} method {1}", c, m));
-				param.appendIf(true, true, true, "default", parseAnything(vr.resolve(pi.getString("default"))));
-				param.appendIf(true, true, true, "enum", parseListOrCdl(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
-				param.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
-				param.appendIf(true, true, true, "x-examples", parseMap(pi.getString("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
-				param.appendIf(true, true, true, "items", parseMap(pi.getString("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
+				param.appendIf(true, true, true, "required", vr.resolve(pi.getString("required")));
+				
+				if (in == BODY) {
+					param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+					param.appendIf(true, true, true, "schema", parseMap(pi.get("schema"), vr, false, true, "ParameterInfo/schema on class {0} method {1}", c, m));					
+					param.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
+					param.appendIf(true, true, true, "x-examples", parseMap(pi.get("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
+				} else {
+					param.appendIf(true, true, true, "type", vr.resolve(pi.getString("type")));
+					param.appendIf(true, true, true, "format", vr.resolve(pi.getString("format")));
+					param.appendIf(true, true, true, "pattern", vr.resolve(pi.getString("pattern")));
+					param.appendIf(true, true, true, "collectionFormat", vr.resolve(pi.getString("collectionFormat")));
+					param.appendIf(true, true, true, "maximum", vr.resolve(pi.getString("maximum")));
+					param.appendIf(true, true, true, "minimum", vr.resolve(pi.getString("minimum")));
+					param.appendIf(true, true, true, "multipleOf", vr.resolve(pi.getString("multipleOf")));
+					param.appendIf(true, true, true, "maxLength", vr.resolve(pi.getString("maxLength")));
+					param.appendIf(true, true, true, "minLength", vr.resolve(pi.getString("minLength")));
+					param.appendIf(true, true, true, "maxItems", vr.resolve(pi.getString("maxItems")));
+					param.appendIf(true, true, true, "minItems", vr.resolve(pi.getString("minItems")));
+					param.appendIf(true, true, true, "allowEmptyValue", vr.resolve(pi.getString("allowEmptyValue")));
+					param.appendIf(true, true, true, "exclusiveMaximum", vr.resolve(pi.getString("exclusiveMaximum")));
+					param.appendIf(true, true, true, "exclusiveMinimum", vr.resolve(pi.getString("exclusiveMinimum")));
+					param.appendIf(true, true, true, "uniqueItems", vr.resolve(pi.getString("uniqueItems")));
+					param.appendIf(true, true, true, "schema", parseMap(pi.get("schema"), vr, false, true, "ParameterInfo/schema on class {0} method {1}", c, m));
+					param.appendIf(true, true, true, "default", parseAnything(vr.resolve(pi.getString("default"))));
+					param.appendIf(true, true, true, "enum", parseListOrCdl(pi.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
+					param.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi.getString("example"))));
+					param.appendIf(true, true, true, "x-examples", parseMap(pi.get("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
+					param.appendIf(true, true, true, "items", parseMap(pi.get("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
+					
+					// Technically Swagger doesn't support schema on non-body parameters, but we do.
+					param.appendIf(true, true, true, "schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+				}
 				
 				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 					param.put("required", true);
 				
-				param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
 				addXExamples(req, sm, param, in.toString(), js, mp.getType());
 			}
 			
@@ -379,9 +393,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 					om.appendIf(true, true, true, "description", vr.resolve(md.getString("description")));
 					om.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(md.getString("example"))));
-					om.appendIf(true, true, true, "examples", parseMap(md.getString("examples"), vr, false, true, "RestMethodThrown/examples on class {0} method {1}", c, m));
-					om.appendIf(true, true, true, "schema", parseMap(md.getString("schema"), vr, false, true, "RestMethodThrown/schema on class {0} method {1}", c, m));
-					om.appendIf(true, true, true, "headers", parseMap(md.getString("headers"), vr, false, true, "RestMethodThrown/headers on class {0} method {1}", c, m));
+					om.appendIf(true, true, true, "examples", parseMap(md.get("examples"), vr, false, true, "RestMethodThrown/examples on class {0} method {1}", c, m));
+					om.appendIf(true, true, true, "schema", parseMap(md.get("schema"), vr, false, true, "RestMethodThrown/schema on class {0} method {1}", c, m));
+					om.appendIf(true, true, true, "headers", parseMap(md.get("headers"), vr, false, true, "RestMethodThrown/headers on class {0} method {1}", c, m));
 				}
 			}
 			
@@ -394,11 +408,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				ObjectMap rmd = r.getMetaData();
 				rom.appendIf(true, true, true, "description", vr.resolve(rmd.getString("description")));
 				rom.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(rmd.getString("example"))));
-				rom.appendIf(true, true, true, "examples", parseMap(rmd.getString("examples"), vr, false, true, "RestMethodReturn/examples on class {0} method {1}", c, m));
-				rom.appendIf(true, true, true, "schema", parseMap(rmd.getString("schema"), vr, false, true, "RestMethodReturn/schema on class {0} method {1}", c, m));
-				rom.appendIf(true, true, true, "headers", parseMap(rmd.getString("headers"), vr, false, true, "RestMethodReturn/headers on class {0} method {1}", c, m));
-				
-				rom.put("schema", getSchema(req, rom.getObjectMap("schema", true), js, m.getGenericReturnType()));
+				rom.appendIf(true, true, true, "examples", parseMap(rmd.get("examples"), vr, false, true, "RestMethodReturn/examples on class {0} method {1}", c, m));
+				rom.appendIf(true, true, true, "schema", parseMap(rmd.get("schema"), vr, false, true, "RestMethodReturn/schema on class {0} method {1}", c, m));
+				rom.appendIf(true, true, true, "headers", parseMap(rmd.get("headers"), vr, false, true, "RestMethodReturn/headers on class {0} method {1}", c, m));
+				rom.appendIf(true, true, true, "schema", getSchema(req, rom.getObjectMap("schema", true), js, m.getGenericReturnType()));
 				addXExamples(req, sm, rom, "ok", js, m.getGenericReturnType());
 			}
 
@@ -432,8 +445,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						header.appendIf(true, true, true, "default", JsonParser.DEFAULT.parse(vr.resolve(pi2.getString("default")), Object.class));
 						header.appendIf(true, true, true, "enum", parseListOrCdl(pi2.getString("enum"), vr, false, true, "ParameterInfo/enum on class {0} method {1}", c, m));
 						header.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi2.getString("example"))));
-						header.appendIf(true, true, true, "examples", parseMap(pi2.getString("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
-						header.appendIf(true, true, true, "items", parseMap(pi2.getString("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
+						header.appendIf(true, true, true, "examples", parseMap(pi2.get("examples"), vr, false, true, "ParameterInfo/examples on class {0} method {1}", c, m));
+						header.appendIf(true, true, true, "items", parseMap(pi2.get("items"), vr, false, true, "ParameterInfo/items on class {0} method {1}", c, m));
 					}
 				
 				} else if (in == RESPONSE) {
@@ -444,10 +457,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						ObjectMap response = responses.getObjectMap(code, true);
 						
 						response.appendIf(true, true, true, "description", vr.resolve(pi2.getString("description")));
-						response.appendIf(true, true, true, "schema", parseMap(pi2.getString("schema"), vr, false, true, "@Response/schema on class {0} method {1}", c, m));
-						response.appendIf(true, true, true, "headers", parseMap(pi2.getString("headers"), vr, false, true, "@Response/headers on class {0} method {1}", c, m));
+						response.appendIf(true, true, true, "schema", parseMap(pi2.get("schema"), vr, false, true, "@Response/schema on class {0} method {1}", c, m));
+						response.appendIf(true, true, true, "headers", parseMap(pi2.get("headers"), vr, false, true, "@Response/headers on class {0} method {1}", c, m));
 						response.appendIf(true, true, true, "x-example", parseAnything(vr.resolve(pi2.getString("example"))));
-						response.appendIf(true, true, true, "examples", parseMap(pi2.getString("examples"), vr, false, true, "@Response/examples on class {0} method {1}", c, m));
+						response.appendIf(true, true, true, "examples", parseMap(pi2.get("examples"), vr, false, true, "@Response/examples on class {0} method {1}", c, m));
 
 						Type type = mp.getType();
 						if (type instanceof ParameterizedType) {
@@ -456,10 +469,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 								type = pt.getActualTypeArguments()[0];
 						}
 
-						response.put("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
-						
-//						if (response.containsKey("x-example"))
-//							addXExamples(req, sm, response, response.getString("x-example"), js, type);
+						response.appendIf(true, true, true, "schema", getSchema(req, response.getObjectMap("schema", true), js, type));
 					}
 					
 				} else if (in == RESPONSE_STATUS) {
@@ -530,23 +540,46 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		return swagger;
 	}
+
 	
-	private ObjectMap parseMap(String s, VarResolverSession vs, boolean ignoreCommentsAndWhitespace, boolean nullOnEmpty, String location, Object...locationArgs) throws ParseException {
+	//=================================================================================================================
+	// Utility methods
+	//=================================================================================================================
+	
+	private ObjectMap parseMap(Object o, VarResolverSession vs, boolean ignoreCommentsAndWhitespace, boolean nullOnEmpty, String location, Object...locationArgs) throws ParseException {
 		try {
-			if (s == null)
+			if (o == null)
 				return null;
-			if (s.isEmpty())
-				return nullOnEmpty ? null : ObjectMap.EMPTY_MAP;
-			s = vs.resolve(s.trim());
-			if ("IGNORE".equalsIgnoreCase(s))
-				return new ObjectMap().append("ignore", true);
-			if (! isObjectMap(s, ignoreCommentsAndWhitespace))
-				s = "{" + s + "}";
-			return new ObjectMap(s);
+			if (o instanceof String) {
+				String s = o.toString();
+				if (s.isEmpty())
+					return nullOnEmpty ? null : ObjectMap.EMPTY_MAP;
+				s = vs.resolve(s.trim());
+				if ("IGNORE".equalsIgnoreCase(s))
+					return new ObjectMap().append("ignore", true);
+				if (! isObjectMap(s, ignoreCommentsAndWhitespace))
+					s = "{" + s + "}";
+				return new ObjectMap(s);
+			} 
+			ObjectMap om = (ObjectMap)o;
+			if (om.containsKey("_api")) {
+				ObjectMap om2 = parseMap(om.remove("_api"), vs, true, false, location, locationArgs);
+				for (Map.Entry<String,Object> e : om.entrySet()) {
+					if (! e.getKey().startsWith("_")) 
+						om2.put(e.getKey(), e.getValue());
+				}
+				om = om2;
+			}
+			for (Map.Entry<String,Object> e : om.entrySet()) {
+				Object val = e.getValue();
+				if (val instanceof ObjectMap)
+					e.setValue(parseMap(val, vs, true, false, location, locationArgs));
+			}
+			return vs.resolve(om);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", locationArgs);
 		}
-	}	
+	}
 
 	private ObjectList parseList(String s, VarResolverSession vs, boolean ignoreCommentsAndWhitespace, boolean nullOnEmpty, String location, Object...locationArgs) throws ParseException {
 		try {
@@ -576,6 +609,61 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
 		}
+	}
+
+	private ObjectMap newMap(ObjectMap om, Object[] value, VarResolverSession vs, String location, Object...locationArgs) throws ParseException {
+		if (value.length == 0)
+			return om == null ? new ObjectMap() : om;
+		ObjectMap om2 = parseMap(joinnl(value), vs, true, false, location, locationArgs);
+		if (om == null)
+			return om2;
+		return om.appendAll(om2);
+	}
+	
+	private ObjectMap merge(ObjectMap om, ExternalDocs a, VarResolverSession vs, String location, Object...locationArgs) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om, a.value(), vs, location, locationArgs);
+		om.appendSkipEmpty("description", vs.resolve(joinnl(a.description())));
+		om.appendSkipEmpty("url", vs.resolve(a.url()));
+		return om.isEmpty() ? null : om;
+	}
+
+	private ObjectMap merge(ObjectMap om, Contact a, VarResolverSession vs, String location, Object...locationArgs) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om, a.value(), vs, location, locationArgs);
+		om.appendSkipEmpty("name", vs.resolve(a.name()));
+		om.appendSkipEmpty("url", vs.resolve(a.url()));
+		om.appendSkipEmpty("email", vs.resolve(a.email()));
+		return om.isEmpty() ? null : om;
+	}
+	
+	private ObjectMap merge(ObjectMap om, License a, VarResolverSession vs, String location, Object...locationArgs) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om, a.value(), vs, location, locationArgs);
+		om.appendSkipEmpty("name", vs.resolve(a.name()));
+		om.appendSkipEmpty("url", vs.resolve(a.url()));
+		return om.isEmpty() ? null : om;
+	}
+
+	private ObjectMap merge(ObjectMap om, Tag a, VarResolverSession vs, String location, Object...locationArgs) throws ParseException {
+		om = newMap(om, a.value(), vs, location, locationArgs);
+		om.appendSkipEmpty("name", vs.resolve(a.name()));
+		om.appendSkipEmpty("description", vs.resolve(joinnl(a.description())));
+		om.appendSkipNull("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs(), vs, location, locationArgs));
+		return om.isEmpty() ? null : om;
+	}
+
+	private ObjectList merge(ObjectList ol, Tag[] aa, VarResolverSession vs, String location, Object...locationArgs) throws ParseException {
+		if (aa.length == 0)
+			return ol;
+		if (ol == null)
+			ol = new ObjectList();
+		for (Tag a : aa) 
+			ol.add(merge(null, a, vs, location, locationArgs));
+		return ol.isEmpty() ? null : ol;
 	}
 
 	private ObjectMap getSchema(RestRequest req, ObjectMap schema, JsonSchemaSerializerSession js, Type type) throws Exception {

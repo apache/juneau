@@ -26,7 +26,7 @@ public class JsonSchemaTest {
 		JsonSerializer s = JsonSerializer.create().ssq().ws().addBeanTypes(false).build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
-		Schema t, t2;
+		JsonSchema t, t2;
 
 		String expected =
 			"{\n"
@@ -110,7 +110,7 @@ public class JsonSchemaTest {
 		t = getTest1();
 		r = s.serialize(t);
 		assertEquals(expected, r);
-		t2 = p.parse(r, Schema.class);
+		t2 = p.parse(r, JsonSchema.class);
 		r = s.serialize(t2);
 		assertEquals(expected, r);
 	}
@@ -120,7 +120,7 @@ public class JsonSchemaTest {
 		JsonSerializer s = JsonSerializer.create().ssq().ws().addBeanTypes(false).build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
-		Schema t, t2;
+		JsonSchema t, t2;
 
 		String expected =
 			"{\n"
@@ -147,7 +147,7 @@ public class JsonSchemaTest {
 		t = getTest2();
 		r = s.serialize(t);
 		assertEquals(expected, r);
-		t2 = p.parse(r, Schema.class);
+		t2 = p.parse(r, JsonSchema.class);
 		r = s.serialize(t2);
 		assertEquals(expected, r);
 	}
@@ -157,7 +157,7 @@ public class JsonSchemaTest {
 		JsonSerializer s = JsonSerializer.create().ssq().ws().addBeanTypes(false).build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
-		Schema t, t2;
+		JsonSchema t, t2;
 
 		String expected =
 			"{\n"
@@ -240,25 +240,25 @@ public class JsonSchemaTest {
 
 		t = getTest1();
 		r = t.toString();
-		t2 = p.parse(r, Schema.class);
+		t2 = p.parse(r, JsonSchema.class);
 		r = s.serialize(t2);
 		assertEquals(expected, r);
 	}
 
 	
 	/** Bean with simple values for each property */
-	public static Schema getTest1() {
-		return new Schema()
+	public static JsonSchema getTest1() {
+		return new JsonSchema()
 			.setId("http://id")
 			.setSchemaVersionUri("http://schemaVersionUri")
 			.setTitle("title")
 			.setDescription("description")
 			.setType(JsonType.NUMBER)
-			.addDefinition("definition", new SchemaRef("http://definition"))
-			.addProperties(new SchemaProperty("property", JsonType.NUMBER))
-			.addPatternProperties(new SchemaProperty("/pattern/", JsonType.NUMBER))
-			.addDependency("dependency", new SchemaRef("http://dependency"))
-			.addItems(new Schema().setType(JsonType.NUMBER))
+			.addDefinition("definition", new JsonSchemaRef("http://definition"))
+			.addProperties(new JsonSchemaProperty("property", JsonType.NUMBER))
+			.addPatternProperties(new JsonSchemaProperty("/pattern/", JsonType.NUMBER))
+			.addDependency("dependency", new JsonSchemaRef("http://dependency"))
+			.addItems(new JsonSchema().setType(JsonType.NUMBER))
 			.setMultipleOf(1)
 			.setMaximum(2)
 			.setExclusiveMaximum(true)
@@ -267,30 +267,30 @@ public class JsonSchemaTest {
 			.setMaxLength(4)
 			.setMinLength(5)
 			.setPattern("/pattern/")
-			.addAdditionalItems(new SchemaProperty("additionalItem", JsonType.NUMBER))
+			.addAdditionalItems(new JsonSchemaProperty("additionalItem", JsonType.NUMBER))
 			.setMaxItems(6)
 			.setMinItems(7)
 			.setUniqueItems(true)
 			.setMaxProperties(8)
 			.setMinProperties(9)
 			.addRequired("required")
-			.setAdditionalProperties(new SchemaRef("http://additionalProperty"))
+			.setAdditionalProperties(new JsonSchemaRef("http://additionalProperty"))
 			.addEnum("enum")
-			.addAllOf(new SchemaRef("http://allOf"))
-			.addAnyOf(new SchemaRef("http://anyOf"))
-			.addOneOf(new SchemaRef("http://oneOf"))
-			.setNot(new SchemaRef("http://not"))
+			.addAllOf(new JsonSchemaRef("http://allOf"))
+			.addAnyOf(new JsonSchemaRef("http://anyOf"))
+			.addOneOf(new JsonSchemaRef("http://oneOf"))
+			.setNot(new JsonSchemaRef("http://not"))
 		;
 	}
 
 	/** Bean with other possible property value types not covered in test1 */
-	public static Schema getTest2() {
-		return new Schema()
+	public static JsonSchema getTest2() {
+		return new JsonSchema()
 			.setId(URI.create("http://id"))
 			.setSchemaVersionUri(URI.create("http://schemaVersionUri"))
 			.setType(new JsonTypeArray(JsonType.STRING, JsonType.NUMBER))
-			.addDefinition("definition", new Schema().setId("http://definition"))
-			.setItems(new SchemaArray(new SchemaRef("http://items")))
+			.addDefinition("definition", new JsonSchema().setId("http://definition"))
+			.setItems(new JsonSchemaArray(new JsonSchemaRef("http://items")))
 			.setAdditionalItems(Boolean.TRUE)
 			.setAdditionalProperties(Boolean.TRUE);
 	}

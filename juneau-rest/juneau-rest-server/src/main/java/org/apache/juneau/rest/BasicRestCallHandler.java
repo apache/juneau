@@ -198,7 +198,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 			handleError(r1, r2, e);
 		} catch (Throwable e) {
 			Response ri = e.getClass().getAnnotation(Response.class);
-			int code = ri == null ? SC_INTERNAL_SERVER_ERROR : ObjectUtils.firstNonZero(ri.code(), ri.value(), SC_INTERNAL_SERVER_ERROR);
+			int code = ri == null ? SC_INTERNAL_SERVER_ERROR : ObjectUtils.firstNonZero(ri.code(), SC_INTERNAL_SERVER_ERROR);
 			RestException e2 = new RestException(e, code);
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);

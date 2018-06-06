@@ -80,6 +80,7 @@ public @interface Query {
 	 * URL query parameter name.
 	 */
 	String name() default "";
+	String value() default "";
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
@@ -90,13 +91,7 @@ public @interface Query {
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
-	/**
-	 * A synonym for {@link #name()}.
-	 * 
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 */
-	String value() default "";
+	String[] api() default {};
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=query)/#/description</code>.
@@ -388,7 +383,7 @@ public @interface Query {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] schema() default {};
+	Schema schema() default @Schema;
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=query)/#/default</code>.
@@ -435,7 +430,7 @@ public @interface Query {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] items() default {};	
+	Items items() default @Items;	
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=query)/#/x-example</code>.

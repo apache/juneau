@@ -66,6 +66,8 @@ import org.apache.juneau.utils.*;
 @Inherited
 public @interface ResponseHeader {
 	
+	String[] api() default {};
+	
 	/**
 	 * The HTTP status (or statuses) of the response.
 	 * 
@@ -102,28 +104,29 @@ public @interface ResponseHeader {
 	 * </ul>
 	 */
 	String name() default "";
-	
-	/**
-	 * A synonym to {@link #name()}.
-	 * 
-	 * <p>
-	 * Useful if you only want to specify a header name.
-	 * 
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(...)
-	 * 	<jk>public void</jk> login(<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit) {
-	 *		rateLimit.set(1000);
-	 *		...
-	 * 	}
-	 * </p>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		At least one of {@link #name()} or {@link #value()} must be specified}.
-	 * </ul>
-	 */
 	String value() default "";
+	
+//	/**
+//	 * A synonym to {@link #name()}.
+//	 * 
+//	 * <p>
+//	 * Useful if you only want to specify a header name.
+//	 * 
+//	 * <p class='bcode'>
+//	 * 	<ja>@RestMethod</ja>(...)
+//	 * 	<jk>public void</jk> login(<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit) {
+//	 *		rateLimit.set(1000);
+//	 *		...
+//	 * 	}
+//	 * </p>
+//	 * 
+//	 * <h5 class='section'>Notes:</h5>
+//	 * <ul class='spaced-list'>
+//	 * 	<li>
+//	 * 		At least one of {@link #name()} or {@link #value()} must be specified}.
+//	 * </ul>
+//	 */
+//	String value() default "";
 
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values.
@@ -388,7 +391,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] items() default {};
+	Items items() default @Items;
 
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/default</code>.

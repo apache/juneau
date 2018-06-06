@@ -51,6 +51,7 @@ public @interface Path {
 	 * Optional if the attributes are specified in the same order as in the URL path pattern.
 	 */
 	String name() default "";
+	String value() default "";
 	
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
@@ -61,13 +62,7 @@ public @interface Path {
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
-	/**
-	 * A synonym for {@link #name()}.
-	 * 
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 */
-	String value() default "";
+	String[] api() default {};
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/description</code>.
@@ -280,7 +275,7 @@ public @interface Path {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] schema() default {};
+	Schema schema() default @Schema;
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/enum</code>.

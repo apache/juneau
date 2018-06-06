@@ -97,7 +97,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		)
 	)
 	public Collection<LinkString> listMethods(
-			@Path(value="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface
+			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface
 		) throws Exception {
 		
 		List<LinkString> l = new ArrayList<>();
@@ -119,8 +119,8 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		)
 	)
 	public Div showEntryForm(
-			@Path(value="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
-			@Path(value="javaMethod", description="Java method name", example="myMethod") String javaMethod
+			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
+			@Path(name="javaMethod", description="Java method name", example="myMethod") String javaMethod
 		) throws NotFound, Exception {
 		
 		// Find the method.
@@ -187,8 +187,8 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 			Reader r,
 			ReaderParser p,
 			@Header("Content-Type") ContentType contentType,
-			@Path(value="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
-			@Path(value="javaMethod", description="Java method name", example="myMethod") String javaMethod
+			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
+			@Path(name="javaMethod", description="Java method name", example="myMethod") String javaMethod
 		) throws UnsupportedMediaType, NotFound, Exception {
 
 		// Find the parser.

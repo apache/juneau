@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.reflect.*;
 
@@ -36,11 +36,8 @@ public class RestMethodReturn {
 		int code = 200;
 		if (type instanceof Class)
 		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, (Class<?>)type)) {
-			code = ObjectUtils.firstNonZero(ri.code(), ri.value(), code);
-			metaData.appendSkipEmpty("description", joinnl(ri.description()));
-			metaData.appendSkipEmpty("example", joinnl(ri.example()));
-			metaData.appendSkipEmpty("headers", joinnl(ri.headers()));
-			metaData.appendSkipEmpty("schema", joinnl(ri.schema()));
+			code = ObjectUtils.firstNonZero(ri.code(), code);
+			merge(metaData, ri);
 		}
 		 
 		this.code = code;

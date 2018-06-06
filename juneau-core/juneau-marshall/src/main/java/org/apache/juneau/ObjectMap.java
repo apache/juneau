@@ -376,7 +376,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @return This object (for method chaining).
 	 */
 	public ObjectMap appendAll(Map<String,Object> m) {
-		putAll(m);
+		if (m != null)
+			putAll(m);
 		return this;
 	}
 

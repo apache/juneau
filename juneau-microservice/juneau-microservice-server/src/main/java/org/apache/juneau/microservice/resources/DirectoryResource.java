@@ -187,7 +187,7 @@ public class DirectoryResource extends BasicRestServlet {
 		description="Add or overwrite a file on the file system."
 	)
 	public RedirectToRoot updateFile(
-		@Body(schema="{type:'string',format:'binary'}") InputStream is, 
+		@Body(schema=@Schema(type="string",format="binary")) InputStream is, 
 		@PathRemainder String path
 	) throws InternalServerError {
 		
@@ -209,7 +209,7 @@ public class DirectoryResource extends BasicRestServlet {
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Response(schema="{schema:{type:'string',format:'binary'}}", description="Contents of file")
+	@Response(schema=@Schema(type="string",format="binary"), description="Contents of file")
 	static class FileContents extends FileInputStream {
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);

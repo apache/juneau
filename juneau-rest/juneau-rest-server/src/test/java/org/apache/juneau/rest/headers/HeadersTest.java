@@ -512,7 +512,7 @@ public class HeadersTest {
 	@RestResource
 	public static class E {
 		@RestMethod(name=GET)
-		public ObjectMap e(@Header("H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
+		public ObjectMap e(@Header(name="H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)
 				.append("h2", h2)
@@ -570,7 +570,7 @@ public class HeadersTest {
 	@RestResource
 	public static class G {
 		@RestMethod(name=GET)
-		public ObjectMap g(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
+		public ObjectMap g(@Header(name="h1",_default="1") String h1, @Header(name="h2",_default="2") String h2, @Header(name="h3",_default="3") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)
 				.append("h2", h2)
@@ -592,6 +592,31 @@ public class HeadersTest {
 		g.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	
+	@RestResource
+	public static class GB {
+		@RestMethod(name=GET)
+		public ObjectMap g(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
+			return new ObjectMap()
+				.append("h1", h1)
+				.append("h2", h2)
+				.append("h3", h3);
+		}
+	}
+	static MockRest gb = MockRest.create(GB.class);
+	
+	@Test
+	public void gb01_annotatedHeadersDefault_default() throws Exception {
+		gb.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+	}
+	@Test
+	public void gb02_annotatedHeadersDefault_override() throws Exception {
+		gb.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+	}
+	@Test
+	public void gb03_annotatedHeadersDefault_override_caseInsensitive() throws Exception {
+		gb.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+	}
+
 	//====================================================================================================
 	// Default values - Annotated headers with default values and default request headers.
 	//====================================================================================================

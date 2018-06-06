@@ -10,40 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.a.rttests;
+package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import org.apache.juneau.dto.jsonschema.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import java.lang.annotation.*;
 
 /**
- * Tests designed to serialize and parse objects to make sure we end up
- * with the same objects for all serializers and parsers.
+ * Swagger schema annotation.
+ * 
+ * <p>
+ * The Schema Object allows the definition of input and output data types. 
+ * These types can be objects, but also primitives and arrays. 
+ * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it. 
+ * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
  */
-@SuppressWarnings({})
-public class RoundTripDTOsTest extends RoundTripTest {
-
-	public RoundTripDTOsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
-
-	//====================================================================================================
-	// org.apache.juneau.test.dto.jsonschema
-	//====================================================================================================
-	@Test
-	public void testJsonSchema1() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest1();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEqualObjects(s, s2);
-	}
-
-	@Test
-	public void testJsonSchema2() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest2();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEqualObjects(s, s2);
-	}
+@Documented
+@Target({PARAMETER,TYPE})
+@Retention(RUNTIME)
+@Inherited
+public @interface Contact {
+	
+	String[] value() default {};
+	
+	String name() default "";
+	String url() default "";
+	String email() default "";
 }

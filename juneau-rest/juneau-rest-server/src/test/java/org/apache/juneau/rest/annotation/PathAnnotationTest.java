@@ -99,35 +99,35 @@ public class PathAnnotationTest {
 	@RestResource
 	public static class B  {
 		@RestMethod(name=GET, path="/int/{x}/foo")
-		public String b01(@Path("x") int x) {
+		public String b01(@Path(name="x") int x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/short/{x}/foo")
-		public String b02(@Path("x") short x) {
+		public String b02(@Path(name="x") short x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/long/{x}/foo")
-		public String b03(@Path("x") long x) {
+		public String b03(@Path(name="x") long x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/char/{x}/foo")
-		public String b04(@Path("x") char x) {
+		public String b04(@Path(name="x") char x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/float/{x}/foo")
-		public String b05(@Path("x") float x) {
+		public String b05(@Path(name="x") float x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/double/{x}/foo")
-		public String b06(@Path("x") double x) {
+		public String b06(@Path(name="x") double x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/byte/{x}/foo")
-		public String b07(@Path("x") byte x) {
+		public String b07(@Path(name="x") byte x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/boolean/{x}/foo")
-		public String b08(@Path("x") boolean x) {
+		public String b08(@Path(name="x") boolean x) {
 			return String.valueOf(x);
 		}
 	}	
@@ -181,35 +181,35 @@ public class PathAnnotationTest {
 	@RestResource
 	public static class C  {
 		@RestMethod(name=GET, path="/Integer/{x}/foo")
-		public String c01(@Path("x") Integer x) {
+		public String c01(@Path(name="x") Integer x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Short/{x}/foo")
-		public String c02(@Path("x") Short x) {
+		public String c02(@Path(name="x") Short x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Long/{x}/foo")
-		public String c03(@Path("x") Long x) {
+		public String c03(@Path(name="x") Long x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Character/{x}/foo")
-		public String c04(@Path("x") Character x) {
+		public String c04(@Path(name="x") Character x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Float/{x}/foo")
-		public String c05(@Path("x") Float x) {
+		public String c05(@Path(name="x") Float x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Double/{x}/foo")
-		public String c06(@Path("x") Double x) {
+		public String c06(@Path(name="x") Double x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Byte/{x}/foo")
-		public String c07(@Path("x") Byte x) {
+		public String c07(@Path(name="x") Byte x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Boolean/{x}/foo")
-		public String c08(@Path("x") Boolean x) {
+		public String c08(@Path(name="x") Boolean x) {
 			return String.valueOf(x);
 		}
 	}	
@@ -264,7 +264,7 @@ public class PathAnnotationTest {
 	public static class D {
 		// Object with forString(String) method
 		@RestMethod(name=GET, path="/uuid/{uuid}")
-		public UUID uuid(RestResponse res, @Path("uuid") UUID uuid) {
+		public UUID uuid(RestResponse res, @Path(name="uuid") UUID uuid) {
 			return uuid;
 		}
 	}

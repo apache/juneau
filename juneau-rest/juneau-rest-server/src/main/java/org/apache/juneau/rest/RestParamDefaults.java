@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
 import java.io.*;
@@ -549,7 +550,7 @@ class RestParamDefaults {
 	static final class PathObject extends RestMethodParam {
 
 		protected PathObject(Method method, Path a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(PATH, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, PathObject.class)));
+			super(PATH, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, PathObject.class)));
 		}
 
 		@Override /* RestMethodParam */
@@ -567,23 +568,7 @@ class RestParamDefaults {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;
-			return om
-				.appendSkipEmpty("description", joinnl(a.description()))
-				.appendSkipEmpty("type", a.type())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("maxLength", a.maxLength())
-				.appendSkipEmpty("minLength", a.minLength())
-				.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
-				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("schema", joinnl(a.schema()))
-				.appendSkipEmpty("enum", joinnl(a._enum()))
-				.appendSkipEmpty("example", joinnl(a.example()))
-			;
+			return merge(om, a);
 		}
 	}
 
@@ -600,41 +585,15 @@ class RestParamDefaults {
 		
 		private static final ObjectMap getMetaData(Body a, BodyObject existing) {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
-			if (a == null)
-				return om;
-			return om
-				.appendSkipEmpty("description", joinnl(a.description()))
-				.appendSkipEmpty("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("maxLength", a.maxLength())
-				.appendSkipEmpty("minLength", a.minLength())
-				.appendSkipEmpty("maxItems", a.maxItems())
-				.appendSkipEmpty("minItems", a.minItems())
-				.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
-				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", joinnl(a.schema()))
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("enum", joinnl(a._enum()))
-				.appendSkipEmpty("items", joinnl(a.items()))
-				.appendSkipEmpty("example", joinnl(a.example()))
-				.appendSkipEmpty("examples", joinnl(a.examples()))
-			;
+			return merge(om, a);
 		}
 	}
-
+	
 	static final class HeaderObject extends RestMethodParam {
 		private final HttpPartParser partParser;
 
 		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(HEADER, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
+			super(HEADER, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
@@ -651,32 +610,7 @@ class RestParamDefaults {
 		
 		private static ObjectMap getMetaData(Header a, HeaderObject existing) {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
-			if (a == null)
-				return om;
-			return om
-				.appendSkipEmpty("description", joinnl(a.description()))
-				.appendSkipEmpty("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("maxLength", a.maxLength())
-				.appendSkipEmpty("minLength", a.minLength())
-				.appendSkipEmpty("maxItems", a.maxItems())
-				.appendSkipEmpty("minItems", a.minItems())
-				.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
-				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", joinnl(a.schema()))
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("enum", joinnl(a._enum()))
-				.appendSkipEmpty("items", joinnl(a.items()))
-				.appendSkipEmpty("example", joinnl(a.example()))
-			;
+			return merge(om, a);
 		}
 	}
 
@@ -684,7 +618,7 @@ class RestParamDefaults {
 		final HttpPartSerializer partSerializer;
 
 		protected ResponseHeaderObject(Method method, ResponseHeader a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(RESPONSE_HEADER, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
+			super(RESPONSE_HEADER, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
 			this.partSerializer = a.serializer() == HttpPartSerializer.Null.class ? null : ClassUtils.newInstance(HttpPartSerializer.class, a.serializer(), true, ps);
 		}
 
@@ -732,27 +666,7 @@ class RestParamDefaults {
 			if (codes.isEmpty())
 				codes.add(200);
 			for (int c : codes) {
-				ObjectMap om2 = om.getObjectMap(String.valueOf(c), true);
-				om2
-					.appendSkipEmpty("description", joinnl(a.description()))
-					.appendSkipEmpty("type", a.type())
-					.appendSkipEmpty("format", a.format())
-					.appendSkipEmpty("collectionFormat", a.collectionFormat())
-					.appendSkipEmpty("maximum", a.maximum())
-					.appendSkipEmpty("minimum", a.minimum())
-					.appendSkipEmpty("multipleOf", a.multipleOf())
-					.appendSkipEmpty("maxLength", a.maxLength())
-					.appendSkipEmpty("minLength", a.minLength())
-					.appendSkipEmpty("maxItems", a.maxItems())
-					.appendSkipEmpty("minItems", a.minItems())
-					.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-					.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-					.appendSkipEmpty("uniqueItems", a.uniqueItems())
-					.appendSkipEmpty("default", joinnl(a._default()))
-					.appendSkipEmpty("enum", joinnl(a._enum()))
-					.appendSkipEmpty("items", joinnl(a.items()))
-					.appendSkipEmpty("example", joinnl(a.example()))
-				;
+				merge(om.getObjectMap(String.valueOf(c), true), a);
 			}
 			return om;
 		}
@@ -794,15 +708,8 @@ class RestParamDefaults {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;
-			int status = ObjectUtils.firstNonZero(a.code(), a.value(), 200);
-			ObjectMap om2 = om.getObjectMap(String.valueOf(status), true);
-			om2
-				.appendSkipEmpty("description", joinnl(a.description()))
-				.appendSkipEmpty("schema", joinnl(a.schema()))
-				.appendSkipEmpty("headers", joinnl(a.headers()))
-				.appendSkipEmpty("example", joinnl(a.example()))
-				.appendSkipEmpty("examples", joinnl(a.examples()))
-			;
+			int status = ObjectUtils.firstNonZero(a.code(), 200);
+			merge(om.getObjectMap(String.valueOf(status), true), a);
 			return om;
 		}
 	}
@@ -871,7 +778,7 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 
 		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(FORM_DATA, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
+			super(FORM_DATA, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
 			this.multiPart = a.multipart();
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
@@ -893,32 +800,7 @@ class RestParamDefaults {
 		
 		private static final ObjectMap getMetaData(FormData a, FormDataObject existing) {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
-			if (a == null)
-				return om;
-			return om
-				.appendSkipEmpty("description", joinnl(a.description()))
-				.appendSkipEmpty("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("maxLength", a.maxLength())
-				.appendSkipEmpty("minLength", a.minLength())
-				.appendSkipEmpty("maxItems", a.maxItems())
-				.appendSkipEmpty("minItems", a.minItems())
-				.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
-				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", joinnl(a.schema()))
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("enum", joinnl(a._enum()))
-				.appendSkipEmpty("items", joinnl(a.items()))
-				.appendSkipEmpty("example", joinnl(a.example()))
-			;
+			return merge(om, a);
 		}
 	}
 
@@ -927,7 +809,7 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 
 		protected QueryObject(Method method, Query a, Type type, PropertyStore ps, RestMethodParam existing) {
-			super(QUERY, method, firstNonEmpty(a.name(), a.value(), existing == null ? null : existing.name), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
+			super(QUERY, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
 			this.multiPart = a.multipart();
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
@@ -949,32 +831,7 @@ class RestParamDefaults {
 		
 		private static final ObjectMap getMetaData(Query a, QueryObject existing) {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
-			if (a == null)
-				return om;
-			return om
-				.appendSkipEmpty("description", joinnl(a.description()))
-				.appendSkipEmpty("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("maxLength", a.maxLength())
-				.appendSkipEmpty("minLength", a.minLength())
-				.appendSkipEmpty("maxItems", a.maxItems())
-				.appendSkipEmpty("minItems", a.minItems())
-				.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
-				.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("schema", joinnl(a.schema()))
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("enum", joinnl(a._enum()))
-				.appendSkipEmpty("items", joinnl(a.items()))
-				.appendSkipEmpty("example", joinnl(a.example()))
-			;
+			return merge(om, a);
 		}
 	}
 
@@ -1323,6 +1180,10 @@ class RestParamDefaults {
 			return req.getUriResolver();
 		}
 	}
+
+	//=================================================================================================================
+	// Utility methods
+	//=================================================================================================================
 
 	static final boolean isCollection(Type t) {
 		return BeanContext.DEFAULT.getClassMeta(t).isCollectionOrArray();
