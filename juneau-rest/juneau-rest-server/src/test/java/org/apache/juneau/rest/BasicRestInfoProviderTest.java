@@ -4761,6 +4761,20 @@ public class BasicRestInfoProviderTest {
 		@RestMethod(name=GET,path="/basic")
 		public void ta00(TA00 h) {}
 
+		@Body(
+			api={
+				"description:'a\nb',",
+				"required:true,",
+				"schema:{type:'a'},",
+				"examples:{foo:'bar'}"
+			}
+		)
+		public static class TA01 {
+			public TA01(String x) {}
+		}
+		
+		@RestMethod(name=GET,path="/api")
+		public void ta01(TA01 h) {}
 
 		@Body(schema=@Schema(" type:'b' "))
 		public static class TA18b {}
@@ -4814,6 +4828,14 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
+//	@Test
+//	public void ta01_Body_onPojo_api() throws Exception {
+//		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("body", null);
+//		assertEquals("a\nb", x.getDescription());
+//		assertObjectEquals("true", x.getRequired());
+//		assertObjectEquals("{type:'a'}", x.getSchema());
+//		assertObjectEquals("{foo:'bar'}", x.getExamples());
+//	}
 	@Test
 	public void ta18b_Body_onPojo_schema2() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/schema2").get("get").getParameter("body", null);

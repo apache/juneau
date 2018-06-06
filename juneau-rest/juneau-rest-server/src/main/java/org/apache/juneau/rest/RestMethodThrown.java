@@ -31,14 +31,17 @@ public class RestMethodThrown {
 	
 	RestMethodThrown(Class<?> type) {
 		this.type = type;
-		this.metaData = new ObjectMap();
+		
+		ObjectMap om = new ObjectMap();
 		
 		int code = 500;
 		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, type)) {
 			code = ObjectUtils.firstNonZero(ri.code(), code);
-			merge(metaData, ri);
+			om = merge(om, ri);
 		}
 		
+		this.metaData = om.unmodifiable();
+
 		this.code = code;
 	}
 	

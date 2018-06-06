@@ -21629,6 +21629,22 @@
 				Serializers now allow for q-values on the media types they handle.
 				<br>For example, the accept media type on <code>JsonSerializer.Simple</code> is <js>"application/json+simple,application/json;q=0.9"</js>.
 				<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
+			<li>
+				New methods for creating unmodifiable {@link org.apache.juneau.ObjectMap ObjectMaps} and {@link org.apache.juneau.ObjectList ObjectLists}.
+				<ul class='doctree'>
+					<li class='jc'>{@link org.apache.juneau.ObjectMap}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.ObjectMap#isUnmodifiable() isUnmodifable()}
+						<li class='jm'>{@link org.apache.juneau.ObjectMap#unmodifiable() unmodifiable()}
+						<li class='jm'>{@link org.apache.juneau.ObjectMap#modifiable() modifiable()}
+					</ul>
+					<li class='jp'>{@link org.apache.juneau.ObjectList}
+					<ul>
+						<li class='jm'>{@link org.apache.juneau.ObjectList#isUnmodifiable() isUnmodifable()}
+						<li class='jm'>{@link org.apache.juneau.ObjectList#unmodifiable() unmodifiable()}
+						<li class='jm'>{@link org.apache.juneau.ObjectList#modifiable() modifiable()}
+					</ul>
+				</ul>
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>

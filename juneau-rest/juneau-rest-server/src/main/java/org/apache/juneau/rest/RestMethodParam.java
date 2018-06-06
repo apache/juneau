@@ -138,7 +138,7 @@ public abstract class RestMethodParam {
 		this.name = name;
 		this.type = type;
 		this.c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
-		this.metaData = metaData;
+		this.metaData = metaData.unmodifiable();
 	}
 
 	/**

@@ -420,6 +420,12 @@ public final class RestUtils {
 	// Methods for merging annotation values.
 	//=================================================================================================================
 	
+	private static ObjectMap newMap(ObjectMap om) {
+		if (om == null)
+			return new ObjectMap();
+		return om.modifiable();
+	}
+	
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
 	 * 
@@ -430,8 +436,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, Body a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
@@ -451,8 +456,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, ExternalDocs a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.value()))
 			.appendSkipEmpty("description", joinnl(a.description()))
@@ -469,8 +473,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, Schema a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.value()))
 			.appendSkipEmpty("$ref", a.$ref())
@@ -517,16 +520,14 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, Response a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
-		om
+		om = newMap(om);
+		return om
 			.appendSkipEmpty("_api", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("example", joinnl(a.example()))
 			.appendSkipEmpty("examples", joinnl(a.examples()))
 			.append("schema", merge(om.getObjectMap("schema"), a.schema()))
 			.append("headers", merge(om.getObjectMap("headers"), a.headers()));
-		return om;
 	}	
 	
 	/**
@@ -539,8 +540,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, ResponseHeader[] a) {
 		if (a.length == 0)
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		for (ResponseHeader aa : a) {
 			String name = firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
@@ -560,8 +560,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, Items a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.value()))
 			.appendSkipEmpty("type", a.type())
@@ -593,8 +592,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, ResponseHeader a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om 
 			.appendSkipEmpty("_api", joinnl(a.api()))
 			.appendSkipEmpty("$ref", a.$ref())
@@ -629,8 +627,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, Path a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
@@ -660,8 +657,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, Query a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
@@ -698,8 +694,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, Header a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
@@ -736,8 +731,7 @@ public final class RestUtils {
 	public static ObjectMap merge(ObjectMap om, FormData a) {
 		if (empty(a))
 			return om;
-		if (om == null)
-			om = new ObjectMap();
+		om = newMap(om);
 		return om
 			.appendSkipEmpty("_api", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
@@ -835,7 +829,7 @@ public final class RestUtils {
 		if (a == null)
 			return true;
 		return 
-			empty(a.description(), a.example(), a.examples())
+			empty(a.description(), a.example(), a.examples(), a.api())
 			&& a.headers().length == 0
 			&& empty(a.schema())
 		;
@@ -906,7 +900,7 @@ public final class RestUtils {
 		if (a == null)
 			return true;
 		return 
-			empty(a.description(), a.example(), a.examples()) 
+			empty(a.description(), a.example(), a.examples(), a.api()) 
 			&& empty(a.required())
 			&& empty(a.schema());
 	}

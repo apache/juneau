@@ -31,14 +31,17 @@ public class RestMethodReturn {
 	
 	RestMethodReturn(Type type) {
 		this.type = type;
-		this.metaData = new ObjectMap();
+		
+		ObjectMap om = new ObjectMap();
 		
 		int code = 200;
 		if (type instanceof Class)
 		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, (Class<?>)type)) {
 			code = ObjectUtils.firstNonZero(ri.code(), code);
-			merge(metaData, ri);
+			om = merge(om, ri);
 		}
+		
+		this.metaData = om.unmodifiable();
 		 
 		this.code = code;
 	}

@@ -658,6 +658,7 @@ class RestParamDefaults {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;
+			om = om.modifiable();
 			List<Integer> codes = new ArrayList<>();
 			if (a.code() != 0)
 				codes.add(a.code());
@@ -708,6 +709,7 @@ class RestParamDefaults {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;
+			om = om.modifiable();
 			int status = ObjectUtils.firstNonZero(a.code(), 200);
 			merge(om.getObjectMap(String.valueOf(status), true), a);
 			return om;
@@ -750,6 +752,7 @@ class RestParamDefaults {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;
+			om = om.modifiable();
 			int status = firstNonZero(a.code(), a.value(), 200);
 			ObjectMap om2 = om.getObjectMap(String.valueOf(status), true);
 			om2

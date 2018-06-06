@@ -1543,6 +1543,37 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		JsonSerializer.DEFAULT.serialize(this);
 		return this;
 	}
+	
+	/**
+	 * Returns <jk>true</jk> if this map is unmodifiable.
+	 * 
+	 * @return <jk>true</jk> if this map is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return false;
+	}
+	
+	/**
+	 * Returns a modifiable copy of this map if it's unmodifiable.
+	 * 
+	 * @return A modifiable copy of this map if it's unmodifiable, or this map if it is already modifiable.
+	 */
+	public ObjectMap modifiable() {
+		if (isUnmodifiable()) 
+			return new ObjectMap(this);
+		return this;
+	}
+	
+	/**
+	 * Returns an unmodifiable copy of this map if it's modifiable.
+	 * 
+	 * @return An unmodifiable copy of this map if it's modifiable, or this map if it is already unmodifiable.
+	 */
+	public ObjectMap unmodifiable() {
+		if (this instanceof UnmodifiableObjectMap)
+			return this;
+		return new UnmodifiableObjectMap(this);
+	}
 
 	@Override /* Map */
 	public Set<String> keySet() {
@@ -1610,6 +1641,34 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		};
 	}
 	
+	private static final class UnmodifiableObjectMap extends ObjectMap {
+		private static final long serialVersionUID = 1L;
+
+		UnmodifiableObjectMap(ObjectMap contents) {
+			super();
+			if (contents != null) {
+				for (Map.Entry<String,Object> e : contents.entrySet()) {
+					super.put(e.getKey(), e.getValue());
+				}
+			}
+		}
+		
+		@Override
+		public final Object put(String key, Object val) {
+			throw new UnsupportedOperationException("ObjectMap is read-only.");
+		}
+
+		@Override
+		public final Object remove(Object key) {
+			throw new UnsupportedOperationException("ObjectMap is read-only.");
+		}
+		
+		@Override
+		public final boolean isUnmodifiable() {
+			return true;
+		}
+	}
+
 	private BeanSession bs() {
 		if (session == null)
 			session = BeanContext.DEFAULT.createBeanSession();

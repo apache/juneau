@@ -719,6 +719,37 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this list is unmodifiable.
+	 * 
+	 * @return <jk>true</jk> if this list is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return false;
+	}
+	
+	/**
+	 * Returns a modifiable copy of this list if it's unmodifiable.
+	 * 
+	 * @return A modifiable copy of this list if it's unmodifiable, or this list if it is already modifiable.
+	 */
+	public ObjectList modifiable() {
+		if (isUnmodifiable()) 
+			return new ObjectList(this);
+		return this;
+	}
+	
+	/**
+	 * Returns an unmodifiable copy of this list if it's modifiable.
+	 * 
+	 * @return An unmodifiable copy of this list if it's modifiable, or this list if it is already unmodifiable.
+	 */
+	public ObjectList unmodifiable() {
+		if (this instanceof UnmodifiableObjectList)
+			return this;
+		return new UnmodifiableObjectList(this);
+	}
+
+	/**
 	 * Serialize this array to JSON using the {@link JsonSerializer#DEFAULT} serializer.
 	 */
 	@Override /* Object */
@@ -759,6 +790,39 @@ public class ObjectList extends LinkedList<Object> {
 		}
 	}
 	
+	private static final class UnmodifiableObjectList extends ObjectList {
+		private static final long serialVersionUID = 1L;
+
+		UnmodifiableObjectList(ObjectList contents) {
+			super();
+			if (contents != null) {
+				for (Object e : this) {
+					super.add(e);
+				}
+			}
+		}
+		
+		@Override /* List */
+		public void add(int location, Object object) {
+			throw new UnsupportedOperationException("ObjectList is read-only.");
+		}
+
+		@Override /* List */
+		public Object remove(int location) {
+			throw new UnsupportedOperationException("ObjectList is read-only.");
+		}
+
+		@Override /* List */
+		public Object set(int location, Object object) {
+			throw new UnsupportedOperationException("ObjectList is read-only.");
+		}
+		
+		@Override
+		public final boolean isUnmodifiable() {
+			return true;
+		}
+	}
+
 	BeanSession bs() {
 		if (session == null)
 			session = BeanContext.DEFAULT.createBeanSession();

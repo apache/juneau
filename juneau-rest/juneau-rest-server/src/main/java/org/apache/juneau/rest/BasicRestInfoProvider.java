@@ -409,7 +409,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				
 				ObjectMap pi = mp.getMetaData();
 				if (pi.containsKey("_api"))
-					param.putAll(parseMap(pi.getString("_api"), vr, true, false, "@Body(api) on class {0} method {1}"));
+					param.putAll(parseMap(pi.getString("_api"), vr, true, false, "@Body(api) on class {0} method {1}", c, m));
 
 				// Common to all
 				param.appendSkipEmpty("description", vr.resolve(pi.getString("description")));
@@ -609,7 +609,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		return swagger;
 	}
 
-	
 	//=================================================================================================================
 	// Utility methods
 	//=================================================================================================================
