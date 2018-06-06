@@ -438,7 +438,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("required", a.required())
 			.appendSkipEmpty("example", joinnl(a.example()))
@@ -458,7 +458,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.value()))
+			.appendSkipEmpty("_value", joinnl(a.value()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("url", a.url());
 	}
@@ -475,7 +475,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.value()))
+			.appendSkipEmpty("_value", joinnl(a.value()))
 			.appendSkipEmpty("$ref", a.$ref())
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("title", a.title())
@@ -522,7 +522,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("example", joinnl(a.example()))
 			.appendSkipEmpty("examples", joinnl(a.examples()))
@@ -562,7 +562,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.value()))
+			.appendSkipEmpty("_value", joinnl(a.value()))
 			.appendSkipEmpty("type", a.type())
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
@@ -594,7 +594,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om 
-			.appendSkipEmpty("_api", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("$ref", a.$ref())
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("type", a.type())
@@ -629,7 +629,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("type", a.type())
 			.appendSkipEmpty("format", a.format())
@@ -659,7 +659,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("required", a.required())
 			.appendSkipEmpty("type", a.type())
@@ -696,7 +696,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("required", a.required())
 			.appendSkipEmpty("type", a.type())
@@ -733,7 +733,7 @@ public final class RestUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_api", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("required", a.required())
 			.appendSkipEmpty("type", a.type())
