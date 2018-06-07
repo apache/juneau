@@ -112,7 +112,7 @@ import java.util.logging.*;
  * 	<li>
  * 		Annotation values are coalesced from multiple sources in the following order of precedence:
  * 		<ol>
- * 			<li><ja>@Body</ja> annotation on parameter.
+ * 			<li><ja>@Body</ja> annotation fields on parameter.
  * 			<li><ja>@Body</ja> annotation on class.
  * 			<li><ja>@Body</ja> annotation on parent classes and interfaces.
  * 		</ol>
@@ -130,8 +130,59 @@ import java.util.logging.*;
 @Inherited
 public @interface Body {
 	
-	String[] api() default {};
+	/**
+	 * Free-form swagger for the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#</code>
+	 * 
+	 * <p>
+	 * This is a JSON object that makes up the swagger information for this parameter-info.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining the swagger description of the body:
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(<js>"{description:'Pet object to add to the store'}"</js>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * 
+	 * <p>
+	 * 	The reasons why you may want to use this field include:
+	 * <ul>
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
+	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<ul>
+	 * 			<li><code>body=<js>"{description:'Pet object to add to the store'}"</js></code>
+	 * 			<li><code>body=<js>"description:'Pet object to add to the store'"</js></code>
+	 * 		<ul>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Resolution of variables is delayed until request time and occurs before parsing.
+	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
+	 * 	<li>
+	 * 		Swagger field values defined in this value can be overridden by the other specific annotation fields (e.g {@link #description()}).
+	 * </ul>
+	 */
+	String[] value() default {};
 	
+
 	//=================================================================================================================
 	// Attributes common to all ParameterInfos
 	//=================================================================================================================

@@ -26,7 +26,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Contact;
-import org.apache.juneau.rest.annotation.Items;
 import org.apache.juneau.rest.annotation.License;
 import org.apache.juneau.rest.annotation.Tag;
 import org.apache.juneau.rest.mock.*;
@@ -69,8 +68,7 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	//=================================================================================================================
-	// /swagger
-	// "swagger": "2.0",
+	// /<root>
 	//=================================================================================================================
 
 	@RestResource()
@@ -78,656 +76,588 @@ public class BasicRestInfoProviderTest {
 	
 	@Test
 	public void a01_swagger_default() throws Exception {
-		assertEquals("2.0", getSwagger(new A01()).getSwagger());
-		assertEquals("0.0", getSwaggerWithFile(new A01()).getSwagger());
+		Swagger x = getSwagger(new A01());
+		assertEquals("2.0", x.getSwagger());
+		assertEquals(null, x.getHost());
+		assertEquals(null, x.getBasePath());
+		assertEquals(null, x.getSchemes());
+	}
+	@Test
+	public void a01_swagger_default_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new A01());
+		assertEquals("0.0", x.getSwagger());
+		assertEquals("s-host", x.getHost());
+		assertEquals("s-basePath", x.getBasePath());
+		assertObjectEquals("['s-scheme']", x.getSchemes());
 	}
 
 	
-	@RestResource(swagger=@ResourceSwagger("{swagger:'3.0'}"))
+	@RestResource(swagger=@ResourceSwagger("{swagger:'3.0',host:'a-host',basePath:'a-basePath',schemes:['a-scheme']}"))
 	public static class A02 {}
 	
 	@Test
 	public void a02_swagger_ResourceSwagger_value() throws Exception {
-		assertEquals("3.0", getSwagger(new A02()).getSwagger());
-		assertEquals("3.0", getSwaggerWithFile(new A02()).getSwagger());
+		Swagger x = getSwagger(new A02());
+		assertEquals("3.0", x.getSwagger());
+		assertEquals("a-host", x.getHost());
+		assertEquals("a-basePath", x.getBasePath());
+		assertObjectEquals("['a-scheme']", x.getSchemes());
 	}
-	
+	@Test
+	public void a02_swagger_ResourceSwagger_value_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new A02());
+		assertEquals("3.0", x.getSwagger());
+		assertEquals("a-host", x.getHost());
+		assertEquals("a-basePath", x.getBasePath());
+		assertObjectEquals("['a-scheme']", x.getSchemes());
+	}
+
 	//=================================================================================================================
-	// /info/title
-	// "title": "Swagger Petstore",
+	// /info
 	//=================================================================================================================
 
-	@RestResource(title="a-title")
+	@RestResource(
+		title="a-title",
+		description="a-description"
+	)
 	public static class B01 {}
 
 	@Test
-	public void b01_title_RestResource_title() throws Exception {
-		assertEquals("a-title", getSwagger(new B01()).getInfo().getTitle());
-		assertEquals("s-title", getSwaggerWithFile(new B01()).getInfo().getTitle());
+	public void b01a_info_RestResource() throws Exception {
+		Info x = getSwagger(new B01()).getInfo();
+		assertEquals("a-title", x.getTitle());
+		assertEquals("a-description", x.getDescription());
+		assertEquals(null, x.getVersion());
+		assertEquals(null, x.getTermsOfService());
+		assertEquals(null, x.getContact());
+		assertEquals(null, x.getLicense());
+	}
+	@Test
+	public void b01b_info_RestResource_withFile() throws Exception {
+		Info x = getSwaggerWithFile(new B01()).getInfo();
+		assertEquals("s-title", x.getTitle());
+		assertEquals("s-description", x.getDescription());
+		assertEquals("0.0.0", x.getVersion());
+		assertEquals("s-termsOfService", x.getTermsOfService());
+		assertObjectEquals("{name:'s-name',url:'s-url',email:'s-email'}", x.getContact());
+		assertObjectEquals("{name:'s-name',url:'s-url'}", x.getLicense());
 	}
 
-	@RestResource(title="$L{foo}",messages="BasicRestInfoProviderTest")
+	@RestResource(
+		messages="BasicRestInfoProviderTest",
+		title="$L{foo}",
+		description="$L{foo}"
+	)
 	public static class B02 {}
 
 	@Test
-	public void b02_title_RestResource_title_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new B02()).getInfo().getTitle());
-		assertEquals("s-title", getSwaggerWithFile(new B02()).getInfo().getTitle());
+	public void b02a_info_RestResource_localized() throws Exception {
+		Info x = getSwagger(new B02()).getInfo();
+		assertEquals("l-foo", x.getTitle());
+		assertEquals("l-foo", x.getDescription());
 	}
-
+	@Test
+	public void b02b_info_RestResource_localized_withFile() throws Exception {
+		Info x = getSwaggerWithFile(new B02()).getInfo();
+		assertEquals("s-title", x.getTitle());
+		assertEquals("s-description", x.getDescription());
+	}
 	
-	@RestResource(title="a-title", swagger=@ResourceSwagger("{info:{title:'b-title'}}"))
+	@RestResource(
+		title="a-title", 
+		description="a-description", 
+		swagger=@ResourceSwagger(
+			{
+				"info:{",
+					"title:'b-title',",
+					"description:'b-description',",
+					"version:'2.0.0',",
+					"termsOfService:'a-termsOfService',",
+					"contact:{name:'a-name',url:'a-url',email:'a-email'},",
+					"license:{name:'a-name',url:'a-url'}",
+				"}"
+			}
+		)
+	)
 	public static class B03 {}
 
 	@Test
-	public void b03_title_ResourceSwagger_value() throws Exception {
-		assertEquals("b-title", getSwagger(new B03()).getInfo().getTitle());
-		assertEquals("b-title", getSwaggerWithFile(new B03()).getInfo().getTitle());
+	public void b03a_info_ResourceSwagger_value() throws Exception {
+		Info x = getSwagger(new B03()).getInfo();
+		assertEquals("b-title", x.getTitle());
+		assertEquals("b-description", x.getDescription());
+		assertEquals("2.0.0", x.getVersion());
+		assertEquals("a-termsOfService", x.getTermsOfService());
+		assertObjectEquals("{name:'a-name',url:'a-url',email:'a-email'}", x.getContact());
+		assertObjectEquals("{name:'a-name',url:'a-url'}", x.getLicense());
 	}
-	
+	@Test
+	public void b03b_info_ResourceSwagger_value_withFile() throws Exception {
+		Info x = getSwaggerWithFile(new B03()).getInfo();
+		assertEquals("b-title", x.getTitle());
+		assertEquals("b-description", x.getDescription());
+		assertEquals("2.0.0", x.getVersion());
+		assertEquals("a-termsOfService", x.getTermsOfService());
+		assertObjectEquals("{name:'a-name',url:'a-url',email:'a-email'}", x.getContact());
+		assertObjectEquals("{name:'a-name',url:'a-url'}", x.getLicense());
+	}
 
-	@RestResource(title="a-title", swagger=@ResourceSwagger("{info:{title:'$L{bar}'}}"), messages="BasicRestInfoProviderTest")
+	@RestResource(
+		messages="BasicRestInfoProviderTest",
+		title="a-title", 
+		description="a-description",
+		swagger=@ResourceSwagger("{info:{title:'$L{bar}',description:'$L{bar}'}}")
+	)
 	public static class B04 {}
 	
 	@Test
-	public void b04_title_ResourceSwagger_value_localised() throws Exception {
+	public void b04_info_ResourceSwagger_value_localised() throws Exception {
 		assertEquals("l-bar", getSwagger(new B04()).getInfo().getTitle());
 		assertEquals("l-bar", getSwaggerWithFile(new B04()).getInfo().getTitle());
+		assertEquals("l-bar", getSwagger(new B04()).getInfo().getDescription());
+		assertEquals("l-bar", getSwaggerWithFile(new B04()).getInfo().getDescription());
 	}
-
 	
-	@RestResource(title="a-title", swagger=@ResourceSwagger(value="{info:{title:'b-title'}}", title="c-title"))
+	@RestResource(
+		title="a-title", 
+		description="a-description",
+		swagger=@ResourceSwagger(
+			value= {
+				"info:{",
+					"title:'b-title',",
+					"description:'b-description',",
+					"version:'2.0.0',",
+					"termsOfService:'a-termsOfService',",
+					"contact:{name:'a-name',url:'a-url',email:'a-email'},",
+					"license:{name:'a-name',url:'a-url'}",
+				"}"
+			},
+			title="c-title",
+			description="c-description",
+			version="3.0.0",
+			termsOfService="b-termsOfService",
+			contact=@Contact(name="b-name",url="b-url",email="b-email"),
+			license=@License(name="b-name",url="b-url")
+		)
+	)
 	public static class B05 {}
 
 	@Test
-	public void b05_title_ResourceSwagger_title() throws Exception {
-		assertEquals("c-title", getSwagger(new B05()).getInfo().getTitle());
-		assertEquals("c-title", getSwaggerWithFile(new B05()).getInfo().getTitle());
+	public void b05a_info_ResourceSwagger_title() throws Exception {
+		Info x = getSwagger(new B05()).getInfo();
+		assertEquals("c-title", x.getTitle());
+		assertEquals("c-description", x.getDescription());
+		assertEquals("3.0.0", x.getVersion());
+		assertEquals("b-termsOfService", x.getTermsOfService());
+		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", x.getContact());
+		assertObjectEquals("{name:'b-name',url:'b-url'}", x.getLicense());
+	}
+	@Test
+	public void b05b_info_ResourceSwagger_title_withFile() throws Exception {
+		Info x = getSwaggerWithFile(new B05()).getInfo();
+		assertEquals("c-title", x.getTitle());
+		assertEquals("c-description", x.getDescription());
+		assertEquals("3.0.0", x.getVersion());
+		assertEquals("b-termsOfService", x.getTermsOfService());
+		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", x.getContact());
+		assertObjectEquals("{name:'b-name',url:'b-url'}", x.getLicense());
 	}
 	
-	
-	@RestResource(title="a-title", swagger=@ResourceSwagger(value="{info:{title:'b-title'}}", title="$L{baz}"), messages="BasicRestInfoProviderTest")
+	@RestResource(
+		title="a-title", 
+		description="a-description", 
+		swagger=@ResourceSwagger(
+			value= {
+				"info:{",
+					"title:'b-title',",
+					"description:'b-description',",
+					"version:'2.0.0',",
+					"termsOfService:'a-termsOfService',",
+					"contact:{name:'a-name',url:'a-url',email:'a-email'},",
+					"license:{name:'a-name',url:'a-url'}",
+				"}" 
+			},
+			title="$L{baz}",
+			description="$L{baz}",
+			version="$L{foo}",
+			termsOfService="$L{foo}",
+			contact=@Contact("{name:'$L{foo}',url:'$L{bar}',email:'$L{baz}'}"),
+			license=@License("{name:'$L{foo}',url:'$L{bar}'}")
+		), 
+		messages="BasicRestInfoProviderTest"
+	)
 	public static class B06 {}
 	
 	@Test
-	public void b06_title_ResourceSwagger_title_localized() throws Exception {
-		assertEquals("l-baz", getSwagger(new B06()).getInfo().getTitle());
-		assertEquals("l-baz", getSwaggerWithFile(new B06()).getInfo().getTitle());
+	public void b06a_info_ResourceSwagger_title_localized() throws Exception {
+		Info x = getSwagger(new B06()).getInfo();
+		assertEquals("l-baz", x.getTitle());
+		assertEquals("l-baz", x.getDescription());
+		assertEquals("l-foo", x.getVersion());
+		assertEquals("l-foo", x.getTermsOfService());
+		assertObjectEquals("{name:'l-foo',url:'l-bar',email:'l-baz'}", x.getContact());
+		assertObjectEquals("{name:'l-foo',url:'l-bar'}", x.getLicense());
 	}
-
+	@Test
+	public void b06b_info_ResourceSwagger_title_localized_withFile() throws Exception {
+		Info x = getSwaggerWithFile(new B06()).getInfo();
+		assertEquals("l-baz", x.getTitle());
+		assertEquals("l-baz", x.getDescription());
+		assertEquals("l-foo", x.getVersion());
+		assertEquals("l-foo", x.getTermsOfService());
+		assertObjectEquals("{name:'l-foo',url:'l-bar',email:'l-baz'}", x.getContact());
+		assertObjectEquals("{name:'l-foo',url:'l-bar'}", x.getLicense());
+	}
 	
-	@RestResource(swagger=@ResourceSwagger(title="c-title"))
+	@RestResource(
+		swagger=@ResourceSwagger(
+			title="c-title",
+			description="c-description"
+		)
+	)
 	public static class B07 {}
 
 	@Test
-	public void b07_title_ResourceSwagger_title_only() throws Exception {
-		assertEquals("c-title", getSwagger(new B07()).getInfo().getTitle());
-		assertEquals("c-title", getSwaggerWithFile(new B07()).getInfo().getTitle());
+	public void b07a_title_ResourceSwagger_title_only() throws Exception {
+		Info x = getSwagger(new B07()).getInfo();
+		assertEquals("c-title", x.getTitle());
+		assertEquals("c-description", x.getDescription());
 	}
-	
-	//=================================================================================================================
-	// /info/description
-	// "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
-	//=================================================================================================================
+	@Test
+	public void b07b_title_ResourceSwagger_title_only_withFile() throws Exception {
+		Info x = getSwaggerWithFile(new B07()).getInfo();
+		assertEquals("c-title", x.getTitle());
+		assertEquals("c-description", x.getDescription());
+	}
 
-	@RestResource(description="a-description")
+	//=================================================================================================================
+	// /tags
+	//=================================================================================================================
+	
+	@RestResource()
 	public static class C01 {}
-
+	
 	@Test
-	public void c01_description_RestResource_description() throws Exception {
-		assertEquals("a-description", getSwagger(new C01()).getInfo().getDescription());
-		assertEquals("s-description", getSwaggerWithFile(new C01()).getInfo().getDescription());
+	public void c01a_tags_default() throws Exception {
+		Swagger x = getSwagger(new C01());
+		assertEquals(null, x.getTags());
+	}
+	@Test
+	public void c01b_tags_default_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C01());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}}]", x.getTags());
 	}
 
-	
-	@RestResource(description="$L{foo}",messages="BasicRestInfoProviderTest")
+	// Tags in @ResourceSwagger(value) should override file.
+	@RestResource(
+		swagger=@ResourceSwagger(
+			"{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}"
+		)
+	)
 	public static class C02 {}
-
+	
 	@Test
-	public void c02_description_RestResource_description_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new C02()).getInfo().getDescription());
-		assertEquals("s-description", getSwaggerWithFile(new C02()).getInfo().getDescription());
+	public void c02a_tags_ResourceSwagger_value() throws Exception {
+		Swagger x = getSwagger(new C02());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]", x.getTags());
+	}
+	@Test
+	public void c02b_tags_ResourceSwagger_value_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C02());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]", x.getTags());
 	}
 
-	
-	@RestResource(description="a-description", swagger=@ResourceSwagger("{info:{description:'b-description'}}"))
+	// Tags in both @ResourceSwagger(value) and @ResourceSwagger(tags) should accumulate.
+	@RestResource(
+		swagger=@ResourceSwagger(
+			value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}", 
+			tags=@Tag(name="b-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url"))
+		)
+	)
 	public static class C03 {}
-
-	@Test
-	public void c03_description_ResourceSwagger_value() throws Exception {
-		assertEquals("b-description", getSwagger(new C03()).getInfo().getDescription());
-		assertEquals("b-description", getSwaggerWithFile(new C03()).getInfo().getDescription());
-	}
 	
+	@Test
+	public void c03a_tags_ResourceSwagger_tags() throws Exception {
+		Swagger x = getSwagger(new C03());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", x.getTags());
+	}
+	@Test
+	public void c03b_tags_ResourceSwagger_tags_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C03());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", x.getTags());
+	}
 
-	@RestResource(description="a-description", swagger=@ResourceSwagger("{info:{description:'$L{bar}'}}"), messages="BasicRestInfoProviderTest")
+	// Same as above but without [] outer characters.
+	@RestResource(
+		swagger=@ResourceSwagger(
+			value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}", 
+			tags=@Tag(" { name:'b-name', description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")
+		)
+	)
 	public static class C04 {}
 	
 	@Test
-	public void c04_description_ResourceSwagger_value_localised() throws Exception {
-		assertEquals("l-bar", getSwagger(new C04()).getInfo().getDescription());
-		assertEquals("l-bar", getSwaggerWithFile(new C04()).getInfo().getDescription());
+	public void c04a_tags_ResourceSwagger_tags() throws Exception {
+		Swagger x = getSwagger(new C04());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", x.getTags());
 	}
-
-	
-	@RestResource(description="a-description", swagger=@ResourceSwagger(value="{info:{description:'b-description'}}", description="c-description"))
-	public static class C05 {}
-
 	@Test
-	public void c05_description_ResourceSwagger_description() throws Exception {
-		assertEquals("c-description", getSwagger(new C05()).getInfo().getDescription());
-		assertEquals("c-description", getSwaggerWithFile(new C05()).getInfo().getDescription());
+	public void c04b_tags_ResourceSwagger_tags_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C04());
+		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", x.getTags());
 	}
 	
+	// Tags in both Swagger.json and @ResourceSwagger(tags) should accumulate.
+	@RestResource(
+		swagger=@ResourceSwagger(
+			tags=@Tag(name="b-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url"))
+		)
+	)
+	public static class C05 {}
 	
-	@RestResource(description="a-description", swagger=@ResourceSwagger(value="{info:{description:'b-description'}}", description="$L{baz}"), messages="BasicRestInfoProviderTest")
+	@Test
+	public void c05a_tags_ResourceSwagger_tags_only() throws Exception {
+		Swagger x = getSwagger(new C05());
+		assertObjectEquals("[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", x.getTags());
+	}
+	@Test
+	public void c05b_tags_ResourceSwagger_tags_only_witFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C05());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", x.getTags());
+	}
+	
+	// Dup tag names should be overwritten
+	@RestResource(
+		swagger=@ResourceSwagger(
+			tags={
+				@Tag(name="s-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url")),
+				@Tag("{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}")
+			}
+		)
+	)
 	public static class C06 {}
 	
 	@Test
-	public void c06_description_ResourceSwagger_description_localized() throws Exception {
-		assertEquals("l-baz", getSwagger(new C06()).getInfo().getDescription());
-		assertEquals("l-baz", getSwaggerWithFile(new C06()).getInfo().getDescription());
+	public void c06a_tags_ResourceSwagger_tags_dups() throws Exception {
+		Swagger x = getSwagger(new C06());
+		assertObjectEquals("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]", x.getTags());
 	}
-
-	
-	@RestResource(swagger=@ResourceSwagger(description="c-description"))
-	public static class C07 {}
-
 	@Test
-	public void c07_description_ResourceSwagger_description_only() throws Exception {
-		assertEquals("c-description", getSwagger(new C07()).getInfo().getDescription());
-		assertEquals("c-description", getSwaggerWithFile(new C07()).getInfo().getDescription());
+	public void c06b_tags_ResourceSwagger_tags_dups_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C06());
+		assertObjectEquals("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]", x.getTags());
 	}
 
+	@RestResource(
+		swagger=@ResourceSwagger(
+			value="{tags:[{name:'$L{foo}',description:'$L{foo}',externalDocs:{description:'$L{foo}',url:'$L{foo}'}}]}", 
+			tags=@Tag(name="$L{foo}",description="$L{foo}",externalDocs=@ExternalDocs(description="$L{foo}",url="$L{foo}"))
+		), 
+		messages="BasicRestInfoProviderTest"
+	)
+	public static class C07 {}
+	
+	@Test
+	public void c07a_tags_ResourceSwagger_tags_localised() throws Exception {
+		Swagger x = getSwagger(new C07());
+		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", x.getTags());
+	}
+	@Test
+	public void c07b_tags_ResourceSwagger_tags_localised_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C07());
+		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", x.getTags());
+	}
+
+	// Auto-detect tags defined on methods.
+	@RestResource()
+	public static class C08 {
+		@RestMethod(swagger=@MethodSwagger(tags="foo"))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void c08a_tags_ResourceSwagger_tags_loose() throws Exception {
+		Swagger x = getSwagger(new C08());
+		assertObjectEquals("[{name:'foo'}]", x.getTags());
+	}
+	@Test
+	public void c08b_tags_ResourceSwagger_tags_loose_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C08());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'}]", x.getTags());
+	}
+	
+	// Comma-delimited list
+	@RestResource()
+	public static class C09 {
+		@RestMethod(swagger=@MethodSwagger(tags=" foo, bar "))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void c09a_tags_ResourceSwagger_tags_loose_cdl() throws Exception {
+		Swagger x = getSwagger(new C09());
+		assertObjectEquals("[{name:'foo'},{name:'bar'}]", x.getTags());
+	}
+	@Test
+	public void c09b_tags_ResourceSwagger_tags_loose_cdl_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C09());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", x.getTags());
+	}
+
+	// ObjectList
+	@RestResource()
+	public static class C10 {
+		@RestMethod(swagger=@MethodSwagger(tags="['foo', 'bar']"))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void c10a_tags_ResourceSwagger_tags_loose_objectlist() throws Exception {
+		Swagger x = getSwagger(new C10());
+		assertObjectEquals("[{name:'foo'},{name:'bar'}]", x.getTags());
+	}
+	@Test
+	public void c10b_tags_ResourceSwagger_tags_loose_objectlist_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C10());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", x.getTags());
+	}
+
+	// ObjectList localized
+	@RestResource(messages="BasicRestInfoProviderTest")
+	public static class C11 {
+		@RestMethod(swagger=@MethodSwagger(tags="['$L{foo}', '$L{bar}']"))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void c11a_tags_ResourceSwagger_tags_loose_objectlist_localized() throws Exception {
+		Swagger x = getSwagger(new C11());
+		assertObjectEquals("[{name:'l-foo'},{name:'l-bar'}]", x.getTags());
+	}
+	@Test
+	public void c11b_tags_ResourceSwagger_tags_loose_objectlist_localized_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C11());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]", x.getTags());
+	}
+
+	// Comma-delimited list localized
+	@RestResource(messages="BasicRestInfoProviderTest")
+	public static class C12 {
+		@RestMethod(swagger=@MethodSwagger(tags=" $L{foo}, $L{bar} "))
+		public void doFoo() {}
+	}
+	
+	@Test
+	public void c12a_tags_ResourceSwagger_tags_loose_cdl_localized() throws Exception {
+		Swagger x = getSwagger(new C12());
+		assertObjectEquals("[{name:'l-foo'},{name:'l-bar'}]", x.getTags());
+	}
+	@Test
+	public void c12b_tags_ResourceSwagger_tags_loose_cdl_localized_withFile() throws Exception {
+		Swagger x = getSwaggerWithFile(new C12());
+		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]", x.getTags());
+	}
+	
 	//=================================================================================================================
-	// /info/version
-	// "version": "1.0.0",
+	// /externalDocs
 	//=================================================================================================================
 	
 	@RestResource()
 	public static class D01 {}
 	
 	@Test
-	public void d01_version_default() throws Exception {
-		assertEquals(null, getSwagger(new D01()).getInfo().getVersion());
-		assertEquals("0.0.0", getSwaggerWithFile(new D01()).getInfo().getVersion());
+	public void d01a_externalDocs_default() throws Exception {
+		ExternalDocumentation x = getSwagger(new D01()).getExternalDocs();
+		assertEquals(null, x);
+	}
+	@Test
+	public void d01b_externalDocs_default_withFile() throws Exception {
+		ExternalDocumentation x = getSwaggerWithFile(new D01()).getExternalDocs();
+		assertObjectEquals("{description:'s-description',url:'s-url'}", x);
 	}
 
 
-	@RestResource(swagger=@ResourceSwagger("{info:{version:'2.0.0'}}"))
+	@RestResource(
+		swagger=@ResourceSwagger("{externalDocs:{description:'a-description',url:'a-url'}}")
+	)
 	public static class D02 {}
 	
 	@Test
-	public void d02_version_ResourceSwagger_value() throws Exception {
-		assertEquals("2.0.0", getSwagger(new D02()).getInfo().getVersion());
-		assertEquals("2.0.0", getSwaggerWithFile(new D02()).getInfo().getVersion());
+	public void d02a_externalDocs_ResourceSwagger_value() throws Exception {
+		ExternalDocumentation x = getSwagger(new D02()).getExternalDocs();
+		assertObjectEquals("{description:'a-description',url:'a-url'}", x);
+	}
+	@Test
+	public void d02b_externalDocs_ResourceSwagger_value_withFile() throws Exception {
+		ExternalDocumentation x = getSwaggerWithFile(new D02()).getExternalDocs();
+		assertObjectEquals("{description:'a-description',url:'a-url'}", x);
 	}
 
 	
-	@RestResource(swagger=@ResourceSwagger(value="{info:{version:'2.0.0'}}", version="3.0.0"))
+	@RestResource(
+		swagger=@ResourceSwagger(
+			value="{externalDocs:{description:'a-description',url:'a-url'}}", 
+			externalDocs=@ExternalDocs(description="b-description",url="b-url")
+		)
+	)
 	public static class D03 {}
 	
 	@Test
-	public void d03_version_ResourceSwagger_version() throws Exception {
-		assertEquals("3.0.0", getSwagger(new D03()).getInfo().getVersion());
-		assertEquals("3.0.0", getSwaggerWithFile(new D03()).getInfo().getVersion());
+	public void d03a_externalDocs_ResourceSwagger_externalDocs() throws Exception {
+		ExternalDocumentation x = getSwagger(new D03()).getExternalDocs();
+		assertObjectEquals("{description:'b-description',url:'b-url'}", x);
+	}
+	@Test
+	public void d03b_externalDocs_ResourceSwagger_externalDocs_withFile() throws Exception {
+		ExternalDocumentation x = getSwaggerWithFile(new D03()).getExternalDocs();
+		assertObjectEquals("{description:'b-description',url:'b-url'}", x);
 	}
 
-	@RestResource(swagger=@ResourceSwagger(value="{info:{version:'2.0.0'}}", version="$L{foo}"), messages="BasicRestInfoProviderTest")
+	@RestResource(
+		swagger=@ResourceSwagger(
+			value="{info:{externalDocs:{description:'a-description',url:'a-url'}}}", 
+			externalDocs=@ExternalDocs(" description:'b-description', url:'b-url' ")
+			)
+	)
 	public static class D04 {}
 	
 	@Test
-	public void d04_version_ResourceSwagger_version_localised() throws Exception {
-		assertEquals("l-foo", getSwagger(new D04()).getInfo().getVersion());
-		assertEquals("l-foo", getSwaggerWithFile(new D04()).getInfo().getVersion());
+	public void d04a_externalDocs_ResourceSwagger_externalDocs() throws Exception {
+		ExternalDocumentation x = getSwagger(new D04()).getExternalDocs();
+		assertObjectEquals("{description:'b-description',url:'b-url'}", x);
+	}
+	@Test
+	public void d04b_externalDocs_ResourceSwagger_externalDocs_withFile() throws Exception {
+		ExternalDocumentation x = getSwaggerWithFile(new D04()).getExternalDocs();
+		assertObjectEquals("{description:'b-description',url:'b-url'}", x);
+	}
+
+	@RestResource(
+		swagger=@ResourceSwagger(
+			value="{externalDocs:{description:'a-description',url:'a-url'}}", 
+			externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{bar}'}")
+		), 
+		messages="BasicRestInfoProviderTest"
+	)
+	public static class D05 {}
+	
+	@Test
+	public void d05a_externalDocs_ResourceSwagger_externalDocs_localised() throws Exception {
+		ExternalDocumentation x = getSwagger(new D05()).getExternalDocs();
+		assertObjectEquals("{description:'l-foo',url:'l-bar'}", x);
+	}
+	@Test
+	public void d05b_externalDocs_ResourceSwagger_externalDocs_localised_withFile() throws Exception {
+		ExternalDocumentation x = getSwaggerWithFile(new D05()).getExternalDocs();
+		assertObjectEquals("{description:'l-foo',url:'l-bar'}", x);
 	}
 	
 	//=================================================================================================================
-	// /info/termsOfService
-	// "termsOfService": "http://swagger.io/terms/",
-	//=================================================================================================================
-
-	@RestResource()
-	public static class E01 {}
-	
-	@Test
-	public void e01_termsOfService_default() throws Exception {
-		assertEquals(null, getSwagger(new E01()).getInfo().getTermsOfService());
-		assertEquals("s-termsOfService", getSwaggerWithFile(new E01()).getInfo().getTermsOfService());
-	}
-
-
-	@RestResource(swagger=@ResourceSwagger("{info:{termsOfService:'a-termsOfService'}}"))
-	public static class E02 {}
-	
-	@Test
-	public void e02_termsOfService_ResourceSwagger_value() throws Exception {
-		assertEquals("a-termsOfService", getSwagger(new E02()).getInfo().getTermsOfService());
-		assertEquals("a-termsOfService", getSwaggerWithFile(new E02()).getInfo().getTermsOfService());
-	}
-
-	
-	@RestResource(swagger=@ResourceSwagger(value="{info:{termsOfService:'a-termsOfService'}}", termsOfService="b-termsOfService"))
-	public static class E03 {}
-	
-	@Test
-	public void e03_termsOfService_ResourceSwagger_termsOfService() throws Exception {
-		assertEquals("b-termsOfService", getSwagger(new E03()).getInfo().getTermsOfService());
-		assertEquals("b-termsOfService", getSwaggerWithFile(new E03()).getInfo().getTermsOfService());
-	}
-
-	@RestResource(swagger=@ResourceSwagger(value="{info:{termsOfService:'a-termsOfService'}}", termsOfService="$L{foo}"), messages="BasicRestInfoProviderTest")
-	public static class E04 {}
-	
-	@Test
-	public void e04_termsOfService_ResourceSwagger_termsOfService_localised() throws Exception {
-		assertEquals("l-foo", getSwagger(new E04()).getInfo().getTermsOfService());
-		assertEquals("l-foo", getSwaggerWithFile(new E04()).getInfo().getTermsOfService());
-	}
-
-	//=================================================================================================================
-	// /info/contact
-	// "contact": {
-	// 	"email": "apiteam@swagger.io"
-	// },
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class F01 {}
-	
-	@Test
-	public void f01_contact_default() throws Exception {
-		assertEquals(null, getSwagger(new F01()).getInfo().getContact());
-		assertObjectEquals("{name:'s-name',url:'s-url',email:'s-email'}", getSwaggerWithFile(new F01()).getInfo().getContact());
-	}
-
-
-	@RestResource(swagger=@ResourceSwagger("{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}"))
-	public static class F02 {}
-	
-	@Test
-	public void f02_contact_ResourceSwagger_value() throws Exception {
-		assertObjectEquals("{name:'a-name',url:'a-url',email:'a-email'}", getSwagger(new F02()).getInfo().getContact());
-		assertObjectEquals("{name:'a-name',url:'a-url',email:'a-email'}", getSwaggerWithFile(new F02()).getInfo().getContact());
-	}
-
-	
-	@RestResource(swagger=@ResourceSwagger(value="{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}", contact=@Contact(name="b-name",url="b-url",email="b-email")))
-	public static class F03 {}
-	
-	@Test
-	public void f03_contact_ResourceSwagger_contact() throws Exception {
-		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwagger(new F03()).getInfo().getContact());
-		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwaggerWithFile(new F03()).getInfo().getContact());
-	}
-
-	@RestResource(swagger=@ResourceSwagger(value="{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}", contact=@Contact(" name:'b-name', url:'b-url', email:'b-email' ")))
-	public static class F04 {}
-	
-	@Test
-	public void f04_contact_ResourceSwagger_contact() throws Exception {
-		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwagger(new F04()).getInfo().getContact());
-		assertObjectEquals("{name:'b-name',url:'b-url',email:'b-email'}", getSwaggerWithFile(new F04()).getInfo().getContact());
-	}
-
-	@RestResource(swagger=@ResourceSwagger(value="{info:{contact:{name:'a-name',url:'a-url',email:'a-email'}}}", contact=@Contact("{name:'$L{foo}',url:'$L{bar}',email:'$L{baz}'}")), messages="BasicRestInfoProviderTest")
-	public static class F05 {}
-	
-	@Test
-	public void f05_contact_ResourceSwagger_contact_localised() throws Exception {
-		assertObjectEquals("{name:'l-foo',url:'l-bar',email:'l-baz'}", getSwagger(new F05()).getInfo().getContact());
-		assertObjectEquals("{name:'l-foo',url:'l-bar',email:'l-baz'}", getSwaggerWithFile(new F05()).getInfo().getContact());
-	}
-	
-	//=================================================================================================================
-	// /info/license
-	// "license": {
-	// 	"name": "Apache 2.0",
-	// 	"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-	// }
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class G01 {}
-	
-	@Test
-	public void g01_license_default() throws Exception {
-		assertEquals(null, getSwagger(new G01()).getInfo().getLicense());
-		assertObjectEquals("{name:'s-name',url:'s-url'}", getSwaggerWithFile(new G01()).getInfo().getLicense());
-	}
-
-
-	@RestResource(swagger=@ResourceSwagger("{info:{license:{name:'a-name',url:'a-url'}}}"))
-	public static class G02 {}
-	
-	@Test
-	public void g02_license_ResourceSwagger_value() throws Exception {
-		assertObjectEquals("{name:'a-name',url:'a-url'}", getSwagger(new G02()).getInfo().getLicense());
-		assertObjectEquals("{name:'a-name',url:'a-url'}", getSwaggerWithFile(new G02()).getInfo().getLicense());
-	}
-
-	
-	@RestResource(swagger=@ResourceSwagger(value="{info:{license:{name:'a-name',url:'a-url'}}}", license=@License(name="b-name",url="b-url")))
-	public static class G03 {}
-	
-	@Test
-	public void g03_license_ResourceSwagger_license() throws Exception {
-		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwagger(new G03()).getInfo().getLicense());
-		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwaggerWithFile(new G03()).getInfo().getLicense());
-	}
-
-	@RestResource(swagger=@ResourceSwagger(value="{info:{license:{name:'a-name',url:'a-url'}}}", license=@License(" name:'b-name', url:'b-url' ")))
-	public static class G04 {}
-	
-	@Test
-	public void g04_license_ResourceSwagger_license() throws Exception {
-		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwagger(new G04()).getInfo().getLicense());
-		assertObjectEquals("{name:'b-name',url:'b-url'}", getSwaggerWithFile(new G04()).getInfo().getLicense());
-	}
-
-	@RestResource(swagger=@ResourceSwagger(value="{info:{license:{name:'a-name',url:'a-url'}}}", license=@License("{name:'$L{foo}',url:'$L{bar}'}")), messages="BasicRestInfoProviderTest")
-	public static class G05 {}
-	
-	@Test
-	public void g05_license_ResourceSwagger_license_localised() throws Exception {
-		assertObjectEquals("{name:'l-foo',url:'l-bar'}", getSwagger(new G05()).getInfo().getLicense());
-		assertObjectEquals("{name:'l-foo',url:'l-bar'}", getSwaggerWithFile(new G05()).getInfo().getLicense());
-	}
-
-	
-	//=================================================================================================================
-	// /host
-	// "host": "petstore.swagger.io",
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class H01 {}
-	
-	@Test
-	public void h01_host_default() throws Exception {
-		assertEquals(null, getSwagger(new H01()).getHost());
-		assertEquals("s-host", getSwaggerWithFile(new H01()).getHost());
-	}
-
-	
-	@RestResource(swagger=@ResourceSwagger("{host:'a-host'}"))
-	public static class H02 {}
-	
-	@Test
-	public void h02_host_ResourceSwagger_value() throws Exception {
-		assertEquals("a-host", getSwagger(new H02()).getHost());
-		assertEquals("a-host", getSwaggerWithFile(new H02()).getHost());
-	}
-	
-	
-	//=================================================================================================================
-	// /basePath
-	// "basePath": "/v2",
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class I01 {}
-	
-	@Test
-	public void i01_basePath_default() throws Exception {
-		assertEquals(null, getSwagger(new I01()).getBasePath());
-		assertEquals("s-basePath", getSwaggerWithFile(new I01()).getBasePath());
-	}
-
-	
-	@RestResource(swagger=@ResourceSwagger("{basePath:'a-basePath'}"))
-	public static class I02 {}
-	
-	@Test
-	public void i02_basePath_ResourceSwagger_value() throws Exception {
-		assertEquals("a-basePath", getSwagger(new I02()).getBasePath());
-		assertEquals("a-basePath", getSwaggerWithFile(new I02()).getBasePath());
-	}
-
-	
-	//=================================================================================================================
-	// /tags
-	// "tags": [
-	//	{
-	//		"name": "pet",
-	//		"description": "Everything about your Pets",
-	//		"externalDocs": {
-	//			"description": "Find out more",
-	//			"url": "http://swagger.io"
-	//		}
-	//	},
-	// ],
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class J01 {}
-	
-	@Test
-	public void j01_tags_default() throws Exception {
-		assertEquals(null, getSwagger(new J01()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}}]", getSwaggerWithFile(new J01()).getTags());
-	}
-
-	// Tags in @ResourceSwagger(value) should override file.
-	@RestResource(swagger=@ResourceSwagger("{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}"))
-	public static class J02 {}
-	
-	@Test
-	public void j02_tags_ResourceSwagger_value() throws Exception {
-		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]", getSwagger(new J02()).getTags());
-		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]", getSwaggerWithFile(new J02()).getTags());
-	}
-
-	// Tags in both @ResourceSwagger(value) and @ResourceSwagger(tags) should accumulate.
-	@RestResource(swagger=@ResourceSwagger(value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}", tags=@Tag(name="b-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url"))))
-	public static class J03 {}
-	
-	@Test
-	public void j03_tags_ResourceSwagger_tags() throws Exception {
-		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwagger(new J03()).getTags());
-		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwaggerWithFile(new J03()).getTags());
-	}
-
-	// Same as above but without [] outer characters.
-	@RestResource(swagger=@ResourceSwagger(value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}", tags=@Tag(" { name:'b-name', description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")))
-	public static class J04 {}
-	
-	@Test
-	public void j04_tags_ResourceSwagger_tags() throws Exception {
-		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwagger(new J04()).getTags());
-		assertObjectEquals("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwaggerWithFile(new J04()).getTags());
-	}
-	
-	// Tags in both Swagger.json and @ResourceSwagger(tags) should accumulate.
-	@RestResource(swagger=@ResourceSwagger(tags=@Tag(name="b-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url"))))
-	public static class J05 {}
-	
-	@Test
-	public void j05_tags_ResourceSwagger_tags_only() throws Exception {
-		assertObjectEquals("[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwagger(new J05()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]", getSwaggerWithFile(new J05()).getTags());
-	}
-	
-	// Dup tag names should be overwritten
-	@RestResource(swagger=@ResourceSwagger(tags={@Tag(name="s-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url")),@Tag("{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}")}))
-	public static class J06 {}
-	
-	@Test
-	public void j06_tags_ResourceSwagger_tags_dups() throws Exception {
-		assertObjectEquals("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]", getSwagger(new J06()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]", getSwaggerWithFile(new J06()).getTags());
-	}
-
-
-	@RestResource(swagger=@ResourceSwagger(value="{tags:[{name:'$L{foo}',description:'$L{foo}',externalDocs:{description:'$L{foo}',url:'$L{foo}'}}]}", tags=@Tag(name="$L{foo}",description="$L{foo}",externalDocs=@ExternalDocs(description="$L{foo}",url="$L{foo}"))), messages="BasicRestInfoProviderTest")
-	public static class J07 {}
-	
-	@Test
-	public void j07_tags_ResourceSwagger_tags_localised() throws Exception {
-		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", getSwagger(new J07()).getTags());
-		assertObjectEquals("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]", getSwaggerWithFile(new J07()).getTags());
-	}
-
-	// Auto-detect tags defined on methods.
-	@RestResource()
-	public static class J08 {
-		
-		@RestMethod(swagger=@MethodSwagger(tags="foo"))
-		public void doFoo() {}
-	}
-	
-	@Test
-	public void j08_tags_ResourceSwagger_tags_loose() throws Exception {
-		assertObjectEquals("[{name:'foo'}]", getSwagger(new J08()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'}]", getSwaggerWithFile(new J08()).getTags());
-	}
-	
-	// Comma-delimited list
-	@RestResource()
-	public static class J09 {
-		
-		@RestMethod(swagger=@MethodSwagger(tags=" foo, bar "))
-		public void doFoo() {}
-	}
-	
-	@Test
-	public void j09_tags_ResourceSwagger_tags_loose_cdl() throws Exception {
-		assertObjectEquals("[{name:'foo'},{name:'bar'}]", getSwagger(new J09()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", getSwaggerWithFile(new J09()).getTags());
-	}
-
-	// ObjectList
-	@RestResource()
-	public static class J10 {
-		
-		@RestMethod(swagger=@MethodSwagger(tags="['foo', 'bar']"))
-		public void doFoo() {}
-	}
-	
-	@Test
-	public void j10_tags_ResourceSwagger_tags_loose_objectlist() throws Exception {
-		assertObjectEquals("[{name:'foo'},{name:'bar'}]", getSwagger(new J10()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", getSwaggerWithFile(new J10()).getTags());
-	}
-
-	// ObjectList localized
-	@RestResource(messages="BasicRestInfoProviderTest")
-	public static class J11 {
-		
-		@RestMethod(swagger=@MethodSwagger(tags="['$L{foo}', '$L{bar}']"))
-		public void doFoo() {}
-	}
-	
-	@Test
-	public void j11_tags_ResourceSwagger_tags_loose_objectlist_localized() throws Exception {
-		assertObjectEquals("[{name:'l-foo'},{name:'l-bar'}]", getSwagger(new J11()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]", getSwaggerWithFile(new J11()).getTags());
-	}
-
-	// Comma-delimited list localized
-	@RestResource(messages="BasicRestInfoProviderTest")
-	public static class J12 {
-		
-		@RestMethod(swagger=@MethodSwagger(tags=" $L{foo}, $L{bar} "))
-		public void doFoo() {}
-	}
-	
-	@Test
-	public void j12_tags_ResourceSwagger_tags_loose_cdl_localized() throws Exception {
-		assertObjectEquals("[{name:'l-foo'},{name:'l-bar'}]", getSwagger(new J12()).getTags());
-		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]", getSwaggerWithFile(new J12()).getTags());
-	}
-
-	
-	//=================================================================================================================
-	// /schemes
-	// "schemes": [
-	//	"http"
-	// ],
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class K01 {}
-	
-	@Test
-	public void k01_schemes_default() throws Exception {
-		assertEquals(null, getSwagger(new K01()).getSchemes());
-		assertObjectEquals("['s-scheme']", getSwaggerWithFile(new K01()).getSchemes());
-	}
-
-	
-	@RestResource(swagger=@ResourceSwagger("{schemes:['a-scheme']}"))
-	public static class K02 {}
-	
-	@Test
-	public void k02_schemes_ResourceSwagger_value() throws Exception {
-		assertObjectEquals("['a-scheme']", getSwagger(new K02()).getSchemes());
-		assertObjectEquals("['a-scheme']", getSwaggerWithFile(new K02()).getSchemes());
-	}
-	
-	
-	//=================================================================================================================
-	// /externalDocs
-	// "externalDocs": {
-	//	"description": "Find out more about Swagger",
-	//	"url": "http://swagger.io"
-	// }
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class L01 {}
-	
-	@Test
-	public void l01_externalDocs_default() throws Exception {
-		assertEquals(null, getSwagger(new L01()).getExternalDocs());
-		assertObjectEquals("{description:'s-description',url:'s-url'}", getSwaggerWithFile(new L01()).getExternalDocs());
-	}
-
-
-	@RestResource(swagger=@ResourceSwagger("{externalDocs:{description:'a-description',url:'a-url'}}"))
-	public static class L02 {}
-	
-	@Test
-	public void l02_externalDocs_ResourceSwagger_value() throws Exception {
-		assertObjectEquals("{description:'a-description',url:'a-url'}", getSwagger(new L02()).getExternalDocs());
-		assertObjectEquals("{description:'a-description',url:'a-url'}", getSwaggerWithFile(new L02()).getExternalDocs());
-	}
-
-	
-	@RestResource(swagger=@ResourceSwagger(value="{externalDocs:{description:'a-description',url:'a-url'}}", externalDocs=@ExternalDocs(description="b-description",url="b-url")))
-	public static class L03 {}
-	
-	@Test
-	public void l03_externalDocs_ResourceSwagger_externalDocs() throws Exception {
-		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwagger(new L03()).getExternalDocs());
-		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwaggerWithFile(new L03()).getExternalDocs());
-	}
-
-	@RestResource(swagger=@ResourceSwagger(value="{info:{externalDocs:{description:'a-description',url:'a-url'}}}", externalDocs=@ExternalDocs(" description:'b-description', url:'b-url' ")))
-	public static class L04 {}
-	
-	@Test
-	public void l04_externalDocs_ResourceSwagger_externalDocs() throws Exception {
-		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwagger(new L04()).getExternalDocs());
-		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwaggerWithFile(new L04()).getExternalDocs());
-	}
-
-	@RestResource(swagger=@ResourceSwagger(value="{externalDocs:{description:'a-description',url:'a-url'}}", externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{bar}'}")), messages="BasicRestInfoProviderTest")
-	public static class L05 {}
-	
-	@Test
-	public void l05_externalDocs_ResourceSwagger_externalDocs_localised() throws Exception {
-		assertObjectEquals("{description:'l-foo',url:'l-bar'}", getSwagger(new L05()).getExternalDocs());
-		assertObjectEquals("{description:'l-foo',url:'l-bar'}", getSwaggerWithFile(new L05()).getExternalDocs());
-	}
-	
-	//=================================================================================================================
-	// /paths/<path>/<method>/operationId
+	// /paths/<path>/<method>
 	//=================================================================================================================
 
 	@RestResource()
-	public static class MA01 {
-		
+	public static class E01 {
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
 			return null;
@@ -735,13 +665,30 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	@Test
-	public void ma01_operation_operationId_default() throws Exception {
-		assertEquals("doFoo", getSwagger(new MA01()).getPaths().get("/path/{foo}").get("get").getOperationId());
-		assertEquals("s-operationId", getSwaggerWithFile(new MA01()).getPaths().get("/path/{foo}").get("get").getOperationId());
+	public void e01a_operation_summary_default() throws Exception {
+		Operation x = getSwagger(new E01()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("doFoo", x.getOperationId());
+		assertEquals(null, x.getSummary());
+		assertEquals(null, x.getDescription());
+		assertEquals(null, x.getDeprecated());
+		assertEquals(null, x.getSchemes());
+	}
+	@Test
+	public void e01b_operation_summary_default_withFile() throws Exception {
+		Operation x = getSwaggerWithFile(new E01()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("s-operationId", x.getOperationId());
+		assertEquals("s-summary", x.getSummary());
+		assertEquals("s-description", x.getDescription());
+		assertObjectEquals("true", x.getDeprecated());
+		assertObjectEquals("['s-scheme']", x.getSchemes());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{operationId:'a-operationId'}}}"))
-	public static class MA02 {		
+	@RestResource(
+		swagger=@ResourceSwagger(
+			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
+		)
+	)
+	public static class E02 {		
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
 			return null;
@@ -749,259 +696,190 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	@Test
-	public void ma02_operation_operationId_swaggerOnClass() throws Exception {
-		assertEquals("a-operationId", getSwagger(new MA02()).getPaths().get("/path/{foo}").get("get").getOperationId());
-		assertEquals("a-operationId", getSwaggerWithFile(new MA02()).getPaths().get("/path/{foo}").get("get").getOperationId());
+	public void e02a_operation_summary_swaggerOnClass() throws Exception {
+		Operation x = getSwagger(new E02()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("a-operationId", x.getOperationId());
+		assertEquals("a-summary", x.getSummary());
+		assertEquals("a-description", x.getDescription());
+		assertObjectEquals("false", x.getDeprecated());
+		assertObjectEquals("['a-scheme']", x.getSchemes());
+	}
+	@Test
+	public void e02b_operation_summary_swaggerOnClass_withFile() throws Exception {
+		Operation x = getSwaggerWithFile(new E02()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("a-operationId", x.getOperationId());
+		assertEquals("a-summary", x.getSummary());
+		assertEquals("a-description", x.getDescription());
+		assertObjectEquals("false", x.getDeprecated());
+		assertObjectEquals("['a-scheme']", x.getSchemes());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{operationId:'a-operationId'}}}"))
-	public static class MA03 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("operationId:'b-operationId'"))
+	@RestResource(
+		swagger=@ResourceSwagger(
+			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
+		)
+	)
+	public static class E03 {		
+		@RestMethod(name=GET,path="/path/{foo}",
+			swagger=@MethodSwagger("operationId:'b-operationId',summary:'b-summary',description:'b-description',deprecated:false,schemes:['b-scheme']")
+		)
 		public Foo doFoo() {
 			return null;
 		}
 	}
 	
 	@Test
-	public void ma03_operation_operationId_swaggerOnMethod() throws Exception {
-		assertEquals("b-operationId", getSwagger(new MA03()).getPaths().get("/path/{foo}").get("get").getOperationId());
-		assertEquals("b-operationId", getSwaggerWithFile(new MA03()).getPaths().get("/path/{foo}").get("get").getOperationId());
+	public void e03a_operation_summary_swaggerOnMethod() throws Exception {
+		Operation x = getSwagger(new E03()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("b-operationId", x.getOperationId());
+		assertEquals("b-summary", x.getSummary());
+		assertEquals("b-description", x.getDescription());
+		assertObjectEquals("false", x.getDeprecated());
+		assertObjectEquals("['b-scheme']", x.getSchemes());
+	}
+	@Test
+	public void e03b_operation_summary_swaggerOnMethod_withFile() throws Exception {
+		Operation x = getSwaggerWithFile(new E03()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("b-operationId", x.getOperationId());
+		assertEquals("b-summary", x.getSummary());
+		assertEquals("b-description", x.getDescription());
+		assertObjectEquals("false", x.getDeprecated());
+		assertObjectEquals("['b-scheme']", x.getSchemes());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{operationId:'a-operationId'}}}"))
-	public static class MA04 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(operationId="c-operationId"))
+	@RestResource(
+		swagger=@ResourceSwagger(
+			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
+		)
+	)
+	public static class E04 {		
+		@RestMethod(name=GET,path="/path/{foo}",
+			swagger=@MethodSwagger(
+				operationId="c-operationId",
+				summary="c-summary",
+				description="c-description",
+				deprecated="false",
+				schemes="d-scheme-1, d-scheme-2"
+			)
+		)
 		public Foo doFoo() {
 			return null;
 		}
 	}
 
 	@Test
-	public void ma04_operation_operationId_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-operationId", getSwagger(new MA04()).getPaths().get("/path/{foo}").get("get").getOperationId());
-		assertEquals("c-operationId", getSwaggerWithFile(new MA04()).getPaths().get("/path/{foo}").get("get").getOperationId());
+	public void e04a_operation_summary_swaggerOnAnnotation() throws Exception {
+		Operation x = getSwagger(new E04()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("c-operationId", x.getOperationId());
+		assertEquals("c-summary", x.getSummary());
+		assertEquals("c-description", x.getDescription());
+		assertObjectEquals("['d-scheme-1','d-scheme-2']", x.getSchemes());
+	}
+	@Test
+	public void e04b_operation_summary_swaggerOnAnnotation_withFile() throws Exception {
+		Operation x = getSwaggerWithFile(new E04()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("c-operationId", x.getOperationId());
+		assertEquals("c-summary", x.getSummary());
+		assertEquals("c-description", x.getDescription());
+		assertObjectEquals("['d-scheme-1','d-scheme-2']", x.getSchemes());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{operationId:'a-operationId'}}}"))
-	public static class MA05 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(operationId="$L{foo}"))
+	@RestResource(
+		messages="BasicRestInfoProviderTest", 
+		swagger=@ResourceSwagger(
+			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
+		)
+	)
+	public static class E05 {		
+		@RestMethod(name=GET,path="/path/{foo}",
+			swagger=@MethodSwagger(
+				summary="$L{foo}",
+				operationId="$L{foo}",
+				description="$L{foo}",
+				deprecated="$L{false}",
+				schemes="$L{foo}"
+			)
+		)
 		public Foo doFoo() {
 			return null;
 		}
 	}
 
 	@Test
-	public void ma05_operation_operationId_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new MA05()).getPaths().get("/path/{foo}").get("get").getOperationId());
-		assertEquals("l-foo", getSwaggerWithFile(new MA05()).getPaths().get("/path/{foo}").get("get").getOperationId());
+	public void e05a_operation_summary_swaggerOnAnnotation_localized() throws Exception {
+		Operation x = getSwagger(new E05()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("l-foo", x.getOperationId());
+		assertEquals("l-foo", x.getSummary());
+		assertEquals("l-foo", x.getDescription());
+		assertObjectEquals("false", x.getDeprecated());
+		assertObjectEquals("['l-foo']", x.getSchemes());
+	}
+	@Test
+	public void e05b_operation_summary_swaggerOnAnnotation_localized_withFile() throws Exception {
+		Operation x = getSwaggerWithFile(new E05()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("l-foo", x.getOperationId());
+		assertEquals("l-foo", x.getSummary());
+		assertEquals("l-foo", x.getDescription());
+		assertObjectEquals("false", x.getDeprecated());
+		assertObjectEquals("['l-foo']", x.getSchemes());
 	}
 	
-	//=================================================================================================================
-	// /paths/<path>/<method>/summary
-	//=================================================================================================================
-
-	@RestResource()
-	public static class MB01 {
-		
-		@RestMethod(name=GET,path="/path/{foo}")
+	@RestResource(
+		swagger=@ResourceSwagger(
+			"paths:{'/path/{foo}':{get:{summary:'a-summary',description:'a-description'}}}"
+		)
+	)
+	public static class E06 {		
+		@RestMethod(name=GET,path="/path/{foo}",
+			summary="d-summary",
+			description="d-description"
+		)
 		public Foo doFoo() {
 			return null;
 		}
+	}
+
+	@Test
+	public void e06a_operation_summary_RestMethod() throws Exception {
+		Operation x = getSwagger(new E06()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("a-summary", x.getSummary());
+		assertEquals("a-description", x.getDescription());
+	}
+	@Test
+	public void e06b_operation_summary_RestMethod_withFile() throws Exception {
+		Operation x = getSwaggerWithFile(new E06()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("a-summary", x.getSummary());
+		assertEquals("a-description", x.getDescription());
+	}
+
+	@RestResource(
+		swagger=@ResourceSwagger(
+			"paths:{'/path/{foo}':{get:{}}}"
+		)
+	)
+	public static class E07 {		
+		@RestMethod(name=GET,path="/path/{foo}",
+			summary="d-summary",
+			description="d-description"
+		)
+		public Foo doFoo() {
+			return null;
+		}
+	}
+
+	@Test
+	public void e07a_operation_summary_RestMethod() throws Exception {
+		Operation x = getSwagger(new E07()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("d-summary", x.getSummary());
+		assertEquals("d-description", x.getDescription());
+	}
+	@Test
+	public void e07b_operation_summary_RestMethod_withFile() throws Exception {
+		Operation x = getSwaggerWithFile(new E07()).getPaths().get("/path/{foo}").get("get");
+		assertEquals("d-summary", x.getSummary());
+		assertEquals("d-description", x.getDescription());
 	}
 	
-	@Test
-	public void mb01_operation_summary_default() throws Exception {
-		assertEquals(null, getSwagger(new MB01()).getPaths().get("/path/{foo}").get("get").getSummary());
-		assertEquals("s-summary", getSwaggerWithFile(new MB01()).getPaths().get("/path/{foo}").get("get").getSummary());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{summary:'a-summary'}}}"))
-	public static class MB02 {		
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mb02_operation_summary_swaggerOnClass() throws Exception {
-		assertEquals("a-summary", getSwagger(new MB02()).getPaths().get("/path/{foo}").get("get").getSummary());
-		assertEquals("a-summary", getSwaggerWithFile(new MB02()).getPaths().get("/path/{foo}").get("get").getSummary());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{summary:'a-summary'}}}"))
-	public static class MB03 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("summary:'b-summary'"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mb03_operation_summary_swaggerOnMethod() throws Exception {
-		assertEquals("b-summary", getSwagger(new MB03()).getPaths().get("/path/{foo}").get("get").getSummary());
-		assertEquals("b-summary", getSwaggerWithFile(new MB03()).getPaths().get("/path/{foo}").get("get").getSummary());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{summary:'a-summary'}}}"))
-	public static class MB04 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(summary="c-summary"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mb04_operation_summary_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-summary", getSwagger(new MB04()).getPaths().get("/path/{foo}").get("get").getSummary());
-		assertEquals("c-summary", getSwaggerWithFile(new MB04()).getPaths().get("/path/{foo}").get("get").getSummary());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{summary:'a-summary'}}}"))
-	public static class MB05 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(summary="$L{foo}"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mb05_operation_summary_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new MB05()).getPaths().get("/path/{foo}").get("get").getSummary());
-		assertEquals("l-foo", getSwaggerWithFile(new MB05()).getPaths().get("/path/{foo}").get("get").getSummary());
-	}
-	
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{summary:'a-summary'}}}"))
-	public static class MB06 {		
-		@RestMethod(name=GET,path="/path/{foo}",summary="d-summary")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mb06_operation_summary_RestMethod() throws Exception {
-		assertEquals("a-summary", getSwagger(new MB06()).getPaths().get("/path/{foo}").get("get").getSummary());
-		assertEquals("a-summary", getSwaggerWithFile(new MB06()).getPaths().get("/path/{foo}").get("get").getSummary());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{}}}"))
-	public static class MB07 {		
-		@RestMethod(name=GET,path="/path/{foo}",summary="d-summary")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mb07_operation_summary_RestMethod() throws Exception {
-		assertEquals("d-summary", getSwagger(new MB07()).getPaths().get("/path/{foo}").get("get").getSummary());
-		assertEquals("d-summary", getSwaggerWithFile(new MB07()).getPaths().get("/path/{foo}").get("get").getSummary());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/description
-	//=================================================================================================================
-
-	@RestResource()
-	public static class MC01 {
-		
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mc01_operation_description_default() throws Exception {
-		assertEquals(null, getSwagger(new MC01()).getPaths().get("/path/{foo}").get("get").getDescription());
-		assertEquals("s-description", getSwaggerWithFile(new MC01()).getPaths().get("/path/{foo}").get("get").getDescription());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{description:'a-description'}}}"))
-	public static class MC02 {		
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mc02_operation_description_swaggerOnClass() throws Exception {
-		assertEquals("a-description", getSwagger(new MC02()).getPaths().get("/path/{foo}").get("get").getDescription());
-		assertEquals("a-description", getSwaggerWithFile(new MC02()).getPaths().get("/path/{foo}").get("get").getDescription());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{description:'a-description'}}}"))
-	public static class MC03 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("description:'b-description'"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mc03_operation_description_swaggerOnMethod() throws Exception {
-		assertEquals("b-description", getSwagger(new MC03()).getPaths().get("/path/{foo}").get("get").getDescription());
-		assertEquals("b-description", getSwaggerWithFile(new MC03()).getPaths().get("/path/{foo}").get("get").getDescription());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{description:'a-description'}}}"))
-	public static class MC04 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(description="c-description"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mc04_operation_description_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-description", getSwagger(new MC04()).getPaths().get("/path/{foo}").get("get").getDescription());
-		assertEquals("c-description", getSwaggerWithFile(new MC04()).getPaths().get("/path/{foo}").get("get").getDescription());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{description:'a-description'}}}"))
-	public static class MC05 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(description="$L{foo}"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mc05_operation_description_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new MC05()).getPaths().get("/path/{foo}").get("get").getDescription());
-		assertEquals("l-foo", getSwaggerWithFile(new MC05()).getPaths().get("/path/{foo}").get("get").getDescription());
-	}
-	
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{description:'a-description'}}}"))
-	public static class MC06 {		
-		@RestMethod(name=GET,path="/path/{foo}",description="d-description")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mc06_operation_description_RestMethod() throws Exception {
-		assertEquals("a-description", getSwagger(new MC06()).getPaths().get("/path/{foo}").get("get").getDescription());
-		assertEquals("a-description", getSwaggerWithFile(new MC06()).getPaths().get("/path/{foo}").get("get").getDescription());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{}}}"))
-	public static class MC07 {		
-		@RestMethod(name=GET,path="/path/{foo}",description="d-description")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mc07_operation_description_RestMethod() throws Exception {
-		assertEquals("d-description", getSwagger(new MC07()).getPaths().get("/path/{foo}").get("get").getDescription());
-		assertEquals("d-description", getSwaggerWithFile(new MC07()).getPaths().get("/path/{foo}").get("get").getDescription());
-	}
-
 	//=================================================================================================================
 	// /paths/<path>/<method>/tags
 	//=================================================================================================================
@@ -1447,76 +1325,6 @@ public class BasicRestInfoProviderTest {
 	//=================================================================================================================
 
 	@RestResource()
-	public static class MH01 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mh01_operation_deprecated_default() throws Exception {
-		assertEquals(null, getSwagger(new MH01()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-		assertObjectEquals("true", getSwaggerWithFile(new MH01()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{deprecated:false}}}"))
-	public static class MH02 {		
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mh02_operation_deprecated_swaggerOnClass() throws Exception {
-		assertObjectEquals("false", getSwagger(new MH02()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-		assertObjectEquals("false", getSwaggerWithFile(new MH02()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{deprecated:false}}}"))
-	public static class MH03 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("deprecated:false"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mh03_operation_deprecated_swaggerOnMethod() throws Exception {
-		assertObjectEquals("false", getSwagger(new MH03()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-		assertObjectEquals("false", getSwaggerWithFile(new MH03()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{deprecated:false}}}"))
-	public static class MH04 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(deprecated="false"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mh04_operation_deprecated_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("false", getSwagger(new MH04()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-		assertObjectEquals("false", getSwaggerWithFile(new MH04()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{deprecated:false}}}"))
-	public static class MH05 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(deprecated="$L{false}"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mh05_operation_deprecated_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("false", getSwagger(new MH05()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-		assertObjectEquals("false", getSwaggerWithFile(new MH05()).getPaths().get("/path/{foo}").get("get").getDeprecated());
-	}
-
-	@RestResource()
 	public static class MH06 {
 		@RestMethod(name=GET,path="/path2/{foo}")
 		@Deprecated
@@ -1547,95 +1355,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	//=================================================================================================================
-	// /paths/<path>/<method>/schemes
-	//=================================================================================================================
-
-	@RestResource()
-	public static class MI01 {
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mi01_operation_schemes_default() throws Exception {
-		assertEquals(null, getSwagger(new MI01()).getPaths().get("/path/{foo}").get("get").getSchemes());
-		assertObjectEquals("['s-scheme']", getSwaggerWithFile(new MI01()).getPaths().get("/path/{foo}").get("get").getSchemes());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{schemes:['a-scheme']}}}"))
-	public static class MI02 {		
-		@RestMethod(name=GET,path="/path/{foo}")
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mi02_operation_schemes_swaggerOnClass() throws Exception {
-		assertObjectEquals("['a-scheme']", getSwagger(new MI02()).getPaths().get("/path/{foo}").get("get").getSchemes());
-		assertObjectEquals("['a-scheme']", getSwaggerWithFile(new MI02()).getPaths().get("/path/{foo}").get("get").getSchemes());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{schemes:['a-scheme']}}}"))
-	public static class MI03 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("schemes:['b-scheme']"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void mi03_operation_schemes_swaggerOnMethod() throws Exception {
-		assertObjectEquals("['b-scheme']", getSwagger(new MI03()).getPaths().get("/path/{foo}").get("get").getSchemes());
-		assertObjectEquals("['b-scheme']", getSwaggerWithFile(new MI03()).getPaths().get("/path/{foo}").get("get").getSchemes());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{schemes:['a-scheme']}}}"))
-	public static class MI04a {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(schemes="['c-scheme-1','c-scheme-2']"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mi04a_operation_schemes_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("['c-scheme-1','c-scheme-2']", getSwagger(new MI04a()).getPaths().get("/path/{foo}").get("get").getSchemes());
-		assertObjectEquals("['c-scheme-1','c-scheme-2']", getSwaggerWithFile(new MI04a()).getPaths().get("/path/{foo}").get("get").getSchemes());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{schemes:['a-scheme']}}}"))
-	public static class MI04b {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(schemes="d-scheme-1, d-scheme-2"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mi04b_operation_schemes_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("['d-scheme-1','d-scheme-2']", getSwagger(new MI04b()).getPaths().get("/path/{foo}").get("get").getSchemes());
-		assertObjectEquals("['d-scheme-1','d-scheme-2']", getSwaggerWithFile(new MI04b()).getPaths().get("/path/{foo}").get("get").getSchemes());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{schemes:['a-scheme']}}}"))
-	public static class MI05 {		
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(schemes="$L{foo}"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-
-	@Test
-	public void mi05_operation_schemes_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("['l-foo']", getSwagger(new MI05()).getPaths().get("/path/{foo}").get("get").getSchemes());
-		assertObjectEquals("['l-foo']", getSwaggerWithFile(new MI05()).getPaths().get("/path/{foo}").get("get").getSchemes());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/type
+	// /paths/<path>/<method>/parameters/query
 	//=================================================================================================================
 
 	@RestResource()
@@ -1647,12 +1367,72 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	@Test
-	public void na01_query_type_default() throws Exception {
-		assertEquals(null, getSwagger(new NA01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
-		assertEquals("string", getSwaggerWithFile(new NA01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
+	public void na01a_query_type_default() throws Exception {
+		ParameterInfo x = getSwagger(new NA01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals(null, x.getType());
+		assertEquals(null, x.getDescription());
+		assertEquals(null, x.getRequired());
+		assertEquals(null, x.getAllowEmptyValue());
+		assertEquals(null, x.getExclusiveMaximum());
+		assertEquals(null, x.getExclusiveMinimum());
+		assertEquals(null, x.getUniqueItems());
+		assertEquals(null, x.getFormat());
+		assertEquals(null, x.getCollectionFormat());
+		assertEquals(null, x.getPattern());
+		assertEquals(null, x.getMaximum());
+		assertEquals(null, x.getMinimum());
+		assertEquals(null, x.getMultipleOf());
+		assertEquals(null, x.getMaxLength());
+		assertEquals(null, x.getMinLength());
+		assertEquals(null, x.getMaxItems());
+		assertEquals(null, x.getMinItems());
+	}
+	@Test
+	public void na01b_query_type_default_withFile() throws Exception {
+		ParameterInfo x = getSwaggerWithFile(new NA01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("string", x.getType());
+		assertEquals("s-description", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertEquals("s-format", x.getFormat());
+		assertEquals("s-collectionFormat", x.getCollectionFormat());
+		assertEquals("s-pattern", x.getPattern());
+		assertObjectEquals("1.0", x.getMaximum());
+		assertObjectEquals("1.0", x.getMinimum());
+		assertObjectEquals("1.0", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',type:'int32'}]}}}"))
+	@RestResource(
+		swagger=@ResourceSwagger({
+			"paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',",
+				"name:'foo',",
+				"type:'int32',",
+				"description:'a-description',",
+				"required:false,",
+				"allowEmptyValue:false,",
+				"exclusiveMaximum:false,",
+				"exclusiveMinimum:false,",
+				"uniqueItems:false,",
+				"format:'a-format',",
+				"collectionFormat:'a-collectionFormat',",
+				"pattern:'a-pattern',",
+				"maximum:2.0,",
+				"minimum:2.0,",
+				"multipleOf:2.0,",
+				"maxLength:2,",
+				"minLength:2,",
+				"maxItems:2,",
+				"minItems:2",
+			"}]}}}"
+		})
+	)
 	public static class NA02 {		
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1661,1263 +1441,335 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	@Test
-	public void na02_query_type_swaggerOnClass() throws Exception {
+	public void na02a_query_type_swaggerOnClass() throws Exception {
+		ParameterInfo x = getSwagger(new NA02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertEquals("int32", getSwagger(new NA02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
-		assertEquals("int32", getSwaggerWithFile(new NA02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
+		assertEquals("a-description", x.getDescription());
+		assertObjectEquals("false", x.getRequired());
+		assertObjectEquals("false", x.getAllowEmptyValue());
+		assertObjectEquals("false", x.getExclusiveMaximum());
+		assertObjectEquals("false", x.getExclusiveMinimum());
+		assertObjectEquals("false", x.getUniqueItems());
+		assertEquals("a-format", x.getFormat());
+		assertEquals("a-collectionFormat", x.getCollectionFormat());
+		assertEquals("a-pattern", x.getPattern());
+		assertObjectEquals("2.0", x.getMaximum());
+		assertObjectEquals("2.0", x.getMinimum());
+		assertObjectEquals("2.0", x.getMultipleOf());
+		assertObjectEquals("2", x.getMaxLength());
+		assertObjectEquals("2", x.getMinLength());
+		assertObjectEquals("2", x.getMaxItems());
+		assertObjectEquals("2", x.getMinItems());
+	}
+	@Test
+	public void na02b_query_type_swaggerOnClass_withFile() throws Exception {
+		ParameterInfo x = getSwaggerWithFile(new NA02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("int32", x.getType());
+		assertEquals("a-description", x.getDescription());
+		assertObjectEquals("false", x.getRequired());
+		assertObjectEquals("false", x.getAllowEmptyValue());
+		assertObjectEquals("false", x.getExclusiveMaximum());
+		assertObjectEquals("false", x.getExclusiveMinimum());
+		assertObjectEquals("false", x.getUniqueItems());
+		assertEquals("a-format", x.getFormat());
+		assertEquals("a-collectionFormat", x.getCollectionFormat());
+		assertEquals("a-pattern", x.getPattern());
+		assertObjectEquals("2.0", x.getMaximum());
+		assertObjectEquals("2.0", x.getMinimum());
+		assertObjectEquals("2.0", x.getMultipleOf());
+		assertObjectEquals("2", x.getMaxLength());
+		assertObjectEquals("2", x.getMinLength());
+		assertObjectEquals("2", x.getMaxItems());
+		assertObjectEquals("2", x.getMinItems());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',type:'int32'}]}}}"))
+	@RestResource(
+		swagger=@ResourceSwagger({
+			"paths:{'/path/{foo}/query':{get:{parameters:[{",
+				"'in':'query',",
+				"name:'foo',",
+				"type:'int32',",
+				"description:'a-description',",
+				"required:false,",
+				"allowEmptyValue:false,",
+				"exclusiveMaximum:false,",
+				"exclusiveMinimum:false,",
+				"uniqueItems:false,",
+				"format:'a-format',",
+				"collectionFormat:'a-collectionFormat',",
+				"pattern:'a-pattern',",
+				"maximum:2.0,",
+				"minimum:2.0,",
+				"multipleOf:2.0,",
+				"maxLength:2,",
+				"minLength:2,",
+				"maxItems:2,",
+				"minItems:2",
+			"}]}}}"
+		})
+	)
 	public static class NA03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',type:'int64'}]"))
+		@RestMethod(name=GET,path="/path/{foo}/query",
+			swagger=@MethodSwagger({
+				"parameters:[{",
+					"'in':'query',",
+					"name:'foo',",
+					"type:'int64',",
+					"description:'b-description',",
+					"required:'true',",
+					"allowEmptyValue:'true',",
+					"exclusiveMaximum:'true',",
+					"exclusiveMinimum:'true',",
+					"uniqueItems:'true',",
+					"format:'b-format',",
+					"collectionFormat:'b-collectionFormat',",
+					"pattern:'b-pattern',",
+					"maximum:3.0,",
+					"minimum:3.0,",
+					"multipleOf:3.0,",
+					"maxLength:3,",
+					"minLength:3,",
+					"maxItems:3,",
+					"minItems:3",
+				"}]"
+			}))
 		public Foo doFoo() {
 			return null;
 		}
 	}
 	
 	@Test
-	public void na03_query_type_swaggerOnMethod() throws Exception {
-		assertEquals("int64", getSwagger(new NA03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
-		assertEquals("int64", getSwaggerWithFile(new NA03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
+	public void na03a_query_type_swaggerOnMethod() throws Exception {
+		ParameterInfo x = getSwagger(new NA03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("int64", x.getType());
+		assertEquals("b-description", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertEquals("b-format", x.getFormat());
+		assertEquals("b-collectionFormat", x.getCollectionFormat());
+		assertEquals("b-pattern", x.getPattern());
+		assertObjectEquals("3.0", x.getMaximum());
+		assertObjectEquals("3.0", x.getMinimum());
+		assertObjectEquals("3.0", x.getMultipleOf());
+		assertObjectEquals("3", x.getMaxLength());
+		assertObjectEquals("3", x.getMinLength());
+		assertObjectEquals("3", x.getMaxItems());
+		assertObjectEquals("3", x.getMinItems());
+	}
+	@Test
+	public void na03b_query_type_swaggerOnMethod_withFile() throws Exception {
+		ParameterInfo x = getSwaggerWithFile(new NA03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("int64", x.getType());
+		assertEquals("b-description", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertEquals("b-format", x.getFormat());
+		assertEquals("b-collectionFormat", x.getCollectionFormat());
+		assertEquals("b-pattern", x.getPattern());
+		assertObjectEquals("3.0", x.getMaximum());
+		assertObjectEquals("3.0", x.getMinimum());
+		assertObjectEquals("3.0", x.getMultipleOf());
+		assertObjectEquals("3", x.getMaxLength());
+		assertObjectEquals("3", x.getMinLength());
+		assertObjectEquals("3", x.getMaxItems());
+		assertObjectEquals("3", x.getMinItems());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',type:'int32'}]}}}"))
+	@RestResource(
+		swagger=@ResourceSwagger({
+			"paths:{'/path/{foo}/query':{get:{parameters:[{",
+				"'in':'query',",
+				"name:'foo',",
+				"type:'int32',",
+				"description:'a-description',",
+				"required:false,",
+				"allowEmptyValue:false,",
+				"exclusiveMaximum:false,",
+				"exclusiveMinimum:false,",
+				"uniqueItems:false,",
+				"format:'a-format',",
+				"collectionFormat:'a-collectionFormat',",
+				"pattern:'a-pattern',",
+				"maximum:2.0,",
+				"minimum:2.0,",
+				"multipleOf:2.0,",
+				"maxLength:2,",
+				"minLength:2,",
+				"maxItems:2,",
+				"minItems:2",
+			"}]}}}"
+		})
+	)
 	public static class NA04 {		
 		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",type="boolean") Foo foo) {
+		public Foo doFoo(
+			@Query(
+				name="foo",
+				type="boolean",
+				description="c-description",
+				required="true",
+				allowEmptyValue="true",
+				exclusiveMaximum="true",
+				exclusiveMinimum="true",
+				uniqueItems="true",
+				format="c-format",
+				collectionFormat="c-collectionFormat",
+				pattern="c-pattern",
+				maximum="4.0",
+				minimum="4.0",
+				multipleOf="4.0",
+				maxLength="4",
+				minLength="4",
+				maxItems="4",
+				minItems="4"
+			) Foo foo) {
 			return null;
 		}
 	}
 
 	@Test
-	public void na04_query_type_swaggerOnAnnotation() throws Exception {
-		assertEquals("boolean", getSwagger(new NA04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
-		assertEquals("boolean", getSwaggerWithFile(new NA04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
+	public void na04a_query_type_swaggerOnAnnotation() throws Exception {
+		ParameterInfo x = getSwagger(new NA04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("boolean", x.getType());
+		assertEquals("c-description", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertEquals("c-format", x.getFormat());
+		assertEquals("c-collectionFormat", x.getCollectionFormat());
+		assertEquals("c-pattern", x.getPattern());
+		assertObjectEquals("4.0", x.getMaximum());
+		assertObjectEquals("4.0", x.getMinimum());
+		assertObjectEquals("4.0", x.getMultipleOf());
+		assertObjectEquals("4", x.getMaxLength());
+		assertObjectEquals("4", x.getMinLength());
+		assertObjectEquals("4", x.getMaxItems());
+		assertObjectEquals("4", x.getMinItems());
 	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',type:'int32'}]}}}"))
+	@Test
+	public void na04b_query_type_swaggerOnAnnotation_withFile() throws Exception {
+		ParameterInfo x = getSwaggerWithFile(new NA04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("boolean", x.getType());
+		assertEquals("c-description", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertEquals("c-format", x.getFormat());
+		assertEquals("c-collectionFormat", x.getCollectionFormat());
+		assertEquals("c-pattern", x.getPattern());
+		assertObjectEquals("4.0", x.getMaximum());
+		assertObjectEquals("4.0", x.getMinimum());
+		assertObjectEquals("4.0", x.getMultipleOf());
+		assertObjectEquals("4", x.getMaxLength());
+		assertObjectEquals("4", x.getMinLength());
+		assertObjectEquals("4", x.getMaxItems());
+		assertObjectEquals("4", x.getMinItems());
+	}
+	
+	@RestResource(
+		messages="BasicRestInfoProviderTest", 
+		swagger=@ResourceSwagger({
+			"paths:{'/path/{foo}/query':{get:{parameters:[{",
+				"'in':'query',",
+				"name:'foo',",
+				"type:'int32',",
+				"description:'a-description',",
+				"required:false,",
+				"allowEmptyValue:false,",
+				"exclusiveMaximum:false,",
+				"exclusiveMinimum:false,",
+				"uniqueItems:false,",
+				"format:'a-format',",
+				"collectionFormat:'a-collectionFormat',",
+				"pattern:'a-pattern',",
+				"maximum:2.0,",
+				"minimum:2.0,",
+				"multipleOf:2.0,",
+				"maxLength:2,",
+				"minLength:2,",
+				"maxItems:2,",
+				"minItems:2",
+			"}]}}}"
+		})
+	)
 	public static class NA05 {		
 		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",type="$L{foo}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void na05_query_type_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new NA05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
-		assertEquals("l-foo", getSwaggerWithFile(new NA05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
-	}
-	
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/type
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NB01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nb01_query_description_default() throws Exception {
-		assertEquals(null, getSwagger(new NB01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-		assertEquals("s-description", getSwaggerWithFile(new NB01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',description:'a-description'}]}}}"))
-	public static class NB02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nb02_query_description_swaggerOnClass() throws Exception {
-		assertEquals("a-description", getSwagger(new NB02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-		assertEquals("a-description", getSwaggerWithFile(new NB02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',description:'a-description'}]}}}"))
-	public static class NB03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',description:'b-description'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nb03_query_description_swaggerOnMethod() throws Exception {
-		assertEquals("b-description", getSwagger(new NB03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-		assertEquals("b-description", getSwaggerWithFile(new NB03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',description:'a-description'}]}}}"))
-	public static class NB04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",description="c-description") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nb04_query_description_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-description", getSwagger(new NB04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-		assertEquals("c-description", getSwaggerWithFile(new NB04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',description:'a-description'}]}}}"))
-	public static class NB05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",description="$L{foo}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nb05_query_description_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new NB05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-		assertEquals("l-foo", getSwaggerWithFile(new NB05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getDescription());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/required
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NC01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nc01_query_required_default() throws Exception {
-		assertEquals(null, getSwagger(new NC01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-		assertObjectEquals("true", getSwaggerWithFile(new NC01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',required:false}]}}}"))
-	public static class NC02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nc02_query_required_swaggerOnClass() throws Exception {
-		assertObjectEquals("false", getSwagger(new NC02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-		assertObjectEquals("false", getSwaggerWithFile(new NC02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',required:false}]}}}"))
-	public static class NC03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',required:'true'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nc03_query_required_swaggerOnMethod() throws Exception {
-		assertObjectEquals("true", getSwagger(new NC03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-		assertObjectEquals("true", getSwaggerWithFile(new NC03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',required:false}]}}}"))
-	public static class NC04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",required="true") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nc04_query_required_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("true", getSwagger(new NC04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-		assertObjectEquals("true", getSwaggerWithFile(new NC04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',required:false}]}}}"))
-	public static class NC05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",required="$L{false}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nc05_query_required_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("false", getSwagger(new NC05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-		assertObjectEquals("false", getSwaggerWithFile(new NC05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getRequired());
-	}
-
-	@RestResource()
-	public static class NC06 {		
-		@RestMethod(name=GET,path="/path/{foo}/path")
-		public Foo doFoo(@Path(name="foo") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nc06_path_required_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("true", getSwagger(new NC06()).getPaths().get("/path/{foo}/path").get("get").getParameter("path", "foo").getRequired());
-		assertObjectEquals("true", getSwaggerWithFile(new NC06()).getPaths().get("/path/{foo}/path").get("get").getParameter("path", "foo").getRequired());
-	}
-	
-	@RestResource()
-	public static class NC07 {		
-		@RestMethod(name=GET,path="/path/{foo}/body")
-		public Foo doFoo(@Body() Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nc07_body_required_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("true", getSwagger(new NC07()).getPaths().get("/path/{foo}/body").get("get").getParameter("body", null).getRequired());
-		assertObjectEquals("true", getSwaggerWithFile(new NC07()).getPaths().get("/path/{foo}/body").get("get").getParameter("body", null).getRequired());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/allowEmptyValue
-	//=================================================================================================================
-
-	@RestResource()
-	public static class ND01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nd01_query_allowEmptyValue_default() throws Exception {
-		assertEquals(null, getSwagger(new ND01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-		assertObjectEquals("true", getSwaggerWithFile(new ND01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',allowEmptyValue:false}]}}}"))
-	public static class ND02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nd02_query_allowEmptyValue_swaggerOnClass() throws Exception {
-		assertObjectEquals("false", getSwagger(new ND02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-		assertObjectEquals("false", getSwaggerWithFile(new ND02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',allowEmptyValue:false}]}}}"))
-	public static class ND03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',allowEmptyValue:'true'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nd03_query_allowEmptyValue_swaggerOnMethod() throws Exception {
-		assertObjectEquals("true", getSwagger(new ND03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-		assertObjectEquals("true", getSwaggerWithFile(new ND03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',allowEmptyValue:false}]}}}"))
-	public static class ND04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",allowEmptyValue="true") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nd04_query_allowEmptyValue_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("true", getSwagger(new ND04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-		assertObjectEquals("true", getSwaggerWithFile(new ND04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',allowEmptyValue:false}]}}}"))
-	public static class ND05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",allowEmptyValue="$L{false}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nd05_query_allowEmptyValue_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("false", getSwagger(new ND05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-		assertObjectEquals("false", getSwaggerWithFile(new ND05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getAllowEmptyValue());
-	}
-	
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/exclusiveMaximum
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NE01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ne01_query_exclusiveMaximum_default() throws Exception {
-		assertEquals(null, getSwagger(new NE01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-		assertObjectEquals("true", getSwaggerWithFile(new NE01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMaximum:false}]}}}"))
-	public static class NE02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ne02_query_exclusiveMaximum_swaggerOnClass() throws Exception {
-		assertObjectEquals("false", getSwagger(new NE02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-		assertObjectEquals("false", getSwaggerWithFile(new NE02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMaximum:false}]}}}"))
-	public static class NE03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',exclusiveMaximum:'true'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ne03_query_exclusiveMaximum_swaggerOnMethod() throws Exception {
-		assertObjectEquals("true", getSwagger(new NE03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-		assertObjectEquals("true", getSwaggerWithFile(new NE03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMaximum:false}]}}}"))
-	public static class NE04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",exclusiveMaximum="true") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void ne04_query_exclusiveMaximum_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("true", getSwagger(new NE04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-		assertObjectEquals("true", getSwaggerWithFile(new NE04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMaximum:false}]}}}"))
-	public static class NE05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",exclusiveMaximum="$L{false}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void ne05_query_exclusiveMaximum_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("false", getSwagger(new NE05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-		assertObjectEquals("false", getSwaggerWithFile(new NE05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMaximum());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/exclusiveMinimum
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NF01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nf01_query_exclusiveMinimum_default() throws Exception {
-		assertEquals(null, getSwagger(new NF01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-		assertObjectEquals("true", getSwaggerWithFile(new NF01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMinimum:false}]}}}"))
-	public static class NF02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nf02_query_exclusiveMinimum_swaggerOnClass() throws Exception {
-		assertObjectEquals("false", getSwagger(new NF02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-		assertObjectEquals("false", getSwaggerWithFile(new NF02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMinimum:false}]}}}"))
-	public static class NF03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',exclusiveMinimum:'true'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nf03_query_exclusiveMinimum_swaggerOnMethod() throws Exception {
-		assertObjectEquals("true", getSwagger(new NF03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-		assertObjectEquals("true", getSwaggerWithFile(new NF03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMinimum:false}]}}}"))
-	public static class NF04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",exclusiveMinimum="true") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nf04_query_exclusiveMinimum_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("true", getSwagger(new NF04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-		assertObjectEquals("true", getSwaggerWithFile(new NF04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',exclusiveMinimum:false}]}}}"))
-	public static class NF05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",exclusiveMinimum="$L{false}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nf05_query_exclusiveMinimum_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("false", getSwagger(new NF05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-		assertObjectEquals("false", getSwaggerWithFile(new NF05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExclusiveMinimum());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/uniqueItems
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NG01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ng01_query_uniqueItems_default() throws Exception {
-		assertEquals(null, getSwagger(new NG01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-		assertObjectEquals("true", getSwaggerWithFile(new NG01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',uniqueItems:false}]}}}"))
-	public static class NG02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ng02_query_uniqueItems_swaggerOnClass() throws Exception {
-		assertObjectEquals("false", getSwagger(new NG02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-		assertObjectEquals("false", getSwaggerWithFile(new NG02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',uniqueItems:false}]}}}"))
-	public static class NG03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',uniqueItems:'true'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ng03_query_uniqueItems_swaggerOnMethod() throws Exception {
-		assertObjectEquals("true", getSwagger(new NG03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-		assertObjectEquals("true", getSwaggerWithFile(new NG03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',uniqueItems:false}]}}}"))
-	public static class NG04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",uniqueItems="true") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void ng04_query_uniqueItems_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("true", getSwagger(new NG04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-		assertObjectEquals("true", getSwaggerWithFile(new NG04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',uniqueItems:false}]}}}"))
-	public static class NG05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",uniqueItems="$L{false}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void ng05_query_uniqueItems_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("false", getSwagger(new NG05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-		assertObjectEquals("false", getSwaggerWithFile(new NG05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getUniqueItems());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/format
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NH01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nh01_query_format_default() throws Exception {
-		assertEquals(null, getSwagger(new NH01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-		assertEquals("s-format", getSwaggerWithFile(new NH01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',format:'a-format'}]}}}"))
-	public static class NH02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nh02_query_format_swaggerOnClass() throws Exception {
-		assertEquals("a-format", getSwagger(new NH02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-		assertEquals("a-format", getSwaggerWithFile(new NH02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',format:'a-format'}]}}}"))
-	public static class NH03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',format:'b-format'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nh03_query_format_swaggerOnMethod() throws Exception {
-		assertEquals("b-format", getSwagger(new NH03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-		assertEquals("b-format", getSwaggerWithFile(new NH03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',format:'a-format'}]}}}"))
-	public static class NH04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",format="c-format") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nh04_query_format_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-format", getSwagger(new NH04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-		assertEquals("c-format", getSwaggerWithFile(new NH04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',format:'a-format'}]}}}"))
-	public static class NH05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",format="$L{foo}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nh05_query_format_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new NH05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-		assertEquals("l-foo", getSwaggerWithFile(new NH05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getFormat());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/collectionFormat
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class NI01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ni01_query_collectionFormat_default() throws Exception {
-		assertEquals(null, getSwagger(new NI01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-		assertEquals("s-collectionFormat", getSwaggerWithFile(new NI01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',collectionFormat:'a-collectionFormat'}]}}}"))
-	public static class NI02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ni02_query_collectionFormat_swaggerOnClass() throws Exception {
-		assertEquals("a-collectionFormat", getSwagger(new NI02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-		assertEquals("a-collectionFormat", getSwaggerWithFile(new NI02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',collectionFormat:'a-collectionFormat'}]}}}"))
-	public static class NI03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',collectionFormat:'b-collectionFormat'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void ni03_query_collectionFormat_swaggerOnMethod() throws Exception {
-		assertEquals("b-collectionFormat", getSwagger(new NI03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-		assertEquals("b-collectionFormat", getSwaggerWithFile(new NI03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',collectionFormat:'a-collectionFormat'}]}}}"))
-	public static class NI04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",collectionFormat="c-collectionFormat") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void ni04_query_collectionFormat_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-collectionFormat", getSwagger(new NI04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-		assertEquals("c-collectionFormat", getSwaggerWithFile(new NI04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',collectionFormat:'a-collectionFormat'}]}}}"))
-	public static class NI05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",collectionFormat="$L{foo}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void ni05_query_collectionFormat_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new NI05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-		assertEquals("l-foo", getSwaggerWithFile(new NI05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getCollectionFormat());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/pattern
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NJ01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nj01_query_pattern_default() throws Exception {
-		assertEquals(null, getSwagger(new NJ01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-		assertEquals("s-pattern", getSwaggerWithFile(new NJ01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',pattern:'a-pattern'}]}}}"))
-	public static class NJ02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nj02_query_pattern_swaggerOnClass() throws Exception {
-		assertEquals("a-pattern", getSwagger(new NJ02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-		assertEquals("a-pattern", getSwaggerWithFile(new NJ02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',pattern:'a-pattern'}]}}}"))
-	public static class NJ03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',pattern:'b-pattern'}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nj03_query_pattern_swaggerOnMethod() throws Exception {
-		assertEquals("b-pattern", getSwagger(new NJ03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-		assertEquals("b-pattern", getSwaggerWithFile(new NJ03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',pattern:'a-pattern'}]}}}"))
-	public static class NJ04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",pattern="c-pattern") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nj04_query_pattern_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-pattern", getSwagger(new NJ04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-		assertEquals("c-pattern", getSwaggerWithFile(new NJ04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',pattern:'a-pattern'}]}}}"))
-	public static class NJ05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",pattern="$L{foo}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nj05_query_pattern_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new NJ05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-		assertEquals("l-foo", getSwaggerWithFile(new NJ05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getPattern());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/maximum
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NK01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nk01_query_maximum_default() throws Exception {
-		assertEquals(null, getSwagger(new NK01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-		assertObjectEquals("1.0", getSwaggerWithFile(new NK01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maximum:2.0}]}}}"))
-	public static class NK02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nk02_query_maximum_swaggerOnClass() throws Exception {
-		assertObjectEquals("2.0", getSwagger(new NK02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-		assertObjectEquals("2.0", getSwaggerWithFile(new NK02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maximum:2.0}]}}}"))
-	public static class NK03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',maximum:3.0}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nk03_query_maximum_swaggerOnMethod() throws Exception {
-		assertObjectEquals("3.0", getSwagger(new NK03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-		assertObjectEquals("3.0", getSwaggerWithFile(new NK03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maximum:2.0}]}}}"))
-	public static class NK04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",maximum="4.0") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nk04_query_maximum_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("4.0", getSwagger(new NK04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-		assertObjectEquals("4.0", getSwaggerWithFile(new NK04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maximum:2.0}]}}}"))
-	public static class NK05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",maximum="$L{50}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nk05_query_maximum_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("5.0", getSwagger(new NK05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-		assertObjectEquals("5.0", getSwaggerWithFile(new NK05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaximum());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/minimum
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NL01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nl01_query_minimum_default() throws Exception {
-		assertEquals(null, getSwagger(new NL01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-		assertObjectEquals("1.0", getSwaggerWithFile(new NL01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minimum:2.0}]}}}"))
-	public static class NL02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nl02_query_minimum_swaggerOnClass() throws Exception {
-		assertObjectEquals("2.0", getSwagger(new NL02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-		assertObjectEquals("2.0", getSwaggerWithFile(new NL02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minimum:2.0}]}}}"))
-	public static class NL03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',minimum:3.0}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nl03_query_minimum_swaggerOnMethod() throws Exception {
-		assertObjectEquals("3.0", getSwagger(new NL03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-		assertObjectEquals("3.0", getSwaggerWithFile(new NL03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minimum:2.0}]}}}"))
-	public static class NL04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",minimum="4.0") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nl04_query_minimum_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("4.0", getSwagger(new NL04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-		assertObjectEquals("4.0", getSwaggerWithFile(new NL04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minimum:2.0}]}}}"))
-	public static class NL05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",minimum="$L{50}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nl05_query_minimum_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("5.0", getSwagger(new NL05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-		assertObjectEquals("5.0", getSwaggerWithFile(new NL05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinimum());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/multipleOf
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NM01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nm01_query_multipleOf_default() throws Exception {
-		assertEquals(null, getSwagger(new NM01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-		assertObjectEquals("1.0", getSwaggerWithFile(new NM01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',multipleOf:2.0}]}}}"))
-	public static class NM02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nm02_query_multipleOf_swaggerOnClass() throws Exception {
-		assertObjectEquals("2.0", getSwagger(new NM02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-		assertObjectEquals("2.0", getSwaggerWithFile(new NM02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',multipleOf:2.0}]}}}"))
-	public static class NM03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',multipleOf:3.0}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nm03_query_multipleOf_swaggerOnMethod() throws Exception {
-		assertObjectEquals("3.0", getSwagger(new NM03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-		assertObjectEquals("3.0", getSwaggerWithFile(new NM03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',multipleOf:2.0}]}}}"))
-	public static class NM04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",multipleOf="4.0") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nm04_query_multipleOf_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("4.0", getSwagger(new NM04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-		assertObjectEquals("4.0", getSwaggerWithFile(new NM04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',multipleOf:2.0}]}}}"))
-	public static class NM05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",multipleOf="$L{50}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nm05_query_multipleOf_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("5.0", getSwagger(new NM05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-		assertObjectEquals("5.0", getSwaggerWithFile(new NM05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMultipleOf());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/maxLength
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NN01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nn01_query_maxLength_default() throws Exception {
-		assertEquals(null, getSwagger(new NN01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-		assertObjectEquals("1", getSwaggerWithFile(new NN01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxLength:2}]}}}"))
-	public static class NN02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nn02_query_maxLength_swaggerOnClass() throws Exception {
-		assertObjectEquals("2", getSwagger(new NN02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-		assertObjectEquals("2", getSwaggerWithFile(new NN02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxLength:2}]}}}"))
-	public static class NN03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',maxLength:3}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nn03_query_maxLength_swaggerOnMethod() throws Exception {
-		assertObjectEquals("3", getSwagger(new NN03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-		assertObjectEquals("3", getSwaggerWithFile(new NN03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxLength:2}]}}}"))
-	public static class NN04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",maxLength="4") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nn04_query_maxLength_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("4", getSwagger(new NN04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-		assertObjectEquals("4", getSwaggerWithFile(new NN04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxLength:2}]}}}"))
-	public static class NN05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",maxLength="$L{5}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nn05_query_maxLength_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("5", getSwagger(new NN05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-		assertObjectEquals("5", getSwaggerWithFile(new NN05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxLength());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/minLength
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NO01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void no01_query_minLength_default() throws Exception {
-		assertEquals(null, getSwagger(new NO01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-		assertObjectEquals("1", getSwaggerWithFile(new NO01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minLength:2}]}}}"))
-	public static class NO02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void no02_query_minLength_swaggerOnClass() throws Exception {
-		assertObjectEquals("2", getSwagger(new NO02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-		assertObjectEquals("2", getSwaggerWithFile(new NO02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minLength:2}]}}}"))
-	public static class NO03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',minLength:3}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void no03_query_minLength_swaggerOnMethod() throws Exception {
-		assertObjectEquals("3", getSwagger(new NO03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-		assertObjectEquals("3", getSwaggerWithFile(new NO03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minLength:2}]}}}"))
-	public static class NO04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",minLength="4") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void no04_query_minLength_swaggerOnAnootation() throws Exception {
-		assertObjectEquals("4", getSwagger(new NO04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-		assertObjectEquals("4", getSwaggerWithFile(new NO04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minLength:2}]}}}"))
-	public static class NO05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",minLength="$L{5}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void no05_query_minLength_swaggerOnAnootation_localized() throws Exception {
-		assertObjectEquals("5", getSwagger(new NO05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-		assertObjectEquals("5", getSwaggerWithFile(new NO05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinLength());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/maxItems
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NP01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void np01_query_maxItems_default() throws Exception {
-		assertEquals(null, getSwagger(new NP01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-		assertObjectEquals("1", getSwaggerWithFile(new NP01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxItems:2}]}}}"))
-	public static class NP02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void np02_query_maxItems_swaggerOnClass() throws Exception {
-		assertObjectEquals("2", getSwagger(new NP02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-		assertObjectEquals("2", getSwaggerWithFile(new NP02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxItems:2}]}}}"))
-	public static class NP03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',maxItems:3}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void np03_query_maxItems_swaggerOnMethod() throws Exception {
-		assertObjectEquals("3", getSwagger(new NP03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-		assertObjectEquals("3", getSwaggerWithFile(new NP03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxItems:2}]}}}"))
-	public static class NP04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",maxItems="4") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void np04_query_maxItems_swaggerOnAnpotation() throws Exception {
-		assertObjectEquals("4", getSwagger(new NP04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-		assertObjectEquals("4", getSwaggerWithFile(new NP04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',maxItems:2}]}}}"))
-	public static class NP05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",maxItems="$L{5}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void np05_query_maxItems_swaggerOnAnpotation_localized() throws Exception {
-		assertObjectEquals("5", getSwagger(new NP05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-		assertObjectEquals("5", getSwaggerWithFile(new NP05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMaxItems());
-	}
-
-	//=================================================================================================================
-	// /paths/<path>/<method>/parameters/query/minItems
-	//=================================================================================================================
-
-	@RestResource()
-	public static class NQ01 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nq01_query_minItems_default() throws Exception {
-		assertEquals(null, getSwagger(new NQ01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-		assertObjectEquals("1", getSwaggerWithFile(new NQ01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minItems:2}]}}}"))
-	public static class NQ02 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query("foo") Foo foo) {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nq02_query_minItems_swaggerOnClass() throws Exception {
-		assertObjectEquals("2", getSwagger(new NQ02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-		assertObjectEquals("2", getSwaggerWithFile(new NQ02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minItems:2}]}}}"))
-	public static class NQ03 {		
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',minItems:3}]"))
-		public Foo doFoo() {
-			return null;
-		}
-	}
-	
-	@Test
-	public void nq03_query_minItems_swaggerOnMethod() throws Exception {
-		assertObjectEquals("3", getSwagger(new NQ03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-		assertObjectEquals("3", getSwaggerWithFile(new NQ03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-	}
-
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minItems:2}]}}}"))
-	public static class NQ04 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",minItems="4") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nq04_query_minItems_swaggerOnAnqotation() throws Exception {
-		assertObjectEquals("4", getSwagger(new NQ04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-		assertObjectEquals("4", getSwaggerWithFile(new NQ04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-	}
-
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',minItems:2}]}}}"))
-	public static class NQ05 {		
-		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",minItems="$L{5}") Foo foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void nq05_query_minItems_swaggerOnAnqotation_localized() throws Exception {
-		assertObjectEquals("5", getSwagger(new NQ05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
-		assertObjectEquals("5", getSwaggerWithFile(new NQ05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getMinItems());
+		public Foo doFoo(
+			@Query(
+				name="foo",
+				type="$L{foo}",
+				description="$L{foo}",
+				required="$L{false}",
+				allowEmptyValue="$L{false}",
+				exclusiveMaximum="$L{false}",
+				exclusiveMinimum="$L{false}",
+				uniqueItems="$L{false}",
+				format="$L{foo}",
+				collectionFormat="$L{foo}",
+				pattern="$L{foo}",
+				maximum="$L{50}",
+				minimum="$L{50}",
+				multipleOf="$L{50}",
+				maxLength="$L{5}",
+				minLength="$L{5}",
+				maxItems="$L{5}",
+				minItems="$L{5}"
+			) Foo foo) {
+			return null;
+		}
+	}
+
+	@Test
+	public void na05a_query_type_swaggerOnAnnotation_localized() throws Exception {
+		ParameterInfo x = getSwagger(new NA05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("l-foo", x.getType());
+		assertEquals("l-foo", x.getDescription());
+		assertObjectEquals("false", x.getRequired());
+		assertObjectEquals("false", x.getAllowEmptyValue());
+		assertObjectEquals("false", x.getExclusiveMaximum());
+		assertObjectEquals("false", x.getExclusiveMinimum());
+		assertObjectEquals("false", x.getUniqueItems());
+		assertEquals("l-foo", x.getFormat());
+		assertEquals("l-foo", x.getCollectionFormat());
+		assertEquals("l-foo", x.getPattern());
+		assertObjectEquals("5.0", x.getMaximum());
+		assertObjectEquals("5.0", x.getMinimum());
+		assertObjectEquals("5.0", x.getMultipleOf());
+		assertObjectEquals("5", x.getMaxLength());
+		assertObjectEquals("5", x.getMinLength());
+		assertObjectEquals("5", x.getMaxItems());
+		assertObjectEquals("5", x.getMinItems());
+	}
+	@Test
+	public void na05b_query_type_swaggerOnAnnotation_localized_withFile() throws Exception {
+		ParameterInfo x = getSwaggerWithFile(new NA05()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		assertEquals("l-foo", x.getType());
+		assertEquals("l-foo", x.getDescription());
+		assertObjectEquals("false", x.getRequired());
+		assertObjectEquals("false", x.getAllowEmptyValue());
+		assertObjectEquals("false", x.getExclusiveMaximum());
+		assertObjectEquals("false", x.getExclusiveMinimum());
+		assertObjectEquals("false", x.getUniqueItems());
+		assertEquals("l-foo", x.getFormat());
+		assertEquals("l-foo", x.getCollectionFormat());
+		assertEquals("l-foo", x.getPattern());
+		assertObjectEquals("5.0", x.getMaximum());
+		assertObjectEquals("5.0", x.getMinimum());
+		assertObjectEquals("5.0", x.getMultipleOf());
+		assertObjectEquals("5", x.getMaxLength());
+		assertObjectEquals("5", x.getMinLength());
+		assertObjectEquals("5", x.getMaxItems());
+		assertObjectEquals("5", x.getMinItems());
 	}
 
 	//=================================================================================================================
@@ -3511,2484 +2363,6 @@ public class BasicRestInfoProviderTest {
 	public void oe05_response_100_schema_swaggerOnAnnotation_loealized() throws Exception {
 		assertObjectEquals("{'$ref':'l-foo'}", getSwagger(new OE05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 		assertObjectEquals("{'$ref':'l-foo'}", getSwaggerWithFile(new OE05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
-	}
-
-	//=================================================================================================================
-	// @Header on POJO
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class PA {
-
-		@Header(
-			name="H", 
-			_default="a",
-			allowEmptyValue="true",
-			collectionFormat="A",
-			description={"a","b"},
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			format="a",
-			maximum="1",
-			maxItems="1",
-			maxLength="1",
-			minimum="1",
-			minItems="1",
-			minLength="1",
-			multipleOf="1",
-			pattern="a",
-			required="true",
-			type="a",
-			uniqueItems="true",
-			_enum="A,B,C",
-			example="a",
-			items=@Items(type="a"),
-			schema=@Schema(type="a")
-		)
-		public static class PA00 {
-			public PA00(String x) {}
-		}
-
-		@RestMethod(name=GET,path="/basic")
-		public void pa00(PA00 h) {}
-		
-		@Header(name="H", _enum="['A','B','C']")
-		public static class PA03 {}
-		
-		@RestMethod(name=GET,path="/_enum2")
-		public void pa03(PA03 h) {}
-		
-		@Header(name="H", example="{f1:'a'}")
-		public static class PA08b {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void pa08b(PA08b h) {}
-		
-		@Header(name="H", items=@Items(" type:'a' "))
-		public static class PA13 {}
-		
-		@RestMethod(name=GET,path="/items2")
-		public void pa13(PA13 h) {}
-		
-		@Header(name="H", schema=@Schema(" type:'a' "))
-		public static class PA23b {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void pa23(PA23b h) {}
-
-		@Header(name="H")
-		public static class PA23c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void pa23c(PA23c b) {}
-
-		@Header(name="H")
-		public static class PA23d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void pa23d(PA23d b) {}
-
-		@Header(name="H")
-		public static class PA23e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void pa23e(PA23e b) {}
-	}
-	
-	@Test
-	public void pa00_Header_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/basic").get("get").getParameter("header", "H");
-		assertObjectEquals("'a'", x.getDefault());
-		assertEquals(true, x.getAllowEmptyValue());
-		assertEquals("A", x.getCollectionFormat());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals(true, x.getExclusiveMaximum());
-		assertEquals(true, x.getExclusiveMinimum());
-		assertEquals("a", x.getFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("'a'", x.getPattern());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("'a'", x.getType());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("['A','B','C']", x.getEnum());
-		assertEquals("a", x.getExample());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-	}
-	@Test
-	public void pa03_Header_onPojo_enum2() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/_enum2").get("get").getParameter("header", "H");
-		assertObjectEquals("['A','B','C']", x.getEnum());
-	}
-	@Test
-	public void pa08b_Header_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/example2").get("get").getParameter("header", "H");
-		assertObjectEquals("{f1:'a'}", x.getExample());
-	}
-	@Test
-	public void pa13_Header_onPojo_items2() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/items2").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'a'}", x.getItems());
-	}
-	@Test
-	public void pa23b_Header_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/schema2").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'a'}", x.getSchema());
-	}
-	@Test
-	public void pa23c_Header_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/schema3").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void pa23d_Header_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/schema4").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void pa23e_Header_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new PA()).getPaths().get("/schema5").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-
-	//=================================================================================================================
-	// @Header on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class PB {
-
-		@RestMethod(name=GET,path="/basic")
-		public void pb00(
-			@Header(
-				name="H",
-				description={"a","b"},
-				type="a",
-				format="a",
-				pattern="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				allowEmptyValue="true",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				schema=@Schema(type="a"),
-				_default="a",
-				_enum="a,b",
-				items=@Items(type="a"),
-				example="a,b"
-			) String h) {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void pb02(@Header("H") String h) {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void pb19b(@Header(name="H", schema=@Schema(" type:'b' ")) String h) {}
-
-		public static class PB19c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void pb19c(@Header("H") PB19c b) {}
-
-		public static class PB19d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void pb19d(@Header("H") PB19d b) {}
-
-		public static class PB19e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void pb19e(@Header("H") PB19e b) {}
-
-		@RestMethod(name=GET,path="/schema6")
-		public void pb19f(@Header("H") Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7")
-		public void pb19g(@Header("H") Boolean b) {}
-
-		@RestMethod(name=GET,path="/_default2")
-		public void pb20b(@Header(name="H", _default={"a","b"}) String h) {}
-
-		@RestMethod(name=GET,path="/_enum2")
-		public void pb21b(@Header(name="H", _enum={"['a','b']"}) String h) {}
-
-		@RestMethod(name=GET,path="/items2")
-		public void pb22b(@Header(name="H", items=@Items(" type:'b' ")) String h) {}
-
-		@RestMethod(name=GET,path="/example2")
-		public void pb23b(@Header(name="H", example={"a","b"}) String h) {}
-	}
-
-	@Test
-	public void pb00_Header_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/basic").get("get").getParameter("header", "H");
-		assertEquals("H", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("'a'", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a,b", x.getExample());
-	}
-	@Test
-	public void pb02_Header_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/value").get("get").getParameter("header", "H");
-		assertEquals("H", x.getName());
-	}
-	@Test
-	public void pb19b_Header_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/schema2").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void pb19c_Header_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/schema3").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void pb19d_Header_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/schema4").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void pb19e_Header_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/schema5").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void pb19f_Header_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/schema6").get("get").getParameter("header", "H");
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
-	}
-	@Test
-	public void pb19g_Header_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/schema7").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
-	}
-	@Test
-	public void pb20b_Header_onParameter__default2() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/_default2").get("get").getParameter("header", "H");
-		assertObjectEquals("'a\\nb'", x.getDefault());
-	}
-	@Test
-	public void pb21b_Header_onParameter__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/_enum2").get("get").getParameter("header", "H");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void pb22b_Header_onParameter_items2() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/items2").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'b'}", x.getItems());
-	}
-	@Test
-	public void pb23b_Header_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new PB()).getPaths().get("/example2").get("get").getParameter("header", "H");
-		assertEquals("a\nb", x.getExample());
-	}
-
-	
-	//=================================================================================================================
-	// @Query on POJO
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class QA {
-
-		@Query(
-			name="Q", 
-			description= {"a","b"},
-			required="true",
-			type="a",
-			format="a",
-			pattern="a",
-			collectionFormat="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			maxItems="1",
-			minItems="1",
-			allowEmptyValue="true",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			uniqueItems="true",
-			schema=@Schema(type="a"),
-			_default="a",
-			_enum="a, b",
-			items=@Items(type="a"),
-			example="'a'"
-		)
-		public static class QA00 {
-			public QA00(String x) {}
-		}
-		
-		@RestMethod(name=GET, path="/basic")
-		public void qa00(QA00 q) {}
-
-		@Query("Q")
-		public static class QA01 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void qa01(QA01 q) {}
-
-		@Query(name="Q", schema=@Schema(" type:'b' "))
-		public static class QA19b {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void qa19b(QA19b q) {}
-
-		@Query("Q")
-		public static class QA19c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void qa19c(QA19c q) {}
-
-		@Query("Q")
-		public static class QA19d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void qa19d(QA19d q) {}
-
-		@Query("Q")
-		public static class QA19e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void qa19e(QA19e q) {}
-		
-		@Query(name="Q", _default={"a","b"})
-		public static class QA21b {}
-		
-		@RestMethod(name=GET,path="/_default2")
-		public void qa21b(QA21b q) {}
-
-		@Query(name="Q", _enum={" ['a','b'] "})
-		public static class QA22b {}
-		
-		@RestMethod(name=GET,path="/_enum2")
-		public void qa22b(QA22b q) {}
-
-		@Query(name="Q", items=@Items(" type: 'b' "))
-		public static class QA23b {}
-		
-		@RestMethod(name=GET,path="/items2")
-		public void qa23b(QA23b q) {}
-
-		@Query(name="Q", example={"{f1:'a'}"})
-		public static class QA24b {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void qa24b(QA24b q) {}
-	}
-	
-	@Test
-	public void qa00a_Query_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/basic").get("get").getParameter("query", "Q");
-		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("'a'", x.getExample());
-	}
-	@Test
-	public void qa01_Query_onPojo_value() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/value").get("get").getParameter("query", "Q");
-		assertEquals("Q", x.getName());
-	}
-	@Test
-	public void qa19b_Query_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/schema2").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void qa19c_Query_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/schema3").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void qa19d_Query_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/schema4").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void qa19e_Query_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/schema5").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void qa21b_Query_onPojo_default2() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/_default2").get("get").getParameter("query", "Q");
-		assertEquals("a\nb", x.getDefault());
-	}
-	@Test
-	public void qa22b_Query_onPojo_enum2() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/_enum2").get("get").getParameter("query", "Q");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void qa23b_Query_onPojo_items2() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/items2").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'b'}", x.getItems());
-	}
-	@Test
-	public void qa24b_Query_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new QA()).getPaths().get("/example2").get("get").getParameter("query", "Q");
-		assertObjectEquals("{f1:'a'}", x.getExample());
-	}
-		
-	//=================================================================================================================
-	// @Query on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class QB {
-		
-		@RestMethod(name=GET,path="/basic")
-		public void qb00(
-			@Query(
-				name="Q",
-				description= {"a","b"},
-				required="true",
-				type="a",
-				format="a",
-				pattern="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				allowEmptyValue="true",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				schema=@Schema(type="a"),
-				_default="a",
-				_enum="a,b",
-				items=@Items(type="a"),
-				example="a"
-			) 
-			String q) {}
-
-		@RestMethod(name=GET,path="/value")
-		public void qb02(@Query("Q") String q) {}
-
-		@RestMethod(name=GET,path="/schema2")
-		public void qb19b(@Query(name="Q", schema=@Schema( " type: 'b' ")) String q) {}
-
-		public static class TB18c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void tb18c(@Body TB18c b) {}
-
-		public static class TB18d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void tb18d(@Body TB18d b) {}
-
-		public static class TB18e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void tb18e(@Body TB18e b) {}
-
-		@RestMethod(name=GET,path="/schema6")
-		public void tb18f(@Body Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7")
-		public void tb18g(@Body Boolean b) {}
-
-		@RestMethod(name=GET,path="/_default2")
-		public void qb20b(@Query(name="Q", _default={"a","b"}) String q) {}
-
-		@RestMethod(name=GET,path="/_enum2")
-		public void qb21b(@Query(name="Q", _enum= {" ['a','b'] "}) String q) {}
-
-		@RestMethod(name=GET,path="/items2")
-		public void qb22b(@Query(name="Q", items=@Items(" type:'b' ")) String q) {}
-
-		@RestMethod(name=GET,path="/example2")
-		public void qb23b(@Query(name="Q", example={"a","b"}) String q) {}
-	}
-	
-	@Test
-	public void qb00_Query_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new QB()).getPaths().get("/basic").get("get").getParameter("query", "Q");
-		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a", x.getExample());
-	}
-	@Test
-	public void qb02_Query_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new QB()).getPaths().get("/value").get("get").getParameter("query", "Q");
-		assertEquals("Q", x.getName());
-	}
-	@Test
-	public void qb19b_Query_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new QB()).getPaths().get("/schema2").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void qb20b_Query_onParameter__default2() throws Exception {
-		ParameterInfo x = getSwagger(new QB()).getPaths().get("/_default2").get("get").getParameter("query", "Q");
-		assertEquals("a\nb", x.getDefault());
-	}
-	@Test
-	public void qb21b_Query_onParameter__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new QB()).getPaths().get("/_enum2").get("get").getParameter("query", "Q");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void qb22b_Query_onParameter_items2() throws Exception {
-		ParameterInfo x = getSwagger(new QB()).getPaths().get("/items2").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'b'}", x.getItems());
-	}
-	@Test
-	public void qb23b_Query_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new QB()).getPaths().get("/example2").get("get").getParameter("query", "Q");
-		assertEquals("a\nb", x.getExample());
-	}
-
-	//=================================================================================================================
-	// @FormData on POJO
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class RA {
-
-		@FormData(
-			name="F",
-			description= {"a","b"},
-			required="true",
-			type="a",
-			format="a",
-			pattern="a",
-			collectionFormat="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			maxItems="1",
-			minItems="1",
-			allowEmptyValue="true",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			uniqueItems="true",
-			schema=@Schema(type="a"),
-			_default="a",
-			_enum=" a,b ",
-			items=@Items(type="a"),
-			example="a"
-		)
-		public static class RA00 {
-			public RA00(String x) {}
-		}
-		
-		@RestMethod(name=GET,path="/basic")
-		public void ra00(RA00 f) {}
-
-		@FormData("F")
-		public static class RA02 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void ra02(RA02 f) {}
-		
-		@FormData(name="F", schema=@Schema(" type:'b' "))
-		public static class RA20b {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void ra20b(RA20b f) {}
-
-		@FormData("F")
-		public static class RA20c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void ra20c(RA20c f) {}
-
-		@FormData("F")
-		public static class RA20d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void ra20d(RA20d f) {}
-
-		@FormData("F")
-		public static class RA20e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void ra20e(RA20e f) {}
-
-		@FormData(name="F", _default={"a","b"})
-		public static class RA23 {}
-		
-		@RestMethod(name=GET,path="/_default2")
-		public void ra23(RA23 f) {}
-
-		@FormData(name="F", _enum={ "['a','b']" })
-		public static class RA25 {}
-		
-		@RestMethod(name=GET,path="/_enum2")
-		public void ra25(RA25 f) {}
-
-		@FormData(name="F", items=@Items(" type:'b' "))
-		public static class RA27 {}
-		
-		@RestMethod(name=GET,path="/items2")
-		public void ra27(RA27 f) {}
-
-		@FormData(name="F", example={"{f1:'a'}"})
-		public static class RA29 {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void ra29(RA29 f) {}
-	}
-	
-	@Test
-	public void ra00_FormData_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/basic").get("get").getParameter("formData", "F");
-		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a", x.getExample());
-	}
-	@Test
-	public void ra02_FormData_onPojo_value() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/value").get("get").getParameter("formData", "F");
-		assertEquals("F", x.getName());
-	}
-	@Test
-	public void ra20b_FormData_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/schema2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void ra20c_FormData_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/schema3").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void ra20d_FormData_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/schema4").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void ra20e_FormData_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/schema5").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void ra23_FormData_onPojo__default2() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/_default2").get("get").getParameter("formData", "F");
-		assertEquals("a\nb", x.getDefault());
-	}
-	@Test
-	public void ra25_FormData_onPojo__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/_enum2").get("get").getParameter("formData", "F");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void ra27_FormData_onPojo_items2() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/items2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getItems());
-	}
-	@Test
-	public void ra29_FormData_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new RA()).getPaths().get("/example2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{f1:'a'}", x.getExample());
-	}
-	
-	//=================================================================================================================
-	// @FormData on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class RB {
-
-		@RestMethod(name=GET,path="/basic")
-		public void rb00(
-			@FormData(
-				name="F",
-				description={"a","b"},
-				required="true",
-				type="a",
-				format="a",
-				pattern="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				allowEmptyValue="true",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				schema=@Schema(type="a"),
-				_default="a",
-				_enum="a,b",
-				items=@Items(type="a"),
-				example="'a'"
-			) String f) {}
-
-		@RestMethod(name=GET,path="/value")
-		public void rb02(@FormData("F") String f) {}
-
-		@RestMethod(name=GET,path="/schema2")
-		public void rb21b(@FormData(name="F", schema=@Schema(" type:'b' ")) String f) {}
-
-		public static class RB21c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void rb21c(@FormData("F") RB21c b) {}
-
-		public static class RB21d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void rb21d(@FormData("F") RB21d b) {}
-
-		public static class RB21e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void rb21e(@FormData("F") RB21e b) {}
-
-		@RestMethod(name=GET,path="/schema6")
-		public void rb21f(@FormData("F") Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7")
-		public void rb21g(@FormData("F") Boolean b) {}
-		
-		@RestMethod(name=GET,path="/_default2")
-		public void rb24(@FormData(name="F", _default={"a","b"}) String f) {}
-
-		@RestMethod(name=GET,path="/_enum2")
-		public void rb26(@FormData(name="F", _enum={" ['a','b'] "}) String f) {}
-
-		@RestMethod(name=GET,path="/items2")
-		public void rb28(@FormData(name="F", items=@Items(" type:'b' ")) String f) {}
-
-		@RestMethod(name=GET,path="/example2")
-		public void rb30(@FormData(name="F", example="{f1:'a'}") String f) {}
-	}
-
-	@Test
-	public void rb00_FormData_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/basic").get("get").getParameter("formData", "F");
-		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("'a'", x.getExample());
-	}
-	@Test
-	public void rb02_FormData_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/value").get("get").getParameter("formData", "F");
-		assertEquals("F", x.getName());
-	}
-	@Test
-	public void rb21b_FormData_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/schema2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void rb21c_FormData_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/schema3").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void rb21d_FormData_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/schema4").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void rb21e_FormData_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/schema5").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void rb21f_FormData_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/schema6").get("get").getParameter("formData", "F");
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
-	}
-	@Test
-	public void rb21g_FormData_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/schema7").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
-	}
-	@Test
-	public void rb24_FormData_onParameter__default2() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/_default2").get("get").getParameter("formData", "F");
-		assertEquals("a\nb", x.getDefault());
-	}
-	@Test
-	public void rb26_FormData_onParameter__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/_enum2").get("get").getParameter("formData", "F");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void rb28_FormData_onParameter_items2() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/items2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getItems());
-	}
-	@Test
-	public void rb30_FormData_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new RB()).getPaths().get("/example2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{f1:'a'}", x.getExample());
-	}
-	
-	//=================================================================================================================
-	// @Path on POJO
-	//=================================================================================================================
-
-	@RestResource()
-	public static class SA {
-
-		@Path(
-			name="P",
-			description={"a","b"},
-			type="a",
-			format="a",
-			pattern="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			allowEmptyValue="true",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			schema=@Schema(type="a"),
-			_enum="a,b",
-			example="'a'"
-		)
-		public static class SA00 {
-			public SA00(String x) {}
-		}
-		
-		@RestMethod(name=GET,path="/basic/{P}")
-		public void sa00(SA00 f) {}
-
-		@Path("P")
-		public static class SA02 {}
-		
-		@RestMethod(name=GET,path="/value/{P}")
-		public void sa02(SA02 f) {}
-
-		@Path(name="P", description="a")
-		public static class SA03 {}
-		
-		@Path(name="P", schema=@Schema(" type:'b' "))
-		public static class SA16b {}
-		
-		@RestMethod(name=GET,path="/schema2/{P}")
-		public void sa16b(SA16b f) {}
-
-		@Path("P")
-		public static class SA16c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3/{P}")
-		public void sa16c(SA16c b) {}
-
-		@Path("P")
-		public static class SA16d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4/{P}")
-		public void sa16d(SA16d b) {}
-
-		@Path("P")
-		public static class SA16e {}
-
-		@RestMethod(name=GET,path="/schema5/{P}")
-		public void sa16e(SA16e b) {}
-
-		@Path(name="P", _enum={" ['a','b'] "})
-		public static class SA19 {}
-		
-		@RestMethod(name=GET,path="/_enum2/{P}")
-		public void sa19(SA19 f) {}
-
-		@Path(name="P", example={" {f1:'a'} "})
-		public static class SA21 {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2/{P}")
-		public void sa21(SA21 f) {}
-	}
-
-	@Test
-	public void sa00_Path_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
-		assertEquals("P", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
-	}
-	@Test
-	public void sa02_Path_onPojo_value() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/value/{P}").get("get").getParameter("path", "P");
-		assertEquals("P", x.getName());
-	}
-	@Test
-	public void sa16b_Path_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void sa16c_Path_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema3/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void sa16d_Path_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema4/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void sa16e_Path_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema5/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void sa19_Path_onPojo__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/_enum2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void sa21_Path_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/example2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{f1:'a'}", x.getExample());
-	}
-
-	//=================================================================================================================
-	// @Path on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class SB {
-
-		@RestMethod(name=GET,path="/basic/{P}")
-		public void sb00(@Path(
-			name="P",
-			description="a",
-			type="a",
-			format="a",
-			pattern="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			allowEmptyValue="true",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			schema=@Schema(type="a"),
-			_enum=" a,b ",
-			example="'a'"
-		) String h) {}
-
-		@RestMethod(name=GET,path="/value/{P}")
-		public void sb02(@Path("P") String h) {}
-
-		@RestMethod(name=GET,path="/schema2/{P}")
-		public void sb16b(@Path(name="P", schema=@Schema(" type:'b' ")) String h) {}
-
-		public static class SB16c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3/{P}")
-		public void sb16c(@Path("P") SB16c b) {}
-
-		public static class SB16d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4/{P}")
-		public void sb16d(@Path("P") SB16d b) {}
-
-		public static class SB16e {}
-
-		@RestMethod(name=GET,path="/schema5/{P}")
-		public void sb16e(@Path("P") SB16e b) {}
-
-		@RestMethod(name=GET,path="/schema6/{P}")
-		public void sb16f(@Path("P") Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7/{P}")
-		public void sb16g(@Path("P") Boolean b) {}
-		
-		@RestMethod(name=GET,path="/enum2/{P}")
-		public void sb19(@Path(name="P", _enum={" ['a','b'] "}) String h) {}
-
-		@RestMethod(name=GET,path="/example2/{P}")
-		public void sb21(@Path(name="P", example="{f1:'b'}") String h) {}
-	}
-	
-	@Test
-	public void sb00_Path_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
-		assertEquals("a", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
-	}
-	@Test
-	public void sb02_Path_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/value/{P}").get("get").getParameter("path", "P");
-		assertEquals("P", x.getName());
-	}
-	@Test
-	public void sb16b_Path_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void sb16c_Path_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema3/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void sb16d_Path_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema4/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void sb16e_Path_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema5/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void sb16f_Path_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema6/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
-	}
-	@Test
-	public void sb16g_Path_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema7/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
-	}
-	@Test
-	public void sb19_Path_onParameter__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/enum2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void sb21_Path_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/example2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-	
-	//=================================================================================================================
-	// @Body on POJO
-	//=================================================================================================================
-
-	@RestResource()
-	public static class TA {
-
-		@Body(
-			description={"a","b"},
-			required="true",
-			schema=@Schema(type="a"),
-			example=" 'a' ",
-			examples="{foo:'bar'}"
-		)
-		public static class TA00 {
-			public TA00(String x) {}
-		}
-		
-		@RestMethod(name=GET,path="/basic")
-		public void ta00(TA00 h) {}
-
-		@Body(
-			api={
-				"description:'a\nb',",
-				"required:true,",
-				"schema:{type:'a'},",
-				"examples:{foo:'bar'}"
-			}
-		)
-		public static class TA01 {
-			public TA01(String x) {}
-		}
-		
-		@RestMethod(name=GET,path="/api")
-		public void ta01(TA01 h) {}
-
-		@Body(schema=@Schema(" type:'b' "))
-		public static class TA18b {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void ta18b(TA18b h) {}
-
-		@Body
-		public static class TA18c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void ta18c(TA18c b) {}
-
-		@Body
-		public static class TA18d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void ta18d(TA18d b) {}
-
-		@Body
-		public static class TA18e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void ta18e(TA18e b) {}
-
-		@Body(example=" {f1:'b'} ")
-		public static class TA27 {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void ta27(TA27 h) {}
-
-		@Body(examples={" foo:'bar' "})
-		public static class TA29 {}
-		
-		@RestMethod(name=GET,path="/examples2")
-		public void ta29(TA29 h) {}
-	}
-	
-	@Test
-	public void ta00_Body_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("body", null);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
-	}
-//	@Test
-//	public void ta01_Body_onPojo_api() throws Exception {
-//		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("body", null);
-//		assertEquals("a\nb", x.getDescription());
-//		assertObjectEquals("true", x.getRequired());
-//		assertObjectEquals("{type:'a'}", x.getSchema());
-//		assertObjectEquals("{foo:'bar'}", x.getExamples());
-//	}
-	@Test
-	public void ta18b_Body_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/schema2").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void ta18c_Body_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/schema3").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void ta18d_Body_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/schema4").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void ta18e_Body_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/schema5").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void ta27_Body_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/example2").get("get").getParameter("body", null);
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-	@Test
-	public void ta29_Body_onPojo_examples2() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/examples2").get("get").getParameter("body", null);
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
-	}
-
-	//=================================================================================================================
-	// @Body on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class TB {
-
-		public static class TB01 {
-			public TB01(String x) {}
-		}
-
-		@RestMethod(name=GET, path="/basic")
-		public void tb01(
-			@Body(
-				description= {"a","b"},
-				required="true",
-				schema=@Schema(type="a"),
-				example="'a'",
-				examples=" {foo:'bar'} "
-			) TB01 b) {}
-
-		public static class TB18b {}
-
-		@RestMethod(name=GET,path="/schema2")
-		public void tb18b(@Body(schema=@Schema(" { type:'b' } ")) TB18b b) {}
-
-		public static class TB18c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void tb18c(@Body TB18c b) {}
-
-		public static class TB18d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void tb18d(@Body TB18d b) {}
-
-		public static class TB18e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void tb18e(@Body TB18e b) {}
-
-		@RestMethod(name=GET,path="/schema6")
-		public void tb18f(@Body Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7")
-		public void tb18g(@Body Boolean b) {}
-
-		public static class TB27 {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/example2")
-		public void tb27(@Body(example="{f1:'b'}") TB27 b) {}
-
-		public static class TB29 {}
-
-		@RestMethod(name=GET,path="/examples2")
-		public void tb29(@Body(examples={" foo:'bar' "}) TB29 b) {}
-	}
-	
-	@Test
-	public void tb00_Body_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/basic").get("get").getParameter("body", null);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
-	}
-	@Test
-	public void tb18b_Body_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schema2").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void tb18c_Body_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schema3").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void tb18d_Body_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schema4").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void tb18e_Body_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schema5").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void tb18e_Body_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schema6").get("get").getParameter("body", null);
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
-	}
-	@Test
-	public void tb18e_Body_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schema7").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
-	}
-	@Test
-	public void tb27_Body_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/example2").get("get").getParameter("body", null);
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-	@Test
-	public void tb29_Body_onParameter_examples2() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/examples2").get("get").getParameter("body", null);
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
-	}
-
-	//=================================================================================================================
-	// @Response on POJO
-	//=================================================================================================================
-
-	@RestResource()
-	public static class UA {
-
-		@Response(
-			description={"a","b"},
-			schema=@Schema(type="a"),
-			headers=@ResponseHeader(name="foo",type="a"),
-			example="'a'",
-			examples=" {foo:'a'} "
-		)
-		public static class UA00 {}
-		
-		@RestMethod(name=GET,path="/basic")
-		public void ua00(UA00 r) {}
-
-		@Response(code=100)
-		public static class UA01 {}
-		
-		@RestMethod(name=GET,path="/code")
-		public void ua01(UA01 r) {}
-
-		@Response(code=100)
-		public static class UA02 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void ua02(UA02 r) {}
-
-		@Response(schema=@Schema(" type:'b' "))
-		public static class UA04b {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void ua04b(UA04b r) {}
-
-		@Response
-		public static class UA04c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void ua04c(UA04c b) {}
-
-		@Response
-		public static class UA04d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void ua04d(UA04d b) {}
-
-		@Response
-		public static class UA04e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void ua04e(UA04e b) {}
-
-		@Response(headers=@ResponseHeader(name="foo",api=" type:'b' "))
-		public static class UA05b {}
-		
-		@RestMethod(name=GET,path="/headers2")
-		public void ua05b(UA05b r) {}
-
-		@Response(example="{f1:'a'}")
-		public static class UA06b {}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void ua06b(UA06b r) {}
-
-		@Response(examples={" foo:'b' "})
-		public static class UA07b {}
-		
-		@RestMethod(name=GET,path="/examples2")
-		public void ua07b(UA07b r) {}
-	}
-	
-	@Test
-	public void ua00_Response_onPojo_basic() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/basic").get("get").getResponse(200);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
-	}
-	@Test
-	public void ua01_Response_onPojo_code() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/code").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void ua02_Response_onPojo_value() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/value").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void ua04b_Response_onPojo_schema2() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/schema2").get("get").getResponse(200);
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void ua04c_Response_onPojo_schema3() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/schema3").get("get").getResponse(200);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void ua04d_Response_onPojo_schema4() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/schema4").get("get").getResponse(200);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void ua04e_Response_onPojo_schema5() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/schema5").get("get").getResponse(200);
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void ua05b_Response_onPojo_headers2() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/headers2").get("get").getResponse(200);
-		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
-	}
-	@Test
-	public void ua06b_Response_onPojo_example2() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/example2").get("get").getResponse(200);
-		assertObjectEquals("{f1:'a'}", x.getExample());
-	}
-	@Test
-	public void ua07b_Response_onPojo_examples2() throws Exception {
-		ResponseInfo x = getSwagger(new UA()).getPaths().get("/examples2").get("get").getResponse(200);
-		assertObjectEquals("{foo:'b'}", x.getExamples());
-	}
-	
-	//=================================================================================================================
-	// @Response on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class UB {
-
-		public static class UB00 {}
-
-		@RestMethod(name=GET,path="/basic")
-		public void ub00(
-			@Response(
-				description={"a","b"},
-				schema=@Schema(type="a"),
-				headers=@ResponseHeader(name="foo",type="a"),
-				example=" 'a' ",
-				examples=" {foo:'a'} "
-			) UB00 r
-		) {}
-
-		public static class UB01 {}
-
-		@RestMethod(name=GET,path="/code")
-		public void ub01(@Response(code=100) UB01 r) {}
-
-		public static class UB02 {}
-
-		@RestMethod(name=GET,path="/value")
-		public void ub02(@Response(code=100) UB02 r) {}
-
-		public static class UB05b {}
-
-		@RestMethod(name=GET,path="/schema2")
-		public void ub05b(@Response(schema=@Schema(" type:'b' ")) UB05b r) {}
-
-		public static class UB05c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void ub05c(@Response UB05c b) {}
-
-		public static class UB05d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void ub05d(@Response UB05d b) {}
-
-		public static class UB05e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void ub05e(@Response UB05e b) {}
-
-		public static class UB08 {}
-
-		@RestMethod(name=GET,path="/headers2")
-		public void ub08(@Response(headers=@ResponseHeader(name="foo",api=" type:'b' ")) UB08 r) {}
-
-		public static class UB10 {}
-
-		@RestMethod(name=GET,path="/example2")
-		public void ub10(@Response(example=" {f1:'b'} ") UB10 r) {}
-
-		public static class UB12 {}
-
-		@RestMethod(name=GET,path="/examples2")
-		public void ub12(@Response(examples={" foo:'b' "}) UB12 r) {}
-	}
-	
-	@Test
-	public void ub00_Response_onParameter_basic() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/basic").get("get").getResponse(200);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
-	}
-	@Test
-	public void ub01_Response_onParameter_code() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/code").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void ub02_Response_onParameter_value() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/value").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void ub05b_Response_onParameter_schema2() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/schema2").get("get").getResponse(200);
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void ub05c_Response_onParameter_schema3() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/schema3").get("get").getResponse(200);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void ub05d_Response_onParameter_schema4() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/schema4").get("get").getResponse(200);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void ub05e_Response_onParameter_schema5() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/schema5").get("get").getResponse(200);
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void ub08_Response_onParameter_headers2() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/headers2").get("get").getResponse(200);
-		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
-	}
-	@Test
-	public void ub10_Response_onParameter_example2() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/example2").get("get").getResponse(200);
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-	@Test
-	public void ub12_Response_onParameter_examples2() throws Exception {
-		ResponseInfo x = getSwagger(new UB()).getPaths().get("/examples2").get("get").getResponse(200);
-		assertObjectEquals("{foo:'b'}", x.getExamples());
-	}
-
-	//=================================================================================================================
-	// @Response on throwable
-	//=================================================================================================================
-
-	@RestResource()
-	@SuppressWarnings({"unused","serial"})
-	public static class UC {		
-		
-		@Response(
-			description= {"a","b"},
-			schema=@Schema(type="a"),
-			headers=@ResponseHeader(name="foo",type="a"),
-			example=" 'a' ",
-			examples=" {foo:'a'} "
-		)
-		public static class UC00 extends Throwable {}
-
-		@RestMethod(name=GET,path="/basic")
-		public void uc00() throws UC00 {}
-
-		@Response(code=100)
-		public static class UC01 extends Throwable {}
-
-		@RestMethod(name=GET,path="/code")
-		public void uc01() throws UC01 {}
-
-		@Response(code=100)
-		public static class UC02 extends Throwable {}
-
-		@RestMethod(name=GET,path="/value")
-		public void uc02() throws UC02 {}
-
-		@Response(schema=@Schema(" type:'b' "))
-		public static class UC03 extends Throwable {}
-
-		@RestMethod(name=GET,path="/schema1")
-		public void uc03() throws UC03 {}
-
-		@Response(headers=@ResponseHeader(name="foo", api=" {type:'b'} "))
-		public static class UC04 extends Throwable {}
-
-		@RestMethod(name=GET,path="/headers1")
-		public void uc04() throws UC04 {}
-
-		@Response(example={" {f1:'b'} "})
-		public static class UC05 extends Throwable {}
-
-		@RestMethod(name=GET,path="/example1")
-		public void uc05() throws UC05 {}
-
-		@Response(examples={" foo:'b' "})
-		public static class UC06 extends Throwable {}
-
-		@RestMethod(name=GET,path="/examples1")
-		public void uc06() throws UC06 {}
-	}
-	
-	@Test
-	public void uc00_Response_onThrowable_basic() throws Exception {
-		ResponseInfo x = getSwagger(new UC()).getPaths().get("/basic").get("get").getResponse(500);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
-	}
-	@Test
-	public void uc01_Response_onThrowable_code() throws Exception {
-		ResponseInfo x = getSwagger(new UC()).getPaths().get("/code").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void uc02_Response_onThrowable_value() throws Exception {
-		ResponseInfo x = getSwagger(new UC()).getPaths().get("/value").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void uc03_Response_onThrowable_schema1() throws Exception {
-		ResponseInfo x = getSwagger(new UC()).getPaths().get("/schema1").get("get").getResponse(500);
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void uc04_Response_onThrowable_headers1() throws Exception {
-		ResponseInfo x = getSwagger(new UC()).getPaths().get("/headers1").get("get").getResponse(500);
-		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
-	}
-	@Test
-	public void uc05_Response_onThrowable_example1() throws Exception {
-		ResponseInfo x = getSwagger(new UC()).getPaths().get("/example1").get("get").getResponse(500);
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-	@Test
-	public void uc6_Response_onThrowable_examples1() throws Exception {
-		ResponseInfo x = getSwagger(new UC()).getPaths().get("/examples1").get("get").getResponse(500);
-		assertObjectEquals("{foo:'b'}", x.getExamples());
-	}
-
-	//=================================================================================================================
-	// @Responses on POJO
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class UD {
-
-		@Responses({
-			@Response(code=100),
-			@Response(code=101)
-		})
-		public static class UD01 {}
-		
-		@RestMethod(name=GET,path="/code")
-		public void ud01(UD01 r) {}
-
-		@Responses({
-			@Response(code=100),
-			@Response(code=101)
-		})
-		public static class UD02 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void ud02(UD02 r) {}
-
-		@Responses({
-			@Response(code=100, description="a"),
-			@Response(code=101, description={"a","b"})
-		})
-		public static class UD03 {}
-		
-		@RestMethod(name=GET,path="/description")
-		public void ud03(UD03 r) {}
-
-		@Responses({
-			@Response(code=100, schema=@Schema(type="a")),
-			@Response(code=101, schema=@Schema(" type:'b' "))
-		})
-		public static class UD04 {}
-		
-		@RestMethod(name=GET,path="/schema")
-		public void ud04(UD04 r) {}
-
-		@Responses({
-			@Response(code=100, headers=@ResponseHeader(name="foo", type="a")),
-			@Response(code=101, headers=@ResponseHeader(name="foo", api=" type:'b' "))
-		})
-		public static class UD05 {}
-		
-		@RestMethod(name=GET,path="/headers")
-		public void ud05(UD05 r) {}
-
-		@Responses({
-			@Response(code=100, example="'a'"),
-			@Response(code=101, example="{f1:'a'}")
-		})
-		public static class UD06 {}
-		
-		@RestMethod(name=GET,path="/example")
-		public void ud06(UD06 r) {}
-
-		@Responses({
-			@Response(code=100, examples=" {foo:'a'} "),
-			@Response(code=101, examples={" foo:'b' "})
-		})
-		public static class UD07 {}
-		
-		@RestMethod(name=GET,path="/examples")
-		public void ud07(UD07 r) {}
-	}
-	
-	@Test
-	public void ud01_Responses_onPojo_code() throws Exception {
-		Operation x = getSwagger(new UD()).getPaths().get("/code").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void ud02_Responses_onPojo_value() throws Exception {
-		Operation x = getSwagger(new UD()).getPaths().get("/value").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void ud03_Responses_onPojo_description() throws Exception {
-		Operation x = getSwagger(new UD()).getPaths().get("/description").get("get");
-		assertEquals("a", x.getResponse(100).getDescription());
-		assertEquals("a\nb", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void ud04_Responses_onPojo_schema() throws Exception {
-		Operation x = getSwagger(new UD()).getPaths().get("/schema").get("get");
-		assertObjectEquals("{type:'a'}", x.getResponse(100).getSchema());
-		assertObjectEquals("{type:'b'}", x.getResponse(101).getSchema());
-	}
-	@Test
-	public void ud05_Responses_onPojo_headers() throws Exception {
-		Operation x = getSwagger(new UD()).getPaths().get("/headers").get("get");
-		assertObjectEquals("{foo:{type:'a'}}", x.getResponse(100).getHeaders());
-		assertObjectEquals("{foo:{type:'b'}}", x.getResponse(101).getHeaders());
-	}
-	@Test
-	public void ud06_Responses_onPojo_example() throws Exception {
-		Operation x = getSwagger(new UD()).getPaths().get("/example").get("get");
-		assertObjectEquals("'a'", x.getResponse(100).getExample());
-		assertObjectEquals("{f1:'a'}", x.getResponse(101).getExample());
-	}
-	@Test
-	public void ud07_Responses_onPojo_examples() throws Exception {
-		Operation x = getSwagger(new UD()).getPaths().get("/examples").get("get");
-		assertObjectEquals("{foo:'a'}", x.getResponse(100).getExamples());
-		assertObjectEquals("{foo:'b'}", x.getResponse(101).getExamples());
-	}
-	
-	//=================================================================================================================
-	// @Responses on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class UE {
-
-		public static class UE01 {}
-
-		@RestMethod(name=GET,path="/code")
-		public void ue01(
-			@Responses({
-				@Response(code=100),
-				@Response(code=101)
-			}) 
-			UE01 r) {}
-
-		public static class UE02 {}
-
-		@RestMethod(name=GET,path="/value")
-		public void ue02(
-			@Responses({
-				@Response(code=100),
-				@Response(code=101)
-			})
-			UE02 r) {}
-
-		public static class UE03 {}
-
-		@RestMethod(name=GET,path="/description")
-		public void ue03(
-			@Responses({
-				@Response(code=100, description="a"),
-				@Response(code=101, description={"a","b"})
-			})
-			UE03 r) {}
-
-		public static class UE04 {}
-
-		@RestMethod(name=GET,path="/schema")
-		public void ue04(
-			@Responses({
-				@Response(code=100, schema=@Schema(type="a")),
-				@Response(code=101, schema=@Schema(" type:'b' "))
-			})
-			UE04 r) {}
-
-		public static class UE05 {}
-
-		@RestMethod(name=GET,path="/headers")
-		public void ue05(
-			@Responses({
-				@Response(code=100, headers=@ResponseHeader(name="foo",type="a")),
-				@Response(code=101, headers=@ResponseHeader(name="foo", api=" type:'b' "))
-			})
-			UE05 r) {}
-
-		public static class UE06 {}
-
-		@RestMethod(name=GET,path="/example")
-		public void ue06(
-			@Responses({
-				@Response(code=100, example=" 'a' "),
-				@Response(code=101, example=" {f1:'b'} ")
-			})
-			UE06 r) {}
-
-		public static class UE07 {}
-
-		@RestMethod(name=GET,path="/examples")
-		public void ue07(
-			@Responses({
-				@Response(code=100, examples=" {foo:'a'} "),
-				@Response(code=101, examples={" foo:'b' "})
-			})
-			UE07 r) {}
-	}
-	
-	@Test
-	public void ue01_Responses_onParameter_code() throws Exception {
-		Operation x = getSwagger(new UE()).getPaths().get("/code").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void ue02_Responses_onParameter_value() throws Exception {
-		Operation x = getSwagger(new UE()).getPaths().get("/value").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void ue03_Responses_onParameter_description() throws Exception {
-		Operation x = getSwagger(new UE()).getPaths().get("/description").get("get");
-		assertEquals("a", x.getResponse(100).getDescription());
-		assertEquals("a\nb", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void ue04_Responses_onParameter_schema() throws Exception {
-		Operation x = getSwagger(new UE()).getPaths().get("/schema").get("get");
-		assertObjectEquals("{type:'a'}", x.getResponse(100).getSchema());
-		assertObjectEquals("{type:'b'}", x.getResponse(101).getSchema());
-	}
-	@Test
-	public void ue05_Responses_onParameter_headers() throws Exception {
-		Operation x = getSwagger(new UE()).getPaths().get("/headers").get("get");
-		assertObjectEquals("{foo:{type:'a'}}", x.getResponse(100).getHeaders());
-		assertObjectEquals("{foo:{type:'b'}}", x.getResponse(101).getHeaders());
-	}
-	@Test
-	public void ue06_Responses_onParameter_example() throws Exception {
-		Operation x = getSwagger(new UE()).getPaths().get("/example").get("get");
-		assertObjectEquals("'a'", x.getResponse(100).getExample());
-		assertObjectEquals("{f1:'b'}", x.getResponse(101).getExample());
-	}
-	@Test
-	public void ue07_Responses_onParameter_examples() throws Exception {
-		Operation x = getSwagger(new UE()).getPaths().get("/examples").get("get");
-		assertObjectEquals("{foo:'a'}", x.getResponse(100).getExamples());
-		assertObjectEquals("{foo:'b'}", x.getResponse(101).getExamples());
-	}
-	
-
-	//=================================================================================================================
-	// @ResponseStatus on POJO
-	//=================================================================================================================
-
-	@RestResource()
-	public static class VA {
-		@ResponseStatus({
-			@Status(code=100),
-			@Status(code=101)
-		})
-		public static class VA01 {}
-		
-		@RestMethod(name=GET,path="/code")
-		public void va01(VA01 r) {}
-
-		@ResponseStatus({
-			@Status(100),
-			@Status(101)
-		})
-		public static class VA02 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void va02(VA02 r) {}
-
-		@ResponseStatus({
-			@Status(code=100, description="a"),
-			@Status(code=101, description="a\nb")
-		})
-		public static class VA03 {}
-		
-		@RestMethod(name=GET,path="/description")
-		public void va03(VA03 r) {}
-	}
-
-	@Test
-	public void va01_ResponseStatus_onPojo_code() throws Exception {
-		Operation x = getSwagger(new VA()).getPaths().get("/code").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void va02_ResponseStatus_onPojo_value() throws Exception {
-		Operation x = getSwagger(new VA()).getPaths().get("/value").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void va03_ResponseStatus_onPojo_description() throws Exception {
-		Operation x = getSwagger(new VA()).getPaths().get("/description").get("get");
-		assertEquals("a", x.getResponse(100).getDescription());
-		assertEquals("a\nb", x.getResponse(101).getDescription());
-	}
-	
-	//=================================================================================================================
-	// @ResponseStatus on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class VB {
-		public static class VB01 {}
-		
-		@RestMethod(name=GET,path="/code")
-		public void vb01(
-				@ResponseStatus({
-					@Status(code=100),
-					@Status(code=101)
-				})
-				VB01 r
-			) {}
-
-		public static class VB02 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void vb02(
-				@ResponseStatus({
-					@Status(100),
-					@Status(101)
-				})
-				VB02 r
-			) {}
-
-		public static class VB03 {}
-		
-		@RestMethod(name=GET,path="/description")
-		public void vb03(
-				@ResponseStatus({
-					@Status(code=100, description="a"),
-					@Status(code=101, description="a\nb")
-				})
-				VB03 r
-			) {}
-	}
-	
-	@Test
-	public void vb01_ResponseStatus_onParameter_code() throws Exception {
-		Operation x = getSwagger(new VB()).getPaths().get("/code").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void vb02_ResponseStatus_onParameter_vblue() throws Exception {
-		Operation x = getSwagger(new VB()).getPaths().get("/value").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void vb03_ResponseStatus_onParameter_description() throws Exception {
-		Operation x = getSwagger(new VB()).getPaths().get("/description").get("get");
-		assertEquals("a", x.getResponse(100).getDescription());
-		assertEquals("a\nb", x.getResponse(101).getDescription());
-	}
-
-	//=================================================================================================================
-	// @ResponseHeader on POJO
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class WA {
-
-		@ResponseHeader(
-			name="H",
-			description="a",
-			type="a",
-			format="a",
-			collectionFormat="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			maxItems="1",
-			minItems="1",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			uniqueItems="true",
-			items=@Items(type="a"),
-			_default="'a'",
-			_enum=" a,b ",
-			example="'a'"
-		)
-		public static class WA00 {}
-		
-		@RestMethod(name=GET,path="/basic")
-		public void wa00(WA00 h) {}
-
-		@ResponseHeader(name="H", code=100)
-		public static class WA01a {}
-		
-		@RestMethod(name=GET,path="/code")
-		public void wa01a(WA01a h) {}
-
-		@ResponseHeader(name="H", codes={100,101})
-		public static class WA01b {}
-		
-		@RestMethod(name=GET,path="/codes")
-		public void wa01b(WA01b h) {}
-
-		@ResponseHeader(name="H", code=100,codes={101})
-		public static class WA01c {}
-		
-		@RestMethod(name=GET,path="/codeAndCodes")
-		public void wa01c(WA01c h) {}
-
-		@ResponseHeader(name="H", description="a")
-		public static class WA01d {}
-		
-		@RestMethod(name=GET,path="/nocode")
-		public void wa01d(WA01d h) {}
-
-		@ResponseHeader("H")
-		public static class WA02 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void wa02(WA02 h) {}
-
-		@ResponseHeader(name="H", items=@Items(" type:'b' "))
-		public static class WA03 {}
-		
-		@RestMethod(name=GET,path="/items1")
-		public void wa03(WA03 h) {}
-
-		@ResponseHeader(name="H", _default={" {f1:'b'} "})
-		public static class WA04 {}
-		
-		@RestMethod(name=GET,path="/default1")
-		public void wa04(WA04 h) {}
-
-		@ResponseHeader(name="H", _enum={" ['a','b'] "})
-		public static class WA05 {}
-		
-		@RestMethod(name=GET,path="/enum1")
-		public void wa05(WA05 h) {}
-
-		@ResponseHeader(name="H", example={" {f1:'b'} "})
-		public static class WA06 {}
-		
-		@RestMethod(name=GET,path="/example1")
-		public void wa06(WA06 h) {}
-	}
-	
-	@Test
-	public void wa00_ResponseHeader_onPojo_basic() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/basic").get("get").getResponse(200).getHeader("H");
-		assertEquals("a", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("'a'", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
-	}
-	@Test
-	public void wa01a_ResponseHeader_onPojo_code() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/code").get("get").getResponse(100).getHeader("H");
-		assertNotNull(x);
-	}
-	@Test
-	public void wa01b_ResponseHeader_onPojo_codes() throws Exception {
-		Operation x = getSwagger(new WA()).getPaths().get("/codes").get("get");
-		assertNotNull(x.getResponse(100).getHeader("H"));
-		assertNotNull(x.getResponse(101).getHeader("H"));
-	}
-	@Test
-	public void wa01c_ResponseHeader_onPojo_codeAndCodes() throws Exception {
-		Operation x = getSwagger(new WA()).getPaths().get("/codeAndCodes").get("get");
-		assertNotNull(x.getResponse(100).getHeader("H"));
-		assertNotNull(x.getResponse(101).getHeader("H"));
-	}
-	@Test
-	public void wa01d_ResponseHeader_onPojo_nocode() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/nocode").get("get").getResponse(200).getHeader("H");
-		assertEquals("a", x.getDescription());
-	}
-	@Test
-	public void wa02_ResponseHeader_onPojo_value() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/value").get("get").getResponse(200).getHeader("H");
-		assertNotNull(x);
-	}
-	@Test
-	public void wa03_ResponseHeader_onPojo_items1() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/items1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("{type:'b'}", x.getItems());
-	}
-	@Test
-	public void wa04_ResponseHeader_onPojo_default1() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/default1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("{f1:'b'}", x.getDefault());
-	}
-	@Test
-	public void wa05_ResponseHeader_onPojo_enum1() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/enum1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void wa06_ResponseHeader_onPojo_example1() throws Exception {
-		HeaderInfo x = getSwagger(new WA()).getPaths().get("/example1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-
-	//=================================================================================================================
-	// @ResponseHeader on parameter
-	//=================================================================================================================
-	
-	@RestResource()
-	public static class WB {
-
-		public static class WB00 {}
-		
-		@RestMethod(name=GET,path="/basic")
-		public void wb00(
-			@ResponseHeader(
-				name="H",
-				description="a",
-				type="a",
-				format="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				items=@Items(type="a"),
-				_default="'a'",
-				_enum=" a,b ",
-				example="'a'"
-			) WB00 h) {}
-		
-		public static class WB01a {}
-		
-		@RestMethod(name=GET,path="/code")
-		public void wb01a(@ResponseHeader(name="H", code=100) WB01a h) {}
-
-		public static class WB01b {}
-		
-		@RestMethod(name=GET,path="/codes")
-		public void wb01b(@ResponseHeader(name="H", codes={100,101}) WB01b h) {}
-
-		public static class WB01c {}
-		
-		@RestMethod(name=GET,path="/codeAndCodes")
-		public void wb01c(@ResponseHeader(name="H", code=100,codes={101}) WB01c h) {}
-
-		public static class WB01d {}
-		
-		@RestMethod(name=GET,path="/nocode")
-		public void wb01d(@ResponseHeader(name="H", description="a") WB01d h) {}
-
-		public static class WB02 {}
-		
-		@RestMethod(name=GET,path="/value")
-		public void wb02(@ResponseHeader("H") WB02 h) {}
-		
-		public static class WB03 {}
-		
-		@RestMethod(name=GET,path="/items1")
-		public void wb03(@ResponseHeader(name="H", items=@Items(" type:'b' ")) WB03 h) {}
-
-		public static class WB04 {}
-		
-		@RestMethod(name=GET,path="/default1")
-		public void wb04(@ResponseHeader(name="H", _default={" {f1:'b'} "}) WB04 h) {}
-
-		public static class WB05 {}
-		
-		@RestMethod(name=GET,path="/enum1")
-		public void wb05(@ResponseHeader(name="H", _enum={" ['a','b'] "}) WB05 h) {}
-
-		public static class WB06 {}
-		
-		@RestMethod(name=GET,path="/example1")
-		public void wb06(@ResponseHeader(name="H", example={" {f1:'b'} "}) WB06 h) {}
-	}
-	
-	@Test
-	public void wb00_ResponseHeader_onPojo_basic() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/basic").get("get").getResponse(200).getHeader("H");
-		assertEquals("a", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("'a'", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
-	}
-	@Test
-	public void wb01a_ResponseHeader_onPojo_code() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/code").get("get").getResponse(100).getHeader("H");
-		assertNotNull(x);
-	}
-	@Test
-	public void wb01b_ResponseHeader_onPojo_codes() throws Exception {
-		Operation x = getSwagger(new WB()).getPaths().get("/codes").get("get");
-		assertNotNull(x.getResponse(100).getHeader("H"));
-		assertNotNull(x.getResponse(101).getHeader("H"));
-	}
-	@Test
-	public void wb01c_ResponseHeader_onPojo_codeAndCodes() throws Exception {
-		Operation x = getSwagger(new WB()).getPaths().get("/codeAndCodes").get("get");
-		assertNotNull(x.getResponse(100).getHeader("H"));
-		assertNotNull(x.getResponse(101).getHeader("H"));
-	}
-	@Test
-	public void wb01d_ResponseHeader_onPojo_nocode() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/nocode").get("get").getResponse(200).getHeader("H");
-		assertEquals("a", x.getDescription());
-	}
-	@Test
-	public void wb02_ResponseHeader_onPojo_value() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/value").get("get").getResponse(200).getHeader("H");
-		assertNotNull(x);
-	}
-	@Test
-	public void wb03_ResponseHeader_onPojo_items1() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/items1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("{type:'b'}", x.getItems());
-	}
-	@Test
-	public void wb04_ResponseHeader_onPojo_default1() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/default1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("{f1:'b'}", x.getDefault());
-	}
-	@Test
-	public void wb05_ResponseHeader_onPojo_enum1() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/enum1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void wb06_ResponseHeader_onPojo_example1() throws Exception {
-		HeaderInfo x = getSwagger(new WB()).getPaths().get("/example1").get("get").getResponse(200).getHeader("H");
-		assertObjectEquals("{f1:'b'}", x.getExample());
 	}
 
 	

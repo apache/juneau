@@ -45,7 +45,7 @@ public class AnnotationUtils {
 			return om;
 		om = newMap(om);
 		return om
-			.appendSkipEmpty("_value", joinnl(a.api()))
+			.appendSkipEmpty("_value", joinnl(a.value()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("required", a.required())
 			.appendSkipEmpty("example", joinnl(a.example()))
@@ -507,7 +507,7 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return 
-			empty(a.description(), a.example(), a.examples(), a.api()) 
+			empty(a.description(), a.example(), a.examples(), a.value()) 
 			&& empty(a.required())
 			&& empty(a.schema());
 	}
