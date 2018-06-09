@@ -386,11 +386,13 @@ public final class JsonParserSession extends ReaderParserSession {
 			return parseString(r);
 		if (isStrict())
 			throw new ParseException(this, "Unquoted attribute detected.");
+		if (! VALID_BARE_CHARS.contains(c))
+			throw new ParseException(this, "Could not find the start of the field name.");
 		r.mark();
 		// Look for whitespace.
 		while (c != -1) {
 			c = r.read();
-			if (c == ':' || isWhitespace(c) || c == '/') {
+			if (! VALID_BARE_CHARS.contains(c)) {
 				r.unread();
 				String s = r.getMarked().intern();
 				return s.equals("null") ? null : s;
@@ -398,6 +400,8 @@ public final class JsonParserSession extends ReaderParserSession {
 		}
 		throw new ParseException(this, "Could not find the end of the field name.");
 	}
+	
+	private static final AsciiSet VALID_BARE_CHARS = AsciiSet.create().range('A','Z').range('a','z').range('0','9').chars("$_-.").build();
 
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l,
 			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
@@ -478,8 +482,13 @@ public final class JsonParserSession extends ReaderParserSession {
 			while (c != -1) {
 				c = r.read();
 				if (state == S0) {
-					if (c == '{')
+					if (c == '{') {
 						state = S1;
+					} else if (isCommentOrWhitespace(c)) {
+						skipCommentsAndSpace(r.unread());
+					} else {
+						break;
+					}
 				} else if (state == S1) {
 					if (c == '}') {
 						return m;

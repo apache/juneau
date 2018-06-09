@@ -103,6 +103,8 @@ public @interface Response {
 	 */
 	int code() default 0;
 	
+	int value() default 0;
+	
 	String[] api() default {};
 	
 	/**

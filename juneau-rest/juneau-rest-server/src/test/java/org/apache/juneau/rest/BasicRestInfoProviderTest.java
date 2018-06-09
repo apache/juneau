@@ -71,7 +71,7 @@ public class BasicRestInfoProviderTest {
 	// /<root>
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class A01 {}
 	
 	@Test
@@ -334,7 +334,7 @@ public class BasicRestInfoProviderTest {
 	// /tags
 	//=================================================================================================================
 	
-	@RestResource()
+	@RestResource
 	public static class C01 {}
 	
 	@Test
@@ -469,7 +469,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Auto-detect tags defined on methods.
-	@RestResource()
+	@RestResource
 	public static class C08 {
 		@RestMethod(swagger=@MethodSwagger(tags="foo"))
 		public void doFoo() {}
@@ -487,7 +487,7 @@ public class BasicRestInfoProviderTest {
 	}
 	
 	// Comma-delimited list
-	@RestResource()
+	@RestResource
 	public static class C09 {
 		@RestMethod(swagger=@MethodSwagger(tags=" foo, bar "))
 		public void doFoo() {}
@@ -505,7 +505,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// ObjectList
-	@RestResource()
+	@RestResource
 	public static class C10 {
 		@RestMethod(swagger=@MethodSwagger(tags="['foo', 'bar']"))
 		public void doFoo() {}
@@ -562,7 +562,7 @@ public class BasicRestInfoProviderTest {
 	// /externalDocs
 	//=================================================================================================================
 	
-	@RestResource()
+	@RestResource
 	public static class D01 {}
 	
 	@Test
@@ -656,7 +656,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class E01 {
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
@@ -884,7 +884,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/tags
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class MD01 {
 		
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -973,7 +973,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/externalDocs
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class ME01 {
 		
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -1062,7 +1062,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/consumes
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class MF01 {
 		
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -1193,7 +1193,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/produces
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class MG01 {
 		
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -1324,7 +1324,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/deprecated
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class MH06 {
 		@RestMethod(name=GET,path="/path2/{foo}")
 		@Deprecated
@@ -1339,7 +1339,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwaggerWithFile(new MH06()).getPaths().get("/path2/{foo}").get("get").getDeprecated());
 	}
 	
-	@RestResource()
+	@RestResource
 	@Deprecated
 	public static class MH07 {
 		@RestMethod(name=GET,path="/path2/{foo}")
@@ -1358,7 +1358,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/query
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class NA01 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1776,7 +1776,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/query/example
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class NR01 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1850,7 +1850,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/body/examples
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class NS01 {
 		@RestMethod(name=GET,path="/path/{foo}/body")
 		public Foo doFoo(@Body Foo foo) {
@@ -1924,7 +1924,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/query/schema
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class NT01 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1999,10 +1999,10 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/description
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class OA01 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
+		public Foo doFoo(@Response(100) Value<Foo> foo) {
 			return null;
 		}
 	}
@@ -2073,7 +2073,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/headers
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class OB01 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
@@ -2147,7 +2147,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/example
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class OC01 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
@@ -2221,7 +2221,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/examples
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class OD01 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
@@ -2295,7 +2295,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/schema
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class OE01 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public Foo doFoo(@Response(code=100) Value<Foo> foo) {

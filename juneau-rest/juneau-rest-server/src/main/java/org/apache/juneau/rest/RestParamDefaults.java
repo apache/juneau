@@ -710,7 +710,7 @@ class RestParamDefaults {
 			if (a == null)
 				return om;
 			om = om.modifiable();
-			int status = ObjectUtils.firstNonZero(a.code(), 200);
+			int status = ObjectUtils.firstNonZero(a.code(), a.value(), 200);
 			merge(om.getObjectMap(String.valueOf(status), true), a);
 			return om;
 		}

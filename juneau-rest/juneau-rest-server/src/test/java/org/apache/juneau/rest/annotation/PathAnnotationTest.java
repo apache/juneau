@@ -294,7 +294,11 @@ public class PathAnnotationTest {
 	// @Path on POJO
 	//=================================================================================================================
 
-	@RestResource()
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
 	public static class SA {
 
 		@Path(
@@ -315,67 +319,93 @@ public class PathAnnotationTest {
 			_enum="a,b",
 			example="'a'"
 		)
-		public static class SA00 {
-			public SA00(String x) {}
+		public static class SA01 {
+			public SA01(String x) {}
 		}
-		
 		@RestMethod(name=GET,path="/basic/{P}")
-		public void sa00(SA00 f) {}
+		public void sa01(SA01 f) {}
 
-		@Path("P")
-		public static class SA02 {}
-		
-		@RestMethod(name=GET,path="/value/{P}")
+		@Path(
+			name="P",
+			api={
+				"description:'a\nb',",
+				"type:'a',",
+				"format:'a',",
+				"pattern:'a',",
+				"maximum:'1',",
+				"minimum:'1',",
+				"multipleOf:'1',",
+				"maxLength:'1',",
+				"minLength:'1',",
+				"allowEmptyValue:'true',",
+				"exclusiveMaximum:'true',",
+				"exclusiveMinimum:'true',",
+				"schema:{type:'a'},",
+				"enum:'a,b',",
+				"example:'a'"
+			}
+		)
+		public static class SA02 {
+			public SA02(String x) {}
+		}
+		@RestMethod(name=GET,path="/api/{P}")
 		public void sa02(SA02 f) {}
 
-		@Path(name="P", description="a")
-		public static class SA03 {}
-		
-		@Path(name="P", schema=@Schema(" type:'b' "))
-		public static class SA16b {}
-		
-		@RestMethod(name=GET,path="/schema2/{P}")
-		public void sa16b(SA16b f) {}
-
-		@Path("P")
-		public static class SA16c {
-			public String f1;
+		@Path(
+			name="P",
+			api={
+				"description:'b\nc',",
+				"type:'b',",
+				"format:'b',",
+				"pattern:'b',",
+				"maximum:'2',",
+				"minimum:'2',",
+				"multipleOf:'2',",
+				"maxLength:'2',",
+				"minLength:'2',",
+				"allowEmptyValue:'false',",
+				"exclusiveMaximum:'false',",
+				"exclusiveMinimum:'false',",
+				"schema:{type:'b'},",
+				"enum:'b,c',",
+				"example:'b'"
+			},
+			description={"a","b"},
+			type="a",
+			format="a",
+			pattern="a",
+			maximum="1",
+			minimum="1",
+			multipleOf="1",
+			maxLength="1",
+			minLength="1",
+			allowEmptyValue="true",
+			exclusiveMaximum="true",
+			exclusiveMinimum="true",
+			schema=@Schema(type="a"),
+			_enum="a,b",
+			example="'a'"
+		)
+		public static class SA03 {
+			public SA03(String x) {}
 		}
+		@RestMethod(name=GET,path="/mixed/{P}")
+		public void sa03(SA03 f) {}
 
-		@RestMethod(name=GET,path="/schema3/{P}")
-		public void sa16c(SA16c b) {}
-
+		
 		@Path("P")
-		public static class SA16d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4/{P}")
-		public void sa16d(SA16d b) {}
-
-		@Path("P")
-		public static class SA16e {}
-
-		@RestMethod(name=GET,path="/schema5/{P}")
-		public void sa16e(SA16e b) {}
+		public static class SA04 {}
+		@RestMethod(name=GET,path="/value/{P}")
+		public void sa04(SA04 f) {}
 
 		@Path(name="P", _enum={" ['a','b'] "})
 		public static class SA19 {}
-		
-		@RestMethod(name=GET,path="/_enum2/{P}")
+		@RestMethod(name=GET,path="/enum/{P}")
 		public void sa19(SA19 f) {}
-
-		@Path(name="P", example={" {f1:'a'} "})
-		public static class SA21 {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2/{P}")
-		public void sa21(SA21 f) {}
 	}
 
 	@Test
-	public void sa00_Path_onPojo_basic() throws Exception {
+	public void sa01_Path_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
@@ -395,38 +425,128 @@ public class PathAnnotationTest {
 		assertObjectEquals("'a'", x.getExample());
 	}
 	@Test
-	public void sa02_Path_onPojo_value() throws Exception {
+	public void sa02_Path_onPojo_api() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api/{P}").get("get").getParameter("path", "P");
+		assertEquals("P", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void sa03_Path_onPojo_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed/{P}").get("get").getParameter("path", "P");
+		assertEquals("P", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void sa04_Path_onPojo_value() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/value/{P}").get("get").getParameter("path", "P");
 		assertEquals("P", x.getName());
 	}
 	@Test
-	public void sa16b_Path_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema2/{P}").get("get").getParameter("path", "P");
+	public void sa05_Path_onPojo_enum() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/enum/{P}").get("get").getParameter("path", "P");
+		assertObjectEquals("['a','b']", x.getEnum());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class SB {
+
+		@Path(name="P", schema=@Schema(" type:'b' "))
+		public static class SB01 {}
+		@RestMethod(name=GET,path="/schemaValue/{P}")
+		public void sb01(SB01 f) {}
+
+		@Path("P")
+		public static class SB02 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/autoDetectBean/{P}")
+		public void sb02(SB02 b) {}
+
+		@Path("P")
+		public static class SB03 extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+		@RestMethod(name=GET,path="/autoDetectList/{P}")
+		public void sb03(SB03 b) {}
+
+		@Path("P")
+		public static class SB04 {}
+		@RestMethod(name=GET,path="/autoDetectStringObject/{P}")
+		public void sb04(SB04 b) {}
+	}
+
+	@Test
+	public void sb01_Path_onPojo_schemaValue() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'b'}", x.getSchema());
 	}
 	@Test
-	public void sa16c_Path_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema3/{P}").get("get").getParameter("path", "P");
+	public void sb02_Path_onPojo_autoDetectBean() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
 	}
 	@Test
-	public void sa16d_Path_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema4/{P}").get("get").getParameter("path", "P");
+	public void sb03_Path_onPojo_autoDetectList() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
 	}
 	@Test
-	public void sa16e_Path_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema5/{P}").get("get").getParameter("path", "P");
+	public void sb04_Path_onPojo_sautoDetectStringObject() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
-	@Test
-	public void sa19_Path_onPojo__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/_enum2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("['a','b']", x.getEnum());
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class SC {
+
+		@Path(name="P", example={" {f1:'a'} "})
+		public static class SC01 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/example/{P}")
+		public void sc01(SC01 f) {}
 	}
+
+
 	@Test
-	public void sa21_Path_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/example2/{P}").get("get").getParameter("path", "P");
+	public void sc01_Path_onPojo_example() throws Exception {
+		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{f1:'a'}", x.getExample());
 	}
 
@@ -434,11 +554,15 @@ public class PathAnnotationTest {
 	// @Path on parameter
 	//=================================================================================================================
 
-	@RestResource()
-	public static class SB {
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TA {
 
 		@RestMethod(name=GET,path="/basic/{P}")
-		public void sb00(@Path(
+		public void ta01(@Path(
 			name="P",
 			description="a",
 			type="a",
@@ -457,47 +581,75 @@ public class PathAnnotationTest {
 			example="'a'"
 		) String h) {}
 
+		@RestMethod(name=GET,path="/api/{P}")
+		public void ta02(@Path(
+			name="P",
+			api={
+				"description:'a',",
+				"type:'a',",
+				"format:'a',",
+				"pattern:'a',",
+				"maximum:'1',",
+				"minimum:'1',",
+				"multipleOf:'1',",
+				"maxLength:'1',",
+				"minLength:'1',",
+				"allowEmptyValue:'true',",
+				"exclusiveMaximum:'true',",
+				"exclusiveMinimum:'true',",
+				"schema:{type:'a'},",
+				"enum:'a,b',",
+				"example:'a'"
+			}
+		) String h) {}
+
+		@RestMethod(name=GET,path="/mixed/{P}")
+		public void ta03(@Path(
+			name="P",
+			api={
+				"description:'b',",
+				"type:'b',",
+				"format:'b',",
+				"pattern:'b',",
+				"maximum:'2',",
+				"minimum:'2',",
+				"multipleOf:'2',",
+				"maxLength:'2',",
+				"minLength:'2',",
+				"allowEmptyValue:'false',",
+				"exclusiveMaximum:'false',",
+				"exclusiveMinimum:'false',",
+				"schema:{type:'b'},",
+				"enum:'b,c',",
+				"example:'b'"
+			},
+			description="a",
+			type="a",
+			format="a",
+			pattern="a",
+			maximum="1",
+			minimum="1",
+			multipleOf="1",
+			maxLength="1",
+			minLength="1",
+			allowEmptyValue="true",
+			exclusiveMaximum="true",
+			exclusiveMinimum="true",
+			schema=@Schema(type="a"),
+			_enum=" a,b ",
+			example="'a'"
+		) String h) {}
+
 		@RestMethod(name=GET,path="/value/{P}")
-		public void sb02(@Path("P") String h) {}
+		public void ta04(@Path("P") String h) {}
 
-		@RestMethod(name=GET,path="/schema2/{P}")
-		public void sb16b(@Path(name="P", schema=@Schema(" type:'b' ")) String h) {}
-
-		public static class SB16c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3/{P}")
-		public void sb16c(@Path("P") SB16c b) {}
-
-		public static class SB16d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4/{P}")
-		public void sb16d(@Path("P") SB16d b) {}
-
-		public static class SB16e {}
-
-		@RestMethod(name=GET,path="/schema5/{P}")
-		public void sb16e(@Path("P") SB16e b) {}
-
-		@RestMethod(name=GET,path="/schema6/{P}")
-		public void sb16f(@Path("P") Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7/{P}")
-		public void sb16g(@Path("P") Boolean b) {}
-		
-		@RestMethod(name=GET,path="/enum2/{P}")
-		public void sb19(@Path(name="P", _enum={" ['a','b'] "}) String h) {}
-
-		@RestMethod(name=GET,path="/example2/{P}")
-		public void sb21(@Path(name="P", example="{f1:'b'}") String h) {}
+		@RestMethod(name=GET,path="/enum/{P}")
+		public void ta05(@Path(name="P", _enum={" ['a','b'] "}) String h) {}
 	}
-	
+
 	@Test
-	public void sb00_Path_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
+	public void ta01_Path_onParameter_basic() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
 		assertEquals("a", x.getDescription());
 		assertEquals("a", x.getType());
 		assertEquals("a", x.getFormat());
@@ -515,48 +667,132 @@ public class PathAnnotationTest {
 		assertObjectEquals("'a'", x.getExample());
 	}
 	@Test
-	public void sb02_Path_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/value/{P}").get("get").getParameter("path", "P");
+	public void ta02_Path_onParameter_api() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api/{P}").get("get").getParameter("path", "P");
+		assertEquals("a", x.getDescription());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void ta03_Path_onParameter_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed/{P}").get("get").getParameter("path", "P");
+		assertEquals("a", x.getDescription());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void ta04_Path_onParameter_value() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value/{P}").get("get").getParameter("path", "P");
 		assertEquals("P", x.getName());
 	}
 	@Test
-	public void sb16b_Path_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema2/{P}").get("get").getParameter("path", "P");
+	public void ta05_Path_onParameter_enum() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/enum/{P}").get("get").getParameter("path", "P");
+		assertObjectEquals("['a','b']", x.getEnum());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TB {
+
+		@RestMethod(name=GET,path="/schemaValue/{P}")
+		public void tb01(@Path(name="P", schema=@Schema(" type:'b' ")) String h) {}
+
+		public static class TB02 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/autoDetectBean/{P}")
+		public void tb02(@Path("P") TB02 b) {}
+
+		public static class TB03 extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+		@RestMethod(name=GET,path="/autoDetectList/{P}")
+		public void tb03(@Path("P") TB03 b) {}
+
+		public static class TB04 {}
+		@RestMethod(name=GET,path="/autoDetectStringObject/{P}")
+		public void tb04(@Path("P") TB04 b) {}
+
+		@RestMethod(name=GET,path="/autoDetectInteger/{P}")
+		public void tb05(@Path("P") Integer b) {}
+
+		@RestMethod(name=GET,path="/autoDetectBoolean/{P}")
+		public void tb06(@Path("P") Boolean b) {}
+	}
+
+	@Test
+	public void tb01_Path_onParameter_schemaValue() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'b'}", x.getSchema());
 	}
 	@Test
-	public void sb16c_Path_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema3/{P}").get("get").getParameter("path", "P");
+	public void tb02_Path_onParameter_autoDetectBean() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBean/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
 	}
 	@Test
-	public void sb16d_Path_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema4/{P}").get("get").getParameter("path", "P");
+	public void tb03_Path_onParameter_autoDetectList() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectList/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
 	}
 	@Test
-	public void sb16e_Path_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema5/{P}").get("get").getParameter("path", "P");
+	public void tb04_Path_onParameter_autoDetectStringObject() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectStringObject/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 	@Test
-	public void sb16f_Path_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema6/{P}").get("get").getParameter("path", "P");
+	public void tb05_Path_onParameter_autoDetectInteger() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectInteger/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
 	}
 	@Test
-	public void sb16g_Path_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema7/{P}").get("get").getParameter("path", "P");
+	public void tb06_Path_onParameter_autoDetectBoolean() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBoolean/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{type:'boolean'}", x.getSchema());
 	}
-	@Test
-	public void sb19_Path_onParameter__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/enum2/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("['a','b']", x.getEnum());
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TC {
+
+		@RestMethod(name=GET,path="/example/{P}")
+		public void ta21(@Path(name="P", example="{f1:'b'}") String h) {}
 	}
+	
 	@Test
-	public void sb21_Path_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/example2/{P}").get("get").getParameter("path", "P");
+	public void tc01_Path_onParameter_example2() throws Exception {
+		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example/{P}").get("get").getParameter("path", "P");
 		assertObjectEquals("{f1:'b'}", x.getExample());
 	}
 }

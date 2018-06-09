@@ -314,7 +314,7 @@ public abstract class Session {
 	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session.
 	 */
 	public void checkForWarnings() {
-		if (! warnings.isEmpty())
+		if (warnings != null && ! warnings.isEmpty())
 			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));		
 	}
 }

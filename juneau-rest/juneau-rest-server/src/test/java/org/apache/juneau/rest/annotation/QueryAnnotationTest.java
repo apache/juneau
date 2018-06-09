@@ -261,7 +261,11 @@ public class QueryAnnotationTest {
 	// @Query on POJO
 	//=================================================================================================================
 	
-	@RestResource()
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
 	public static class SA {
 
 		@Query(
@@ -289,76 +293,123 @@ public class QueryAnnotationTest {
 			items=@Items(type="a"),
 			example="'a'"
 		)
-		public static class SA00 {
-			public SA00(String x) {}
+		public static class SA01 {
+			public SA01(String x) {}
 		}
-		
 		@RestMethod(name=GET, path="/basic")
-		public void sa00(SA00 q) {}
-
-		@Query("Q")
-		public static class SA01 {}
-		
-		@RestMethod(name=GET,path="/value")
 		public void sa01(SA01 q) {}
 
-		@Query(name="Q", schema=@Schema(" type:'b' "))
-		public static class SA19b {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void sa19b(SA19b q) {}
-
-		@Query("Q")
-		public static class SA19c {
-			public String f1;
+		@Query(
+			name="Q", 
+			api={
+				"description: 'a\nb',",
+				"required:'true',",
+				"type:'a',",
+				"format:'a',",
+				"pattern:'a',",
+				"collectionFormat:'a',",
+				"maximum:'1',",
+				"minimum:'1',",
+				"multipleOf:'1',",
+				"maxLength:'1',",
+				"minLength:'1',",
+				"maxItems:'1',",
+				"minItems:'1',",
+				"allowEmptyValue:'true',",
+				"exclusiveMaximum:'true',",
+				"exclusiveMinimum:'true',",
+				"uniqueItems:'true',",
+				"schema:{type:'a'},",
+				"default:'a',",
+				"enum:'a, b',",
+				"items:{type:'a'},",
+				"example:'a'"
+			}
+		)
+		public static class SA02 {
+			public SA02(String x) {}
 		}
+		@RestMethod(name=GET, path="/api")
+		public void sa02(SA02 q) {}
 
-		@RestMethod(name=GET,path="/schema3")
-		public void sa19c(SA19c q) {}
-
-		@Query("Q")
-		public static class SA19d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
+		@Query(
+			name="Q", 
+			api={
+				"description: 'b\nc',",
+				"required:'false',",
+				"type:'b',",
+				"format:'b',",
+				"pattern:'b',",
+				"collectionFormat:'b',",
+				"maximum:'2',",
+				"minimum:'2',",
+				"multipleOf:'2',",
+				"maxLength:'2',",
+				"minLength:'2',",
+				"maxItems:'2',",
+				"minItems:'2',",
+				"allowEmptyValue:'false',",
+				"exclusiveMaximum:'false',",
+				"exclusiveMinimum:'false',",
+				"uniqueItems:'false',",
+				"schema:{type:'b'},",
+				"default:'b',",
+				"enum:'b, c',",
+				"items:{type:'b'},",
+				"example:'b'"
+			},
+			description= {"a","b"},
+			required="true",
+			type="a",
+			format="a",
+			pattern="a",
+			collectionFormat="a",
+			maximum="1",
+			minimum="1",
+			multipleOf="1",
+			maxLength="1",
+			minLength="1",
+			maxItems="1",
+			minItems="1",
+			allowEmptyValue="true",
+			exclusiveMaximum="true",
+			exclusiveMinimum="true",
+			uniqueItems="true",
+			schema=@Schema(type="a"),
+			_default="a",
+			_enum="a, b",
+			items=@Items(type="a"),
+			example="'a'"
+		)
+		public static class SA03 {
+			public SA03(String x) {}
 		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void sa19d(SA19d q) {}
+		@RestMethod(name=GET, path="/mixed")
+		public void sa03(SA03 q) {}
 
 		@Query("Q")
-		public static class SA19e {}
+		public static class SA04 {}
+		@RestMethod(name=GET,path="/value")
+		public void sa04(SA04 q) {}
 
-		@RestMethod(name=GET,path="/schema5")
-		public void sa19e(SA19e q) {}
-		
 		@Query(name="Q", _default={"a","b"})
-		public static class SA21b {}
-		
-		@RestMethod(name=GET,path="/_default2")
-		public void sa21b(SA21b q) {}
+		public static class SA05 {}
+		@RestMethod(name=GET,path="/default")
+		public void sa05(SA05 q) {}
 
 		@Query(name="Q", _enum={" ['a','b'] "})
-		public static class SA22b {}
-		
-		@RestMethod(name=GET,path="/_enum2")
-		public void sa22b(SA22b q) {}
+		public static class SA06 {}
+		@RestMethod(name=GET,path="/enum")
+		public void sa06(SA06 q) {}
 
 		@Query(name="Q", items=@Items(" type: 'b' "))
-		public static class SA23b {}
-		
-		@RestMethod(name=GET,path="/items2")
-		public void sa23b(SA23b q) {}
-
-		@Query(name="Q", example={"{f1:'a'}"})
-		public static class SA24b {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void sa24b(SA24b q) {}
+		public static class SA07 {}
+		@RestMethod(name=GET,path="/items")
+		public void sa07(SA07 q) {}
 	}
-	
+
 	@Test
-	public void sa00a_Query_onPojo_basic() throws Exception {
+	public void sa01_Query_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("query", "Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
@@ -385,48 +436,151 @@ public class QueryAnnotationTest {
 		assertObjectEquals("'a'", x.getExample());
 	}
 	@Test
-	public void sa01_Query_onPojo_value() throws Exception {
+	public void sa02_Query_onPojo_api() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("query", "Q");
+		assertEquals("Q", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void sa03_Query_onPojo_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("query", "Q");
+		assertEquals("Q", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void sa04_Query_onPojo_value() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/value").get("get").getParameter("query", "Q");
 		assertEquals("Q", x.getName());
 	}
 	@Test
-	public void sa19b_Query_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema2").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void sa19c_Query_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema3").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void sa19d_Query_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema4").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void sa19e_Query_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema5").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void sa21b_Query_onPojo_default2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/_default2").get("get").getParameter("query", "Q");
+	public void sa05_Query_onPojo_default() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/default").get("get").getParameter("query", "Q");
 		assertEquals("a\nb", x.getDefault());
 	}
 	@Test
-	public void sa22b_Query_onPojo_enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/_enum2").get("get").getParameter("query", "Q");
+	public void sa06_Query_onPojo_enum() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/enum").get("get").getParameter("query", "Q");
 		assertObjectEquals("['a','b']", x.getEnum());
 	}
 	@Test
-	public void sa23b_Query_onPojo_items2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/items2").get("get").getParameter("query", "Q");
+	public void sa07_Query_onPojo_items() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/items").get("get").getParameter("query", "Q");
 		assertObjectEquals("{type:'b'}", x.getItems());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class SB {
+
+		@Query(name="Q", schema=@Schema(" type:'b' "))
+		public static class SB01 {}
+		@RestMethod(name=GET,path="/schemaValue")
+		public void sb01(SB01 q) {}
+
+		@Query("Q")
+		public static class SB02 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/autoDetectBean")
+		public void sb02(SB02 q) {}
+
+		@Query("Q")
+		public static class SB03 extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+		@RestMethod(name=GET,path="/autoDetectList")
+		public void sb03(SB03 q) {}
+
+		@Query("Q")
+		public static class SB04 {}
+		@RestMethod(name=GET,path="/autoDetectStringObject")
+		public void sb04(SB04 q) {}
+	}
+
 	@Test
-	public void sa24b_Query_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/example2").get("get").getParameter("query", "Q");
+	public void sb01_Query_onPojo_schemaValue() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getParameter("query", "Q");
+		assertObjectEquals("{type:'b'}", x.getSchema());
+	}
+	@Test
+	public void sb02_Query_onPojo_autoDetectBean() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean").get("get").getParameter("query", "Q");
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+	}
+	@Test
+	public void sb03_Query_onPojo_autoDetectList() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList").get("get").getParameter("query", "Q");
+		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+	}
+	@Test
+	public void sb04_Query_onPojo_autoDetectStringObject() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("query", "Q");
+		assertObjectEquals("{type:'string'}", x.getSchema());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class SC {
+
+		@Query(name="Q", example={"{f1:'a'}"})
+		public static class SC01 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/example")
+		public void sc01(SC01 q) {}
+	}
+	
+	@Test
+	public void sc01_Query_onPojo_example() throws Exception {
+		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("query", "Q");
 		assertObjectEquals("{f1:'a'}", x.getExample());
 	}
 		
@@ -434,11 +588,15 @@ public class QueryAnnotationTest {
 	// @Query on parameter
 	//=================================================================================================================
 
-	@RestResource()
-	public static class SB {
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TA {
 		
 		@RestMethod(name=GET,path="/basic")
-		public void sb00(
+		public void ta01(
 			@Query(
 				name="Q",
 				description= {"a","b"},
@@ -465,29 +623,107 @@ public class QueryAnnotationTest {
 				example="a"
 			) 
 			String q) {}
+		
+		@RestMethod(name=GET,path="/api")
+		public void ta02(
+			@Query(
+				name="Q",
+				api={
+					"description: 'a\nb',",
+					"required:'true',",
+					"type:'a',",
+					"format:'a',",
+					"pattern:'a',",
+					"collectionFormat:'a',",
+					"maximum:'1',",
+					"minimum:'1',",
+					"multipleOf:'1',",
+					"maxLength:'1',",
+					"minLength:'1',",
+					"maxItems:'1',",
+					"minItems:'1',",
+					"allowEmptyValue:'true',",
+					"exclusiveMaximum:'true',",
+					"exclusiveMinimum:'true',",
+					"uniqueItems:'true',",
+					"schema:{type:'a'},",
+					"default:'a',",
+					"enum:'a, b',",
+					"items:{type:'a'},",
+					"example:'a'"
+				}
+			) 
+			String q) {}
+		
+		@RestMethod(name=GET,path="/mixed")
+		public void ta03(
+			@Query(
+				name="Q",
+				api={
+					"description: 'b\nc',",
+					"required:'false',",
+					"type:'b',",
+					"format:'b',",
+					"pattern:'b',",
+					"collectionFormat:'b',",
+					"maximum:'2',",
+					"minimum:'2',",
+					"multipleOf:'2',",
+					"maxLength:'2',",
+					"minLength:'2',",
+					"maxItems:'2',",
+					"minItems:'2',",
+					"allowEmptyValue:'false',",
+					"exclusiveMaximum:'false',",
+					"exclusiveMinimum:'false',",
+					"uniqueItems:'false',",
+					"schema:{type:'b'},",
+					"default:'b',",
+					"enum:'b, c',",
+					"items:{type:'b'},",
+					"example:'b'"
+				},
+				description= {"a","b"},
+				required="true",
+				type="a",
+				format="a",
+				pattern="a",
+				collectionFormat="a",
+				maximum="1",
+				minimum="1",
+				multipleOf="1",
+				maxLength="1",
+				minLength="1",
+				maxItems="1",
+				minItems="1",
+				allowEmptyValue="true",
+				exclusiveMaximum="true",
+				exclusiveMinimum="true",
+				uniqueItems="true",
+				schema=@Schema(type="a"),
+				_default="a",
+				_enum="a,b",
+				items=@Items(type="a"),
+				example="a"
+			) 
+			String q) {}
 
 		@RestMethod(name=GET,path="/value")
-		public void sb02(@Query("Q") String q) {}
+		public void ta04(@Query("Q") String q) {}
 
-		@RestMethod(name=GET,path="/schema2")
-		public void sb19b(@Query(name="Q", schema=@Schema( " type: 'b' ")) String q) {}
+		@RestMethod(name=GET,path="/default")
+		public void ta05(@Query(name="Q", _default={"a","b"}) String q) {}
 
-		@RestMethod(name=GET,path="/_default2")
-		public void sb20b(@Query(name="Q", _default={"a","b"}) String q) {}
+		@RestMethod(name=GET,path="/enum")
+		public void ta06(@Query(name="Q", _enum= {" ['a','b'] "}) String q) {}
 
-		@RestMethod(name=GET,path="/_enum2")
-		public void sb21b(@Query(name="Q", _enum= {" ['a','b'] "}) String q) {}
-
-		@RestMethod(name=GET,path="/items2")
-		public void sb22b(@Query(name="Q", items=@Items(" type:'b' ")) String q) {}
-
-		@RestMethod(name=GET,path="/example2")
-		public void sb23b(@Query(name="Q", example={"a","b"}) String q) {}
+		@RestMethod(name=GET,path="/items")
+		public void ta07(@Query(name="Q", items=@Items(" type:'b' ")) String q) {}
 	}
-	
+
 	@Test
-	public void sb00_Query_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/basic").get("get").getParameter("query", "Q");
+	public void ta01_Query_onParameter_basic() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("query", "Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
@@ -513,33 +749,111 @@ public class QueryAnnotationTest {
 		assertEquals("a", x.getExample());
 	}
 	@Test
-	public void sb02_Query_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/value").get("get").getParameter("query", "Q");
+	public void ta02_Query_onParameter_api() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("query", "Q");
+		assertEquals("Q", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertEquals("a", x.getExample());
+	}
+	@Test
+	public void ta03_Query_onParameter_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("query", "Q");
+		assertEquals("Q", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertEquals("a", x.getExample());
+	}
+	@Test
+	public void ta04_Query_onParameter_value() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value").get("get").getParameter("query", "Q");
 		assertEquals("Q", x.getName());
 	}
 	@Test
-	public void sb19b_Query_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema2").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void sb20b_Query_onParameter__default2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/_default2").get("get").getParameter("query", "Q");
+	public void ta05_Query_onParameter_default() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/default").get("get").getParameter("query", "Q");
 		assertEquals("a\nb", x.getDefault());
 	}
 	@Test
-	public void sb21b_Query_onParameter__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/_enum2").get("get").getParameter("query", "Q");
+	public void ta06_Query_onParameter_enum() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/enum").get("get").getParameter("query", "Q");
 		assertObjectEquals("['a','b']", x.getEnum());
 	}
 	@Test
-	public void sb22b_Query_onParameter_items2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/items2").get("get").getParameter("query", "Q");
+	public void ta07_Query_onParameter_items() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/items").get("get").getParameter("query", "Q");
 		assertObjectEquals("{type:'b'}", x.getItems());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TB {
+		
+		@RestMethod(name=GET,path="/schemaValue")
+		public void tb01(@Query(name="Q", schema=@Schema( " type: 'b' ")) String q) {}
+	}
+
 	@Test
-	public void sb23b_Query_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/example2").get("get").getParameter("query", "Q");
+	public void tb01_Query_onParameter_schemaValue() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("query", "Q");
+		assertObjectEquals("{type:'b'}", x.getSchema());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TC {
+		
+		@RestMethod(name=GET,path="/example")
+		public void tc01(@Query(name="Q", example={"a","b"}) String q) {}
+	}
+	
+	@Test
+	public void t01_Query_onParameter_example() throws Exception {
+		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("query", "Q");
 		assertEquals("a\nb", x.getExample());
 	}
 }

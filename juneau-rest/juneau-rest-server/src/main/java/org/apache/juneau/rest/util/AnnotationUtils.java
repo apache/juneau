@@ -50,7 +50,7 @@ public class AnnotationUtils {
 			.appendSkipEmpty("required", a.required())
 			.appendSkipEmpty("example", joinnl(a.example()))
 			.appendSkipEmpty("examples", joinnl(a.examples()))
-			.append("schema", merge(om.getObjectMap("schema"), a.schema()));
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()));
 	}
 
 	/**
@@ -104,14 +104,14 @@ public class AnnotationUtils {
 			.appendSkipEmpty("required", a.required())
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("type", a.type())
-			.append("items", merge(om.getObjectMap("items"), a.items()))
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("allOf", joinnl(a.allOf()))
 			.appendSkipEmpty("properties", joinnl(a.properties()))
 			.appendSkipEmpty("additionalProperties", joinnl(a.additionalProperties()))
 			.appendSkipEmpty("discriminator", a.discriminator())
 			.appendSkipEmpty("readOnly", a.readOnly())
 			.appendSkipEmpty("xml", joinnl(a.xml()))
-			.append("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs()))
+			.appendSkipEmpty("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs()))
 			.appendSkipEmpty("example", joinnl(a.example()))
 			.appendSkipEmpty("examples", joinnl(a.examples()))
 			.appendSkipEmpty("ignore", a.ignore() ? "true" : null);
@@ -133,8 +133,8 @@ public class AnnotationUtils {
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("example", joinnl(a.example()))
 			.appendSkipEmpty("examples", joinnl(a.examples()))
-			.append("schema", merge(om.getObjectMap("schema"), a.schema()))
-			.append("headers", merge(om.getObjectMap("headers"), a.headers()));
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipEmpty("headers", merge(om.getObjectMap("headers"), a.headers()));
 	}	
 	
 	/**
@@ -218,7 +218,7 @@ public class AnnotationUtils {
 			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("default", joinnl(a._default()))
-			.append("items", merge(om.getObjectMap("items"), a.items()))
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("example", joinnl(a.example()));
@@ -249,7 +249,7 @@ public class AnnotationUtils {
 			.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
 			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.append("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("example", joinnl(a.example()));
 	}
@@ -284,10 +284,10 @@ public class AnnotationUtils {
 			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("uniqueItems", a.uniqueItems())
-			.append("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
-			.append("items", merge(om.getObjectMap("items"), a.items()))
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("example", joinnl(a.example()));
 	}
 	
@@ -321,10 +321,10 @@ public class AnnotationUtils {
 			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("uniqueItems", a.uniqueItems())
-			.append("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
-			.append("items", merge(om.getObjectMap("items"), a.items()))
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("example", joinnl(a.example()));
 	}
 
@@ -358,10 +358,10 @@ public class AnnotationUtils {
 			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("uniqueItems", a.uniqueItems())
-			.append("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
-			.append("items", merge(om.getObjectMap("items"), a.items()))
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("example", joinnl(a.example()));
 	}
 	

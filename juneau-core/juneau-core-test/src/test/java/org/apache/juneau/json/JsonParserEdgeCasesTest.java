@@ -129,7 +129,7 @@ public class JsonParserEdgeCasesTest {
 			{ 94, "n_object_garbage_at_end", "{\"a\":\"a\" 123}", "Could not find '}'" },
 			{ 95, "n_object_key_with_single_quotes", "{key: 'value'}", "Unquoted attribute detected" },
 			{ 96, "n_object_missing_colon", "{\"a\" b}", "Could not find ':'" },
-			{ 97, "n_object_missing_key", "{:\"b\"}", "Unquoted attribute detected" },
+			{ 97, "n_object_missing_key", "{:\"b\"}", null },
 			{ 98, "n_object_missing_semicolon", "{\"a\" \"b\"}", "Could not find ':'" },
 			{ 99, "n_object_missing_value", "{\"a\":", "Unrecognized syntax" },
 			{ 100, "n_object_no-colon", "{\"a\"", "Could not find ':'" },

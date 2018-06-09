@@ -161,7 +161,11 @@ public class FormDataAnnotationTest {
 	// @FormData on POJO
 	//=================================================================================================================
 	
-	@RestResource()
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
 	public static class SA {
 
 		@FormData(
@@ -189,76 +193,123 @@ public class FormDataAnnotationTest {
 			items=@Items(type="a"),
 			example="a"
 		)
-		public static class SA00 {
-			public SA00(String x) {}
+		public static class SA01 {
+			public SA01(String x) {}
 		}
-		
 		@RestMethod(name=GET,path="/basic")
-		public void sa00(SA00 f) {}
+		public void sa01(SA01 f) {}
 
-		@FormData("F")
-		public static class SA02 {}
-		
-		@RestMethod(name=GET,path="/value")
+		@FormData(
+			name="F",
+			api={
+				"description:'a\nb',",
+				"required:'true',",
+				"type:'a',",
+				"format:'a',",
+				"pattern:'a',",
+				"collectionFormat:'a',",
+				"maximum:'1',",
+				"minimum:'1',",
+				"multipleOf:'1',",
+				"maxLength:'1',",
+				"minLength:'1',",
+				"maxItems:'1',",
+				"minItems:'1',",
+				"allowEmptyValue:'true',",
+				"exclusiveMaximum:'true',",
+				"exclusiveMinimum:'true',",
+				"uniqueItems:'true',",
+				"schema:{type:'a'},",
+				"default:'a',",
+				"enum:' a,b ',",
+				"items:{type:'a'},",
+				"example:'a'"
+			}
+		)
+		public static class SA02 {
+			public SA02(String x) {}
+		}
+		@RestMethod(name=GET,path="/api")
 		public void sa02(SA02 f) {}
 		
-		@FormData(name="F", schema=@Schema(" type:'b' "))
-		public static class SA20b {}
+		@FormData(
+			name="F",
+			api={
+				"description:'b\nc',",
+				"required:'false',",
+				"type:'b',",
+				"format:'b',",
+				"pattern:'b',",
+				"collectionFormat:'b',",
+				"maximum:'2',",
+				"minimum:'2',",
+				"multipleOf:'2',",
+				"maxLength:'2',",
+				"minLength:'2',",
+				"maxItems:'2',",
+				"minItems:'2',",
+				"allowEmptyValue:'false',",
+				"exclusiveMaximum:'false',",
+				"exclusiveMinimum:'false',",
+				"uniqueItems:'false',",
+				"schema:{type:'a'},",
+				"default:'a',",
+				"enum:' a,b ',",
+				"items:{type:'a'},",
+				"example:'b'"
+			},
+			description= {"a","b"},
+			required="true",
+			type="a",
+			format="a",
+			pattern="a",
+			collectionFormat="a",
+			maximum="1",
+			minimum="1",
+			multipleOf="1",
+			maxLength="1",
+			minLength="1",
+			maxItems="1",
+			minItems="1",
+			allowEmptyValue="true",
+			exclusiveMaximum="true",
+			exclusiveMinimum="true",
+			uniqueItems="true",
+			schema=@Schema(type="a"),
+			_default="a",
+			_enum=" a,b ",
+			items=@Items(type="a"),
+			example="a"
+		)
+		public static class SA03 {
+			public SA03(String x) {}
+		}
+		@RestMethod(name=GET,path="/mixed")
+		public void sa03(SA03 f) {}
 		
-		@RestMethod(name=GET,path="/schema2")
-		public void sa20b(SA20b f) {}
-
 		@FormData("F")
-		public static class SA20c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void sa20c(SA20c f) {}
-
-		@FormData("F")
-		public static class SA20d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void sa20d(SA20d f) {}
-
-		@FormData("F")
-		public static class SA20e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void sa20e(SA20e f) {}
-
+		public static class SA04 {}
+		@RestMethod(name=GET,path="/value")
+		public void sa04(SA04 f) {}
+		
 		@FormData(name="F", _default={"a","b"})
-		public static class SA23 {}
+		public static class SA05 {}
+		@RestMethod(name=GET,path="/default")
+		public void sa05(SA05 f) {}
 		
-		@RestMethod(name=GET,path="/_default2")
-		public void sa23(SA23 f) {}
-
 		@FormData(name="F", _enum={ "['a','b']" })
-		public static class SA25 {}
+		public static class SA06 {}
+		@RestMethod(name=GET,path="/enum")
+		public void sa06(SA06 f) {}
 		
-		@RestMethod(name=GET,path="/_enum2")
-		public void sa25(SA25 f) {}
-
 		@FormData(name="F", items=@Items(" type:'b' "))
-		public static class SA27 {}
-		
-		@RestMethod(name=GET,path="/items2")
-		public void sa27(SA27 f) {}
-
-		@FormData(name="F", example={"{f1:'a'}"})
-		public static class SA29 {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void sa29(SA29 f) {}
+		public static class SA07 {}
+		@RestMethod(name=GET,path="/items")
+		public void sa07(SA07 f) {}
 	}
 	
 	@Test
-	public void sa00_FormData_onPojo_basic() throws Exception {
+	public void sa01_FormData_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
@@ -285,48 +336,151 @@ public class FormDataAnnotationTest {
 		assertEquals("a", x.getExample());
 	}
 	@Test
-	public void sa02_FormData_onPojo_value() throws Exception {
+	public void sa02_FormData_onPojo_api() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("formData", "F");
+		assertEquals("F", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertEquals("a", x.getExample());
+	}
+	@Test
+	public void sa03_FormData_onPojo_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("formData", "F");
+		assertEquals("F", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertEquals("a", x.getExample());
+	}
+	@Test
+	public void sa04_FormData_onPojo_value() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/value").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 	}
 	@Test
-	public void sa20b_FormData_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void sa20c_FormData_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema3").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void sa20d_FormData_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema4").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void sa20e_FormData_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema5").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void sa23_FormData_onPojo__default2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/_default2").get("get").getParameter("formData", "F");
+	public void sa05_FormData_onPojo__default2() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/default").get("get").getParameter("formData", "F");
 		assertEquals("a\nb", x.getDefault());
 	}
 	@Test
-	public void sa25_FormData_onPojo__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/_enum2").get("get").getParameter("formData", "F");
+	public void sa06_FormData_onPojo__enum2() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/enum").get("get").getParameter("formData", "F");
 		assertObjectEquals("['a','b']", x.getEnum());
 	}
 	@Test
-	public void sa27_FormData_onPojo_items2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/items2").get("get").getParameter("formData", "F");
+	public void sa07_FormData_onPojo_items2() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/items").get("get").getParameter("formData", "F");
 		assertObjectEquals("{type:'b'}", x.getItems());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class SB {
+
+		@FormData(name="F", schema=@Schema(" type:'b' "))
+		public static class SB01 {}
+		@RestMethod(name=GET,path="/value")
+		public void sb01(SB01 f) {}
+
+		@FormData("F")
+		public static class SB02 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/autoDetectBean")
+		public void sb02(SB02 f) {}
+
+		@FormData("F")
+		public static class SB03 extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+		@RestMethod(name=GET,path="/autoDetectList")
+		public void sb03(SB03 f) {}
+
+		@FormData("F")
+		public static class SB04 {}
+		@RestMethod(name=GET,path="/autoDetectStringObject")
+		public void sb04(SB04 f) {}
+	}
+	
 	@Test
-	public void sa29_FormData_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/example2").get("get").getParameter("formData", "F");
+	public void sb01_FormData_onPojo_value() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/value").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'b'}", x.getSchema());
+	}
+	@Test
+	public void sb02_FormData_onPojo_autoDetectBean() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+	}
+	@Test
+	public void sb03_FormData_onPojo_autoDetectList() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+	}
+	@Test
+	public void sb04_FormData_onPojo_autoDetectStringObject() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'string'}", x.getSchema());
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class SC {
+
+		@FormData(name="F", example={"{f1:'a'}"})
+		public static class SC01 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/example")
+		public void sc01(SC01 f) {}
+	}
+	
+	@Test
+	public void sc01_FormData_onPojo_example() throws Exception {
+		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("formData", "F");
 		assertObjectEquals("{f1:'a'}", x.getExample());
 	}
 	
@@ -334,11 +488,15 @@ public class FormDataAnnotationTest {
 	// @FormData on parameter
 	//=================================================================================================================
 
-	@RestResource()
-	public static class SB {
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TA {
 
 		@RestMethod(name=GET,path="/basic")
-		public void sb00(
+		public void ta01(
 			@FormData(
 				name="F",
 				description={"a","b"},
@@ -365,53 +523,104 @@ public class FormDataAnnotationTest {
 				example="'a'"
 			) String f) {}
 
-		@RestMethod(name=GET,path="/value")
-		public void sb02(@FormData("F") String f) {}
-
-		@RestMethod(name=GET,path="/schema2")
-		public void sb21b(@FormData(name="F", schema=@Schema(" type:'b' ")) String f) {}
-
-		public static class SB21c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void sb21c(@FormData("F") SB21c b) {}
-
-		public static class SB21d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void sb21d(@FormData("F") SB21d b) {}
-
-		public static class SB21e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void sb21e(@FormData("F") SB21e b) {}
-
-		@RestMethod(name=GET,path="/schema6")
-		public void sb21f(@FormData("F") Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7")
-		public void sb21g(@FormData("F") Boolean b) {}
+		@RestMethod(name=GET,path="/api")
+		public void ta02(
+			@FormData(
+				name="F",
+				api={
+					"description:'a\nb',",
+					"required:'true',",
+					"type:'a',",
+					"format:'a',",
+					"pattern:'a',",
+					"collectionFormat:'a',",
+					"maximum:'1',",
+					"minimum:'1',",
+					"multipleOf:'1',",
+					"maxLength:'1',",
+					"minLength:'1',",
+					"maxItems:'1',",
+					"minItems:'1',",
+					"allowEmptyValue:'true',",
+					"exclusiveMaximum:'true',",
+					"exclusiveMinimum:'true',",
+					"uniqueItems:'true',",
+					"schema:{type:'a'},",
+					"default:'a',",
+					"enum:' a,b ',",
+					"items:{type:'a'},",
+					"example:'a'"
+				}
+			) String f) {}
 		
-		@RestMethod(name=GET,path="/_default2")
-		public void sb24(@FormData(name="F", _default={"a","b"}) String f) {}
+		@RestMethod(name=GET,path="/mixed")
+		public void ta03(
+			@FormData(
+				name="F",
+				api={
+					"description:'b\nc',",
+					"required:'false',",
+					"type:'b',",
+					"format:'b',",
+					"pattern:'b',",
+					"collectionFormat:'b',",
+					"maximum:'2',",
+					"minimum:'2',",
+					"multipleOf:'2',",
+					"maxLength:'2',",
+					"minLength:'2',",
+					"maxItems:'2',",
+					"minItems:'2',",
+					"allowEmptyValue:'false',",
+					"exclusiveMaximum:'false',",
+					"exclusiveMinimum:'false',",
+					"uniqueItems:'false',",
+					"schema:{type:'b'},",
+					"default:'b',",
+					"enum:' b,c ',",
+					"items:{type:'b'},",
+					"example:'b'"
+				},
+				description={"a","b"},
+				required="true",
+				type="a",
+				format="a",
+				pattern="a",
+				collectionFormat="a",
+				maximum="1",
+				minimum="1",
+				multipleOf="1",
+				maxLength="1",
+				minLength="1",
+				maxItems="1",
+				minItems="1",
+				allowEmptyValue="true",
+				exclusiveMaximum="true",
+				exclusiveMinimum="true",
+				uniqueItems="true",
+				schema=@Schema(type="a"),
+				_default="a",
+				_enum="a,b",
+				items=@Items(type="a"),
+				example="'a'"
+			) String f) {}
 
-		@RestMethod(name=GET,path="/_enum2")
-		public void sb26(@FormData(name="F", _enum={" ['a','b'] "}) String f) {}
+		@RestMethod(name=GET,path="/value")
+		public void ta04(@FormData("F") String f) {}
+		
+		@RestMethod(name=GET,path="/default")
+		public void ta05(@FormData(name="F", _default={"a","b"}) String f) {}
 
-		@RestMethod(name=GET,path="/items2")
-		public void sb28(@FormData(name="F", items=@Items(" type:'b' ")) String f) {}
+		@RestMethod(name=GET,path="/enum")
+		public void ta06(@FormData(name="F", _enum={" ['a','b'] "}) String f) {}
 
-		@RestMethod(name=GET,path="/example2")
-		public void sb30(@FormData(name="F", example="{f1:'a'}") String f) {}
+		@RestMethod(name=GET,path="/items")
+		public void ta07(@FormData(name="F", items=@Items(" type:'b' ")) String f) {}
 	}
 
 	@Test
-	public void sb00_FormData_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/basic").get("get").getParameter("formData", "F");
+	public void ta01_FormData_onParameter_basic() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
@@ -437,58 +646,158 @@ public class FormDataAnnotationTest {
 		assertObjectEquals("'a'", x.getExample());
 	}
 	@Test
-	public void sb02_FormData_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/value").get("get").getParameter("formData", "F");
+	public void ta02_FormData_onParameter_api() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("formData", "F");
+		assertEquals("F", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void ta03_FormData_onParameter_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("formData", "F");
+		assertEquals("F", x.getName());
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertEquals("a", x.getType());
+		assertEquals("a", x.getFormat());
+		assertEquals("a", x.getPattern());
+		assertEquals("a", x.getCollectionFormat());
+		assertObjectEquals("1", x.getMaximum());
+		assertObjectEquals("1", x.getMinimum());
+		assertObjectEquals("1", x.getMultipleOf());
+		assertObjectEquals("1", x.getMaxLength());
+		assertObjectEquals("1", x.getMinLength());
+		assertObjectEquals("1", x.getMaxItems());
+		assertObjectEquals("1", x.getMinItems());
+		assertObjectEquals("true", x.getAllowEmptyValue());
+		assertObjectEquals("true", x.getExclusiveMaximum());
+		assertObjectEquals("true", x.getExclusiveMinimum());
+		assertObjectEquals("true", x.getUniqueItems());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("a", x.getDefault());
+		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{type:'a'}", x.getItems());
+		assertObjectEquals("'a'", x.getExample());
+	}
+	@Test
+	public void ta04_FormData_onParameter_value() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 	}
 	@Test
-	public void sb21b_FormData_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema2").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void sb21c_FormData_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema3").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void sb21d_FormData_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema4").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void sb21e_FormData_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema5").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void sb21f_FormData_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema6").get("get").getParameter("formData", "F");
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
-	}
-	@Test
-	public void sb21g_FormData_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema7").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
-	}
-	@Test
-	public void sb24_FormData_onParameter__default2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/_default2").get("get").getParameter("formData", "F");
+	public void ta05_FormData_onParameter_default() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/default").get("get").getParameter("formData", "F");
 		assertEquals("a\nb", x.getDefault());
 	}
 	@Test
-	public void sb26_FormData_onParameter__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/_enum2").get("get").getParameter("formData", "F");
+	public void ta06_FormData_onParameter_enum() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/enum").get("get").getParameter("formData", "F");
 		assertObjectEquals("['a','b']", x.getEnum());
 	}
 	@Test
-	public void sb28_FormData_onParameter_items2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/items2").get("get").getParameter("formData", "F");
+	public void ta07_FormData_onParameter_items() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/items").get("get").getParameter("formData", "F");
 		assertObjectEquals("{type:'b'}", x.getItems());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource
+	public static class TB {
+
+		@RestMethod(name=GET,path="/schemaValue")
+		public void tb01(@FormData(name="F", schema=@Schema(" type:'b' ")) String f) {}
+
+		public static class TB02 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/autoDetectBean")
+		public void tb02(@FormData("F") TB02 b) {}
+
+		public static class TB03 extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+		@RestMethod(name=GET,path="/autoDetectList")
+		public void tb03(@FormData("F") TB03 b) {}
+
+		public static class TB04 {}
+		@RestMethod(name=GET,path="/autoDetectStringObject")
+		public void tb04(@FormData("F") TB04 b) {}
+
+		@RestMethod(name=GET,path="/autoDetectInteger")
+		public void tb05(@FormData("F") Integer b) {}
+
+		@RestMethod(name=GET,path="/autoDetectBoolean")
+		public void tb06(@FormData("F") Boolean b) {}
+	}
+
 	@Test
-	public void sb30_FormData_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/example2").get("get").getParameter("formData", "F");
+	public void tb01_FormData_onParameter_schemaValue() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'b'}", x.getSchema());
+	}
+	@Test
+	public void tb02_FormData_onParameter_autoDetectBean() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBean").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+	}
+	@Test
+	public void tb03_FormData_onParameter_autoDetectList() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectList").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+	}
+	@Test
+	public void tb04_FormData_onParameter_autoDetectStringObject() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'string'}", x.getSchema());
+	}
+	@Test
+	public void tb05_FormData_onParameter_autoDetectInteger() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectInteger").get("get").getParameter("formData", "F");
+		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
+	}
+	@Test
+	public void tb06_FormData_onParameter_autoDetectBoolean() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBoolean").get("get").getParameter("formData", "F");
+		assertObjectEquals("{type:'boolean'}", x.getSchema());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TC {
+
+		@RestMethod(name=GET,path="/example")
+		public void tc01(@FormData(name="F", example="{f1:'a'}") String f) {}
+	}
+	
+	@Test
+	public void tc01_FormData_onParameter_example() throws Exception {
+		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("formData", "F");
 		assertObjectEquals("{f1:'a'}", x.getExample());
 	}
 }

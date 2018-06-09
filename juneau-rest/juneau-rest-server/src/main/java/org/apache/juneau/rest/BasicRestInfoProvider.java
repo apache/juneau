@@ -252,6 +252,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		info.appendSkipEmpty("termsOfService", resolve(vr, mb.findFirstString(locale, "termsOfService")));
 		info.appendSkipEmpty("contact", parseMap(vr, mb.findFirstString(locale, "contact"), "Messages/contact on class {0}", c));
 		info.appendSkipEmpty("license", parseMap(vr, mb.findFirstString(locale, "license"), "Messages/license on class {0}", c));
+		if (info.isEmpty())
+			omSwagger.remove("info");
 
 		ObjectList
 			produces = omSwagger.getObjectList("produces", true),
@@ -513,7 +515,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						header.appendSkipEmpty("exclusiveMaximum", resolve(vr, pi2.getString("exclusiveMaximum")));
 						header.appendSkipEmpty("exclusiveMinimum", resolve(vr, pi2.getString("exclusiveMinimum")));
 						header.appendSkipEmpty("uniqueItems", resolve(vr, pi2.getString("uniqueItems")));
-						header.appendSkipEmpty("default", JsonParser.DEFAULT.parse(vr.resolve(pi2.getString("default")), Object.class));
+						header.appendSkipEmpty("default", parseAnything(vr, pi2.getString("default"), "@ResponseHeader/default on class {0} method {1}", c, m));
 						header.appendSkipEmpty("enum", parseListOrCdl(vr, pi2.getString("enum"), "@ResponseHeader/enum on class {0} method {1}", c, m));
 						header.appendSkipEmpty("x-example", parseAnything(vr, pi2.getString("example"), "@ResponseHeader/example on class {0} method {1}", c, m));
 						header.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@ResponseHeader/examples on class {0} method {1}", c, m));
@@ -584,7 +586,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (js.getBeanDefs() != null) 
 			for (Map.Entry<String,ObjectMap> e : js.getBeanDefs().entrySet())
 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
-		
+		if (definitions.isEmpty())
+			omSwagger.remove("definitions");
+			
 		if (! tagMap.isEmpty())
 			omSwagger.put("tags", tagMap.values());
 		
@@ -592,6 +596,14 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			omSwagger.remove("consumes");
 		if (produces.isEmpty())
 			omSwagger.remove("produces");
+		
+//		try {
+//			if (! omSwagger.isEmpty())
+//				assertNoEmpties(omSwagger);
+//		} catch (SwaggerException e1) {
+//			System.err.println(omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE));
+//			throw e1;
+//		}
 		
 		try {
 			String swaggerJson = omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE);
@@ -601,11 +613,32 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		}
 		
 		swaggers.get(locale).put(hashCode, swagger);
-
-//		JsonSerializer.DEFAULT_LAX_READABLE.println(swagger);
 		
 		return swagger;
 	}
+	
+//	private static void assertNoEmpties(ObjectMap om) throws SwaggerException {
+//		if (om.isEmpty())
+//			throw new SwaggerException(null, "Empty map detected.");
+//		for (Map.Entry<String,Object> e : om.entrySet()) {
+//			Object val = e.getValue();
+//			if (val instanceof ObjectMap)
+//				assertNoEmpties((ObjectMap)val);
+//			if (val instanceof ObjectList)
+//				assertNoEmpties((ObjectList)val);
+//		}
+//	}
+//	
+//	private static void assertNoEmpties(ObjectList ol) throws SwaggerException {
+//		if (ol.isEmpty())
+//			throw new SwaggerException(null, "Empty list detected.");
+//		for (Object val : ol) {
+//			if (val instanceof ObjectMap)
+//				assertNoEmpties((ObjectMap)val);
+//			if (val instanceof ObjectList)
+//				assertNoEmpties((ObjectList)val);
+//		}
+//	}
 
 	//=================================================================================================================
 	// Utility methods

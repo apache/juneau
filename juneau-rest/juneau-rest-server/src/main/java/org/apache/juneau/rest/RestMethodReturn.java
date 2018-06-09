@@ -37,7 +37,7 @@ public class RestMethodReturn {
 		int code = 200;
 		if (type instanceof Class)
 		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, (Class<?>)type)) {
-			code = ObjectUtils.firstNonZero(ri.code(), code);
+			code = ObjectUtils.firstNonZero(ri.code(), ri.value(), code);
 			om = merge(om, ri);
 		}
 		

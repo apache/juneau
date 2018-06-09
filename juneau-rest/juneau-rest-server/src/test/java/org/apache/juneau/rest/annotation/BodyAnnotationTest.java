@@ -773,7 +773,11 @@ public class BodyAnnotationTest {
 	// Swagger - @Body on POJO
 	//=================================================================================================================
 
-	@RestResource()
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource
 	public static class SA {
 
 		@Body(
@@ -783,73 +787,48 @@ public class BodyAnnotationTest {
 			example=" 'a' ",
 			examples="{foo:'bar'}"
 		)
-		public static class SA00 {
-			public SA00(String x) {}
+		public static class SA01 {
+			public SA01(String x) {}
 		}
-		
 		@RestMethod(name=GET,path="/basic")
-		public void sa00(SA00 h) {}
+		public void sa01(SA01 h) {}
+
+		@Body({
+			"description:'a\nb',",
+			"required:true,",
+			"schema:{type:'a'},",
+			"example:'a',",
+			"examples:{foo:'bar'}"
+		})
+		public static class SA02 {
+			public SA02(String x) {}
+		}
+		@RestMethod(name=GET,path="/api")
+		public void sa02(SA02 h) {}
 
 		@Body(
 			value={
 				"description:'a\nb',",
 				"required:true,",
 				"schema:{type:'a'},",
+				"example:'a',",
 				"examples:{foo:'bar'}"
-			}
+			},
+			description={"b","c"},
+			required="false",
+			schema=@Schema(type="b"),
+			example="b",
+			examples="{foo:'baz'}"
 		)
-		public static class SA01 {
-			public SA01(String x) {}
+		public static class SA03 {
+			public SA03(String x) {}
 		}
-		
-		@RestMethod(name=GET,path="/api")
-		public void sa01(SA01 h) {}
-
-		@Body(schema=@Schema(" type:'b' "))
-		public static class SA18b {}
-		
-		@RestMethod(name=GET,path="/schema2")
-		public void sa18b(SA18b h) {}
-
-		@Body
-		public static class SA18c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void sa18c(SA18c b) {}
-
-		@Body
-		public static class SA18d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void sa18d(SA18d b) {}
-
-		@Body
-		public static class SA18e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void sa18e(SA18e b) {}
-
-		@Body(example=" {f1:'b'} ")
-		public static class SA27 {
-			public String f1;
-		}
-		
-		@RestMethod(name=GET,path="/example2")
-		public void sa27(SA27 h) {}
-
-		@Body(examples={" foo:'bar' "})
-		public static class SA29 {}
-		
-		@RestMethod(name=GET,path="/examples2")
-		public void sa29(SA29 h) {}
+		@RestMethod(name=GET,path="/mixed")
+		public void sa03(SA03 h) {}
 	}
-	
+		
 	@Test
-	public void sa00_Body_onPojo_basic() throws Exception {
+	public void sa01_Body_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("body", null);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
@@ -857,112 +836,9 @@ public class BodyAnnotationTest {
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
-//	@Test
-//	public void sa01_Body_onPojo_api() throws Exception {
-//		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("body", null);
-//		assertEquals("a\nb", x.getDescription());
-//		assertObjectEquals("true", x.getRequired());
-//		assertObjectEquals("{type:'a'}", x.getSchema());
-//		assertObjectEquals("{foo:'bar'}", x.getExamples());
-//	}
 	@Test
-	public void sa18b_Body_onPojo_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema2").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'b'}", x.getSchema());
-	}
-	@Test
-	public void sa18c_Body_onPojo_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema3").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void sa18d_Body_onPojo_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema4").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void sa18e_Body_onPojo_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/schema5").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-	@Test
-	public void sa27_Body_onPojo_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/example2").get("get").getParameter("body", null);
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-	@Test
-	public void sa29_Body_onPojo_examples2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/examples2").get("get").getParameter("body", null);
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
-	}
-
-	//=================================================================================================================
-	// @Body on parameter
-	//=================================================================================================================
-
-	@RestResource()
-	public static class SB {
-
-		public static class SB01 {
-			public SB01(String x) {}
-		}
-
-		@RestMethod(name=GET, path="/basic")
-		public void sb01(
-			@Body(
-				description= {"a","b"},
-				required="true",
-				schema=@Schema(type="a"),
-				example="'a'",
-				examples=" {foo:'bar'} "
-			) SB01 b) {}
-
-		public static class SB18b {}
-
-		@RestMethod(name=GET,path="/schema2")
-		public void sb18b(@Body(schema=@Schema(" { type:'b' } ")) SB18b b) {}
-
-		public static class SB18c {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/schema3")
-		public void sb18c(@Body SB18c b) {}
-
-		public static class SB18d extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-
-		@RestMethod(name=GET,path="/schema4")
-		public void sb18d(@Body SB18d b) {}
-
-		public static class SB18e {}
-
-		@RestMethod(name=GET,path="/schema5")
-		public void sb18e(@Body SB18e b) {}
-
-		@RestMethod(name=GET,path="/schema6")
-		public void sb18f(@Body Integer b) {}
-
-		@RestMethod(name=GET,path="/schema7")
-		public void sb18g(@Body Boolean b) {}
-
-		public static class SB27 {
-			public String f1;
-		}
-
-		@RestMethod(name=GET,path="/example2")
-		public void sb27(@Body(example="{f1:'b'}") SB27 b) {}
-
-		public static class SB29 {}
-
-		@RestMethod(name=GET,path="/examples2")
-		public void sb29(@Body(examples={" foo:'bar' "}) SB29 b) {}
-	}
-	
-	@Test
-	public void sb00_Body_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/basic").get("get").getParameter("body", null);
+	public void sa02_Body_onPojo_api() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("body", null);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
 		assertObjectEquals("{type:'a'}", x.getSchema());
@@ -970,44 +846,280 @@ public class BodyAnnotationTest {
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
 	@Test
-	public void sb18b_Body_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema2").get("get").getParameter("body", null);
+	public void sa03_Body_onPojo_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("body", null);
+		assertEquals("b\nc", x.getDescription());
+		assertObjectEquals("false", x.getRequired());
+		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("'b'", x.getExample());
+		assertObjectEquals("{foo:'baz'}", x.getExamples());
+	}
+		
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class SB {
+		
+		@Body(schema=@Schema(" type:'b' "))
+		public static class SB01 {}
+		@RestMethod(name=GET,path="/schemaValue")
+		public void sb10(SB01 h) {}
+
+		@Body
+		public static class SB02 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/autoDetectBean")
+		public void sb02(SB02 b) {}
+
+		@Body
+		public static class SB03 extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+		@RestMethod(name=GET,path="/autoDetectList")
+		public void sb03(SB03 b) {}
+
+		@Body
+		public static class SB04 {}
+		@RestMethod(name=GET,path="/autoDetectStringObject")
+		public void sb04(SB04 b) {}
+	}
+		
+	@Test
+	public void sb01_Body_onPojo_schemaValue() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getParameter("body", null);
 		assertObjectEquals("{type:'b'}", x.getSchema());
 	}
 	@Test
-	public void sb18c_Body_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema3").get("get").getParameter("body", null);
+	public void sb02_Body_onPojo_autoDetectBean() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean").get("get").getParameter("body", null);
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
 	}
 	@Test
-	public void sb18d_Body_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema4").get("get").getParameter("body", null);
+	public void sb03_Body_onPojo_autoDetectList() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList").get("get").getParameter("body", null);
 		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
 	}
 	@Test
-	public void sb18e_Body_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema5").get("get").getParameter("body", null);
+	public void sb04_Body_onPojo_autoDetectStringObject() throws Exception {
+		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("body", null);
 		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
-	@Test
-	public void sb18e_Body_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema6").get("get").getParameter("body", null);
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource
+	public static class SC {
+
+		@Body(example=" {f1:'b'} ")
+		public static class SC01 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/example")
+		public void sc01(SC01 h) {}
+
+		@Body(examples={" foo:'bar' "})
+		public static class SC02 {}
+		@RestMethod(name=GET,path="/examples")
+		public void sc02(SC02 h) {}
 	}
+	
+
 	@Test
-	public void sb18e_Body_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schema7").get("get").getParameter("body", null);
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
-	}
-	@Test
-	public void sb27_Body_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/example2").get("get").getParameter("body", null);
+	public void sc01_Body_onPojo_example() throws Exception {
+		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("body", null);
 		assertObjectEquals("{f1:'b'}", x.getExample());
 	}
 	@Test
-	public void sb29_Body_onParameter_examples2() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/examples2").get("get").getParameter("body", null);
+	public void sc02_Body_onPojo_examples() throws Exception {
+		ParameterInfo x = getSwagger(new SC()).getPaths().get("/examples").get("get").getParameter("body", null);
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
 
+	//=================================================================================================================
+	// @Body on parameter
+	//=================================================================================================================
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class TA {
+
+		public static class TA01 {
+			public TA01(String x) {}
+		}
+
+		@RestMethod(name=GET, path="/basic")
+		public void ta01(
+			@Body(
+				description= {"a","b"},
+				required="true",
+				schema=@Schema(type="a"),
+				example="'a'",
+				examples=" {foo:'bar'} "
+			) TA01 b) {}
+
+		public static class TA02 {
+			public TA02(String x) {}
+		}
+
+		@RestMethod(name=GET, path="/api")
+		public void ta02(
+			@Body({
+				"description:'a\nb',",
+				"required:true,",
+				"schema:{type:'a'},",
+				"example:'a',",
+				"examples:{foo:'bar'}"
+			}) TA02 b) {}
+		
+		public static class TA03 {
+			public TA03(String x) {}
+		}
+
+		@RestMethod(name=GET, path="/mixed")
+		public void ta03(
+			@Body(
+				value= {
+					"description:'a\nb',",
+					"required:true,",
+					"schema:{type:'a'},",
+					"example:'a',",
+					"examples:{foo:'bar'}"
+				},
+				description= {"b","c"},
+				required="false",
+				schema=@Schema(type="b"),
+				example="b",
+				examples=" {foo:'baz'} "
+			) TA03 b) {}
+	}
+	
+	@Test
+	public void ta01_Body_onParameter_basic() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("body", null);
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("'a'", x.getExample());
+		assertObjectEquals("{foo:'bar'}", x.getExamples());
+	}
+	@Test
+	public void ta02_Body_onParameter_api() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("body", null);
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("'a'", x.getExample());
+		assertObjectEquals("{foo:'bar'}", x.getExamples());
+	}
+	@Test
+	public void ta03_Body_onParameter_mixed() throws Exception {
+		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("body", null);
+		assertEquals("b\nc", x.getDescription());
+		assertObjectEquals("false", x.getRequired());
+		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("'b'", x.getExample());
+		assertObjectEquals("{foo:'baz'}", x.getExamples());
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Schema
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource
+	public static class TB {
+
+		public static class TB01 {}
+		@RestMethod(name=GET,path="/schemaValue")
+		public void tb01(@Body(schema=@Schema(" { type:'b' } ")) TB01 b) {}
+
+		public static class TB02 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/autoDetectBean")
+		public void sc02(@Body TB02 b) {}
+
+		public static class TB03 extends LinkedList<String> {
+			private static final long serialVersionUID = 1L;
+		}
+		@RestMethod(name=GET,path="/autoDetectList")
+		public void tb03(@Body TB03 b) {}
+
+		public static class TB04 {}
+		@RestMethod(name=GET,path="/autoDetectStringObject")
+		public void tb04(@Body TB04 b) {}
+
+		@RestMethod(name=GET,path="/autoDetectInteger")
+		public void tb05(@Body Integer b) {}
+
+		@RestMethod(name=GET,path="/autoDetectBoolean")
+		public void tb06(@Body Boolean b) {}
+	}
+
+	@Test
+	public void tb01_Body_onParameter_schemaValue() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("body", null);
+		assertObjectEquals("{type:'b'}", x.getSchema());
+	}
+	@Test
+	public void tb02_Body_onParameter_autoDetectBean() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBean").get("get").getParameter("body", null);
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+	}
+	@Test
+	public void tb03_Body_onParameter_autoDetectList() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectList").get("get").getParameter("body", null);
+		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+	}
+	@Test
+	public void tb04_Body_onParameter_autoDetectStringObject() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("body", null);
+		assertObjectEquals("{type:'string'}", x.getSchema());
+	}
+	@Test
+	public void tb05_Body_onParameter_autoDetectInteger() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectInteger").get("get").getParameter("body", null);
+		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
+	}
+	@Test
+	public void tb06_Body_onParameter_autoDetectBoolean() throws Exception {
+		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBoolean").get("get").getParameter("body", null);
+		assertObjectEquals("{type:'boolean'}", x.getSchema());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@RestResource
+	public static class TC {
+
+		public static class TC01 {
+			public String f1;
+		}
+		@RestMethod(name=GET,path="/example")
+		public void tc01(@Body(example="{f1:'b'}") TC01 b) {}
+
+		public static class TC02 {}
+		@RestMethod(name=GET,path="/examples")
+		public void tc02(@Body(examples={" foo:'bar' "}) TC02 b) {}
+	}
+	
+	@Test
+	public void tc01_Body_onParameter_example() throws Exception {
+		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("body", null);
+		assertObjectEquals("{f1:'b'}", x.getExample());
+	}
+	@Test
+	public void tc02_Body_onParameter_examples() throws Exception {
+		ParameterInfo x = getSwagger(new TC()).getPaths().get("/examples").get("get").getParameter("body", null);
+		assertObjectEquals("{foo:'bar'}", x.getExamples());
+	}
 }

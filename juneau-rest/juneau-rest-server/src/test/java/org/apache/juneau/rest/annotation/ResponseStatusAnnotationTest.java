@@ -43,7 +43,7 @@ public class ResponseStatusAnnotationTest {
 	// @ResponseStatus on POJO
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class SA {
 		@ResponseStatus({
 			@Status(code=100),
@@ -96,7 +96,7 @@ public class ResponseStatusAnnotationTest {
 	// @ResponseStatus on parameter
 	//=================================================================================================================
 
-	@RestResource()
+	@RestResource
 	public static class SB {
 		public static class SB01 {}
 		

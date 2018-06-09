@@ -36,7 +36,7 @@ public class RestMethodThrown {
 		
 		int code = 500;
 		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, type)) {
-			code = ObjectUtils.firstNonZero(ri.code(), code);
+			code = ObjectUtils.firstNonZero(ri.code(), ri.value(), code);
 			om = merge(om, ri);
 		}
 		
