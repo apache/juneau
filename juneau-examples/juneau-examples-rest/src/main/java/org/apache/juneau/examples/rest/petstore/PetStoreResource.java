@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -168,10 +167,9 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok addPet(
-			@Body(description="Pet object that needs to be added to the store") PetCreate pet
+			@Body(description="Pet object to add to the store") PetCreate pet
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		
-		JsonSerializer.DEFAULT_LAX_READABLE.println(pet);
 		store.create(pet);
 		return OK;
 	}
@@ -280,8 +278,14 @@ public class PetStoreResource extends BasicRestServletJena {
 	public Collection<Pet> findPetsByStatus(
 			@Query(
 				name="status", 
-				description="Status values that need to be considered for filter", 
+				description="Status values that need to be considered for filter.", 
 				required="true", 
+				type="array",
+				items=@Items(
+					type="string",
+					_enum="AVAILABLE,PENDING,SOLD",
+					_default="AVAILABLE"
+				),
 				example="['AVAILABLE','PENDING']"
 			) 
 			PetStatus[] status
@@ -328,7 +332,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok deletePet(
-			@Header(name="api_key", example="foobar") String apiKey, 
+			@Header(name="api_key", description="Security API key", required="true", example="foobar") String apiKey, 
 			@Path(name="petId", description="Pet id to delete", example="123") long petId
 		) throws IdNotFound, NotAcceptable {
 		

@@ -19,10 +19,10 @@ package org.apache.juneau.dto.jsonschema;
  * An instance of this object is equivalent to calling...
  * 
  * <p class='bcode'>
- * 	SchemaProperty p = <jk>new</jk> SchemaProperty(name)
+ * 	JsonSchemaProperty p = <jk>new</jk> JsonSchemaProperty(name)
  * 		.setType(JsonType.<jsf>ARRAY</jsf>)
  * 		.setItems(
- * 			<jk>new</jk> Schema().setType(elementType)
+ * 			<jk>new</jk> JsonSchema().setType(elementType)
  * 		);
  * </p>
  * 

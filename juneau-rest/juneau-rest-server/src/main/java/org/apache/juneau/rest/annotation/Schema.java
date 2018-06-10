@@ -27,14 +27,17 @@ import org.apache.juneau.rest.*;
  * These types can be objects, but also primitives and arrays. 
  * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it. 
  * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Swagger Specification &gt; Schema Object</a>
+ * </ul>
  */
 @Documented
 @Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Schema {
-	
-	String[] value() default {};
 	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/$ref</code>.
@@ -464,4 +467,70 @@ public @interface Schema {
 	String[] examples() default {};
 
 	boolean ignore() default false;
+	
+	/**
+	 * Free-form value for Schema objects in Swagger
+	 * 
+	 * <p>
+	 * This is a JSON object that makes up the swagger information for this field.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining the swagger description of a Schema object:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"array"</js>,
+	 * 		items=<ja>@Items</ja>(
+	 * 			$ref=<js>"#/definitions/Pet"</js>
+	 * 		)
+	 * 	) 
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		<js>"type: 'array',"</js>,
+	 * 		<js>"items: {"</js>,
+	 * 			<js>"$ref: '#/definitions/Pet'"</js>,
+	 * 		<js>"}"</js>
+	 * 	) 
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form using variables</jc>
+	 * 	<ja>@Schema</ja>(<js>"$L{petArraySwagger}"</js>)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<mc>// Contents of MyResource.properties</mc>
+	 * 	<mk>petArraySwagger</mk> = <mv>{ type: "array", items: { $ref: "#/definitions/Pet" } }</mv>
+	 * </p>
+	 * 
+	 * <p>
+	 * 	The reasons why you may want to use this field include:
+	 * <ul>
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
+	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a Simplified JSON object.
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Schema</ja>(<js>"{type: 'array'}"</js>)
+	 * 		</p>
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Schema</ja>(<js>"type: 'array'"</js>)
+	 * 		</p>
+	 * 	<li>
+	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
+	 * </ul>
+	 */
+	String[] value() default {};
 }

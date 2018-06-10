@@ -22,7 +22,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests related to @ResponseStatus annotation.
+ * Tests related to @ResponseStatuses annotation.
  */
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -40,32 +40,32 @@ public class ResponseStatusAnnotationTest {
 	}
 
 	//=================================================================================================================
-	// @ResponseStatus on POJO
+	// @ResponseStatuses on POJO
 	//=================================================================================================================
 
 	@RestResource
 	public static class SA {
-		@ResponseStatus({
-			@Status(code=100),
-			@Status(code=101)
+		@ResponseStatuses({
+			@ResponseStatus(code=100),
+			@ResponseStatus(code=101)
 		})
 		public static class SA01 {}
 		
 		@RestMethod(name=GET,path="/code")
 		public void sa01(SA01 r) {}
 
-		@ResponseStatus({
-			@Status(100),
-			@Status(101)
+		@ResponseStatuses({
+			@ResponseStatus(100),
+			@ResponseStatus(101)
 		})
 		public static class SA02 {}
 		
 		@RestMethod(name=GET,path="/salue")
 		public void sa02(SA02 r) {}
 
-		@ResponseStatus({
-			@Status(code=100, description="a"),
-			@Status(code=101, description="a\nb")
+		@ResponseStatuses({
+			@ResponseStatus(code=100, description="a"),
+			@ResponseStatus(code=101, description="a\nb")
 		})
 		public static class SA03 {}
 		
@@ -93,7 +93,7 @@ public class ResponseStatusAnnotationTest {
 	}
 	
 	//=================================================================================================================
-	// @ResponseStatus on parameter
+	// @ResponseStatuses on parameter
 	//=================================================================================================================
 
 	@RestResource
@@ -102,9 +102,9 @@ public class ResponseStatusAnnotationTest {
 		
 		@RestMethod(name=GET,path="/code")
 		public void sb01(
-				@ResponseStatus({
-					@Status(code=100),
-					@Status(code=101)
+				@ResponseStatuses({
+					@ResponseStatus(code=100),
+					@ResponseStatus(code=101)
 				})
 				SB01 r
 			) {}
@@ -113,9 +113,9 @@ public class ResponseStatusAnnotationTest {
 		
 		@RestMethod(name=GET,path="/salue")
 		public void sb02(
-				@ResponseStatus({
-					@Status(100),
-					@Status(101)
+				@ResponseStatuses({
+					@ResponseStatus(100),
+					@ResponseStatus(101)
 				})
 				SB02 r
 			) {}
@@ -124,9 +124,9 @@ public class ResponseStatusAnnotationTest {
 		
 		@RestMethod(name=GET,path="/description")
 		public void sb03(
-				@ResponseStatus({
-					@Status(code=100, description="a"),
-					@Status(code=101, description="a\nb")
+				@ResponseStatuses({
+					@ResponseStatus(code=100, description="a"),
+					@ResponseStatus(code=101, description="a\nb")
 				})
 				SB03 r
 			) {}

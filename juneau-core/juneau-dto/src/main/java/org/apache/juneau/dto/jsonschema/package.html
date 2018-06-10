@@ -247,17 +247,17 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.Schema} - Top level schema object.
+				{@link org.apache.juneau.dto.jsonschema.JsonSchema} - Top level schema object.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.SchemaProperty} - A subclass of <code>Schema</code> for 
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaProperty} - A subclass of <code>Schema</code> for 
 				representing properties.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.SchemaPropertySimpleArray} - A convenience subclass of 
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaPropertySimpleArray} - A convenience subclass of 
 				<code>SchemaProperty</code> for representing properties of simple array types.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.SchemaRef} - Represents a URI reference to another schema.
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaRef} - Represents a URI reference to another schema.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.SchemaArray} - An array of <code>Schema</code> objects.
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaArray} - An array of <code>Schema</code> objects.
 			<li>
 				{@link org.apache.juneau.dto.jsonschema.JsonType} - An enum of possible JSON data types.
 			<li>
@@ -302,13 +302,13 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create the document object model</jc>
-	Schema s = <jk>new</jk> Schema()
+	JsonSchema s = <jk>new</jk> JsonSchema()
 		.setTitle(<js>"Example Schema"</js>)
 		.setType(JsonType.<jsf>OBJECT</jsf>)
 		.addProperties(
-			<jk>new</jk> SchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>),
-			<jk>new</jk> SchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>),
-			<jk>new</jk> SchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>)
+			<jk>new</jk> JsonSchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>),
+			<jk>new</jk> JsonSchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>),
+			<jk>new</jk> JsonSchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>)
 				.setDescription(<js>"Age in years"</js>)
 				.setMinimum(0)
 		)
@@ -360,40 +360,40 @@
 			This document can be constructing using the following code:
 		</p>
 		<p class='bcode'>
-	Schema s = <jk>new</jk> Schema()
+	JsonSchema s = <jk>new</jk> JsonSchema()
 		.setId(<js>"http://some.site.somewhere/entry-schema#"</js>)
 		.setSchemaVersionId(<js>"http://json-schema.org/draft-04/schema#"</js>)
 		.setDescription(<js>"schema for an fstab entry"</js>)
 		.setType(JsonType.<jsf>OBJECT</jsf>)
 		.addRequired(<js>"storage"</js>)
 		.addProperties(
-			<jk>new</jk> SchemaProperty(<js>"storage"</js>)
+			<jk>new</jk> JsonSchemaProperty(<js>"storage"</js>)
 				.setType(JsonType.<jsf>OBJECT</jsf>)
 				.addOneOf(
-					<jk>new</jk> SchemaRef(<js>"#/definitions/diskDevice"</js>),
-					<jk>new</jk> SchemaRef(<js>"#/definitions/diskUUID"</js>),
-					<jk>new</jk> SchemaRef(<js>"#/definitions/nsf"</js>),
-					<jk>new</jk> SchemaRef(<js>"#/definitions/tmpfs"</js>)
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/diskDevice"</js>),
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/diskUUID"</js>),
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/nsf"</js>),
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/tmpfs"</js>)
 				),
-			<jk>new</jk> SchemaProperty(<js>"fstype"</js>)
+			<jk>new</jk> JsonSchemaProperty(<js>"fstype"</js>)
 				.addEnum(<js>"ext3"</js>, <js>"ext4"</js>, <js>"btrfs"</js>),
-			<jk>new</jk> SchemaPropertySimpleArray(<js>"options"</js>, JsonType.<jsf>STRING</jsf>)
+			<jk>new</jk> JsonSchemaPropertySimpleArray(<js>"options"</js>, JsonType.<jsf>STRING</jsf>)
 				.setMinItems(1)
 				.setUniqueItems(<jk>true</jk>),
-			<jk>new</jk> SchemaProperty(<js>"readonly"</js>)
+			<jk>new</jk> JsonSchemaProperty(<js>"readonly"</js>)
 				.setType(JsonType.<jsf>BOOLEAN</jsf>)
 		)
 		.addDefinition(<js>"diskDevice"</js>,
-			<jk>new</jk> Schema()
+			<jk>new</jk> JsonSchema()
 		)
 		.addDefinition(<js>"diskUUID"</js>,
-			<jk>new</jk> Schema()
+			<jk>new</jk> JsonSchema()
 		)
 		.addDefinition(<js>"nfs"</js>,
-			<jk>new</jk> Schema()
+			<jk>new</jk> JsonSchema()
 		)
 		.addDefinition(<js>"tmpfs"</js>,
-			<jk>new</jk> Schema()
+			<jk>new</jk> JsonSchema()
 		);
 
 	<jc>// Serialize to JSON</jc>
@@ -430,22 +430,22 @@
 	)
 	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> BasicRestServletJena {
 	
-		<jk>private</jk> Schema <jf>schema</jf>;     <jc>// The schema document</jc>
+		<jk>private</jk> JsonSchema <jf>schema</jf>;     <jc>// The schema document</jc>
 		
 		<jd>/** Servlet initialization */</jd> 
 		<ja>@Override</ja>
 		<jk>public void</jk> init() {
 	
 			<jk>try</jk> {
-				<jf>schema</jf> = <jk>new</jk> Schema()
+				<jf>schema</jf> = <jk>new</jk> JsonSchema()
 					.setId(<js>"http://example.com/sample-schema#"</js>)
 					.setSchemaVersionUri(<js>"http://json-schema.org/draft-04/schema#"</js>)
 					.setTitle(<js>"Example Schema"</js>)
 					.setType(JsonType.<jsf>OBJECT</jsf>)
 					.addProperties(
-						<jk>new</jk> SchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>),
-						<jk>new</jk> SchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>),
-						<jk>new</jk> SchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>)
+						<jk>new</jk> JsonSchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>),
+						<jk>new</jk> JsonSchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>),
+						<jk>new</jk> JsonSchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>)
 							.setDescription(<js>"Age in years"</js>)
 							.setMinimum(0)
 					)
@@ -457,7 +457,7 @@
 		
 		<jd>/** GET request handler */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> Schema getSchema() <jk>throws</jk> Exception {
+		<jk>public</jk> JsonSchema getSchema() <jk>throws</jk> Exception {
 			<jk>return</jk> <jf>schema</jf>;
 		}
 		
@@ -466,7 +466,7 @@
 		 * Replaces the schema document with the specified content, and then mirrors it as the response. 
 		 */</jd>
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> Schema setSchema(<ja>@Body</ja> Schema schema) <jk>throws</jk> Exception {
+		<jk>public</jk> JsonSchema setSchema(<ja>@Body</ja> JsonSchema schema) <jk>throws</jk> Exception {
 			<jk>this</jk>.<jf>schema</jf> = schema;
 			<jk>return</jk> <jk>this</jk>.<jf>schema</jf>;
 		}
@@ -526,7 +526,7 @@
 		</p>
 		<p class='bcode'>		
 	<jc>// Use parser to load JSON-Schema document into JSON-Schema DTOs</jc>
-	Schema schema = JsonParser.<jsf>DEFAULT</jsf>.parse(json, Schema.<jk>class</jk>);
+	Schema schema = JsonParser.<jsf>DEFAULT</jsf>.parse(json, JsonSchema.<jk>class</jk>);
 		</p>
 		<p>
 			Schema objects can also be constructed from the other media types using the appropriate parsers.

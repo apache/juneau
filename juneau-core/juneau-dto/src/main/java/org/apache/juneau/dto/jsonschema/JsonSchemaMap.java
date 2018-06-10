@@ -55,7 +55,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 * 
 	 * @param uri The URI of the schema to retrieve.
-	 * @return The Schema, or <jk>null</jk> if schema was not located and could not be loaded.
+	 * @return The JsonSchema, or <jk>null</jk> if schema was not located and could not be loaded.
 	 */
 	@Override /* Map */
 	public JsonSchema get(Object uri) {
@@ -87,7 +87,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	public JsonSchemaMap add(JsonSchema...schemas) {
 		for (JsonSchema schema : schemas) {
 			if (schema.getId() == null)
-				throw new RuntimeException("Schema with no ID passed to SchemaMap.add(Schema...)");
+				throw new RuntimeException("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
 			put(schema.getId(), schema);
 			schema.setSchemaMap(this);
 		}

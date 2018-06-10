@@ -20,6 +20,10 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.logging.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
+
 /**
  * REST request body annotation.
  * 
@@ -52,12 +56,40 @@ import java.util.logging.*;
  * </p>
  * 
  * <p>
+ * This annotation is also used for supplying swagger information about the body of the request.
+ * 
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Normal</jc>
+ * 	<ja>@Body</ja>(
+ * 		description=<js>"Pet object to add to the store"</js>,
+ * 		required=<js>"true"</js>,
+ * 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Free-form</jc>
+ * 	<ja>@Body</ja>({
+ * 		<js>"description: 'Pet object to add to the store',"</js>,
+ * 		<js>"required: true,"</js>,
+ * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']},"</js>
+ * 		<js>"x-extra: 'extra field'"</js>
+ * 	})
+ * </p>
+ * 
+ * <p>
+ * This is used to populate the auto-generated Swagger documentation and UI:
+ * 
+ * <p>
+ * <img class='bordered' src='doc-files/Body_Swagger.png' style='width:860px'>
+ * 
+ * <p>
  * This annotation can be applied to the following:
  * <ul class='spaced-list'>
  * 	<li>
- * 		Parameters on a  {@link RestMethod @RestMethod}-annotated method.
+ * 		Parameters on a {@link RestMethod @RestMethod}-annotated method.
  * 	<li>
- * 		POJO classes.
+ * 		POJO classes used as parameters on a {@link RestMethod @RestMethod}-annotated method.
  * </ul>
  * 
  * <p>
@@ -106,22 +138,28 @@ import java.util.logging.*;
  * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
  * </ol>
  * 
- * 
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		Annotation values are coalesced from multiple sources in the following order of precedence:
  * 		<ol>
- * 			<li><ja>@Body</ja> annotation fields on parameter.
- * 			<li><ja>@Body</ja> annotation on class.
+ * 			<li><ja>@Body</ja> annotation on parameter.
+ * 			<li><ja>@Body</ja> annotation on parameter class.
  * 			<li><ja>@Body</ja> annotation on parent classes and interfaces.
+ * 			<li><ja>@MethodSwagger(value)</ja> annotation.
+ * 			<li>Localized resource bundle property <js>"[method-name].produces"</js>.
+ * 			<li><ja>@ResourceSwagger(value)</ja> annotation.
+ * 			<li>Localized classpath resource file <js>"[enclosing-class].[simple-class-name]_[locale].json"</js> (if it's an inner or member class).
+ * 			<li>Default classpath resource file <js>"[enclosing-class].[simple-class-name].json"</js> (if it's an inner or member class).
+ * 			<li>Localized classpath resource file <js>"[simple-class-name]_[locale].json"</js>.
+ * 			<li>Default classpath resource file <js>"[simple-class-name].json"</js>.
  * 		</ol>
  * </ul>
- * 
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Body">Overview &gt; juneau-rest-server &gt; @Body</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  */
 @Documented
@@ -130,59 +168,6 @@ import java.util.logging.*;
 @Inherited
 public @interface Body {
 	
-	/**
-	 * Free-form swagger for the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#</code>
-	 * 
-	 * <p>
-	 * This is a JSON object that makes up the swagger information for this parameter-info.
-	 * 
-	 * <p>
-	 * The following are completely equivalent ways of defining the swagger description of the body:
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
-	 * 	) {...}
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(<js>"{description:'Pet object to add to the store'}"</js>) Pet input
-	 * 	) {...}
-	 * </p>
-	 * 
-	 * <p>
-	 * 	The reasons why you may want to use this field include:
-	 * <ul>
-	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
-	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
-	 * 		<br>The following two example are considered equivalent:
-	 * 		<ul>
-	 * 			<li><code>body=<js>"{description:'Pet object to add to the store'}"</js></code>
-	 * 			<li><code>body=<js>"description:'Pet object to add to the store'"</js></code>
-	 * 		<ul>
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Resolution of variables is delayed until request time and occurs before parsing.
-	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
-	 * 	<li>
-	 * 		Swagger field values defined in this value can be overridden by the other specific annotation fields (e.g {@link #description()}).
-	 * </ul>
-	 */
-	String[] value() default {};
-	
-
 	//=================================================================================================================
 	// Attributes common to all ParameterInfos
 	//=================================================================================================================
@@ -277,7 +262,7 @@ public @interface Body {
 	 * 		<ul>
 	 * 			<li><code>schema=<js>"{type:'string',format:'binary'}"</js></code>
 	 * 			<li><code>schema=<js>"type:'string',format:'binary'"</js></code>
-	 * 		<ul>
+	 * 		</ul>
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -286,22 +271,210 @@ public @interface Body {
 	Schema schema() default @Schema;
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/x-examples</code>.
+	 * Serialized example for the body.
 	 * 
 	 * <p>
-	 * This is a JSON object whose keys are media types and values are string representations of that value.
+	 * This is the JSON or String representation of an example of the body.
+	 * 
+	 * <p>
+	 * This value is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
+	 * supported language types.
+	 * <br>These values are then used to automatically populate the {@link #examples} field.
+	 * 
+	 * <p class='bcode w800'>
+	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
+	 * 	<ja>@Body</ja>(
+	 * 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	 * 	)
+	 * </p>
+	 * <p>
+	 * <img class='bordered' src='doc-files/Body_Example.png' style='width:860px'>
+	 * 
+	 * <p>
+	 * There are several other options for defining this example:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Defining an <js>"x-example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+	 * 	<li>
+	 * 		Defining an <js>"x-example"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
+	 * </ul>
+	 * 
+	 * <p>
+	 * The latter is important because Juneau also supports auto-generation of JSON-Schema from POJO classes using {@link JsonSchemaSerializer} which has several of it's own
+	 * options for auto-detecting and calculation POJO examples.
+	 * 
+	 * <p>
+	 * In particular, examples can be defined via static methods, fields, and annotations on the classes themselves.
+	 * 
+	 * <p class='bcode w800'>
+	 * 	<jc>// Annotation on class.</jc>
+	 * 	<ja>@Example</ja>(<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
+	 * 	<jk>public class</jk> PetCreate {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Annotation on static method.</jc>
+	 * 	<jk>public class</jk> PetCreate {
+	 * 		
+	 * 		<ja>@Example</ja>
+	 * 		<jk>public static</jk> PetCreate <jsm>sample</jsm>() {
+	 * 			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Static method with specific name 'example'.</jc>
+	 * 	<jk>public class</jk> PetCreate {
+	 * 		
+	 * 		<jk>public static</jk> PetCreate <jsm>example</jsm>() {
+	 * 			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Static field.</jc>
+	 * 	<jk>public class</jk> PetCreate {
+	 * 		
+	 * 		<ja>@Example</ja>
+	 * 		<jk>public static</jk> PetCreate <jsf>EXAMPLE</jsf> = <jk>new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+	 * 	}
+	 * </p>
+	 * 
+	 * <p>
+	 * Examples can also be specified via generic properties as well using the {@link BeanContext#BEAN_examples} property at either the class or method level.
+	 * <p class='bcode w800'>
+	 * 	<jc>// Examples defined at class level.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(
+	 * 				name=<jsf>BEAN_examples</jsf>, 
+	 * 				value=<js>"{'org.apache.juneau.examples.rest.petstore.PetCreate': {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
+	 * 			)
+	 * 		}
+	 * 	)
+	 * </p>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object.
+	 * 		The format is any JSON if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
+	 * 		can be converted from a String.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
+	String[] example() default {};
+	
+	/**
+	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/x-examples</code>.
+	 * 
+	 * <p>
+	 * This is a JSON object whose keys are media types and values are string representations of that value.
+	 * 
+	 * <p>
+	 * In general you won't need to populate this value directly since it will automatically be calculated based on the value provided in the {@link #example()} field.
+	 * <br>However, this field allows you to override the behavior and show examples for only specified media types or different examples for different media types.
+	 * 
+	 * <p class='bcode w800'>
+	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
+	 * 	<ja>@Body</ja>(
+	 * 		examples={
+	 * 			<js>"'application/json':'{name:\\'Doggie\\',species:\\'Dog\\'}',"</js>,
+	 * 			<js>"'text/uon':'(name:Doggie,species=Dog)'"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a Simplified JSON object with string keys (media type) and string values (example for that media type) .
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 	<li>
+	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Resolution of variables is delayed until request time and occurs before parsing.
+	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
+	 * </ul>
+	 */
 	String[] examples() default {};
 
-	String[] example() default {};
+	/**
+	 * Free-form value for the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#</code>
+	 * 
+	 * <p>
+	 * This is a JSON object that makes up the swagger information for this parameter-info.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining the swagger description of the body:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(
+	 * 			description=<js>"Pet object to add to the store"</js>,
+	 * 			required=<js>"true"</js>,
+	 * 			example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	 * 		) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>({
+	 * 			<js>"description: 'Pet object to add to the store',"</js>,
+	 * 			<js>"required: true,"</js>,
+	 * 			<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	 * 		}) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form with variables</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(<js>"$L{petObjectSwagger}"</js>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<mc>// Contents of MyResource.properties</mc>
+	 * 	<mk>petObjectSwagger</mk> = <mv>{ description: "Pet object to add to the store", required: true, example: {name:"Doggie",price:9.99,species:"Dog",tags:["friendly","cute"]} }</mv>
+	 * </p>
+	 * 
+	 * <p>
+	 * 	The reasons why you may want to use this field include:
+	 * <ul>
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
+	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a Simplified JSON object.
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Body</ja>(<js>"{description: 'Pet object to add to the store'}"</js>)
+	 * 		</p>
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Body</ja>(<js>"description: 'Pet object to add to the store'"</js>)
+	 * 		</p>
+	 * 	<li>
+	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
+	 * </ul>
+	 */
+	String[] value() default {};
 }

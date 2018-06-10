@@ -391,7 +391,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(
 		swagger=@ResourceSwagger(
 			value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}", 
-			tags=@Tag(" { name:'b-name', description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")
+			tags=@Tag(name="b-name",api=" { description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")
 		)
 	)
 	public static class C04 {}
@@ -431,7 +431,7 @@ public class BasicRestInfoProviderTest {
 		swagger=@ResourceSwagger(
 			tags={
 				@Tag(name="s-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url")),
-				@Tag("{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}")
+				@Tag(name="s-name",api="{description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}")
 			}
 		)
 	)
@@ -2016,7 +2016,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA02 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2030,7 +2030,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA03 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{description:'b-100-description'}}"))
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2090,7 +2090,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB02 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2104,7 +2104,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB03 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{headers:{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}}}"))
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2164,7 +2164,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC02 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2178,7 +2178,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC03 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{example:{foo:'c'}}}"))
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2238,7 +2238,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD02 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2252,7 +2252,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD03 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{examples:{foo:{bar:'c'}}}}"))
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2312,7 +2312,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE02 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -2326,7 +2326,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE03 {		
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
-		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
 			return null;
 		}
 	}

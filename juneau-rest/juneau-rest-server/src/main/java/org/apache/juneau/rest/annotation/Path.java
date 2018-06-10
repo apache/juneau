@@ -36,6 +36,7 @@ import org.apache.juneau.rest.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; juneau-rest-server &gt; Method Parameters</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  */
 @Documented
@@ -62,8 +63,6 @@ public @interface Path {
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
-	String[] api() default {};
-	
 	/**
 	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/description</code>.
 	 * 
@@ -310,4 +309,79 @@ public @interface Path {
 	 * </ul>
 	 */
 	String[] example() default {};
+	
+	/**
+	 * Free-form value for the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#</code>
+	 * 
+	 * <p>
+	 * This is a JSON object that makes up the swagger information for this field.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining the swagger description of the Path object:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal</jc>
+	 * 	<ja>@Path</ja>(
+	 * 		name=<js>"orderId"</js>, 
+	 * 		description=<js>"ID of order to fetch"</js>, 
+	 * 		maximum=<js>"1000"</js>, 
+	 * 		minimum=<js>"101"</js>, 
+	 * 		example=<js>"123"</js>
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form</jc>
+	 * 	<ja>@Path</ja>({
+	 * 		name=<js>"orderId"</js>,
+	 * 		api={ 
+	 * 			<js>"description: 'ID of order to fetch',"</js>, 
+	 * 			<js>"maximum: 1000,"</js>, 
+	 * 			<js>"minimum: 101,"</js>, 
+	 * 			<js>"example: 123"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form using variables</jc>
+	 * 	<ja>@Path</ja>({
+	 * 		name=<js>"orderId"</js>,
+	 * 		api=<js>"$L{orderIdSwagger}"</js>
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<mc>// Contents of MyResource.properties</mc>
+	 * 	<mk>orderIdSwagger</mk> = <mv>{ description: "ID of order to fetch", maximum: 1000, minimum: 101, example: 123 }</mv>
+	 * </p>
+	 * 
+	 * <p>
+	 * 	The reasons why you may want to use this field include:
+	 * <ul>
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
+	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
+	 * 	<li>
+	 * 		The format is a Simplified JSON object.
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Path</ja>(api=<js>"{description: 'ID of order to fetch'}"</js>)
+	 * 		</p>
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Path</ja>(api=<js>"description: 'ID of order to fetch''"</js>)
+	 * 		</p>
+	 * 	<li>
+	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
+	 * </ul>
+	 */
+	String[] api() default {};
 }

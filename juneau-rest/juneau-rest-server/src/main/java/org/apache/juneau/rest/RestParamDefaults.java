@@ -718,7 +718,7 @@ class RestParamDefaults {
 
 	static final class ResponseStatusObject extends RestMethodParam {
 
-		protected ResponseStatusObject(Method method, Status a, Type type, PropertyStore ps, RestMethodParam existing) {
+		protected ResponseStatusObject(Method method, ResponseStatus a, Type type, PropertyStore ps, RestMethodParam existing) {
 			super(RESPONSE_STATUS, method, "", type, getMetaData(a, castOrNull(existing, ResponseStatusObject.class)));
 		}
 
@@ -748,16 +748,14 @@ class RestParamDefaults {
 			return v;
 		}
 		
-		private static ObjectMap getMetaData(Status a, ResponseStatusObject existing) {
+		private static ObjectMap getMetaData(ResponseStatus a, ResponseStatusObject existing) {
 			ObjectMap om = existing == null ? new ObjectMap() : existing.metaData;
 			if (a == null)
 				return om;
 			om = om.modifiable();
 			int status = firstNonZero(a.code(), a.value(), 200);
 			ObjectMap om2 = om.getObjectMap(String.valueOf(status), true);
-			om2
-				.appendSkipEmpty("description", joinnl(a.description()))
-			;
+			merge(om2, a);
 			return om;
 		}
 	}

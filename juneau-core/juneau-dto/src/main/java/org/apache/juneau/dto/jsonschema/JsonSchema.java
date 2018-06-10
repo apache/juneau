@@ -52,8 +52,8 @@ public class JsonSchema {
 	private Map<String,JsonSchema> properties;
 	private Map<String,JsonSchema> patternProperties;
 	private Map<String,JsonSchema> dependencies;
-	private JsonSchema itemsSchema;                            // Schema representation of items
-	private JsonSchemaArray itemsSchemaArray;                  // SchemaArray representation of items
+	private JsonSchema itemsSchema;                            // JsonSchema representation of items
+	private JsonSchemaArray itemsSchemaArray;                  // JsonSchemaArray representation of items
 	private Number multipleOf;
 	private Number maximum;
 	private Boolean exclusiveMaximum;
@@ -63,7 +63,7 @@ public class JsonSchema {
 	private Integer minLength;
 	private String pattern;
 	private Boolean additionalItemsBoolean;                // Boolean representation of additionalItems
-	private JsonSchemaArray additionalItemsSchemaArray;        // SchemaArray representation of additionalItems
+	private JsonSchemaArray additionalItemsSchemaArray;        // JsonSchemaArray representation of additionalItems
 	private Integer maxItems;
 	private Integer minItems;
 	private Boolean uniqueItems;
@@ -71,7 +71,7 @@ public class JsonSchema {
 	private Integer minProperties;
 	private List<String> required;
 	private Boolean additionalPropertiesBoolean;           // Boolean representation of additionalProperties
-	private JsonSchema additionalPropertiesSchema;             // Schema representation of additionalProperties
+	private JsonSchema additionalPropertiesSchema;             // JsonSchema representation of additionalProperties
 	private List<String> _enum;
 	private List<JsonSchema> allOf;
 	private List<JsonSchema> anyOf;
@@ -437,7 +437,7 @@ public class JsonSchema {
 		for (JsonSchema p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class,
-					"Invalid property passed to Schema.addProperties().  Property name was null.");
+					"Invalid property passed to JsonSchema.addProperties().  Property name was null.");
 			setMasterOn(p);
 			this.properties.put(p.getName(), p);
 		}
@@ -488,7 +488,7 @@ public class JsonSchema {
 		for (JsonSchema p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class,
-					"Invalid property passed to Schema.addProperties().  Property name was null.");
+					"Invalid property passed to JsonSchema.addProperties().  Property name was null.");
 			setMasterOn(p);
 			this.patternProperties.put(p.getName(), p);
 		}
@@ -540,7 +540,7 @@ public class JsonSchema {
 	 * 	The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * 	Can be either a {@link JsonSchema} or {@link JsonSchemaArray} depending on what value was used to set it.
 	 */
-	@Swap(SchemaOrSchemaArraySwap.class)
+	@Swap(JsonSchemaOrSchemaArraySwap.class)
 	public Object getItems() {
 		if (itemsSchema != null)
 			return itemsSchema;
@@ -586,7 +586,7 @@ public class JsonSchema {
 	 * <p>
 	 * Serialization method is a no-op.
 	 */
-	public static class SchemaOrSchemaArraySwap extends PojoSwap<Object,Object> {
+	public static class JsonSchemaOrSchemaArraySwap extends PojoSwap<Object,Object> {
 
 		@Override /* PojoSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
@@ -625,7 +625,7 @@ public class JsonSchema {
 				setMasterOn(this.itemsSchemaArray);
 			} else
 				throw new BeanRuntimeException(JsonSchemaProperty.class,
-					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Schema, SchemaArray",
+					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray",
 					items.getClass().getName());
 		}
 		return this;
@@ -872,7 +872,7 @@ public class JsonSchema {
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else
 				throw new BeanRuntimeException(JsonSchemaProperty.class,
-					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, SchemaArray",
+					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray",
 					additionalItems.getClass().getName());
 		}
 		return this;
@@ -1153,7 +1153,7 @@ public class JsonSchema {
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
 				throw new BeanRuntimeException(JsonSchemaProperty.class,
-					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, Schema",
+					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema",
 					additionalProperties.getClass().getName());
 		}
 		return this;
@@ -1409,7 +1409,7 @@ public class JsonSchema {
 	 * Sets the master schema for this schema and all child schema objects.
 	 * 
 	 * <p>
-	 * All child elements in a schema should point to a single "master" schema in order to locate registered SchemaMap
+	 * All child elements in a schema should point to a single "master" schema in order to locate registered JsonSchemaMap
 	 * objects for resolving external schemas.
 	 * 
 	 * @param master The master schema to associate on this and all children.  Can be <jk>null</jk>.

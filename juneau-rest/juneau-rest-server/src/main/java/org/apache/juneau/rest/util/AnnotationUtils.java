@@ -231,6 +231,22 @@ public class AnnotationUtils {
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
 	 */
+	public static ObjectMap merge(ObjectMap om, ResponseStatus a) {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		return om 
+			.appendSkipEmpty("_value", joinnl(a.api()))
+			.appendSkipEmpty("description", joinnl(a.description()));
+	}
+
+	/**
+	 * Merges the contents of the specified annotation into the specified map.
+	 * 
+	 * @param om The map to add the annotation values to.
+	 * @param a The annotation.
+	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
+	 */
 	public static ObjectMap merge(ObjectMap om, Path a) {
 		if (empty(a))
 			return om;
@@ -458,6 +474,19 @@ public class AnnotationUtils {
 				a.maxLength(), a.minLength(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
 			)
 			&& empty(a.items());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 * 
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(ResponseStatus a) {
+		if (a == null)
+			return true;
+		return
+			empty(a.description(), a.api());
 	}
 
 	/**

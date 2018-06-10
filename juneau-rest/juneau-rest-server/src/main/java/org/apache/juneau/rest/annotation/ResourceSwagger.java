@@ -22,55 +22,6 @@ package org.apache.juneau.rest.annotation;
  */
 public @interface ResourceSwagger {
 	
-	/**
-	 * Defines the the free-form contents of the swagger.
-	 * 
-	 * <p>
-	 * Used to populate the auto-generated OPTIONS swagger documentation.
-	 * 
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		<jc>// Swagger info.</jc>
-	 * 		swagger=@ResourceSwagger({
-	 * 			<js>"title:'Petstore application',"</js>,
-	 * 			<js>"description:"</js>,
-	 * 				<js>"'This is a sample server Petstore server based on the Petstore sample at Swagger.io."</js>,
-	 * 				+ <js>"\nYou can find out more about Swagger at &lt;a class=\'link\' href=\'http://swagger.io\'&gt;http://swagger.io&lt;/a&gt;.',"</js>,
-	 * 			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
-	 * 			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
-	 * 			<js>"version:'2.0',</js>,
-	 * 			<js>"termsOfService:'You are on your own.',"</js>,
-	 * 			<js>"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}],"</js>,
-	 * 			<js>"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"</js>
-	 * 		})
-	 * 	)
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		<jc>// Swagger info pulled from file.</jc>
-	 * 		swagger=@ResourceSwagger("$F{MyResource.json}")
-	 * 	)
-	 * </p>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters are optional.
-	 * 	<li>
-	 * 		If a Swagger JSON file <code>{resource-class-simple-name}_{locale}.json</code> is present in the same package on the classpath, the values
-	 * 		defined in this annotation will be superimposed on the values pulled from the Swagger JSON file.
-	 * 	<li>
-	 * 		The other annotation values defined here are superimposed on the values defined by this value.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] value() default {};
 	
 	/**
 	 * Defines the swagger field <code>/info/title</code>.
@@ -359,4 +310,119 @@ public @interface ResourceSwagger {
 	 * </ul>
 	 */
 	String version() default "";
+	
+	/**
+	 * Free-form value for the swagger of a resource.
+	 * 
+	 * <p>
+	 * This is a JSON object that makes up the swagger information for this resource.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining the swagger description of a resource:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 			title=<js>"Petstore application"</js>,
+	 * 			description={
+	 * 				<js>"This is a sample server Petstore server based on the Petstore sample at Swagger.io."</js>,
+	 * 				<js>"You can find out more about Swagger at &lt;a class='link' href='http://swagger.io'&gt;http://swagger.io&lt;/a&gt;."</js>
+	 * 			},
+	 * 			contact=<ja>@Contact</ja>(
+	 * 				name=<js>"John Smith"</js>,
+	 * 				email=<js>"john@smith.com"</js>
+	 * 			),
+	 * 			license=<ja>@License</ja>(
+	 * 				name=<js>"Apache 2.0"</js>,
+	 * 				url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
+	 * 			),
+	 * 			version=<js>"2.0"</js>,
+	 * 			termsOfService=<js>"You are on your own."</js>,
+	 * 			tags={
+	 * 				<ja>@Tag</ja>(
+	 * 					name=<js>"Java"</js>,
+	 * 					description=<js>"Java utility"</js>,
+	 * 					externalDocs=<ja>@ExternalDocs</ja>(
+	 * 						description=<js>"Home page"</js>,
+	 * 						url=<js>"http://juneau.apache.org"</js>
+	 * 					)
+	 * 				}
+	 * 			},
+	 * 			externalDocs=<ja>@ExternalDocs</ja>(
+	 * 				description=<js>"Home page"</js>,
+	 * 				url=<js>"http://juneau.apache.org"</js>
+	 * 			)
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=@ResourceSwagger({
+	 * 			<js>"title: 'Petstore application',"</js>,
+	 * 			<js>"description: 'This is a sample server Petstore server based on the Petstore sample at Swagger.io.\nYou can find out more about Swagger at &lt;a class='link' href='http://swagger.io'&gt;http://swagger.io&lt;/a&gt;.',"</js>,
+	 * 			<js>"contact:{"</js>,
+	 * 				<js>"name: 'John Smith',"</js>,
+	 * 				<js>"email: 'john@smith.com'"</js>,
+	 * 			<js>"},"</js>,
+	 * 			<js>"license:{"</js>,
+	 * 				<js>"name: 'Apache 2.0',"</js>,
+	 * 				<js>"url: 'http://www.apache.org/licenses/LICENSE-2.0.html'"</js>,
+	 * 			<js>"},"</js>,
+	 * 			<js>"version: '2.0',"</js>,
+	 * 			<js>"termsOfService: 'You are on your own.',"</js>,
+	 * 			<js>"tags:["</js>,
+	 * 				<js>"{"</js>,
+	 * 					<js>"name: 'Java',"</js>,
+	 * 					<js>"description: 'Java utility',"</js>,
+	 * 					<js>"externalDocs:{"</js>,
+	 * 						<js>"description: 'Home page',"</js>,
+	 * 						<js>"url: 'http://juneau.apache.org'"</js>,
+	 * 					<js>"}"</js>,
+	 * 				<js>"}"</js>,
+	 * 			<js>"],"</js>,
+	 * 			<js>"externalDocs:{"</js>,
+	 * 				<js>"description: 'Home page',"</js>,
+	 * 				<js>"url: 'http://juneau.apache.org'"</js>,
+	 * 			<js>"}"</js>
+	 * 		})
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form with variables</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=@ResourceSwagger(<js>"$F{MyResourceSwagger.json}"</js>)
+	 * 	)
+	 * </p>
+	 * 
+	 * <p>
+	 * 	The reasons why you may want to use this field include:
+	 * <ul>
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
+	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a Simplified JSON object.
+	 * 	<li>
+	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@ResourceSwagger</ja>(<js>"{title:'Petstore application'}"</js>)
+	 * 		</p>
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@ResourceSwagger</ja>(<js>"title:'Petstore application'"</js>)
+	 * 		</p>
+	 * 	<li>
+	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
+	 * </ul>
+	 */
+	String[] value() default {};
 }

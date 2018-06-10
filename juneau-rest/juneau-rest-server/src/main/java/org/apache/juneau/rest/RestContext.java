@@ -4305,8 +4305,8 @@ public final class RestContext extends BeanContext {
 					else if (a instanceof Responses) 
 						for (Response r : ((Responses)a).value())
 							rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
-					else if (a instanceof ResponseStatus) {
-						for (Status rs : ((ResponseStatus)a).value())
+					else if (a instanceof ResponseStatuses) {
+						for (ResponseStatus rs : ((ResponseStatuses)a).value())
 							rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
 						if (rp[i] == null)
 							rp[i] = new RestParamDefaults.ResponseStatusObject(method, null, t, ps, rp[i]);
@@ -4340,8 +4340,8 @@ public final class RestContext extends BeanContext {
 				else if (a instanceof Responses) 
 					for (Response r : ((Responses)a).value())
 						rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
-				else if (a instanceof ResponseStatus) {
-					for (Status rs : ((ResponseStatus)a).value())
+				else if (a instanceof ResponseStatuses) {
+					for (ResponseStatus rs : ((ResponseStatuses)a).value())
 						rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);	
 					if (rp[i] == null)
 						rp[i] = new RestParamDefaults.ResponseStatusObject(method, null, t, ps, rp[i]);

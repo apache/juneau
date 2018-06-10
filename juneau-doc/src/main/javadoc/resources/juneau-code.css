@@ -120,6 +120,7 @@ un { color: DarkBlue; } /* Number value */
 us { color: #00B; } /* String value */
 
 /*--- Manifest-file code effects ---*/
+mc { color: green; }
 mk { color: DarkRed; font-weight: bold; }
 mv { color: DarkBlue;}
 

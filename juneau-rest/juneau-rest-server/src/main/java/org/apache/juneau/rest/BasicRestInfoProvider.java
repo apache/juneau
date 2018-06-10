@@ -836,8 +836,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	}
 
 	private ObjectMap toMap(VarResolverSession vs, Tag a, String location, Object...locationArgs) throws ParseException {
-		ObjectMap om = newMap(vs, new ObjectMap(), a.value(), location, locationArgs);
-		om.appendSkipEmpty("name", vs.resolve(a.name()));
+		ObjectMap om = newMap(vs, new ObjectMap(), a.api(), location, locationArgs);
+		om.appendSkipEmpty("name", vs.resolve(firstNonEmpty(a.name(), a.value())));
 		om.appendSkipEmpty("description", vs.resolve(joinnl(a.description())));
 		om.appendSkipNull("externalDocs", merge(om.getObjectMap("externalDocs"), toMap(vs, a.externalDocs(), location, locationArgs)));
 		return om.isEmpty() ? null : om;
@@ -899,7 +899,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		
 		boolean isOk = "ok".equals(in), isBody = "body".equals(in);
 		
-		example = JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT.serialize(example), type);
+		String sex = example.toString();
+		if (RestUtils.isJson(sex)) {
+			example = JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT.serialize(example), type);
+		} else {
+			ClassMeta<?> cm = js.getClassMeta(type);
+			if (cm.hasStringTransform()) {
+				example = cm.getStringTransform().transform(sex);
+			}
+		}
 		
 		String examplesKey = isOk ? "examples" : "x-examples";  // Parameters don't have an examples attribute.
 

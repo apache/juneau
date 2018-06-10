@@ -366,12 +366,22 @@ public final class RestUtils {
 	 * @throws ParseException
 	 */
 	public static Object parseAnything(String s) throws ParseException {
-		if (s == null)
-			return null;
-		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
-		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
+		if (isJson(s))
 			return JsonParser.DEFAULT.parse(s, Object.class);
 		return s;
+	}
+	
+	public static boolean isJson(String s) {
+		if (s == null)
+			return false;
+		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
+		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
+			return true;
+		if (StringUtils.isOneOf(s, "true","false","null"))
+			return true;
+		if (StringUtils.isNumeric(s))
+			return true;
+		return false;
 	}
 	
 	/**

@@ -33,7 +33,7 @@ public class PetCreate {
 	}
 	
 	public static PetCreate example() {
-		return new PetCreate("Doggie", 9.99f, "doc", new String[] {"friendly","cute"});
+		return new PetCreate("Doggie", 9.99f, "Dog", new String[] {"friendly","cute"});
 	}
 
 	public String getName() {

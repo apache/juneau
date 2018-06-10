@@ -12451,25 +12451,7 @@
 			<ul>
 				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#description() description()}
 				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#required() required()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#type() type()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#format() format()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#pattern() pattern()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#collectionFormat() collectionFormat()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#maximum() maximum()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#minimum() minimum()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#multipleOf() multipleOf()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#maxLength() maxLength()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#minLength() minLength()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#maxItems() maxItems()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#minItems() minItems()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#allowEmptyValue() allowEmptyValue()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#exclusiveMaximum() exclusiveMaximum()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#exclusiveMinimum() exclusiveMinimum()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#uniqueItems() uniqueItems()}
 				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#schema() schema()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#_default() _default()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#_enum() _enum()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#items() items()}
 				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#example() example()}
 				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#examples() examples()}
 			</ul>
@@ -20567,7 +20549,7 @@
 				href='org/apache/juneau/dto/jsonschema/package-summary.html#TOC'>JSON Schema DTO</a> API.
 		</ul>
 		<p>
-			The resource consists of a pre-initialized {@link org.apache.juneau.dto.jsonschema.Schema} object.
+			The resource consists of a pre-initialized {@link org.apache.juneau.dto.jsonschema.JsonSchema} object.
 			Pointing a browser to the resource shows the following:
 		</p>
 		<p class='bcode w800'>
@@ -20614,21 +20596,21 @@
 	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> BasicRestServletJena { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
-		<jk>private</jk> Schema schema; <jc>// The schema document</jc> 
+		<jk>private</jk> JsonSchema schema; <jc>// The schema document</jc> 
 		
 		<ja>@Override</ja> /* Servlet */ 
 		<jk>public void</jk> init() { 
 			
 			<jk>try</jk> { 
-				<jf>schema</jf> = <jk>new</jk> Schema() 
+				<jf>schema</jf> = <jk>new</jk> JsonSchema() 
 					.setId(<js>"http://example.com/sample-schema#"</js>) 
 					.setSchemaVersionUri(<js>"http://json-schema.org/draft-04/schema#"</js>) 
 					.setTitle(<js>"Example Schema"</js>) 
 					.setType(JsonType.<jsf>OBJECT</jsf>) 
 					.addProperties( 
-						<jk>new</jk> SchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>), 
-						<jk>new</jk> SchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>), 
-						<jk>new</jk> SchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>) 
+						<jk>new</jk> JsonSchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>), 
+						<jk>new</jk> JsonSchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>), 
+						<jk>new</jk> JsonSchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>) 
 							.setDescription(<js>"Age in years"</js>) 
 							.setMinimum(0) 
 				) 
@@ -20640,7 +20622,7 @@
 		
 		<jd>/** GET request handler */</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> Schema getSchema() <jk>throws</jk> Exception { 
+		<jk>public</jk> JsonSchema getSchema() <jk>throws</jk> Exception { 
 			<jk>return</jk> <jf>schema</jf>; 
 		} 
 		
@@ -20649,7 +20631,7 @@
 		* Replaces the schema document with the specified content, and then mirrors it as the response. 
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>) 
-		<jk>public</jk> Schema setSchema(<ja>@Body</ja> Schema schema) <jk>throws</jk> Exception { 
+		<jk>public</jk> JsonSchema setSchema(<ja>@Body</ja> JsonSchema schema) <jk>throws</jk> Exception { 
 			<jk>this</jk>.<jf>schema</jf> = schema; 
 			<jk>return</jk> schema; 
 		} 
@@ -25964,7 +25946,7 @@
 				</ul>
 			</li>
 			<li>
-				New JSON-Schema {@link org.apache.juneau.dto.jsonschema.SchemaMap} class for supporting linked schemas.
+				New JSON-Schema {@link org.apache.juneau.dto.jsonschema.JsonSchemaMap} class for supporting linked schemas.
 			</li>
 			<li>
 				Serializers will no longer throw an exception when <code>maxDepth</code> setting is reached, and will instead simply ignore content below the specified depth.<br>
