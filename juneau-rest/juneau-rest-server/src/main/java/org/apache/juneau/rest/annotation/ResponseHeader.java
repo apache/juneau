@@ -140,7 +140,7 @@ public @interface ResponseHeader {
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -155,7 +155,7 @@ public @interface ResponseHeader {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/type</code>.
+	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -183,7 +183,7 @@ public @interface ResponseHeader {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/format</code>.
+	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -202,7 +202,7 @@ public @interface ResponseHeader {
 	String format() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/collectionFormat</code>.
+	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -225,7 +225,7 @@ public @interface ResponseHeader {
 	String collectionFormat() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/$ref</code>.
+	 * <mk>$ref</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <p>
 	 * Denotes a reference to a definition object.
@@ -242,7 +242,7 @@ public @interface ResponseHeader {
 	String $ref() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maximum</code>.
+	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -256,7 +256,7 @@ public @interface ResponseHeader {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minimum</code>.
+	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -270,7 +270,7 @@ public @interface ResponseHeader {
 	String minimum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/multipleOf</code>.
+	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -284,7 +284,7 @@ public @interface ResponseHeader {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maxLength</code>.
+	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -298,7 +298,7 @@ public @interface ResponseHeader {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minLength</code>.
+	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -312,7 +312,7 @@ public @interface ResponseHeader {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/maxItems</code>.
+	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -326,7 +326,7 @@ public @interface ResponseHeader {
 	String maxItems() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/minItems</code>.
+	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -340,7 +340,7 @@ public @interface ResponseHeader {
 	String minItems() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMaximum</code>.
+	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -354,7 +354,7 @@ public @interface ResponseHeader {
 	String exclusiveMaximum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/exclusiveMinimum</code>.
+	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -368,7 +368,7 @@ public @interface ResponseHeader {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/uniqueItems</code>.
+	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -382,7 +382,7 @@ public @interface ResponseHeader {
 	String uniqueItems() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/items</code>.
+	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -397,7 +397,7 @@ public @interface ResponseHeader {
 	Items items() default @Items;
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/default</code>.
+	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -412,7 +412,7 @@ public @interface ResponseHeader {
 	String[] _default() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/enum</code>.
+	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -427,7 +427,7 @@ public @interface ResponseHeader {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers/{header-name}/x-example</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the body value that is used by {@link BasicRestInfoProvider} to construct
@@ -446,7 +446,7 @@ public @interface ResponseHeader {
 	String[] example() default {};
 	
 	/**
-	 * Free-form value for the swagger field <code>/paths/{path}/{method}/responses/{response}/headers/{header}</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this Header object.

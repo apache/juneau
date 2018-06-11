@@ -14,14 +14,11 @@ package org.apache.juneau.rest.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.rest.helper.Ok.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.helper.*;
 
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a form post
@@ -101,7 +98,7 @@ public @interface FormData {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -116,7 +113,7 @@ public @interface FormData {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/required</code>.
+	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -130,7 +127,7 @@ public @interface FormData {
 	String required() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/type</code>.
+	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -157,7 +154,7 @@ public @interface FormData {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/format</code>.
+	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -176,7 +173,7 @@ public @interface FormData {
 	String format() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/pattern</code>.
+	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -192,7 +189,7 @@ public @interface FormData {
 	String pattern() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/collectionFormat</code>.
+	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -213,7 +210,7 @@ public @interface FormData {
 	String collectionFormat() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/maximum</code>.
+	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -227,7 +224,7 @@ public @interface FormData {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/minimum</code>.
+	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -241,7 +238,7 @@ public @interface FormData {
 	String minimum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/multipleOf</code>.
+	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -255,7 +252,7 @@ public @interface FormData {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/maxLength</code>.
+	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -269,7 +266,7 @@ public @interface FormData {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/minLength</code>.
+	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -283,7 +280,7 @@ public @interface FormData {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/maxItems</code>.
+	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -297,7 +294,7 @@ public @interface FormData {
 	String maxItems() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/minItems</code>.
+	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -311,7 +308,7 @@ public @interface FormData {
 	String minItems() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/allowEmptyValue</code>.
+	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -325,7 +322,7 @@ public @interface FormData {
 	String allowEmptyValue() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/exclusiveMaximum</code>.
+	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -339,7 +336,7 @@ public @interface FormData {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/exclusiveMinimum</code>.
+	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -353,7 +350,7 @@ public @interface FormData {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/uniqueItems</code>.
+	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -367,7 +364,7 @@ public @interface FormData {
 	String uniqueItems() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/schema</code>.
+	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -389,7 +386,7 @@ public @interface FormData {
 	Schema schema() default @Schema;
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/default</code>.
+	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * Additionally, this method can be used to define a default value for a missing form data entry.
@@ -407,7 +404,7 @@ public @interface FormData {
 	String[] _default() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/enum</code>.
+	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -422,7 +419,7 @@ public @interface FormData {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/items</code>.
+	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -437,7 +434,7 @@ public @interface FormData {
 	Items items() default @Items;	
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=formData)/#/x-example</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
@@ -456,7 +453,7 @@ public @interface FormData {
 	String[] example() default {};
 	
 	/**
-	 * Free-form value for the swagger field <code>/paths/{path}/{method}/parameters(in=form)/#</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

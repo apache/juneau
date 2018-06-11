@@ -70,7 +70,7 @@ public @interface Header {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -85,7 +85,7 @@ public @interface Header {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/required</code>.
+	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -99,7 +99,7 @@ public @interface Header {
 	String required() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/type</code>.
+	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -126,7 +126,7 @@ public @interface Header {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/format</code>.
+	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -145,7 +145,7 @@ public @interface Header {
 	String format() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/pattern</code>.
+	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -161,7 +161,7 @@ public @interface Header {
 	String pattern() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/collectionFormat</code>.
+	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -184,7 +184,7 @@ public @interface Header {
 	String collectionFormat() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/maximum</code>.
+	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -198,7 +198,7 @@ public @interface Header {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/minimum</code>.
+	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -212,7 +212,7 @@ public @interface Header {
 	String minimum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/multipleOf</code>.
+	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -226,7 +226,7 @@ public @interface Header {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/maxLength</code>.
+	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -240,7 +240,7 @@ public @interface Header {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/minLength</code>.
+	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -254,7 +254,7 @@ public @interface Header {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/maxItems</code>.
+	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -268,7 +268,7 @@ public @interface Header {
 	String maxItems() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/minItems</code>.
+	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -282,7 +282,7 @@ public @interface Header {
 	String minItems() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/allowEmptyValue</code>.
+	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -296,7 +296,7 @@ public @interface Header {
 	String allowEmptyValue() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/exclusiveMaximum</code>.
+	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -310,7 +310,7 @@ public @interface Header {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/exclusiveMinimum</code>.
+	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -324,7 +324,7 @@ public @interface Header {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/uniqueItems</code>.
+	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -338,7 +338,7 @@ public @interface Header {
 	String uniqueItems() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/schema</code>.
+	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -360,7 +360,7 @@ public @interface Header {
 	Schema schema() default @Schema;
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/default</code>.
+	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * Additionally, this method can be used to define a default value for a missing header entry.
@@ -378,7 +378,7 @@ public @interface Header {
 	String[] _default() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/enum</code>.
+	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -393,7 +393,7 @@ public @interface Header {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/items</code>.
+	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -408,7 +408,7 @@ public @interface Header {
 	Items items() default @Items;	
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#/x-example</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
@@ -427,7 +427,7 @@ public @interface Header {
 	String[] example() default {};
 	
 	/**
-	 * Free-form value for the swagger field <code>/paths/{path}/{method}/parameters(in=header)/#</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

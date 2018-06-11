@@ -64,7 +64,7 @@ public @interface Path {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -79,7 +79,7 @@ public @interface Path {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/type</code>.
+	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -108,7 +108,7 @@ public @interface Path {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/format</code>.
+	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -127,7 +127,7 @@ public @interface Path {
 	String format() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/pattern</code>.
+	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -143,7 +143,7 @@ public @interface Path {
 	String pattern() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/maximum</code>.
+	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -157,7 +157,7 @@ public @interface Path {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/minimum</code>.
+	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -171,7 +171,7 @@ public @interface Path {
 	String minimum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/multipleOf</code>.
+	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -185,7 +185,7 @@ public @interface Path {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/maxLength</code>.
+	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -199,7 +199,7 @@ public @interface Path {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/minLength</code>.
+	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -213,7 +213,7 @@ public @interface Path {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/allowEmptyValue</code>.
+	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -227,7 +227,7 @@ public @interface Path {
 	String allowEmptyValue() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/exclusiveMaximum</code>.
+	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -241,7 +241,7 @@ public @interface Path {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/exclusiveMinimum</code>.
+	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -255,7 +255,7 @@ public @interface Path {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/schema</code>.
+	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -277,7 +277,7 @@ public @interface Path {
 	Schema schema() default @Schema;
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/enum</code>.
+	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -292,7 +292,7 @@ public @interface Path {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#/x-example</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
@@ -311,7 +311,7 @@ public @interface Path {
 	String[] example() default {};
 	
 	/**
-	 * Free-form value for the swagger field <code>/paths/{path}/{method}/parameters(in=path)/#</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

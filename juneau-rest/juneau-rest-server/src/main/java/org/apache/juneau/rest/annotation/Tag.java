@@ -37,13 +37,55 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Tag {
 	
+	/**
+	 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String name() default "";
+	
 	String value() default "";
+	
+	/**
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String[] description() default {};
+	
+	/**
+	 * <mk>externalDocs</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 	
 	/**
-	 * Free-form value for the swagger field <code>/tags/[#]</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this Tag object.

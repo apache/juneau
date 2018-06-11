@@ -121,7 +121,7 @@ public @interface ResponseStatus {
 	int value() default 0;
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -136,7 +136,7 @@ public @interface ResponseStatus {
 	String[] description() default {};
 	
 	/**
-	 * Free-form value for the swagger field <code>/paths/{path}/{method}/responses/{response}</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this Response object.

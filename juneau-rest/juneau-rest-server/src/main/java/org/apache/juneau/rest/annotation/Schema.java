@@ -40,7 +40,7 @@ import org.apache.juneau.rest.*;
 public @interface Schema {
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/$ref</code>.
+	 * <mk>$ref</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <p>
 	 * 	A JSON reference to the schema definition.
@@ -57,7 +57,7 @@ public @interface Schema {
 	String $ref() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/format</code>.
+	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
@@ -84,10 +84,22 @@ public @interface Schema {
 	 */
 	String format() default "";
 	
+	/**
+	 * <mk>title</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String title() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -124,7 +136,7 @@ public @interface Schema {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/default</code>.
+	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -139,7 +151,7 @@ public @interface Schema {
 	String[] _default() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/multipleOf</code>.
+	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -153,7 +165,7 @@ public @interface Schema {
 	String multipleOf() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/maximum</code>.
+	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -167,7 +179,7 @@ public @interface Schema {
 	String maximum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/exclusiveMaximum</code>.
+	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -181,7 +193,7 @@ public @interface Schema {
 	String exclusiveMaximum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/minimum</code>.
+	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -195,7 +207,7 @@ public @interface Schema {
 	String minimum() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/exclusiveMinimum</code>.
+	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -209,7 +221,7 @@ public @interface Schema {
 	String exclusiveMinimum() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/maxLength</code>.
+	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -223,7 +235,7 @@ public @interface Schema {
 	String maxLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/minLength</code>.
+	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -237,7 +249,7 @@ public @interface Schema {
 	String minLength() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/pattern</code>.
+	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -259,7 +271,7 @@ public @interface Schema {
 	String pattern() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/maxItems</code>.
+	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -273,7 +285,7 @@ public @interface Schema {
 	String maxItems() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/minItems</code>.
+	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -287,7 +299,7 @@ public @interface Schema {
 	String minItems() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/uniqueItems</code>.
+	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -300,12 +312,40 @@ public @interface Schema {
 	 */
 	String uniqueItems() default "";
 	
+	
+	/**
+	 * <mk>maxProperties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String maxProperties() default "";
 	
+	
+	/**
+	 * <mk>minProperties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String minProperties() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/required</code>.
+	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <p>
 	 * 	Determines whether this parameter is mandatory. 
@@ -340,7 +380,7 @@ public @interface Schema {
 	String required() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/enum</code>.
+	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -355,7 +395,7 @@ public @interface Schema {
 	String[] _enum() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/type</code>.
+	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
@@ -403,7 +443,7 @@ public @interface Schema {
 	String type() default "";
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/items</code>.
+	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -417,20 +457,113 @@ public @interface Schema {
 	 */
 	Items items() default @Items;	
 	
+	/**
+	 * <mk>allOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String[] allOf() default {};
+	
+	/**
+	 * <mk>properties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String[] properties() default {};
+	
+	/**
+	 * <mk>additionalProperties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String[] additionalProperties() default {};
-//	discriminator	string	Adds support for polymorphism. The discriminator is the schema property name that is used to differentiate between other schema that inherit this schema. The property name used MUST be defined at this schema and it MUST be in the required property list. When used, the value MUST be the name of this schema or any schema that inherits it.
+	
+	/**
+	 * <mk>discriminator</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String discriminator() default "";
-//	readOnly	boolean	Relevant only for Schema "properties" definitions. Declares the property as "read only". This means that it MAY be sent as part of a response but MUST NOT be sent as part of the request. Properties marked as readOnly being true SHOULD NOT be in the required list of the defined schema. Default value is false.
+	
+	/**
+	 * <mk>readOnly</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String readOnly() default "";
-//	xml	XML Object	This MAY be used only on properties schemas. It has no effect on root schemas. Adds Additional metadata to describe the XML representation format of this property.
+	
+	/**
+	 * <mk>xml</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	String[] xml() default {};
-//	externalDocs	External Documentation Object	Additional external documentation for this schema.
+	
+	/**
+	 * <mk>externalDocs</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a JSON object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/example</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the body value that is used by {@link BasicRestInfoProvider} to construct
@@ -449,7 +582,7 @@ public @interface Schema {
 	String[] example() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/[parameters(in=body)|responses]/schema/x-examples</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
@@ -469,7 +602,7 @@ public @interface Schema {
 	boolean ignore() default false;
 	
 	/**
-	 * Free-form value for Schema objects in Swagger
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

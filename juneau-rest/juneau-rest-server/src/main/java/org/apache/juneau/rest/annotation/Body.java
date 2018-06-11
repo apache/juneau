@@ -173,7 +173,7 @@ public @interface Body {
 	//=================================================================================================================
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -210,7 +210,7 @@ public @interface Body {
 	String[] description() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/required</code>.
+	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * 	Determines whether this parameter is mandatory. 
@@ -249,7 +249,7 @@ public @interface Body {
 	//=================================================================================================================
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/schema</code>.
+	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -271,7 +271,7 @@ public @interface Body {
 	Schema schema() default @Schema;
 	
 	/**
-	 * Serialized example for the body.
+	 * TODO
 	 * 
 	 * <p>
 	 * This is the JSON or String representation of an example of the body.
@@ -369,7 +369,7 @@ public @interface Body {
 	String[] example() default {};
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#/x-examples</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
@@ -406,7 +406,7 @@ public @interface Body {
 	String[] examples() default {};
 
 	/**
-	 * Free-form value for the swagger field <code>/paths/{path}/{method}/parameters(in=body)/#</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this parameter-info.

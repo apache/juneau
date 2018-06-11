@@ -115,7 +115,7 @@ public @interface Response {
 	int value() default 0;
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/description</code>.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -130,12 +130,12 @@ public @interface Response {
 	String[] description() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/schema</code>.
+	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 */
 	Schema schema() default @Schema;
 	
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses/{status-code}/headers</code>.
+	 * <mk>headers</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -157,7 +157,7 @@ public @interface Response {
 	ResponseHeader[] headers() default {};
 	
 	/**
-	 * Used for populating the swagger field <code>/paths/{path}/{method}/responses/{status-code}/x-examples</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * The format of the example should be a JSON representation of the POJO being serialized.
@@ -184,7 +184,7 @@ public @interface Response {
 	String[] example() default {};
 	
 	/**
-	 * Used for populating the swagger field <code>/paths/{path}/{method}/responses/{status-code}/examples</code>.
+	 * TODO
 	 * 
 	 * <p>
 	 * The format is a JSON object with keys as media types and values as string representations of the body response.
@@ -204,7 +204,7 @@ public @interface Response {
 	String[] examples() default {};
 	
 	/**
-	 * Free-form value for the swagger field <code>/paths/{path}/{method}/responses/{response}</code>
+	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 * 
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.
