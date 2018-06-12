@@ -312,7 +312,6 @@ public class PathAnnotationTest {
 			multipleOf="1",
 			maxLength="1",
 			minLength="1",
-			allowEmptyValue="true",
 			exclusiveMaximum="true",
 			exclusiveMinimum="true",
 			schema=@Schema(type="a"),
@@ -337,7 +336,6 @@ public class PathAnnotationTest {
 				"multipleOf:'1',",
 				"maxLength:'1',",
 				"minLength:'1',",
-				"allowEmptyValue:'true',",
 				"exclusiveMaximum:'true',",
 				"exclusiveMinimum:'true',",
 				"schema:{type:'a'},",
@@ -363,7 +361,6 @@ public class PathAnnotationTest {
 				"multipleOf:'2',",
 				"maxLength:'2',",
 				"minLength:'2',",
-				"allowEmptyValue:'false',",
 				"exclusiveMaximum:'false',",
 				"exclusiveMinimum:'false',",
 				"schema:{type:'b'},",
@@ -379,7 +376,6 @@ public class PathAnnotationTest {
 			multipleOf="1",
 			maxLength="1",
 			minLength="1",
-			allowEmptyValue="true",
 			exclusiveMaximum="true",
 			exclusiveMinimum="true",
 			schema=@Schema(type="a"),
@@ -417,7 +413,6 @@ public class PathAnnotationTest {
 		assertObjectEquals("1", x.getMultipleOf());
 		assertObjectEquals("1", x.getMaxLength());
 		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("{type:'a'}", x.getSchema());
@@ -437,7 +432,6 @@ public class PathAnnotationTest {
 		assertObjectEquals("1", x.getMultipleOf());
 		assertObjectEquals("1", x.getMaxLength());
 		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("{type:'a'}", x.getSchema());
@@ -457,7 +451,6 @@ public class PathAnnotationTest {
 		assertObjectEquals("1", x.getMultipleOf());
 		assertObjectEquals("1", x.getMaxLength());
 		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("{type:'a'}", x.getSchema());
@@ -573,7 +566,6 @@ public class PathAnnotationTest {
 			multipleOf="1",
 			maxLength="1",
 			minLength="1",
-			allowEmptyValue="true",
 			exclusiveMaximum="true",
 			exclusiveMinimum="true",
 			schema=@Schema(type="a"),
@@ -594,7 +586,6 @@ public class PathAnnotationTest {
 				"multipleOf:'1',",
 				"maxLength:'1',",
 				"minLength:'1',",
-				"allowEmptyValue:'true',",
 				"exclusiveMaximum:'true',",
 				"exclusiveMinimum:'true',",
 				"schema:{type:'a'},",
@@ -616,7 +607,6 @@ public class PathAnnotationTest {
 				"multipleOf:'2',",
 				"maxLength:'2',",
 				"minLength:'2',",
-				"allowEmptyValue:'false',",
 				"exclusiveMaximum:'false',",
 				"exclusiveMinimum:'false',",
 				"schema:{type:'b'},",
@@ -632,7 +622,6 @@ public class PathAnnotationTest {
 			multipleOf="1",
 			maxLength="1",
 			minLength="1",
-			allowEmptyValue="true",
 			exclusiveMaximum="true",
 			exclusiveMinimum="true",
 			schema=@Schema(type="a"),
@@ -659,7 +648,6 @@ public class PathAnnotationTest {
 		assertObjectEquals("1", x.getMultipleOf());
 		assertObjectEquals("1", x.getMaxLength());
 		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("{type:'a'}", x.getSchema());
@@ -678,7 +666,6 @@ public class PathAnnotationTest {
 		assertObjectEquals("1", x.getMultipleOf());
 		assertObjectEquals("1", x.getMaxLength());
 		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("{type:'a'}", x.getSchema());
@@ -697,7 +684,6 @@ public class PathAnnotationTest {
 		assertObjectEquals("1", x.getMultipleOf());
 		assertObjectEquals("1", x.getMaxLength());
 		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("{type:'a'}", x.getSchema());

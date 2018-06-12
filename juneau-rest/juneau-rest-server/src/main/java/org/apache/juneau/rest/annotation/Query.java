@@ -78,6 +78,19 @@ public @interface Query {
 	boolean multipart() default false;
 
 	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 * 
+	 * <p>
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
+	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+
+	//=================================================================================================================
+	// Attributes common to all Swagger Parameter objects
+	//=================================================================================================================
+
+	/**
 	 * URL query parameter name.
 	 * 
 	 * Required. The name of the parameter. Parameter names are case sensitive.
@@ -108,22 +121,17 @@ public @interface Query {
 	String value() default "";
 
 	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
-	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
-	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
-
-	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * A brief description of the parameter. This could contain examples of use. 
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		<br>TODO - Future support for <a href='https://guides.github.com/features/mastering-markdown/#GitHub-flavored-markdown'>MarkDown</a>.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -133,6 +141,9 @@ public @interface Query {
 	
 	/**
 	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * Determines whether this parameter is mandatory. The default value is <jk>false</jk>.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -145,23 +156,34 @@ public @interface Query {
 	 */
 	String required() default "";
 	
+	//=================================================================================================================
+	// Attributes specific to parameters other than body
+	//=================================================================================================================
+
 	/**
 	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
+	 * <p>
+	 * The type of the parameter. 
+	 * 
+	 * <p>
+	 * Note that per the Swagger specification, this value is required and must be a simple type (e.g. <js>"string"</js>, <js>"number"</js>...).
+	 * <br>However, Juneau allows for arbitrarily-complex POJOs such as beans in form parameters using UON notation, this attribute can be left off in lieu of a {@link #schema()} 
+	 * attribute.
+	 * 
+	 * <p> 
+	 * The possible values are:
+	 * <ul>
+	 * 	<li><js>"string"</js>
+	 * 	<li><js>"number"</js>
+	 * 	<li><js>"integer"</js>
+	 * 	<li><js>"boolean"</js>
+	 * 	<li><js>"array"</js>
+	 * 	<li><js>"file"</js>
+	 * </ul>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		The possible values are:
-	 * 		<ul>
-	 * 			<li><js>"string"</js>
-	 * 			<li><js>"number"</js>
-	 * 			<li><js>"integer"</js>
-	 * 			<li><js>"boolean"</js>
-	 * 			<li><js>"array"</js>
-	 * 			<li><js>"file"</js>
-	 * 		</ul>
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -177,29 +199,48 @@ public @interface Query {
 	/**
 	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
+	 * <p>
+	 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>. 
+	 * See <a href='https://swagger.io/specification/v2/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is plain text.
+	 * 		The format is plain-text.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
-	 * </ul>
 	 */
 	String format() default "";
 	
+	/**
+	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * Sets the ability to pass empty-valued parameters. 
+	 * <br>This is valid only for either query or formData parameters and allows you to send a parameter with a name only or an empty value. 
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is boolean.
+	 * 	<li>
+	 * 		Default value is <jk>false</jk>.
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String allowEmptyValue() default "";
+
 	/**
 	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is plain text.
+	 * 		The format is a regular expression according to the ECMA 262 regular expression dialect.
 	 * 	<li>
 	 * 		This string SHOULD be a valid regular expression.
 	 * 	<li>
@@ -212,19 +253,19 @@ public @interface Query {
 	/**
 	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
+	 * <p>
+	 * Determines the format of the array if type array is used. 
+	 * <br>Possible values are:
+	 * <ul>
+	 * 	<li><js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 	<li><js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 	<li><js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 	<li><js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 	<li><js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>). 
+	 * </ul>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		The possible value are:
-	 * 		<ul>
-	 * 			<li><js>"csv"</js>
-	 * 			<li><js>"ssv"</js>
-	 * 			<li><js>"tsv"</js>
-	 * 			<li><js>"pipes"</js>
-	 * 			<li><js>"multi"</js>
-	 * 		</ul>
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -238,7 +279,7 @@ public @interface Query {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		The format is a JSON number.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -252,7 +293,7 @@ public @interface Query {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		The format is a JSON number.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -329,20 +370,6 @@ public @interface Query {
 	 * </ul>
 	 */
 	String minItems() default "";
-
-	/**
-	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String allowEmptyValue() default "";
 
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.

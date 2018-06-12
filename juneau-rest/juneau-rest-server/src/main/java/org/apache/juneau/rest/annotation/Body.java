@@ -169,7 +169,7 @@ import org.apache.juneau.jsonschema.*;
 public @interface Body {
 	
 	//=================================================================================================================
-	// Attributes common to all ParameterInfos
+	// Attributes common to all Swagger Parameter objects
 	//=================================================================================================================
 	
 	/**
@@ -212,8 +212,7 @@ public @interface Body {
 	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * 	Determines whether this parameter is mandatory. 
-	 *  <br>The property MAY be included and its default value is false.
+	 * Determines whether the body is mandatory. The default value is <jk>false</jk>.
 	 *  
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
@@ -276,6 +275,10 @@ public @interface Body {
 	 */
 	Schema schema() default @Schema;
 	
+	//=================================================================================================================
+	// Other
+	//=================================================================================================================
+
 	/**
 	 * TODO
 	 * 

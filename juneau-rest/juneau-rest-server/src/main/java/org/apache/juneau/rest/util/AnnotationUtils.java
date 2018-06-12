@@ -257,12 +257,12 @@ public class AnnotationUtils {
 			.appendSkipEmpty("type", a.type())
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
 			.appendSkipEmpty("maxLength", a.maxLength())
 			.appendSkipEmpty("minLength", a.minLength())
-			.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
 			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
@@ -333,7 +333,6 @@ public class AnnotationUtils {
 			.appendSkipEmpty("minLength", a.minLength())
 			.appendSkipEmpty("maxItems", a.maxItems())
 			.appendSkipEmpty("minItems", a.minItems())
-			.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
 			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("uniqueItems", a.uniqueItems())
@@ -417,7 +416,7 @@ public class AnnotationUtils {
 			empty(a.description(), a._default(), a._enum(), a.example(), a.api())
 			&& empty(
 				a.name(), a.value(), a.required(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf(), a.maxLength(), 
-				a.minLength(), a.maxItems(), a.minItems(), a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
+				a.minLength(), a.maxItems(), a.minItems(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
 			)
 			&& empty(a.schema())
 			&& empty(a.items());
@@ -599,7 +598,7 @@ public class AnnotationUtils {
 			empty(a.description(), a._enum(), a.example(), a.api())
 			&& empty(
 				a.name(), a.value(), a.type(), a.format(), a.pattern(), a.maximum(), a.minimum(), a.multipleOf(), a.maxLength(), 
-				a.minLength(), a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum()
+				a.minLength(), a.exclusiveMaximum(), a.exclusiveMinimum()
 			)
 			&& empty(a.schema());
 	}

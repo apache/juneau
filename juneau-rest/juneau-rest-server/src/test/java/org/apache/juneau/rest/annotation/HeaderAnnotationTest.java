@@ -57,7 +57,6 @@ public class HeaderAnnotationTest {
 		@Header(
 			name="H", 
 			_default="a",
-			allowEmptyValue="true",
 			collectionFormat="A",
 			description={"a","b"},
 			exclusiveMaximum="true",
@@ -89,7 +88,6 @@ public class HeaderAnnotationTest {
 			name="H", 
 			api={
 				"default:'a',",
-				"allowEmptyValue:'true',",
 				"collectionFormat:'A',",
 				"description:'a\nb',",
 				"exclusiveMaximum:'true',",
@@ -122,7 +120,6 @@ public class HeaderAnnotationTest {
 			name="H", 
 			api={
 				"default:'b',",
-				"allowEmptyValue:'false',",
 				"collectionFormat:'b',",
 				"description:'b\nc',",
 				"exclusiveMaximum:'false',",
@@ -145,7 +142,6 @@ public class HeaderAnnotationTest {
 				"schema:{type:'b'}"
 			},
 			_default="a",
-			allowEmptyValue="true",
 			collectionFormat="A",
 			description={"a","b"},
 			exclusiveMaximum="true",
@@ -188,7 +184,6 @@ public class HeaderAnnotationTest {
 	public void sa01_Header_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("header", "H");
 		assertObjectEquals("'a'", x.getDefault());
-		assertEquals(true, x.getAllowEmptyValue());
 		assertEquals("A", x.getCollectionFormat());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals(true, x.getExclusiveMaximum());
@@ -214,7 +209,6 @@ public class HeaderAnnotationTest {
 	public void sa02_Header_onPojo_api() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("header", "H");
 		assertObjectEquals("'a'", x.getDefault());
-		assertEquals(true, x.getAllowEmptyValue());
 		assertEquals("A", x.getCollectionFormat());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals(true, x.getExclusiveMaximum());
@@ -240,7 +234,6 @@ public class HeaderAnnotationTest {
 	public void sa03_Header_onPojo_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("header", "H");
 		assertObjectEquals("'a'", x.getDefault());
-		assertEquals(true, x.getAllowEmptyValue());
 		assertEquals("A", x.getCollectionFormat());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals(true, x.getExclusiveMaximum());
@@ -373,7 +366,6 @@ public class HeaderAnnotationTest {
 				minLength="1",
 				maxItems="1",
 				minItems="1",
-				allowEmptyValue="true",
 				exclusiveMaximum="true",
 				exclusiveMinimum="true",
 				uniqueItems="true",
@@ -401,7 +393,6 @@ public class HeaderAnnotationTest {
 					"minLength:'1',",
 					"maxItems:'1',",
 					"minItems:'1',",
-					"allowEmptyValue:'true',",
 					"exclusiveMaximum:'true',",
 					"exclusiveMinimum:'true',",
 					"uniqueItems:'true',",
@@ -430,7 +421,6 @@ public class HeaderAnnotationTest {
 					"minLength:'2',",
 					"maxItems:'2',",
 					"minItems:'2',",
-					"allowEmptyValue:'false',",
 					"exclusiveMaximum:'false',",
 					"exclusiveMinimum:'false',",
 					"uniqueItems:'false',",
@@ -452,7 +442,6 @@ public class HeaderAnnotationTest {
 				minLength="1",
 				maxItems="1",
 				minItems="1",
-				allowEmptyValue="true",
 				exclusiveMaximum="true",
 				exclusiveMinimum="true",
 				uniqueItems="true",
@@ -492,7 +481,6 @@ public class HeaderAnnotationTest {
 		assertObjectEquals("1", x.getMinLength());
 		assertObjectEquals("1", x.getMaxItems());
 		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("true", x.getUniqueItems());
@@ -518,7 +506,6 @@ public class HeaderAnnotationTest {
 		assertObjectEquals("1", x.getMinLength());
 		assertObjectEquals("1", x.getMaxItems());
 		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("true", x.getUniqueItems());
@@ -544,7 +531,6 @@ public class HeaderAnnotationTest {
 		assertObjectEquals("1", x.getMinLength());
 		assertObjectEquals("1", x.getMaxItems());
 		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
 		assertObjectEquals("true", x.getExclusiveMaximum());
 		assertObjectEquals("true", x.getExclusiveMinimum());
 		assertObjectEquals("true", x.getUniqueItems());
