@@ -58,6 +58,22 @@ public @interface Header {
 	 * HTTP header name.
 	 */
 	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * 
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining a header entry:
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Order placeOrder(<jk>@Header</jk>(name=<js>"api_key"</js>) String apiKey) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Order placeOrder(<jk>@Header</jk>(<js>"api_key"</js>) String apiKey) {...}
+	 * </p>
+	 */
 	String value() default "";
 
 	/**

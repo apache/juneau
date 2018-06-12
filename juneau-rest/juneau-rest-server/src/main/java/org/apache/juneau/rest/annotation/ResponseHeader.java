@@ -103,34 +103,28 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		At least one of {@link #name()} or {@link #value()} must be specified}.
+	 * 		The format is plain-text.
 	 * </ul>
 	 */
 	String name() default "";
+	
+	/**
+	 * A synonym for {@link #name()}.
+	 * 
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining a response header:
+	 * <p class='bcode w800'>
+	 * 	<ja>@ResponseHeader</ja>(name=<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
+	 * </p>
+	 */
 	String value() default "";
 	
-//	/**
-//	 * A synonym to {@link #name()}.
-//	 * 
-//	 * <p>
-//	 * Useful if you only want to specify a header name.
-//	 * 
-//	 * <p class='bcode'>
-//	 * 	<ja>@RestMethod</ja>(...)
-//	 * 	<jk>public void</jk> login(<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit) {
-//	 *		rateLimit.set(1000);
-//	 *		...
-//	 * 	}
-//	 * </p>
-//	 * 
-//	 * <h5 class='section'>Notes:</h5>
-//	 * <ul class='spaced-list'>
-//	 * 	<li>
-//	 * 		At least one of {@link #name()} or {@link #value()} must be specified}.
-//	 * </ul>
-//	 */
-//	String value() default "";
-
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values.
 	 * 

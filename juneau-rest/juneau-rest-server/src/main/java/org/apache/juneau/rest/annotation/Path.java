@@ -49,9 +49,40 @@ public @interface Path {
 	 * URL path variable name.
 	 * 
 	 * <p>
-	 * Optional if the attributes are specified in the same order as in the URL path pattern.
+	 * The name field MUST correspond to the associated <a href='https://swagger.io/specification/v2/#pathsPath'>path</a> segment from the path field in the <a href='https://swagger.io/specification/v2/#pathsObject'>Paths Object</a>. 
+	 * See <a href='https://swagger.io/specification/v2/#pathTemplating'>Path Templating</a> for further information.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain-text.
+	 * </ul>
 	 */
 	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * 
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining a path entry:
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		name=<js>"GET"</js>, 
+	 * 		path=<js>"/pet/{petId}"</js>
+	 * 	)
+	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) { ... }
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		name=<js>"GET"</js>, 
+	 * 		path=<js>"/pet/{petId}"</js>
+	 * 	)
+	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> petId) { ... }
+	 * </p>
+	 */
 	String value() default "";
 	
 	/**

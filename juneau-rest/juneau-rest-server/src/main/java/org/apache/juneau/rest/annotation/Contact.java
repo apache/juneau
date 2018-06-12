@@ -64,6 +64,9 @@ public @interface Contact {
 	/**
 	 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Contact</a> object.
 	 * 
+	 * <p>
+	 * The identifying name of the contact person/organization.
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -78,10 +81,13 @@ public @interface Contact {
 	/**
 	 * <mk>url</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Contact</a> object.
 	 * 
+	 * <p>
+	 * The URL pointing to the contact information. MUST be in the format of a URL.
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a plain-text string.
+	 * 		The format is a URL string.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -92,10 +98,13 @@ public @interface Contact {
 	/**
 	 * <mk>email</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Contact</a> object.
 	 * 
+	 * <p>
+	 * The email address of the contact person/organization. MUST be in the format of an email address.
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a plain-text string.
+	 * 		The format is an email string.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

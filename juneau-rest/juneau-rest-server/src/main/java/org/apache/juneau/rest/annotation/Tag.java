@@ -43,15 +43,38 @@ public @interface Tag {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		The format is plain text.
 	 * </ul>
 	 */
 	String name() default "";
 	
+	/**
+	 * A synonym for {@link #name()}.
+	 * 
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining a simple tag:
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 			tags={
+	 * 				<ja>@Tag</ja>(name=<js>"store"</js>)
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 			tags={
+	 * 				<ja>@Tag</ja>(<js>"store"</js>)
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
 	String value() default "";
 	
 	/**

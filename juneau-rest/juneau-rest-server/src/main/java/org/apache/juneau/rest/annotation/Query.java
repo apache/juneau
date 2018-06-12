@@ -79,8 +79,32 @@ public @interface Query {
 
 	/**
 	 * URL query parameter name.
+	 * 
+	 * Required. The name of the parameter. Parameter names are case sensitive.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is plain-text.
+	 * </ul>
 	 */
 	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * 
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining the existence of a query entry:
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Order placeOrder(<jk>@Query</jk>(name=<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Order placeOrder(<jk>@Query</jk>(<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * </p>
+	 */
 	String value() default "";
 
 	/**

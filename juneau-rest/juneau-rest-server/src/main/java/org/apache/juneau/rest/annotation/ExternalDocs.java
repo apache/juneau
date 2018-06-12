@@ -25,11 +25,15 @@ public @interface ExternalDocs {
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">ExternalDocumentation</a> object.
 	 * 
+	 * <p>
+	 * A short description of the target documentation.
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		<br>TODO - Future support for <a href='https://guides.github.com/features/mastering-markdown/#GitHub-flavored-markdown'>MarkDown</a>.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -40,10 +44,15 @@ public @interface ExternalDocs {
 	/**
 	 * <mk>url</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">ExternalDocumentation</a> object.
 	 * 
+	 * <p>
+	 * The URL for the target documentation. Value MUST be in the format of a URL.
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a plain-text string.
+	 * 		The value is required.
+	 * 	<li>
+	 * 		The format is a URL string.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

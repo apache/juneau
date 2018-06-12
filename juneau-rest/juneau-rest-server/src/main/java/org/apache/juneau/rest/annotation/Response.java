@@ -112,6 +112,23 @@ public @interface Response {
 	 */
 	int code() default 0;
 	
+	/**
+	 * A synonym for {@link #code()}.
+	 * 
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the code.
+	 * 
+	 * <p>
+	 * The following are completely equivalent ways of defining the response code:
+	 * <p class='bcode w800'>
+	 * 	<ja>@Response</ja>(code=404)
+	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Response</ja>(404)
+	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
+	 * </p>
+	 */
 	int value() default 0;
 	
 	/**

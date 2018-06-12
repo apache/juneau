@@ -200,11 +200,10 @@ public @interface Body {
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		<br>TODO - Future support for <a href='https://guides.github.com/features/mastering-markdown/#GitHub-flavored-markdown'>MarkDown</a>.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		TODO - Future support for MarkDown.
 	 * </ul>
 	 */
 	String[] description() default {};
@@ -250,6 +249,13 @@ public @interface Body {
 
 	/**
 	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 * 
+	 * <p>
+	 * This is a required attribute per the swagger definition.  
+	 * However, if not explicitly specified, the value will be auto-generated using {@link JsonSchemaSerializer}.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>

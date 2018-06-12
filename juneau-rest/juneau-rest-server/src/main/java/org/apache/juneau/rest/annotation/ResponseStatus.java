@@ -114,7 +114,12 @@ public @interface ResponseStatus {
 	 * <p>
 	 * Useful if you only want to specify a code only.
 	 * 
-	 * <p class='bcode'>
+	 * <p>
+	 * The following are completely equivalent ways of defining the response code:
+	 * <p class='bcode w800'>
+	 * 	<ja>@ResponseStatus</ja>(code=200)
+	 * </p>
+	 * <p class='bcode w800'>
 	 * 	<ja>@ResponseStatus</ja>(200)
 	 * </p>
 	 */
