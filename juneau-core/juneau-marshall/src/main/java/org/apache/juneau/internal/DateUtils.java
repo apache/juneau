@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.ref.*;
 import java.text.*;
 import java.util.*;
@@ -114,7 +116,7 @@ public final class DateUtils {
 	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
 	 */
 	public static Calendar parseISO8601Calendar(String s) {
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			return null;
 		return DatatypeConverter.parseDateTime(toValidISO8601DT(s));
 	}

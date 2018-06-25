@@ -13,9 +13,12 @@
 package org.apache.juneau.httppart;
 
 /**
- * Represents possible enum values that can be passed to the {@link HttpPartSerializer#serialize(HttpPartType, Object)}.
+ * Represents possible enum values that can be passed to the {@link HttpPartSerializer#serialize(HttpPartType, HttpPartSchema, Object)}.
  */
 public enum HttpPartType {
+
+	/** An HTTP request body */
+	BODY,
 
 	/** A URI path variable */
 	PATH,

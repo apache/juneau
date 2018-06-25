@@ -156,7 +156,7 @@ public class ConfigEntry {
 				}
 			}
 				
-			if (! isEmpty(comment)) 
+			if (isNotEmpty(comment)) 
 				w.append(" # ").append(comment);
 			
 			w.append('\n');

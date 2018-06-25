@@ -24,6 +24,7 @@ import javax.servlet.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.exception.*;
@@ -51,6 +52,8 @@ public class RequestBody {
 	private int contentLength = 0;
 	private MediaType mediaType;
 	private Parser parser;
+	private HttpPartParser partParser;
+	private HttpPartSchema schema;
 
 	RequestBody(RestRequest req) {
 		this.req = req;
@@ -85,6 +88,16 @@ public class RequestBody {
 		this.mediaType = mediaType;
 		this.parser = parser;
 		this.body = body;
+		return this;
+	}
+
+	RequestBody partParser(HttpPartParser partParser) {
+		this.partParser = partParser;
+		return this;
+	}
+
+	RequestBody schema(HttpPartSchema schema) {
+		this.schema = schema;
 		return this;
 	}
 
@@ -178,7 +191,7 @@ public class RequestBody {
 	 * 	for the specified type.
 	 */
 	public <T> T asType(Class<T> type) throws IOException, ParseException {
-		return parse(beanSession.getClassMeta(type));
+		return parse(getClassMeta(type));
 	}
 
 	/**
@@ -223,7 +236,7 @@ public class RequestBody {
 	 * @return The input parsed to a POJO.
 	 */
 	public <T> T asType(Type type, Type...args) {
-		return (T)parse(beanSession.getClassMeta(type, args));
+		return parse(this.<T>getClassMeta(type, args));
 	}
 
 	/**
@@ -417,7 +430,10 @@ public class RequestBody {
 					req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
 					ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.getContext().getResource()));
 					try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
-						return session.parse(in, cm);
+						T o = session.parse(in, cm);
+						if (schema != null)
+							schema.validateOutput(o, cm.getBeanContext());
+						return o;
 					}
 				} catch (ParseException e) {
 					throw new BadRequest(e,
@@ -434,8 +450,21 @@ public class RequestBody {
 				return cm.getInputStreamTransform().transform(getInputStream());
 			
 			MediaType mt = getMediaType();
-			if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringTransform())
-				return cm.getStringTransform().transform(asString());
+			if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
+				if (partParser != null) {
+					try {
+						String in = asString();
+						return partParser.parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
+					} catch (ParseException e) {
+						throw new BadRequest(e,
+							"Could not convert request body content to class type ''{0}'' using parser ''{1}''.",
+							cm, partParser.getClass().getName()
+						);
+					}
+				} else if (cm.hasStringTransform()) {
+					return cm.getStringTransform().transform(asString());
+				}
+			}
 			
 			throw new UnsupportedMediaType(
 				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
@@ -453,7 +482,7 @@ public class RequestBody {
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
 			String ce = req.getHeader("content-encoding");
-			if (! isEmpty(ce)) {
+			if (isNotEmpty(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
@@ -480,5 +509,18 @@ public class RequestBody {
 	 */
 	public int getContentLength() {
 		return contentLength == 0 ? req.getRawContentLength() : contentLength;
+	}
+	
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
+		return beanSession.getClassMeta(type, args);
+	}
+
+	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
+		return beanSession.getClassMeta(type);
 	}
 }

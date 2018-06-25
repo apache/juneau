@@ -16,6 +16,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -188,7 +189,7 @@ public @interface ResponseStatus {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"code"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a Simplified JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

@@ -332,10 +332,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Convenience method for adding an entry to this map.
 	 * 
 	 * <p>
-	 * Equivalent to calling {@code put(key, value)}, but returns this map so that the method can be chained.
-	 * 
-	 * <p>
-	 * <jk>null</jk> and empty string/map/collection values are skipped.
+	 * A no-op if the value is <jk>null</jk> or an empty string/map/collection.
 	 * 
 	 * @param key The key.
 	 * @param value The value.
@@ -345,6 +342,54 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		return appendIf(true, true, true, key, value);
 	}
 	
+	/**
+	 * Convenience method for adding an entry to this map.
+	 * 
+	 * <p>
+	 * A no-op if the value is <jk>false</jk>.
+	 * 
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendSkipFalse(String key, boolean value) {
+		if (value) 
+			append(key, value);
+		return this;
+	}
+
+	/**
+	 * Convenience method for adding an entry to this map.
+	 * 
+	 * <p>
+	 * A no-op if the value is <code>-1</code>.
+	 * 
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendSkipMinusOne(String key, long value) {
+		if (value != -1) 
+			append(key, value);
+		return this;
+	}
+
+	/**
+	 * Convenience method for adding an entry to this map.
+	 * 
+	 * <p>
+	 * A no-op if the value is <code>-1</code>.
+	 * 
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendSkipMinusOne(String key, int value) {
+		if (value != -1) 
+			append(key, value);
+		return this;
+	}
+
 	/**
 	 * Convenience method for adding an entry to this map.
 	 * 

@@ -47,7 +47,7 @@ public class AnnotationUtils {
 		return om
 			.appendSkipEmpty("_value", joinnl(a.value()))
 			.appendSkipEmpty("description", joinnl(a.description()))
-			.appendSkipEmpty("required", a.required())
+			.appendSkipFalse("required", a.required())
 			.appendSkipEmpty("example", joinnl(a.example()))
 			.appendSkipEmpty("examples", joinnl(a.examples()))
 			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()));
@@ -81,6 +81,7 @@ public class AnnotationUtils {
 		if (empty(a))
 			return om;
 		om = newMap(om);
+		a._enum();
 		return om
 			.appendSkipEmpty("_value", joinnl(a.value()))
 			.appendSkipEmpty("$ref", a.$ref())
@@ -90,18 +91,18 @@ public class AnnotationUtils {
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("multipleOf", a.multipleOf())
 			.appendSkipEmpty("maximum", a.maximum())
-			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipEmpty("minimum", a.minimum())
-			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("maxLength", a.maxLength())
-			.appendSkipEmpty("minLength", a.minLength())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
 			.appendSkipEmpty("pattern", a.pattern())
-			.appendSkipEmpty("maxItems", a.maxItems())
-			.appendSkipEmpty("minItems", a.minItems())
-			.appendSkipEmpty("uniqueItems", a.uniqueItems())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("maxProperties", a.maxProperties())
 			.appendSkipEmpty("minProperties", a.minProperties())
-			.appendSkipEmpty("required", a.required())
+			.appendSkipFalse("required", a.required())
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("type", a.type())
 			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
@@ -109,7 +110,7 @@ public class AnnotationUtils {
 			.appendSkipEmpty("properties", joinnl(a.properties()))
 			.appendSkipEmpty("additionalProperties", joinnl(a.additionalProperties()))
 			.appendSkipEmpty("discriminator", a.discriminator())
-			.appendSkipEmpty("readOnly", a.readOnly())
+			.appendSkipFalse("readOnly", a.readOnly())
 			.appendSkipEmpty("xml", joinnl(a.xml()))
 			.appendSkipEmpty("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs()))
 			.appendSkipEmpty("example", joinnl(a.example()))
@@ -178,15 +179,51 @@ public class AnnotationUtils {
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("maxLength", a.maxLength())
-			.appendSkipEmpty("minLength", a.minLength())
-			.appendSkipEmpty("maxItems", a.maxItems())
-			.appendSkipEmpty("minItems", a.minItems())
-			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("uniqueItems", a.uniqueItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("default", joinnl(a._default()))
-			.appendSkipEmpty("enum", joinnl(a._enum()));
+			.appendSkipEmpty("enum", joinnl(a._enum()))
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
+			;
+	}	
+
+	/**
+	 * Merges the contents of the specified annotation into the specified map.
+	 * 
+	 * @param om The map to add the annotation values to.
+	 * @param a The annotation.
+	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
+	 */
+	public static ObjectMap merge(ObjectMap om, SubItems a) {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		return om
+			.appendSkipEmpty("_value", joinnl(a.value()))
+			.appendSkipEmpty("type", a.type())
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipEmpty("$ref", a.$ref())
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("enum", joinnl(a._enum()))
+			.appendSkipEmpty("items", joinnl(a.items()))
+			;
 	}	
 
 	/**
@@ -210,13 +247,13 @@ public class AnnotationUtils {
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("maxLength", a.maxLength())
-			.appendSkipEmpty("minLength", a.minLength())
-			.appendSkipEmpty("maxItems", a.maxItems())
-			.appendSkipEmpty("minItems", a.minItems())
-			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("uniqueItems", a.uniqueItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("default", joinnl(a._default()))
@@ -255,17 +292,17 @@ public class AnnotationUtils {
 			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("type", a.type())
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("pattern", a.pattern())
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("maxLength", a.maxLength())
-			.appendSkipEmpty("minLength", a.minLength())
-			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("example", joinnl(a.example()));
 	}
@@ -284,7 +321,7 @@ public class AnnotationUtils {
 		return om
 			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
-			.appendSkipEmpty("required", a.required())
+			.appendSkipFalse("required", a.required())
 			.appendSkipEmpty("type", a.type())
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("pattern", a.pattern())
@@ -292,15 +329,14 @@ public class AnnotationUtils {
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("maxLength", a.maxLength())
-			.appendSkipEmpty("minLength", a.minLength())
-			.appendSkipEmpty("maxItems", a.maxItems())
-			.appendSkipEmpty("minItems", a.minItems())
-			.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
-			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("uniqueItems", a.uniqueItems())
-			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
@@ -321,7 +357,7 @@ public class AnnotationUtils {
 		return om
 			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
-			.appendSkipEmpty("required", a.required())
+			.appendSkipFalse("required", a.required())
 			.appendSkipEmpty("type", a.type())
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("pattern", a.pattern())
@@ -329,14 +365,13 @@ public class AnnotationUtils {
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("maxLength", a.maxLength())
-			.appendSkipEmpty("minLength", a.minLength())
-			.appendSkipEmpty("maxItems", a.maxItems())
-			.appendSkipEmpty("minItems", a.minItems())
-			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("uniqueItems", a.uniqueItems())
-			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
@@ -357,7 +392,7 @@ public class AnnotationUtils {
 		return om
 			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()))
-			.appendSkipEmpty("required", a.required())
+			.appendSkipFalse("required", a.required())
 			.appendSkipEmpty("type", a.type())
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("pattern", a.pattern())
@@ -365,15 +400,14 @@ public class AnnotationUtils {
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("maxLength", a.maxLength())
-			.appendSkipEmpty("minLength", a.minLength())
-			.appendSkipEmpty("maxItems", a.maxItems())
-			.appendSkipEmpty("minItems", a.minItems())
-			.appendSkipEmpty("allowEmptyValue", a.allowEmptyValue())
-			.appendSkipEmpty("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipEmpty("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("uniqueItems", a.uniqueItems())
-			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("enum", joinnl(a._enum()))
 			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
@@ -395,11 +429,9 @@ public class AnnotationUtils {
 			return true;
 		return 
 			empty(a.description(), a._default(), a.example(), a.api())
-			&& empty(
-				a.name(), a.value(), a.required(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf(), a.maxLength(), a.minLength(),
-				a.maxItems(), a.minItems(), a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
-			)
-			&& empty(a.schema())
+			&& empty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
+			&& empty(a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
+			&& empty(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
 			&& empty(a.items());
 	}
 
@@ -414,11 +446,9 @@ public class AnnotationUtils {
 			return true;
 		return 
 			empty(a.description(), a._default(), a._enum(), a.example(), a.api())
-			&& empty(
-				a.name(), a.value(), a.required(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf(), a.maxLength(), 
-				a.minLength(), a.maxItems(), a.minItems(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
-			)
-			&& empty(a.schema())
+			&& empty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
+			&& empty(a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
+			&& empty(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
 			&& empty(a.items());
 	}
 
@@ -433,11 +463,9 @@ public class AnnotationUtils {
 			return true;
 		return 
 			empty(a.description(), a._default(), a._enum(), a.example(), a.api())
-			&& empty(
-				a.name(), a.value(), a.required(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf(), a.maxLength(), 
-				a.minLength(), a.maxItems(), a.minItems(), a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
-			)
-			&& empty(a.schema())
+			&& empty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
+			&& empty(a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
+			&& empty(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
 			&& empty(a.items());
 	}
 	
@@ -468,10 +496,9 @@ public class AnnotationUtils {
 			return true;
 		return
 			empty(a.description(), a._default(), a._enum(), a.example(), a.api())
-			&& empty(
-				a.name(), a.value(), a.type(), a.format(), a.collectionFormat(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf(), 
-				a.maxLength(), a.minLength(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
-			)
+			&& empty(a.name(), a.value(), a.type(), a.format(), a.collectionFormat(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
+			&& empty(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
+			&& empty(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
 			&& empty(a.items());
 	}
 
@@ -498,15 +525,10 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return 
-			empty(
-				a.value(), a.description(), a._default(), a._enum(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.examples()
-			)
-			&& empty(
-				a.$ref(), a.format(), a.title(), a.multipleOf(), a.maximum(), a.exclusiveMaximum(), a.minimum(), a.exclusiveMinimum(), a.maxLength(), 
-				a.minLength(), a.pattern(), a.maxItems(), a.minItems(), a.uniqueItems(), a.maxProperties(), a.minProperties(), a.required(),
-				a.type(), a.discriminator(), a.readOnly()
-			)
-			&& ! a.ignore()
+			empty(a.value(), a.description(), a._default(), a._enum(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.examples())
+			&& empty(a.$ref(), a.format(), a.title(), a.multipleOf(), a.maximum(), a.minimum(), a.pattern(), a.maxProperties(), a.minProperties(), a.type(), a.discriminator())
+			&& empty(a.ignore(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.readOnly(), a.required(), a.uniqueItems())
+			&& empty(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
 			&& empty(a.items())
 			&& empty(a.externalDocs());
 	}
@@ -579,10 +601,26 @@ public class AnnotationUtils {
 			return true;
 		return
 			empty(a.value(), a._default(), a._enum())
-			&& empty(
-				a.type(), a.format(), a.collectionFormat(), a.pattern(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf(), 
-				a.maxLength(), a.minLength(), a.maxItems(), a.minItems(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems()
-			);
+			&& empty(a.type(), a.format(), a.collectionFormat(), a.pattern(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
+			&& empty(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
+			&& empty(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			&& empty(a.items());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 * 
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(SubItems a) {
+		if (a == null)
+			return true;
+		return
+			empty(a.value(), a._default(), a._enum(), a.items())
+			&& empty(a.type(), a.format(), a.collectionFormat(), a.pattern(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
+			&& empty(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
+			&& empty(a.maxLength(), a.minLength(), a.maxItems(), a.minItems());
 	}
 
 	/**
@@ -596,11 +634,10 @@ public class AnnotationUtils {
 			return true;
 		return 
 			empty(a.description(), a._enum(), a.example(), a.api())
-			&& empty(
-				a.name(), a.value(), a.type(), a.format(), a.pattern(), a.maximum(), a.minimum(), a.multipleOf(), a.maxLength(), 
-				a.minLength(), a.exclusiveMaximum(), a.exclusiveMinimum()
-			)
-			&& empty(a.schema());
+			&& empty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.maximum(), a.minimum(), a.multipleOf())
+			&& empty(a.exclusiveMaximum(), a.exclusiveMinimum())
+			&& empty(a.maxLength(), a.minLength())
+			&& empty(a.items());
 	}
 
 	/**
@@ -631,6 +668,20 @@ public class AnnotationUtils {
 	private static boolean empty(String[]...strings) {
 		for (String[] s : strings)
 			if (s.length != 0)
+				return false;
+		return true;
+	}
+
+	private static boolean empty(boolean...booleans) {
+		for (boolean b : booleans)
+			if (b)
+				return false;
+		return true;
+	}
+
+	private static boolean empty(long...longs) {
+		for (long i : longs)
+			if (i != -1)
 				return false;
 		return true;
 	}

@@ -794,9 +794,9 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	public String getPathInfo() {
 		if (pathInfo == null) {
 			pathInfo = getRequestURI();
-			if (! isEmpty(contextPath))
+			if (isNotEmpty(contextPath))
 				pathInfo = pathInfo.substring(contextPath.length());
-			if (! isEmpty(servletPath))
+			if (isNotEmpty(servletPath))
 				pathInfo = pathInfo.substring(servletPath.length());
 		}
 		return nullIfEmpty(urlDecode(pathInfo));

@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.remoteable.FormData;
 import org.apache.juneau.remoteable.Header;
@@ -1998,7 +1999,7 @@ public class RequestBeanProxyTest {
 
 	public static class XSerializer implements HttpPartSerializer {
 		@Override
-		public String serialize(HttpPartType type, Object value) {
+		public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
 			if (value == null)
 				return "NULL";
 			if (value instanceof Collection)
@@ -2011,7 +2012,7 @@ public class RequestBeanProxyTest {
 
 	public static class ListSerializer implements HttpPartSerializer {
 		@Override
-		public String serialize(HttpPartType type, Object value) {
+		public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
 			if (value == null)
 				return "NULL";
 			if (value instanceof Collection)

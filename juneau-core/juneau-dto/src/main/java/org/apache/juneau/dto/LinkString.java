@@ -20,6 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.utils.*;
 
 /**

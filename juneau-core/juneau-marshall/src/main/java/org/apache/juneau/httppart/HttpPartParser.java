@@ -21,7 +21,8 @@ import org.apache.juneau.parser.*;
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parts encoded in UON notation.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.oapi.OapiPartParser} - Parts encoded in based on OpenAPI schema.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.uon.UonPartParser} - Parts encoded in UON notation.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parts encoded in plain text.
  * </ul>
  * 
@@ -43,10 +44,14 @@ public interface HttpPartParser {
 	 * Converts the specified input to the specified class type.
 	 * 
 	 * @param partType The part type being parsed.
+	 * @param schema 
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.  
 	 * @param in The input being parsed.
 	 * @param type The category of value being parsed.
 	 * @return The parsed value.
 	 * @throws ParseException
 	 */
-	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException;
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException;
 }

@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -364,7 +365,7 @@ public final class IOUtils {
 	 */
 	public static int getBufferSize(String contentLength) {
 		try {
-			if (! StringUtils.isEmpty(contentLength)) {
+			if (isNotEmpty(contentLength)) {
 				long l = Long.decode(contentLength);
 				if (l > 1048576)
 					return 1048576;

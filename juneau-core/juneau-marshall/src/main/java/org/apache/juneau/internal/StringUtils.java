@@ -802,6 +802,28 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
+	 * 
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
+	 */
+	public static boolean isNotEmpty(String s) {
+		return ! isEmpty(s);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or it's {@link #toString()} method doesn't return an empty
+	 * string.
+	 * 
+	 * @param s The string to check.
+	 * @return
+	 * 	<jk>true</jk> if specified string is not <jk>null</jk> or it's {@link #toString()} method doesn't return an empty string.
+	 */
+	public static boolean isNotEmpty(Object s) {
+		return ! isEmpty(s);
+	}
+
+	/**
 	 * Returns <jk>null</jk> if the specified string is <jk>null</jk> or empty.
 	 * 
 	 * @param s The string to check.
@@ -2010,7 +2032,7 @@ public final class StringUtils {
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (String ss : s)
-			if (! isEmpty(ss))
+			if (isNotEmpty(ss))
 				return ss;
 		return null;
 	}
@@ -2162,6 +2184,47 @@ public final class StringUtils {
 		return false;
 	}
 
+	/**
+	 * Parses a string that can consist of either a JSON array or comma-delimited list.
+	 * 
+	 * <p>
+	 * The type of string is auto-detected.
+	 * 
+	 * @param s The string to parse.
+	 * @return The parsed string.
+	 * @throws ParseException
+	 */
+	public static ObjectList parseListOrCdl(String s) throws ParseException {
+		if (isEmpty(s))
+			return null;
+		if (! isObjectList(s, true))
+			return new ObjectList(Arrays.asList(StringUtils.split(s.trim(), ',')));
+		return new ObjectList(s);
+	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified string is valid JSON.
+	 * 
+	 * <p>
+	 * Leading and trailing spaces are ignored.
+	 * <br>Leading and trailing comments are not allowed.
+	 * 
+	 * @param s The string to test.
+	 * @return <jk>true</jk> if the specified string is valid JSON.
+	 */
+	public static boolean isJson(String s) {
+		if (s == null)
+			return false;
+		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
+		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
+			return true;
+		if (StringUtils.isOneOf(s, "true","false","null"))
+			return true;
+		if (StringUtils.isNumeric(s))
+			return true;
+		return false;
+	}
+	
 	/**
 	 * Returns <jk>true</jk> if the specified string appears to be a JSON object.
 	 * 

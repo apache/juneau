@@ -55,7 +55,7 @@ public class SimplePartParser implements HttpPartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	@Override
-	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException {
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException {
 		return ClassUtils.fromString(type.getInnerClass(), in);
 	}
 }

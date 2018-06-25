@@ -18,6 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
@@ -129,7 +131,7 @@ public @interface ResponseHeader {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values.
 	 * 
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link SimpleUonPartSerializer}.
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OapiPartSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
@@ -289,7 +291,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String maxLength() default "";
+	long maxLength() default -1;
 	
 	/**
 	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
@@ -303,7 +305,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String minLength() default "";
+	long minLength() default -1;
 	
 	/**
 	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
@@ -317,7 +319,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String maxItems() default "";
+	long maxItems() default -1;
 	
 	/**
 	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
@@ -331,7 +333,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String minItems() default "";
+	long minItems() default -1;
 	
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
@@ -345,7 +347,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String exclusiveMaximum() default "";
+	boolean exclusiveMaximum() default false;
 	
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
@@ -359,7 +361,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String exclusiveMinimum() default "";
+	boolean exclusiveMinimum() default false;
 	
 	/**
 	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
@@ -373,7 +375,7 @@ public @interface ResponseHeader {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String uniqueItems() default "";
+	boolean uniqueItems() default false;
 	
 	/**
 	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
@@ -381,7 +383,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -396,7 +398,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is any JSON.
+	 * 		The format is any {@link JsonSerializer#DEFAULT_LAX Simple-JSON}.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -411,7 +413,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON array or comma-delimited list.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -430,7 +432,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object or plain text string.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -491,7 +493,7 @@ public @interface ResponseHeader {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a Simplified JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

@@ -10,32 +10,30 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.httppart.uon;
+
+import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.uon.*;
 
 /**
- * An extension of {@link UonPartSerializer} with plain-text string handling.
+ * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
  * 
  * <p>
- * Uses UON notation for beans and maps (serialized as UON objects), and plain text for everything else.
- * <br>Collections/arrays are also serialized as comma-delimited lists.
- * 
- * <p>
- * The downside to this class vs. {@link UonPartSerializer} is that you may lose type information on the parse side.
- * For example, it's not possible to distinguish between the boolean <jk>false</jk> and the string <js>"false"</js>.
- * The same is true of numbers.  Also, whitespace in strings or strings containing single quotes may get lost if using
- * the {@link UonPartParser} to process them.
+ * This serializer uses UON notation for all parts by default.  This allows for arbitrary POJOs to be losslessly
+ * serialized as any of the specified HTTP types.
  */
-public class SimpleUonPartSerializer extends UonPartSerializer {
+public class UonPartSerializer extends UonSerializer implements HttpPartSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Reusable instance of {@link SimpleUonPartSerializer}, all default settings. */
-	public static final SimpleUonPartSerializer DEFAULT = new SimpleUonPartSerializer(PropertyStore.DEFAULT);
+	/** Reusable instance of {@link UonPartSerializer}, all default settings. */
+	public static final UonPartSerializer DEFAULT = new UonPartSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -48,21 +46,21 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public SimpleUonPartSerializer(PropertyStore ps) {
+	public UonPartSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(UON_paramFormat, ParamFormat.PLAINTEXT)
+				.set(UON_encoding, false)
 				.build() 
 		);
 	}
-	
+
 	@Override /* Context */
-	public SimpleUonPartSerializerBuilder builder() {
-		return new SimpleUonPartSerializerBuilder(getPropertyStore());
+	public UonPartSerializerBuilder builder() {
+		return new UonPartSerializerBuilder(getPropertyStore());
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link SimpleUonPartSerializerBuilder} object.
+	 * Instantiates a new clean-slate {@link UonPartSerializerBuilder} object.
 	 * 
 	 * <p>
 	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
@@ -70,7 +68,45 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 	 * 
 	 * @return A new {@link UonPartSerializerBuilder} object.
 	 */
-	public static SimpleUonPartSerializerBuilder create() {
-		return new SimpleUonPartSerializerBuilder();
+	public static UonPartSerializerBuilder create() {
+		return new UonPartSerializerBuilder();
+	}
+
+	//--------------------------------------------------------------------------------
+	// Entry point methods
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Convenience method for calling the parse method without a schema object.
+	 * 
+	 * @param type The category of value being serialized.
+	 * @param value The value being serialized.	
+	 * @return The serialized value.
+	 */
+	public String serialize(HttpPartType type, Object value) {
+		return serialize(type, null, value);
+	}
+
+	@Override /* PartSerializer */
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
+		try {
+			// Shortcut for simple types.
+			ClassMeta<?> cm = getClassMetaForObject(value);
+			if (cm != null) {
+				if (cm.isNumber() || cm.isBoolean())
+					return ClassUtils.toString(value);
+				if (cm.isString()) {
+					String s = ClassUtils.toString(value);
+					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
+						return s;
+				}
+			}
+			StringWriter w = new StringWriter();
+			UonSerializerSession s = new UonSerializerSession(this, false, createDefaultSessionArgs());
+			s.serialize(value, w);
+			return w.toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

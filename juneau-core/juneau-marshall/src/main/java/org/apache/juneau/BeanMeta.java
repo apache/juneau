@@ -469,7 +469,7 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
 			BeanProperty bp = f.getAnnotation(BeanProperty.class);
 			String name = bpName(bp);
-			if (! isEmpty(name)) {
+			if (isNotEmpty(name)) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
 				return null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties.

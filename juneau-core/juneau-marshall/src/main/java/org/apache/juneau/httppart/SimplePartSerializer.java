@@ -35,7 +35,7 @@ public class SimplePartSerializer implements HttpPartSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	@Override /* PartSerializer */
-	public String serialize(HttpPartType type, Object value) {
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
 		return ClassUtils.toString(value);
 	}
 }

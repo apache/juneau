@@ -304,17 +304,7 @@ public class PathAnnotationTest {
 		@Path(
 			name="P",
 			description={"a","b"},
-			type="a",
-			format="a",
-			pattern="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			schema=@Schema(type="a"),
+			type="string",
 			_enum="a,b",
 			example="'a'"
 		)
@@ -328,17 +318,7 @@ public class PathAnnotationTest {
 			name="P",
 			api={
 				"description:'a\nb',",
-				"type:'a',",
-				"format:'a',",
-				"pattern:'a',",
-				"maximum:'1',",
-				"minimum:'1',",
-				"multipleOf:'1',",
-				"maxLength:'1',",
-				"minLength:'1',",
-				"exclusiveMaximum:'true',",
-				"exclusiveMinimum:'true',",
-				"schema:{type:'a'},",
+				"type:'string',",
 				"enum:'a,b',",
 				"example:'a'"
 			}
@@ -353,32 +333,12 @@ public class PathAnnotationTest {
 			name="P",
 			api={
 				"description:'b\nc',",
-				"type:'b',",
-				"format:'b',",
-				"pattern:'b',",
-				"maximum:'2',",
-				"minimum:'2',",
-				"multipleOf:'2',",
-				"maxLength:'2',",
-				"minLength:'2',",
-				"exclusiveMaximum:'false',",
-				"exclusiveMinimum:'false',",
-				"schema:{type:'b'},",
+				"type:'string',",
 				"enum:'b,c',",
 				"example:'b'"
 			},
 			description={"a","b"},
-			type="a",
-			format="a",
-			pattern="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			schema=@Schema(type="a"),
+			type="string",
 			_enum="a,b",
 			example="'a'"
 		)
@@ -405,17 +365,8 @@ public class PathAnnotationTest {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("string", x.getType());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
 		assertObjectEquals("'a'", x.getExample());
 	}
@@ -424,17 +375,8 @@ public class PathAnnotationTest {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api/{P}").get("get").getParameter("path", "P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("string", x.getType());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
 		assertObjectEquals("'a'", x.getExample());
 	}
@@ -443,17 +385,8 @@ public class PathAnnotationTest {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed/{P}").get("get").getParameter("path", "P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertEquals("string", x.getType());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
 		assertObjectEquals("'a'", x.getExample());
 	}
@@ -475,7 +408,7 @@ public class PathAnnotationTest {
 	@RestResource
 	public static class SB {
 
-		@Path(name="P", schema=@Schema(" type:'b' "))
+		@Path(name="P")
 		public static class SB01 {}
 		@RestMethod(name=GET,path="/schemaValue/{P}")
 		public void sb01(SB01 f) {}
@@ -503,7 +436,7 @@ public class PathAnnotationTest {
 	@Test
 	public void sb01_Path_onPojo_schemaValue() throws Exception {
 		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 	@Test
 	public void sb02_Path_onPojo_autoDetectBean() throws Exception {
@@ -558,19 +491,7 @@ public class PathAnnotationTest {
 		public void ta01(@Path(
 			name="P",
 			description="a",
-			type="a",
-			format="a",
-			pattern="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			schema=@Schema(type="a"),
-			_enum=" a,b ",
-			example="'a'"
+			type="string"
 		) String h) {}
 
 		@RestMethod(name=GET,path="/api/{P}")
@@ -578,19 +499,7 @@ public class PathAnnotationTest {
 			name="P",
 			api={
 				"description:'a',",
-				"type:'a',",
-				"format:'a',",
-				"pattern:'a',",
-				"maximum:'1',",
-				"minimum:'1',",
-				"multipleOf:'1',",
-				"maxLength:'1',",
-				"minLength:'1',",
-				"exclusiveMaximum:'true',",
-				"exclusiveMinimum:'true',",
-				"schema:{type:'a'},",
-				"enum:'a,b',",
-				"example:'a'"
+				"type:'string'"
 			}
 		) String h) {}
 
@@ -599,34 +508,10 @@ public class PathAnnotationTest {
 			name="P",
 			api={
 				"description:'b',",
-				"type:'b',",
-				"format:'b',",
-				"pattern:'b',",
-				"maximum:'2',",
-				"minimum:'2',",
-				"multipleOf:'2',",
-				"maxLength:'2',",
-				"minLength:'2',",
-				"exclusiveMaximum:'false',",
-				"exclusiveMinimum:'false',",
-				"schema:{type:'b'},",
-				"enum:'b,c',",
-				"example:'b'"
+				"type:'string'"
 			},
 			description="a",
-			type="a",
-			format="a",
-			pattern="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			schema=@Schema(type="a"),
-			_enum=" a,b ",
-			example="'a'"
+			type="string"
 		) String h) {}
 
 		@RestMethod(name=GET,path="/value/{P}")
@@ -640,55 +525,19 @@ public class PathAnnotationTest {
 	public void ta01_Path_onParameter_basic() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
 		assertEquals("a", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta02_Path_onParameter_api() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api/{P}").get("get").getParameter("path", "P");
 		assertEquals("a", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta03_Path_onParameter_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed/{P}").get("get").getParameter("path", "P");
 		assertEquals("a", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta04_Path_onParameter_value() throws Exception {
@@ -709,7 +558,7 @@ public class PathAnnotationTest {
 	public static class TB {
 
 		@RestMethod(name=GET,path="/schemaValue/{P}")
-		public void tb01(@Path(name="P", schema=@Schema(" type:'b' ")) String h) {}
+		public void tb01(@Path(name="P") String h) {}
 
 		public static class TB02 {
 			public String f1;
@@ -737,7 +586,7 @@ public class PathAnnotationTest {
 	@Test
 	public void tb01_Path_onParameter_schemaValue() throws Exception {
 		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 	@Test
 	public void tb02_Path_onParameter_autoDetectBean() throws Exception {

@@ -16,9 +16,14 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * Identical to {@link FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form
@@ -64,24 +69,10 @@ import org.apache.juneau.rest.*;
 public @interface Query {
 
 	/**
-	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
-	 * 
-	 * <p>
-	 * Normally, we expect single parameters to be specified in UON notation for representing collections of values
-	 * (e.g. <js>"&amp;key=(1,2,3)"</js>.
-	 * This annotation allows the use of multi-part parameters to represent collections
-	 * (e.g. <js>"&amp;key=1&amp;key=2&amp;key=3"</js>.
-	 * 
-	 * <p>
-	 * This setting should only be applied to Java parameters of type array or Collection.
-	 */
-	boolean multipart() default false;
-
-	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
 	 * 
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OapiPartParser}.
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
@@ -143,18 +134,12 @@ public @interface Query {
 	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * Determines whether this parameter is mandatory. The default value is <jk>false</jk>.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * Determines whether the parameter is mandatory.
+	 *  
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
 	 */
-	String required() default "";
+	boolean required() default false;
 	
 	//=================================================================================================================
 	// Attributes specific to parameters other than body
@@ -166,27 +151,36 @@ public @interface Query {
 	 * <p>
 	 * The type of the parameter. 
 	 * 
-	 * <p>
-	 * Note that per the Swagger specification, this value is required and must be a simple type (e.g. <js>"string"</js>, <js>"number"</js>...).
-	 * <br>However, Juneau allows for arbitrarily-complex POJOs such as beans in form parameters using UON notation, this attribute can be left off in lieu of a {@link #schema()} 
-	 * attribute.
-	 * 
 	 * <p> 
 	 * The possible values are:
-	 * <ul>
-	 * 	<li><js>"string"</js>
-	 * 	<li><js>"number"</js>
-	 * 	<li><js>"integer"</js>
-	 * 	<li><js>"boolean"</js>
-	 * 	<li><js>"array"</js>
-	 * 	<li><js>"file"</js>
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<js>"string"</js>
+	 * 		<br>Parameter must be a string or a POJO convertible from a string.
+	 * 	<li>
+	 * 		<js>"number"</js>
+	 * 		<br>Parameter must be a number primitive or number object.
+	 * 		<br>If parameter is <code>Object</code>, creates either a <code>Float</code> or <code>Double</code> depending on the size of the number.
+	 * 	<li>
+	 * 		<js>"integer"</js>
+	 * 		<br>Parameter must be a integer/long primitive or integer/long object.
+	 * 		<br>If parameter is <code>Object</code>, creates either a <code>Short</code>, <code>Integer</code>, or <code>Long</code> depending on the size of the number.
+	 * 	<li>
+	 * 		<js>"boolean"</js>
+	 * 		<br>Parameter must be a boolean primitive or object.
+	 * 	<li>
+	 * 		<js>"array"</js>
+	 * 		<br>Parameter must be an array or collection.
+	 * 		<br>Elements must be strings or POJOs convertible from strings.
+	 * 		<br>If parameter is <code>Object</code>, creates an {@link ObjectList}.
+	 * 	<li>
+	 * 		<js>"object"</js>
+	 * 		<br>Parameter must be a map or bean.
+	 * 		<br>If parameter is <code>Object</code>, creates an {@link ObjectMap}.
+	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
+	 * 	<li>
+	 * 		<js>"file"</js>
+	 * 		<br>This type is currently not supported.
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -201,15 +195,48 @@ public @interface Query {
 	 * 
 	 * <p>
 	 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>. 
-	 * See <a href='https://swagger.io/specification/v2/#dataTypeFormat'>Data Type Formats</a> for further details.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <p> 
+	 * The possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is plain-text.
+	 * 		<js>"int32"</js> - Signed 32 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<js>"int64"</js> - Signed 64 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
+	 * 	<li>
+	 * 		<js>"float"</js> - 32-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"double"</js> - 64-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"byte"</js> - BASE-64 encoded characters.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+	 * 	<li>
+	 * 		<js>"binary"</js> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+	 * 	<li>
+	 * 		<js>"date"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"date-time"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
+	 * 		<br>This format does not affect the serialization or parsing of the parameter.
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>). 
+	 * 		<br>Only valid with type <js>"object"</js>.
+	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
 	 * </ul>
 	 */
 	String format() default "";
@@ -220,270 +247,280 @@ public @interface Query {
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters. 
 	 * <br>This is valid only for either query or formData parameters and allows you to send a parameter with a name only or an empty value. 
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Default value is <jk>false</jk>.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * <p>
+	 * The default value is <jk>false</jk>.
 	 */
-	String allowEmptyValue() default "";
+	boolean allowEmptyValue() default false;
 
 	/**
-	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a regular expression according to the ECMA 262 regular expression dialect.
-	 * 	<li>
-	 * 		This string SHOULD be a valid regular expression.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * <p>
+	 * Describes the type of items in the array.
+	 * <p>
+	 * Required if <code>type</code> is <js>"array"</js>. 
+	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
 	 */
-	String pattern() default "";
+	Items items() default @Items;	
 
 	/**
 	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * Determines the format of the array if type array is used. 
-	 * <br>Possible values are:
-	 * <ul>
-	 * 	<li><js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
-	 * 	<li><js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
-	 * 	<li><js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-	 * 	<li><js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-	 * 	<li><js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>). 
-	 * </ul>
+	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used. 
+	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <br>Possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 	<li>
+	 * 		<js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 	<li>
+	 * 		<js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 	<li>
+	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 	<li>
+	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>). 
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>). 
 	 * </ul>
+	 * 
+	 * <p>
+	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements. 
 	 */
 	String collectionFormat() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON number.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String maximum() default "";
-	
-	/**
-	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON number.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String minimum() default "";
-
-	/**
-	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String multipleOf() default "";
-	
-	/**
-	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String maxLength() default "";
-	
-	/**
-	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String minLength() default "";
-	
-	/**
-	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String maxItems() default "";
-
-	/**
-	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String minItems() default "";
-
-	/**
-	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String exclusiveMaximum() default "";
-
-	/**
-	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String exclusiveMinimum() default "";
-	
-	/**
-	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String uniqueItems() default "";
-	
-	/**
-	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
-	 * 		<br>The following two example are considered equivalent:
-	 * 		<ul>
-	 * 			<li><code>schema=<js>"{type:'string',format:'binary'}"</js></code>
-	 * 			<li><code>schema=<js>"type:'string',format:'binary'"</js></code>
-	 * 		<ul>
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	Schema schema() default @Schema;
-	
-	/**
 	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * Additionally, this method can be used to define a default value for a missing query entry.
+	 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request. 
+	 * <br>(Note: "default" has no meaning for required parameters.) 
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is any JSON.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * <p>
+	 * Additionally, this value is used to create instances of POJOs that are then serialized as language-specific examples in the generated Swagger documentation
+	 * if the examples are not defined in some other way.
+	 * 
+	 * <p>
+	 * The format of this value is a string.
+	 * <br>Multiple lines are concatenated with newlines.
+	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Order placeOrder(
+	 * 		<jk>@Query</jk>(name=<js>"petId"</jk>, _default=<js>"100"</js>) <jk>long</jk> petId,
+	 * 		<jk>@Query</jk>(name=<js>"additionalInfo"</jk>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
+	 * 		<jk>@Query</jk>(name=<js>"flags"</jk>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
+	 * 	) {...}
+	 * </p>
 	 */
 	String[] _default() default {};
 	
 	/**
+	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * Defines the maximum value for a parameter of numeric types.
+	 * <br>The value must be a valid JSON number.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 */
+	String maximum() default "";
+	
+	/**
+	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * Defines whether the maximum is matched exclusively.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 * <br>If <jk>true</jk>, must be accompanied with <code>maximum</code>.
+	 */
+	boolean exclusiveMaximum() default false;
+
+	/**
+	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * Defines the minimum value for a parameter of numeric types.
+	 * <br>The value must be a valid JSON number.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 */
+	String minimum() default "";
+	
+	/**
+	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * Defines whether the minimum is matched exclusively.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 * <br>If <jk>true</jk>, Must be accompanied with <code>minimum</code>.
+	 */
+	boolean exclusiveMinimum() default false;
+	
+	/**
+	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
+	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
+	 * <br>The value <code>-1</code> is always ignored.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 */
+	long maxLength() default -1;
+	
+	/**
+	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
+	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
+	 * <br>The value <code>-1</code> is always ignored.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 */
+	long minLength() default -1;
+	
+	/**
+	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * A string input is valid if it matches the specified regular expression pattern.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 */
+	String pattern() default "";
+
+	/**
+	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 */
+	long maxItems() default -1;
+
+	/**
+	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 */
+	long minItems() default -1;
+
+	/**
+	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * 
+	 * <p>
+	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * <br>If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
+	 * <br>Otherwise, the collection or array is checked for duplicate items.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 */
+	boolean uniqueItems() default false;
+
+	/**
 	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON array or comma-delimited list.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * <p>
+	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array or comma-delimited list.
+	 * <br>Multiple lines are concatenated with newlines.
+	 * 
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
+	 * 		<ja>@Query</ja>(
+	 * 			name=<js>"status"</js>, 
+	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
+	 * 		) PetStatus status
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
+	 * 		<ja>@Query</ja>(
+	 * 			name=<js>"status"</js>, 
+	 * 			_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>,
+	 * 		) PetStatus status
+	 * 	) {...}
+	 * </p>
 	 */
 	String[] _enum() default {};
 	
 	/**
-	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a JSON object.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * <p>
+	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
+	 * <br>The value must be a valid JSON number.
+	 * 
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 */
-	Items items() default @Items;	
+	String multipleOf() default "";
+
+	//=================================================================================================================
+	// Other
+	//=================================================================================================================
 	
 	/**
-	 * TODO
+	 * A serialized example of the parameter.
 	 * 
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
@@ -492,7 +529,7 @@ public @interface Query {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object or plain text string.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -505,7 +542,7 @@ public @interface Query {
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * This is a JSON object that makes up the swagger information for this field.
+	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this field.
 	 * 
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the Query object:
@@ -565,7 +602,9 @@ public @interface Query {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a Simplified JSON object.
+	 * 		Automatic validation is NOT performed on input based on attributes in this value.
+	 * 	<li>
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

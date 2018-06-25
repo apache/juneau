@@ -179,7 +179,7 @@ public class License extends SwaggerElement {
 	 * @return <jk>true</jk> if the name property is not null or empty.
 	 */
 	public boolean hasName() {
-		return ! isEmpty(name);
+		return isNotEmpty(name);
 	}
 
 	/**

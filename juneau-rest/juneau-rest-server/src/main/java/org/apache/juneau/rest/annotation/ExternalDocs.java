@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.json.*;
+
 /**
  * TODO
  * 
@@ -64,7 +66,7 @@ public @interface ExternalDocs {
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">ExternalDocumentation</a> object.
 	 * 
 	 * <p>
-	 * This is a JSON object that makes up the swagger information for this field.
+	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this field.
 	 * 
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of documentation:
@@ -113,7 +115,7 @@ public @interface ExternalDocs {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a Simplified JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

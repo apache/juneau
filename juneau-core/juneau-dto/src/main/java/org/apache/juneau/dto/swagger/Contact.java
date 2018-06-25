@@ -221,7 +221,7 @@ public class Contact extends SwaggerElement {
 	 * @return <jk>true</jk> if the name property is not null or empty.
 	 */
 	public boolean hasName() {
-		return ! isEmpty(name);
+		return isNotEmpty(name);
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class Contact extends SwaggerElement {
 	 * @return <jk>true</jk> if the email property is not null or empty.
 	 */
 	public boolean hasEmail() {
-		return ! isEmpty(email);
+		return isNotEmpty(email);
 	}
 
 	@Override /* SwaggerElement */

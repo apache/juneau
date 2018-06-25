@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.config.encode.*;
 
 /**
@@ -65,7 +66,7 @@ public enum ConfigMod {
 	 * @return The list of modifiers, or an empty list if the string is empty or <jk>null</jk>.
 	 */
 	public static List<ConfigMod> asModifiersReverse(String s) {
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.length() == 1) {
 			ConfigMod m = fromChar(s.charAt(0));
@@ -87,7 +88,7 @@ public enum ConfigMod {
 	 * @return The list of modifiers, or an empty list if the string is empty or <jk>null</jk>.
 	 */
 	public static List<ConfigMod> asModifiers(String s) {
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.length() == 1) {
 			ConfigMod m = fromChar(s.charAt(0));

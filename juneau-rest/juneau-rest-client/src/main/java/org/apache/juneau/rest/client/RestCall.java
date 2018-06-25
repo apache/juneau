@@ -37,6 +37,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
+import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
@@ -193,26 +195,31 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	Can also be {@link Map}, {@link String}, {@link NameValuePairs}, or bean if the name is null/blank/*.
 	 * 	If a {@link String} and the name is null/blank/*, then calls {@link URIBuilder#setCustomQuery(String)}.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
-	 * @param partSerializer
-	 * 	The part serializer to use to convert the value to a string.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
+	 * @param schema 
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall query(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
-		if (partSerializer == null)
-			partSerializer = client.getPartSerializer();
+	public RestCall query(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+		if (serializer == null)
+			serializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
-				uriBuilder.addParameter(name, partSerializer.serialize(HttpPartType.QUERY, value));
+				uriBuilder.addParameter(name, serializer.serialize(HttpPartType.QUERY, schema, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				query(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT);
+				query(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT, schema);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				query(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
+				query(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
 		} else if (isBean(value)) {
-			return query(name, toBeanMap(value), skipIfEmpty, partSerializer);
+			return query(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else if (value instanceof Reader) {
 			try {
 				uriBuilder.setCustomQuery(read(value));
@@ -221,7 +228,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			}
 		} else if (value instanceof CharSequence) {
 			String s = value.toString();
-			if (! isEmpty(s))
+			if (isNotEmpty(s))
 				uriBuilder.setCustomQuery(s);
 		} else {
 			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
@@ -238,7 +245,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall query(String name, Object value) throws RestCallException {
-		return query(name, value, false, null);
+		return query(name, value, false, null, null);
 	}
 
 	/**
@@ -264,7 +271,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall queryIfNE(String name, Object value) throws RestCallException {
-		return query(name, value, true, null);
+		return query(name, value, true, null, null);
 	}
 
 	/**
@@ -278,7 +285,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall queryIfNE(Map<String,Object> params) throws RestCallException {
-		return query(null, params, true, null);
+		return query(null, params, true, null, null);
 	}
 
 	/**
@@ -302,29 +309,34 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The parameter value converted to a string using UON notation.
 	 * 	Can also be {@link Map}, {@link NameValuePairs}, or bean if the name is null/blank/*.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
-	 * @param partSerializer
-	 * 	The part serializer to use to convert the value to a string.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
+	 * @param schema 
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall formData(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
+	public RestCall formData(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		if (formData == null)
 			formData = new NameValuePairs();
-		if (partSerializer == null)
-			partSerializer = client.getPartSerializer();
+		if (serializer == null)
+			serializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
-				formData.add(new SerializedNameValuePair(name, value, partSerializer));
+				formData.add(new SerializedNameValuePair(name, value, serializer, schema));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
 				if (p.getValue() != null && ! (isEmpty(p.getValue()) && skipIfEmpty))
 					formData.add(p);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				formData(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
+				formData(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
 		} else if (isBean(value)) {
-			return formData(name, toBeanMap(value), skipIfEmpty, partSerializer);
+			return formData(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else if (value instanceof Reader) {
 			contentType("application/x-www-form-urlencoded");
 			input(value);
@@ -352,7 +364,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException If name was null/blank and value wasn't a {@link Map} or {@link NameValuePairs}.
 	 */
 	public RestCall formData(String name, Object value) throws RestCallException {
-		return formData(name, value, false, null);
+		return formData(name, value, false, null, null);
 	}
 
 	/**
@@ -389,7 +401,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall formDataIfNE(String name, Object value) throws RestCallException {
-		return formData(name, value, true, null);
+		return formData(name, value, true, null, null);
 	}
 
 	/**
@@ -403,7 +415,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall formDataIfNE(Map<String,Object> params) throws RestCallException {
-		return formData(null, params, true, null);
+		return formData(null, params, true, null, null);
 	}
 
 	/**
@@ -411,30 +423,35 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 
 	 * @param name The path variable name.
 	 * @param value The replacement value.
-	 * @param partSerializer
-	 * 	The part serializer to use to convert the value to a string.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
+	 * @param schema 
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If variable could not be found in path.
 	 */
-	public RestCall path(String name, Object value, HttpPartSerializer partSerializer) throws RestCallException {
+	public RestCall path(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		String path = uriBuilder.getPath();
-		if (partSerializer == null)
-			partSerializer = client.getPartSerializer();
+		if (serializer == null)
+			serializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			String var = "{" + name + "}";
 			if (path.indexOf(var) == -1)
 				throw new RestCallException("Path variable {"+name+"} was not found in path.");
-			String newPath = path.replace(var, partSerializer.serialize(HttpPartType.PATH, value));
+			String newPath = path.replace(var, serializer.serialize(HttpPartType.PATH, schema, value));
 			uriBuilder.setPath(newPath);
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				path(p.getName(), p.getValue(), partSerializer);
+				path(p.getName(), p.getValue(), serializer, schema);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				path(p.getKey(), p.getValue(), partSerializer);
+				path(p.getKey(), p.getValue(), serializer, schema);
 		} else if (isBean(value)) {
-			return path(name, toBeanMap(value), partSerializer);
+			return path(name, toBeanMap(value), serializer, schema);
 		} else if (value != null) {
 			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
@@ -450,7 +467,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException If variable could not be found in path.
 	 */
 	public RestCall path(String name, Object value) throws RestCallException {
-		return path(name, value, null);
+		return path(name, value, null, null);
 	}
 
 	/**
@@ -548,26 +565,31 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @param skipIfEmpty Don't add the header if the name is null/empty.
-	 * @param partSerializer
-	 * 	The part serializer to use to convert the value to a string.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
+	 * @param schema 
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall header(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
-		if (partSerializer == null)
-			partSerializer = client.getPartSerializer();
+	public RestCall header(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+		if (serializer == null)
+			serializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
-				request.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, value));
+				request.setHeader(name, serializer.serialize(HttpPartType.HEADER, schema, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				header(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT);
+				header(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT, schema);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				header(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
+				header(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
 		} else if (isBean(value)) {
-			return header(name, toBeanMap(value), skipIfEmpty, partSerializer);
+			return header(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else {
 			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
@@ -586,7 +608,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall header(String name, Object value) throws RestCallException {
-		return header(name, value, false, null);
+		return header(name, value, false, null, null);
 	}
 
 	/**
@@ -597,7 +619,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall headers(Map<String,Object> values) throws RestCallException {
-		return header(null, values, false, null);
+		return header(null, values, false, null, null);
 	}
 
 	/**
@@ -614,7 +636,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall headerIfNE(String name, Object value) throws RestCallException {
-		return header(name, value, true, null);
+		return header(name, value, true, null, null);
 	}
 
 	/**
@@ -628,7 +650,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException
 	 */
 	public RestCall headersIfNE(Map<String,Object> values) throws RestCallException {
-		return header(null, values, true, null);
+		return header(null, values, true, null, null);
 	}
 
 	/**

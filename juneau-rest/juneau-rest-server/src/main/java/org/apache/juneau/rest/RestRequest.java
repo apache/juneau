@@ -1078,6 +1078,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 
 	 * @return The part serializer associated with this request.
 	 */
+	public HttpPartParser getPartParser() {
+		return restJavaMethod.partParser;
+	}
+
+	/**
+	 * Returns the part serializer associated with this request.
+	 * 
+	 * @return The part serializer associated with this request.
+	 */
 	public HttpPartSerializer getPartSerializer() {
 		return restJavaMethod.partSerializer;
 	}

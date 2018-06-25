@@ -22,6 +22,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -245,7 +246,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Class<T> type) throws ParseException {
-		return get(null, name, type);
+		return getInner(null, null, name, null, getClassMeta(type));
 	}
 
 	/**
@@ -254,14 +255,19 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The parameter name.
 	 * @param type The class type to convert the parameter value to.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
-		return get(parser, name, getClassMeta(type));
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws ParseException {
+		return getInner(parser, schema, name, null, getClassMeta(type));
 	}
 
 	/**
@@ -275,7 +281,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, T def, Class<T> type) throws ParseException {
-		return get(null, name, def, type);
+		return getInner(null, null, name, def, getClassMeta(type));
 	}
 
 	/**
@@ -284,6 +290,11 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The parameter name.
 	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
 	 * @param type The class type to convert the parameter value to.
@@ -291,8 +302,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T get(HttpPartParser parser, String name, T def, Class<T> type) throws ParseException {
-		return get(parser, name, def, getClassMeta(type));
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws ParseException {
+		return getInner(parser, schema, name, def, getClassMeta(type));
 	}
 
 	/**
@@ -342,7 +353,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
-		return get((HttpPartParser)null, name, type, args);
+		return getInner(null, null, name, null, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
 	/**
@@ -351,7 +362,11 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
-	 * 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
@@ -364,8 +379,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
-		return (T)parse(parser, name, getClassMeta(type, args));
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+		return getInner(parser, schema, name, null, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
 	/**
@@ -384,8 +399,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T get(String name, Object def, Type type, Type...args) throws ParseException {
-		return get(null, name, def, type, args);
+	public <T> T get(String name, T def, Type type, Type...args) throws ParseException {
+		return getInner(null, null, name, def, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
 	/**
@@ -394,6 +409,11 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
@@ -407,8 +427,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T get(HttpPartParser parser, String name, Object def, Type type, Type...args) throws ParseException {
-		return (T)parse(parser, name, def, getClassMeta(type, args));
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Type type, Type...args) throws ParseException {
+		return getInner(parser, schema, name, def, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
 	/**
@@ -425,7 +445,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T getAll(String name, Class<T> c) throws ParseException {
-		return getAll(name, beanSession.getClassMeta(c));
+		return getAllInner(null, null, name, null, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -448,7 +468,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T getAll(String name, Type type, Type...args) throws ParseException {
-		return getAll(null, name, type, args);
+		return getAllInner(null, null, name, null, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
 	/**
@@ -457,6 +477,11 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The query parameter name.
 	 * @param type
 	 * 	The type of object to create.
@@ -469,8 +494,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @return The query parameter value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T getAll(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
-		return (T)parseAll(parser, name, getClassMeta(type, args));
+	public <T> T getAll(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+		return getAllInner(parser, schema, name, null, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
 	/**
@@ -552,37 +577,29 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser parser, String name, Object def, ClassMeta<T> cm) throws ParseException {
-		String val = getString(name);
-		if (val == null)
-			return (T)def;
-		return parseValue(parser, val, cm);
-	}
-
-	/* Workhorse method */
-	private <T> T parse(HttpPartParser parser, String name, ClassMeta<T> cm) throws ParseException {
-		String val = getString(name);
-		if (cm.isPrimitive() && (val == null || val.isEmpty()))
-			return cm.getPrimitiveDefault();
-		return parseValue(parser, val, cm);
+	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
+		T t = parse(parser, schema, getString(name), cm);
+		return (t == null ? def : t);
 	}
 
 	/* Workhorse method */
 	@SuppressWarnings("rawtypes")
-	private <T> T parseAll(HttpPartParser parser, String name, ClassMeta<T> cm) throws ParseException {
+	private <T> T getAllInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
 		String[] p = get(name);
 		if (p == null)
-			return null;
+			return def;
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
 		if (cm.isArray()) {
 			List c = new ArrayList();
 			for (int i = 0; i < p.length; i++)
-				c.add(parseValue(parser, p[i], cm.getElementType()));
+				c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
 			return (T)toArray(c, cm.getElementType().getInnerClass());
 		} else if (cm.isCollection()) {
 			try {
 				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
 				for (int i = 0; i < p.length; i++)
-					c.add(parseValue(parser, p[i], cm.getElementType()));
+					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
 				return (T)c;
 			} catch (ParseException e) {
 				throw e;
@@ -594,10 +611,10 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		throw new ParseException("Invalid call to getQueryParameters(String, ClassMeta).  Class type must be a Collection or array.");
 	}
 
-	private <T> T parseValue(HttpPartParser parser, String val, ClassMeta<T> c) throws ParseException {
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.parse(HttpPartType.QUERY, val, c);
+		return parser.parse(HttpPartType.QUERY, schema, val, c);
 	}
 
 	/**
@@ -635,16 +652,20 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		return sb.toString();
 	}
 
-	private ClassMeta<?> getClassMeta(Type type, Type...args) {
+	@Override /* Object */
+	public String toString() {
+		return toString(false);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		return beanSession.getClassMeta(type, args);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
 		return beanSession.getClassMeta(type);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return toString(false);
 	}
 }

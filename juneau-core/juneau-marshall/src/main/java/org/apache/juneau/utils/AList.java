@@ -60,4 +60,17 @@ public final class AList<T> extends LinkedList<T> {
 		addAll(Arrays.asList(t));
 		return this;
 	}
+
+	/**
+	 * Adds an entry to this list if the boolean flag is <jk>true</jk>.
+	 * 
+	 * @param b The boolean flag.
+	 * @param val The value to add.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> appendIf(boolean b, T val) {
+		if (b)
+			append(val);
+		return this;
+	}
 }

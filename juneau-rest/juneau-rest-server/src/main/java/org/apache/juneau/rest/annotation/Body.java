@@ -23,6 +23,7 @@ import java.util.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * REST request body annotation.
@@ -212,8 +213,11 @@ public @interface Body {
 	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * Determines whether the body is mandatory. The default value is <jk>false</jk>.
+	 * Determines whether the body is mandatory.
 	 *  
+	 * <p>
+	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Used on parameter</jc>
@@ -240,7 +244,7 @@ public @interface Body {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String required() default "";
+	boolean required() default false;
 	
 	//=================================================================================================================
 	// Attributes specific to in=body
@@ -259,7 +263,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
@@ -280,10 +284,10 @@ public @interface Body {
 	//=================================================================================================================
 
 	/**
-	 * TODO
+	 * A serialized example of the body of a request.
 	 * 
 	 * <p>
-	 * This is the JSON or String representation of an example of the body.
+	 * This is the {@link JsonSerializer#DEFAULT_LAX Simple-JSON} or String representation of an example of the body.
 	 * 
 	 * <p>
 	 * This value is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
@@ -367,7 +371,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is any JSON if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
+	 * 		The format is any {@link JsonSerializer#DEFAULT_LAX Simple-JSON} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
 	 * 		can be converted from a String.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
@@ -378,10 +382,10 @@ public @interface Body {
 	String[] example() default {};
 	
 	/**
-	 * TODO
+	 * Serialized examples of the body of a request.
 	 * 
 	 * <p>
-	 * This is a JSON object whose keys are media types and values are string representations of that value.
+	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object whose keys are media types and values are string representations of that value.
 	 * 
 	 * <p>
 	 * In general you won't need to populate this value directly since it will automatically be calculated based on the value provided in the {@link #example()} field.
@@ -399,7 +403,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a Simplified JSON object with string keys (media type) and string values (example for that media type) .
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 	<li>
@@ -418,7 +422,7 @@ public @interface Body {
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * This is a JSON object that makes up the swagger information for this parameter-info.
+	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this parameter-info.
 	 * 
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the body:
@@ -466,7 +470,9 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a Simplified JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
+	 * 	<li>
+	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

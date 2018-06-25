@@ -33,6 +33,7 @@ import org.apache.juneau.config.vars.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -1280,7 +1281,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link UonPartParser}.
+	 * 	<br>The default is {@link OapiPartParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(Class<? extends HttpPartParser> value) {
@@ -1300,7 +1301,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link UonPartParser}.
+	 * 	<br>The default is {@link OapiPartParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(HttpPartParser value) {
@@ -1320,7 +1321,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link SimpleUonPartSerializer}.
+	 * 	<br>The default is {@link OapiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
@@ -1340,7 +1341,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param value 
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link SimpleUonPartSerializer}.
+	 * 	<br>The default is {@link OapiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(HttpPartSerializer value) {
@@ -1698,7 +1699,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder staticFiles(Class<?> baseClass, String mappingString) {
-		if (! isEmpty(mappingString))
+		if (isNotEmpty(mappingString))
 			staticFiles(new StaticFileMapping(baseClass, mappingString));
 		return this;
 	}

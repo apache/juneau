@@ -37,7 +37,7 @@ import org.apache.juneau.json.*;
 @Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
-public @interface Items {
+public @interface SubItems {
 	
 	/**
 	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
@@ -278,11 +278,6 @@ public @interface Items {
 	String $ref() default "";
 	
 	/**
-	 * TODO
-	 */
-	SubItems items() default @SubItems;
-	
-	/**
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
 	 * 
 	 * <p>
@@ -374,4 +369,8 @@ public @interface Items {
 	 */
 	String[] value() default {};
 	
+	/**
+	 * TODO
+	 */
+	String[] items() default {};
 }

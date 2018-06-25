@@ -380,7 +380,7 @@ public class Info extends SwaggerElement {
 	 * @return <jk>true</jk> if the title property is not null or empty.
 	 */
 	public boolean hasTitle() {
-		return ! isEmpty(title);
+		return isNotEmpty(title);
 	}
 
 	/**
@@ -389,7 +389,7 @@ public class Info extends SwaggerElement {
 	 * @return <jk>true</jk> if the description property is not null or empty.
 	 */
 	public boolean hasDescription() {
-		return ! isEmpty(description);
+		return isNotEmpty(description);
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class Info extends SwaggerElement {
 	 * @return <jk>true</jk> if the version property is not null or empty.
 	 */
 	public boolean hasVersion() {
-		return ! isEmpty(version);
+		return isNotEmpty(version);
 	}
 
 	/**
@@ -407,7 +407,7 @@ public class Info extends SwaggerElement {
 	 * @return <jk>true</jk> if the termsOfService property is not null or empty.
 	 */
 	public boolean hasTermsOfService() {
-		return ! isEmpty(termsOfService);
+		return isNotEmpty(termsOfService);
 	}
 
 	@Override /* SwaggerElement */

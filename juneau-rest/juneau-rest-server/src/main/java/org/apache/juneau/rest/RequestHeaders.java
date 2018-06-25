@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -252,7 +253,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @throws ParseException 
 	 */
 	public <T> T get(String name, Class<T> type) throws ParseException {
-		return get(parser, name, null, type);
+		return getInner(null, null, name, null, getClassMeta(type));
 	}
 
 	/**
@@ -261,14 +262,19 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string header.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The HTTP header name.
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException 
 	 */
-	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
-		return get(parser, name, null, type);
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws ParseException {
+		return getInner(parser, schema, name, null, getClassMeta(type));
 	}
 
 	/**
@@ -282,7 +288,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @throws ParseException 
 	 */
 	public <T> T get(String name, T def, Class<T> type) throws ParseException {
-		return get(parser, name, def, type);
+		return getInner(null, null, name, def, getClassMeta(type));
 	}
 
 	/**
@@ -291,6 +297,11 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string header.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The HTTP header name.
 	 * @param def The default value if the header was not specified or is <jk>null</jk>.
 	 * @param type The class type to convert the header value to.
@@ -298,13 +309,8 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException 
 	 */
-	public <T> T get(HttpPartParser parser, String name, T def, Class<T> type) throws ParseException {
-		String s = getString(name);
-		if (s == null)
-			return def;
-		if (parser == null)
-			parser = this.parser;
-		return parser.parse(HttpPartType.HEADER, s, getClassMeta(type));
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws ParseException {
+		return getInner(parser, schema, name, def, getClassMeta(type));
 	}
 
 	/**
@@ -347,7 +353,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @throws ParseException If the header could not be converted to the specified type.
 	 */
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
-		return get(null, name, type, args);
+		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
 
 	/**
@@ -356,6 +362,11 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param parser
 	 * 	The parser to use for parsing the string header.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name 
 	 * 	The HTTP header name.
 	 * @param type
@@ -369,14 +380,21 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException If the header could not be converted to the specified type.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
-		String s = getString(name);
-		if (s == null)
-			return null;
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
+	}
+	
+	/* Workhorse method */
+	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
+		T t = parse(parser, schema, getString(name), cm);
+		return (t == null ? def : t);
+	}
+
+	/* Workhorse method */
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return (T)parser.parse(HttpPartType.HEADER, s, getClassMeta(type, args));
+		return parser.parse(HttpPartType.HEADER, schema, val, cm);
 	}
 
 	/**
@@ -916,16 +934,20 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		return JsonSerializer.DEFAULT_LAX.toString(m);
 	}
 	
-	private ClassMeta<?> getClassMeta(Type type, Type...args) {
+	@Override /* Object */
+	public String toString() {
+		return toString(false);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		return beanSession.getClassMeta(type, args);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
 		return beanSession.getClassMeta(type);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return toString(false);
 	}
 }

@@ -10,11 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.httppart.uon;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
@@ -73,9 +74,21 @@ public class UonPartParser extends UonParser implements HttpPartParser {
 		return new UonPartParserBuilder();
 	}
 
-
-	@Override /* HttpPartParser */
+	/**
+	 * Convenience method for calling the parse method without a schema object.
+	 * 
+	 * @param partType The part type being parsed.
+	 * @param in The input being parsed.
+	 * @param type The category of value being parsed.
+	 * @return The parsed value.
+	 * @throws ParseException
+	 */
 	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException {
+		return parse(partType, null, in, type);
+	}
+	
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException {
 		if (in == null)
 			return null;
 		if (type.isString() && in.length() > 0) {

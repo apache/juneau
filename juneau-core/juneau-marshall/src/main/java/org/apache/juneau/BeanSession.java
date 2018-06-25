@@ -490,6 +490,8 @@ public class BeanSession extends Session {
 							return (T)new AtomicInteger(Integer.valueOf(n));
 						if (tc == AtomicLong.class)
 							return (T)new AtomicLong(Long.valueOf(n));
+						if (tc == Number.class)
+							return (T)StringUtils.parseNumber(n, Number.class);
 					}
 				}
 			}

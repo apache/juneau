@@ -30,6 +30,7 @@ import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -1014,16 +1015,16 @@ public class RestClient extends BeanContext implements Closeable {
 							rc.serializer(serializer).parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
-								rc.path(a.name, args[a.index], a.serializer);
+								rc.path(a.name, args[a.index], a.serializer, null);
 
 							for (RemoteMethodArg a : rmm.getQueryArgs())
-								rc.query(a.name, args[a.index], a.skipIfNE, a.serializer);
+								rc.query(a.name, args[a.index], a.skipIfNE, a.serializer, null);
 
 							for (RemoteMethodArg a : rmm.getFormDataArgs())
-								rc.formData(a.name, args[a.index], a.skipIfNE, a.serializer);
+								rc.formData(a.name, args[a.index], a.skipIfNE, a.serializer, null);
 
 							for (RemoteMethodArg a : rmm.getHeaderArgs())
-								rc.header(a.name, args[a.index], a.skipIfNE, a.serializer);
+								rc.header(a.name, args[a.index], a.skipIfNE, a.serializer, null);
 
 							if (rmm.getBodyArg() != null)
 								rc.input(args[rmm.getBodyArg()]);
@@ -1039,32 +1040,32 @@ public class RestClient extends BeanContext implements Closeable {
 
 										Path p = pMeta.getAnnotation(Path.class);
 										if (p != null)
-											rc.path(getName(p.name(), p.value(), pMeta), val, getPartSerializer(p.serializer(), rma.serializer));
+											rc.path(getName(p.name(), p.value(), pMeta), val, getPartSerializer(p.serializer(), rma.serializer), null);
 
 										if (val != null) {
 											Query q1 = pMeta.getAnnotation(Query.class);
 											if (q1 != null)
-												rc.query(getName(q1.name(), q1.value(), pMeta), val, q1.skipIfEmpty(), getPartSerializer(q1.serializer(), rma.serializer));
+												rc.query(getName(q1.name(), q1.value(), pMeta), val, q1.skipIfEmpty(), getPartSerializer(q1.serializer(), rma.serializer), null);
 
 											QueryIfNE q2 = pMeta.getAnnotation(QueryIfNE.class);
 											if (q2 != null)
-												rc.query(getName(q2.name(), q2.value(), pMeta), val, true, getPartSerializer(q2.serializer(), rma.serializer));
+												rc.query(getName(q2.name(), q2.value(), pMeta), val, true, getPartSerializer(q2.serializer(), rma.serializer), null);
 
 											FormData f1 = pMeta.getAnnotation(FormData.class);
 											if (f1 != null)
-												rc.formData(getName(f1.name(), f1.value(), pMeta), val, f1.skipIfEmpty(), getPartSerializer(f1.serializer(), rma.serializer));
+												rc.formData(getName(f1.name(), f1.value(), pMeta), val, f1.skipIfEmpty(), getPartSerializer(f1.serializer(), rma.serializer), null);
 
 											FormDataIfNE f2 = pMeta.getAnnotation(FormDataIfNE.class);
 											if (f2 != null)
-												rc.formData(getName(f2.name(), f2.value(), pMeta), val, true, getPartSerializer(f2.serializer(), rma.serializer));
+												rc.formData(getName(f2.name(), f2.value(), pMeta), val, true, getPartSerializer(f2.serializer(), rma.serializer), null);
 
 											org.apache.juneau.remoteable.Header h1 = pMeta.getAnnotation(org.apache.juneau.remoteable.Header.class);
 											if (h1 != null)
-												rc.header(getName(h1.name(), h1.value(), pMeta), val, h1.skipIfEmpty(), getPartSerializer(h1.serializer(), rma.serializer));
+												rc.header(getName(h1.name(), h1.value(), pMeta), val, h1.skipIfEmpty(), getPartSerializer(h1.serializer(), rma.serializer), null);
 
 											HeaderIfNE h2 = pMeta.getAnnotation(HeaderIfNE.class);
 											if (h2 != null)
-												rc.header(getName(h2.name(), h2.value(), pMeta), val, true, getPartSerializer(h2.serializer(), rma.serializer));
+												rc.header(getName(h2.name(), h2.value(), pMeta), val, true, getPartSerializer(h2.serializer(), rma.serializer), null);
 										}
 									}
 								}

@@ -22,8 +22,9 @@ import org.apache.juneau.remoteable.*;
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer} - Parts encoded in UON notation, but
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.oapi.OapiPartSerializer} - Parts encoded based on OpenAPI schema.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.uon.UonPartSerializer} - Parts encoded in UON notation.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.uon.SimpleUonPartSerializer} - Parts encoded in UON notation, but
  * 		strings are treated as plain-text and arrays/collections are serialized as comma-delimited lists.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Parts encoded in plain text.
  * </ul>
@@ -64,8 +65,12 @@ public interface HttpPartSerializer {
 	 * Returned values should NOT be URL-encoded.
 	 * 
 	 * @param type The category of value being serialized.
-	 * @param value The value being serialized.
+	 * @param schema 
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part serializer use the schema information.  
+	 * @param value The value being serialized.	
 	 * @return The serialized value.
 	 */
-	public String serialize(HttpPartType type, Object value);
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value);
 }

@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -275,7 +276,7 @@ public class ObjectList extends LinkedList<Object> {
 	 */
 	public ObjectList appendIfNotEmpty(String...o) {
 		for (String s : o)
-			if (! StringUtils.isEmpty(s))
+			if (isNotEmpty(s))
 				add(s);
 		return this;
 	}

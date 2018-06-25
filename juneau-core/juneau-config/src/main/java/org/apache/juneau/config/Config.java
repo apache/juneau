@@ -1370,7 +1370,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
-		return ! isEmpty(getString(key, null));
+		return isNotEmpty(getString(key, null));
 	}
 
 	/**

@@ -272,7 +272,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 	}
 
 	private static String resolveResourceBundleName(Class<?> forClass, String path) {
-		if (StringUtils.isEmpty(path))
+		if (isEmpty(path))
 			return null;
 		String rb = rbMap.get(forClass);
 		if (rb == null) {

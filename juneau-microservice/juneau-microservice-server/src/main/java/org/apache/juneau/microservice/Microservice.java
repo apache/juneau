@@ -761,7 +761,7 @@ public abstract class Microservice implements ConfigEventListener {
 		Config cf = getConfig();
 		logger = Logger.getLogger("");
 		String logFile = cf.getString("Logging/logFile");
-		if (! isEmpty(logFile)) {
+		if (isNotEmpty(logFile)) {
 			LogManager.getLogManager().reset();
 			String logDir = cf.getString("Logging/logDir", ".");
 			mkdirs(new File(logDir), false);

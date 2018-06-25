@@ -548,9 +548,13 @@ class RestParamDefaults {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static final class PathObject extends RestMethodParam {
+		private final HttpPartParser partParser;
+		private final HttpPartSchema schema;
 
 		protected PathObject(Method method, Path a, Type type, PropertyStore ps, RestMethodParam existing) {
 			super(PATH, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, PathObject.class)));
+			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+			this.schema = getSchema(metaData, method, "@Path");
 		}
 
 		@Override /* RestMethodParam */
@@ -561,7 +565,7 @@ class RestParamDefaults {
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getPathMatch().get(name, type);
+			return req.getPathMatch().get(partParser, schema, name, type);
 		}
 		
 		private static final ObjectMap getMetaData(Path a, PathObject existing) {
@@ -573,14 +577,17 @@ class RestParamDefaults {
 	}
 
 	static final class BodyObject extends RestMethodParam {
+		private final HttpPartSchema schema;
 		
 		protected BodyObject(Method method, Body a, Type type, RestMethodParam existing) {
 			super(BODY, method, null, type, getMetaData(a, castOrNull(existing, BodyObject.class)));
+			this.schema = getSchema(metaData, method, "@Body");
 		}
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getBody().asType(type);
+			Object o = req.getBody().schema(schema).asType(type);
+			return o;
 		}
 		
 		private static final ObjectMap getMetaData(Body a, BodyObject existing) {
@@ -591,10 +598,12 @@ class RestParamDefaults {
 	
 	static final class HeaderObject extends RestMethodParam {
 		private final HttpPartParser partParser;
+		private final HttpPartSchema schema;
 
 		protected HeaderObject(Method method, Header a, Type type, PropertyStore ps, RestMethodParam existing) {
 			super(HEADER, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, HeaderObject.class)));
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+			this.schema = getSchema(metaData, method, "@Header");
 		}
 
 		@Override /* RestMethodParam */
@@ -605,7 +614,7 @@ class RestParamDefaults {
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getHeaders().get(partParser, name, type);
+			return req.getHeaders().get(partParser, schema, name, type);
 		}
 		
 		private static ObjectMap getMetaData(Header a, HeaderObject existing) {
@@ -616,10 +625,12 @@ class RestParamDefaults {
 
 	static final class ResponseHeaderObject extends RestMethodParam {
 		final HttpPartSerializer partSerializer;
+		final HttpPartSchema schema;
 
 		protected ResponseHeaderObject(Method method, ResponseHeader a, Type type, PropertyStore ps, RestMethodParam existing) {
 			super(RESPONSE_HEADER, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, ResponseHeaderObject.class)));
 			this.partSerializer = a.serializer() == HttpPartSerializer.Null.class ? null : ClassUtils.newInstance(HttpPartSerializer.class, a.serializer(), true, ps);
+			this.schema = getSchema(metaData, method, "@Reponse");
 		}
 
 		@Override /* RestMethodParam */
@@ -639,7 +650,7 @@ class RestParamDefaults {
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object newValue) {
-					res.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, newValue));
+					res.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, schema, newValue));
 				}
 			});
 			String def = getMetaData().getString("default");
@@ -777,11 +788,13 @@ class RestParamDefaults {
 	static final class FormDataObject extends RestMethodParam {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
+		private final HttpPartSchema schema;
 
 		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps, RestMethodParam existing) {
 			super(FORM_DATA, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, FormDataObject.class)));
-			this.multiPart = a.multipart();
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+			this.schema = getSchema(metaData, method, "@FormData");
+			this.multiPart = schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
 		}
 		
 		@Override /* RestMethodParam */
@@ -795,8 +808,8 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			if (multiPart)
-				return req.getFormData().getAll(partParser, name, type);
-			return req.getFormData().get(partParser, name, type);
+				return req.getFormData().getAll(partParser, schema, name, type);
+			return req.getFormData().get(partParser, schema, name, type);
 		}
 		
 		private static final ObjectMap getMetaData(FormData a, FormDataObject existing) {
@@ -808,11 +821,13 @@ class RestParamDefaults {
 	static final class QueryObject extends RestMethodParam {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
+		private final HttpPartSchema schema;
 
 		protected QueryObject(Method method, Query a, Type type, PropertyStore ps, RestMethodParam existing) {
 			super(QUERY, method, firstNonEmpty(existing == null ? null : existing.name, a.name(), a.value()), type, getMetaData(a, castOrNull(existing, QueryObject.class)));
-			this.multiPart = a.multipart();
+			this.multiPart = "multi".equals(a.collectionFormat());
 			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
+			this.schema = getSchema(metaData, method, "@Query");
 		}
 
 		@Override /* RestMethodParam */
@@ -826,8 +841,8 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			if (multiPart)
-				return req.getQuery().getAll(partParser, name, type);
-			return req.getQuery().get(partParser, name, type);
+				return req.getQuery().getAll(partParser, schema, name, type);
+			return req.getQuery().get(partParser, schema, name, type);
 		}
 		
 		private static final ObjectMap getMetaData(Query a, QueryObject existing) {
@@ -842,7 +857,7 @@ class RestParamDefaults {
 			super(FORM_DATA, method, firstNonEmpty(a.name(), a.value()), type);
 			if (type != Boolean.class && type != boolean.class)
 				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", method);
-	}
+		}
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
@@ -1189,4 +1204,91 @@ class RestParamDefaults {
 	static final boolean isCollection(Type t) {
 		return BeanContext.DEFAULT.getClassMeta(t).isCollectionOrArray();
 	}
+
+	static HttpPartSchema getSchema(ObjectMap md, Method m, String argType) throws InternalServerError {
+		try {
+			return getSchemaBuilder(md).build();
+		} catch (Exception e) {
+			throw new InternalServerError(e, "Invalid {0} argument on class ''{1}'' method ''{2}''", argType, m.getDeclaringClass().getName(), m.getName());
+		}
+	}
+	
+	static HttpPartSchema.Builder getSchemaBuilder(ObjectMap md) throws ParseException {
+		ObjectMap md2 = md.getObjectMap("schema", ObjectMap.EMPTY_MAP);
+		HttpPartSchema.Builder b = HttpPartSchema
+			.create()
+			._default(md.getString("default"))
+			._default(md2.getString("default"))
+			._enum(toSet(md.getString("enum")))
+			._enum(toSet(md2.getString("enum")))
+			.allowEmptyValue(md.getBoolean("allowEmptyValue"))
+			.allowEmptyValue(md2.getBoolean("allowEmptyValue"))
+			.exclusiveMaximum(md.getBoolean("exclusiveMaximum"))
+			.exclusiveMaximum(md2.getBoolean("exclusiveMaximum"))
+			.exclusiveMinimum(md.getBoolean("exclusiveMinimum"))
+			.exclusiveMinimum(md2.getBoolean("exclusiveMinimum"))
+			.required(md.getBoolean("required"))
+			.required(md2.getBoolean("required"))
+			.uniqueItems(md.getBoolean("uniqueItems"))
+			.uniqueItems(md2.getBoolean("uniqueItems"))
+			.collectionFormat(md.getString("collectionFormat"))
+			.collectionFormat(md2.getString("collectionFormat"))
+			.type(md.getString("type"))
+			.type(md2.getString("type"))
+			.format(md.getString("format"))
+			.format(md2.getString("format"))
+			.pattern(md.getString("pattern"))
+			.pattern(md2.getString("pattern"))
+			.maximum(md.get("maximum", Number.class))
+			.maximum(md2.get("maximum", Number.class))
+			.minimum(md.get("minimum", Number.class))
+			.minimum(md2.get("minimum", Number.class))
+			.multipleOf(md.get("multipleOf", Number.class))
+			.multipleOf(md2.get("multipleOf", Number.class))
+			.maxItems(md.get("maxItems", Integer.class))
+			.maxItems(md2.get("maxItems", Integer.class))
+			.maxLength(md.get("maxLength", Integer.class))
+			.maxLength(md2.get("maxLength", Integer.class))
+			.maxProperties(md.get("maxProperties", Integer.class))
+			.maxProperties(md2.get("maxProperties", Integer.class))
+			.minItems(md.get("minItems", Integer.class))
+			.minItems(md2.get("minItems", Integer.class))
+			.minLength(md.get("minLength", Integer.class))
+			.minLength(md2.get("minLength", Integer.class))
+			.minProperties(md.get("minProperties", Integer.class))
+			.minProperties(md2.get("minProperties", Integer.class))
+		;
+		
+		ObjectMap items = md.getObjectMap("items");
+		if (items != null)
+			b.items(getSchemaBuilder(items));
+		
+		ObjectMap additionalProperties = md.getObjectMap("additionalProperties");
+		if (additionalProperties != null)
+			b.additionalProperties(getSchemaBuilder(additionalProperties));
+		
+		ObjectMap properties = md.getObjectMap("properties");
+		if (properties != null) {
+			for (String name : properties.keySet()) {
+				b.property(name, getSchemaBuilder(md.getObjectMap(name)));
+			}
+		}
+		
+		return b;
+	}
+	
+	private static Set<String> toSet(String s) {
+		if (isEmpty(s))
+			return null;
+		Set<String> set = new ASet<>();
+		try {
+			for (Object o : StringUtils.parseListOrCdl(s))
+				set.add(o.toString());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return set;
+	}
+	
 }

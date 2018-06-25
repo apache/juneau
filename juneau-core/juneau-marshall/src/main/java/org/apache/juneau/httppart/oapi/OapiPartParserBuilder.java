@@ -10,26 +10,29 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.httppart.oapi;
 
-import static org.apache.juneau.uon.UonParser.*;
+import static org.apache.juneau.httppart.oapi.OapiPartParser.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
 
 /**
- * Builder class for building instances of {@link UonPartParser}.
+ * Builder class for building instances of {@link OapiPartParser}.
  */
-public class UonPartParserBuilder extends UonParserBuilder {
+public class OapiPartParserBuilder extends UonPartParserBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public UonPartParserBuilder() {
+	public OapiPartParserBuilder() {
 		super();
 	}
 
@@ -38,13 +41,13 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public UonPartParserBuilder(PropertyStore ps) {
+	public OapiPartParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParser build() {
-		return build(UonPartParser.class);
+	public OapiPartParser build() {
+		return build(OapiPartParser.class);
 	}
 
 
@@ -52,427 +55,448 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
+	/**
+	 * Configuration property: Decode <js>"%xx"</js> sequences.
+	 * 
+	 * <p>
+	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
+	 * decoded before being passed to this parser.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonParser#UON_decoding}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
+	 * @return This object (for method chaining).
+	 */
+	public OapiPartParserBuilder schema(HttpPartSchema value) {
+		return set(OAPI_schema, value);
+	}
+
 	@Override /* UonParserBuilder */
-	public UonPartParserBuilder decoding(boolean value) {
+	public OapiPartParserBuilder decoding(boolean value) {
 		return set(UON_decoding, value);
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder fileCharset(String value) {
+	public OapiPartParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder inputStreamCharset(String value) {
+	public OapiPartParserBuilder inputStreamCharset(String value) {
 		super.inputStreamCharset(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder listener(Class<? extends ParserListener> value) {
+	public OapiPartParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder strict(boolean value) {
+	public OapiPartParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder strict() {
+	public OapiPartParserBuilder strict() {
 		super.strict();
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder trimStrings(boolean value) {
+	public OapiPartParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder trimStrings() {
+	public OapiPartParserBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanClassVisibility(Visibility value) {
+	public OapiPartParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanConstructorVisibility(Visibility value) {
+	public OapiPartParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionary(boolean append, Object...values) {
+	public OapiPartParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionary(Class<?>...values) {
+	public OapiPartParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionary(Object...values) {
+	public OapiPartParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionaryRemove(Object...values) {
+	public OapiPartParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanFieldVisibility(Visibility value) {
+	public OapiPartParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanFilters(boolean append, Object...values) {
+	public OapiPartParserBuilder beanFilters(boolean append, Object...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanFilters(Class<?>...values) {
+	public OapiPartParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanFilters(Object...values) {
+	public OapiPartParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanFiltersRemove(Object...values) {
+	public OapiPartParserBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanMapPutReturnsOldValue(boolean value) {
+	public OapiPartParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanMapPutReturnsOldValue() {
+	public OapiPartParserBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanMethodVisibility(Visibility value) {
+	public OapiPartParserBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beansRequireDefaultConstructor(boolean value) {
+	public OapiPartParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beansRequireDefaultConstructor() {
+	public OapiPartParserBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beansRequireSerializable(boolean value) {
+	public OapiPartParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beansRequireSerializable() {
+	public OapiPartParserBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beansRequireSettersForGetters(boolean value) {
+	public OapiPartParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beansRequireSettersForGetters() {
+	public OapiPartParserBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beansRequireSomeProperties(boolean value) {
+	public OapiPartParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanTypePropertyName(String value) {
+	public OapiPartParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder debug() {
+	public OapiPartParserBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> UonPartParserBuilder example(Class<T> c, T o) {
+	public <T> OapiPartParserBuilder example(Class<T> c, T o) {
 		super.example(c, o);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+	public OapiPartParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignoreInvocationExceptionsOnGetters() {
+	public OapiPartParserBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+	public OapiPartParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignoreInvocationExceptionsOnSetters() {
+	public OapiPartParserBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignorePropertiesWithoutSetters(boolean value) {
+	public OapiPartParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignoreUnknownBeanProperties(boolean value) {
+	public OapiPartParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignoreUnknownBeanProperties() {
+	public OapiPartParserBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
+	public OapiPartParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> UonPartParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public <T> OapiPartParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder implClasses(Map<String,Class<?>> values) {
+	public OapiPartParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder locale(Locale value) {
+	public OapiPartParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder mediaType(MediaType value) {
+	public OapiPartParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanClasses(boolean append, Object...values) {
+	public OapiPartParserBuilder notBeanClasses(boolean append, Object...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanClasses(Class<?>...values) {
+	public OapiPartParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanClasses(Object...values) {
+	public OapiPartParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanClassesRemove(Object...values) {
+	public OapiPartParserBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanPackages(boolean append, Object...values) {
+	public OapiPartParserBuilder notBeanPackages(boolean append, Object...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanPackages(Object...values) {
+	public OapiPartParserBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanPackages(String...values) {
+	public OapiPartParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder notBeanPackagesRemove(Object...values) {
+	public OapiPartParserBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder pojoSwaps(boolean append, Object...values) {
+	public OapiPartParserBuilder pojoSwaps(boolean append, Object...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder pojoSwaps(Class<?>...values) {
+	public OapiPartParserBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder pojoSwaps(Object...values) {
+	public OapiPartParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder pojoSwapsRemove(Object...values) {
+	public OapiPartParserBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder sortProperties(boolean value) {
+	public OapiPartParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder sortProperties() {
+	public OapiPartParserBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder timeZone(TimeZone value) {
+	public OapiPartParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder useEnumNames() {
+	public OapiPartParserBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 	
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder useInterfaceProxies(boolean value) {
+	public OapiPartParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder useJavaBeanIntrospector(boolean value) {
+	public OapiPartParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder useJavaBeanIntrospector() {
+	public OapiPartParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 	
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder set(String name, Object value) {
+	public OapiPartParserBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder set(boolean append, String name, Object value) {
+	public OapiPartParserBuilder set(boolean append, String name, Object value) {
 		super.set(append, name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder set(Map<String,Object> properties) {
+	public OapiPartParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder add(Map<String,Object> properties) {
+	public OapiPartParserBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder addTo(String name, Object value) {
+	public OapiPartParserBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder addTo(String name, String key, Object value) {
+	public OapiPartParserBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder removeFrom(String name, Object value) {
+	public OapiPartParserBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonPartParserBuilder apply(PropertyStore copyFrom) {
+	public OapiPartParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

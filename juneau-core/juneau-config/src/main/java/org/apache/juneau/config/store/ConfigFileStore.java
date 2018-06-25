@@ -255,7 +255,7 @@ public class ConfigFileStore extends ConfigStore {
 		boolean exists = Files.exists(p);
 		
 		// Don't create the file if we're not going to match.
-		if ((!exists) && (!isEmpty(expectedContents)))
+		if ((!exists) && isNotEmpty(expectedContents))
 			return "";
 		
 		if (isWritable(p)) {

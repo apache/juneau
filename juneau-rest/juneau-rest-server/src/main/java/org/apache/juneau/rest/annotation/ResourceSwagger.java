@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.json.*;
+
 /**
  * Extended annotation for {@link RestResource#swagger() @RestResource.swagger()}.
  * 
@@ -96,7 +98,7 @@ public @interface ResourceSwagger {
 	 * Defines the swagger field <code>/info/contact</code>.
 	 * 
 	 * <p>
-	 * A simplified JSON string with the following fields:
+	 * A {@link JsonSerializer#DEFAULT_LAX Simple-JSON} string with the following fields:
 	 * <p class='bcode'>
 	 * 	{
 	 * 		name: string,
@@ -139,7 +141,7 @@ public @interface ResourceSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -177,7 +179,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger license field and to display on HTML pages.
 	 * 
 	 * <p>
-	 * A simplified JSON string with the following fields:
+	 * A {@link JsonSerializer#DEFAULT_LAX Simple-JSON} string with the following fields:
 	 * <p class='bcode'>
 	 * 	{
 	 * 		name: string,
@@ -202,7 +204,7 @@ public @interface ResourceSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -221,7 +223,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
 	 * 
 	 * <p>
-	 * A simplified JSON string with the following fields:
+	 * A {@link JsonSerializer#DEFAULT_LAX Simple-JSON} string with the following fields:
 	 * <p class='bcode'>
 	 * 	[
 	 * 		{
@@ -252,7 +254,7 @@ public @interface ResourceSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON array.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
@@ -315,7 +317,7 @@ public @interface ResourceSwagger {
 	 * Free-form value for the swagger of a resource.
 	 * 
 	 * <p>
-	 * This is a JSON object that makes up the swagger information for this resource.
+	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this resource.
 	 * 
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
@@ -405,7 +407,7 @@ public @interface ResourceSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a Simplified JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

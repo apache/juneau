@@ -20,9 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.Items;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.*;
@@ -77,13 +75,18 @@ public class FormDataAnnotationTest {
 	}
 	
 	//=================================================================================================================
-	// Plain parameters
+	// UON parameters
 	//=================================================================================================================
 
 	@RestResource
 	public static class B {
-		@RestMethod(name=POST)
-		public String post(RestRequest req, @FormData(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
+		@RestMethod(name=POST,path="/post1")
+		public String post1(RestRequest req, @FormData(value="p1") String p1) throws Exception {
+			RequestFormData f = req.getFormData();
+			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
+		}
+		@RestMethod(name=POST,path="/post2")
+		public String post2(RestRequest req, @FormData(value="p1",format="uon") String p1) throws Exception {
 			RequestFormData f = req.getFormData();
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
 		}
@@ -92,8 +95,13 @@ public class FormDataAnnotationTest {
 	
 	@Test
 	public void b01() throws Exception {
-		b.post("", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
-		b.post("", "p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=['p1','p1',p1]");
+		b.post("/post1", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
+		b.post("/post1", "p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=['p1','p1','p1']");
+	}
+	@Test
+	public void b02() throws Exception {
+		b.post("/post2", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
+		b.post("/post2", "p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,'p1','p1']");
 	}
 	
 	//=================================================================================================================
@@ -171,27 +179,7 @@ public class FormDataAnnotationTest {
 		@FormData(
 			name="F",
 			description= {"a","b"},
-			required="true",
-			type="a",
-			format="a",
-			pattern="a",
-			collectionFormat="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			maxItems="1",
-			minItems="1",
-			allowEmptyValue="true",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			uniqueItems="true",
-			schema=@Schema(type="a"),
-			_default="a",
-			_enum=" a,b ",
-			items=@Items(type="a"),
-			example="a"
+			type="string"
 		)
 		public static class SA01 {
 			public SA01(String x) {}
@@ -203,27 +191,7 @@ public class FormDataAnnotationTest {
 			name="F",
 			api={
 				"description:'a\nb',",
-				"required:'true',",
-				"type:'a',",
-				"format:'a',",
-				"pattern:'a',",
-				"collectionFormat:'a',",
-				"maximum:'1',",
-				"minimum:'1',",
-				"multipleOf:'1',",
-				"maxLength:'1',",
-				"minLength:'1',",
-				"maxItems:'1',",
-				"minItems:'1',",
-				"allowEmptyValue:'true',",
-				"exclusiveMaximum:'true',",
-				"exclusiveMinimum:'true',",
-				"uniqueItems:'true',",
-				"schema:{type:'a'},",
-				"default:'a',",
-				"enum:' a,b ',",
-				"items:{type:'a'},",
-				"example:'a'"
+				"type:'string'"
 			}
 		)
 		public static class SA02 {
@@ -236,50 +204,10 @@ public class FormDataAnnotationTest {
 			name="F",
 			api={
 				"description:'b\nc',",
-				"required:'false',",
-				"type:'b',",
-				"format:'b',",
-				"pattern:'b',",
-				"collectionFormat:'b',",
-				"maximum:'2',",
-				"minimum:'2',",
-				"multipleOf:'2',",
-				"maxLength:'2',",
-				"minLength:'2',",
-				"maxItems:'2',",
-				"minItems:'2',",
-				"allowEmptyValue:'false',",
-				"exclusiveMaximum:'false',",
-				"exclusiveMinimum:'false',",
-				"uniqueItems:'false',",
-				"schema:{type:'a'},",
-				"default:'a',",
-				"enum:' a,b ',",
-				"items:{type:'a'},",
-				"example:'b'"
+				"type:'string'"
 			},
 			description= {"a","b"},
-			required="true",
-			type="a",
-			format="a",
-			pattern="a",
-			collectionFormat="a",
-			maximum="1",
-			minimum="1",
-			multipleOf="1",
-			maxLength="1",
-			minLength="1",
-			maxItems="1",
-			minItems="1",
-			allowEmptyValue="true",
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			uniqueItems="true",
-			schema=@Schema(type="a"),
-			_default="a",
-			_enum=" a,b ",
-			items=@Items(type="a"),
-			example="a"
+			type="string"
 		)
 		public static class SA03 {
 			public SA03(String x) {}
@@ -291,21 +219,6 @@ public class FormDataAnnotationTest {
 		public static class SA04 {}
 		@RestMethod(name=GET,path="/value")
 		public void sa04(SA04 f) {}
-		
-		@FormData(name="F", _default={"a","b"})
-		public static class SA05 {}
-		@RestMethod(name=GET,path="/default")
-		public void sa05(SA05 f) {}
-		
-		@FormData(name="F", _enum={ "['a','b']" })
-		public static class SA06 {}
-		@RestMethod(name=GET,path="/enum")
-		public void sa06(SA06 f) {}
-		
-		@FormData(name="F", items=@Items(" type:'b' "))
-		public static class SA07 {}
-		@RestMethod(name=GET,path="/items")
-		public void sa07(SA07 f) {}
 	}
 	
 	@Test
@@ -313,101 +226,26 @@ public class FormDataAnnotationTest {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void sa02_FormData_onPojo_api() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void sa03_FormData_onPojo_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void sa04_FormData_onPojo_value() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/value").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
-	}
-	@Test
-	public void sa05_FormData_onPojo__default2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/default").get("get").getParameter("formData", "F");
-		assertEquals("a\nb", x.getDefault());
-	}
-	@Test
-	public void sa06_FormData_onPojo__enum2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/enum").get("get").getParameter("formData", "F");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void sa07_FormData_onPojo_items2() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/items").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getItems());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -417,7 +255,7 @@ public class FormDataAnnotationTest {
 	@RestResource
 	public static class SB {
 
-		@FormData(name="F", schema=@Schema(" type:'b' "))
+		@FormData(name="F")
 		public static class SB01 {}
 		@RestMethod(name=GET,path="/value")
 		public void sb01(SB01 f) {}
@@ -445,7 +283,7 @@ public class FormDataAnnotationTest {
 	@Test
 	public void sb01_FormData_onPojo_value() throws Exception {
 		ParameterInfo x = getSwagger(new SB()).getPaths().get("/value").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 	@Test
 	public void sb02_FormData_onPojo_autoDetectBean() throws Exception {
@@ -500,27 +338,7 @@ public class FormDataAnnotationTest {
 			@FormData(
 				name="F",
 				description={"a","b"},
-				required="true",
-				type="a",
-				format="a",
-				pattern="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				allowEmptyValue="true",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				schema=@Schema(type="a"),
-				_default="a",
-				_enum="a,b",
-				items=@Items(type="a"),
-				example="'a'"
+				type="string"
 			) String f) {}
 
 		@RestMethod(name=GET,path="/api")
@@ -529,27 +347,7 @@ public class FormDataAnnotationTest {
 				name="F",
 				api={
 					"description:'a\nb',",
-					"required:'true',",
-					"type:'a',",
-					"format:'a',",
-					"pattern:'a',",
-					"collectionFormat:'a',",
-					"maximum:'1',",
-					"minimum:'1',",
-					"multipleOf:'1',",
-					"maxLength:'1',",
-					"minLength:'1',",
-					"maxItems:'1',",
-					"minItems:'1',",
-					"allowEmptyValue:'true',",
-					"exclusiveMaximum:'true',",
-					"exclusiveMinimum:'true',",
-					"uniqueItems:'true',",
-					"schema:{type:'a'},",
-					"default:'a',",
-					"enum:' a,b ',",
-					"items:{type:'a'},",
-					"example:'a'"
+					"type:'string'",
 				}
 			) String f) {}
 		
@@ -559,63 +357,14 @@ public class FormDataAnnotationTest {
 				name="F",
 				api={
 					"description:'b\nc',",
-					"required:'false',",
-					"type:'b',",
-					"format:'b',",
-					"pattern:'b',",
-					"collectionFormat:'b',",
-					"maximum:'2',",
-					"minimum:'2',",
-					"multipleOf:'2',",
-					"maxLength:'2',",
-					"minLength:'2',",
-					"maxItems:'2',",
-					"minItems:'2',",
-					"allowEmptyValue:'false',",
-					"exclusiveMaximum:'false',",
-					"exclusiveMinimum:'false',",
-					"uniqueItems:'false',",
-					"schema:{type:'b'},",
-					"default:'b',",
-					"enum:' b,c ',",
-					"items:{type:'b'},",
-					"example:'b'"
+					"type:'string'",
 				},
 				description={"a","b"},
-				required="true",
-				type="a",
-				format="a",
-				pattern="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				allowEmptyValue="true",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				schema=@Schema(type="a"),
-				_default="a",
-				_enum="a,b",
-				items=@Items(type="a"),
-				example="'a'"
+				type="string"
 			) String f) {}
 
 		@RestMethod(name=GET,path="/value")
 		public void ta04(@FormData("F") String f) {}
-		
-		@RestMethod(name=GET,path="/default")
-		public void ta05(@FormData(name="F", _default={"a","b"}) String f) {}
-
-		@RestMethod(name=GET,path="/enum")
-		public void ta06(@FormData(name="F", _enum={" ['a','b'] "}) String f) {}
-
-		@RestMethod(name=GET,path="/items")
-		public void ta07(@FormData(name="F", items=@Items(" type:'b' ")) String f) {}
 	}
 
 	@Test
@@ -623,101 +372,26 @@ public class FormDataAnnotationTest {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta02_FormData_onParameter_api() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta03_FormData_onParameter_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getAllowEmptyValue());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertEquals("a", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta04_FormData_onParameter_value() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value").get("get").getParameter("formData", "F");
 		assertEquals("F", x.getName());
-	}
-	@Test
-	public void ta05_FormData_onParameter_default() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/default").get("get").getParameter("formData", "F");
-		assertEquals("a\nb", x.getDefault());
-	}
-	@Test
-	public void ta06_FormData_onParameter_enum() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/enum").get("get").getParameter("formData", "F");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void ta07_FormData_onParameter_items() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/items").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getItems());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -728,7 +402,7 @@ public class FormDataAnnotationTest {
 	public static class TB {
 
 		@RestMethod(name=GET,path="/schemaValue")
-		public void tb01(@FormData(name="F", schema=@Schema(" type:'b' ")) String f) {}
+		public void tb01(@FormData(name="F") String f) {}
 
 		public static class TB02 {
 			public String f1;
@@ -756,7 +430,7 @@ public class FormDataAnnotationTest {
 	@Test
 	public void tb01_FormData_onParameter_schemaValue() throws Exception {
 		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("formData", "F");
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 	@Test
 	public void tb02_FormData_onParameter_autoDetectBean() throws Exception {

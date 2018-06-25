@@ -1090,7 +1090,7 @@ public class Operation extends SwaggerElement {
 	 * @return <jk>true</jk> if the summary property is not null or empty.
 	 */
 	public boolean hasSummary() {
-		return ! isEmpty(summary);
+		return isNotEmpty(summary);
 	}
 
 	/**
@@ -1099,7 +1099,7 @@ public class Operation extends SwaggerElement {
 	 * @return <jk>true</jk> if the description property is not null or empty.
 	 */
 	public boolean hasDescription() {
-		return ! isEmpty(description);
+		return isNotEmpty(description);
 	}
 
 	/**

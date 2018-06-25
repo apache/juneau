@@ -54,9 +54,9 @@ public class MockRest implements MockHttpConnection {
 
 	private final RestContext rc;
 	
-	private MockRest(Class<?> c) throws Exception {
+	private MockRest(Class<?> c, boolean debug) throws Exception {
 		if (! CONTEXTS.containsKey(c))
-			CONTEXTS.put(c, RestContext.create(c.newInstance()).build().postInit().postInitChildFirst());
+			CONTEXTS.put(c, RestContext.create(c.newInstance()).logger(debug ? BasicRestLogger.class : NoOpRestLogger.class).build().postInit().postInitChildFirst());
 		rc = CONTEXTS.get(c);
 	}
 	
@@ -69,13 +69,28 @@ public class MockRest implements MockHttpConnection {
 	 * 	For testing conveniences, this method wraps all exceptions in a RuntimeException so that you can easily define mocks as reusable fields. 
 	 */
 	public static MockRest create(Class<?> c) throws RuntimeException {
+		return create(c, false);
+	}
+	
+	/**
+	 * Create a new mock REST interface 
+	 * 
+	 * @param c The REST class.
+	 * @param debug 
+	 * 	If <jk>true</jk>, the REST interface will use the {@link BasicRestLogger} for logging.
+	 * 	<br>Otherwise, uses {@link NoOpRestLogger}.
+	 * @return A new mock interface.
+	 * @throws RuntimeException 
+	 * 	For testing conveniences, this method wraps all exceptions in a RuntimeException so that you can easily define mocks as reusable fields. 
+	 */
+	public static MockRest create(Class<?> c, boolean debug) throws RuntimeException {
 		try {
-			return new MockRest(c);
+			return new MockRest(c, debug);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Performs a REST request against the REST interface.
 	 * 

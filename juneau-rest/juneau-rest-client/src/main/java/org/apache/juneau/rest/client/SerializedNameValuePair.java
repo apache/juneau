@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -32,18 +33,26 @@ public final class SerializedNameValuePair implements NameValuePair {
 	private String name;
 	private Object value;
 	private HttpPartSerializer serializer;
+	private HttpPartSchema schema;
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param name The parameter name.
 	 * @param value The POJO to serialize to the parameter value.
-	 * @param serializer The serializer to use to convert the value to a string.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
+	 * @param schema 
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
 	 */
-	public SerializedNameValuePair(String name, Object value, HttpPartSerializer serializer) {
+	public SerializedNameValuePair(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		this.name = name;
 		this.value = value;
 		this.serializer = serializer;
+		this.schema = schema;
 	}
 
 	@Override /* NameValuePair */
@@ -53,6 +62,6 @@ public final class SerializedNameValuePair implements NameValuePair {
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return serializer.serialize(HttpPartType.FORMDATA, value);
+		return serializer.serialize(HttpPartType.FORMDATA, schema, value);
 	}
 }

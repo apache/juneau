@@ -13,14 +13,13 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.DateUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import javax.xml.bind.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for converting {@link Calendar} and {@link Date} objects to common serialized forms.
@@ -560,7 +559,7 @@ public class CalendarUtils {
 	 * @throws Exception
 	 */
 	public static final Calendar parseCalendar(String in, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws Exception {
-		if (StringUtils.isEmpty(in))
+		if (isEmpty(in))
 			return null;
 		if (timeZone == null)
 			timeZone = TimeZone.getDefault();
@@ -632,7 +631,7 @@ public class CalendarUtils {
 	 * @throws Exception
 	 */
 	public static final Date parseDate(String in, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws Exception {
-		if (StringUtils.isEmpty(in))
+		if (isEmpty(in))
 			return null;
 		if (timeZone == null)
 			timeZone = TimeZone.getDefault();

@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -39,6 +38,8 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
+import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -1735,7 +1736,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.partParser.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link HttpPartParser} | Class&lt;? <jk>extends</jk> {@link HttpPartParser}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link UonPartParser}
+	 * 	<li><b>Default:</b>  {@link OapiPartSerializer}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -1753,7 +1754,7 @@ public final class RestContext extends BeanContext {
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
 	 * <p>
-	 * The default value is {@link UonPartParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
+	 * The default value is {@link OapiPartParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
 	 * <br>If your parts contain text that can be confused with UON (e.g. <js>"(foo)"</js>), you can switch to 
 	 * {@link SimplePartParser} which treats everything as plain text.
 	 * 
@@ -1803,7 +1804,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.partSerializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link HttpPartSerializer} | Class&lt;? <jk>extends</jk> {@link HttpPartSerializer}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link SimpleUonPartSerializer}
+	 * 	<li><b>Default:</b>  {@link OapiPartSerializer}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
@@ -1821,12 +1822,14 @@ public final class RestContext extends BeanContext {
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 * 
 	 * <p>
-	 * The default value is {@link SimpleUonPartSerializer} which serializes UON notation for beans and maps, and
+	 * The default value is {@link OapiPartSerializer} which serializes based on OpenAPI rules, but defaults to UON notation for beans and maps, and
 	 * plain text for everything else.
 	 * <br>Other options include:
 	 * <ul>
 	 * 	<li class='jc'>{@link SimplePartSerializer} - Always serializes to plain text.
 	 * 	<li class='jc'>{@link UonPartSerializer} - Always serializers to UON.
+	 * 	<li class='jc'>{@link SimpleUonPartSerializer} - Serializes to UON notation for beans and maps, and
+	 * 		plain text for everything else..
 	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>
@@ -2919,8 +2922,8 @@ public final class RestContext extends BeanContext {
 			properties = builder.properties;
 			serializers = SerializerGroup.create().append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], true, resource, ps)).build();
 			parsers = ParserGroup.create().append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], true, resource, ps)).build();
-			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, SimpleUonPartSerializer.class, true, resource, ps);
-			partParser = getInstanceProperty(REST_partSerializer, HttpPartParser.class, UonPartParser.class, true, resource, ps);
+			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OapiPartSerializer.class, true, resource, ps);
+			partParser = getInstanceProperty(REST_partSerializer, HttpPartParser.class, OapiPartParser.class, true, resource, ps);
 			jsonSchemaSerializer = new JsonSchemaSerializer(ps);
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
@@ -3956,7 +3959,7 @@ public final class RestContext extends BeanContext {
 	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
 	 */
 	public boolean allowMethodParam(String m) {
-		return (! isEmpty(m) && (allowedMethodParams.contains(m) || allowedMethodParams.contains("*")));
+		return (isNotEmpty(m) && (allowedMethodParams.contains(m) || allowedMethodParams.contains("*")));
 	}
 
 	/**

@@ -190,7 +190,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * @return <jk>true</jk> if the description property is not null or empty.
 	 */
 	public boolean hasDescription() {
-		return ! isEmpty(description);
+		return isNotEmpty(description);
 	}
 
 	@Override /* SwaggerElement */

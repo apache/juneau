@@ -260,7 +260,7 @@ public class JsonSerializer extends WriterSerializer {
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
 
-	/** Default serializer, single quotes, simple mode. */
+	/** Default serializer, single quotes, {@link #JSON_simpleMode simple mode}. */
 	public static final JsonSerializer DEFAULT_LAX = new Simple(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */

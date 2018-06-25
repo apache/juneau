@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -3847,7 +3848,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	public static class DummyPartSerializer implements HttpPartSerializer {
 		@Override
-		public String serialize(HttpPartType type, Object value) {
+		public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
 			return "dummy-"+value;
 		}
 	}

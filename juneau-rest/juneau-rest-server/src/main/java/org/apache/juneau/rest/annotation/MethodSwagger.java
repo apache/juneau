@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.json.*;
+
 /**
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.
  * 
@@ -84,7 +86,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a JSON array.
+	 * 		The format is either a comma-delimited list of simple strings or a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -130,7 +132,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a JSON array.
+	 * 		The format is either a comma-delimited list of simple strings or a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -149,7 +151,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a JSON array.
+	 * 		The format is either a comma-delimited list of simple strings or a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -299,7 +301,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 		<br>Comments and whitespace are ignored.
 	 * 		<br>The leading and trailing <js>'{'</js>/<js>'}'</js> characters are optional.
@@ -317,7 +319,7 @@ public @interface MethodSwagger {
 	 * Free-form value for the swagger of a resource method.
 	 * 
 	 * <p>
-	 * This is a JSON object that makes up the swagger information for this resource method.
+	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this resource method.
 	 * 
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource method:
@@ -376,7 +378,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a Simplified JSON object.
+	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

@@ -371,19 +371,6 @@ public final class RestUtils {
 		return s;
 	}
 	
-	public static boolean isJson(String s) {
-		if (s == null)
-			return false;
-		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
-		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
-			return true;
-		if (StringUtils.isOneOf(s, "true","false","null"))
-			return true;
-		if (StringUtils.isNumeric(s))
-			return true;
-		return false;
-	}
-	
 	/**
 	 * Merges the specified parent and child arrays.
 	 * 
@@ -423,5 +410,4 @@ public final class RestUtils {
 		}
 		return l.toArray(new Object[l.size()]);
 	}
-
 }

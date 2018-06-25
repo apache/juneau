@@ -761,9 +761,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			if (s.isEmpty())
 				return null;
 			s = vs.resolve(s.trim());
-			if (! isObjectList(s, true))
-				return new ObjectList(Arrays.asList(StringUtils.split(s, ',')));
-			return new ObjectList(s);
+			return StringUtils.parseListOrCdl(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
 		}
@@ -900,7 +898,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		boolean isOk = "ok".equals(in), isBody = "body".equals(in);
 		
 		String sex = example.toString();
-		if (RestUtils.isJson(sex)) {
+		if (isJson(sex)) {
 			example = JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT.serialize(example), type);
 		} else {
 			ClassMeta<?> cm = js.getClassMeta(type);
@@ -935,7 +933,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		} else {
 			String paramName = piri.getString("name");
-			String s = sm.partSerializer.serialize(HttpPartType.valueOf(in.toUpperCase()), example);
+			String s = sm.partSerializer.serialize(HttpPartType.valueOf(in.toUpperCase()), null, example);
 			if ("query".equals(in))
 				s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
 			else if ("formData".equals(in))

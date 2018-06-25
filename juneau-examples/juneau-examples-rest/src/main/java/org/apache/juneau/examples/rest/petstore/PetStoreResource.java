@@ -279,7 +279,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Query(
 				name="status", 
 				description="Status values that need to be considered for filter.", 
-				required="true", 
+				required=true, 
 				type="array",
 				items=@Items(
 					type="string",
@@ -311,7 +311,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Query(
 				name="tags", 
 				description="Tags to filter by", 
-				required="true", 
+				required=true, 
 				example="['tag1','tag2']"
 			) 
 			String[] tags
@@ -332,7 +332,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok deletePet(
-			@Header(name="api_key", description="Security API key", required="true", example="foobar") String apiKey, 
+			@Header(name="api_key", description="Security API key", required=true, example="foobar") String apiKey, 
 			@Path(name="petId", description="Pet id to delete", example="123") long petId
 		) throws IdNotFound, NotAcceptable {
 		
@@ -354,7 +354,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	public Ok uploadImage(
 			@Path(name="petId", description="ID of pet to update", example="123") long petId, 
 			@FormData(name="additionalMetadata", description="Additional data to pass to server", example="Foobar") String additionalMetadata, 
-			@FormData(name="file", description="file to upload", required="true", type="file") byte[] file
+			@FormData(name="file", description="file to upload", required=true, type="file") byte[] file
 		) throws NotAcceptable, UnsupportedMediaType {
 		
 		return OK;
@@ -591,8 +591,8 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok login(
-			@Query(name="username", description="The username for login", required="true", example="myuser") String username, 
-			@Query(name="password", description="The password for login in clear text", required="true", example="abc123") String password, 
+			@Query(name="username", description="The username for login", required=true, example="myuser") String username, 
+			@Query(name="password", description="The password for login in clear text", required=true, example="abc123") String password, 
 			@ResponseHeader(name="X-Rate-Limit", type="integer", format="int32", description="Calls per hour allowed by the user.", example="123") Value<Integer> rateLimit,
 			ExpiresAfter expiresAfter,
 			RestRequest req, 

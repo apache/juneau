@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.Items;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -56,27 +55,8 @@ public class HeaderAnnotationTest {
 
 		@Header(
 			name="H", 
-			_default="a",
-			collectionFormat="A",
 			description={"a","b"},
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			format="a",
-			maximum="1",
-			maxItems="1",
-			maxLength="1",
-			minimum="1",
-			minItems="1",
-			minLength="1",
-			multipleOf="1",
-			pattern="a",
-			required="true",
-			type="a",
-			uniqueItems="true",
-			_enum="A,B,C",
-			example="a",
-			items=@Items(type="a"),
-			schema=@Schema(type="a")
+			type="string"
 		)
 		public static class SA01 {
 			public SA01(String x) {}
@@ -87,27 +67,8 @@ public class HeaderAnnotationTest {
 		@Header(
 			name="H", 
 			api={
-				"default:'a',",
-				"collectionFormat:'A',",
 				"description:'a\nb',",
-				"exclusiveMaximum:'true',",
-				"exclusiveMinimum:'true',",
-				"format:'a',",
-				"maximum:'1',",
-				"maxItems:'1',",
-				"maxLength:'1',",
-				"minimum:'1',",
-				"minItems:'1',",
-				"minLength:'1',",
-				"multipleOf:'1',",
-				"pattern:'a',",
-				"required:'true',",
-				"type:'a',",
-				"uniqueItems:'true',",
-				"enum:'A,B,C',",
-				"example:'a',",
-				"items:{type:'a'},",
-				"schema:{type:'a'}"
+				"type:'string'"
 			}
 		)
 		public static class SA02 {
@@ -119,151 +80,36 @@ public class HeaderAnnotationTest {
 		@Header(
 			name="H", 
 			api={
-				"default:'b',",
-				"collectionFormat:'b',",
 				"description:'b\nc',",
-				"exclusiveMaximum:'false',",
-				"exclusiveMinimum:'false',",
-				"format:'b',",
-				"maximum:'2',",
-				"maxItems:'2',",
-				"maxLength:'2',",
-				"minimum:'2',",
-				"minItems:'2',",
-				"minLength:'2',",
-				"multipleOf:'2',",
-				"pattern:'b',",
-				"required:'false',",
-				"type:'v',",
-				"uniqueItems:'false',",
-				"enum:'D,E,F',",
-				"example:'b',",
-				"items:{type:'b'},",
-				"schema:{type:'b'}"
+				"type:'string'"
 			},
-			_default="a",
-			collectionFormat="A",
 			description={"a","b"},
-			exclusiveMaximum="true",
-			exclusiveMinimum="true",
-			format="a",
-			maximum="1",
-			maxItems="1",
-			maxLength="1",
-			minimum="1",
-			minItems="1",
-			minLength="1",
-			multipleOf="1",
-			pattern="a",
-			required="true",
-			type="a",
-			uniqueItems="true",
-			_enum="A,B,C",
-			example="a",
-			items=@Items(type="a"),
-			schema=@Schema(type="a")
+			type="string"
 		)
 		public static class SA03 {
 			public SA03(String x) {}
 		}
 		@RestMethod(name=GET,path="/mixed")
 		public void sa03(SA03 h) {}
-		
-		@Header(name="H", _enum="['A','B','C']")
-		public static class SA04 {}
-		@RestMethod(name=GET,path="/enum")
-		public void sa04(SA04 h) {}
-		
-		@Header(name="H", items=@Items(" type:'a' "))
-		public static class SA05 {}
-		@RestMethod(name=GET,path="/items")
-		public void sa05(SA05 h) {}
 	}
 
 	@Test
 	public void sa01_Header_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("header", "H");
-		assertObjectEquals("'a'", x.getDefault());
-		assertEquals("A", x.getCollectionFormat());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals(true, x.getExclusiveMaximum());
-		assertEquals(true, x.getExclusiveMinimum());
-		assertEquals("a", x.getFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("'a'", x.getPattern());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("'a'", x.getType());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("['A','B','C']", x.getEnum());
-		assertEquals("a", x.getExample());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("'string'", x.getType());
 	}
 	@Test
 	public void sa02_Header_onPojo_api() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("header", "H");
-		assertObjectEquals("'a'", x.getDefault());
-		assertEquals("A", x.getCollectionFormat());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals(true, x.getExclusiveMaximum());
-		assertEquals(true, x.getExclusiveMinimum());
-		assertEquals("a", x.getFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("'a'", x.getPattern());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("'a'", x.getType());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("['A','B','C']", x.getEnum());
-		assertEquals("a", x.getExample());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("'string'", x.getType());
 	}
 	@Test
 	public void sa03_Header_onPojo_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("header", "H");
-		assertObjectEquals("'a'", x.getDefault());
-		assertEquals("A", x.getCollectionFormat());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals(true, x.getExclusiveMaximum());
-		assertEquals(true, x.getExclusiveMinimum());
-		assertEquals("a", x.getFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("'a'", x.getPattern());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("'a'", x.getType());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("['A','B','C']", x.getEnum());
-		assertEquals("a", x.getExample());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-	}
-	@Test
-	public void sa04_Header_onPojo_enum() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/enum").get("get").getParameter("header", "H");
-		assertObjectEquals("['A','B','C']", x.getEnum());
-	}
-	@Test
-	public void sa05_Header_onPojo_items() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/items").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'a'}", x.getItems());
+		assertObjectEquals("'string'", x.getType());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -273,7 +119,7 @@ public class HeaderAnnotationTest {
 	@RestResource
 	public static class SB {
 
-		@Header(name="H", schema=@Schema(" type:'a' "))
+		@Header(name="H")
 		public static class SB01 {}
 		@RestMethod(name=GET,path="/schemaValue")
 		public void sb01(SB01 h) {}
@@ -300,7 +146,7 @@ public class HeaderAnnotationTest {
 	@Test
 	public void sb01_Header_onPojo_schemaValue() throws Exception {
 		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 	@Test
 	public void sb02_Header_onPojo_autoDetectBean() throws Exception {
@@ -355,25 +201,7 @@ public class HeaderAnnotationTest {
 			@Header(
 				name="H",
 				description={"a","b"},
-				type="a",
-				format="a",
-				pattern="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				schema=@Schema(type="a"),
-				_default="a",
-				_enum="a,b",
-				items=@Items(type="a"),
-				example="a,b"
+				type="string"
 			) String h) {}
 		
 		@RestMethod(name=GET,path="/api")
@@ -382,25 +210,7 @@ public class HeaderAnnotationTest {
 				name="H",
 				api={
 					"description:'a\nb',",
-					"type:'a',",
-					"format:'a',",
-					"pattern:'a',",
-					"collectionFormat:'a',",
-					"maximum:'1',",
-					"minimum:'1',",
-					"multipleOf:'1',",
-					"maxLength:'1',",
-					"minLength:'1',",
-					"maxItems:'1',",
-					"minItems:'1',",
-					"exclusiveMaximum:'true',",
-					"exclusiveMinimum:'true',",
-					"uniqueItems:'true',",
-					"schema:{type:'a'},",
-					"default:'a',",
-					"enum:'a,b',",
-					"items:{type:'a'},",
-					"example:'a,b'"
+					"type:'string'",
 				}
 			) String h) {}
 
@@ -410,59 +220,14 @@ public class HeaderAnnotationTest {
 				name="H",
 				api={
 					"description:'b\nc',",
-					"type:'b',",
-					"format:'b',",
-					"pattern:'b',",
-					"collectionFormat:'b',",
-					"maximum:'2',",
-					"minimum:'2',",
-					"multipleOf:'2',",
-					"maxLength:'2',",
-					"minLength:'2',",
-					"maxItems:'2',",
-					"minItems:'2',",
-					"exclusiveMaximum:'false',",
-					"exclusiveMinimum:'false',",
-					"uniqueItems:'false',",
-					"schema:{type:'b'},",
-					"default:'b',",
-					"enum:'b,c',",
-					"items:{type:'b'},",
-					"example:'b,c'"
+					"type:'string'",
 				},
 				description={"a","b"},
-				type="a",
-				format="a",
-				pattern="a",
-				collectionFormat="a",
-				maximum="1",
-				minimum="1",
-				multipleOf="1",
-				maxLength="1",
-				minLength="1",
-				maxItems="1",
-				minItems="1",
-				exclusiveMaximum="true",
-				exclusiveMinimum="true",
-				uniqueItems="true",
-				schema=@Schema(type="a"),
-				_default="a",
-				_enum="a,b",
-				items=@Items(type="a"),
-				example="a,b"
+				type="string"
 			) String h) {}
 
 		@RestMethod(name=GET,path="/value")
 		public void ta04(@Header("H") String h) {}
-		
-		@RestMethod(name=GET,path="/default")
-		public void ta05(@Header(name="H", _default={"a","b"}) String h) {}
-
-		@RestMethod(name=GET,path="/enum")
-		public void ta06(@Header(name="H", _enum={"['a','b']"}) String h) {}
-
-		@RestMethod(name=GET,path="/items")
-		public void ta07(@Header(name="H", items=@Items(" type:'b' ")) String h) {}
 	}
 
 	@Test
@@ -470,95 +235,26 @@ public class HeaderAnnotationTest {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("header", "H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("'a'", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a,b", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta02_Header_onParameter_api() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("header", "H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("'a'", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a,b", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta03_Header_onParameter_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("header", "H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
-		assertEquals("a", x.getType());
-		assertEquals("a", x.getFormat());
-		assertEquals("a", x.getPattern());
-		assertEquals("a", x.getCollectionFormat());
-		assertObjectEquals("1", x.getMaximum());
-		assertObjectEquals("1", x.getMinimum());
-		assertObjectEquals("1", x.getMultipleOf());
-		assertObjectEquals("1", x.getMaxLength());
-		assertObjectEquals("1", x.getMinLength());
-		assertObjectEquals("1", x.getMaxItems());
-		assertObjectEquals("1", x.getMinItems());
-		assertObjectEquals("true", x.getExclusiveMaximum());
-		assertObjectEquals("true", x.getExclusiveMinimum());
-		assertObjectEquals("true", x.getUniqueItems());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("'a'", x.getDefault());
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{type:'a'}", x.getItems());
-		assertEquals("a,b", x.getExample());
+		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta04_Header_onParameter_value() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value").get("get").getParameter("header", "H");
 		assertEquals("H", x.getName());
-	}
-	@Test
-	public void ta05_Header_onParameter_default() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/default").get("get").getParameter("header", "H");
-		assertObjectEquals("'a\\nb'", x.getDefault());
-	}
-	@Test
-	public void ta06_Header_onParameter_enum() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/enum").get("get").getParameter("header", "H");
-		assertObjectEquals("['a','b']", x.getEnum());
-	}
-	@Test
-	public void ta07_Header_onParameter_items() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/items").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'b'}", x.getItems());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -569,7 +265,7 @@ public class HeaderAnnotationTest {
 	public static class TB {
 		
 		@RestMethod(name=GET,path="/schemaValue")
-		public void tb01(@Header(name="H", schema=@Schema(" type:'b' ")) String h) {}
+		public void tb01(@Header(name="H") String h) {}
 
 		public static class TB02 {
 			public String f1;
@@ -597,7 +293,7 @@ public class HeaderAnnotationTest {
 	@Test
 	public void tb01_Header_onParameter_schema2() throws Exception {
 		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 	@Test
 	public void tb02_Header_onParameter_schema3() throws Exception {

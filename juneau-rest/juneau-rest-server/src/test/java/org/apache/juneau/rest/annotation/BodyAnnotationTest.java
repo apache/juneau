@@ -770,6 +770,26 @@ public class BodyAnnotationTest {
 	}
 	
 	//=================================================================================================================
+	// Test behavior of @Body(required=true).
+	//=================================================================================================================
+	
+	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
+	public static class I {
+		@RestMethod(name=POST)
+		public DTOs.B g(@Body(required=true) DTOs.B content) throws Exception {
+			return content;
+		}
+	}
+	static MockRest i = MockRest.create(I.class);
+	
+	@Test
+	public void i01() throws Exception {
+		i.post("/", "").json().execute().assertStatus(400).assertBodyContains("Required value not provided.");
+		i.post("/", "{}").json().execute().assertStatus(200);
+	}
+
+	
+	//=================================================================================================================
 	// Swagger - @Body on POJO
 	//=================================================================================================================
 
@@ -782,8 +802,8 @@ public class BodyAnnotationTest {
 
 		@Body(
 			description={"a","b"},
-			required="true",
-			schema=@Schema(type="a"),
+			required=true,
+			schema=@Schema(type="string"),
 			example=" 'a' ",
 			examples="{foo:'bar'}"
 		)
@@ -796,7 +816,7 @@ public class BodyAnnotationTest {
 		@Body({
 			"description:'a\nb',",
 			"required:true,",
-			"schema:{type:'a'},",
+			"schema:{type:'string'},",
 			"example:'a',",
 			"examples:{foo:'bar'}"
 		})
@@ -810,13 +830,12 @@ public class BodyAnnotationTest {
 			value={
 				"description:'a\nb',",
 				"required:true,",
-				"schema:{type:'a'},",
+				"schema:{type:'string'},",
 				"example:'a',",
 				"examples:{foo:'bar'}"
 			},
 			description={"b","c"},
-			required="false",
-			schema=@Schema(type="b"),
+			schema=@Schema(type="string"),
 			example="b",
 			examples="{foo:'baz'}"
 		)
@@ -832,7 +851,7 @@ public class BodyAnnotationTest {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("body", null);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
@@ -841,7 +860,7 @@ public class BodyAnnotationTest {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("body", null);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
@@ -849,8 +868,8 @@ public class BodyAnnotationTest {
 	public void sa03_Body_onPojo_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("body", null);
 		assertEquals("b\nc", x.getDescription());
-		assertObjectEquals("false", x.getRequired());
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("'b'", x.getExample());
 		assertObjectEquals("{foo:'baz'}", x.getExamples());
 	}
@@ -959,8 +978,8 @@ public class BodyAnnotationTest {
 		public void ta01(
 			@Body(
 				description= {"a","b"},
-				required="true",
-				schema=@Schema(type="a"),
+				required=true,
+				schema=@Schema(type="string"),
 				example="'a'",
 				examples=" {foo:'bar'} "
 			) TA01 b) {}
@@ -974,7 +993,7 @@ public class BodyAnnotationTest {
 			@Body({
 				"description:'a\nb',",
 				"required:true,",
-				"schema:{type:'a'},",
+				"schema:{type:'string'},",
 				"example:'a',",
 				"examples:{foo:'bar'}"
 			}) TA02 b) {}
@@ -989,13 +1008,12 @@ public class BodyAnnotationTest {
 				value= {
 					"description:'a\nb',",
 					"required:true,",
-					"schema:{type:'a'},",
+					"schema:{type:'string'},",
 					"example:'a',",
 					"examples:{foo:'bar'}"
 				},
 				description= {"b","c"},
-				required="false",
-				schema=@Schema(type="b"),
+				schema=@Schema(type="string"),
 				example="b",
 				examples=" {foo:'baz'} "
 			) TA03 b) {}
@@ -1006,7 +1024,7 @@ public class BodyAnnotationTest {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("body", null);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
@@ -1015,7 +1033,7 @@ public class BodyAnnotationTest {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("body", null);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'a'}", x.getSchema());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
@@ -1023,8 +1041,8 @@ public class BodyAnnotationTest {
 	public void ta03_Body_onParameter_mixed() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("body", null);
 		assertEquals("b\nc", x.getDescription());
-		assertObjectEquals("false", x.getRequired());
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("true", x.getRequired());
+		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("'b'", x.getExample());
 		assertObjectEquals("{foo:'baz'}", x.getExamples());
 	}

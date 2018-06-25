@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -32,7 +33,6 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; juneau-rest-server &gt; RequestPathMatch</a>
  * </ul>
  */
-@SuppressWarnings("unchecked")
 public class RequestPathMatch extends TreeMap<String,String> {
 	private static final long serialVersionUID = 1L;
 
@@ -82,7 +82,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws ParseException
 	 */
 	public String getString(String name) throws ParseException {
-		return parse(parser, name, beanSession.string());
+		return getInner(parser, null, name, null, beanSession.string());
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws ParseException
 	 */
 	public int getInt(String name) throws ParseException {
-		return parse(parser, name, beanSession.getClassMeta(int.class));
+		return getInner(parser, null, name, null, getClassMeta(int.class));
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws ParseException
 	 */
 	public boolean getBoolean(String name) throws ParseException {
-		return parse(parser, name, beanSession.getClassMeta(boolean.class));
+		return getInner(null, null, name, null, getClassMeta(boolean.class));
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Class<T> type) throws ParseException {
-		return get(parser, name, type);
+		return getInner(null, null, name, null, this.<T>getClassMeta(type));
 	}
 
 	/**
@@ -149,14 +149,19 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The attribute name.
 	 * @param type The class type to convert the attribute value to.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
-		return parse(parser, name, beanSession.getClassMeta(type));
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws ParseException {
+		return getInner(parser, schema, name, null, this.<T>getClassMeta(type));
 	}
 
 	/**
@@ -209,7 +214,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
-		return get(parser, name, type, args);
+		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
 
 	/**
@@ -218,6 +223,11 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
 	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method. 
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
 	 * @param name The attribute name.
 	 * @param type
 	 * 	The type of object to create.
@@ -230,22 +240,21 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @return The attribute value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
-		return (T)parse(parser, name, beanSession.getClassMeta(type, args));
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
 	}
-	
-	
+
 	/* Workhorse method */
-	<T> T parse(HttpPartParser parser, String name, ClassMeta<T> cm) throws ParseException {
+	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
+		T t = parse(parser, schema, get(name), cm);
+		return (t == null ? def : t);
+	}
+
+	/* Workhorse method */
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws ParseException {
 		if (parser == null)
 			parser = this.parser;
-		Object attr = get(name);
-		T t = null;
-		if (attr != null)
-			t = parser.parse(HttpPartType.PATH, attr.toString(), cm);
-		if (t == null && cm.isPrimitive())
-			return cm.getPrimitiveDefault();
-		return t;
+		return parser.parse(HttpPartType.PATH, schema, val, cm);
 	}
 
 	/**
@@ -319,5 +328,17 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 */
 	public String getPattern() {
 		return pattern;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
+		return beanSession.getClassMeta(type, args);
+	}
+
+	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
+		return beanSession.getClassMeta(type);
 	}
 }
