@@ -296,7 +296,6 @@ public @interface Header {
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 		<br>TODO - Future support for <a href='https://guides.github.com/features/mastering-markdown/#GitHub-flavored-markdown'>MarkDown</a>.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

@@ -129,8 +129,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		TODO - Future support for MarkDown.
 	 * </ul>
 	 */
 	String[] description() default {};

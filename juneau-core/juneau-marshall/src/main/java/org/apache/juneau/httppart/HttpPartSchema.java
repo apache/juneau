@@ -732,7 +732,14 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>name</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -745,7 +752,13 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>httpStatusCode</mk> key of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a> object.
+		 * <mk>httpStatusCode</mk> key.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -760,7 +773,13 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>httpStatusCode</mk> key of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a> object.
+		 * <mk>httpStatusCode</mk> key.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -777,10 +796,17 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>required</mk> field.
 		 *
 		 * <p>
 		 * Determines whether the parameter is mandatory.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -794,7 +820,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>type</mk> field.
 		 *
 		 * <p>
 		 * The type of the parameter.
@@ -834,6 +860,15 @@ public class HttpPartSchema {
 		 * <p>
 		 * If the type is not specified, it will be auto-detected based on the parameter class type.
 		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#securitySchemeObject">Security Scheme</a>
+		 * </ul>
+		 *
 		 * <h5 class='section'>See Also:</h5>
 		 * <ul class='doctree'>
 		 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
@@ -855,7 +890,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>format</mk> field.
 		 *
 		 * <p>
 		 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>.
@@ -898,6 +933,15 @@ public class HttpPartSchema {
 		 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 		 * </ul>
 		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
+		 *
 		 * <h5 class='section'>See Also:</h5>
 		 * <ul class='doctree'>
 		 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
@@ -919,12 +963,18 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>allowEmptyValue</mk> field.
 		 *
 		 * <p>
 		 * Sets the ability to pass empty-valued parameters.
 		 * <br>This is valid only for either query or formData parameters and allows you to send a parameter with a name only or an empty value.
 		 * <br>The default value is <jk>false</jk>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -938,7 +988,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>items</mk> field.
 		 *
 		 * <p>
 		 * Describes the type of items in the array.
@@ -946,12 +996,21 @@ public class HttpPartSchema {
 		 * Required if <code>type</code> is <js>"array"</js>.
 		 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
 		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
+		 *
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
-		Builder items(ObjectMap value) {
+		public Builder items(ObjectMap value) {
 			if (value != null && ! value.isEmpty()) {
 				items = HttpPartSchema.create().apply(value);
 				api.put("items", value);
@@ -976,7 +1035,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>collectionFormat</mk> field.
 		 *
 		 * <p>
 		 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
@@ -1000,6 +1059,14 @@ public class HttpPartSchema {
 		 * </ul>
 		 *
 		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
+		 *
+		 * <p>
 		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 		 *
 		 * @param value
@@ -1018,11 +1085,20 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>default</mk> field.
 		 *
 		 * <p>
 		 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
 		 * <br>(Note: "default" has no meaning for required parameters.)
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1036,13 +1112,22 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>maximum</mk> field.
 		 *
 		 * <p>
 		 * Defines the maximum value for a parameter of numeric types.
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1056,7 +1141,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>exclusiveMaximum</mk> field.
 		 *
 		 * <p>
 		 * Defines whether the maximum is matched exclusively.
@@ -1064,6 +1149,15 @@ public class HttpPartSchema {
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 		 * <br>If <jk>true</jk>, must be accompanied with <code>maximum</code>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1077,13 +1171,22 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>minimum</mk> field.
 		 *
 		 * <p>
 		 * Defines the minimum value for a parameter of numeric types.
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1097,7 +1200,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>exclusiveMinimum</mk> field.
 		 *
 		 * <p>
 		 * Defines whether the minimum is matched exclusively.
@@ -1105,6 +1208,15 @@ public class HttpPartSchema {
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 		 * <br>If <jk>true</jk>, must be accompanied with <code>minimum</code>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1118,7 +1230,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>maxLength</mk> field.
 		 *
 		 * <p>
 		 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
@@ -1126,6 +1238,15 @@ public class HttpPartSchema {
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"string"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1139,7 +1260,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>minLength</mk> field.
 		 *
 		 * <p>
 		 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -1147,6 +1268,15 @@ public class HttpPartSchema {
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"string"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1160,13 +1290,22 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>pattern</mk> field.
 		 *
 		 * <p>
 		 * A string input is valid if it matches the specified regular expression pattern.
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"string"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1184,13 +1323,22 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>maxItems</mk> field.
 		 *
 		 * <p>
 		 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1204,13 +1352,22 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>minItems</mk> field.
 		 *
 		 * <p>
 		 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1224,7 +1381,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>uniqueItems</mk> field.
 		 *
 		 * <p>
 		 * If <jk>true</jk>, the input validates successfully if all of its elements are unique.
@@ -1235,6 +1392,15 @@ public class HttpPartSchema {
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1262,10 +1428,19 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>enum</mk> field.
 		 *
 		 * <p>
 		 * If specified, the input validates successfully if it is equal to one of the elements in this array.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1279,13 +1454,22 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * <mk>multipleOf</mk> field.
 		 *
 		 * <p>
 		 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
 		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1299,7 +1483,13 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * TODO
+		 * <mk>mapProperties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1313,7 +1503,13 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * TODO
+		 * <mk>minProperties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1327,7 +1523,13 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * TODO
+		 * <mk>properties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1342,7 +1544,13 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * TODO
+		 * <mk>additionalProperties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1370,7 +1578,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * TODO
+		 * Identifies the part parser to use for parsing this part.
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1384,8 +1592,9 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * TODO
-		 * @param noValidate
+		 * Disables Swagger schema usage validation checking.
+		 *
+		 * @param noValidate Specify <jk>true</jk> to prevent {@link ContextRuntimeException} from being thrown if invalid Swagger usage was detected.
 		 * @return This object (for method chaining).
 		 */
 		public Builder noValidate(boolean noValidate) {
@@ -1589,6 +1798,7 @@ public class HttpPartSchema {
 	 * Returns the name of the object described by this schema, for example the query or form parameter name.
 	 *
 	 * @return The name, or <jk>null</jk> if not specified.
+	 * @see Builder#name(String)
 	 */
 	public String getName() {
 		return name;
@@ -1600,6 +1810,8 @@ public class HttpPartSchema {
 	 * @return
 	 * 	The list of HTTP status codes.
 	 * 	<br>Never <jk>null</jk>.
+	 * @see Builder#code(int)
+	 * @see Builder#codes(int[])
 	 */
 	public Set<Integer> getCodes() {
 		return codes;
@@ -1613,6 +1825,8 @@ public class HttpPartSchema {
 	 * 	The list of HTTP status codes.
 	 * 	<br>A singleton set containing the default value if the set is empty.
 	 * 	<br>Never <jk>null</jk>.
+	 * @see Builder#code(int)
+	 * @see Builder#codes(int[])
 	 */
 	public Set<Integer> getCodes(Integer def) {
 		return codes.isEmpty() ? Collections.singleton(def) : codes;
@@ -1626,24 +1840,28 @@ public class HttpPartSchema {
 	 * 	The list of HTTP status codes.
 	 * 	<br>A singleton set containing the default value if the set is empty.
 	 * 	<br>Never <jk>null</jk>.
+	 * @see Builder#code(int)
+	 * @see Builder#codes(int[])
 	 */
 	public Integer getCode(Integer def) {
 		return codes.isEmpty() ? def : codes.iterator().next();
 	}
 
 	/**
-	 * TODO
+	 * Returns the <code>type</code> field of this schema.
 	 *
-	 * @return TODO
+	 * @return The <code>type</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#type(String)
 	 */
 	public Type getType() {
 		return type;
 	}
 
 	/**
-	 * Returns the default value for this schema.
+	 * Returns the <code>default</code> field of this schema.
 	 *
 	 * @return The default value for this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#_default(String)
 	 */
 	public String getDefault() {
 		return _default;
@@ -1652,19 +1870,21 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <code>collectionFormat</code> field of this schema.
 	 *
-	 * @return The <code>collectionFormat</code> field of this schema.
+	 * @return The <code>collectionFormat</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#collectionFormat(String)
 	 */
 	public CollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
 
 	/**
-	 * Returns the type field of this schema.
+	 * Returns the <code>type</code> field of this schema.
 	 *
 	 * @param cm
 	 * 	The class meta of the object.
 	 * 	<br>Used to auto-detect the type if the type was not specified.
-	 * @return The format field of this schema.
+	 * @return The format field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#format(String)
 	 */
 	public Type getType(ClassMeta<?> cm) {
 		if (type != Type.NONE)
@@ -1685,24 +1905,208 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <code>format</code> field of this schema.
 	 *
-	 * @return The <code>format</code> field of this schema.
+	 * @return The <code>format</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#format(String)
 	 */
 	public Format getFormat() {
 		return format;
 	}
 
 	/**
-	 * Returns the schema for child items of the object represented by this schema.
+	 * Returns the <code>maximum</code> field of this schema.
 	 *
 	 * @return The schema for child items of the object represented by this schema, or <jk>null</jk> if not defined.
+	 * @see Builder#items(ObjectMap)
 	 */
 	public HttpPartSchema getItems() {
 		return items;
 	}
 
 	/**
-	 * TODO
-	 * @return TODO
+	 * Returns the <code>maximum</code> field of this schema.
+	 *
+	 * @return The <code>maximum</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#maximum(Number)
+	 */
+	public Number getMaximum() {
+		return maximum;
+	}
+
+	/**
+	 * Returns the <code>minimum</code> field of this schema.
+	 *
+	 * @return The <code>minimum</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#minimum(Number)
+	 */
+	public Number getMinimum() {
+		return minimum;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#multipleOf(Number)
+	 */
+	public Number getMultipleOf() {
+		return multipleOf;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#pattern(String)
+	 */
+	public Pattern getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#maxLength(Long)
+	 */
+	public Long getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#minLength(Long)
+	 */
+	public Long getMinLength() {
+		return minLength;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#maxItems(Long)
+	 */
+	public Long getMaxItems() {
+		return maxItems;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#minItems(Long)
+	 */
+	public Long getMinItems() {
+		return minItems;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#maxProperties(Long)
+	 */
+	public Long getMaxProperties() {
+		return maxProperties;
+	}
+
+	/**
+	 * Returns the <code>xxx</code> field of this schema.
+	 *
+	 * @return The <code>xxx</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#minProperties(Long)
+	 */
+	public Long getMinProperties() {
+		return minProperties;
+	}
+
+	/**
+	 * Returns the <code>exclusiveMaximum</code> field of this schema.
+	 *
+	 * @return The <code>exclusiveMaximum</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#exclusiveMaximum(Boolean)
+	 */
+	public Boolean getExclusiveMaximum() {
+		return exclusiveMaximum;
+	}
+
+	/**
+	 * Returns the <code>exclusiveMinimum</code> field of this schema.
+	 *
+	 * @return The <code>exclusiveMinimum</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#exclusiveMinimum(Boolean)
+	 */
+	public Boolean getExclusiveMinimum() {
+		return exclusiveMinimum;
+	}
+
+	/**
+	 * Returns the <code>uniqueItems</code> field of this schema.
+	 *
+	 * @return The <code>uniqueItems</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#uniqueItems(Boolean)
+	 */
+	public Boolean getUniqueItems() {
+		return uniqueItems;
+	}
+
+	/**
+	 * Returns the <code>required</code> field of this schema.
+	 *
+	 * @return The <code>required</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#required(Boolean)
+	 */
+	public Boolean getRequired() {
+		return required;
+	}
+
+	/**
+	 * Returns the <code>skipIfEmpty</code> field of this schema.
+	 *
+	 * @return The <code>skipIfEmpty</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#skipIfEmpty(Boolean)
+	 */
+	public Boolean getSkipIfEmpty() {
+		return skipIfEmpty;
+	}
+
+	/**
+	 * Returns the <code>enum</code> field of this schema.
+	 *
+	 * @return The <code>enum</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#_enum(Set)
+	 */
+	public Set<String> getEnum() {
+		return _enum;
+	}
+
+	/**
+	 * Returns the <code>parser</code> field of this schema.
+	 *
+	 * @return The <code>parser</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#parser(Class)
+	 */
+	public Class<? extends HttpPartParser> getParser() {
+		return parser;
+	}
+
+	/**
+	 * Returns the <code>serializer</code> field of this schema.
+	 *
+	 * @return The <code>serializer</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see Builder#serializer(Class)
+	 */
+	public Class<? extends HttpPartSerializer> getSerializer() {
+		return serializer;
+	}
+
+
+	/**
+	 * Returns the Swagger documentation for this schema.
+	 *
+	 * @return The Swagger documentation for this schema as an unmodifiable {@link ObjectMap}.
 	 */
 	public ObjectMap getApi() {
 		return api;
@@ -2026,137 +2430,5 @@ public class HttpPartSchema {
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Number getMaximum() {
-		return maximum;
-	}
-
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Number getMinimum() {
-		return minimum;
-	}
-
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
-
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Pattern getPattern() {
-		return pattern;
-	}
-
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Long getMaxLength() {
-		return maxLength;
-	}
-
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Long getMinLength() {
-		return minLength;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Long getMaxItems() {
-		return maxItems;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Long getMinItems() {
-		return minItems;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Long getMaxProperties() {
-		return maxProperties;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Long getMinProperties() {
-		return minProperties;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Boolean getSkipIfEmpty() {
-		return skipIfEmpty;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Set<String> getEnum() {
-		return _enum;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Class<? extends HttpPartParser> getParser() {
-		return parser;
-	}
-	/**
-	 * TODO
-	 * @return TODO
-	 */
-	public Class<? extends HttpPartSerializer> getSerializer() {
-		return serializer;
 	}
 }
