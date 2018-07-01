@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Used to associate multiple {@link Response @Response} annotations to the same parameter or class.
+ * Used to associate multiple {@link ResponseStatus @ResponseStatus} annotations to the same parameter or class.
  * 
  * <p>
  * Since Juneau currently prereq's Java 1.7, we cannot take advantage of annotation duplication support in Java 8.
@@ -28,10 +28,10 @@ import java.lang.annotation.*;
 @Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
-public @interface Responses {
+public @interface ResponseStatuses {
 
 	/**
-	 * Specifies one or more {@link Response @Response} annotations to apply to the same parameter or class.
+	 * Specifies one or more {@link ResponseStatus @ResponseStatus} annotations to apply to the same parameter or class.
 	 */
-	Response[] value() default {};
+	ResponseStatus[] value() default {};
 }

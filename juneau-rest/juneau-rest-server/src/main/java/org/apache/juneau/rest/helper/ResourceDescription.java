@@ -14,7 +14,7 @@ package org.apache.juneau.rest.helper;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
  * Shortcut label for child resources.  Typically used in router resources.

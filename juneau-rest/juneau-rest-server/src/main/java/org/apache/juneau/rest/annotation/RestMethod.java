@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.

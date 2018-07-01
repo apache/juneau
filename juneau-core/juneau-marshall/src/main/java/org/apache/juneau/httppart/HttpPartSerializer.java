@@ -13,7 +13,9 @@
 package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.remoteable.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Interface used to convert POJOs to simple strings in HTTP headers, query parameters, form-data parameters, and URI
@@ -33,11 +35,8 @@ import org.apache.juneau.remoteable.*;
  * This class is used in the following locations:
  * <ul>
  * 	<li class='ja'>{@link FormData#serializer()}
- * 	<li class='ja'>{@link FormDataIfNE#serializer()}
  * 	<li class='ja'>{@link Query#serializer()}
- * 	<li class='ja'>{@link QueryIfNE#serializer()}
  * 	<li class='ja'>{@link Header#serializer()}
- * 	<li class='ja'>{@link HeaderIfNE#serializer()}
  * 	<li class='ja'>{@link Path#serializer()}
  * 	<li class='ja'>{@link RequestBean#serializer()}
  * 	<li class='jc'><code>RestClientBuilder.partSerializer(Class)</code>
@@ -71,6 +70,8 @@ public interface HttpPartSerializer {
 	 * 	<br>Not all part serializer use the schema information.  
 	 * @param value The value being serialized.	
 	 * @return The serialized value.
+	 * @throws SerializeException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationSerializeException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value);
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationSerializeException;
 }

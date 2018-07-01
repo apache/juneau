@@ -21426,7 +21426,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
-		<li><p><a class='doclink' href='#7.1.1'>7.1.1 (TBD)</a></p>
+		<li><p><a class='doclink' href='#7.2.0'>7.2.0 (TBD)</a></p>
 		<li><p><a class='doclink' href='#7.1.0'>7.1.0 (Mar 08, 2018)</a></p>
 		<li><p><a class='doclink' href='#7.0.1'>7.0.1 (Dec 24, 2017)</a></p>
 		<li><p><a class='doclink' href='#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
@@ -21500,8 +21500,8 @@
 	</ul>
 
 	<!-- =========================================================================================================== -->
-	<a id='7.1.1'></a>
-	<h3 class='topic' onclick='toggle(this)'>7.1.1 (TBD)</h3>
+	<a id='7.2.0'></a>
+	<h3 class='topic' onclick='toggle(this)'>7.2.0 (TBD)</h3>
 	<div class='topic'>
 		<p>
 			TBD
@@ -21627,6 +21627,12 @@
 						<li class='jm'>{@link org.apache.juneau.ObjectList#modifiable() modifiable()}
 					</ul>
 				</ul>
+			<li>
+				The REST client <ja>@Remoteable</ja> annotations and REST server <ja>@RemoteMethod</ja> annotations which used to be
+				in separate packages in the client and server projects have been combined into a single set of annotations in 
+				the {@link org.apache.juneau.http.annotation} package.
+				<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
+				<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -21,15 +21,30 @@ import java.nio.charset.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.remoteable.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * REST request body annotation.
  * 
  * <p>
  * Identifies a POJO to be used as the body of an HTTP request.
+ * 
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments of client-side REST interface proxies.
+ * 	<li>Java method arguments of server-side REST Java methods and/or their class types.
+ * </ul>
+ * 
+ * <h5 class='topic'>Server-side REST</h5>
+ * 
+ * <p>
+ * On server-side REST, this annotation can be applied to method parameters or parameter classes to identify them as the body of an HTTP request.
  * 
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
@@ -88,9 +103,9 @@ import org.apache.juneau.rest.exception.*;
  * This annotation can be applied to the following:
  * <ul class='spaced-list'>
  * 	<li>
- * 		Parameters on a {@link RestMethod @RestMethod}-annotated method.
+ * 		Parameters on a <ja>@RestMethod</ja>-annotated method.
  * 	<li>
- * 		POJO classes used as parameters on a {@link RestMethod @RestMethod}-annotated method.
+ * 		POJO classes used as parameters on a <ja>@RestMethod</ja>-annotated method.
  * </ul>
  * 
  * <p>
@@ -162,13 +177,66 @@ import org.apache.juneau.rest.exception.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Body">Overview &gt; juneau-rest-server &gt; @Body</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
+ * 
+ * <h5 class='topic'>Client-side REST</h5>
+ * 
+ * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
+ * 
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ * 
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+ * 		String myProxyMethod(<ja>@Body</ja> MyPojo pojo);
+ * 	}
+ * </p>
+ * 
+ * <p>
+ * The argument can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Any serializable POJO - Converted to text using the {@link Serializer} registered with the
+ * 		<code>RestClient</code>.
+ * 	<li>
+ * 		{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+ * 	<li>
+ * 		{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+ * 	<li>
+ * 		<code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+ * 	<li>
+ * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
+ * </ul>
+ * 
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ * {@link RequestBean @RequestBean}:
+ * 
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ * 
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+ * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 	}
+ * 
+ * 	<jk>public interface</jk> MyRequestBean {
+ * 		<ja>@Body</ja>
+ * 		MyPojo getMyPojo();
+ * 	}
+ * </p>
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces</a>
+ * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
+@Target({PARAMETER,FIELD,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Body {
-	
 	//=================================================================================================================
 	// Attributes common to all Swagger Parameter objects
 	//=================================================================================================================
@@ -216,7 +284,8 @@ public @interface Body {
 	 * Determines whether the body is mandatory.
 	 *  
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
@@ -492,4 +561,18 @@ public @interface Body {
 	 * </ul>
 	 */
 	String[] value() default {};
+
+	/**
+	 * TODO
+	 */
+	String[] api() default {};
+
+	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 * 
+	 * <p>
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OapiPartParser}.
+	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 }

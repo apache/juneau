@@ -23,6 +23,7 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -305,7 +306,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/mapHeader")
 	public String mapHeader(
 		@Header("a") String a,
-		@Header("b") String b,
+		@Header(name="b",allowEmptyValue=true) String b,
 		@Header("c") String c
 	) throws Exception {
 
@@ -319,7 +320,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/beanHeader")
 	public String beanHeader(
 		@Header("a") String a,
-		@Header("b") String b,
+		@Header(name="b",allowEmptyValue=true) String b,
 		@Header("c") String c
 	) throws Exception {
 
@@ -333,7 +334,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/nameValuePairsHeader")
 	public String nameValuePairsHeader(
 		@Header("a") String a,
-		@Header("b") String b,
+		@Header(name="b",allowEmptyValue=true) String b,
 		@Header("c") String c
 	) throws Exception {
 
@@ -653,7 +654,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/beanQuery")
 	public String beanQuery(
 			@Query("a") String a,
-			@Query("b") String b,
+			@Query(name="b",allowEmptyValue=true) String b,
 			@Query("c") String c
 		) throws Exception {
 
@@ -667,7 +668,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/nameValuePairsQuery")
 	public String nameValuePairsQuery(
 		@Query("a") String a,
-		@Query("b") String b,
+		@Query(name="b",allowEmptyValue=true) String b,
 		@Query("c") String c
 	) throws Exception {
 
@@ -951,7 +952,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/mapFormData")
 	public String mapFormData(
 		@FormData("a") String a,
-		@FormData("b") String b,
+		@FormData(name="b",allowEmptyValue=true) String b,
 		@FormData("c") String c
 	) throws Exception {
 
@@ -965,7 +966,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/beanFormData2")
 	public String beanFormData(
 		@FormData("a") String a,
-		@FormData("b") String b,
+		@FormData(name="b",allowEmptyValue=true) String b,
 		@FormData("c") String c
 	) throws Exception {
 
@@ -979,7 +980,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/nameValuePairsFormData")
 	public String nameValuePairsFormData(
 		@FormData("a") String a,
-		@FormData("b") String b,
+		@FormData(name="b",allowEmptyValue=true) String b,
 		@FormData("c") String c
 	) throws Exception {
 
@@ -1757,27 +1758,14 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	public String partFormatter(
 		@Path("p1") String p1,
 		@Header("h1") String h1,
-		@Header("h2") String h2,
-		@Header("h3") String h3,
 		@Query("q1") String q1,
-		@Query("q2") String q2,
-		@Query("q3") String q3,
-		@FormData("f1") String f1,
-		@FormData("f2") String f2,
-		@FormData("f3") String f3
+		@FormData("f1") String f1
 	) throws Exception {
 
 		assertEquals("dummy-1", p1);
-
 		assertEquals("dummy-2", h1);
-		assertEquals("dummy-3", h2);
-		assertNull(h3);
-		assertEquals("dummy-4", q1);
-		assertEquals("dummy-5", q2);
-		assertNull(q3);
-		assertEquals("dummy-6", f1);
-		assertEquals("dummy-7", f2);
-		assertNull(f3);
+		assertEquals("dummy-3", q1);
+		assertEquals("dummy-4", f1);
 
 		return "OK";
 	}

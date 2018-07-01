@@ -14,16 +14,20 @@ package org.apache.juneau.rest.client;
 
 import static java.lang.String.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.StringUtils.format;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
+import java.text.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
+import org.apache.juneau.parser.ParseException;
 
 /**
  * Exception representing a <code>400+</code> HTTP response code against a remote resource.
@@ -44,10 +48,23 @@ public final class RestCallException extends IOException {
 	/**
 	 * Constructor.
 	 * 
-	 * @param msg The exception message.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public RestCallException(String msg) {
-		super(msg);
+	public RestCallException(String message, Object...args) {
+		super(format(message, args));
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public RestCallException(Throwable cause, String message, Object...args) {
+		this(getMessage(cause, message, null), args);
+		initCause(cause);
 	}
 
 	/**
@@ -77,7 +94,7 @@ public final class RestCallException extends IOException {
 	 * @throws IOException
 	 */
 	public RestCallException(String msg, HttpResponse response) throws ParseException, IOException {
-		super(format("%s%nstatus='%s'%nResponse: %n%s%n", msg, response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), UTF8)));
+		super(format("{0}\n{1}\nstatus='{2}'\nResponse: \n{3}", msg, response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), UTF8)));
 	}
 
 	/**
@@ -90,7 +107,7 @@ public final class RestCallException extends IOException {
 	 * @param response The response from the server.
 	 */
 	public RestCallException(int responseCode, String responseMsg, String method, URI url, String response) {
-		super(format("HTTP method '%s' call to '%s' caused response code '%s,%s'.%nResponse: %n%s%n", method, url, responseCode, responseMsg, response));
+		super(format("HTTP method '{0}' call to '{1}' caused response code '{2},{3}'.\nResponse: \n{4}", method, url, responseCode, responseMsg, response));
 		this.responseCode = responseCode;
 		this.responseStatusMessage = responseMsg;
 		this.response = response;
@@ -207,14 +224,18 @@ public final class RestCallException extends IOException {
 	}
 
 	/**
-	 * Sets the inner cause for this exception.
+	 * Finds the message.
 	 * 
-	 * @param cause The inner cause.
-	 * @return This object (for method chaining).
+	 * @param cause The cause.
+	 * @param msg The message.
+	 * @param def The default value if both above are <jk>null</jk>.
+	 * @return The resolved message.
 	 */
-	@Override /* Throwable */
-	public synchronized RestCallException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
+	protected static final String getMessage(Throwable cause, String msg, String def) {
+		if (msg != null)
+			return msg;
+		if (cause != null)
+			return cause.getMessage();
+		return def;
 	}
 }

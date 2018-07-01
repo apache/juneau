@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.util.AnnotationUtils.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 
 /**
  * Contains metadata about the return type on a REST Java method.
@@ -27,23 +25,13 @@ public class RestMethodReturn {
 	
 	private final Type type;
 	private final int code;
-	private final ObjectMap metaData;
+	private final ObjectMap api;
 	
 	RestMethodReturn(Type type) {
+		HttpPartSchema s = HttpPartSchema.create(Response.class, type);
 		this.type = type;
-		
-		ObjectMap om = new ObjectMap();
-		
-		int code = 200;
-		if (type instanceof Class)
-		for (Response ri : ReflectionUtils.findAnnotationsParentFirst(Response.class, (Class<?>)type)) {
-			code = ObjectUtils.firstNonZero(ri.code(), ri.value(), code);
-			om = merge(om, ri);
-		}
-		
-		this.metaData = om.unmodifiable();
-		 
-		this.code = code;
+		this.api = HttpPartSchema.getApiCodeMap(s, 200).unmodifiable();
+		this.code = s.getCode(200);
 	}
 	
 	/**
@@ -69,7 +57,7 @@ public class RestMethodReturn {
 	 * 
 	 * @return A map of return metadata, never <jk>null</jk>.
 	 */
-	public ObjectMap getMetaData() {
-		return metaData;
+	public ObjectMap getApi() {
+		return api;
 	}
 }

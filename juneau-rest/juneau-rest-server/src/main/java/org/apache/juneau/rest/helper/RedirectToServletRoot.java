@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.helper;
 
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
  * Convenience subclass of {@link Redirect} for redirecting a response to the servlet root.

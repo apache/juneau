@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.exception.*;
 
 /**

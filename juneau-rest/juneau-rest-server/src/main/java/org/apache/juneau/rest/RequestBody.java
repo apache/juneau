@@ -52,8 +52,6 @@ public class RequestBody {
 	private int contentLength = 0;
 	private MediaType mediaType;
 	private Parser parser;
-	private HttpPartParser partParser;
-	private HttpPartSchema schema;
 
 	RequestBody(RestRequest req) {
 		this.req = req;
@@ -88,16 +86,6 @@ public class RequestBody {
 		this.mediaType = mediaType;
 		this.parser = parser;
 		this.body = body;
-		return this;
-	}
-
-	RequestBody partParser(HttpPartParser partParser) {
-		this.partParser = partParser;
-		return this;
-	}
-
-	RequestBody schema(HttpPartSchema schema) {
-		this.schema = schema;
 		return this;
 	}
 
@@ -185,13 +173,12 @@ public class RequestBody {
 	 * @param type The class type to instantiate.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed for the requested {@code Accept} header or is not valid
-	 * 	for the specified type.
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.
+	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
 	 */
-	public <T> T asType(Class<T> type) throws IOException, ParseException {
-		return parse(getClassMeta(type));
+	public <T> T asType(Class<T> type) throws BadRequest, UnsupportedMediaType, InternalServerError {
+		return getInner(null, null, getClassMeta(type));
 	}
 
 	/**
@@ -234,9 +221,39 @@ public class RequestBody {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.
+	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
 	 */
-	public <T> T asType(Type type, Type...args) {
-		return parse(this.<T>getClassMeta(type, args));
+	public <T> T asType(Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {
+		return getInner(null, null, this.<T>getClassMeta(type, args));
+	}
+
+	/**
+	 * Same as {@link #asType(Type, Type...)} but allows you to specify a part parser and schema.
+	 * 
+	 * @param partParser
+	 * 	The part-parser to use for parsing the body as a string value if none of the existing parsers match the media type.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param schema 
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @param <T> The class type to instantiate.
+	 * @return The input parsed to a POJO.
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.
+	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
+	 */
+	public <T> T asType(HttpPartParser partParser, HttpPartSchema schema, Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {
+		return getInner(partParser, schema, this.<T>getClassMeta(type, args));
 	}
 
 	/**
@@ -408,75 +425,72 @@ public class RequestBody {
 			return (InputStreamParser)p;
 		return null;
 	}
+	
+	private <T> T getInner(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
+		try {
+			return parse(partParser, schema, cm);
+		} catch (UnsupportedMediaType e) {
+			throw e;
+		} catch (SchemaValidationParseException e) {
+			throw new BadRequest("Validation failed on request body. " + e.getLocalizedMessage());
+		} catch (ParseException e) {
+			throw new BadRequest(e, "Could not convert request body content to class type ''{0}''.", cm);
+		} catch (IOException e) {
+			throw new InternalServerError(e, "I/O exception occurred while parsing request body.");
+		} catch (Exception e) {
+			throw new InternalServerError(e, "Exception occurred while parsing request body.");
+		}
+	}
 
 	/* Workhorse method */
-	private <T> T parse(ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
+	private <T> T parse(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> cm) throws SchemaValidationParseException, ParseException, UnsupportedMediaType, IOException {
 
-		try {
-			if (cm.isReader())
-				return (T)getReader();
+		if (cm.isReader())
+			return (T)getReader();
 
-			if (cm.isInputStream())
-				return (T)getInputStream();
+		if (cm.isInputStream())
+			return (T)getInputStream();
 
-			TimeZone timeZone = headers.getTimeZone();
-			Locale locale = req.getLocale();
-			ParserMatch pm = getParserMatch();
-			
-			if (pm != null) {
-				Parser p = pm.getParser();
-				MediaType mediaType = pm.getMediaType();
-				try {
-					req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
-					ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.getContext().getResource()));
-					try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
-						T o = session.parse(in, cm);
-						if (schema != null)
-							schema.validateOutput(o, cm.getBeanContext());
-						return o;
-					}
-				} catch (ParseException e) {
-					throw new BadRequest(e,
-						"Could not convert request body content to class type ''{0}'' using parser ''{1}''.",
-						cm, p.getClass().getName()
-					);
-				}
+		TimeZone timeZone = headers.getTimeZone();
+		Locale locale = req.getLocale();
+		ParserMatch pm = getParserMatch();
+
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
+		
+		if (pm != null) {
+			Parser p = pm.getParser();
+			MediaType mediaType = pm.getMediaType();
+			req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
+			ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.getContext().getResource()));
+			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
+				T o = session.parse(in, cm);
+				if (schema != null)
+					schema.validateOutput(o, cm.getBeanContext());
+				return o;
 			}
-			
-			if (cm.hasReaderTransform())
-				return cm.getReaderTransform().transform(getReader());
-
-			if (cm.hasInputStreamTransform())
-				return cm.getInputStreamTransform().transform(getInputStream());
-			
-			MediaType mt = getMediaType();
-			if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
-				if (partParser != null) {
-					try {
-						String in = asString();
-						return partParser.parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
-					} catch (ParseException e) {
-						throw new BadRequest(e,
-							"Could not convert request body content to class type ''{0}'' using parser ''{1}''.",
-							cm, partParser.getClass().getName()
-						);
-					}
-				} else if (cm.hasStringTransform()) {
-					return cm.getStringTransform().transform(asString());
-				}
-			}
-			
-			throw new UnsupportedMediaType(
-				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-				headers.getContentType(), req.getParsers().getSupportedMediaTypes()
-			);
-
-		} catch (IOException e) {
-			throw new InternalServerError(e,
-				"I/O exception occurred while attempting to handle request ''{0}''.",
-				req.getDescription()
-			);
 		}
+			
+		if (cm.hasReaderTransform())
+			return cm.getReaderTransform().transform(getReader());
+
+		if (cm.hasInputStreamTransform())
+			return cm.getInputStreamTransform().transform(getInputStream());
+		
+		MediaType mt = getMediaType();
+		if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
+			if (partParser != null) {
+				String in = asString();
+				return partParser.parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
+			} else if (cm.hasStringTransform()) {
+				return cm.getStringTransform().transform(asString());
+			}
+		}
+		
+		throw new UnsupportedMediaType(
+			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
+			headers.getContentType(), req.getParsers().getSupportedMediaTypes()
+		);
 	}
 
 	private Encoder getEncoder() throws UnsupportedMediaType {

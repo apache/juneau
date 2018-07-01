@@ -26,6 +26,7 @@ import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * Represents the headers in an HTTP request.
@@ -250,9 +251,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException 
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, Class<T> type) throws ParseException {
+	public <T> T get(String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, getClassMeta(type));
 	}
 
@@ -271,9 +273,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException 
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, getClassMeta(type));
 	}
 
@@ -285,9 +288,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException 
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, T def, Class<T> type) throws ParseException {
+	public <T> T get(String name, T def, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, def, getClassMeta(type));
 	}
 
@@ -307,9 +311,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException 
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, def, getClassMeta(type));
 	}
 
@@ -350,9 +355,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException If the header could not be converted to the specified type.
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, Type type, Type...args) throws ParseException {
+	public <T> T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
 
@@ -378,20 +384,29 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException If the header could not be converted to the specified type.
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
 	}
 	
 	/* Workhorse method */
-	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
-		T t = parse(parser, schema, getString(name), cm);
-		return (t == null ? def : t);
+	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		try {
+			T t = parse(parser, schema, getString(name), cm);
+			return (t == null ? def : t);
+		} catch (SchemaValidationParseException e) {
+			throw new BadRequest(e, "Validation failed on header ''{0}''. ", name);
+		} catch (ParseException e) {
+			throw new BadRequest(e, "Could not parse header ''{0}''.", name) ;
+		} catch (Exception e) {
+			throw new InternalServerError(e, "Could not parse header ''{0}''.", name);
+		}
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws ParseException {
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationParseException, ParseException {
 		if (parser == null)
 			parser = this.parser;
 		return parser.parse(HttpPartType.HEADER, schema, val, cm);

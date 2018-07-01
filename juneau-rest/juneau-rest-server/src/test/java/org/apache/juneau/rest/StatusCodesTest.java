@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -167,7 +168,7 @@ public class StatusCodesTest {
 		b.put("/setParameterToInvalidTypes/123?noTrace=true&p1=foo", "'foo'").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
-				"Could not convert QUERY 'p1' to type 'int'"
+				"Could not parse query parameter 'p1'."
 			);
 	}
 	@Test
@@ -175,7 +176,7 @@ public class StatusCodesTest {
 		b.put("/setParameterToInvalidTypes/foo?noTrace=true&p1=1", "'foo'").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
-				"Could not convert PATH 'a1' to type 'int'"
+				"Could not parse path parameter 'a1'."
 			);
 	}
 	@Test
@@ -183,7 +184,7 @@ public class StatusCodesTest {
 		b.put("/setParameterToInvalidTypes/123?noTrace=true&p1=1", "'foo'").header("h1", "foo").json().execute()
 			.assertStatus(400)
 			.assertBodyContains(
-				"Could not convert HEADER 'h1' to type 'int'"
+				"Could not parse header 'h1'."
 			);
 	}
 	

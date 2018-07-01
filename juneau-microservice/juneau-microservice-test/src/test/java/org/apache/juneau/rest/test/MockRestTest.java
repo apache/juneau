@@ -15,6 +15,7 @@ package org.apache.juneau.rest.test;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.junit.Assert.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;

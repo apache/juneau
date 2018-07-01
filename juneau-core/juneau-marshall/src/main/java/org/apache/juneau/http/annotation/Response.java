@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -18,17 +18,15 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.helper.*;
 
 /**
- * Annotation that can be applied to exceptions and return types that identify the HTTP status they trigger and a description about the exception.
+ * Annotation that can be applied to exceptions and return types on server-side REST methods that identify the HTTP status they trigger and a description about the exception.
  * 
  * <p>
  * When applied to exception classes, this annotation defines Swagger information on non-200 return types.
  * 
  * <p>
- * The following example shows the <ja>@Response</ja> annotation used to define a subclass of {@link Unauthorized} for an invalid login attempt.
+ * The following example shows the <ja>@Response</ja> annotation used to define a subclass of <code>Unauthorized</code> for an invalid login attempt.
  * <br>Note that the annotation can be used on super and subclasses.
  * 
  * <p class='bcode'>
@@ -70,7 +68,7 @@ import org.apache.juneau.rest.helper.*;
  * When applied to return type classes, this annotation defines Swagger information on the body of responses.
  * 
  * <p>
- * In the example above, we're using the {@link Ok} class which is defined like so:
+ * In the example above, we're using the <code>Ok</code> class which is defined like so:
  * 
  * <p class='bcode'>
  * 	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
@@ -78,7 +76,7 @@ import org.apache.juneau.rest.helper.*;
  * </p>
  * 
  * <p>
- * Another example is {@link Redirect} which is defined like so:
+ * Another example is <code>Redirect</code> which is defined like so:
  * 
  * <p class='bcode'>
  * 	<ja>@Response<ja>(
@@ -110,8 +108,10 @@ public @interface Response {
 	 * The HTTP response code.
 	 * 
 	 * The default value is <code>500</code> for exceptions and <code>200</code> for return types.
+	 * 
+	 * TODO - Can also be used on throwable to specify the HTTP status code to set when thrown.
 	 */
-	int code() default 0;
+	int[] code() default {};
 	
 	/**
 	 * A synonym for {@link #code()}.
@@ -130,7 +130,7 @@ public @interface Response {
 	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
 	 * </p>
 	 */
-	int value() default 0;
+	int[] value() default {};
 	
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.

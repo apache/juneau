@@ -211,7 +211,11 @@ public final class RestCall extends BeanSession implements Closeable {
 			serializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
-				uriBuilder.addParameter(name, serializer.serialize(HttpPartType.QUERY, schema, value));
+				try {
+					uriBuilder.addParameter(name, serializer.serialize(HttpPartType.QUERY, schema, value));
+				} catch (SerializeException e) {
+					throw new RestCallException(e);
+				}
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
 				query(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT, schema);
@@ -231,7 +235,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			if (isNotEmpty(s))
 				uriBuilder.setCustomQuery(s);
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -442,8 +446,11 @@ public final class RestCall extends BeanSession implements Closeable {
 			String var = "{" + name + "}";
 			if (path.indexOf(var) == -1)
 				throw new RestCallException("Path variable {"+name+"} was not found in path.");
-			String newPath = path.replace(var, serializer.serialize(HttpPartType.PATH, schema, value));
-			uriBuilder.setPath(newPath);
+			try {
+				uriBuilder.setPath(path.replace(var, serializer.serialize(HttpPartType.PATH, schema, value)));
+			} catch (SerializeException e) {
+				throw new RestCallException(e);
+			}
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
 				path(p.getName(), p.getValue(), serializer, schema);
@@ -453,7 +460,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		} else if (isBean(value)) {
 			return path(name, toBeanMap(value), serializer, schema);
 		} else if (value != null) {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, getReadableClassNameForObject(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -581,7 +588,11 @@ public final class RestCall extends BeanSession implements Closeable {
 			serializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
-				request.setHeader(name, serializer.serialize(HttpPartType.HEADER, schema, value));
+				try {
+					request.setHeader(name, serializer.serialize(HttpPartType.HEADER, schema, value));
+				} catch (SerializeException e) {
+					throw new RestCallException(e);
+				}
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
 				header(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT, schema);
@@ -591,7 +602,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		} else if (isBean(value)) {
 			return header(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
 		return this;
 	}

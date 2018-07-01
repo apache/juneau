@@ -15,11 +15,13 @@ package org.apache.juneau.httppart;
 import static java.util.Collections.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -45,19 +47,25 @@ public class HttpPartSchema {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link OapiPartSerializer}, all default settings. */
-	public static final HttpPartSchema DEFAULT = HttpPartSchema.create().build();
+	public static final HttpPartSchema DEFAULT = HttpPartSchema.create().allowEmptyValue(true).build();
 
+	final String name;
+	final Set<Integer> codes;
 	final String _default;
 	final Set<String> _enum;
 	final Map<String,HttpPartSchema> properties;
-	final Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems;
+	final Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 	final CollectionFormat collectionFormat;
 	final Type type;
 	final Format format;
 	final Pattern pattern;
 	final HttpPartSchema items, additionalProperties;
 	final Number maximum, minimum, multipleOf;
-	final Integer maxItems, maxLength, maxProperties, minItems, minLength, minProperties;
+	final Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
+	final Class<? extends HttpPartParser> parser;
+	final Class<? extends HttpPartSerializer> serializer;
+	
+	final ObjectMap api;
 	
 	/**
 	 * Instantiates a new builder for this object.
@@ -67,22 +75,165 @@ public class HttpPartSchema {
 	public static Builder create() {
 		return new Builder();
 	}
+
+	/**
+	 * Finds the schema information for the specified method parameter.
+	 * 
+	 * <p>
+	 * This method will gather all the schema information from the annotations at the following locations:
+	 * <ul>
+	 * 	<li>The method parameter.
+	 * 	<li>The method parameter class.
+	 * 	<li>The method parameter parent classes and interfaces.
+	 * </ul>
+	 * 
+	 * @param c 
+	 * 	The annotation to look for.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li>{@link Body}
+	 * 		<li>{@link Header}
+	 * 		<li>{@link Query}
+	 * 		<li>{@link FormData}
+	 * 		<li>{@link Path}
+	 * 		<li>{@link Response}
+	 * 		<li>{@link ResponseHeader}
+	 * 		<li>{@link ResponseStatus}
+	 * 		<li>{@link HasQuery}
+	 * 		<li>{@link HasFormData}
+	 * 	</ul> 
+	 * @param m
+	 * 	The Java method containing the parameter.
+	 * @param mi
+	 * 	The index of the parameter on the method.
+	 * @return The schema information about the parameter.
+	 */
+	public static HttpPartSchema create(Class<? extends Annotation> c, Method m, int mi) {
+		return create().apply(c, m, mi).build();
+	}
 	
+	/**
+	 * Finds the schema information for the specified class.
+	 * 
+	 * <p>
+	 * This method will gather all the schema information from the annotations on the class and all parent classes/interfaces.
+	 * 
+	 * @param c 
+	 * 	The annotation to look for.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li>{@link Body}
+	 * 		<li>{@link Header}
+	 * 		<li>{@link Query}
+	 * 		<li>{@link FormData}
+	 * 		<li>{@link Path}
+	 * 		<li>{@link Response}
+	 * 		<li>{@link ResponseHeader}
+	 * 		<li>{@link ResponseStatus}
+	 * 		<li>{@link HasQuery}
+	 * 		<li>{@link HasFormData}
+	 * 	</ul> 
+	 * @param t
+	 * 	The class containing the parameter.
+	 * @return The schema information about the parameter.
+	 */
+	public static HttpPartSchema create(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+		return create().apply(c, t).build();
+	}
+
+	/**
+	 * Utility method for creating response maps from a schema.
+	 * 
+	 * <p>
+	 * Given the valid response codes for this particular schema (from the {@link #getCodes()} method, this will
+	 * return a map with response-code keys and values that are the api of the passed-in schema.
+	 * <br>
+	 * The purpose of this method is to easily construct response sections in generated Swagger JSON documents.
+	 * 
+	 * <p>
+	 * Only valid for the following types of
+	 * <ul>
+	 * 		<li>{@link Response}
+	 * 		<li>{@link ResponseHeader}
+	 * 		<li>{@link ResponseStatus}
+	 * </ul> 
+	 * For 
+	 * 
+	 * @param s 
+	 * 	The schema to create a map from.
+	 * 	<br>Only valid for the following types of schemas:
+	 * 	<ul>
+	 * 		<li>{@link Response}
+	 * 		<li>{@link ResponseHeader}
+	 * 		<li>{@link ResponseStatus}
+	 * 	</ul> 
+	 * @param def
+	 * 	The default response code if no codes were specified in the schema.
+	 * @return The schema response map.
+	 */
+	public static ObjectMap getApiCodeMap(HttpPartSchema s, Integer def) {
+		ObjectMap om = new ObjectMap();
+		for (Integer c : s.getCodes(def)) 
+			om.getObjectMap(String.valueOf(c), true).appendAll(s.getApi());
+		return om;
+	}
+
+	/**
+	 * Utility method for creating response maps from multiple schemas.
+	 * 
+	 * <p>
+	 * Same as {@link #getApiCodeMap(HttpPartSchema, Integer)} except combines the maps from multiple schemas.
+	 * 
+	 * @param ss 
+	 * 	The schemas to create a map from.
+	 * 	<br>Only valid for the following types of schemas:
+	 * 	<ul>
+	 * 		<li>{@link Response}
+	 * 		<li>{@link ResponseHeader}
+	 * 		<li>{@link ResponseStatus}
+	 * 	</ul> 
+	 * @param def
+	 * 	The default response code if no codes were specified in the schema.
+	 * @return The schema response map.
+	 */
+	public static ObjectMap getApiCodeMap(HttpPartSchema[] ss, Integer def) {
+		ObjectMap om = new ObjectMap();
+		for (HttpPartSchema s : ss) 
+			for (Integer c : s.getCodes(def)) 
+				om.getObjectMap(String.valueOf(c), true).appendAll(s.getApi());
+		return om;
+	}
+	
+	
+	/**
+	 * Finds the schema information on the specified annotation.
+	 * 
+	 * @param a
+	 * 	The annotation to find the schema information on..
+	 * @return The schema information found on the annotation.
+	 */
+	public static HttpPartSchema create(Annotation a) {
+		return create().apply(a).build();
+	}
+
 	HttpPartSchema(Builder b) {
+		this.name = b.name;
+		this.codes = copy(b.codes);
 		this._default = b._default; 
 		this._enum = copy(b._enum);
-		this.properties = build(b.properties);
+		this.properties = build(b.properties, b.noValidate);
 		this.allowEmptyValue = b.allowEmptyValue;
 		this.exclusiveMaximum = b.exclusiveMaximum;
 		this.exclusiveMinimum = b.exclusiveMinimum;
 		this.required = b.required;
 		this.uniqueItems = b.uniqueItems;
+		this.skipIfEmpty = b.skipIfEmpty;
 		this.collectionFormat = b.collectionFormat;
 		this.type = b.type;
 		this.format = b.format;
 		this.pattern = b.pattern;
-		this.items = build(b.items);
-		this.additionalProperties = build(b.additionalProperties);
+		this.items = build(b.items, b.noValidate);
+		this.additionalProperties = build(b.additionalProperties, b.noValidate);
 		this.maximum = b.maximum;
 		this.minimum = b.minimum;
 		this.multipleOf = b.multipleOf;
@@ -92,6 +243,9 @@ public class HttpPartSchema {
 		this.minItems = b.minItems;
 		this.minLength = b.minLength;
 		this.minProperties = b.minProperties;
+		this.api = b.api.unmodifiable();
+		this.parser = b.parser;
+		this.serializer = b.serializer;
 		
 		if (b.noValidate)
 			return;
@@ -226,24 +380,28 @@ public class HttpPartSchema {
 		if (! errors.isEmpty())
 			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t")); 
 	}
-	
+
 	/**
 	 * The builder class for creating {@link HttpPartSchema} objects.
 	 * 
 	 */
 	public static class Builder {
-		String _default;
+		String name, _default;
+		Set<Integer> codes;
 		Set<String> _enum;
-		Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems;
+		Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 		CollectionFormat collectionFormat = CollectionFormat.NONE;
 		Type type = Type.NONE;
 		Format format = Format.NONE;
 		Pattern pattern;
 		Number maximum, minimum, multipleOf;
-		Integer maxItems, maxLength, maxProperties, minItems, minLength, minProperties;
+		Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
 		Map<String,Builder> properties;
 		HttpPartSchema.Builder items, additionalProperties;
 		boolean noValidate;
+		ObjectMap api = new ObjectMap();
+		Class<? extends HttpPartParser> parser;
+		Class<? extends HttpPartSerializer> serializer;
 		
 		/**
 		 * Instantiates a new {@link HttpPartSchema} object based on the configuration of this builder.
@@ -259,6 +417,361 @@ public class HttpPartSchema {
 			return new HttpPartSchema(this);
 		}
 
+		Builder apply(Class<? extends Annotation> c, Method m, int index) {
+			for (Annotation a :  m.getParameterAnnotations()[index])
+				if (c.isInstance(a))
+					return apply(a);
+			apply(c, m.getGenericParameterTypes()[index]);
+			return this;
+		}
+
+		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+			if (t instanceof Class<?>) 
+				for (Annotation a : ReflectionUtils.findAnnotationsParentFirst(c, (Class<?>)t)) 
+					apply(a);
+			return this;
+		}
+
+		Builder apply(Annotation a) {
+			if (a instanceof Body)
+				apply((Body)a);
+			else if (a instanceof Header)
+				apply((Header)a);
+			else if (a instanceof FormData)
+				apply((FormData)a);
+			else if (a instanceof Query)
+				apply((Query)a);
+			else if (a instanceof Path)
+				apply((Path)a);
+			else if (a instanceof Response)
+				apply((Response)a);
+			else if (a instanceof ResponseHeader)
+				apply((ResponseHeader)a);
+			else if (a instanceof ResponseStatus)
+				apply((ResponseStatus)a);
+			else if (a instanceof HasQuery)
+				apply((HasQuery)a);
+			else if (a instanceof HasFormData)
+				apply((HasFormData)a);
+			return this;
+		}
+		
+		Builder apply(Body a) {
+			api = AnnotationUtils.merge(api, a);
+			required(toBoolean(a.required()));
+			allowEmptyValue(toBoolean(! a.required()));
+			parser(a.parser());
+			apply(a.schema());
+			return this;
+		}
+		
+		Builder apply(Header a) {
+			api = AnnotationUtils.merge(api, a);
+			name(a.value());
+			name(a.name());
+			required(toBoolean(a.required()));
+			type(a.type());
+			format(a.format());
+			allowEmptyValue(toBoolean(a.allowEmptyValue()));
+			items(a.items());
+			collectionFormat(a.collectionFormat());
+			_default(joinnl(a._default()));
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
+			maxItems(toLong(a.maxItems()));
+			minItems(toLong(a.minItems()));
+			uniqueItems(toBoolean(a.uniqueItems()));
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			skipIfEmpty(toBoolean(a.skipIfEmpty()));
+			parser(a.parser());
+			serializer(a.serializer());
+			return this;
+		}
+		
+		Builder apply(ResponseHeader a) {
+			api = AnnotationUtils.merge(api, a);
+			name(a.value());
+			name(a.name());
+			codes(a.code());
+			type(a.type());
+			format(a.format());
+			items(a.items());
+			collectionFormat(a.collectionFormat());
+			_default(joinnl(a._default()));
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			maxItems(toLong(a.maxItems()));
+			minItems(toLong(a.minItems()));
+			uniqueItems(toBoolean(a.uniqueItems()));
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			allowEmptyValue(false);
+			serializer(a.serializer());
+			return this;
+		}
+
+		Builder apply(ResponseStatus a) {
+			api = AnnotationUtils.merge(api, a);
+			code(a.value());
+			code(a.code());
+			return this;
+		}
+		
+		Builder apply(FormData a) {
+			api = AnnotationUtils.merge(api, a);
+			name(a.value());
+			name(a.name());
+			required(toBoolean(a.required()));
+			type(a.type());
+			format(a.format());
+			allowEmptyValue(toBoolean(a.allowEmptyValue()));
+			items(a.items());
+			collectionFormat(a.collectionFormat());
+			_default(joinnl(a._default()));
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
+			maxItems(toLong(a.maxItems()));
+			minItems(toLong(a.minItems()));
+			uniqueItems(toBoolean(a.uniqueItems()));
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			skipIfEmpty(toBoolean(a.skipIfEmpty()));
+			parser(a.parser());
+			serializer(a.serializer());
+			return this;
+		}
+		
+		Builder apply(Query a) {
+			api = AnnotationUtils.merge(api, a);
+			name(a.value());
+			name(a.name());
+			required(toBoolean(a.required()));
+			type(a.type());
+			format(a.format());
+			allowEmptyValue(toBoolean(a.allowEmptyValue()));
+			items(a.items());
+			collectionFormat(a.collectionFormat());
+			_default(joinnl(a._default()));
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
+			maxItems(toLong(a.maxItems()));
+			minItems(toLong(a.minItems()));
+			uniqueItems(toBoolean(a.uniqueItems()));
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			skipIfEmpty(toBoolean(a.skipIfEmpty()));
+			parser(a.parser());
+			serializer(a.serializer());
+			return this;
+		}
+		
+		Builder apply(Path a) {
+			api = AnnotationUtils.merge(api, a);
+			name(a.value());
+			name(a.name());
+			type(a.type());
+			format(a.format());
+			items(a.items());
+			collectionFormat(a.collectionFormat());
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			parser(a.parser());
+			serializer(a.serializer());
+			return this;
+		}
+		
+		Builder apply(Response a) {
+			api = AnnotationUtils.merge(api, a);
+			codes(a.value());
+			codes(a.code());
+			apply(a.schema());
+			return this;
+		}
+
+		Builder apply(Items a) {
+			api = AnnotationUtils.merge(api, a);
+			type(a.type());
+			format(a.format());
+			items(a.items());
+			collectionFormat(a.collectionFormat());
+			_default(joinnl(a._default()));
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
+			maxItems(toLong(a.maxItems()));
+			minItems(toLong(a.minItems()));
+			uniqueItems(toBoolean(a.uniqueItems()));
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			return this;
+		}
+		
+		Builder apply(SubItems a) {
+			api = AnnotationUtils.merge(api, a);
+			type(a.type());
+			format(a.format());
+			items(toObjectMap(a.items()));
+			collectionFormat(a.collectionFormat());
+			_default(joinnl(a._default()));
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
+			maxItems(toLong(a.maxItems()));
+			minItems(toLong(a.minItems()));
+			uniqueItems(toBoolean(a.uniqueItems()));
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			return this;
+		}
+
+		Builder apply(Schema a) {
+			type(a.type());
+			format(a.format());
+			items(a.items());
+			_default(joinnl(a._default()));
+			maximum(toNumber(a.maximum()));
+			exclusiveMaximum(toBoolean(a.exclusiveMaximum()));
+			minimum(toNumber(a.minimum()));
+			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
+			maxLength(toLong(a.maxLength()));
+			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
+			maxItems(toLong(a.maxItems()));
+			minItems(toLong(a.minItems()));
+			uniqueItems(toBoolean(a.uniqueItems()));
+			_enum(toSet(a._enum()));
+			multipleOf(toNumber(a.multipleOf()));
+			maxProperties(toLong(a.maxProperties()));
+			minProperties(toLong(a.minProperties()));
+			properties(toObjectMap(a.properties()));
+			additionalProperties(toObjectMap(a.additionalProperties()));
+			return this;
+		}
+		
+		Builder apply(HasQuery a) {
+			name(a.value());
+			name(a.name());
+			return this;
+		}
+
+		Builder apply(HasFormData a) {
+			name(a.value());
+			name(a.name());
+			return this;
+		}
+
+		Builder apply(ObjectMap m) {
+			if (m != null && ! m.isEmpty()) {
+				_default(m.getString("default"));
+				_enum(toSet(m.getString("enum")));
+				allowEmptyValue(m.getBoolean("allowEmptyValue"));
+				exclusiveMaximum(m.getBoolean("exclusiveMaximum"));
+				exclusiveMinimum(m.getBoolean("exclusiveMinimum"));
+				required(m.getBoolean("required"));
+				uniqueItems(m.getBoolean("uniqueItems"));
+				collectionFormat(m.getString("collectionFormat"));
+				type(m.getString("type"));
+				format(m.getString("format"));
+				pattern(m.getString("pattern"));
+				maximum(m.get("maximum", Number.class));
+				minimum(m.get("minimum", Number.class));
+				multipleOf(m.get("multipleOf", Number.class));
+				maxItems(m.get("maxItems", Long.class));
+				maxLength(m.get("maxLength", Long.class));
+				maxProperties(m.get("maxProperties", Long.class));
+				minItems(m.get("minItems", Long.class));
+				minLength(m.get("minLength", Long.class));
+				minProperties(m.get("minProperties", Long.class));
+				
+				items(m.getObjectMap("items"));
+				properties(m.getObjectMap("properties"));
+				additionalProperties(m.getObjectMap("additionalProperties"));
+				
+				apply(m.getObjectMap("schema", null));
+			}
+			return this;
+		}		
+		
+		/**
+		 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+		 * 
+		 * @param value 
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder name(String value) {
+			if (isNotEmpty(value))
+				name = value;
+			return this;
+		}
+
+		/**
+		 * <mk>httpStatusCode</mk> key of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a> object.
+		 * 
+		 * @param value 
+		 * 	The new value for this property.
+		 * 	<br>Ignored if <jk>null</jk> or an empty array.
+		 * @return This object (for method chaining).
+		 */
+		public Builder codes(int[] value) {
+			if (value != null && value.length != 0) 
+				for (int v : value)
+					code(v);
+			return this;
+		}
+		
+		/**
+		 * <mk>httpStatusCode</mk> key of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a> object.
+		 * 
+		 * @param value 
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <code>0</code>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder code(int value) {
+			if (value != 0) {
+				if (codes == null)
+					codes = new TreeSet<>();
+				codes.add(value);
+			}
+			return this;
+		}
+		
 		/**
 		 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 		 * 
@@ -267,11 +780,12 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder required(Boolean value) {
-			if (value != null)
-				this.required = value;
+			if (value != null) 
+				required = value;
 			return this;
 		}
 	
@@ -323,12 +837,13 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
 		public Builder type(String value) {
 			try {
-				if (isNotEmpty(value))
-					this.type = Type.fromString(value);
+				if (isNotEmpty(value)) 
+					type = Type.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, Type.values()); 
 			}
@@ -386,12 +901,13 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
 		public Builder format(String value) {
 			try {
-				if (isNotEmpty(value))
-					this.format = Format.fromString(value);
+				if (isNotEmpty(value)) 
+					format = Format.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, Format.values()); 
 			}
@@ -408,11 +924,12 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder allowEmptyValue(Boolean value) {
-			if (value != null)
-				this.allowEmptyValue = value;
+			if (value != null) 
+				allowEmptyValue = value;
 			return this;
 		}
 	
@@ -427,14 +944,33 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
-		public Builder items(Builder value) {
-			if (value != null)
-				items = value;
+		Builder items(ObjectMap value) {
+			if (value != null && ! value.isEmpty()) {
+				items = HttpPartSchema.create().apply(value);
+				api.put("items", value);
+			}
 			return this;
 		}
 
+		Builder items(Items value) {
+			if (! AnnotationUtils.empty(value)) {
+				items = HttpPartSchema.create().apply(value);
+				api.put("items", items.api);
+			}
+			return this;
+		}
+
+		Builder items(SubItems value) {
+			if (! AnnotationUtils.empty(value)) {
+				items = HttpPartSchema.create().apply(value);
+				api.put("items", items.api);
+			}
+			return this;
+		}
+		
 		/**
 		 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 		 * 
@@ -464,6 +1000,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
 		public Builder collectionFormat(String value) {
@@ -485,6 +1022,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
 		public Builder _default(String value) {
@@ -504,6 +1042,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder maximum(Number value) {
@@ -524,6 +1063,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder exclusiveMaximum(Boolean value) {
@@ -543,6 +1083,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder minimum(Number value) {
@@ -563,6 +1104,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder exclusiveMinimum(Boolean value) {
@@ -583,9 +1125,10 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder maxLength(Integer value) {
+		public Builder maxLength(Long value) {
 			if (value != null)
 				this.maxLength = value;
 			return this;
@@ -603,9 +1146,10 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder minLength(Integer value) {
+		public Builder minLength(Long value) {
 			if (value != null)
 				this.minLength = value;
 			return this;
@@ -622,6 +1166,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
 		public Builder pattern(String value) {
@@ -645,9 +1190,10 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder maxItems(Integer value) {
+		public Builder maxItems(Long value) {
 			if (value != null)
 				this.maxItems = value;
 			return this;
@@ -664,9 +1210,10 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder minItems(Integer value) {
+		public Builder minItems(Long value) {
 			if (value != null)
 				this.minItems = value;
 			return this;
@@ -687,6 +1234,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder uniqueItems(Boolean value) {
@@ -696,6 +1244,20 @@ public class HttpPartSchema {
 		}
 	
 		/**
+		 * Identifies whether an item should be skipped if it's empty.
+		 * 
+		 * @param value 
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder skipIfEmpty(Boolean value) {
+			if (value != null)
+				this.skipIfEmpty = value;
+			return this;
+		}
+
+		/**
 		 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 		 * 
 		 * <p>
@@ -703,6 +1265,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder _enum(Set<String> value) {
@@ -722,6 +1285,7 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder multipleOf(Number value) {
@@ -735,10 +1299,11 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder maxProperties(Integer value) {
-			if (value != null)
+		public Builder maxProperties(Long value) {
+			if (value != null && value != -1)
 				this.maxProperties = value;
 			return this;
 		}
@@ -748,10 +1313,11 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder minProperties(Integer value) {
-			if (value != null)
+		public Builder minProperties(Long value) {
+			if (value != null && value != -1)
 				this.minProperties = value;
 			return this;
 		}
@@ -759,14 +1325,15 @@ public class HttpPartSchema {
 		/**
 		 * TODO
 		 * 
-		 * @param name The property name.
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder property(String name, Builder value) {
-			if (isNotEmpty(name) && isNotEmpty(value))
-				properties.put(name, value);
+		public Builder properties(ObjectMap value) {
+			if (value != null && ! value.isEmpty()) 
+				for (Map.Entry<String,Object> e : value.entrySet()) 
+					properties.put(e.getKey(), HttpPartSchema.create().apply((ObjectMap)e.getValue()));
 			return this;
 		}
 	
@@ -775,23 +1342,50 @@ public class HttpPartSchema {
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
-		public Builder additionalProperties(Builder value) {
-			if (value != null)
-				additionalProperties = value;
-			return additionalProperties;
+		public Builder additionalProperties(ObjectMap value) {
+			if (value != null && ! value.isEmpty())
+				additionalProperties = HttpPartSchema.create().apply(value);
+			return this;
 		}
 		
+		/**
+		 * Identifies the part serializer to use for serializing this part.
+		 * 
+		 * @param value 
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartSerializer.Null}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder serializer(Class<? extends HttpPartSerializer> value) {
+			if (serializer != null && serializer != HttpPartSerializer.Null.class) 
+				serializer = value;
+			return this;
+		}
+
 		/**
 		 * TODO
 		 * 
 		 * @param value 
 		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartParser.Null}.
 		 * @return This object (for method chaining).
 		 */
-		public Builder noValidate(boolean value) {
-			this.noValidate = value;
+		public Builder parser(Class<? extends HttpPartParser> value) {
+			if (parser != null && parser != HttpPartParser.Null.class) 
+				parser = value;
+			return this;
+		}
+
+		/**
+		 * TODO
+		 * @param noValidate 
+		 * @return This object (for method chaining).
+		 */
+		public Builder noValidate(boolean noValidate) {
+			this.noValidate = noValidate;
 			return this;
 		}
 	}
@@ -988,6 +1582,61 @@ public class HttpPartSchema {
 	}
 
 	/**
+	 * Returns the name of the object described by this schema, for example the query or form parameter name.
+	 * 
+	 * @return The name, or <jk>null</jk> if not specified. 
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns the HTTP status code or codes defined on a schema.
+	 * 
+	 * @return 
+	 * 	The list of HTTP status codes.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Set<Integer> getCodes() {
+		return codes;
+	}
+
+	/**
+	 * Returns the HTTP status code or codes defined on a schema.
+	 * 
+	 * @param def The default value if there are no codes defined.
+	 * @return 
+	 * 	The list of HTTP status codes.
+	 * 	<br>A singleton set containing the default value if the set is empty.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Set<Integer> getCodes(Integer def) {
+		return codes.isEmpty() ? Collections.singleton(def) : codes;
+	}
+
+	/**
+	 * Returns the first HTTP status code on a schema.
+	 * 
+	 * @param def The default value if there are no codes defined.
+	 * @return 
+	 * 	The list of HTTP status codes.
+	 * 	<br>A singleton set containing the default value if the set is empty.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Integer getCode(Integer def) {
+		return codes.isEmpty() ? def : codes.iterator().next();
+	}
+
+	/**
+	 * TODO
+	 * 
+	 * @return TODO
+	 */
+	public Type getType() {
+		return type;
+	}
+
+	/**
 	 * Returns the default value for this schema.
 	 * 
 	 * @return The default value for this schema, or <jk>null</jk> if not specified. 
@@ -1048,60 +1697,63 @@ public class HttpPartSchema {
 	}
 	
 	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public ObjectMap getApi() {
+		return api;
+	}
+
+	/**
 	 * Throws a {@link ParseException} if the specified pre-parsed input does not validate against this schema.
 	 * 
 	 * @param in The input.
 	 * @return The same object passed in.
-	 * @throws ParseException if the specified pre-parsed input does not validate against this schema.
+	 * @throws SchemaValidationParseException if the specified pre-parsed input does not validate against this schema.
 	 */
-	public String validateInput(String in) throws ParseException {
+	public String validateInput(String in) throws SchemaValidationParseException {
 		if (! isValidRequired(in))
-			throw new ParseException("No value specified.");
+			throw new SchemaValidationParseException("No value specified.");
 		if (in != null) {
 			if (! isValidAllowEmpty(in))
-				throw new ParseException("Empty value not allowed.");
+				throw new SchemaValidationParseException("Empty value not allowed.");
 			if (! isValidPattern(in))
-				throw new ParseException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
+				throw new SchemaValidationParseException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
 			if (! isValidEnum(in))
-				throw new ParseException("Value does not match one of the expected values.  Must be one of the following: {0}", _enum);
+				throw new SchemaValidationParseException("Value does not match one of the expected values.  Must be one of the following: {0}", _enum);
 			if (! isValidMaxLength(in))
-				throw new ParseException("Maximum length of value exceeded.");
+				throw new SchemaValidationParseException("Maximum length of value exceeded.");
 			if (! isValidMinLength(in))
-				throw new ParseException("Minimum length of value exceeded.");
+				throw new SchemaValidationParseException("Minimum length of value not met.");
 		}
 		return in;
 	}
-	
+
 	/**
 	 * Throws a {@link ParseException} if the specified parsed output does not validate against this schema.
 	 * 
 	 * @param o The parsed output.
 	 * @param bc The bean context used to detect POJO types.
 	 * @return The same object passed in.
-	 * @throws ParseException if the specified parsed output does not validate against this schema.
+	 * @throws SchemaValidationParseException if the specified parsed output does not validate against this schema.
 	 */
 	@SuppressWarnings("rawtypes")
-	public Object validateOutput(Object o, BeanContext bc) throws ParseException {
+	public Object validateOutput(Object o, BeanContext bc) throws SchemaValidationParseException {
 		if (o == null) {
 			if (! isValidRequired(o))
-				throw new ParseException("Required value not provided.");
+				throw new SchemaValidationParseException("Required value not provided.");
 			return o;
 		}
 		ClassMeta<?> cm = bc.getClassMetaForObject(o);
 		switch (getType(cm)) {
-			case STRING: {
-				if (cm.isString()) 
-					return validateInput(o.toString());
-				break;
-			}
 			case ARRAY: {
 				if (cm.isArray()) {
 					if (! isValidMinItems(o))
-						throw new ParseException("Minimum items of value exceeded.");
+						throw new SchemaValidationParseException("Minimum number of items not met.");
 					if (! isValidMaxItems(o))
-						throw new ParseException("Maximum items of value exceeded.");
+						throw new SchemaValidationParseException("Maximum number of items exceeded.");
 					if (! isValidUniqueItems(o)) 
-						throw new ParseException("Duplicate items found.");
+						throw new SchemaValidationParseException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
 					if (items != null) 
 						for (int i = 0; i < Array.getLength(o); i++)
@@ -1109,11 +1761,11 @@ public class HttpPartSchema {
 				} else if (cm.isCollection()) {
 					Collection<?> c = (Collection<?>)o;
 					if (! isValidMinItems(c))
-						throw new ParseException("Minimum items of value exceeded.");
+						throw new SchemaValidationParseException("Minimum number of items not met.");
 					if (! isValidMaxItems(c))
-						throw new ParseException("Maximum items of value exceeded.");
+						throw new SchemaValidationParseException("Maximum number of items exceeded.");
 					if (! isValidUniqueItems(c))
-						throw new ParseException("Duplicate items found.");
+						throw new SchemaValidationParseException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
 					if (items != null) 
 						for (Object o2 : c)
@@ -1125,11 +1777,11 @@ public class HttpPartSchema {
 				if (cm.isNumber()) {
 					Number n = (Number)o;
 					if (! isValidMinimum(n))
-						throw new ParseException("Minimal value exceeded.");
+						throw new SchemaValidationParseException("Minimum value not met.");
 					if (! isValidMaximum(n))
-						throw new ParseException("Maximum value exceeded.");
+						throw new SchemaValidationParseException("Maximum value exceeded.");
 					if (! isValidMultipleOf(n))
-						throw new ParseException("Multiple-of not met.");
+						throw new SchemaValidationParseException("Multiple-of not met.");
 				}
 				break;
 			}
@@ -1137,11 +1789,11 @@ public class HttpPartSchema {
 				if (cm.isNumber()) {
 					Number n = (Number)o;
 					if (! isValidMinimum(n))
-						throw new ParseException("Minimal value exceeded.");
+						throw new SchemaValidationParseException("Minimum value not met.");
 					if (! isValidMaximum(n))
-						throw new ParseException("Maximum value exceeded.");
+						throw new SchemaValidationParseException("Maximum value exceeded.");
 					if (! isValidMultipleOf(n))
-						throw new ParseException("Multiple-of not met.");
+						throw new SchemaValidationParseException("Multiple-of not met.");
 				}
 				break;
 			}
@@ -1149,9 +1801,9 @@ public class HttpPartSchema {
 				if (cm.isMapOrBean()) {
 					Map<?,?> m = cm.isMap() ? (Map<?,?>)o : bc.createSession().toBeanMap(o);
 					if (! isValidMinProperties(m))
-						throw new ParseException("Minimum number properties of value not met.");
+						throw new SchemaValidationParseException("Minimum number of properties not met.");
 					if (! isValidMaxProperties(m))
-						throw new ParseException("Maximum number of properties of value exceeded.");
+						throw new SchemaValidationParseException("Maximum number of properties exceeded.");
 					for (Map.Entry e : m.entrySet()) {
 						String key = e.getKey().toString();
 						HttpPartSchema s2 = getProperty(key);
@@ -1165,6 +1817,7 @@ public class HttpPartSchema {
 			}
 			case BOOLEAN: 
 			case FILE: 
+			case STRING:
 			case NONE: 
 				break;
 		}		
@@ -1230,7 +1883,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidAllowEmpty(String x) {
-		return allowEmptyValue == null || allowEmptyValue || isNotEmpty(x);
+		return (allowEmptyValue != null && allowEmptyValue) || isNotEmpty(x);
 	}
 	
 	private boolean isValidPattern(String x) {
@@ -1238,7 +1891,7 @@ public class HttpPartSchema {
 	}
 	
 	private boolean isValidEnum(String x) {
-		return _enum == null || _enum.contains(x);
+		return _enum.isEmpty() || _enum.contains(x);
 	}
 	
 	private boolean isValidMinLength(String x) {
@@ -1297,20 +1950,209 @@ public class HttpPartSchema {
 	}
 
 	
-	private static Set<String> copy(Set<String> in) {
-		return in == null ? null : unmodifiableSet(new LinkedHashSet<>(in));
+	private static <T> Set<T> copy(Set<T> in) {
+		return in == null ? Collections.EMPTY_SET : unmodifiableSet(new LinkedHashSet<>(in));
 	}
 	
-	private static Map<String,HttpPartSchema> build(Map<String,Builder> in) {
+	private static Map<String,HttpPartSchema> build(Map<String,Builder> in, boolean noValidate) {
 		if (in == null)
 			return null;
 		Map<String,HttpPartSchema> m = new LinkedHashMap<>();
 		for (Map.Entry<String,Builder> e : in.entrySet()) 
-			m.put(e.getKey(), e.getValue().build());
+			m.put(e.getKey(), e.getValue().noValidate(noValidate).build());
 		return unmodifiableMap(m);
 	}
 
-	private static HttpPartSchema build(Builder in) {
-		return in == null ? null : in.build();
+	private static HttpPartSchema build(Builder in, boolean noValidate) {
+		return in == null ? null : in.noValidate(noValidate).build();
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	final static Set<String> toSet(String[] s) {
+		return toSet(joinnl(s));
+	}
+	
+	final static Set<String> toSet(String s) {
+		if (isEmpty(s))
+			return null;
+		Set<String> set = new ASet<>();
+		try {
+			for (Object o : StringUtils.parseListOrCdl(s))
+				set.add(o.toString());
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		return set;
+	}
+
+	final static Number toNumber(String s) {
+		try {
+			if (isNotEmpty(s))
+				return parseNumber(s, Number.class);
+			return null;
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+//	final static Integer toInteger(int i) {
+//		return i == -1 ? null : i;
+//	}
+
+	final static Long toLong(long l) {
+		return l == -1 ? null : l;
+	}
+
+	final static Boolean toBoolean(boolean b) {
+		return b == false ? null : b;
+	}
+	
+	final static ObjectMap toObjectMap(String[] ss) {
+		String s = joinnl(ss);
+		if (s.isEmpty())
+			return null;
+		if (! isObjectMap(s, true))
+			s = "{" + s + "}";
+		try {
+			return new ObjectMap(s);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Number getMaximum() {
+		return maximum;
+	}
+
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Number getMinimum() {
+		return minimum;
+	}
+
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Number getMultipleOf() {
+		return multipleOf;
+	}
+
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Pattern getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Long getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Long getMinLength() {
+		return minLength;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Long getMaxItems() {
+		return maxItems;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Long getMinItems() {
+		return minItems;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Long getMaxProperties() {
+		return maxProperties;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Long getMinProperties() {
+		return minProperties;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Boolean getExclusiveMaximum() {
+		return exclusiveMaximum;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Boolean getExclusiveMinimum() {
+		return exclusiveMinimum;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Boolean getUniqueItems() {
+		return uniqueItems;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Boolean getRequired() {
+		return required;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Boolean getSkipIfEmpty() {
+		return skipIfEmpty;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Set<String> getEnum() {
+		return _enum;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Class<? extends HttpPartParser> getParser() {
+		return parser;
+	}
+	/**
+	 * TODO
+	 * @return TODO
+	 */
+	public Class<? extends HttpPartSerializer> getSerializer() {
+		return serializer;
 	}
 }

@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -23,6 +24,37 @@ import java.util.*;
  */
 public final class ReflectionUtils {
 
+	/**
+	 * Returns <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
+	 * 
+	 * @param a The annotation to check for.
+	 * @param m The method containing the parameter to check.
+	 * @param index The parameter index.
+	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
+	 */
+	public static boolean hasAnnotation(Class<? extends Annotation> a, Method m, int index) {
+		return getAnnotation(a, m, index) != null;
+	}
+
+	/**
+	 * Returns the specified annotation if it exists on the specified parameter or parameter type class.
+	 * 
+	 * @param a The annotation to check for.
+	 * @param m The method containing the parameter to check.
+	 * @param index The parameter index.
+	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m, int index) {
+		for (Annotation a2 :  m.getParameterAnnotations()[index])
+			if (a.isInstance(a2))
+				return (T)a2;
+		Type t = m.getGenericParameterTypes()[index];
+		if (t instanceof Class) 
+			return getAnnotation(a, (Class<?>)t);
+		return null;
+	}
+	
 	/**
 	 * Similar to {@link Class#getAnnotation(Class)} except also searches annotations on interfaces.
 	 * 

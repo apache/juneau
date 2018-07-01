@@ -29,6 +29,7 @@ import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.internal.*;
@@ -841,7 +842,7 @@ public class RestClient extends BeanContext implements Closeable {
 			if (closedStack != null) {
 				e2 = new Exception("Creation stack:");
 				e2.setStackTrace(closedStack);
-				throw new RestCallException("RestClient.close() has already been called.  This client cannot be reused.").initCause(e2);
+				throw new RestCallException(e2, "RestClient.close() has already been called.  This client cannot be reused.");
 			}
 			throw new RestCallException("RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client.RestClient.trackCreation' to true.");
 		}
@@ -1047,25 +1048,13 @@ public class RestClient extends BeanContext implements Closeable {
 											if (q1 != null)
 												rc.query(getName(q1.name(), q1.value(), pMeta), val, q1.skipIfEmpty(), getPartSerializer(q1.serializer(), rma.serializer), null);
 
-											QueryIfNE q2 = pMeta.getAnnotation(QueryIfNE.class);
-											if (q2 != null)
-												rc.query(getName(q2.name(), q2.value(), pMeta), val, true, getPartSerializer(q2.serializer(), rma.serializer), null);
-
 											FormData f1 = pMeta.getAnnotation(FormData.class);
 											if (f1 != null)
 												rc.formData(getName(f1.name(), f1.value(), pMeta), val, f1.skipIfEmpty(), getPartSerializer(f1.serializer(), rma.serializer), null);
 
-											FormDataIfNE f2 = pMeta.getAnnotation(FormDataIfNE.class);
-											if (f2 != null)
-												rc.formData(getName(f2.name(), f2.value(), pMeta), val, true, getPartSerializer(f2.serializer(), rma.serializer), null);
-
-											org.apache.juneau.remoteable.Header h1 = pMeta.getAnnotation(org.apache.juneau.remoteable.Header.class);
+											org.apache.juneau.http.annotation.Header h1 = pMeta.getAnnotation(org.apache.juneau.http.annotation.Header.class);
 											if (h1 != null)
 												rc.header(getName(h1.name(), h1.value(), pMeta), val, h1.skipIfEmpty(), getPartSerializer(h1.serializer(), rma.serializer), null);
-
-											HeaderIfNE h2 = pMeta.getAnnotation(HeaderIfNE.class);
-											if (h2 != null)
-												rc.header(getName(h2.name(), h2.value(), pMeta), val, true, getPartSerializer(h2.serializer(), rma.serializer), null);
 										}
 									}
 								}

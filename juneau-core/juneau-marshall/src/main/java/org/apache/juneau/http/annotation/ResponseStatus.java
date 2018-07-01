@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Annotation that can be applied to parameters and types to denote them as an HTTP response status.
+ * Annotation that can be applied to parameters and types to denote them as an HTTP response status on server-side REST method parameters.
  * 
  * <p>
  * This can only be applied to parameters and subclasses of the {@link Value} class with an {@link Integer} type.

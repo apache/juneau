@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -55,8 +56,8 @@ public class ResponseAnnotationTest {
 
 		@Response(
 			description={"a","b"},
-			schema=@Schema(type="a"),
-			headers=@ResponseHeader(name="foo",type="a"),
+			schema=@Schema(type="string"),
+			headers=@ResponseHeader(name="foo",type="string"),
 			example="'a'",
 			examples=" {foo:'a'} "
 		)
@@ -67,8 +68,8 @@ public class ResponseAnnotationTest {
 		@Response(
 			api={
 				"description:'a\nb',",
-				"schema:{type:'a'},",
-				"headers:{foo:{type:'a'}},",
+				"schema:{type:'string'},",
+				"headers:{foo:{type:'string'}},",
 				"example:'a',",
 				"examples:{foo:'a'}"
 			}
@@ -81,14 +82,14 @@ public class ResponseAnnotationTest {
 		@Response(
 			api={
 				"description:'b',",
-				"schema:{type:'b'},",
-				"headers:{bar:{type:'b'}},",
+				"schema:{type:'number'},",
+				"headers:{bar:{type:'number'}},",
 				"example:'b',",
 				"examples:{bar:'b'}"
 			},
 			description={"a","b"},
-			schema=@Schema(type="a"),
-			headers=@ResponseHeader(name="foo",type="a"),
+			schema=@Schema(type="string"),
+			headers=@ResponseHeader(name="foo",type="string"),
 			example="'a'",
 			examples=" {foo:'a'} "
 		)
@@ -116,8 +117,8 @@ public class ResponseAnnotationTest {
 	public void sa01_Response_onPojo_basic() throws Exception {
 		ResponseInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -125,8 +126,8 @@ public class ResponseAnnotationTest {
 	public void sa02_Response_onPojo_api() throws Exception {
 		ResponseInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -134,8 +135,8 @@ public class ResponseAnnotationTest {
 	public void sa03_Response_onPojo_mixed() throws Exception {
 		ResponseInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -162,7 +163,7 @@ public class ResponseAnnotationTest {
 	@RestResource
 	public static class SB {
 
-		@Response(schema=@Schema(" type:'b' "))
+		@Response(schema=@Schema(" type:'number' "))
 		public static class SB01 {}
 		@RestMethod(name=GET,path="/schemaValue")
 		public void sb01(SB01 r) {}
@@ -190,7 +191,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void sb01_Response_onPojo_schemaValue() throws Exception {
 		ResponseInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getResponse(200);
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'number'}", x.getSchema());
 	}
 	@Test
 	public void sb02_Response_onPojo_autoDetectBean() throws Exception {
@@ -253,8 +254,8 @@ public class ResponseAnnotationTest {
 		public void ta01(
 			@Response(
 				description={"a","b"},
-				schema=@Schema(type="a"),
-				headers=@ResponseHeader(name="foo",type="a"),
+				schema=@Schema(type="string"),
+				headers=@ResponseHeader(name="foo",type="string"),
 				example=" 'a' ",
 				examples=" {foo:'a'} "
 			) TA01 r
@@ -266,8 +267,8 @@ public class ResponseAnnotationTest {
 			@Response(
 				api={
 					"description:'a\nb',",
-					"schema:{type:'a'},",
-					"headers:{foo:{type:'a'}},",
+					"schema:{type:'string'},",
+					"headers:{foo:{type:'string'}},",
 					"example:'a',",
 					"examples:{foo:'a'}"
 				}
@@ -280,14 +281,14 @@ public class ResponseAnnotationTest {
 			@Response(
 				api={
 					"description:'b',",
-					"schema:{type:'b'},",
-					"headers:{bar:{type:'b'}},",
+					"schema:{type:'number'},",
+					"headers:{bar:{type:'number'}},",
 					"example:'b',",
 					"examples:{bar:'b'}"
 				},
 				description={"a","b"},
-				schema=@Schema(type="a"),
-				headers=@ResponseHeader(name="foo",type="a"),
+				schema=@Schema(type="string"),
+				headers=@ResponseHeader(name="foo",type="string"),
 				example=" 'a' ",
 				examples=" {foo:'a'} "
 			) TA03 r
@@ -303,15 +304,15 @@ public class ResponseAnnotationTest {
 
 		public static class TA06 {}
 		@RestMethod(name=GET,path="/headers")
-		public void ta06(@Response(headers=@ResponseHeader(name="foo",api=" type:'b' ")) TA06 r) {}
+		public void ta06(@Response(headers=@ResponseHeader(name="foo",api=" type:'number' ")) TA06 r) {}
 	}
 
 	@Test
 	public void ta01_Response_onParameter_basic() throws Exception {
 		ResponseInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -319,8 +320,8 @@ public class ResponseAnnotationTest {
 	public void ta02_Response_onParameter_api() throws Exception {
 		ResponseInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -328,8 +329,8 @@ public class ResponseAnnotationTest {
 	public void ta03_Response_onParameter_mixed() throws Exception {
 		ResponseInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -346,7 +347,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void ta06_Response_onParameter_headers() throws Exception {
 		ResponseInfo x = getSwagger(new TA()).getPaths().get("/headers").get("get").getResponse(200);
-		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
+		assertObjectEquals("{foo:{type:'number'}}", x.getHeaders());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -358,7 +359,7 @@ public class ResponseAnnotationTest {
 
 		public static class TB01 {}
 		@RestMethod(name=GET,path="/schemaValue")
-		public void tb01(@Response(schema=@Schema(" type:'b' ")) TB01 r) {}
+		public void tb01(@Response(schema=@Schema(" type:'number' ")) TB01 r) {}
 
 		public static class TB02 {
 			public String f1;
@@ -380,7 +381,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void tb01_Response_onParameter_schemaValue() throws Exception {
 		ResponseInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getResponse(200);
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'number'}", x.getSchema());
 	}
 	@Test
 	public void tb02_Response_onParameter_autoDetectBean() throws Exception {
@@ -439,8 +440,8 @@ public class ResponseAnnotationTest {
 		
 		@Response(
 			description= {"a","b"},
-			schema=@Schema(type="a"),
-			headers=@ResponseHeader(name="foo",type="a"),
+			schema=@Schema(type="string"),
+			headers=@ResponseHeader(name="foo",type="string"),
 			example=" 'a' ",
 			examples=" {foo:'a'} "
 		)
@@ -451,8 +452,8 @@ public class ResponseAnnotationTest {
 		@Response(
 			api={
 				"description:'a\nb',",
-				"schema:{type:'a'},",
-				"headers:{foo:{type:'a'}},",
+				"schema:{type:'string'},",
+				"headers:{foo:{type:'string'}},",
 				"example:'a',",
 				"examples:{foo:'a'}"
 			}
@@ -464,14 +465,14 @@ public class ResponseAnnotationTest {
 		@Response(
 			api={
 				"description:'b',",
-				"schema:{type:'b'},",
-				"headers:{bar:{type:'b'}},",
+				"schema:{type:'number'},",
+				"headers:{bar:{type:'number'}},",
 				"example:'b',",
 				"examples:{bar:'b'}"
 			},
 			description= {"a","b"},
-			schema=@Schema(type="a"),
-			headers=@ResponseHeader(name="foo",type="a"),
+			schema=@Schema(type="string"),
+			headers=@ResponseHeader(name="foo",type="string"),
 			example=" 'a' ",
 			examples=" {foo:'a'} "
 		)
@@ -489,7 +490,7 @@ public class ResponseAnnotationTest {
 		@RestMethod(name=GET,path="/value")
 		public void ua05() throws UA05 {}
 
-		@Response(headers=@ResponseHeader(name="foo", api=" {type:'b'} "))
+		@Response(headers=@ResponseHeader(name="foo", api=" {type:'number'} "))
 		public static class UA06 extends Throwable {}
 		@RestMethod(name=GET,path="/headers")
 		public void ua06() throws UA06 {}
@@ -499,8 +500,8 @@ public class ResponseAnnotationTest {
 	public void ua01_Response_onThrowable_basic() throws Exception {
 		ResponseInfo x = getSwagger(new UA()).getPaths().get("/basic").get("get").getResponse(500);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -508,8 +509,8 @@ public class ResponseAnnotationTest {
 	public void ua02_Response_onThrowable_api() throws Exception {
 		ResponseInfo x = getSwagger(new UA()).getPaths().get("/api").get("get").getResponse(500);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -517,8 +518,8 @@ public class ResponseAnnotationTest {
 	public void ua03_Response_onThrowable_mixed() throws Exception {
 		ResponseInfo x = getSwagger(new UA()).getPaths().get("/mixed").get("get").getResponse(500);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'a'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'a'}}", x.getHeaders());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
@@ -535,7 +536,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void ua06_Response_onThrowable_headers1() throws Exception {
 		ResponseInfo x = getSwagger(new UA()).getPaths().get("/headers").get("get").getResponse(500);
-		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
+		assertObjectEquals("{foo:{type:'number'}}", x.getHeaders());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -546,7 +547,7 @@ public class ResponseAnnotationTest {
 	@SuppressWarnings({"unused"})
 	public static class UB {		
 		
-		@Response(schema=@Schema(" type:'b' "))
+		@Response(schema=@Schema(" type:'number' "))
 		public static class UB01 extends Throwable {}
 		@RestMethod(name=GET,path="/schemaValue")
 		public void ub01() throws UB01 {}
@@ -555,7 +556,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void ub01_Response_onThrowable_schemaValue() throws Exception {
 		ResponseInfo x = getSwagger(new UB()).getPaths().get("/schemaValue").get("get").getResponse(500);
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObjectEquals("{type:'number'}", x.getSchema());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

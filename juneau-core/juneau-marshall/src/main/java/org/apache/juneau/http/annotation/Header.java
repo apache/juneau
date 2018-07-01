@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -22,24 +22,31 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.remoteable.*;
+import org.apache.juneau.urlencoding.*;
 
 /**
- * Identical to {@link FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form
- * posts.
+ * REST request body annotation.
  * 
  * <p>
- * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
- * URL-encoded form posts.
- * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
- * {@link RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
+ * Identifies a POJO to be used as the header of an HTTP request.
+ * 
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments of client-side REST interface proxies.
+ * 	<li>Java method arguments of server-side REST Java methods and/or their class types.
+ * </ul>
+ * 
+ * <h5 class='topic'>Server-side REST</h5>
+ * 
+ * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a HTTP
+ * request header converted to a POJO.
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 				<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, <ja>@Query</ja>(<js>"p2"</js>) String p2, <ja>@Query</ja>(<js>"p3"</js>) UUID p3) {
+ * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {
  * 		...
  * 	}
  * </p>
@@ -48,26 +55,201 @@ import org.apache.juneau.rest.exception.*;
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
- * 		<jk>int</jk> p1 = req.getQueryParameter(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
- * 		String p2 = req.getQueryParameter(String.<jk>class</jk>, <js>"p2"</js>);
- * 		UUID p3 = req.getQueryParameter(UUID.<jk>class</jk>, <js>"p3"</js>);
+ * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
+ * 		UUID etag = req.getHeader(UUID.<jk>class</jk>, "ETag");
  * 		...
  * 	}
  * </p>
  * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Query">Overview &gt; juneau-rest-server &gt; @Query</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Header">Overview &gt; juneau-rest-server &gt; @Header</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
+ * </ul>
+ * 
+ * <h5 class='topic'>Client-side REST</h5>
+ * 
+ * Annotation applied to Java method arguments of interface proxies to denote that they are serialized as an HTTP
+ * header value.
+ * 
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ * 
+ * 		<jc>// Explicit names specified for HTTP headers.</jc>
+ * 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
+ * 		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String foo,
+ * 			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo pojo);
+ * 
+ * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+ * 		<jc>// Same as @Header("*").</jc>
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
+ * 		String myProxyMethod2(<ja>@Header</ja> NameValuePairs nameValuePairs);
+ * 
+ * 		<jc>// Multiple values pulled from a Map.</jc>
+ * 		<jc>// Same as @Header("*").</jc>
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3"</js>)
+ * 		String myProxyMethod3(<ja>@Header</ja> Map&lt;String,Object&gt; map);
+ * 
+ * 		<jc>// Multiple values pulled from a bean.</jc>
+ * 		<jc>// Same as @Header("*").</jc>
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4"</js>)
+ * 		String myProxyMethod4(<ja>@Header</ja> MyBean myBean);
+ * 	}
+ * </p>
+ * 
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ * {@link RequestBean @RequestBean}:
+ * 
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ * 
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+ * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 	}
+ * 
+ * 	<jk>public interface</jk> MyRequestBean {
+ * 
+ * 		<jc>// Name explicitly specified.</jc>
+ * 		<ja>@Header</ja>(<js>"Foo"</js>)
+ * 		String getX();
+ * 
+ * 		<jc>// Name inherited from bean property.</jc>
+ * 		<jc>// Same as @Header("bar")</jc>
+ * 		<ja>@Header</ja>
+ * 		String getBar();
+ * 
+ * 		<jc>// Name inherited from bean property.</jc>
+ * 		<jc>// Same as @Header("Baz")</jc>
+ * 		<ja>@Header</ja>
+ * 		<ja>@BeanProperty</ja>(<js>"Baz"</js>)
+ * 		String getY();
+ * 
+ * 		<jc>// Multiple values pulled from NameValuePairs object.</jc>
+ * 		<jc>// Same as @Header("*")</jc>
+ * 		<ja>@Header</ja>
+ * 		NameValuePairs getNameValuePairs();
+ * 
+ * 		<jc>// Multiple values pulled from Map.</jc>
+ * 		<jc>// Same as @Header("*")</jc>
+ * 		<ja>@Header</ja>
+ * 	 	Map&lt;String,Object&gt; getMap();
+ * 
+ * 		<jc>// Multiple values pulled from bean.</jc>
+ * 		<jc>// Same as @Header("*")</jc>
+ * 		<ja>@Header</ja>
+ * 	 	MyBean getBean();
+ * 	}
+ * </p>
+ * 
+ * <p>
+ * The {@link #name()} and {@link #value()} elements are synonyms for specifying the header name.
+ * Only one should be used.
+ * <br>The following annotations are fully equivalent:
+ * <p class='bcode'>
+ * 	<ja>@Header</ja>(name=<js>"Foo"</js>)
+ * 
+ * 	<ja>@Header</ja>(<js>"Foo"</js>)
+ * </p>
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces</a>
  * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
+@Target({PARAMETER,FIELD,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-public @interface Query {
+public @interface Header {
 
+	/**
+	 * The HTTP header name.
+	 * 
+	 * <p>
+	 * A blank value (the default) indicates to reuse the bean property name when used on a request bean property.
+	 * 
+	 * <p>
+	 * The value should be either <js>"*"</js> to represent multiple name/value pairs, or a label that defines the
+	 * header name.
+	 * 
+	 * <p>
+	 * A blank value (the default) has the following behavior:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If the data type is <code>NameValuePairs</code>, <code>Map</code>, or a bean,
+	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
+	 * 
+	 * 		<h5 class='figure'>Example:</h5>
+	 * 		<p class='bcode'>
+	 * 	<jc>// When used on a remote method parameter</jc>
+	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	 * 	<jk>public interface</jk> MyProxy {
+	 * 
+	 * 		<jc>// Equivalent to @Header("*")</jc>
+	 * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+	 * 		String myProxyMethod1(<ja>@Header</ja> Map&lt;String,Object&gt; headers);
+	 * 	}
+	 * 
+	 * 	<jc>// When used on a request bean method</jc>
+	 * 	<jk>public interface</jk> MyRequestBean {
+	 * 
+	 * 		<jc>// Equivalent to @Header("*")</jc>
+	 * 		<ja>@Header</ja>
+	 * 		Map&lt;String,Object&gt; getFoo();
+	 * 	}
+	 * 		</p>
+	 * 	</li>
+	 * 	<li>
+	 * 		If used on a request bean method, uses the bean property name.
+	 * 
+	 * 		<h5 class='figure'>Example:</h5>
+	 * 		<p class='bcode'>
+	 * 	<jk>public interface</jk> MyRequestBean {
+	 * 
+	 * 		<jc>// Equivalent to @Header("Foo")</jc>
+	 * 		<ja>@Header</ja>
+	 * 		<ja>@BeanProperty</ja>(<js>"Foo"</js>)
+	 * 		String getFoo();
+	 * 	}
+	 * 		</p>
+	 * 	</li>
+	 * </ul>
+	 */
+//	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * 
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+//	String value() default "";
+
+	/**
+	 * Skips this value if it's an empty string or empty collection/array.
+	 * 
+	 * <p>
+	 * Note that <jk>null</jk> values are already ignored.
+	 */
+	boolean skipIfEmpty() default false;
+
+	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 * 
+	 * <p>
+	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
+	 * then on the client which by default is {@link UrlEncodingSerializer}.
+	 * 
+	 * <p>
+	 * This annotation is provided to allow values to be custom serialized.
+	 */
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
 	 * 
@@ -82,15 +264,7 @@ public @interface Query {
 	//=================================================================================================================
 
 	/**
-	 * URL query parameter name.
-	 * 
-	 * Required. The name of the parameter. Parameter names are case sensitive.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain-text.
-	 * </ul>
+	 * HTTP header name.
 	 */
 	String name() default "";
 
@@ -101,12 +275,12 @@ public @interface Query {
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 * 
 	 * <p>
-	 * The following are completely equivalent ways of defining the existence of a query entry:
+	 * The following are completely equivalent ways of defining a header entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@Query</jk>(name=<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<jk>@Header</jk>(name=<js>"api_key"</js>) String apiKey) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@Query</jk>(<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<jk>@Header</jk>(<js>"api_key"</js>) String apiKey) {...}
 	 * </p>
 	 */
 	String value() default "";
@@ -137,7 +311,7 @@ public @interface Query {
 	 * Determines whether the parameter is mandatory.
 	 *  
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 */
 	boolean required() default false;
 	
@@ -241,14 +415,15 @@ public @interface Query {
 	 */
 	String format() default "";
 	
+
 	/**
 	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * Sets the ability to pass empty-valued parameters. 
-	 * <br>This is valid only for either query or formData parameters and allows you to send a parameter with a name only or an empty value. 
+	 * Sets the ability to pass empty-valued heaver values.
+	 * 
 	 * <p>
-	 * The default value is <jk>false</jk>.
+	 * <b>Note:</b>  This is technically only valid for either query or formData parameters, but support is provided anyway for backwards compatability.
 	 */
 	boolean allowEmptyValue() default false;
 
@@ -262,7 +437,7 @@ public @interface Query {
 	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
 	 */
 	Items items() default @Items;	
-
+	
 	/**
 	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
@@ -284,6 +459,7 @@ public @interface Query {
 	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>). 
 	 * 	<li>
 	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>). 
+	 * 	<li>
 	 * </ul>
 	 * 
 	 * <p>
@@ -309,9 +485,9 @@ public @interface Query {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Order placeOrder(
-	 * 		<jk>@Query</jk>(name=<js>"petId"</jk>, _default=<js>"100"</js>) <jk>long</jk> petId,
-	 * 		<jk>@Query</jk>(name=<js>"additionalInfo"</jk>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
-	 * 		<jk>@Query</jk>(name=<js>"flags"</jk>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
+	 * 		<jk>@Header</jk>(name=<js>"X-PetId"</jk>, _default=<js>"100"</js>) <jk>long</jk> petId,
+	 * 		<jk>@Header</jk>(name=<js>"X-AdditionalInfo"</jk>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
+	 * 		<jk>@Header</jk>(name=<js>"X-Flags"</jk>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
 	 * 	) {...}
 	 * </p>
 	 */
@@ -325,7 +501,8 @@ public @interface Query {
 	 * <br>The value must be a valid JSON number.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -339,7 +516,8 @@ public @interface Query {
 	 * Defines whether the maximum is matched exclusively.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -355,7 +533,8 @@ public @interface Query {
 	 * <br>The value must be a valid JSON number.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -369,11 +548,12 @@ public @interface Query {
 	 * Defines whether the minimum is matched exclusively.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-	 * <br>If <jk>true</jk>, Must be accompanied with <code>minimum</code>.
+	 * <br>If <jk>true</jk>, must be accompanied with <code>minimum</code>.
 	 */
 	boolean exclusiveMinimum() default false;
 	
@@ -386,7 +566,8 @@ public @interface Query {
 	 * <br>The value <code>-1</code> is always ignored.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -402,7 +583,8 @@ public @interface Query {
 	 * <br>The value <code>-1</code> is always ignored.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -416,7 +598,8 @@ public @interface Query {
 	 * A string input is valid if it matches the specified regular expression pattern.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -430,7 +613,8 @@ public @interface Query {
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -444,7 +628,8 @@ public @interface Query {
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -458,7 +643,8 @@ public @interface Query {
 	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * <br>If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
 	 * <br>Otherwise, the collection or array is checked for duplicate items.
 	 * 
@@ -466,7 +652,7 @@ public @interface Query {
 	 * Only allowed for the following types: <js>"array"</js>.
 	 */
 	boolean uniqueItems() default false;
-
+	
 	/**
 	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
@@ -474,7 +660,8 @@ public @interface Query {
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array or comma-delimited list.
@@ -483,16 +670,16 @@ public @interface Query {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
-	 * 		<ja>@Query</ja>(
-	 * 			name=<js>"status"</js>, 
+	 * 		<ja>@Header</ja>(
+	 * 			name=<js>"X-Status"</js>, 
 	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
 	 * 		) PetStatus status
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
-	 * 		<ja>@Query</ja>(
-	 * 			name=<js>"status"</js>, 
+	 * 		<ja>@Header</ja>(
+	 * 			name=<js>"X-Status"</js>, 
 	 * 			_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>,
 	 * 		) PetStatus status
 	 * 	) {...}
@@ -508,7 +695,8 @@ public @interface Query {
 	 * <br>The value must be a valid JSON number.
 	 * 
 	 * <p>
-	 * If validation is not met, the method call will throw a {@link BadRequest}.
+	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
+	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
 	 * 
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -523,8 +711,8 @@ public @interface Query {
 	 * A serialized example of the parameter.
 	 * 
 	 * <p>
-	 * This attribute defines a JSON representation of the value that is used by {@link BasicRestInfoProvider} to construct
-	 * an example of the query entry.
+	 * This attribute defines a JSON representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
+	 * an example of the header entry.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -542,52 +730,40 @@ public @interface Query {
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 * 
 	 * <p>
-	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this field.
+	 * This is a JSON object that makes up the swagger information for this field.
 	 * 
 	 * <p>
-	 * The following are completely equivalent ways of defining the swagger description of the Query object:
+	 * The following are completely equivalent ways of defining the swagger description of the request header:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@Query</ja>(
-	 * 		name=<js>"status"</js>, 
-	 * 		description=<js>"Status values that need to be considered for filter."</js>, 
+	 * 	<ja>@Header</ja>(
+	 * 		name=<js>"api_key"</js>, 
+	 * 		description=<js>"Security API key"</js>, 
 	 * 		required=<js>"true"</js>, 
-	 * 		type=<js>"array"</js>,
-	 * 		items=<ja>@Items</ja>(
-	 * 			type=<js>"string"</js>,
-	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
-	 * 			_default=<js>"AVAILABLE"</js>
-	 * 		),
-	 * 		example=<js>"['AVAILABLE','PENDING']"</js>
+	 * 		example=<js>"foobar"</js>
 	 * 	) 
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@Query</ja>(
-	 * 		name=<js>"status"</js>, 
+	 * 	<ja>@Header</ja>(
+	 * 		name=<js>"api_key"</js>, 
 	 * 		api={
-	 * 			<js>"description: 'Status values that need to be considered for filter.',"</js>, 
+	 * 			<js>"description: 'Security API key',"</js>, 
 	 * 			<js>"required: true,"</js>, 
-	 * 			<js>"type: 'array',"</js>,
-	 * 			<js>"items: {"</js>,
-	 * 				<js>"type: 'string',"</js>,
-	 * 				<js>"enum: 'AVAILABLE,PENDING,SOLD',"</js>,
-	 * 				<js>"default: 'AVAILABLE'"</js>,
-	 * 			<js>"}"</js>,
-	 * 			<js>"example: "['AVAILABLE','PENDING']"</js>
+	 * 			<js>"example: 'foobar'"</js>
 	 * 		}
 	 * 	) 
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Free-form using variables</jc>
-	 * 	<ja>@Query</ja>(
-	 * 		name=<js>"status"</js>, 
-	 * 		api=<js>"$L{statusSwagger}"</js>
+	 * 	<jc>// Free-form with variables</jc>
+	 * 	<ja>@Header</ja>(
+	 * 		name=<js>"api_key"</js>, 
+	 * 		api=<js>"$L{apiKeySwagger}"</js>
 	 * 	) 
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<mc>// Contents of MyResource.properties</mc>
-	 * 	<mk>statusSwagger</mk> = <mv>{ description: "Status values that need to be considered for filter.", required: true, type: "array", items: {type: "string", enum: "AVAILABLE,PENDING,SOLD", default: "AVAILABLE"}, example: "['AVAILABLE','PENDING']" } }</mv>
+	 * 	<mk>apiKeySwagger</mk> = <mv>{ description: "Security API key", required: true, example: "foobar" }</mv>
 	 * </p>
 	 * 
 	 * <p>
@@ -602,17 +778,17 @@ public @interface Query {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		Automatic validation is NOT performed on input based on attributes in this value.
-	 * 	<li>
 	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
+	 * 	<li>
+	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
-	 * 	<ja>@Query</ja>(api=<js>"{description: 'ID of order to fetch'}"</js>)
+	 * 	<ja>@Header</ja>(api=<js>"{required: true}"</js>)
 	 * 		</p>
 	 * 		<p class='bcode w800'>
-	 * 	<ja>@Query</ja>(api=<js>"description: 'ID of order to fetch''"</js>)
+	 * 	<ja>@Header</ja>(api=<js>"required: true"</js>)
 	 * 		</p>
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.

@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -73,16 +74,16 @@ public class ResponsesAnnotationTest {
 		public void a03(A03 r) {}
 
 		@Responses({
-			@Response(code=100, schema=@Schema(type="a")),
-			@Response(code=101, schema=@Schema(" type:'b' "))
+			@Response(code=100, schema=@Schema(type="number")),
+			@Response(code=101, schema=@Schema(" type:'integer' "))
 		})
 		public static class A04 {}
 		@RestMethod(name=GET,path="/schema")
 		public void a04(A04 r) {}
 
 		@Responses({
-			@Response(code=100, headers=@ResponseHeader(name="foo", type="a")),
-			@Response(code=101, headers=@ResponseHeader(name="foo", api=" type:'b' "))
+			@Response(code=100, headers=@ResponseHeader(name="foo", type="number")),
+			@Response(code=101, headers=@ResponseHeader(name="foo", api=" type:'integer' "))
 		})
 		public static class A05 {}
 		@RestMethod(name=GET,path="/headers")
@@ -126,14 +127,14 @@ public class ResponsesAnnotationTest {
 	@Test
 	public void a04_Responses_onPojo_schema() throws Exception {
 		Operation x = getSwagger(new A()).getPaths().get("/schema").get("get");
-		assertObjectEquals("{type:'a'}", x.getResponse(100).getSchema());
-		assertObjectEquals("{type:'b'}", x.getResponse(101).getSchema());
+		assertObjectEquals("{type:'number'}", x.getResponse(100).getSchema());
+		assertObjectEquals("{type:'integer'}", x.getResponse(101).getSchema());
 	}
 	@Test
 	public void a05_Responses_onPojo_headers() throws Exception {
 		Operation x = getSwagger(new A()).getPaths().get("/headers").get("get");
-		assertObjectEquals("{foo:{type:'a'}}", x.getResponse(100).getHeaders());
-		assertObjectEquals("{foo:{type:'b'}}", x.getResponse(101).getHeaders());
+		assertObjectEquals("{foo:{type:'number'}}", x.getResponse(100).getHeaders());
+		assertObjectEquals("{foo:{type:'integer'}}", x.getResponse(101).getHeaders());
 	}
 	@Test
 	public void a06_Responses_onPojo_example() throws Exception {
@@ -186,8 +187,8 @@ public class ResponsesAnnotationTest {
 		@RestMethod(name=GET,path="/schema")
 		public void b04(
 			@Responses({
-				@Response(code=100, schema=@Schema(type="a")),
-				@Response(code=101, schema=@Schema(" type:'b' "))
+				@Response(code=100, schema=@Schema(type="number")),
+				@Response(code=101, schema=@Schema(" type:'integer' "))
 			})
 			B04 r) {}
 
@@ -195,8 +196,8 @@ public class ResponsesAnnotationTest {
 		@RestMethod(name=GET,path="/headers")
 		public void b05(
 			@Responses({
-				@Response(code=100, headers=@ResponseHeader(name="foo",type="a")),
-				@Response(code=101, headers=@ResponseHeader(name="foo", api=" type:'b' "))
+				@Response(code=100, headers=@ResponseHeader(name="foo",type="number")),
+				@Response(code=101, headers=@ResponseHeader(name="foo", api=" type:'integer' "))
 			})
 			B05 r) {}
 
@@ -220,43 +221,43 @@ public class ResponsesAnnotationTest {
 	}
 	
 	@Test
-	public void b01_Responbs_onParameter_code() throws Exception {
+	public void b01_Response_onParameter_code() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/code").get("get");
 		assertEquals("Continue", x.getResponse(100).getDescription());
 		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
 	}
 	@Test
-	public void b02_Responbs_onParameter_value() throws Exception {
+	public void b02_Response_onParameter_value() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/value").get("get");
 		assertEquals("Continue", x.getResponse(100).getDescription());
 		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
 	}
 	@Test
-	public void b03_Responbs_onParameter_description() throws Exception {
+	public void b03_Response_onParameter_description() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/description").get("get");
 		assertEquals("a", x.getResponse(100).getDescription());
 		assertEquals("a\nb", x.getResponse(101).getDescription());
 	}
 	@Test
-	public void b04_Responbs_onParameter_schema() throws Exception {
+	public void b04_Response_onParameter_schema() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/schema").get("get");
-		assertObjectEquals("{type:'a'}", x.getResponse(100).getSchema());
-		assertObjectEquals("{type:'b'}", x.getResponse(101).getSchema());
+		assertObjectEquals("{type:'number'}", x.getResponse(100).getSchema());
+		assertObjectEquals("{type:'integer'}", x.getResponse(101).getSchema());
 	}
 	@Test
-	public void b05_Responbs_onParameter_headers() throws Exception {
+	public void b05_Response_onParameter_headers() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/headers").get("get");
-		assertObjectEquals("{foo:{type:'a'}}", x.getResponse(100).getHeaders());
-		assertObjectEquals("{foo:{type:'b'}}", x.getResponse(101).getHeaders());
+		assertObjectEquals("{foo:{type:'number'}}", x.getResponse(100).getHeaders());
+		assertObjectEquals("{foo:{type:'integer'}}", x.getResponse(101).getHeaders());
 	}
 	@Test
-	public void b06_Responbs_onParameter_example() throws Exception {
+	public void b06_Response_onParameter_example() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/example").get("get");
 		assertObjectEquals("'a'", x.getResponse(100).getExample());
 		assertObjectEquals("{f1:'b'}", x.getResponse(101).getExample());
 	}
 	@Test
-	public void b07_Responbs_onParameter_examples() throws Exception {
+	public void b07_Response_onParameter_examples() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/examples").get("get");
 		assertObjectEquals("{foo:'a'}", x.getResponse(100).getExamples());
 		assertObjectEquals("{foo:'b'}", x.getResponse(101).getExamples());

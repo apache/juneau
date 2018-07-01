@@ -16,8 +16,8 @@ import static org.apache.juneau.rest.exception.PreconditionFailed.*;
 
 import java.text.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Exception representing an HTTP 412 (Precondition Failed).

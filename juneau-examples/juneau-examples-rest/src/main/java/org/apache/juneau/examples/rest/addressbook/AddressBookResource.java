@@ -25,6 +25,7 @@ import org.apache.juneau.dto.cognos.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.examples.rest.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

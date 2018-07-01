@@ -23,7 +23,7 @@ import org.apache.juneau.json.*;
 /**
  * General exception thrown whenever an error occurs during serialization.
  */
-public final class SerializeException extends FormattedException {
+public class SerializeException extends FormattedException {
 
 	private static final long serialVersionUID = 1L;
 

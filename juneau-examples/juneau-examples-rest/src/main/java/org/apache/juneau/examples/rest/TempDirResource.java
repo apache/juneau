@@ -23,6 +23,7 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.io.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

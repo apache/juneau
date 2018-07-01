@@ -10,53 +10,28 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remoteable;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.urlencoding.*;
-
 /**
- * Identical to {@link Query @Query} except skips values if they're null/blank.
+ * Used to associate multiple {@link Response @Response} annotations to the same parameter or class.
  * 
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces</a>
- * </ul>
+ * <p>
+ * Since Juneau currently prereq's Java 1.7, we cannot take advantage of annotation duplication support in Java 8.
+ * <br>This annotation overcomes that limitation.
  */
 @Documented
-@Target({PARAMETER,FIELD,METHOD})
+@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
-public @interface QueryIfNE {
+public @interface Responses {
 
 	/**
-	 * The query parameter name.
-	 * 
-	 * @see Query#name()
+	 * Specifies one or more {@link Response @Response} annotations to apply to the same parameter or class.
 	 */
-	String name() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 * 
-	 * @see Query#value()
-	 */
-	String value() default "";
-
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 * 
-	 * <p>
-	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
-	 * then on the client which by default is {@link UrlEncodingSerializer}.
-	 * 
-	 * <p>
-	 * This annotation is provided to allow values to be custom serialized.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+	Response[] value() default {};
 }

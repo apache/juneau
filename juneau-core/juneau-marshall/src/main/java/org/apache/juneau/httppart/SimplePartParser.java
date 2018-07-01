@@ -14,7 +14,6 @@ package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 
 /**
  * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.
@@ -55,7 +54,7 @@ public class SimplePartParser implements HttpPartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	@Override
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException {
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) {
 		return ClassUtils.fromString(type.getInnerClass(), in);
 	}
 }

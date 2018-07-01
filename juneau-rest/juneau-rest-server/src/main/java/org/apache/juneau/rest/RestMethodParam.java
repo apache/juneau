@@ -25,7 +25,6 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -119,7 +118,7 @@ public abstract class RestMethodParam {
 	final String name;
 	final Type type;
 	final Class<?> c;
-	final ObjectMap metaData;
+	final ObjectMap api;
 
 	/**
 	 * Constructor.
@@ -130,15 +129,15 @@ public abstract class RestMethodParam {
 	 * 	The parameter name.
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
-	 * @param metaData Swagger metadata.
+	 * @param api Swagger metadata.
 	 */
-	protected RestMethodParam(RestParamType paramType, Method method, String name, Type type, ObjectMap metaData) {
+	protected RestMethodParam(RestParamType paramType, Method method, String name, Type type, ObjectMap api) {
 		this.paramType = paramType;
 		this.method = method;
 		this.name = name;
 		this.type = type;
 		this.c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
-		this.metaData = metaData.unmodifiable();
+		this.api = api.unmodifiable();
 	}
 
 	/**
@@ -193,8 +192,8 @@ public abstract class RestMethodParam {
 	 * 
 	 * @return A map of parameter metadata, never <jk>null</jk>.
 	 */
-	protected ObjectMap getMetaData() {
-		return metaData;
+	protected ObjectMap getApi() {
+		return api;
 	};
 
 	/**
@@ -243,11 +242,4 @@ public abstract class RestMethodParam {
 	public Class<?> getTypeClass() {
 		return c;
 	}
-	
-	/**
-	 * Performs validation on the parameter.
-	 * 
-	 * @throws InternalServerError
-	 */
-	public void validate() throws InternalServerError {}
 }

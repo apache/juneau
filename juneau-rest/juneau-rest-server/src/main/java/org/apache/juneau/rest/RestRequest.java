@@ -33,6 +33,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -554,7 +555,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The URL-encoded form data from the request.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws InternalServerError If query parameters could not be parsed.
-	 * @see org.apache.juneau.rest.annotation.FormData
+	 * @see org.apache.juneau.http.annotation.FormData
 	 */
 	public RequestFormData getFormData() throws InternalServerError {
 		try {

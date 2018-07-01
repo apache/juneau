@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -18,7 +18,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
 
 /**
  * Swagger schema annotation.
@@ -327,7 +326,7 @@ public @interface Schema {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String maxProperties() default "";
+	int maxProperties() default -1;
 	
 	
 	/**
@@ -343,7 +342,7 @@ public @interface Schema {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String minProperties() default "";
+	int minProperties() default -1;
 	
 	/**
 	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
@@ -567,7 +566,7 @@ public @interface Schema {
 	 * TODO
 	 * 
 	 * <p>
-	 * This attribute defines a JSON representation of the body value that is used by {@link BasicRestInfoProvider} to construct
+	 * This attribute defines a JSON representation of the body value that is used by <code>BasicRestInfoProvider</code> to construct
 	 * media-type-based examples of the body of the request.
 	 * 
 	 * <h5 class='section'>Notes:</h5>

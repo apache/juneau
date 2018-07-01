@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -84,20 +83,20 @@ public @interface ResponseHeader {
 	 * 		The default value is <js>"200"</js>.
 	 * </ul>
 	 */
-	int code() default 0;
+	int[] code() default {};
 	
-	/**
-	 * The HTTP status (or statuses) of the response.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a comma-delimited list of HTTP status codes that this header applies to.
-	 * 	<li>
-	 * 		The default value is <js>"200"</js>.
-	 * </ul>
-	 */
-	int[] codes() default {};
+//	/**
+//	 * The HTTP status (or statuses) of the response.
+//	 * 
+//	 * <h5 class='section'>Notes:</h5>
+//	 * <ul class='spaced-list'>
+//	 * 	<li>
+//	 * 		The format is a comma-delimited list of HTTP status codes that this header applies to.
+//	 * 	<li>
+//	 * 		The default value is <js>"200"</js>.
+//	 * </ul>
+//	 */
+//	int[] codes() default {};
 
 	/**
 	 * The HTTP header name.
@@ -426,7 +425,7 @@ public @interface ResponseHeader {
 	 * TODO
 	 * 
 	 * <p>
-	 * This attribute defines a JSON representation of the body value that is used by {@link BasicRestInfoProvider} to construct
+	 * This attribute defines a JSON representation of the body value that is used by <code>BasicRestInfoProvider</code> to construct
 	 * media-type-based examples of the header value.
 	 * 
 	 * <h5 class='section'>Notes:</h5>

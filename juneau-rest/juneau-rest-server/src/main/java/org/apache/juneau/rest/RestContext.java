@@ -15,11 +15,11 @@ package org.apache.juneau.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
@@ -37,6 +37,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.httppart.uon.*;
@@ -4272,91 +4273,75 @@ public final class RestContext extends BeanContext {
 	protected RestMethodParam[] findParams(Method method, UrlPathPattern pathPattern, boolean isPreOrPost) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
-		Annotation[][] pa = method.getParameterAnnotations();
 		RestMethodParam[] rp = new RestMethodParam[pt.length];
 		PropertyStore ps = getPropertyStore();
 
 		for (int i = 0; i < pt.length; i++) {
 
 			Type t = pt[i];
+			HttpPartSchema s = null;
 			if (t instanceof Class) {
 				Class<?> c = (Class<?>)t;
 				rp[i] = paramResolvers.get(c);
 				if (rp[i] == null)
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
-				for (Annotation a : c.getAnnotations()) {
-					if (a instanceof Header)
-						rp[i] = new RestParamDefaults.HeaderObject(method, (Header)a, t, ps, rp[i]);
-					else if (a instanceof FormData)
-						rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps, rp[i]);
-					else if (a instanceof Query)
-						rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps, rp[i]);
-					else if (a instanceof HasFormData)
-						rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
-					else if (a instanceof HasQuery)
-						rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
-					else if (a instanceof Body)
-						rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t, null);
-					else if (a instanceof Path)
-						rp[i] = new RestParamDefaults.PathObject(method, (Path)a, t, ps, rp[i]);					
-					else if (a instanceof PathRemainder)
-						rp[i] = new RestParamDefaults.PathRemainderObject(method, t);					
-					else if (a instanceof Response)
-						rp[i] = new RestParamDefaults.ResponseObject(method, (Response)a, t, ps, rp[i]);					
-					else if (a instanceof ResponseHeader)
-						rp[i] = new RestParamDefaults.ResponseHeaderObject(method, (ResponseHeader)a, t, ps, rp[i]);					
-					else if (a instanceof Responses) 
-						for (Response r : ((Responses)a).value())
-							rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
-					else if (a instanceof ResponseStatuses) {
-						for (ResponseStatus rs : ((ResponseStatuses)a).value())
-							rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);			
-						if (rp[i] == null)
-							rp[i] = new RestParamDefaults.ResponseStatusObject(method, null, t, ps, rp[i]);
-					}
-				}
+			}
+				
+			if (hasAnnotation(Header.class, method, i)) {
+				s = HttpPartSchema.create(Header.class, method, i);
+				rp[i] = new RestParamDefaults.HeaderObject(method, s, t, ps);
+			} else if (hasAnnotation(Query.class, method, i)) {
+				s = HttpPartSchema.create(Query.class, method, i);
+				rp[i] = new RestParamDefaults.QueryObject(method, s, t, ps);
+			} else if (hasAnnotation(FormData.class, method, i)) {
+				s = HttpPartSchema.create(FormData.class, method, i);
+				rp[i] = new RestParamDefaults.FormDataObject(method, s, t, ps);
+			} else if (hasAnnotation(Path.class, method, i)) {
+				s = HttpPartSchema.create(Path.class, method, i);
+				rp[i] = new RestParamDefaults.PathObject(method, s, t, ps);
+			} else if (hasAnnotation(Body.class, method, i)) {
+				s = HttpPartSchema.create(Body.class, method, i);
+				rp[i] = new RestParamDefaults.BodyObject(method, s, t, ps);
+
+			} else if (hasAnnotation(Response.class, method, i)) {
+				s = HttpPartSchema.create(Response.class, method, i);
+				rp[i] = new RestParamDefaults.ResponseObject(method, s, t);
+			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
+				s = HttpPartSchema.create(ResponseHeader.class, method, i);
+				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, s, t, ps);
+			} else if (hasAnnotation(ResponseStatus.class, method, i)) {
+				s = HttpPartSchema.create(ResponseStatus.class, method, i);
+				rp[i] = new RestParamDefaults.ResponseStatusObject(method, s, t);
+			
+			} else if (hasAnnotation(Responses.class, method, i)) {
+				Responses a = getAnnotation(Responses.class, method, i);
+				HttpPartSchema[] ss = new HttpPartSchema[a.value().length];
+				for (int j = 0; j < ss.length; j++)
+					ss[j] = HttpPartSchema.create(a.value()[j]);
+				rp[i] = new RestParamDefaults.ResponseObject(method, ss, t);
+			} else if (hasAnnotation(ResponseStatuses.class, method, i)) {
+				ResponseStatuses a = getAnnotation(ResponseStatuses.class, method, i);
+				HttpPartSchema[] ss = new HttpPartSchema[a.value().length];
+				for (int j = 0; j < ss.length; j++)
+					ss[j] = HttpPartSchema.create(a.value()[j]);
+				rp[i] = new RestParamDefaults.ResponseStatusObject(method, ss, t);
+
+			} else if (hasAnnotation(HasFormData.class, method, i)) {
+				s = HttpPartSchema.create(HasFormData.class, method, i);
+				rp[i] = new RestParamDefaults.HasFormDataObject(method, s, t);
+			} else if (hasAnnotation(HasQuery.class, method, i)) {
+				s = HttpPartSchema.create(HasQuery.class, method, i);
+				rp[i] = new RestParamDefaults.HasQueryObject(method, s, t);
+				
+			} else if (hasAnnotation(PathRemainder.class, method, i)) {
+				rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
+				
+			} else if (hasAnnotation(org.apache.juneau.rest.annotation.Method.class, method, i)) {
+				rp[i] = new RestParamDefaults.MethodObject(method, t);
 			}
 
-			for (Annotation a : pa[i]) {
-				if (a instanceof Header)
-					rp[i] = new RestParamDefaults.HeaderObject(method, (Header)a, t, ps, rp[i]);
-				else if (a instanceof FormData)
-					rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps, rp[i]);
-				else if (a instanceof Query)
-					rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps, rp[i]);
-				else if (a instanceof HasFormData)
-					rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
-				else if (a instanceof HasQuery)
-					rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
-				else if (a instanceof Body)
-					rp[i] = new RestParamDefaults.BodyObject(method, (Body)a, t, rp[i]);
-				else if (a instanceof org.apache.juneau.rest.annotation.Method)
-					rp[i] = new RestParamDefaults.MethodObject(method, t);
-				else if (a instanceof Path)
-					rp[i] = new RestParamDefaults.PathObject(method, (Path)a, t, ps, rp[i]);
-				else if (a instanceof PathRemainder)
-					rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
-				else if (a instanceof Response)
-					rp[i] = new RestParamDefaults.ResponseObject(method, (Response)a, t, ps, rp[i]);
-				else if (a instanceof ResponseHeader)
-					rp[i] = new RestParamDefaults.ResponseHeaderObject(method, (ResponseHeader)a, t, ps, rp[i]);
-				else if (a instanceof Responses) 
-					for (Response r : ((Responses)a).value())
-						rp[i] = new RestParamDefaults.ResponseObject(method, r, t, ps, rp[i]);			
-				else if (a instanceof ResponseStatuses) {
-					for (ResponseStatus rs : ((ResponseStatuses)a).value())
-						rp[i] = new RestParamDefaults.ResponseStatusObject(method, rs, t, ps, rp[i]);	
-					if (rp[i] == null)
-						rp[i] = new RestParamDefaults.ResponseStatusObject(method, null, t, ps, rp[i]);
-				}
-			}
-
-			if (rp[i] == null) {
-				if (! isPreOrPost)
-					throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", method, i);
-			} else {
-				rp[i].validate();
-			}
+			if (rp[i] == null && ! isPreOrPost)
+				throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", method, i);
 		}
 
 		return rp;

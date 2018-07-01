@@ -101,7 +101,7 @@ public class OapiPartParser extends UonPartParser {
 	}
 
 	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException {
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
 		schema = ObjectUtils.firstNonNull(schema, this.schema, HttpPartSchema.DEFAULT);
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
@@ -111,7 +111,7 @@ public class OapiPartParser extends UonPartParser {
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException {
+	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationParseException, ParseException {
 		schema.validateInput(in);
 		if (in == null) {
 			if (schema.getDefault() == null)
@@ -241,7 +241,11 @@ public class OapiPartParser extends UonPartParser {
 		return super.parse(partType, schema, in, type);
 	}
 	
-	private <T> T toType(Object in, ClassMeta<T> type) {
-		return createBeanSession().convertToType(in, type);
+	private <T> T toType(Object in, ClassMeta<T> type) throws ParseException {
+		try {
+			return createBeanSession().convertToType(in, type);
+		} catch (InvalidDataConversionException e) {
+			throw new ParseException(e.getMessage());
+		}
 	}
 }

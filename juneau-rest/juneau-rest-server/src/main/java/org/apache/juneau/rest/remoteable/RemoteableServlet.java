@@ -26,11 +26,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Header;
 import org.apache.juneau.rest.exception.*;
 
 /**

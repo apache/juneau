@@ -28,15 +28,16 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Contact;
+import org.apache.juneau.http.annotation.License;
+import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Contact;
-import org.apache.juneau.rest.annotation.License;
-import org.apache.juneau.rest.annotation.Tag;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -409,7 +410,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if (in != BODY)
 					param.append("name", mp.name);
 				
-				ObjectMap pi = resolve(vr, mp.getMetaData(), "ParameterInfo on class {0} method {1}", c, m);
+				ObjectMap pi = resolve(vr, mp.getApi(), "ParameterInfo on class {0} method {1}", c, m);
 
 				// Common to all
 				param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
@@ -460,15 +461,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						
 			// Gather responses from @Response-annotated exceptions.
 			for (RestMethodThrown rt : context.getRestMethodThrowns(m)) {
-				int code = rt.getCode();
-				if (code != 0) {
-					ObjectMap md = resolve(vr, rt.getMetaData(), "RestMethodThrown on class {0} method {1}", c, m);
-					ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
-					om.appendSkipEmpty("description", resolve(vr, md.getString("description")));
-					om.appendSkipEmpty("x-example", parseAnything(vr, md.getString("example"), "RestMethodThrown/example on class {0} method {1}", c, m));
-					om.appendSkipEmpty("examples", parseMap(vr, md.get("examples"), "RestMethodThrown/examples on class {0} method {1}", c, m));
-					om.appendSkipEmpty("schema", parseMap(vr, md.get("schema"), "RestMethodThrown/schema on class {0} method {1}", c, m));
-					om.appendSkipEmpty("headers", parseMap(vr, md.get("headers"), "RestMethodThrown/headers on class {0} method {1}", c, m));
+				ObjectMap md = resolve(vr, rt.getApi(), "RestMethodThrown on class {0} method {1}", c, m);
+				for (String code : md.keySet()) {
+					ObjectMap response = md.getObjectMap(code);
+					ObjectMap om = responses.getObjectMap(code, true);
+					om.appendSkipEmpty("description", resolve(vr, response.getString("description")));
+					om.appendSkipEmpty("x-example", parseAnything(vr, response.getString("example"), "RestMethodThrown/example on class {0} method {1}", c, m));
+					om.appendSkipEmpty("examples", parseMap(vr, response.get("examples"), "RestMethodThrown/examples on class {0} method {1}", c, m));
+					om.appendSkipEmpty("schema", parseMap(vr, response.get("schema"), "RestMethodThrown/schema on class {0} method {1}", c, m));
+					om.appendSkipEmpty("headers", parseMap(vr, response.get("headers"), "RestMethodThrown/headers on class {0} method {1}", c, m));
 				}
 			}
 			
@@ -478,7 +479,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			ObjectMap rom = responses.getObjectMap(rStatus, true);
 
 			if (r.getType() != void.class) {
-				ObjectMap rmd = resolve(vr, r.getMetaData(), "RestMethodReturn on class {0} method {1}", c, m);
+				ObjectMap rmd = resolve(vr, r.getApi(), "RestMethodReturn on class {0} method {1}", c, m);
 				rom.appendSkipEmpty("description", resolve(vr, rmd.getString("description")));
 				rom.appendSkipEmpty("x-example", parseAnything(vr, rmd.getString("example"), "RestMethodReturn/example on class {0} method {1}", c, m));
 				rom.appendSkipEmpty("examples", parseMap(vr, rmd.get("examples"), "RestMethodReturn/examples on class {0} method {1}", c, m));
@@ -494,7 +495,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				RestParamType in = mp.getParamType();
 				
 				if (in == RESPONSE_HEADER) {
-					ObjectMap pi = resolve(vr, mp.getMetaData(), "@ResponseHeader on class {0} method {1}", c, m);
+					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseHeader on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						String name = mp.getName();
 						ObjectMap pi2 = pi.getObjectMap(code, true);
@@ -523,7 +524,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					}
 				
 				} else if (in == RESPONSE) {
-					ObjectMap pi = resolve(vr, mp.getMetaData(), "@Response on class {0} method {1}", c, m);
+					ObjectMap pi = resolve(vr, mp.getApi(), "@Response on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
 						
@@ -546,7 +547,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					}
 					
 				} else if (in == RESPONSE_STATUS) {
-					ObjectMap pi = resolve(vr, mp.getMetaData(), "@ResponseStatus on class {0} method {1}", c, m);
+					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseStatus on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
 					

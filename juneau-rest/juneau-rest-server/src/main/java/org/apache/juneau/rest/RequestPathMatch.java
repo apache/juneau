@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * Contains information about the matched path on the HTTP request.
@@ -79,9 +80,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 
 	 * @param name The path variable name.
 	 * @return The parameter value.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public String getString(String name) throws ParseException {
+	public String getString(String name) throws BadRequest, InternalServerError {
 		return getInner(parser, null, name, null, beanSession.string());
 	}
 
@@ -90,9 +92,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 
 	 * @param name The path variable name.
 	 * @return The parameter value.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public int getInt(String name) throws ParseException {
+	public int getInt(String name) throws BadRequest, InternalServerError {
 		return getInner(parser, null, name, null, getClassMeta(int.class));
 	}
 
@@ -101,9 +104,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 
 	 * @param name The path variable name.
 	 * @return The parameter value.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public boolean getBoolean(String name) throws ParseException {
+	public boolean getBoolean(String name) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, getClassMeta(boolean.class));
 	}
 
@@ -137,9 +141,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @param type The class type to convert the attribute value to.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, Class<T> type) throws ParseException {
+	public <T> T get(String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, this.<T>getClassMeta(type));
 	}
 
@@ -158,9 +163,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @param type The class type to convert the attribute value to.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, this.<T>getClassMeta(type));
 	}
 
@@ -211,9 +217,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, Type type, Type...args) throws ParseException {
+	public <T> T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
 
@@ -238,20 +245,29 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
 	}
 
 	/* Workhorse method */
-	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
-		T t = parse(parser, schema, get(name), cm);
-		return (t == null ? def : t);
+	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		try {
+			T t = parse(parser, schema, get(name), cm);
+			return (t == null ? def : t);
+		} catch (SchemaValidationParseException e) {
+			throw new BadRequest(e, "Validation failed on path parameter ''{0}''. ", name);
+		} catch (ParseException e) {
+			throw new BadRequest(e, "Could not parse path parameter ''{0}''.", name) ;
+		} catch (Exception e) {
+			throw new InternalServerError(e, "Could not parse path parameter ''{0}''.", name) ;
+		}
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws ParseException {
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationParseException, ParseException {
 		if (parser == null)
 			parser = this.parser;
 		return parser.parse(HttpPartType.PATH, schema, val, cm);

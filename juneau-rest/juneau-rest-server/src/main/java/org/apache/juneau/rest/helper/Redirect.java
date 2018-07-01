@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.net.*;
 import java.text.*;
 
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
  * REST methods can return this object as a shortcut for performing <code>HTTP 302</code> redirects.

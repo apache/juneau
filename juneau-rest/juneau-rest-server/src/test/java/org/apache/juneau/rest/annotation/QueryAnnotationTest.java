@@ -20,6 +20,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Items;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
@@ -51,12 +53,12 @@ public class QueryAnnotationTest {
 	@RestResource
 	public static class A {
 		@RestMethod(name=GET)
-		public String get(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
+		public String get(RestRequest req, @Query(name="p1",allowEmptyValue=true) String p1, @Query(name="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
 		@RestMethod(name=POST)
-		public String post(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
+		public String post(RestRequest req, @Query(name="p1",allowEmptyValue=true) String p1, @Query(name="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}

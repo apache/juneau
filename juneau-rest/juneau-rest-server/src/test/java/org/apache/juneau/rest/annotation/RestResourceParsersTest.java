@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;

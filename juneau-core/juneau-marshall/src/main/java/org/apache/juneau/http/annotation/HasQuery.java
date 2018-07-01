@@ -10,14 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-
-import org.apache.juneau.rest.*;
 
 /**
  * Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
@@ -27,7 +25,7 @@ import org.apache.juneau.rest.*;
  * Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
  * of URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
- * {@link RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
+ * <code>RestRequest.getBody()</code> method for <code>application/x-www-form-urlencoded POST</code> calls.
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

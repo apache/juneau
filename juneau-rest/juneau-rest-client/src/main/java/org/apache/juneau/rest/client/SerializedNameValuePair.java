@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.oapi.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -62,6 +63,10 @@ public final class SerializedNameValuePair implements NameValuePair {
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return serializer.serialize(HttpPartType.FORMDATA, schema, value);
+		try {
+			return serializer.serialize(HttpPartType.FORMDATA, schema, value);
+		} catch (SerializeException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -21,12 +21,13 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.exception.*;
 
 /**
  * Represents the parsed form-data parameters in an HTTP request.
@@ -44,7 +45,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='jm'>{@link RestRequest#getBody()}
  * 	<li class='jm'>{@link RestRequest#getReader()}
  * 	<li class='jm'>{@link RestRequest#getInputStream()}
- * 	<li class='ja'>{@link Header}
+ * 	<li class='ja'>{@link FormData}
  * </ul>
  * 
  * <h5 class='section'>See Also:</h5>
@@ -244,9 +245,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param type The class type to convert the parameter value to.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, Class<T> type) throws ParseException {
+	public <T> T get(String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, getClassMeta(type));
 	}
 
@@ -265,9 +267,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param type The class type to convert the parameter value to.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, getClassMeta(type));
 	}
 
@@ -279,9 +282,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param type The class type to convert the parameter value to.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, T def, Class<T> type) throws ParseException {
+	public <T> T get(String name, T def, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, def, getClassMeta(type));
 	}
 
@@ -301,9 +305,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param type The class type to convert the parameter value to.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, def, getClassMeta(type));
 	}
 
@@ -317,9 +322,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param name The parameter name.
 	 * @param type The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T getAll(String name, Class<T> type) throws ParseException {
+	public <T> T getAll(String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getAllInner(null, null, name, null, getClassMeta(type));
 	}
 
@@ -340,9 +346,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param name The parameter name.
 	 * @param type The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T getAll(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws ParseException {
+	public <T> T getAll(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getAllInner(parser, schema, name, null, getClassMeta(type));
 	}
 
@@ -389,9 +396,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, Type type, Type...args) throws ParseException {
+	public <T> T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
 
@@ -415,9 +423,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
 	}
 
@@ -435,9 +444,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(String name, T def, Type type, Type...args) throws ParseException {
+	public <T> T get(String name, T def, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, def, this.<T>getClassMeta(type, args));
 	}
 
@@ -463,9 +473,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Type type, Type...args) throws ParseException {
+	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, def, this.<T>getClassMeta(type, args));
 	}
 
@@ -485,9 +496,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T getAll(String name, Type type, Type...args) throws ParseException {
+	public <T> T getAll(String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getAllInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
 	
@@ -511,48 +523,58 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T getAll(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws ParseException {
+	public <T> T getAll(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getAllInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
 	}
 	
 	/* Workhorse method */
-	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
-		T t = parse(parser, schema, getString(name), cm);
-		return (t == null ? def : t);
+	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		try {
+			T t = parse(parser, schema, getString(name), cm);
+			return (t == null ? def : t);
+		} catch (SchemaValidationParseException e) {
+			throw new BadRequest(e, "Validation failed on form-data parameter ''{0}''. ", name);
+		} catch (ParseException e) {
+			throw new BadRequest(e, "Could not parse form-data parameter ''{0}''.", name) ;
+		} catch (Exception e) {
+			throw new InternalServerError(e, "Could not parse form-data parameter ''{0}''.", name) ;
+		}
 	}
 
 	/* Workhorse method */
 	@SuppressWarnings("rawtypes")
-	<T> T getAllInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws ParseException {
+	<T> T getAllInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		String[] p = get(name);
 		if (p == null) 
 			return def;
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;
-		if (cm.isArray()) {
-			List c = new ArrayList();
-			for (int i = 0; i < p.length; i++)
-				c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
-			return (T)toArray(c, cm.getElementType().getInnerClass());
-		} else if (cm.isCollection()) {
-			try {
+		try {
+			if (cm.isArray()) {
+				List c = new ArrayList();
+				for (int i = 0; i < p.length; i++)
+					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
+				return (T)toArray(c, cm.getElementType().getInnerClass());
+			} else if (cm.isCollection()) {
 				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
 				for (int i = 0; i < p.length; i++)
 					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
 				return (T)c;
-			} catch (ParseException e) {
-				throw e;
-			} catch (Exception e) {
-				// Typically an instantiation exception.
-				throw new ParseException(e);
 			}
+		} catch (SchemaValidationParseException e) {
+			throw new BadRequest(e, "Validation failed on form-data parameter ''{0}''. ", name);
+		} catch (ParseException e) {
+			throw new BadRequest(e, "Could not parse form-data parameter ''{0}''.", name) ;
+		} catch (Exception e) {
+			throw new InternalServerError(e, "Could not parse form-data parameter ''{0}''.", name) ;
 		}
-		throw new ParseException("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
+		throw new InternalServerError("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
 	}
 
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws ParseException {
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationParseException, ParseException {
 		if (parser == null)
 			parser = this.parser;
 		return parser.parse(HttpPartType.FORMDATA, schema, val, c);

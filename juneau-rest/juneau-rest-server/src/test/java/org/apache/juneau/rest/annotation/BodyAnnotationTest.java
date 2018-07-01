@@ -20,6 +20,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;

@@ -21,6 +21,7 @@ import java.net.*;
 
 import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;

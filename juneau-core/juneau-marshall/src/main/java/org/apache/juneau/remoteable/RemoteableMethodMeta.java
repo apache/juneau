@@ -19,6 +19,8 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Contains the meta-data about a Java method on a remoteable interface.
  * 
@@ -106,21 +108,12 @@ public class RemoteableMethodMeta {
 					} else if (ca == Query.class) {
 						Query q = (Query)a;
 						annotated = queryArgs.add(new RemoteMethodArg(q.name(), q.value(), index, q.skipIfEmpty(), q.serializer()));
-					} else if (ca == QueryIfNE.class) {
-						QueryIfNE q = (QueryIfNE)a;
-						annotated = queryArgs.add(new RemoteMethodArg(q.name(), q.value(), index, true, q.serializer()));
 					} else if (ca == FormData.class) {
 						FormData f = (FormData)a;
 						annotated = formDataArgs.add(new RemoteMethodArg(f.name(), f.value(), index, f.skipIfEmpty(), f.serializer()));
-					} else if (ca == FormDataIfNE.class) {
-						FormDataIfNE f = (FormDataIfNE)a;
-						annotated = formDataArgs.add(new RemoteMethodArg(f.name(), f.value(), index, true, f.serializer()));
 					} else if (ca == Header.class) {
 						Header h = (Header)a;
 						annotated = headerArgs.add(new RemoteMethodArg(h.name(), h.value(), index, h.skipIfEmpty(), h.serializer()));
-					} else if (ca == HeaderIfNE.class) {
-						HeaderIfNE h = (HeaderIfNE)a;
-						annotated = headerArgs.add(new RemoteMethodArg(h.name(), h.value(), index, true, h.serializer()));
 					} else if (ca == RequestBean.class) {
 						RequestBean rb = (RequestBean)a;
 						annotated = requestBeanArgs.add(new RemoteMethodArg("", "", index, false, rb.serializer()));

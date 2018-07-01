@@ -22,12 +22,13 @@ import java.util.*;
 import java.util.Map;
 
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Body;
-import org.apache.juneau.rest.annotation.Header;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
@@ -271,7 +272,7 @@ public class PetStoreResource extends BasicRestServletJena {
 		swagger=@MethodSwagger(
 			tags="pet",
 			value={
-				"security:[{ petstore_auth:[ 'write:pets','read:pets' ] } ]"
+				"security:[{petstore_auth:['write:pets','read:pets']}]"
 			}
 		)
 	)
@@ -281,12 +282,13 @@ public class PetStoreResource extends BasicRestServletJena {
 				description="Status values that need to be considered for filter.", 
 				required=true, 
 				type="array",
+				collectionFormat="csv",
 				items=@Items(
 					type="string",
 					_enum="AVAILABLE,PENDING,SOLD",
 					_default="AVAILABLE"
 				),
-				example="['AVAILABLE','PENDING']"
+				example="AVALIABLE,PENDING"
 			) 
 			PetStatus[] status
 		) throws NotAcceptable {

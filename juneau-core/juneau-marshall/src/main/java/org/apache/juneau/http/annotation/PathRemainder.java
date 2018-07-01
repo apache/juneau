@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -18,20 +18,34 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Used to associate multiple {@link ResponseStatus @ResponseStatus} annotations to the same parameter or class.
+ * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as the URL
+ * parameter remainder after a path pattern match.
+ * 
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
+ * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@PathRemainder</ja> String remainder) {
+ * 		...
+ * 	}
+ * </p>
  * 
  * <p>
- * Since Juneau currently prereq's Java 1.7, we cannot take advantage of annotation duplication support in Java 8.
- * <br>This annotation overcomes that limitation.
+ * This is functionally equivalent to the following code...
+ * <p class='bcode'>
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
+ * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
+ * 		String remainder = req.getPathRemainder();
+ * 		...
+ * 	}
+ * </p>
+ * 
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; juneau-rest-server &gt; Method Parameters</a>
+ * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
+@Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface ResponseStatuses {
-
-	/**
-	 * Specifies one or more {@link ResponseStatus @ResponseStatus} annotations to apply to the same parameter or class.
-	 */
-	ResponseStatus[] value() default {};
-}
+public @interface PathRemainder {}
