@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Specialized input stream for parsing MessagePack streams.
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -58,7 +58,7 @@ public final class MsgPackInputStream extends ParserInputStream {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param pipe The parser input.
 	 * @throws Exception
 	 */
@@ -68,7 +68,7 @@ public final class MsgPackInputStream extends ParserInputStream {
 
 	/**
 	 * Reads the data type flag from the stream.
-	 * 
+	 *
 	 * <p>
 	 * This is the byte that indicates what kind of data follows.
 	 */
@@ -373,7 +373,7 @@ public final class MsgPackInputStream extends ParserInputStream {
 
 	/**
 	 * Returns the length value for the field.
-	 * 
+	 *
 	 * <p>
 	 * For ints/floats/bins/strings, this is the number of bytes that the field takes up (minus the data-type flag).
 	 * For arrays, it's the number of array entries.

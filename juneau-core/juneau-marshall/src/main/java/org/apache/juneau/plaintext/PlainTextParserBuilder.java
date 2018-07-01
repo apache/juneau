@@ -32,7 +32,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public PlainTextParserBuilder(PropertyStore ps) {
@@ -78,7 +78,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 		super.debugOutputLines(value);
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public PlainTextParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
@@ -432,7 +432,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -450,7 +450,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public PlainTextParserBuilder set(String name, Object value) {
 		super.set(name, value);

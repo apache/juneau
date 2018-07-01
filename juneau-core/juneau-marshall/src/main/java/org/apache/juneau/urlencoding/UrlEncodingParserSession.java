@@ -25,7 +25,7 @@ import org.apache.juneau.uon.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UrlEncodingParser}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -37,7 +37,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -59,7 +59,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	/**
 	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
-	 * 
+	 *
 	 * @param pMeta The metadata on the bean property.
 	 * @return <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
@@ -357,7 +357,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		} finally {
 			unmark();
 		}
-		
+
 		return null; // Unreachable.
 	}
 }

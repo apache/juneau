@@ -76,11 +76,11 @@ public class NlsTest {
 	public void a02_fromMethod() throws Exception {
 		a.get("/fromMethod").execute().assertBody("value2");
 	}
-	
+
 	//=================================================================================================================
 	// Test OPTIONS pages without NLS
 	//=================================================================================================================
-	
+
 	@RestResource(title="test")
 	public static class B {
 		@RestMethod(name=OPTIONS, description="foo")
@@ -90,7 +90,7 @@ public class NlsTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01_optionsPageWithoutNls() throws Exception {
 		b.options("/").execute().assertBodyContains("foo");
@@ -99,7 +99,7 @@ public class NlsTest {
 	//=================================================================================================================
 	// Test Missing resource bundles.
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class C {
 		@RestMethod(name=GET)

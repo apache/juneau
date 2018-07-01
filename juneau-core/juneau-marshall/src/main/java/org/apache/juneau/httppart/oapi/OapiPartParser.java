@@ -33,26 +33,26 @@ public class OapiPartParser extends UonPartParser {
 
 	/**
 	 * Configuration property:  OpenAPI schema description.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"OapiPartParser.schema"</js>
 	 * 	<li><b>Data type:</b>  <code>HttpPartSchema</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link OapiPartParserBuilder#schema(HttpPartSchema)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines the OpenAPI schema for this part parser.
 	 */
 	public static final String OAPI_schema = PREFIX + "schema.o";
 
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ public class OapiPartParser extends UonPartParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public OapiPartParser(PropertyStore ps) {
@@ -86,14 +86,14 @@ public class OapiPartParser extends UonPartParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link UonPartParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> UonPartParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link UonPartParserBuilder} object.
 	 */
 	public static UonPartParserBuilder create() {
@@ -109,7 +109,7 @@ public class OapiPartParser extends UonPartParser {
 		schema.validateOutput(t, this);
 		return t;
 	}
-	
+
 	@SuppressWarnings({ "unchecked" })
 	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationParseException, ParseException {
 		schema.validateInput(in);
@@ -122,59 +122,59 @@ public class OapiPartParser extends UonPartParser {
 				case STRING: {
 					if (type.isObject()) {
 						switch (schema.getFormat()) {
-							case BYTE: 
+							case BYTE:
 								return (T)StringUtils.base64Decode(in);
-							case DATE: 
-							case DATE_TIME: 
+							case DATE:
+							case DATE_TIME:
 								return (T)StringUtils.parseIsoDate(in);
-							case BINARY: 
+							case BINARY:
 								return (T)StringUtils.fromHex(in);
-							case UON: 
+							case UON:
 								return super.parse(partType, schema, in, type);
-							default: 
+							default:
 								return (T)in;
 						}
-					} 
+					}
 					switch (schema.getFormat()) {
-						case BYTE: 
+						case BYTE:
 							return toType(StringUtils.base64Decode(in), type);
-						case DATE: 
-						case DATE_TIME: 
+						case DATE:
+						case DATE_TIME:
 							return toType(StringUtils.parseIsoDate(in), type);
-						case BINARY: 
+						case BINARY:
 							return toType(StringUtils.fromHex(in), type);
-						case UON: 
+						case UON:
 							return super.parse(partType, schema, in, type);
-						default: 
+						default:
 							return toType(in, type);
 					}
 				}
 				case ARRAY: {
-					if (type.isObject()) 
+					if (type.isObject())
 						type = (ClassMeta<T>)getClassMeta(ObjectList.class);
-					
+
 					ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
 					if (eType == null)
 						throw new ParseException("Value of type ARRAY cannot be converted to type {0}", type);
-					
+
 					String[] ss = new String[0];
 					switch (schema.getCollectionFormat()) {
-						case MULTI: 
+						case MULTI:
 							ss = new String[]{in};
 							break;
-						case CSV: 
+						case CSV:
 							ss = split(in, ',');
 							break;
-						case PIPES: 
+						case PIPES:
 							ss = split(in, '|');
 							break;
 						case SSV:
 							ss = splitQuoted(in);
 							break;
-						case TSV: 
+						case TSV:
 							ss = split(in, '\t');
 							break;
-						case UON: 
+						case UON:
 							return super.parse(partType, null, in, type);
 						case NONE:
 							if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
@@ -204,7 +204,7 @@ public class OapiPartParser extends UonPartParser {
 								break;
 							default:
 								type = (ClassMeta<T>)getClassMeta(Integer.class);
-								
+
 						}
 					}
 					return super.parse(partType, schema, in, type);
@@ -222,7 +222,7 @@ public class OapiPartParser extends UonPartParser {
 					return super.parse(partType, schema, in, type);
 				}
 				case OBJECT: {
-					if (type.isObject()) 
+					if (type.isObject())
 						type = (ClassMeta<T>)getClassMeta(ObjectMap.class);
 					switch (schema.getFormat()) {
 						default:
@@ -237,10 +237,10 @@ public class OapiPartParser extends UonPartParser {
 				}
 			}
 		}
-		
+
 		return super.parse(partType, schema, in, type);
 	}
-	
+
 	private <T> T toType(Object in, ClassMeta<T> type) throws ParseException {
 		try {
 			return createBeanSession().convertToType(in, type);

@@ -14,39 +14,39 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Location</l> HTTP response header.
- * 
+ *
  * <p>
  * Used in redirection, or when a new resource has been created.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The Location response-header field is used to redirect the recipient to a location other than the Request-URI for
  * completion of the request or identification of a new resource.
  * For 201 (Created) responses, the Location is that of the new resource which was created by the request.
  * For 3xx responses, the location SHOULD indicate the server's preferred URI for automatic redirection to the resource.
  * The field value consists of a single absolute URI.
- * 
+ *
  * <p class='bcode'>
  * 	Location       = "Location" ":" absoluteURI
  * </p>
- * 
+ *
  * <p>
  * An example is:
  * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
- * 
+ *
  * <p>
  * Note: The Content-Location header field (section 14.14) differs from Location in that the Content-Location identifies
  * the original location of the entity enclosed in the request.
  * It is therefore possible for a response to contain header fields for both Location and Content-Location.
  * Also see section 13.10 for cache requirements of some methods.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -56,7 +56,7 @@ public final class Location extends HeaderUri {
 
 	/**
 	 * Returns a parsed <code>Location</code> header.
-	 * 
+	 *
 	 * @param value The <code>Location</code> header string.
 	 * @return The parsed <code>Location</code> header, or <jk>null</jk> if the string was null.
 	 */

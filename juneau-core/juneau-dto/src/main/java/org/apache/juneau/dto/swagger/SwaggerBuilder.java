@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 
 /**
  * Various useful static methods for creating Swagger elements.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -28,7 +28,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Contact} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Contact contact() {
@@ -37,7 +37,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Contact} element with the specified {@link Contact#setName(String) name} attribute.
-	 * 
+	 *
 	 * @param name The {@link Contact#setName(String) name} attribute.
 	 * @return The new element.
 	 */
@@ -48,7 +48,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link Contact} element with the specified {@link Contact#setName(String) name}, {@link Contact#setUrl(URI) url},
 	 * and {@link Contact#setEmail(String) email} attributes.
-	 * 
+	 *
 	 * @param name The {@link Contact#setName(String) name} attribute.
 	 * @param url
 	 * 	The {@link Contact#setUrl(URI) url} attribute.
@@ -64,7 +64,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link ExternalDocumentation} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation() {
@@ -74,7 +74,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#setUrl(URI) url}
 	 * attribute.
-	 * 
+	 *
 	 * @param url
 	 * 	The {@link ExternalDocumentation#setUrl(URI) url} attribute.
 	 * 	<br>The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -89,7 +89,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#setUrl(URI) url}
 	 * and {@link ExternalDocumentation#setDescription(String) description} attributes.
-	 * 
+	 *
 	 * @param url
 	 * 	The {@link ExternalDocumentation#setUrl(URI) url} attribute.
 	 * 	<br>The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -104,7 +104,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link HeaderInfo} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final HeaderInfo headerInfo() {
@@ -113,7 +113,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#setType(String) type} attribute.
-	 * 
+	 *
 	 * @param type The {@link HeaderInfo#setType(String) type} attribute.
 	 * @return The new element.
 	 */
@@ -123,11 +123,11 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link HeaderInfo} element with the specified {@link HeaderInfo#setType(String) type} attribute.
-	 * 
+	 *
 	 * <p>
 	 * Throws a runtime exception if the type is not valid.
-	 * 
-	 * @param type 
+	 *
+	 * @param type
 	 * 	The {@link HeaderInfo#setType(String) type} attribute.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -145,7 +145,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Info} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Info info() {
@@ -155,7 +155,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link Info} element with the specified {@link Info#setTitle(String) title} and {@link Info#setVersion(String) version}
 	 * attributes.
-	 * 
+	 *
 	 * @param title The {@link Info#setTitle(String) title} attribute.
 	 * @param version The {@link Info#setVersion(String) version} attribute.
 	 * @return The new element.
@@ -166,7 +166,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Items} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Items items() {
@@ -175,7 +175,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Items} element with the specified {@link Items#setType(String) type} attribute.
-	 * 
+	 *
 	 * @param type The {@link Items#setType(String) type} attribute.
 	 * @return The new element.
 	 */
@@ -185,11 +185,11 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Items} element with the specified {@link Items#setType(String) type} attribute.
-	 * 
+	 *
 	 * <p>
 	 * Throws a runtime exception if the type is not valid.
-	 * 
-	 * @param type 
+	 *
+	 * @param type
 	 * 	The {@link Items#setType(String) type} attribute.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -207,7 +207,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link License} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final License license() {
@@ -216,7 +216,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link License} element with the specified {@link License#setName(String) name} attribute.
-	 * 
+	 *
 	 * @param name The {@link License#setName(String) name} attribute.
 	 * @return The new element.
 	 */
@@ -226,7 +226,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link License} element with the specified {@link License#setName(String) name} and {@link License#setUrl(URI) url} attributes.
-	 * 
+	 *
 	 * @param name The {@link License#setName(String) name} attribute.
 	 * @param url The {@link License#setUrl(URI) url} attribute.
 	 * @return The new element.
@@ -237,7 +237,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Operation} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Operation operation() {
@@ -246,7 +246,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link ParameterInfo} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final ParameterInfo parameterInfo() {
@@ -256,7 +256,7 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#setIn(String) in} and
 	 * {@link ParameterInfo#setName(String) name} attributes.
-	 * 
+	 *
 	 * @param in The {@link ParameterInfo#setIn(String) in} attribute.
 	 * @param name The {@link ParameterInfo#setName(String) name} attribute.
 	 * @return The new element.
@@ -268,11 +268,11 @@ public class SwaggerBuilder {
 	/**
 	 * Creates an {@link ParameterInfo} element with the specified {@link ParameterInfo#setIn(String) in} and
 	 * {@link ParameterInfo#setName(String) name} attributes.
-	 * 
+	 *
 	 * <p>
 	 * Throws a runtime exception if the type is not valid.
-	 * 
-	 * @param in 
+	 *
+	 * @param in
 	 * 	The {@link ParameterInfo#setIn(String) in} attribute.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -291,7 +291,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link ResponseInfo} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final ResponseInfo responseInfo() {
@@ -300,7 +300,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link ResponseInfo} element with the specified {@link ResponseInfo#setDescription(String) description} attribute.
-	 * 
+	 *
 	 * @param description The {@link ResponseInfo#setDescription(String) description} attribute.
 	 * @return The new element.
 	 */
@@ -310,7 +310,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link SchemaInfo} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final SchemaInfo schemaInfo() {
@@ -319,7 +319,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link SecurityScheme} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final SecurityScheme securityScheme() {
@@ -328,7 +328,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#setType(String) type} attribute.
-	 * 
+	 *
 	 * @param type The {@link SecurityScheme#setType(String) type} attribute.
 	 * @return The new element.
 	 */
@@ -338,14 +338,14 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link SecurityScheme} element with the specified {@link SecurityScheme#setType(String) type} attribute.
-	 * 
+	 *
 	 * <p>
 	 * Throws a runtime exception if the type is not valid.
-	 * 
-	 * @param type 
+	 *
+	 * @param type
 	 * 	The {@link SecurityScheme#setType(String) type} attribute.
 	 * 	<br>Valid values:
-	 * 	<ul>	
+	 * 	<ul>
 	 * 		<li><js>"basic"</js>
 	 * 		<li><js>"apiKey"</js>
 	 * 		<li><js>"oauth2"</js>
@@ -358,7 +358,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Swagger} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Swagger swagger() {
@@ -367,7 +367,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Swagger} element with the specified {@link Swagger#setInfo(Info) info} attribute.
-	 * 
+	 *
 	 * @param info The {@link Swagger#setInfo(Info) info} attribute.
 	 * @return The new element.
 	 */
@@ -377,7 +377,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Tag} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Tag tag() {
@@ -386,7 +386,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link Tag} element with the specified {@link Tag#setName(String) name} attribute.
-	 * 
+	 *
 	 * @param name The {@link Tag#setName(String) name} attribute.
 	 * @return The new element.
 	 */
@@ -396,7 +396,7 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an empty {@link Xml} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Xml xml() {

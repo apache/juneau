@@ -34,7 +34,7 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public YamlSerializerBuilder(PropertyStore ps) {
@@ -53,18 +53,18 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 * The JSON specification allows for either format.
 	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to
 	 * serialize <xt>&lt;\/script&gt;</xt>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link YamlSerializer#YAML_escapeSolidus}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -74,16 +74,16 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Simple JSON mode.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link YamlSerializer#YAML_simpleMode}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -93,12 +93,12 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>setSimpleMode(<jk>true</jk>).sq()</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link YamlSerializer#YAML_simpleMode}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public YamlSerializerBuilder simple() {
@@ -601,7 +601,7 @@ public class YamlSerializerBuilder extends WriterSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

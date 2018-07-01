@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 
 /**
  * Represents a wrapped {@link Map} where entries in the map can be removed without affecting the underlying map.
- * 
+ *
  * @param <T> The class type of the wrapped bean.
  */
 public class DelegateMap<T> extends ObjectMap implements Delegate<T> {
@@ -28,7 +28,7 @@ public class DelegateMap<T> extends ObjectMap implements Delegate<T> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param classMeta The metadata object that created this delegate object.
 	 */
 	public DelegateMap(ClassMeta<T> classMeta) {
@@ -42,10 +42,10 @@ public class DelegateMap<T> extends ObjectMap implements Delegate<T> {
 
 	/**
 	 * Remove all but the specified keys from this map.
-	 * 
+	 *
 	 * <p>
 	 * This does not affect the underlying map.
-	 * 
+	 *
 	 * @param keys The remaining keys in the map (in the specified order).
 	 */
 	public void filterKeys(List<String> keys) {

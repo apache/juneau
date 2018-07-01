@@ -24,10 +24,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Describes a single operation parameter.
- * 
+ *
  * <p>
  * A unique parameter is defined by a combination of a name and location.
- * 
+ *
  * <p>
  * There are five possible parameter types.
  * <ul class='spaced-list'>
@@ -65,15 +65,15 @@ import org.apache.juneau.utils.*;
  * 		</ul>
  * 	</li>
  * </ul>
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ParameterInfo x = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -84,7 +84,7 @@ import org.apache.juneau.utils.*;
  * 		<js>"name"</js>: <js>"foo"</js>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -97,7 +97,7 @@ public class ParameterInfo extends SwaggerElement {
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array", "file"};
 	private static final String[] VALID_COLLECTION_FORMATS = {"csv", "ssv", "tsv", "pipes", "multi"};
 
-	private String 
+	private String
 		name,
 		in,
 		description,
@@ -105,16 +105,16 @@ public class ParameterInfo extends SwaggerElement {
 		format,
 		pattern,
 		collectionFormat;
-	private Number 
+	private Number
 		maximum,
 		minimum,
 		multipleOf;
-	private Integer 
+	private Integer
 		maxLength,
 		minLength,
 		maxItems,
 		minItems;
-	private Boolean 
+	private Boolean
 		required,
 		allowEmptyValue,
 		exclusiveMaximum,
@@ -131,15 +131,15 @@ public class ParameterInfo extends SwaggerElement {
 	 * Default constructor.
 	 */
 	public ParameterInfo() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public ParameterInfo(ParameterInfo copyFrom) {
 		super(copyFrom);
-		
+
 		this.name = copyFrom.name;
 		this.in = copyFrom.in;
 		this.description = copyFrom.description;
@@ -164,21 +164,21 @@ public class ParameterInfo extends SwaggerElement {
 		this._default = copyFrom._default;
 		this._enum = newList(copyFrom._enum);
 		this.example = copyFrom.example;
-		
+
 		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,String>();
 		if (copyFrom.examples != null)
 			this.examples.putAll(copyFrom.examples);
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public ParameterInfo copy() {
 		return new ParameterInfo(this);
 	}
-	
+
 	@Override /* SwaggerElement */
 	protected ParameterInfo strict() {
 		super.strict();
@@ -187,8 +187,8 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Copies any non-null fields from the specified object to this object.
-	 * 
-	 * @param p 
+	 *
+	 * @param p
 	 * 	The object to copy fields from.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -248,13 +248,13 @@ public class ParameterInfo extends SwaggerElement {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>name</property>.
-	 * 
+	 *
 	 * <p>
 	 * The name of the parameter.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -265,12 +265,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
@@ -279,10 +279,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
-	 * 
+	 *
 	 * <p>
 	 * The name of the parameter.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -293,13 +293,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -312,7 +312,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setName(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -325,10 +325,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>in</property>.
-	 * 
+	 *
 	 * <p>
 	 * The location of the parameter.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getIn() {
@@ -337,11 +337,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>in</property>.
-	 * 
+	 *
 	 * <p>
 	 * The location of the parameter.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -368,7 +368,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setIn(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -389,11 +389,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A brief description of the parameter.
 	 * <br>This could contain examples of use.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -402,12 +402,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A brief description of the parameter.
 	 * <br>This could contain examples of use.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -420,7 +420,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
@@ -434,10 +434,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>required</property>.
-	 * 
+	 *
 	 * <p>
 	 * Determines whether this parameter is mandatory.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getRequired() {
@@ -446,13 +446,13 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>required</property>.
-	 * 
+	 *
 	 * <p>
 	 * Determines whether this parameter is mandatory.
-	 * 
+	 *
 	 * <p>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>If the parameter is <code>in</code> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
 	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
@@ -466,7 +466,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setRequired(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -481,10 +481,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
-	 * 
+	 *
 	 * <p>
 	 * The schema defining the type used for the body parameter.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public SchemaInfo getSchema() {
@@ -493,11 +493,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schema</property>.
-	 * 
+	 *
 	 * <p>
 	 * The schema defining the type used for the body parameter.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -509,8 +509,8 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setSchema(SchemaInfo)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -530,10 +530,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
-	 * 
+	 *
 	 * <p>
 	 * The type of the parameter.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getType() {
@@ -542,16 +542,16 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
-	 * 
+	 *
 	 * <p>
 	 * The type of the parameter.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -562,7 +562,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><js>"array"</js>
 	 * 		<li><js>"file"</js>
 	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js> 
+	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
 	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -579,7 +579,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setType(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -592,7 +592,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><js>"array"</js>
 	 * 		<li><js>"file"</js>
 	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js> 
+	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
 	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -603,15 +603,15 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>format</property>.
-	 * 
+	 *
 	 * <p>
 	 * The extending format for the previously mentioned type.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getFormat() {
@@ -620,15 +620,15 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>format</property>.
-	 * 
+	 *
 	 * <p>
 	 * The extending format for the previously mentioned type.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -639,7 +639,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setFormat(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -652,14 +652,14 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>allowEmptyValue</property>.
-	 * 
+	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters.
-	 * 
+	 *
 	 * <p>
 	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
 	 * parameter with a name only or an empty value.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getAllowEmptyValue() {
@@ -668,15 +668,15 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>allowEmptyValue</property>.
-	 * 
+	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters.
-	 * 
+	 *
 	 * <p>
 	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
 	 * parameter with a name only or an empty value.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Default is <jk>false</jk>.
@@ -689,7 +689,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setAllowEmptyValue(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -703,10 +703,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>items</property>.
-	 * 
+	 *
 	 * <p>
 	 * Describes the type of items in the array.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Items getItems() {
@@ -715,11 +715,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>items</property>.
-	 * 
+	 *
 	 * <p>
 	 * Describes the type of items in the array.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -732,8 +732,8 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setItems(Items)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Valid types:
@@ -754,10 +754,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
-	 * 
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getCollectionFormat() {
@@ -766,11 +766,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>collectionFormat</property>.
-	 * 
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -797,7 +797,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setCollectionFormat(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -820,19 +820,19 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>default</property>.
-	 * 
+	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * 
+	 *
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getDefault() {
@@ -841,18 +841,18 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>default</property>.
-	 * 
+	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -863,7 +863,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDefault(Object)}.
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -873,12 +873,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMaximum() {
@@ -887,12 +887,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -903,7 +903,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaximum(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -916,12 +916,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMaximum() {
@@ -930,12 +930,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -946,7 +946,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExclusiveMaximum(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -959,12 +959,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMinimum() {
@@ -973,12 +973,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -989,7 +989,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinimum(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -1002,12 +1002,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMinimum() {
@@ -1016,12 +1016,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1032,7 +1032,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExclusiveMinimum(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -1045,12 +1045,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxLength() {
@@ -1059,12 +1059,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1075,7 +1075,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaxLength(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -1088,12 +1088,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinLength() {
@@ -1102,12 +1102,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1118,7 +1118,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinLength(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -1131,12 +1131,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getPattern() {
@@ -1145,15 +1145,15 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
-	 * 
+	 *
 	 * <p>
 	 * This string SHOULD be a valid regular expression.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1164,7 +1164,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setPattern(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -1177,12 +1177,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxItems() {
@@ -1191,12 +1191,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1207,7 +1207,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaxItems(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -1220,12 +1220,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinItems() {
@@ -1234,12 +1234,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1250,7 +1250,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinItems(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -1263,12 +1263,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() {
@@ -1277,12 +1277,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1293,7 +1293,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setUniqueItems(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -1306,12 +1306,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Object> getEnum() {
@@ -1320,13 +1320,13 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1338,7 +1338,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>enum</property> property.
-	 * 
+	 *
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -1348,10 +1348,10 @@ public class ParameterInfo extends SwaggerElement {
 		_enum = addToList(_enum, value);
 		return this;
 	}
-	
+
 	/**
 	 * Adds one or more values to the <property>enum</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -1379,12 +1379,12 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMultipleOf() {
@@ -1393,13 +1393,13 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1411,7 +1411,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMultipleOf(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -1424,7 +1424,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>x-example</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("x-example")
@@ -1434,8 +1434,8 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>x-example</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1448,7 +1448,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>x-example</property>.
-	 * 
+	 *
 	 * @param value The property value.
 	 * @return This object (for method chaining).
 	 */
@@ -1459,7 +1459,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>x-examples</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("x-examples")
@@ -1469,8 +1469,8 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>x-examples</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1483,7 +1483,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>x-examples</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -1496,7 +1496,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>x-examples</property> property.
-	 * 
+	 *
 	 * @param name The extra property name.
 	 * @param value The extra property value.
 	 * @return This object (for method chaining).
@@ -1508,7 +1508,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>x-examples</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -1592,12 +1592,12 @@ public class ParameterInfo extends SwaggerElement {
 			case "multipleOf": return multipleOf(value);
 			case "x-example": return example(value);
 			case "x-examples": return examples(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
 	}
-	
+
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = new ASet<String>()
@@ -1631,22 +1631,22 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Resolves any <js>"$ref"</js> attributes in this element.
-	 * 
+	 *
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
-	 * @param maxDepth 
-	 * 	The maximum depth to resolve references. 
+	 * @param maxDepth
+	 * 	The maximum depth to resolve references.
 	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
 	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
-	 * @return 
+	 * @return
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
 	public ParameterInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
-		
+
 		if (schema != null)
 			schema = schema.resolveRefs(swagger, refStack, maxDepth);
-		
+
 		if (items != null)
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 

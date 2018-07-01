@@ -34,7 +34,7 @@ public final class CsvSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public CsvSerializer(PropertyStore ps) {
@@ -48,14 +48,14 @@ public final class CsvSerializer extends WriterSerializer {
 
 	/**
 	 * Instantiates a new clean-slate {@link CsvSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> CsvSerializerBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link CsvSerializerBuilder} object.
 	 */
 	public static CsvSerializerBuilder create() {

@@ -18,21 +18,21 @@ import org.apache.juneau.transform.*;
 
 /**
  * Parsers HTTP plain text request bodies into Group 5 POJOs.
- * 
+ *
  * <p>
  * See <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">Group 5 POJOs</a>.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>text/plain</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/plain</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Essentially just converts plain text to POJOs via static <code>fromString()</code> or <code>valueOf()</code>, or
  * through constructors that take a single string argument.
- * 
+ *
  * <p>
  * Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform
  * defined on it.
@@ -53,7 +53,7 @@ public class PlainTextParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public PlainTextParser(PropertyStore ps) {
@@ -62,7 +62,7 @@ public class PlainTextParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The media types that this parser consumes.
 	 * 	<p>
@@ -80,14 +80,14 @@ public class PlainTextParser extends ReaderParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link PlainTextParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> PlainTextParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link PlainTextParserBuilder} object.
 	 */
 	public static PlainTextParserBuilder create() {

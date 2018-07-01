@@ -45,19 +45,19 @@ public final class Constants {
 
 	/**
 	 * RDF property identifier <js>"items"</js>.
-	 * 
+	 *
 	 * <p>
-	 * For resources that are collections, this property identifies the RDF Sequence container for the items in the 
+	 * For resources that are collections, this property identifies the RDF Sequence container for the items in the
 	 * collection.
 	 */
 	public static final String RDF_juneauNs_ITEMS = "items";
 
 	/**
 	 * RDF property identifier <js>"root"</js>.
-	 * 
+	 *
 	 * <p>
 	 * Property added to root nodes to help identify them as root elements during parsing.
-	 * 
+	 *
 	 * <p>
 	 * Added if {@link RdfSerializer#RDF_addRootProperty} setting is enabled.
 	 */
@@ -65,10 +65,10 @@ public final class Constants {
 
 	/**
 	 * RDF property identifier <js>"class"</js>.
-	 * 
+	 *
 	 * <p>
 	 * Property added to bean resources to identify the class type.
-	 * 
+	 *
 	 * <p>
 	 * Added if {@link Serializer#SERIALIZER_addBeanTypes} setting is enabled.
 	 */
@@ -76,7 +76,7 @@ public final class Constants {
 
 	/**
 	 * RDF property identifier <js>"value"</js>.
-	 * 
+	 *
 	 * <p>
 	 * Property added to nodes to identify a simple value.
 	 */

@@ -77,23 +77,23 @@ public class TempDirResource extends DirectoryResource {
 
 	@Override /* DirectoryResource */
 	@RestHook(INIT)
-	public void init(RestContextBuilder b) throws Exception { 
+	public void init(RestContextBuilder b) throws Exception {
 		super.init(b);
 		File rootDir = getRootDir();
 		if (! rootDir.exists()) {
 			rootDir.mkdirs();
-			
+
 			// Make some dummy files.
 			FileUtils.touch(new File(rootDir, "A.txt"));
 			FileUtils.touch(new File(rootDir, "B.txt"));
 			FileUtils.touch(new File(rootDir, "C.txt"));
 		}
 	}
-	
+
 	@RestMethod(
-		name=GET, 
-		path="/upload", 
-		summary="Upload file form entry page", 
+		name=GET,
+		path="/upload",
+		summary="Upload file form entry page",
 		description="Renders an example form page for uploading a file in multipart/form-data format to the temp directory."
 	)
 	public Form getUploadForm() {
@@ -107,8 +107,8 @@ public class TempDirResource extends DirectoryResource {
 	}
 
 	@RestMethod(
-		name=POST, 
-		path="/upload", 
+		name=POST,
+		path="/upload",
 		summary="Upload a file as a multipart form post",
 		description= {
 			"Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.\n",
@@ -128,7 +128,7 @@ public class TempDirResource extends DirectoryResource {
 				}
 			}
 		}
-		return RedirectToServletRoot.INSTANCE; 
+		return RedirectToServletRoot.INSTANCE;
 	}
 
 	/** Causes a 404 if POST isn't multipart/form-data */

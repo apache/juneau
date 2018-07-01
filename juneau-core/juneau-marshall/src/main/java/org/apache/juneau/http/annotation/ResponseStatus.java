@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -21,63 +21,63 @@ import org.apache.juneau.utils.*;
 
 /**
  * Annotation that can be applied to parameters and types to denote them as an HTTP response status on server-side REST method parameters.
- * 
+ *
  * <p>
  * This can only be applied to parameters and subclasses of the {@link Value} class with an {@link Integer} type.
  * <br>The {@link Value} object is mean to be a place-holder for the set value.
- * 
+ *
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
- * 	<jk>public void</jk> login(String username, String password, 
+ * 	<jk>public void</jk> login(String username, String password,
  * 			<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>) Value&lt;Integer&gt; status) {
  * 		<jk>if</jk> (! isValid(username, password))
  * 			status.set(401);
  * 	}
  * </p>
- * 
+ *
  * <p>
  * The {@link Responses @Responses} annotation can be used to represent multiple possible response types.
- * 
+ *
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
- * 	<jk>public void</jk> login(String username, String password, 
+ * 	<jk>public void</jk> login(String username, String password,
  * 			<ja>@ResponseStatuses</ja>{
  * 				<ja>@ResponseStatus</ja>(200)
  * 				<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
  *			}
  * 			Value&lt;Integer&gt; status) {
- * 
+ *
  * 		<jk>if</jk> (! isValid(username, password))
  * 			status.set(401);
  * 		<jk>else</jk>
  * 			status.set(200);
  * 	}
  * </p>
- * 
+ *
  * <p>
  * The other option is to apply this annotation to a subclass of {@link Value} which often leads to a cleaner
  * REST method:
- * 
+ *
  * <p class='bcode'>
  * 	<ja>@ResponseStatuses</ja>{
  * 		<ja>@ResponseStatus</ja>(200)
  * 		<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
  *	}
  * 	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
- * 	
+ *
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
- * 	<jk>public void</jk> login(String username, String password, LoginStatus status) { 
+ * 	<jk>public void</jk> login(String username, String password, LoginStatus status) {
  * 		<jk>if</jk> (! isValid(username, password))
  * 			status.set(401);
  * 		<jk>else</jk>
  * 			status.set(200);
  * 	}
  * </p>
- * 
+ *
  * <p>
  * The attributes on this annotation are used to populate the generated Swagger for the method.
  * <br>In this case, the Swagger is populated with the following:
- * 
+ *
  * <p class='bcode'>
  * 	<js>'/user/login'</js>: {
  * 		get: {
@@ -92,7 +92,7 @@ import org.apache.juneau.utils.*;
  * 		}
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Swagger Specification &gt; Response Object</a>
@@ -103,18 +103,18 @@ import org.apache.juneau.utils.*;
 @Retention(RUNTIME)
 @Inherited
 public @interface ResponseStatus {
-	
+
 	/**
 	 * The HTTP status of the response.
 	 */
 	int code() default 0;
-	
+
 	/**
 	 * A synonym to {@link #code()}.
-	 * 
+	 *
 	 * <p>
 	 * Useful if you only want to specify a code only.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the response code:
 	 * <p class='bcode w800'>
@@ -128,31 +128,31 @@ public @interface ResponseStatus {
 
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] description() default {};
-	
+
 	/**
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
-	 * 
+	 *
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this Response object.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the Response object:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@ResponseStatus</ja>(
-	 * 		code=401, 
+	 * 		code=401,
 	 * 		description=<js>"Invalid user/pw"</js>
 	 * 	)
 	 * </p>
@@ -176,14 +176,14 @@ public @interface ResponseStatus {
 	 * 	<mc>// Contents of MyResource.properties</mc>
 	 * 	<mk>unauthorizedSwagger</mk> = <mv>{ description: "Invalid user/pw" }</mv>
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * 	The reasons why you may want to use this field include:
 	 * <ul>
 	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -200,7 +200,7 @@ public @interface ResponseStatus {
 	 * 	<ja>@ResponseStatus</ja>(<js>"description:'Invalid user/pw'"</js>)
 	 * 		</p>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

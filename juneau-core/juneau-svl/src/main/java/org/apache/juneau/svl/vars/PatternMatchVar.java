@@ -20,31 +20,31 @@ import org.apache.juneau.svl.*;
 
 /**
  * A logical variable resolver that resolves to <js>"true</js> if a pattern matches.
- * 
+ *
  * <p>
  * The format for this var is one of the following:
  * <ul>
  * 	<li><js>"$PM{stringArg, pattern}"</js>
  * 	<li>...
  * </ul>
- * 
+ *
  * <p>
  * The pattern can be any string optionally containing <js>'*'</js> or <js>'?'</js> representing any or one character
  * respectively.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves system properties and $SW vars.</jc>
  * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(PatternMatchVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
- * 
+ *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Running on Windows?  $PM{$P{os.name},*win*}!"</js>));
  * </p>
- * 
+ *
  * <p>
  * Since this is a {@link MultipartVar}, any variables contained in the result will be recursively resolved.
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>

@@ -36,7 +36,7 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Clone an existing encoder group builder.
-	 * 
+	 *
 	 * @param copyFrom The encoder group that we're copying settings and encoders from.
 	 */
 	public EncoderGroupBuilder(EncoderGroup copyFrom) {
@@ -46,7 +46,7 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Registers the specified encoders with this group.
-	 * 
+	 *
 	 * @param e The encoders to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -58,7 +58,7 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Registers the specified encoders with this group.
-	 * 
+	 *
 	 * @param e The encoders to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -69,7 +69,7 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Registers the specified encoders with this group.
-	 * 
+	 *
 	 * @param e The encoders to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -80,7 +80,7 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Registers the encoders in the specified group with this group.
-	 * 
+	 *
 	 * @param eg The encoders to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -91,10 +91,10 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Creates a new {@link EncoderGroup} object using a snapshot of the settings defined in this builder.
-	 * 
+	 *
 	 * <p>
 	 * This method can be called multiple times to produce multiple encoder groups.
-	 * 
+	 *
 	 * @return A new {@link EncoderGroup} object.
 	 */
 	public EncoderGroup build() {

@@ -96,7 +96,7 @@ public class RestResourceSerializersTest {
 	//=================================================================================================================
 	// Basic tests
 	//=================================================================================================================
-	
+
 	@RestResource(serializers=SA.class)
 	public static class A {
 		@RestMethod(name=GET, path="/serializerOnClass")
@@ -121,7 +121,7 @@ public class RestResourceSerializersTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_serializerOnClass() throws Exception {
 		a.get("/serializerOnClass").accept("text/a").execute().assertBody("text/a - test1");

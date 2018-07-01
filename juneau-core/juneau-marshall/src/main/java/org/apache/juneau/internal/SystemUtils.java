@@ -19,7 +19,7 @@ public class SystemUtils {
 
 	/**
 	 * Returns the first non-<jk>null</jk> system property.
-	 * 
+	 *
 	 * @param def
 	 * 	The default value if none are found.
 	 * 	Can be <jk>null</jk>.
@@ -39,7 +39,7 @@ public class SystemUtils {
 
 	/**
 	 * Returns the first non-<jk>null</jk> boolean system property.
-	 * 
+	 *
 	 * @param def
 	 * 	The default value if none are found.
 	 * 	Can be <jk>null</jk>.
@@ -55,7 +55,7 @@ public class SystemUtils {
 
 	/**
 	 * Returns the first non-<jk>null</jk> integer system property.
-	 * 
+	 *
 	 * @param def
 	 * 	The default value if none are found.
 	 * 	Can be <jk>null</jk>.

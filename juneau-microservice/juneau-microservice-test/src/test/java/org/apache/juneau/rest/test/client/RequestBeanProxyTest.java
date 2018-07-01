@@ -36,11 +36,11 @@ import org.junit.runners.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RequestBeanProxyTest {
-	
+
 	//=================================================================================================================
 	// @Query
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class A {
 		@RestMethod(name=GET, path="/echoQuery")
@@ -53,17 +53,17 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @Query - Simple values
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface A01_Remoteable {
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@RequestBean A01_BeanImpl rb);
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String serialized(@RequestBean(serializer=XSerializer.class) A01_BeanImpl rb);
 	}
-	
+
 	public static interface A01_BeanInterface {
 		@Query String getA();
 		@Query("b") String getX1();
@@ -74,7 +74,7 @@ public class RequestBeanProxyTest {
 		@Query("g") String getX6();
 		@Query("h") String getX7();
 	}
-	
+
 	public static class A01_BeanImpl implements A01_BeanInterface {
 		@Override public String getA() { return "a1"; }
 		@Override public String getX1() { return "b1"; }
@@ -88,7 +88,7 @@ public class RequestBeanProxyTest {
 
 	static A01_Remoteable a01a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A01_Remoteable.class, null);
 	static A01_Remoteable a01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteableProxy(A01_Remoteable.class, null);
-	
+
 	@Test
 	public void a01a_query_simpleVals_plainText() throws Exception {
 		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'true',h:'123'}", a01a.normal(new A01_BeanImpl()));
@@ -101,21 +101,21 @@ public class RequestBeanProxyTest {
 	public void a01c_query_simpleVals_x() throws Exception {
 		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',d:'xd1x',e:'xx',g:'xtruex',h:'x123x'}", a01b.serialized(new A01_BeanImpl()));
 	}
-	
+
 	//=================================================================================================================
 	// @Query - Maps
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface A02_Remoteable {
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@RequestBean A02_Bean rb);
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String serialized(@RequestBean(serializer=XSerializer.class) A02_Bean rb);
 	}
-	
+
 	public static class A02_Bean {
 		@Query
 		public Map<String,Object> getA() {
@@ -137,7 +137,7 @@ public class RequestBeanProxyTest {
 
 	static A02_Remoteable a02a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A02_Remoteable.class, null);
 	static A02_Remoteable a02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteableProxy(A02_Remoteable.class, null);
-	
+
 	@Test
 	public void a02a_query_maps_plainText() throws Exception {
 		String r = a02a.normal(new A02_Bean());
@@ -153,21 +153,21 @@ public class RequestBeanProxyTest {
 		String r = a02b.serialized(new A02_Bean());
 		assertEquals("{a1:'xv1x',a2:'x123x',a4:'xx',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
 	}
-	
+
 	//=================================================================================================================
 	// @Query - NameValuePairs
 	//=================================================================================================================
 
 	@Remoteable(path="/")
 	public static interface A03_Remoteable {
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@RequestBean A03_Bean rb);
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String serialized(@RequestBean(serializer=XSerializer.class) A03_Bean rb);
 	}
-	
+
 	public static class A03_Bean {
 		@Query
 		public NameValuePairs getA() {
@@ -189,7 +189,7 @@ public class RequestBeanProxyTest {
 
 	static A03_Remoteable a03a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A03_Remoteable.class, null);
 	static A03_Remoteable a03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteableProxy(A03_Remoteable.class, null);
-	
+
 	@Test
 	public void a03a_query_nameValuePairs_plainText() throws Exception {
 		String r = a03a.normal(new A03_Bean());
@@ -205,17 +205,17 @@ public class RequestBeanProxyTest {
 		String r = a03b.serialized(new A03_Bean());
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
-	
+
 	//=================================================================================================================
 	// @Query - CharSequence
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface A04_Remoteable {
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@RequestBean A04_Bean rb);
 	}
-	
+
 	public static class A04_Bean {
 		@Query("*")
 		public StringBuilder getA() {
@@ -224,17 +224,17 @@ public class RequestBeanProxyTest {
 	}
 
 	static A04_Remoteable a04a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A04_Remoteable.class, null);
-	
+
 	@Test
 	public void a04a_query_charSequence() throws Exception {
 		String r = a04a.normal(new A04_Bean());
 		assertEquals("{baz:'qux',foo:'bar'}", r);
 	}
-	
+
 	//=================================================================================================================
 	// @Query - Reader
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface A05_Remoteable {
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
@@ -247,7 +247,7 @@ public class RequestBeanProxyTest {
 			return new StringReader("foo=bar&baz=qux");
 		}
 	}
-	
+
 	static A05_Remoteable a05a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A05_Remoteable.class, null);
 
 	@Test
@@ -255,37 +255,37 @@ public class RequestBeanProxyTest {
 		String r = a05a.normal(new A05_Bean());
 		assertEquals("{baz:'qux',foo:'bar'}", r);
 	}
-	
+
 	//=================================================================================================================
 	// @Query - Collections
 	//=================================================================================================================
 
 	@Remoteable(path="/")
 	public static interface A06_Remoteable {
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@RequestBean A06_Bean rb);
-		
+
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String serialized(@RequestBean(serializer=XSerializer.class) A06_Bean rb);
 	}
-	
+
 	public static class A06_Bean {
 		@Query
 		public List<Object> getA() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Query("b")
 		public List<Object> getX1() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Query(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Query("d")
 		public List<Object> getX3() {
-			return new AList<Object>();
+			return new AList<>();
 		}
 		@Query("e")
 		public List<Object> getX4() {
@@ -331,7 +331,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @FormData
 	//=================================================================================================================
-	
+
 	@RestResource(parsers=UrlEncodingParser.class)
 	public static class C {
 		@RestMethod(name=POST)
@@ -340,7 +340,7 @@ public class RequestBeanProxyTest {
 		}
 	}
 	static MockRest c = MockRest.create(C.class);
-	
+
 	//=================================================================================================================
 	// @FormData, Simple values
 	//=================================================================================================================
@@ -413,7 +413,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @FormData, Maps
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface C02_Remoteable {
 
@@ -465,7 +465,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @FormData, NameValuePairs
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface C03_Remoteable {
 
@@ -517,7 +517,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @FormData, CharSequence
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface C04_Remoteable {
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
@@ -542,7 +542,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @FormData, Reader
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface C05_Remoteable {
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
@@ -567,7 +567,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @FormData, Collections
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface C06_Remoteable {
 
@@ -581,19 +581,19 @@ public class RequestBeanProxyTest {
 	public static class C06_Bean {
 		@FormData
 		public List<Object> getA() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@FormData("b")
 		public List<Object> getX1() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@FormData(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@FormData("d")
 		public List<Object> getX3() {
-			return new AList<Object>();
+			return new AList<>();
 		}
 		@FormData("e")
 		public List<Object> getX4() {
@@ -635,12 +635,12 @@ public class RequestBeanProxyTest {
 		String r = c06b.serialized(new C06_Bean());
 		assertEquals("{a:'fooXXtrueX123XnullXtrueX123Xnull',b:'fooXXtrueX123XnullXtrueX123Xnull',c:'fooXXtrueX123XnullXtrueX123Xnull',d:'',f:'fooXXtrueX123XnullXtrueX123Xnull',g:'fooXXtrueX123XnullXtrueX123Xnull',h:''}", r);
 	}
-	
-	
+
+
 	//=================================================================================================================
 	// @Header
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class E {
 		@RestMethod(name=GET)
@@ -649,11 +649,11 @@ public class RequestBeanProxyTest {
 		}
 	}
 	static MockRest e = MockRest.create(E.class);
-	
+
 	//=================================================================================================================
 	// @Header, Simple values
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface E01_Remoteable {
 
@@ -663,7 +663,7 @@ public class RequestBeanProxyTest {
 		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
 		String serialized(@RequestBean(serializer=XSerializer.class) E01_Bean rb);
 	}
-	
+
 	public static class E01_Bean {
 		@Header
 		public String getA() {
@@ -722,7 +722,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @Header, Maps
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface E02_Remoteable {
 
@@ -774,7 +774,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @Header, NameValuePairs
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface E03_Remoteable {
 
@@ -784,7 +784,7 @@ public class RequestBeanProxyTest {
 		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
 		String serialized(@RequestBean(serializer=XSerializer.class) E03_Bean rb);
 	}
-	
+
 	public static class E03_Bean {
 		@Header
 		public NameValuePairs getA() {
@@ -826,7 +826,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @Header, Collections
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface E04_Remoteable {
 
@@ -836,23 +836,23 @@ public class RequestBeanProxyTest {
 		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
 		String serialized(@RequestBean(serializer=XSerializer.class) E04_Bean rb);
 	}
-	
+
 	public static class E04_Bean {
 		@Header
 		public List<Object> getA() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Header("b")
 		public List<Object> getX1() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Header(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Header("d")
 		public List<Object> getX3() {
-			return new AList<Object>();
+			return new AList<>();
 		}
 		@Header("e")
 		public List<Object> getX4() {
@@ -907,11 +907,11 @@ public class RequestBeanProxyTest {
 		}
 	}
 	static MockRest g = MockRest.create(G.class);
-	
+
 	//=================================================================================================================
 	// @Path, Simple values
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface G01_Remoteable {
 
@@ -980,7 +980,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @Path, Maps
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface G02_Remoteable {
 
@@ -1032,7 +1032,7 @@ public class RequestBeanProxyTest {
 	//=================================================================================================================
 	// @Path, NameValuePairs
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface G03_Remoteable {
 
@@ -1042,7 +1042,7 @@ public class RequestBeanProxyTest {
 		@RemoteMethod(httpMethod="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
 		String serialized(@RequestBean(serializer=XSerializer.class) G03_Bean rb);
 	}
-	
+
 	public static class G03_Bean {
 		@Path
 		public NameValuePairs getA() {
@@ -1082,9 +1082,9 @@ public class RequestBeanProxyTest {
 	}
 
 	//=================================================================================================================
-	// @Path, Collections 
+	// @Path, Collections
 	//=================================================================================================================
-	
+
 	@Remoteable(path="/")
 	public static interface G04_Remoteable {
 
@@ -1094,23 +1094,23 @@ public class RequestBeanProxyTest {
 		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
 		String serialized(@RequestBean(serializer=XSerializer.class) G04_Bean rb);
 	}
-	
+
 	public static class G04_Bean {
 		@Path
 		public List<Object> getA() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Path("b")
 		public List<Object> getX1() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Path(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<Object>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
 		}
 		@Path("d")
 		public List<Object> getX3() {
-			return new AList<Object>();
+			return new AList<>();
 		}
 		@Path("e")
 		public List<Object> getX4() {
@@ -1133,7 +1133,7 @@ public class RequestBeanProxyTest {
 			return null;
 		}
 	}
-	
+
 	static G04_Remoteable g04a = RestClient.create().mockHttpConnection(g).build().getRemoteableProxy(G04_Remoteable.class, null);
 	static G04_Remoteable g04b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteableProxy(G04_Remoteable.class, null);
 
@@ -1152,7 +1152,7 @@ public class RequestBeanProxyTest {
 		String r = g04b.serialized(new G04_Bean());
 		assertEquals("echoPath/fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull//NULL/fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull//NULL", r);
 	}
-	
+
 	//=================================================================================================================
 	// Support classes
 	//=================================================================================================================

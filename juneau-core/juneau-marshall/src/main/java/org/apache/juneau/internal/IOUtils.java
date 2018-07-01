@@ -31,7 +31,7 @@ public final class IOUtils {
 
 	/**
 	 * Reads the contents of a file into a string.
-	 * 
+	 *
 	 * @param path The path of the file to read using default character encoding.
 	 * @return The contents of the reader as a string, or <jk>null</jk> if file does not exist.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -42,7 +42,7 @@ public final class IOUtils {
 
 	/**
 	 * Reads the contents of a file into a string.
-	 * 
+	 *
 	 * @param in The file to read using default character encoding.
 	 * @return The contents of the reader as a string, or <jk>null</jk> if file does not exist.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -57,7 +57,7 @@ public final class IOUtils {
 
 	/**
 	 * Reads the specified object to a <code>String</code>.
-	 * 
+	 *
 	 * <p>
 	 * Can be any of the following object types:
 	 * <ul>
@@ -67,7 +67,7 @@ public final class IOUtils {
 	 * 	<li>{@link InputStream}
 	 * 	<li><code><jk>byte</jk>[]</code>
 	 * </ul>
-	 * 
+	 *
 	 * @param o The object to read.
 	 * @return The object serialized to a string, or <jk>null</jk> if it wasn't a supported type.
 	 * @throws IOException
@@ -88,7 +88,7 @@ public final class IOUtils {
 
 	/**
 	 * Writes the contents of the specified <code>Reader</code> to the specified file.
-	 * 
+	 *
 	 * @param out The file to write the output to.
 	 * @param in The reader to pipe from.
 	 * @return The number of characters written to the file.
@@ -104,7 +104,7 @@ public final class IOUtils {
 
 	/**
 	 * Writes the contents of the specified <code>InputStream</code> to the specified file.
-	 * 
+	 *
 	 * @param out The file to write the output to.
 	 * @param in The input stream to pipe from.
 	 * @return The number of characters written to the file.
@@ -120,7 +120,7 @@ public final class IOUtils {
 
 	/**
 	 * Reads the contents of a reader into a string.
-	 * 
+	 *
 	 * @param in The input reader.
 	 * @return The contents of the reader as a string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -131,7 +131,7 @@ public final class IOUtils {
 
 	/**
 	 * Reads the contents of an input stream into a string using the specified charset.
-	 * 
+	 *
 	 * @param in The input stream.
 	 * @param cs The charset of the contents of the input stream.
 	 * @return The contents of the reader as a string.  <jk>null</jk> if input stream was null.
@@ -145,7 +145,7 @@ public final class IOUtils {
 
 	/**
 	 * Reads the contents of an input stream into a string using the system default charset.
-	 * 
+	 *
 	 * @param in The input stream.
 	 * @return The contents of the reader as a string, or <jk>null</jk> if the input stream is null.
 	 * @throws IOException If a problem occurred trying to read from the input stream.
@@ -158,7 +158,7 @@ public final class IOUtils {
 
 	/**
 	 * Read the specified input stream into a byte array and closes the stream.
-	 * 
+	 *
 	 * @param in The input stream.
 	 * @param bufferSize The expected size of the buffer.
 	 * @return The contents of the stream as a byte array.
@@ -184,7 +184,7 @@ public final class IOUtils {
 
 	/**
 	 * Reads a raw stream of bytes from the specified file.
-	 * 
+	 *
 	 * @param f The file to read.
 	 * @return A byte array containing the contents of the file.
 	 * @throws IOException
@@ -200,14 +200,14 @@ public final class IOUtils {
 
 	/**
 	 * Reads the specified input into a {@link String} until the end of the input is reached.
-	 * 
+	 *
 	 * <p>
 	 * The {@code Reader} is automatically closed.
-	 * 
+	 *
 	 * <p>
 	 * If the {@code Reader} is not an instance of a {@code BufferedReader}, then it gets wrapped in a
 	 * {@code BufferedReader}.
-	 * 
+	 *
 	 * @param in The input reader.
 	 * @param length Specify a positive number if the length of the input is known.
 	 * @param bufferSize Specify the buffer size to use.
@@ -232,10 +232,10 @@ public final class IOUtils {
 
 	/**
 	 * Pipes the contents of the specified reader into the writer.
-	 * 
+	 *
 	 * <p>
 	 * The reader is closed, the writer is not.
-	 * 
+	 *
 	 * @param in
 	 * 	The reader to pipe from.
 	 * @param out
@@ -250,10 +250,10 @@ public final class IOUtils {
 
 	/**
 	 * Pipes the contents of the specified object into the writer.
-	 * 
+	 *
 	 * <p>
 	 * The reader is closed, the writer is not.
-	 * 
+	 *
 	 * @param in
 	 * 	The input to pipe from.
 	 * 	Can be any of the types defined by {@link #toReader(Object)}.
@@ -267,10 +267,10 @@ public final class IOUtils {
 
 	/**
 	 * Pipes the contents of the specified streams.
-	 * 
+	 *
 	 * <p>
 	 * The input stream is closed, the output stream is not.
-	 * 
+	 *
 	 * @param in
 	 * 	The reader to pipe from.
 	 * @param out
@@ -285,10 +285,10 @@ public final class IOUtils {
 
 	/**
 	 * Pipes the contents of the specified object into the output stream.
-	 * 
+	 *
 	 * <p>
 	 * The input stream is closed, the output stream is not.
-	 * 
+	 *
 	 * @param in
 	 * 	The input to pipe from.
 	 * 	Can be any of the types defined by {@link #toInputStream(Object)}.
@@ -302,7 +302,7 @@ public final class IOUtils {
 
 	/**
 	 * Wraps the specified reader in a buffered reader.
-	 * 
+	 *
 	 * @param r The reader being wrapped.
 	 * @return
 	 * 	The reader wrapped in a {@link BufferedReader}, or the original {@link Reader} if it's already a buffered
@@ -316,7 +316,7 @@ public final class IOUtils {
 
 	/**
 	 * Counts the number of bytes in the input stream and then closes the stream.
-	 * 
+	 *
 	 * @param is The input stream to read from.
 	 * @return The number of bytes read.
 	 * @throws IOException
@@ -336,7 +336,7 @@ public final class IOUtils {
 
 	/**
 	 * Counts the number of characters in the reader and then closes the reader.
-	 * 
+	 *
 	 * @param r The reader to read from.
 	 * @return The number of characters read.
 	 * @throws IOException
@@ -356,10 +356,10 @@ public final class IOUtils {
 
 	/**
 	 * Given the specified <js>"Content-Length"</js> header value, return an appropriate buffer size.
-	 * 
+	 *
 	 * <p>
 	 * The maximum buffer size is 1MB.
-	 * 
+	 *
 	 * @param contentLength The value of the <js>"Content-Length"</js> header.
 	 * @return The appropriate buffer size.
 	 */
@@ -381,10 +381,10 @@ public final class IOUtils {
 
 	/**
 	 * Close input stream and ignore any exceptions.
-	 * 
+	 *
 	 * <p>
 	 * No-op if input stream is <jk>null</jk>.
-	 * 
+	 *
 	 * @param is The input stream to close.
 	 */
 	public static void closeQuietly(InputStream is) {
@@ -396,10 +396,10 @@ public final class IOUtils {
 
 	/**
 	 * Close output stream and ignore any exceptions.
-	 * 
+	 *
 	 * <p>
 	 * No-op if output stream is <jk>null</jk>.
-	 * 
+	 *
 	 * @param os The output stream to close.
 	 */
 	public static void closeQuietly(OutputStream os) {
@@ -411,10 +411,10 @@ public final class IOUtils {
 
 	/**
 	 * Close reader and ignore any exceptions.
-	 * 
+	 *
 	 * <p>
 	 * No-op if reader is <jk>null</jk>.
-	 * 
+	 *
 	 * @param r The reader to close.
 	 */
 	public static void closeQuietly(Reader r) {
@@ -426,10 +426,10 @@ public final class IOUtils {
 
 	/**
 	 * Close writer and ignore any exceptions.
-	 * 
+	 *
 	 * <p>
 	 * No-op if writer is <jk>null</jk>.
-	 * 
+	 *
 	 * @param w The writer to close.
 	 */
 	public static void closeQuietly(Writer w) {
@@ -441,7 +441,7 @@ public final class IOUtils {
 
 	/**
 	 * Quietly close all specified input streams, output streams, readers, and writers.
-	 * 
+	 *
 	 * @param o The list of all objects to quietly close.
 	 */
 	public static void closeQuietly(Object...o) {
@@ -459,7 +459,7 @@ public final class IOUtils {
 
 	/**
 	 * Flushes multiple output streams and writers in a single call.
-	 * 
+	 *
 	 * @param o
 	 * 	The objects to flush.
 	 * 	<jk>null</jk> entries are ignored.
@@ -483,7 +483,7 @@ public final class IOUtils {
 
 	/**
 	 * Close all specified input streams, output streams, readers, and writers.
-	 * 
+	 *
 	 * @param o
 	 * 	The list of all objects to close.
 	 * 	<jk>null</jk> entries are ignored.
@@ -511,7 +511,7 @@ public final class IOUtils {
 
 	/**
 	 * Converts an object to a <code>Reader</code>.
-	 * 
+	 *
 	 * @param o
 	 * 	The object to convert to a reader.
 	 * 	Can be any of the following:
@@ -545,7 +545,7 @@ public final class IOUtils {
 
 	/**
 	 * Converts an object to an <code>InputStream</code>.
-	 * 
+	 *
 	 * @param o
 	 * 	The object to convert to an input stream.
 	 * 	Can be any of the following:

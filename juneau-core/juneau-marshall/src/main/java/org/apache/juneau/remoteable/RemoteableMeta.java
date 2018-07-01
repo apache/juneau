@@ -22,11 +22,11 @@ import java.util.*;
 
 /**
  * Contains the meta-data about a remoteable interface.
- * 
+ *
  * <p>
  * Captures the information in {@link Remoteable @Remoteable} and {@link RemoteMethod @RemoteMethod} annotations for
  * caching and reuse.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces</a>
@@ -38,7 +38,7 @@ public class RemoteableMeta {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param c The interface class annotated with a {@link Remoteable @Remoteable} annotation (optional).
 	 * @param restUrl The absolute URL of the remote REST interface that implements this proxy interface.
 	 */
@@ -63,7 +63,7 @@ public class RemoteableMeta {
 
 	/**
 	 * Returns the metadata about the specified method on this interface proxy.
-	 * 
+	 *
 	 * @param m The method to look up.
 	 * @return Metadata about the method, or <jk>null</jk> if no metadata was found.
 	 */

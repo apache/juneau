@@ -17,30 +17,30 @@ import org.apache.juneau.svl.*;
 
 /**
  * Request path variable resolver.
- * 
+ *
  * <p>
  * The format for this var is <js>"$RP{key1[,key2...]}"</js>.
- * 
+ *
  * <p>
  * Used to resolve values returned by {@link RestRequest#getPath(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// URI path pattern = "/foo/{foo}/bar/{bar}"</jc>
- * 	String foo = restRequest.resolveVars(<js>"$RP{foo}"</js>); 
- * 	String fooOrBar = restRequest.resolveVars(<js>"$RP{foo,bar}"</js>); 
+ * 	String foo = restRequest.resolveVars(<js>"$RP{foo}"</js>);
+ * 	String fooOrBar = restRequest.resolveVars(<js>"$RP{foo,bar}"</js>);
  * </p>
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
- * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
+ * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver
  * 		or a session object on the resolver session.
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
@@ -63,7 +63,7 @@ public class RequestPathVar extends MultipartResolvingVar {
 	public RequestPathVar() {
 		super(NAME);
 	}
-	
+
 	@Override /* Var */
 	protected boolean allowNested() {
 		return false;

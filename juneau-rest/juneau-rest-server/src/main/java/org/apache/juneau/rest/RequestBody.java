@@ -32,7 +32,7 @@ import org.apache.juneau.rest.util.*;
 
 /**
  * Contains the body of the HTTP request.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; juneau-rest-server &gt; RequestBody</a>
@@ -95,10 +95,10 @@ public class RequestBody {
 
 	/**
 	 * Reads the input from the HTTP request parsed into a POJO.
-	 * 
+	 *
 	 * <p>
 	 * The parser used is determined by the matching <code>Content-Type</code> header on the request.
-	 * 
+	 *
 	 * <p>
 	 * If type is <jk>null</jk> or <code>Object.<jk>class</jk></code>, then the actual type will be determined
 	 * automatically based on the following input:
@@ -141,35 +141,35 @@ public class RequestBody {
 	 * 		<td><jk>null</jk></td>
 	 * 	</tr>
 	 * </table>
-	 * 
+	 *
 	 * <p>
 	 * Refer to <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a> for
 	 * a complete definition of supported POJOs.
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
 	 * 	<jk>int</jk> body = req.getBody().asType(<jk>int</jk>.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into an int array.</jc>
 	 * 	<jk>int</jk>[] body = req.getBody().asType(<jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean body = req.getBody().asType(MyBean.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List body = req.getBody().asType(LinkedList.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map body = req.getBody().asType(TreeMap.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
-	 * 
+	 *
 	 * @param type The class type to instantiate.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
@@ -183,25 +183,25 @@ public class RequestBody {
 
 	/**
 	 * Reads the input from the HTTP request parsed into a POJO.
-	 * 
+	 *
 	 * <p>
 	 * This is similar to {@link #asType(Class)} but allows for complex collections of POJOs to be created.
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; body = req.getBody().asType(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List&lt;List&lt;String&gt;&gt; body = req.getBody().asType(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; body = req.getBody().asType(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; body = req.getBody().asType(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -211,7 +211,7 @@ public class RequestBody {
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
-	 * 
+	 *
 	 * @param type
 	 * 	The type of object to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -231,14 +231,14 @@ public class RequestBody {
 
 	/**
 	 * Same as {@link #asType(Type, Type...)} but allows you to specify a part parser and schema.
-	 * 
+	 *
 	 * @param partParser
 	 * 	The part-parser to use for parsing the body as a string value if none of the existing parsers match the media type.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param schema 
+	 * @param schema
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * @param type
 	 * 	The type of object to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -258,13 +258,13 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as a plain string.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
-	 * 
+	 *
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -276,12 +276,12 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as a simple hexadecimal character string.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	0123456789ABCDEF
 	 * </p>
-	 * 
+	 *
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -293,12 +293,12 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	01 23 45 67 89 AB CD EF
 	 * </p>
-	 * 
+	 *
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -310,7 +310,7 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as a {@link Reader}.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -318,7 +318,7 @@ public class RequestBody {
 	 * 	<li>
 	 * 		Automatically handles GZipped input streams.
 	 * </ul>
-	 * 
+	 *
 	 * @return The body contents as a reader.
 	 * @throws IOException
 	 */
@@ -333,7 +333,7 @@ public class RequestBody {
 
 	/**
 	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};
-	 * 
+	 *
 	 * @return An unbuffered reader.
 	 * @throws IOException
 	 */
@@ -345,7 +345,7 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as an {@link InputStream}.
-	 * 
+	 *
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
@@ -358,13 +358,13 @@ public class RequestBody {
 
 		if (enc == null)
 			return new BoundedServletInputStream(req.getRawInputStream(), maxInput);
-		
+
 		return new BoundedServletInputStream(enc.getInputStream(req.getRawInputStream()), maxInput);
 	}
 
 	/**
 	 * Returns the parser and media type matching the request <code>Content-Type</code> header.
-	 * 
+	 *
 	 * @return
 	 * 	The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser was
 	 * 	found.
@@ -376,19 +376,19 @@ public class RequestBody {
 		MediaType mt = getMediaType();
 		return mt == null ? null : parsers.getParserMatch(mt);
 	}
-	
+
 	private MediaType getMediaType() {
 		if (mediaType != null)
 			return mediaType;
 		MediaType mediaType = headers.getContentType();
-		if (mediaType == null && body != null) 
+		if (mediaType == null && body != null)
 			return MediaType.UON;
 		return mediaType;
 	}
-	
+
 	/**
 	 * Returns the parser matching the request <code>Content-Type</code> header.
-	 * 
+	 *
 	 * @return
 	 * 	The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser was
 	 * 	found.
@@ -400,7 +400,7 @@ public class RequestBody {
 
 	/**
 	 * Returns the reader parser matching the request <code>Content-Type</code> header.
-	 * 
+	 *
 	 * @return
 	 * 	The reader parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
 	 * 	reader parser was found, or the matching parser was an input stream parser.
@@ -414,7 +414,7 @@ public class RequestBody {
 
 	/**
 	 * Returns the input stream parser matching the request <code>Content-Type</code> header.
-	 * 
+	 *
 	 * @return
 	 * 	The input stream parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
 	 * 	reader parser was found, or the matching parser was a reader parser.
@@ -425,7 +425,7 @@ public class RequestBody {
 			return (InputStreamParser)p;
 		return null;
 	}
-	
+
 	private <T> T getInner(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
 		try {
 			return parse(partParser, schema, cm);
@@ -457,7 +457,7 @@ public class RequestBody {
 
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;
-		
+
 		if (pm != null) {
 			Parser p = pm.getParser();
 			MediaType mediaType = pm.getMediaType();
@@ -470,13 +470,13 @@ public class RequestBody {
 				return o;
 			}
 		}
-			
+
 		if (cm.hasReaderTransform())
 			return cm.getReaderTransform().transform(getReader());
 
 		if (cm.hasInputStreamTransform())
 			return cm.getInputStreamTransform().transform(getInputStream());
-		
+
 		MediaType mt = getMediaType();
 		if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
 			if (partParser != null) {
@@ -486,7 +486,7 @@ public class RequestBody {
 				return cm.getStringTransform().transform(asString());
 			}
 		}
-		
+
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
 			headers.getContentType(), req.getParsers().getSupportedMediaTypes()
@@ -518,18 +518,18 @@ public class RequestBody {
 
 	/**
 	 * Returns the content length of the body.
-	 * 
+	 *
 	 * @return The content length of the body in bytes.
 	 */
 	public int getContentLength() {
 		return contentLength == 0 ? req.getRawContentLength() : contentLength;
 	}
-	
+
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		return beanSession.getClassMeta(type, args);
 	}

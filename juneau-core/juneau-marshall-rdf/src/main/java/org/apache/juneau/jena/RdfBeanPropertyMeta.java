@@ -19,7 +19,7 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation 
+ * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation
  * on the bean property.
  */
 public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
@@ -29,14 +29,14 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 */
 	public static final RdfBeanPropertyMeta DEFAULT = new RdfBeanPropertyMeta();
 
-	
+
 	private RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
 	private Namespace namespace = null;
 	private boolean isBeanUri;
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
 	 */
 	public RdfBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -54,15 +54,15 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 		namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
-	
+
 	private RdfBeanPropertyMeta() {
 		super(null);
 	}
 
 	/**
-	 * Returns the RDF collection format of this property from the {@link Rdf#collectionFormat} annotation on this bean 
+	 * Returns the RDF collection format of this property from the {@link Rdf#collectionFormat} annotation on this bean
 	 * property.
-	 * 
+	 *
 	 * @return The RDF collection format, or {@link RdfCollectionFormat#DEFAULT} if annotation not specified.
 	 */
 	protected RdfCollectionFormat getCollectionFormat() {
@@ -71,7 +71,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the RDF namespace associated with this bean property.
-	 * 
+	 *
 	 * <p>
 	 * Namespace is determined in the following order of {@link Rdf#prefix() @Rdf.prefix()} annotations:
 	 * <ol>
@@ -85,7 +85,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * 	<li>Bean interfaces.
 	 * 	<li>Bean interface packages.
 	 * </ol>
-	 * 
+	 *
 	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	public Namespace getNamespace() {
@@ -94,7 +94,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if this bean property is marked with {@link Rdf#beanUri() @Rdf.beanUri()} as <jk>true</jk>.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this bean property annotation is <jk>true</jk>.
 	 */
 	public boolean isBeanUri() {

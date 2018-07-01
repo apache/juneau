@@ -17,16 +17,16 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses any valid JSON text into a POJO model.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Content-Type</code> types:  <code><b>application/json, text/json</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
  * time that it takes the built-in Java DOM parsers to parse equivalent XML.
- * 
+ *
  * <p>
  * This parser handles all valid JSON syntax.
  * In addition, when strict mode is disable, the parser also handles the following:
@@ -40,10 +40,10 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		Unquoted attributes.
  * </ul>
- * 
+ *
  * <p>
  * Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
- * 
+ *
  * <p>
  * This parser handles the following input, and automatically returns the corresponding Java class.
  * <ul class='spaced-list'>
@@ -68,7 +68,7 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
  * </ul>
- * 
+ *
  * <p>
  * Input can be any of the following:
  * <ul class='spaced-list'>
@@ -91,7 +91,7 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		<js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
  * </ul>
- * 
+ *
  * <p>
  * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the
  * {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)} or {@link ObjectList#ObjectList(CharSequence)
@@ -108,25 +108,25 @@ public class JsonParser extends ReaderParser {
 
 	/**
 	 * Configuration property:  Validate end.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonParser.validateEnd.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonParserBuilder#validateEnd(boolean)}
 	 * 			<li class='jm'>{@link JsonParserBuilder#validateEnd()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in 
+	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
@@ -134,20 +134,20 @@ public class JsonParser extends ReaderParser {
 	 * 		.<jsm>create</jsm>()
 	 * 		.validateEnd()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>JSON_validateEnd</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
 	 * 	String in = <js>"{foo:'bar'}{baz:'qux'}"</js>;
 	 * 	MyBean myBean = p.parse(in, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String JSON_validateEnd = PREFIX + "validateEnd.b";
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ public class JsonParser extends ReaderParser {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Strict(PropertyStore ps) {
@@ -181,7 +181,7 @@ public class JsonParser extends ReaderParser {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Simple(PropertyStore ps) {
@@ -197,7 +197,7 @@ public class JsonParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public JsonParser(PropertyStore ps) {
@@ -206,7 +206,7 @@ public class JsonParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
@@ -222,14 +222,14 @@ public class JsonParser extends ReaderParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link JsonParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> JsonParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link JsonParserBuilder} object.
 	 */
 	public static JsonParserBuilder create() {
@@ -240,7 +240,7 @@ public class JsonParser extends ReaderParser {
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new JsonParserSession(this, args);
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

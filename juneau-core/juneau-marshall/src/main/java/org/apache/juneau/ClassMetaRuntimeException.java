@@ -23,7 +23,7 @@ public final class ClassMetaRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cause The cause of this exception.
 	 * @param c The class name of the bean that caused the exception.
 	 * @param message The {@link MessageFormat}-style message.
@@ -35,7 +35,7 @@ public final class ClassMetaRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param message The error message.
 	 */
 	public ClassMetaRuntimeException(String message) {
@@ -44,7 +44,7 @@ public final class ClassMetaRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
@@ -54,7 +54,7 @@ public final class ClassMetaRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Shortcut for calling <code><jk>new</jk> ClassMetaRuntimeException(String.format(c.getName() + <js>": "</js> + message, args));</code>
-	 * 
+	 *
 	 * @param c The class name of the bean that caused the exception.
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
@@ -65,7 +65,7 @@ public final class ClassMetaRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cause The initial cause of the exception.
 	 */
 	public ClassMetaRuntimeException(Throwable cause) {

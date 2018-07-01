@@ -18,12 +18,12 @@ import org.apache.juneau.http.annotation.*;
 
 /**
  * Shortcut label for child resources.  Typically used in router resources.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>new</jk> ResourceLink(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; juneau-rest-server &gt; Predefined Label Beans</a>
@@ -37,7 +37,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param name The name of the child resource.
 	 * @param description The description of the child resource.
 	 */
@@ -51,7 +51,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 
 	/**
 	 * Returns the name field on this label.
-	 * 
+	 *
 	 * @return The name.
 	 */
 	@Html(link="servlet:/{name}")
@@ -61,7 +61,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 
 	/**
 	 * Sets the name field on this label to a new value.
-	 * 
+	 *
 	 * @param name The new name.
 	 * @return This object (for method chaining).
 	 */
@@ -72,7 +72,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 
 	/**
 	 * Returns the description field on this label.
-	 * 
+	 *
 	 * @return The description.
 	 */
 	public String getDescription() {
@@ -81,7 +81,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 
 	/**
 	 * Sets the description field on this label to a new value.
-	 * 
+	 *
 	 * @param description The new description.
 	 * @return This object (for method chaining).
 	 */
@@ -89,8 +89,8 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 		this.description = description;
 		return this;
 	}
-	
-	
+
+
 	@Override /* Comparable */
 	public int compareTo(ResourceDescription o) {
 		return getName().toString().compareTo(o.getName().toString());

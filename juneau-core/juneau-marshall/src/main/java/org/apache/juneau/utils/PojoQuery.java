@@ -25,10 +25,10 @@ import org.apache.juneau.internal.*;
 
 /**
  * Designed to provide search/view/sort/paging filtering on tabular in-memory POJO models.
- * 
+ *
  * <p>
  * It can also perform just view filtering on beans/maps.
- * 
+ *
  * <p>
  * Examples of tabular POJO models:
  * <ul>
@@ -37,7 +37,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>Map[]</tt>
  * 	<li><tt>Bean[]</tt>
  * </ul>
- * 
+ *
  * <p>
  * Tabular POJO models can be thought of as tables of data.  For example, a list of the following beans...
  * <p class='bcode'>
@@ -54,7 +54,7 @@ import org.apache.juneau.internal.*;
  * 	<tr><td>123</td><td>'foobar'</td><td>yyyy/MM/dd HH:mm:ss</td></tr>
  * 	<tr><td colspan=3>...</td></tr>
  * </table>
- * 
+ *
  * <p>
  * From this table, you can perform the following functions:
  * <ul class='spaced-list'>
@@ -67,13 +67,13 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		Position/limit - Only return a subset of rows.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Search</h5>
- * 
+ *
  * The search capabilities allow you to filter based on query patterns against strings, dates, and numbers.
  * Queries take the form of a Map with column names as keys, and search patterns as values.
  * <br>Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -83,13 +83,13 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		<tt>{myDate:'2001'}</tt> - Return only rows where the <tt>myDate</tt> column have dates in the year 2001.
  * </ul>
- * 
+ *
  * <h5 class='topic'>String Patterns</h5>
- * 
+ *
  * Any objects can be queried against using string patterns.
  * If the objects being searched are not strings, then the patterns are matched against whatever is return by the
  * {@code Object#toString()} method.
- * 
+ *
  * <h5 class='topic'>Example string query patterns:</h5>
  * <ul>
  * 	<li><tt>foo</tt> - The string 'foo'
@@ -99,7 +99,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>foo*</tt> - <tt>*</tt> matches zero-or-more characters.
  * 	<li><tt>foo?</tt> - <tt>?</tt> matches exactly one character
  * </ul>
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -109,11 +109,11 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		Prepend <tt>-</tt> to tokens that must not match.  (e.g. <tt>+foo* -*bar</tt>)
  * </ul>
- * 
+ *
  * <h5 class='topic'>Numeric Patterns</h5>
- * 
+ *
  * Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.
- * 
+ *
  * <h5 class='topic'>Example numeric query patterns:</h5>
  * <ul>
  * 	<li><tt>123</tt> - The single number 123
@@ -125,7 +125,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>&gt;= 100</tt> - Greater than or equal to 100
  * 	<li><tt>!123</tt> - Not 123
  * </ul>
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -133,15 +133,15 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		Negative numbers are supported.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Date Patterns</h5>
- * 
+ *
  * Any object of type {@link Date} or {@link Calendar} can be searched using date patterns.
- * 
+ *
  * <p>
  * The default valid input timestamp formats (which can be overridden via the {@link #setValidTimestampFormats(String...)}
  * method are...
- * 
+ *
  * <ul>
  * 	<li><tt>yyyy.MM.dd.HH.mm.ss</tt>
  * 	<li><tt>yyyy.MM.dd.HH.mm</tt>
@@ -150,7 +150,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>yyyy.MM</tt>
  * 	<li><tt>yyyy</tt>
  * </ul>
- * 
+ *
  * <h5 class='topic'>Example date query patterns:</h5>
  * <ul>
  * 	<li><tt>2001</tt> - A specific year.
@@ -160,30 +160,30 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>2001 - 2003.06.30</tt>	- A date range.
  * 	<li><tt>2001 2003 2005</tt>	- Multiple date patterns are ORed.
  * </ul>
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		Whitespace is ignored in search patterns.
  * </ul>
- * 
+ *
  * <h5 class='topic'>View</h5>
- * 
+ *
  * The view capability allows you to return only the specified subset of columns in the specified order.
  * <br>The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
- * 
+ *
  * <h5 class='topic'>Example view parameters:</h5>
  * <ul>
  * 	<li><tt>column1</tt> - Return only column 'column1'.
  * 	<li><tt>column2, column1</tt> - Return only columns 'column2' and 'column1' in that order.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Sort</h5>
- * 
+ *
  * The sort capability allows you to sort values by the specified rows.
  * <br>The sort parameter is a list of strings with an optional <js>'+'</js> or <js>'-'</js> suffix representing
  * ascending and descending order accordingly.
- * 
+ *
  * <h5 class='topic'>Example sort parameters:</h5>
  * <ul>
  * 	<li><tt>column1</tt> - Sort rows by column 'column1' ascending.
@@ -191,9 +191,9 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>column1-</tt> - Sort rows by column 'column1' descending.
  * 	<li><tt>column1, column2-</tt> - Sort rows by column 'column1' ascending, then 'column2' descending.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Paging</h5>
- * 
+ *
  * Use the <tt>position</tt> and <tt>limit</tt> parameters to specify a subset of rows to return.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -205,7 +205,7 @@ public final class PojoQuery {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param input The POJO we're going to be filtering.
 	 * @param session The bean session to use to create bean maps for beans.
 	 */
@@ -217,7 +217,7 @@ public final class PojoQuery {
 
 	/**
 	 * Filters the input object as a collection of maps.
-	 * 
+	 *
 	 * @param args The search arguments.
 	 * @return The filtered collection.
 	 * Returns the unaltered input if the input is not a collection or array of objects.
@@ -506,7 +506,7 @@ public final class PojoQuery {
 
 		/**
 		 * Construct a number matcher for the given search pattern.
-		 * 
+		 *
 		 * @param searchPattern A date search paattern.  See class usage for a description.
 		 */
 		public NumberMatcher(String searchPattern) {
@@ -652,7 +652,7 @@ public final class PojoQuery {
 
 	/**
 	 * Use this method to override the allowed search patterns when used in locales where time formats are different.
-	 * 
+	 *
 	 * @param s A comma-delimited list of valid time formats.
 	 */
 	public void setValidTimestampFormats(String...s) {
@@ -667,7 +667,7 @@ public final class PojoQuery {
 
 		/**
 		 * Construct a timestamp matcher for the given search pattern.
-		 * 
+		 *
 		 * @param searchPattern The search pattern.
 		 */
 		DateMatcher(String searchPattern) {
@@ -678,7 +678,7 @@ public final class PojoQuery {
 
 		/**
 		 * Returns <jk>true</jk> if the specified date matches the pattern passed in through the constructor.
-		 * 
+		 *
 		 * <p>
 		 * <br>The Object can be of type {@link Date} or {@link Calendar}.
 		 * <br>Always returns <jk>false</jk> on <jk>null</jk> input.
@@ -852,7 +852,7 @@ public final class PojoQuery {
 	 * Parses a timestamp string off the beginning of the string segment 'seg'.
 	 * Goes through each possible valid timestamp format until it finds a match.
 	 * The position where the parsing left off is stored in pp.
-	 * 
+	 *
 	 * @param seg The string segment being parsed.
 	 * @param pp Where parsing last left off.
 	 * @return An object representing a timestamp.
@@ -920,7 +920,7 @@ public final class PojoQuery {
 
 		/**
 		 * Construct a string matcher for the given search pattern.
-		 * 
+		 *
 		 * @param searchPattern The search pattern.  See class usage for details.
 		 * @param ignoreCase If <jk>true</jk>, use case-insensitive matching.
 		 */
@@ -1133,7 +1133,7 @@ public final class PojoQuery {
 
 	/**
 	 * Replaces tokens in a string with a different token.
-	 * 
+	 *
 	 * <p>
 	 * replace("A and B and C", "and", "or") -> "A or B or C"
 	 * replace("andandand", "and", "or") -> "ororor"

@@ -38,7 +38,7 @@ public class OapiPartSerializerBuilder extends UonPartSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public OapiPartSerializerBuilder(PropertyStore ps) {
@@ -57,17 +57,17 @@ public class OapiPartSerializerBuilder extends UonPartSerializerBuilder {
 
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
-	 * 
+	 *
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
 	 * decoded before being passed to this parser.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * @return This object (for method chaining).
@@ -572,7 +572,7 @@ public class OapiPartSerializerBuilder extends UonPartSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public OapiPartSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

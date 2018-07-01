@@ -20,29 +20,29 @@ import java.lang.annotation.*;
 /**
  * Identifies Java methods on a resource/servlet class that get invoked during particular lifecycle events of
  * the servlet or REST call.
- * 
+ *
  * <p>
  * For example, if you want to add an initialization method to your resource:
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(...)
  * 	<jk>public class</jk> MyResource  {
- * 
+ *
  * 		<jc>// Our database.</jc>
  * 		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
- * 
+ *
  * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
  * 		<jk>public void</jk> initMyDatabase(RestContextBuilder builder) <jk>throws</jk> Exception {
  * 			<jf>myDatabase</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
  * 		}
  * 	}
  * </p>
- * 
+ *
  * <p>
  * Or if you want to intercept REST calls:
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(...)
  * 	<jk>public class</jk> MyResource {
- * 
+ *
  * 		<jc>// Add a request attribute to all incoming requests.</jc>
  * 		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
  * 		<jk>public void</jk> onPreCall(RestRequest req) {
@@ -50,7 +50,7 @@ import java.lang.annotation.*;
  * 		}
  * 	}
  * </p>
- * 
+ *
  * <p>
  * The hook events can be broken down into two categories:
  * <ul class='spaced-list'>
@@ -69,7 +69,7 @@ import java.lang.annotation.*;
  * 			<li>{@link HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
  * 		</ul>
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.LifecycleHooks">Overview &gt; juneau-rest-server &gt; Lifecycle Hooks</a>

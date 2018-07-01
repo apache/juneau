@@ -23,7 +23,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSchemaDocSerializer} and its subclasses.
- * 
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -31,7 +31,7 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -50,7 +50,7 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 
 	/*
 	 * Creates a schema representation of the specified class type.
-	 * 
+	 *
 	 * @param eType The class type to get the schema of.
 	 * @param ctx Serialize context used to prevent infinite loops.
 	 * @param attrName The name of the current attribute.

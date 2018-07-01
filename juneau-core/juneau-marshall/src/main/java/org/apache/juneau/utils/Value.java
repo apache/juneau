@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -14,17 +14,17 @@ package org.apache.juneau.utils;
 
 /**
  * Represents a simple settable value.
- * 
+ *
  * <p>
  * This object is not thread safe.
- * 
+ *
  * @param <T> The value type.
  */
 public class Value<T> {
 
 	private T t;
 	private ValueListener<T> listener;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -33,16 +33,16 @@ public class Value<T> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param t Initial value.
 	 */
 	public Value(T t) {
 		set(t);
 	}
-	
+
 	/**
 	 * Adds a listener for this value.
-	 * 
+	 *
 	 * @param listener The new listener for this value.
 	 * @return This object (for method chaining).
 	 */
@@ -50,10 +50,10 @@ public class Value<T> {
 		this.listener = listener;
 		return this;
 	}
-	
+
 	/**
 	 * Sets the value.
-	 * 
+	 *
 	 * @param t The new value.
 	 * @return This object (for method chaining).
 	 */
@@ -63,10 +63,10 @@ public class Value<T> {
 			listener.onSet(t);
 		return this;
 	}
-	
+
 	/**
 	 * Returns the value.
-	 * 
+	 *
 	 * @return The value, or <jk>null</jk> if it is not set.
 	 */
 	public T get() {
@@ -75,7 +75,7 @@ public class Value<T> {
 
 	/**
 	 * Returns <jk>true</jk> if the value is set.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the value is set.
 	 */
 	public boolean isSet() {

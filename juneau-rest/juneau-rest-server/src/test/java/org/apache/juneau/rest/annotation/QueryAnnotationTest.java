@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -34,7 +34,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings("javadoc")
 public class QueryAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -64,7 +64,7 @@ public class QueryAnnotationTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_get() throws Exception {
 		a.get("?p1=p1&p2=2").execute().assertBody("p1=[p1,p1,p1],p2=[2,2,2]");
@@ -95,7 +95,7 @@ public class QueryAnnotationTest {
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
 		a.post("?p1="+x+"&p2=1", null).execute().assertBody("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
-	
+
 	//=================================================================================================================
 	// UON parameters
 	//=================================================================================================================
@@ -124,7 +124,7 @@ public class QueryAnnotationTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01_get1() throws Exception {
 		b.get("/get1?p1=p1").execute().assertBody("p1=[p1,p1,p1]");
@@ -145,7 +145,7 @@ public class QueryAnnotationTest {
 		b.post("/post2?p1=p1", null).execute().assertBody("p1=[p1,p1,p1]");
 		b.post("/post2?p1='p1'", null).execute().assertBody("p1=[p1,'p1','p1']");
 	}
-	
+
 	//=================================================================================================================
 	// Multipart parameters (e.g. &key=val1,&key=val2).
 	//=================================================================================================================
@@ -157,7 +157,7 @@ public class QueryAnnotationTest {
 			public int b;
 			public boolean c;
 		}
-		
+
 		@RestMethod(name=GET, path="/StringArray")
 		public Object c01(@Query(value="x",collectionFormat="multi") String[] x) {
 			return x;
@@ -215,11 +215,11 @@ public class QueryAnnotationTest {
 		c.get("/ListOfBeans?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
 		c.get("/ListOfBeans?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
 	}
-	
+
 	//=================================================================================================================
 	// Default values.
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class D {
 		@RestMethod(name=GET, path="/defaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
@@ -276,11 +276,11 @@ public class QueryAnnotationTest {
 		d.get("/annotatedAndDefaultQuery").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
 		d.get("/annotatedAndDefaultQuery").query("f1",7).query("f2",8).query("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
 	}
-	
+
 	//=================================================================================================================
 	// @Query on POJO
 	//=================================================================================================================
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
@@ -289,7 +289,7 @@ public class QueryAnnotationTest {
 	public static class SA {
 
 		@Query(
-			name="Q", 
+			name="Q",
 			description= {"a","b"},
 			type="string"
 		)
@@ -300,7 +300,7 @@ public class QueryAnnotationTest {
 		public void sa01(SA01 q) {}
 
 		@Query(
-			name="Q", 
+			name="Q",
 			api={
 				"description: 'a\nb',",
 				"type:'string'"
@@ -313,7 +313,7 @@ public class QueryAnnotationTest {
 		public void sa02(SA02 q) {}
 
 		@Query(
-			name="Q", 
+			name="Q",
 			api={
 				"description: 'b\nc',",
 				"type:'string'"
@@ -427,13 +427,13 @@ public class QueryAnnotationTest {
 		@RestMethod(name=GET,path="/example")
 		public void sc01(SC01 q) {}
 	}
-	
+
 	@Test
 	public void sc01_Query_onPojo_example() throws Exception {
 		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("query", "Q");
 		assertObjectEquals("{f1:'a'}", x.getExample());
 	}
-		
+
 	//=================================================================================================================
 	// @Query on parameter
 	//=================================================================================================================
@@ -444,16 +444,16 @@ public class QueryAnnotationTest {
 
 	@RestResource
 	public static class TA {
-		
+
 		@RestMethod(name=GET,path="/basic")
 		public void ta01(
 			@Query(
 				name="Q",
 				description= {"a","b"},
 				type="string"
-			) 
+			)
 			String q) {}
-		
+
 		@RestMethod(name=GET,path="/api")
 		public void ta02(
 			@Query(
@@ -462,9 +462,9 @@ public class QueryAnnotationTest {
 					"description: 'a\nb',",
 					"type:'string'"
 				}
-			) 
+			)
 			String q) {}
-		
+
 		@RestMethod(name=GET,path="/mixed")
 		public void ta03(
 			@Query(
@@ -475,7 +475,7 @@ public class QueryAnnotationTest {
 				},
 				description= {"a","b"},
 				type="string"
-			) 
+			)
 			String q) {}
 
 		@RestMethod(name=GET,path="/value")
@@ -515,7 +515,7 @@ public class QueryAnnotationTest {
 
 	@RestResource
 	public static class TB {
-		
+
 		@RestMethod(name=GET,path="/schemaValue")
 		public void tb01(@Query(name="Q") String q) {}
 	}
@@ -532,11 +532,11 @@ public class QueryAnnotationTest {
 
 	@RestResource
 	public static class TC {
-		
+
 		@RestMethod(name=GET,path="/example")
 		public void tc01(@Query(name="Q", example={"a","b"}) String q) {}
 	}
-	
+
 	@Test
 	public void t01_Query_onParameter_example() throws Exception {
 		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("query", "Q");

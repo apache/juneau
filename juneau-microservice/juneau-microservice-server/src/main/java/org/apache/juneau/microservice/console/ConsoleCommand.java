@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -20,10 +20,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Implements a command that can be invoked from the console of the microservice.
- * 
+ *
  * <p>
  * Console commands allow you to interact with your microservice through the system console.
- * 
+ *
  * <p>
  * Console commands are associated with the microservice through the following:
  * <ul>
@@ -34,59 +34,59 @@ import org.apache.juneau.utils.*;
  * 		<br>This allows you to override the default implementation above and augment or replace the list
  * 			with your own implementation objects.
  * </ul>
- * 
+ *
  * <p>
  * For example, the {@link HelpCommand} is used to provide help on other commands.
- * 
+ *
  * <p class='bcode'>
  * 	Running class 'RestMicroservice' using config file 'examples.cfg'.
  * 	Server started on port 10000
- * 
+ *
  * 	List of available commands:
  * 		exit -- Shut down service
  * 		restart -- Restarts service
  * 		help -- Commands help
  * 		echo -- Echo command
- * 
+ *
  * 	&gt; <span style='color:green'>help help</span>
  * 	NAME
  * 		help -- Commands help
- * 	
+ *
  * 	SYNOPSIS
  * 		help [command]
- * 	
+ *
  * 	DESCRIPTION
  * 		When called without arguments, prints the descriptions of all available commands.
  * 		Can also be called with one or more arguments to get detailed information on a command.
- * 	
+ *
  * 	EXAMPLES
  * 		List all commands:
  * 			&gt; help
- * 		
+ *
  * 		List help on the help command:
  * 			&gt; help help
- * 			
- * 	&gt; 
+ *
+ * 	&gt;
  * </p>
- * 
+ *
  * <p>
  * The arguments are available as an {@link Args} object which allows for easy accessed to parsed command lines.
  * Some simple examples of valid command lines:
- * 
+ *
  * <p class='bcode'>
  * 	<jc>// mycommand</jc>
  * 	args.get("0");  <jc>// "mycommand"</jc>
- * 
+ *
  * 	<jc>// mycommand arg1 arg2</jc>
  * 	args.get("0");  <jc>// "mycommand"</jc>
  * 	args.get("1");  <jc>// "arg1"</jc>
  * 	args.get("2");  <jc>// "arg2"</jc>
- * 
+ *
  * 	<jc>// mycommand -optArg1 foo bar -optArg2 baz qux</jc>
  * 	args.get("0");  <jc>// "mycommand"</jc>
  * 	args.get("optArg1", String[].class);  <jc>// ["foo","bar"]</jc>
  * 	args.get("optArg2", String[].class);  <jc>// ["baz","qux"]</jc>
- * 	
+ *
  * 	<jc>// mycommand -optArg1 "foo bar" -optArg2 'baz qux'</jc>
  * 	args.get("0");  <jc>// "mycommand"</jc>
  * 	args.get("optArg1", String[].class);  <jc>// ["foo bar"]</jc>
@@ -94,29 +94,29 @@ import org.apache.juneau.utils.*;
  * </p>
  */
 public abstract class ConsoleCommand {
-	
+
 	/**
 	 * Returns the name of the command.
-	 * 
+	 *
 	 * <p>
 	 * Example:  <js>"help"</js> for the help command.
-	 * 
-	 * @return 
-	 * 	The name of the command.  
+	 *
+	 * @return
+	 * 	The name of the command.
 	 * 	<br>Must not be <jk>null</jk> or contain spaces.
 	 */
 	abstract public String getName();
-	
+
 	/**
 	 * Returns the usage synopsis of the command.
-	 * 
+	 *
 	 * <p>
 	 * Example:  <js>"help [command ...]"
-	 * 
+	 *
 	 * <p>
 	 * The default implementation just returns the name, which implies the command takes no additional arguments.
-	 * 
-	 * @return The synopsis of the command.  
+	 *
+	 * @return The synopsis of the command.
 	 */
 	public String getSynopsis() {
 		return getName();
@@ -124,39 +124,39 @@ public abstract class ConsoleCommand {
 
 	/**
 	 * Returns a one-line localized description of the command.
-	 * 
+	 *
 	 * <p>
 	 * The locale should be the system locale.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The localized description of the command.
 	 * 	<br>Can be <jk>null</jk> if there is no information.
 	 */
 	public String getInfo() {
 		return null;
 	}
-	
+
 	/**
 	 * Returns localized details of the command.
-	 * 
+	 *
 	 * <p>
 	 * The locale should be the system locale.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The localized details of the command.
 	 * 	<br>Can be <jk>null</jk> if there is no additional description.
 	 */
 	public String getDescription() {
 		return null;
 	}
-	
+
 	/**
 	 * Returns localized examples of the command.
-	 * 
+	 *
 	 * <p>
 	 * The locale should be the system locale.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The localized examples of the command.
 	 * 	<br>Can be <jk>null</jk> if there is no examples.
 	 */
@@ -169,10 +169,10 @@ public abstract class ConsoleCommand {
 	 * @param in The console reader.
 	 * @param out The console writer.
 	 * @param args The command arguments.  The first argument is always the command itself.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	<jk>true</jk> if the console read thread should exit.
-	 * 	<br>Normally you want to return <jk>true</jk> if your action is causing the microservice to exit or restart. 
+	 * 	<br>Normally you want to return <jk>true</jk> if your action is causing the microservice to exit or restart.
 	 * @throws Exception
 	 * 	Any thrown exception will simply be sent to STDERR.
 	 */

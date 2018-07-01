@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -18,7 +18,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents possible values for the following properties:
- * 
+ *
  * <ul class='doctree'>
  * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo}
  * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo}
@@ -27,40 +27,40 @@ import org.apache.juneau.internal.*;
 public enum TypeCategory {
 
 	/** Beans */
-	BEAN, 
-	
+	BEAN,
+
 	/** Map */
-	MAP, 
-	
+	MAP,
+
 	/** List/Set */
-	COLLECTION, 
-	
+	COLLECTION,
+
 	/** Array */
-	ARRAY, 
-	
+	ARRAY,
+
 	/** Boolean (including primitives) */
-	BOOLEAN, 
-	
+	BOOLEAN,
+
 	/** Short/Integer/Long/Float/Double (including primitives) */
-	NUMBER, 
-	
+	NUMBER,
+
 	/** String/CharSequence/Character */
-	STRING, 
-	
+	STRING,
+
 	/** Enums */
-	ENUM, 
-	
+	ENUM,
+
 	/** Anything else */
 	OTHER,
 
 	/** Anything */
 	ANY;
-	
+
 	/**
 	 * Parses a comma-delimited list of values into a set of {@link TypeCategory} values.
-	 * 
+	 *
 	 * @param s The comma-delimited string.
-	 * @return A comma-delimited list of values into a set of {@link TypeCategory} values. 
+	 * @return A comma-delimited list of values into a set of {@link TypeCategory} values.
 	 */
 	public static Set<TypeCategory> parse(String s) {
 		if (s == null || s.isEmpty())

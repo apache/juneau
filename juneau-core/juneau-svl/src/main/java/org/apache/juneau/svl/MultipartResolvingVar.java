@@ -16,17 +16,17 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Interface for the resolution of vars that can have one or more keys where the first non-null resolution is returned.
- * 
+ *
  * <p>
  * For example, to resolve the system property <js>"myProperty"</js> but then resolve <js>"myProperty2"</js> if the
  * property doesn't exist: <js>"$S{myProperty1,myProperty2}"</js>
- * 
+ *
  * <p>
  * Subclasses must implement the following method:
  * <ul>
  * 	<li class='jm'>{@link #resolve(VarResolverSession, String)}
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
@@ -36,7 +36,7 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param name The name of this variable.
 	 */
 	public MultipartResolvingVar(String name) {

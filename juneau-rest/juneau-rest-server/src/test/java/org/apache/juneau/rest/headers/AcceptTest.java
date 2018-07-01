@@ -29,7 +29,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AcceptTest {
-	
+
 	//=================================================================================================================
 	// Setup classes
 	//=================================================================================================================
@@ -50,11 +50,11 @@ public class AcceptTest {
 			};
 		}
 	}
-	
+
 	public static class S1 extends DummySerializer { public S1(PropertyStore ps) {super(ps, "s1", "text/s1");}}
 	public static class S2 extends DummySerializer { public S2(PropertyStore ps) {super(ps, "s2", "text/s2");}}
 	public static class S3 extends DummySerializer { public S3(PropertyStore ps) {super(ps, "s3", "text/s3");}}
-	
+
 	//=================================================================================================================
 	// Test that default Accept headers on servlet annotation are picked up.
 	//=================================================================================================================
@@ -70,7 +70,7 @@ public class AcceptTest {
 		}
 	}
 	private static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
 		a.put("/", null).execute().assertBody("s2");
@@ -87,7 +87,7 @@ public class AcceptTest {
 	// Test that default Accept headers on servlet annotation are picked up
 	// when @RestMethod.parsers/serializers annotations are used.
 	//=================================================================================================================
-	
+
 	@RestResource(
 		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
@@ -99,7 +99,7 @@ public class AcceptTest {
 		}
 	}
 	private static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
 		b.put("/", null).accept("text/s3").execute().assertBody("s3");
@@ -114,12 +114,12 @@ public class AcceptTest {
 				"Supported media-types: ['text/s3']"
 			);
 	}
-	
+
 	//=================================================================================================================
 	// Test that default Accept headers on servlet annotation are picked up
 	// when @RestMethod.addParsers/addSerializers annotations are used.
 	//=================================================================================================================
-	
+
 	@RestResource(
 		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
@@ -139,7 +139,7 @@ public class AcceptTest {
 		c.put("/", null).accept("text/s2").execute().assertBody("s2");
 		c.put("/", null).accept("text/s3").execute().assertBody("s3");
 	}
-	
+
 	@Test
 	public void c02_restMethodAddParsersSerializersInherit_invalid() throws Exception {
 		c.put("?noTrace=true", null).accept("text/s4").execute()
@@ -165,7 +165,7 @@ public class AcceptTest {
 		}
 	}
 	private static MockRest d = MockRest.create(D.class);
-	
+
 	@Test
 	public void d01_accept_valid() throws Exception {
 		// "*/*" should match the first serializer, not the default serializer.
@@ -186,7 +186,7 @@ public class AcceptTest {
 				"Supported media-types: ['text/s1','text/s2']"
 			);
 	}
-	
+
 	//=================================================================================================================
 	// Test that default Accept headers on method annotation are picked up
 	// when @RestMethod.parsers/serializers annotations are used.

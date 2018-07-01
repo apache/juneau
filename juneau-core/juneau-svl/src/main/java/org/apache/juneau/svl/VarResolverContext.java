@@ -20,10 +20,10 @@ import java.util.concurrent.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.
- * 
+ *
  * <p>
  * Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
@@ -37,7 +37,7 @@ public class VarResolverContext {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param vars The Var classes used for resolving string variables.
 	 * @param contextObjects Read-only context objects.
 	 */
@@ -59,7 +59,7 @@ public class VarResolverContext {
 
 	/**
 	 * Returns an unmodifiable map of {@link Var Vars} associated with this context.
-	 * 
+	 *
 	 * @return A map whose keys are var names (e.g. <js>"S"</js>) and values are {@link Var} instances.
 	 */
 	protected Map<String,Var> getVarMap() {
@@ -68,7 +68,7 @@ public class VarResolverContext {
 
 	/**
 	 * Returns an array of variables define in this variable resolver context.
-	 * 
+	 *
 	 * @return A new array containing the variables in this context.
 	 */
 	protected Class<?>[] getVars() {
@@ -77,7 +77,7 @@ public class VarResolverContext {
 
 	/**
 	 * Returns the context object with the specified name.
-	 * 
+	 *
 	 * @param name The name of the context object.
 	 * @return The context object, or <jk>null</jk> if no context object is specified with that name.
 	 */
@@ -87,7 +87,7 @@ public class VarResolverContext {
 
 	/**
 	 * Returns the context map of this variable resolver context.
-	 * 
+	 *
 	 * @return An unmodifiable map of the context objects of this variable resolver context.
 	 */
 	protected Map<String,Object> getContextObjects() {

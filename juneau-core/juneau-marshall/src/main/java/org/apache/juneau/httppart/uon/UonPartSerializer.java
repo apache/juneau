@@ -21,7 +21,7 @@ import org.apache.juneau.uon.*;
 
 /**
  * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
- * 
+ *
  * <p>
  * This serializer uses UON notation for all parts by default.  This allows for arbitrary POJOs to be losslessly
  * serialized as any of the specified HTTP types.
@@ -42,7 +42,7 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -50,7 +50,7 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 		super(
 			ps.builder()
 				.set(UON_encoding, false)
-				.build() 
+				.build()
 		);
 	}
 
@@ -61,11 +61,11 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 
 	/**
 	 * Instantiates a new clean-slate {@link UonPartSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link UonPartSerializerBuilder} object.
 	 */
 	public static UonPartSerializerBuilder create() {
@@ -78,9 +78,9 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 
 	/**
 	 * Convenience method for calling the parse method without a schema object.
-	 * 
+	 *
 	 * @param type The category of value being serialized.
-	 * @param value The value being serialized.	
+	 * @param value The value being serialized.
 	 * @return The serialized value.
 	 */
 	public String serialize(HttpPartType type, Object value) {

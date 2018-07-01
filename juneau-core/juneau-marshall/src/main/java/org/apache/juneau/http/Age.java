@@ -14,41 +14,41 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Age</l> HTTP response header.
- * 
+ *
  * <p>
  * The age the object has been in a proxy cache in seconds.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Age: 12
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The Age response-header field conveys the sender's estimate of the amount of time since the response (or its
  * revalidation) was generated at the origin server.
  * A cached response is "fresh" if its age does not exceed its freshness lifetime.
  * Age values are calculated as specified in section 13.2.3.
- * 
+ *
  * <p class='bcode'>
  * 	Age = "Age" ":" age-value
  * 	age-value = delta-seconds
  * </p>
- * 
+ *
  * <p>
  * Age values are non-negative decimal integers, representing time in seconds.
- * 
+ *
  * <p>
  * If a cache receives a value larger than the largest positive integer it can represent, or if any of its age
  * calculations overflows, it MUST transmit an Age header with a value of 2147483648 (2^31).
- * 
+ *
  * <p>
  * An HTTP/1.1 server that includes a cache MUST include an Age header field in every response generated from its own
  * cache.
- * 
+ *
  * <p>
  * Caches SHOULD use an arithmetic type of at least 31 bits of range.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -58,7 +58,7 @@ public final class Age extends HeaderInteger {
 
 	/**
 	 * Returns a parsed <code>Age</code> header.
-	 * 
+	 *
 	 * @param value The <code>Age</code> header string.
 	 * @return The parsed <code>Age</code> header, or <jk>null</jk> if the string was null.
 	 */

@@ -16,7 +16,7 @@ import org.apache.juneau.*;
 
 /**
  * Subclass of an {@link ObjectMap} that automatically resolves any SVL variables in values.
- * 
+ *
  * <p>
  * Resolves variables in the following values:
  * <ul>
@@ -25,10 +25,10 @@ import org.apache.juneau.*;
  * 	<li>Collections containing values of type {@link CharSequence}.
  * 	<li>Maps containing values of type {@link CharSequence}.
  * </ul>
- * 
+ *
  * <p>
  * All other data types are left as-is.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
@@ -41,7 +41,7 @@ public class ResolvingObjectMap extends ObjectMap {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param varResolver The var resolver session to use for resolving SVL variables.
 	 */
 	public ResolvingObjectMap(VarResolverSession varResolver) {

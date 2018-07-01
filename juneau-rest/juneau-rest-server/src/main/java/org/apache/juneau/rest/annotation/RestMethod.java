@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod">Overview &gt; juneau-rest-server &gt; @RestMethod</a>
@@ -39,17 +39,17 @@ public @interface RestMethod {
 
 	/**
 	 * Sets the bean filters for the serializers and parsers defined on this method.
-	 * 
+	 *
 	 * <p>
 	 * If no value is specified, the bean filters are inherited from the class.
 	 * <br>Otherwise, this value overrides the bean filters defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link Inherit} to inherit bean filters defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link None} to suppress inheriting bean filters defined on the class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
@@ -59,35 +59,35 @@ public @interface RestMethod {
 
 	/**
 	 * Shortcut for specifying the {@link BeanContext#BEAN_includeProperties} property on all serializers.
-	 * 
+	 *
 	 * <p>
 	 * The typical use case is when you're rendering summary and details views of the same bean in a resource and
 	 * you want to expose or hide specific properties depending on the level of detail you want.
-	 * 
+	 *
 	 * <p>
 	 * In the example below, our 'summary' view is a list of beans where we only want to show the ID property,
 	 * and our detail view is a single bean where we want to expose different fields:
 	 * <p class='bcode'>
 	 * 	<jc>// Our bean</jc>
 	 * 	<jk>public class</jk> MyBean {
-	 * 
+	 *
 	 * 		<jc>// Summary properties</jc>
 	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
 	 * 		<jk>public</jk> String <jf>id</jf>;
-	 * 
+	 *
 	 * 		<jc>// Detail properties</jc>
 	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Only render "id" property.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpi=<js>"MyBean: id"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary() {...}
-	 * 
+	 *
 	 * 	<jc>// Only render "a" and "b" properties.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>, bpi=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -106,7 +106,7 @@ public @interface RestMethod {
 	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
@@ -116,34 +116,34 @@ public @interface RestMethod {
 
 	/**
 	 * Shortcut for specifying the {@link BeanContext#BEAN_excludeProperties} property on all serializers.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #bpi()} except you specify a list of bean property names that you want to exclude from
 	 * serialization.
-	 * 
+	 *
 	 * <p>
 	 * In the example below, our 'summary' view is a list of beans where we want to exclude some properties:
 	 * <p class='bcode'>
 	 * 	<jc>// Our bean</jc>
 	 * 	<jk>public class</jk> MyBean {
-	 * 
+	 *
 	 * 		<jc>// Summary properties</jc>
 	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
 	 * 		<jk>public</jk> String <jf>id</jf>;
-	 * 
+	 *
 	 * 		<jc>// Detail properties</jc>
 	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Don't show "a" and "b" properties.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpx=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary() {...}
-	 * 
+	 *
 	 * 	<jc>// Render all properties.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -162,7 +162,7 @@ public @interface RestMethod {
 	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
@@ -172,18 +172,18 @@ public @interface RestMethod {
 
 	/**
 	 * Specifies whether this method can be called based on the client version.
-	 * 
+	 *
 	 * <p>
 	 * The client version is identified via the HTTP request header identified by
 	 * {@link RestResource#clientVersionHeader() @RestResource.clientVersionHeader()} which by default is <js>"X-Client-Version"</js>.
-	 * 
+	 *
 	 * <p>
 	 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
 	 * method/path based on the client version.
-	 * 
+	 *
 	 * <p>
 	 * The format of the client version range is similar to that of OSGi versions.
-	 * 
+	 *
 	 * <p>
 	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
 	 * <p class='bcode'>
@@ -191,16 +191,16 @@ public @interface RestMethod {
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1()  {...}
-	 * 
+	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2()  {...}
-	 * 
+	 *
 	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
 	 * backwards compatibility.
@@ -208,13 +208,13 @@ public @interface RestMethod {
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod()  {...}
-	 * 
+	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod();
 	 * 	}
-	 * 
+	 *
 	 * <p>
 	 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
 	 * an older form.
@@ -225,7 +225,7 @@ public @interface RestMethod {
 	 * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
 	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
@@ -235,10 +235,10 @@ public @interface RestMethod {
 
 	/**
 	 * Class-level response converters.
-	 * 
+	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with this method.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_converters}
@@ -248,17 +248,17 @@ public @interface RestMethod {
 
 	/**
 	 * Default character encoding.
-	 * 
+	 *
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
@@ -268,20 +268,20 @@ public @interface RestMethod {
 
 	/**
 	 * Specifies default values for form-data parameters.
-	 * 
+	 *
 	 * <p>
 	 * Strings are of the format <js>"name=value"</js>.
-	 * 
+	 *
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getFormData(String)} when the parameter is not present on the
 	 * request.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -289,7 +289,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -297,19 +297,19 @@ public @interface RestMethod {
 
 	/**
 	 * Specifies default values for query parameters.
-	 * 
+	 *
 	 * <p>
 	 * Strings are of the format <js>"name=value"</js>.
-	 * 
+	 *
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getQuery(String)} when the parameter is not present on the request.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -317,7 +317,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -325,24 +325,24 @@ public @interface RestMethod {
 
 	/**
 	 * Default request headers.
-	 * 
+	 *
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
@@ -352,7 +352,7 @@ public @interface RestMethod {
 
 	/**
 	 * Optional description for the exposed API.
-	 * 
+	 *
 	 * <p>
 	 * This description is used in the following locations:
 	 * <ul class='spaced-list'>
@@ -363,16 +363,16 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/description</code>.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
@@ -381,21 +381,21 @@ public @interface RestMethod {
 	String[] description() default {};
 
 	/**
-	 * Compression encoders. 
-	 * 
+	 * Compression encoders.
+	 *
 	 * <p>
 	 * Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at
 	 * the servlet level.
-	 * 
+	 *
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
@@ -405,7 +405,7 @@ public @interface RestMethod {
 
 	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
-	 * 
+	 *
 	 * <p>
 	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
 	 */
@@ -413,10 +413,10 @@ public @interface RestMethod {
 
 	/**
 	 * Method-level guards.
-	 * 
+	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_guards}
@@ -426,10 +426,10 @@ public @interface RestMethod {
 
 	/**
 	 * Provides HTML-doc-specific metadata on this method.
-	 * 
+	 *
 	 * <p>
 	 * Information provided here overrides information provided in the servlet-level annotation.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
@@ -439,14 +439,14 @@ public @interface RestMethod {
 
 	/**
 	 * Method matchers.
-	 * 
+	 *
 	 * <p>
 	 * Associates one more more {@link RestMatcher RestMatchers} with this method.
-	 * 
+	 *
 	 * <p>
 	 * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
 	 * differing based on some request attribute, such as a specific header value.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jac'>{@link RestMatcher}
@@ -456,25 +456,25 @@ public @interface RestMethod {
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
-	 * 
+	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		maxInput=<js>"100M"</js>
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
@@ -484,16 +484,16 @@ public @interface RestMethod {
 
 	/**
 	 * REST method name.
-	 * 
+	 *
 	 * <p>
 	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
-	 * 
+	 *
 	 * <p>
 	 * Method names are case-insensitive (always folded to upper-case).
-	 * 
+	 *
 	 * <p>
 	 * Note that you can use {@link org.apache.juneau.http.HttpMethodName} for constant values.
-	 * 
+	 *
 	 * <p>
 	 * Besides the standard HTTP method names, the following can also be specified:
 	 * <ul class='spaced-list'>
@@ -529,21 +529,21 @@ public @interface RestMethod {
 	String name() default "";
 
 	/**
-	 * Parsers. 
-	 * 
+	 * Parsers.
+	 *
 	 * <p>
 	 * If no value is specified, the parsers are inherited from the class.
 	 * <br>Otherwise, this value overrides the parsers defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link Inherit} to inherit parsers defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link None} to suppress inheriting parsers defined on the class.
-	 * 
+	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
-	 * 
+	 *
 	 * 		<ja>@RestMethod</ja>(
 	 * 			name=<jsf>PUT</jsf>,
 	 * 			path=<js>"/foo"</js>,
@@ -554,7 +554,7 @@ public @interface RestMethod {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_parsers}
@@ -564,22 +564,22 @@ public @interface RestMethod {
 
 	/**
 	 * Optional path pattern for the specified method.
-	 * 
+	 *
 	 * <p>
 	 * Appending <js>"/*"</js> to the end of the path pattern will make it match any remainder too.
 	 * <br>Not appending <js>"/*"</js> to the end of the pattern will cause a 404 (Not found) error to occur if the exact
 	 * pattern is not found.
-	 * 
+	 *
 	 * <p>
 	 * The path can contain variables that get resolved to {@link Path @Path} parameters:
 	 * <p class='bcode'>
 	 * 	<jc>// Example 1</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
-	 * 
+	 *
 	 * 	<jc>// Example 2</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='ja'>{@link Path}
@@ -589,17 +589,17 @@ public @interface RestMethod {
 
 	/**
 	 * Sets the POJO swaps for the serializers and parsers defined on this method.
-	 * 
+	 *
 	 * <p>
 	 * If no value is specified, the POJO swaps are inherited from the class.
 	 * <br>Otherwise, this value overrides the POJO swaps defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link Inherit} to inherit POJO swaps defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link None} to suppress inheriting POJO swaps defined on the class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -609,10 +609,10 @@ public @interface RestMethod {
 
 	/**
 	 * URL path pattern priority.
-	 * 
+	 *
 	 * <p>
 	 * To force path patterns to be checked before other path patterns, use a higher priority number.
-	 * 
+	 *
 	 * <p>
 	 * By default, it's <code>0</code>, which means it will use an internal heuristic to determine a best match.
 	 */
@@ -620,7 +620,7 @@ public @interface RestMethod {
 
 	/**
 	 * Same as {@link RestResource#properties() @RestResource.properties()}, except defines property values by default when this method is called.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code>res.addProperties()</code> in the Java method, but is provided for
 	 * convenience.
@@ -628,22 +628,22 @@ public @interface RestMethod {
 	Property[] properties() default {};
 
 	/**
-	 * Serializers. 
-	 * 
+	 * Serializers.
+	 *
 	 * <p>
 	 * If no value is specified, the serializers are inherited from the class.
 	 * <br>Otherwise, this value overrides the serializers defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link Inherit} to inherit serializers defined on the class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link None} to suppress inheriting serializers defined on the class.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
-	 * 
+	 *
 	 * 		<ja>@RestMethod</ja>(
 	 * 			name=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
@@ -654,7 +654,7 @@ public @interface RestMethod {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
@@ -664,7 +664,7 @@ public @interface RestMethod {
 
 	/**
 	 * Optional summary for the exposed API.
-	 * 
+	 *
 	 * <p>
 	 * This summary is used in the following locations:
 	 * <ul class='spaced-list'>
@@ -675,13 +675,13 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/summary</code>.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -689,37 +689,37 @@ public @interface RestMethod {
 
 	/**
 	 * Supported accept media types.
-	 * 
+	 *
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 */
 	String[] produces() default {};
-	
+
 	/**
 	 * Supported content media types.
-	 * 
+	 *
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_consumes}
@@ -729,20 +729,20 @@ public @interface RestMethod {
 
 	/**
 	 * Provides swagger-specific metadata on this method.
-	 * 
+	 *
 	 * <p>
 	 * Used to populate the auto-generated OPTIONS swagger documentation.
-	 * 
+	 *
 	 * <p>
 	 * The format of this annotation is JSON when all individual parts are concatenated.
 	 * <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<jsf>PUT</jsf>, 
+	 * 		name=<jsf>PUT</jsf>,
 	 * 		path=<js>"/{propertyName}"</js>,
-	 * 
+	 *
 	 * 		<jc>// Swagger info.</jc>
 	 * 		swagger={
 	 * 			<js>"parameters:["</js>,
@@ -756,7 +756,7 @@ public @interface RestMethod {
 	 * 		}
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -767,10 +767,10 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='ja'>{@link MethodSwagger}

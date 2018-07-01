@@ -60,12 +60,12 @@ public class PredefinedLabelsResource extends BasicRestServlet {
 			.append("htmlLinks", "HtmlLink")
 		;
 	}
-	
+
 	@RestMethod(name=GET, path="/beanDescription")
 	public BeanDescription getBeanDescription() throws Exception {
 		return new BeanDescription(Person.class);
-	}	
-	
+	}
+
 	@RestMethod(name=GET, path="/htmlLinks")
 	public LinkString[] htmlLinks() throws Exception {
 		return new LinkString[] {

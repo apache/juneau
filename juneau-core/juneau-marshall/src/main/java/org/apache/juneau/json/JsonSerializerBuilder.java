@@ -34,7 +34,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public JsonSerializerBuilder(PropertyStore ps) {
@@ -53,16 +53,16 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -73,15 +73,15 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>escapeSolidus(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSerializerBuilder escapeSolidus() {
@@ -90,17 +90,17 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Simple JSON mode.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * <br>Otherwise, they are always quoted.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -111,15 +111,15 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Simple JSON mode.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSerializerBuilder simple() {
@@ -128,22 +128,22 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Simple JSON mode and single quote.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>simple().sq()</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * 	<li class='jf'>{@link JsonSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSerializerBuilder ssq() {
 		return simple().sq();
 	}
-	
+
 	@Override /* WriterSerializerBuilder */
 	public JsonSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
@@ -640,7 +640,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

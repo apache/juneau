@@ -20,14 +20,14 @@ import org.apache.juneau.internal.*;
 
 /**
  * Parent class for all bean filters.
- * 
+ *
  * <p>
  * Bean filters are used to control aspects of how beans are handled during serialization and parsing.
- * 
+ *
  * <p>
- * Bean filters are created by {@link BeanFilterBuilder} which is the programmatic equivalent to the {@link Bean @Bean} 
+ * Bean filters are created by {@link BeanFilterBuilder} which is the programmatic equivalent to the {@link Bean @Bean}
  * annotation.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; juneau-marshall &gt; BeanFilters</a>
@@ -69,7 +69,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the bean class that this filter applies to.
-	 * 
+	 *
 	 * @return The bean class that this filter applies to.
 	 */
 	public Class<?> getBeanClass() {
@@ -78,7 +78,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the dictionary name associated with this bean.
-	 * 
+	 *
 	 * @return The dictionary name associated with this bean, or <jk>null</jk> if no name is defined.
 	 */
 	public String getTypeName() {
@@ -87,7 +87,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the set and order of names of properties associated with a bean class.
-	 * 
+	 *
 	 * @return
 	 * 	The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should
 	 * 	be used.
@@ -98,7 +98,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the bean dictionary defined on this bean.
-	 * 
+	 *
 	 * @return The bean dictionary defined on this bean, or <jk>null</jk> if no bean dictionary is defined.
 	 */
 	public Class<?>[] getBeanDictionary() {
@@ -107,11 +107,11 @@ public final class BeanFilter {
 
 	/**
 	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
-	 * 
+	 *
 	 * <p>
 	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
 	 * Otherwise, the ordering of the properties in the returned value is used.
-	 * 
+	 *
 	 * @return <jk>true</jk> if bean properties should be sorted.
 	 */
 	public boolean isSortProperties() {
@@ -120,7 +120,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns <jk>true</jk> if we should find fluent setters.
-	 * 
+	 *
 	 * @return <jk>true</jk> if fluent setters should be found.
 	 */
 	public boolean isFluentSetters() {
@@ -129,7 +129,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the list of properties to ignore on a bean.
-	 * 
+	 *
 	 * @return The name of the properties to ignore on a bean, or <jk>null</jk> to not ignore any properties.
 	 */
 	public String[] getExcludeProperties() {
@@ -138,7 +138,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the {@link PropertyNamer} associated with the bean to tailor the names of bean properties.
-	 * 
+	 *
 	 * @return The property namer class, or <jk>null</jk> if no property namer is associated with this bean property.
 	 */
 	public PropertyNamer getPropertyNamer() {
@@ -147,7 +147,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the interface class associated with this class.
-	 * 
+	 *
 	 * @return The interface class associated with this class, or <jk>null</jk> if no interface class is associated.
 	 */
 	public Class<?> getInterfaceClass() {
@@ -156,7 +156,7 @@ public final class BeanFilter {
 
 	/**
 	 * Returns the stop class associated with this class.
-	 * 
+	 *
 	 * @return The stop class associated with this class, or <jk>null</jk> if no stop class is associated.
 	 */
 	public Class<?> getStopClass() {
@@ -165,7 +165,7 @@ public final class BeanFilter {
 
 	/**
 	 * Calls the {@link PropertyFilter#readProperty(Object, String, Object)} method on the registered property filters.
-	 * 
+	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
 	 * @param value The value just extracted from calling the bean getter.
@@ -177,7 +177,7 @@ public final class BeanFilter {
 
 	/**
 	 * Calls the {@link PropertyFilter#writeProperty(Object, String, Object)} method on the registered property filters.
-	 * 
+	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
 	 * @param value The value just parsed.

@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * A subclass of HTML elements that contain mixed content (elements and text).
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -35,7 +35,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * The children of this element.
-	 * 
+	 *
 	 * @return The children of this element.
 	 */
 	@Xml(format=MIXED)
@@ -46,7 +46,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * Sets the children of this element.
-	 * 
+	 *
 	 * @param children The new children of this element.
 	 * @return This object (for method chaining).
 	 */
@@ -58,7 +58,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * Returns the child node at the specified index.
-	 * 
+	 *
 	 * @param index The index of the node in the list of children.
 	 * @return The child node, or <jk>null</jk> if it doesn't exist.
 	 */
@@ -68,13 +68,13 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * Returns the child node at the specified address.
-	 * 
+	 *
 	 * <p>
 	 * Indexes are zero-indexed.
-	 * 
+	 *
 	 * <p>
 	 * For example, calling <code>getChild(1,2,3);</code> will return the 4th child of the 3rd child of the 2nd child.
-	 * 
+	 *
 	 * @param index The child indexes.
 	 * @return The child node, or <jk>null</jk> if it doesn't point to a valid child.
 	 */
@@ -97,7 +97,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * Returns the child node at the specified index.
-	 * 
+	 *
 	 * @param type The class type of the node.
 	 * @param index The index of the node in the list of children.
 	 * @return The child node, or <jk>null</jk> if it doesn't exist.
@@ -113,7 +113,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * Adds one or more child elements to this element.
-	 * 
+	 *
 	 * @param children
 	 * 	The children to add as child elements.
 	 * 	Can be a mixture of strings and {@link HtmlElement} objects.
@@ -129,7 +129,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * Adds a child element to this element.
-	 * 
+	 *
 	 * @param child
 	 * 	The child to add as a child element.
 	 * 	Can be a string or {@link HtmlElement}.

@@ -23,7 +23,7 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 
 	/**
 	 * Converts string into a GZipped input stream.
-	 * 
+	 *
 	 * @param contents The contents to compress.
 	 * @return The input stream converted to GZip.
 	 * @throws Exception
@@ -39,7 +39,7 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 
 	/**
 	 * Converts a GZipped input stream into a string.
-	 * 
+	 *
 	 * @param is The contents to decompress.
 	 * @return The string.
 	 * @throws Exception

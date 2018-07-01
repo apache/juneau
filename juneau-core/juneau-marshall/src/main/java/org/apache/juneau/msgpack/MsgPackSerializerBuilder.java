@@ -32,7 +32,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public MsgPackSerializerBuilder(PropertyStore ps) {
@@ -515,7 +515,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

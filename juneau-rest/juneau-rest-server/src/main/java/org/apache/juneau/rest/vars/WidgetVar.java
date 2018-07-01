@@ -19,19 +19,19 @@ import org.apache.juneau.svl.*;
 
 /**
  * HTML widget variable resolver.
- * 
+ *
  * <p>
  * The format for this var is <js>"$W{widgetName}"</js>.
- * 
+ *
  * <p>
  * Widgets are simple class that produce some sort of string based on a passed-in HTTP request.
- * 
+ *
  * <p>
  * They're registered via the following mechanisms:
  * <ul>
  * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>

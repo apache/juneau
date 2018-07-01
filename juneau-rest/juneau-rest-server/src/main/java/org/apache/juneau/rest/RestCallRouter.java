@@ -21,7 +21,7 @@ import javax.servlet.http.*;
 /**
  * Represents a group of CallMethods on a REST resource that handle the same HTTP Method name but with different
  * paths/matchers/guards/etc...
- * 
+ *
  * <p>
  * Incoming requests for a particular HTTP method type (e.g. <js>"GET"</js>) are handed off to this class and then
  * dispatched to the appropriate RestJavaMethod.
@@ -68,10 +68,10 @@ public class RestCallRouter {
 
 	/**
 	 * Workhorse method.
-	 * 
+	 *
 	 * <p>
 	 * Routes this request to one of the CallMethods.
-	 * 
+	 *
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */

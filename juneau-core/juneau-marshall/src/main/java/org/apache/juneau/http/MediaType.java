@@ -26,7 +26,7 @@ import org.apache.juneau.json.*;
 /**
  * Describes a single media type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -71,7 +71,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * Returns the media type for the specified string.
 	 * The same media type strings always return the same objects so that these objects
 	 * can be compared for equality using '=='.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -82,7 +82,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 	<li>
 	 * 		Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * @param s
 	 * 	The media type string.
 	 * 	Will be lowercased.
@@ -105,7 +105,7 @@ public class MediaType implements Comparable<MediaType> {
 	/**
 	 * Same as {@link #forString(String)} but allows you to construct an array of <code>MediaTypes</code> from an
 	 * array of strings.
-	 * 
+	 *
 	 * @param s
 	 * 	The media type strings.
 	 * @return
@@ -179,7 +179,7 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.
-	 * 
+	 *
 	 * @return The media type.
 	 */
 	public final String getType() {
@@ -188,7 +188,7 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns the <js>'subType'</js> fragment of the <js>'type/subType'</js> string.
-	 * 
+	 *
 	 * @return The media subtype.
 	 */
 	public final String getSubType() {
@@ -197,7 +197,7 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.
-	 * 
+	 *
 	 * @param st
 	 * 	The subtype string.
 	 * 	Case is ignored.
@@ -213,11 +213,11 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
-	 * 
+	 *
 	 * <P>
 	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
 	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
-	 * 
+	 *
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() {
@@ -226,7 +226,7 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
 	 */
 	public final boolean isMeta() {
@@ -235,11 +235,11 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns a match metric against the specified media type where a larger number represents a better match.
-	 * 
+	 *
 	 * <p>
 	 * This media type can contain <js>'*'</js> metacharacters.
 	 * <br>The comparison media type must not.
-	 * 
+	 *
 	 * <ul>
 	 * 	<li>Exact matches (e.g. <js>"text/json"<js>/</js>"text/json"</js>) should match
 	 * 		better than meta-character matches (e.g. <js>"text/*"<js>/</js>"text/json"</js>)
@@ -254,7 +254,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 		</ul>
 	 * 		More token matches should result in a higher match number.
 	 * </ul>
-	 * 
+	 *
 	 * The formula is as follows for <code>type/subTypes</code>:
 	 * <ul>
 	 * 	<li>An exact match is <code>100,000</code>.
@@ -269,7 +269,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 		<li><code>100</code> for every subtype entry match (e.g. <js>"json"</js>/<js>"json+foo"</js>)
 	 * 	</ul>
 	 * </ul>
-	 * 
+	 *
 	 * @param o The media type to compare with.
 	 * @param allowExtraSubTypes If <jk>true</jk>,
 	 * @return <jk>true</jk> if the media types match.
@@ -322,11 +322,11 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns the additional parameters on this media type.
-	 * 
+	 *
 	 * <p>
 	 * For example, given the media type string <js>"text/html;level=1"</js>, will return a map
 	 * with the single entry <code>{level:[<js>'1'</js>]}</code>.
-	 * 
+	 *
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
 	public final Map<String,Set<String>> getParameters() {

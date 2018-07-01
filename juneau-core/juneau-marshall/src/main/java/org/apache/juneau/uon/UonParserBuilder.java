@@ -35,7 +35,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UonParserBuilder(PropertyStore ps) {
@@ -54,17 +54,17 @@ public class UonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
-	 * 
+	 *
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
 	 * decoded before being passed to this parser.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * @return This object (for method chaining).
@@ -75,15 +75,15 @@ public class UonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>decodeChars(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public UonParserBuilder decoding() {
@@ -92,17 +92,17 @@ public class UonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Validate end.
-	 * 
+	 *
 	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in 
+	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only whitespace.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -110,18 +110,18 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	public UonParserBuilder validateEnd(boolean value) {
 		return set(UON_validateEnd, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Validate end.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public UonParserBuilder validateEnd() {
@@ -157,7 +157,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		super.debugOutputLines(value);
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public UonParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
@@ -511,7 +511,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public UonParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -529,7 +529,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public UonParserBuilder set(String name, Object value) {
 		super.set(name, value);

@@ -18,19 +18,19 @@ import org.apache.juneau.uon.*;
 
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
- * 
+ *
  * <h5 class='section'>Media types:</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
- * This serializer provides several serialization options.  
+ *
+ * This serializer provides several serialization options.
  * <br>Typically, one of the predefined DEFAULT serializers will be sufficient.
  * <br>However, custom serializers can be constructed to fine-tune behavior.
- * 
+ *
  * <p>
  * The following shows a sample object defined in Javascript:
  * <p class='bcode'>
@@ -55,7 +55,7 @@ import org.apache.juneau.uon.*;
  * 		]
  * 	}
  * </p>
- * 
+ *
  * <p>
  * Using the "strict" syntax defined in this document, the equivalent URL-encoded notation would be as follows:
  * <p class='bcode'>
@@ -78,16 +78,16 @@ import org.apache.juneau.uon.*;
  * 		)
  * 	)
  * </p>
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
- * 
+ *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "a=b&amp;c=1&amp;d=false&amp;e=@(f,1,false)&amp;g=(h=i)"</jc>
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
- * 
+ *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
  * 		<jk>public</jk> Person(String s);
@@ -96,16 +96,16 @@ import org.apache.juneau.uon.*;
  * 		<jk>public</jk> Address getAddress();
  * 		<jk>public boolean</jk> deceased;
  * 	}
- * 
+ *
  * 	<jk>public class</jk> Address {
  * 		<jk>public</jk> String getStreet();
  * 		<jk>public</jk> String getCity();
  * 		<jk>public</jk> String getState();
  * 		<jk>public int</jk> getZip();
  * 	}
- * 
+ *
  * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12345, <jk>false</jk>);
- * 
+ *
  * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=(street='123+Main+St',city=Anywhere,state=NY,zip=12345)&amp;deceased=false"</jc>
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
@@ -120,28 +120,28 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.expandedParams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk> 
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UrlEncodingSerializerBuilder#expandedParams(boolean)}
 	 * 			<li class='jm'>{@link UrlEncodingSerializerBuilder#expandedParams()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 * 
+	 *
 	 * <p>
 	 * This option only applies to beans.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -149,7 +149,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// A sample bean.</jc>
@@ -157,23 +157,23 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
 	 * 		<jk>public</jk> List&lt;String&gt; f2 = Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>});
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Normal serializer.</jc>
 	 * 	WriterSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-	 * 	
+	 *
 	 * 	<jc>// Expanded-params serializer.</jc>
 	 * 	WriterSerializer s2 = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
-	 * 
+	 *
 	 * <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); 
-	 * 
+	 * 	String ss1 = s1.serialize(<jk>new</jk> A());
+	 *
 	 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>
 	 * </p>
-	 * 
+	 *
 	 */
 	public static final String URLENC_expandedParams = PREFIX + "expandedParams.b";
-	
+
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -203,7 +203,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Expanded(PropertyStore ps) {
@@ -218,7 +218,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore ps) {
@@ -233,7 +233,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public PlainText(PropertyStore ps) {
@@ -251,7 +251,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -261,7 +261,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -290,8 +290,8 @@ public class UrlEncodingSerializer extends UonSerializer {
 		super(
 			ps.builder()
 				.set(UON_encoding, true)
-				.build(), 
-			produces, 
+				.build(),
+			produces,
 			accept
 		);
 		expandedParams = getBooleanProperty(URLENC_expandedParams, false);
@@ -304,14 +304,14 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 	/**
 	 * Instantiates a new clean-slate {@link UrlEncodingSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> UrlEncodingSerializerBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link UrlEncodingSerializerBuilder} object.
 	 */
 	public static UrlEncodingSerializerBuilder create() {

@@ -24,7 +24,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Describes a single API operation on a path.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
@@ -58,10 +58,10 @@ import org.apache.juneau.utils.*;
  * 		.response(200, <jsm>responseInfo</jsm>(<js>"Pet updated."</js>))
  * 		.response(405, <jsm>responseInfo</jsm>(<js>"Invalid input."</js>))
  * 		.security(<js>"petstore_auth"</js>, <js>"write:pets"</js>, <js>"read:pets"</js>);
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -122,7 +122,7 @@ import org.apache.juneau.utils.*;
  * 		]
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -131,16 +131,16 @@ import org.apache.juneau.utils.*;
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security,*")
 public class Operation extends SwaggerElement {
 
-	private String 
+	private String
 		summary,
 		description,
 		operationId;
 	private Boolean deprecated;
 	private ExternalDocumentation externalDocs;
-	private List<String> 
+	private List<String>
 		tags,
 		schemes;
-	private List<MediaType> 
+	private List<MediaType>
 		consumes,
 		produces;
 	private List<ParameterInfo> parameters;
@@ -151,11 +151,11 @@ public class Operation extends SwaggerElement {
 	 * Default constructor.
 	 */
 	public Operation() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
@@ -169,12 +169,12 @@ public class Operation extends SwaggerElement {
 		this.schemes = newList(copyFrom.schemes);
 		this.consumes = newList(copyFrom.consumes);
 		this.produces = newList(copyFrom.produces);
-		
+
 		this.parameters = copyFrom.parameters == null ? null : new ArrayList<ParameterInfo>();
 		if (copyFrom.parameters != null)
 			for (ParameterInfo p : copyFrom.parameters)
 				this.parameters.add(p.copy());
-		
+
 		this.security = copyFrom.security == null ? null : new ArrayList<Map<String,List<String>>>();
 		if (copyFrom.security != null) {
 			for (Map<String,List<String>> m : copyFrom.security) {
@@ -184,29 +184,29 @@ public class Operation extends SwaggerElement {
 				this.security.add(m2);
 			}
 		}
-		
+
 		this.responses = copyFrom.responses == null ? null : new LinkedHashMap<String,ResponseInfo>();
 		if (copyFrom.responses != null)
-			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet()) 
+			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
 				this.responses.put(e.getKey(), e.getValue().copy());
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public Operation copy() {
 		return new Operation(this);
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>tags</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of tags for API documentation control.
 	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<String> getTags() {
@@ -215,12 +215,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>tags</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of tags for API documentation control.
 	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -232,12 +232,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>tags</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of tags for API documentation control.
 	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -249,8 +249,8 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #addTags(Collection)}.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -275,10 +275,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short summary of what the operation does.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getSummary() {
@@ -287,11 +287,11 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>summary</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short summary of what the operation does.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -303,7 +303,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setSummary(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -316,10 +316,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A verbose explanation of the operation behavior.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -328,11 +328,11 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A verbose explanation of the operation behavior.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -345,7 +345,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -359,10 +359,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
-	 * 
+	 *
 	 * <p>
 	 * Additional external documentation for this operation.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
@@ -371,11 +371,11 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
-	 * 
+	 *
 	 * <p>
 	 * Additional external documentation for this operation.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -387,8 +387,8 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -408,10 +408,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>operationId</property>.
-	 * 
+	 *
 	 * <p>
 	 * Unique string used to identify the operation.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getOperationId() {
@@ -420,11 +420,11 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>operationId</property>.
-	 * 
+	 *
 	 * <p>
-	 * Unique string used to identify the operation. 
-	 * 
-	 * @param value 
+	 * Unique string used to identify the operation.
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The id MUST be unique among all operations described in the API.
 	 * 	<br>Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
@@ -439,7 +439,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setOperationId(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The id MUST be unique among all operations described in the API.
@@ -455,14 +455,14 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>consumes</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
-	 * 
+	 *
 	 * <p>
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<MediaType> getConsumes() {
@@ -471,16 +471,16 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>consumes</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
-	 * 
+	 *
 	 * <p>
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
-	 * 
-	 * @param value 
-	 * 	The new value for this property.	
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * 	<br>Values MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -492,15 +492,15 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>consumes</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
-	 * 
+	 *
 	 * <p>
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Values MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -513,7 +513,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>consumes</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -539,17 +539,17 @@ public class Operation extends SwaggerElement {
 		consumes = addToList(consumes, values, MediaType.class);
 		return this;
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>produces</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the operation can produce.
-	 * 
+	 *
 	 * <p>
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<MediaType> getProduces() {
@@ -558,15 +558,15 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>produces</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the operation can produce.
-	 * 
+	 *
 	 * <p>
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -579,15 +579,15 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>produces</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the operation can produces.
-	 * 
+	 *
 	 * <p>
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -599,8 +599,8 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #addProduces(Collection)}.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -628,14 +628,14 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>parameters</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
+	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>,
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
@@ -647,24 +647,24 @@ public class Operation extends SwaggerElement {
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<ParameterInfo> getParameters() {
 		return parameters;
 	}
-	
+
 	/**
 	 * Returns the parameter with the specified type and name.
-	 * 
+	 *
 	 * @param in The parameter in.
 	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <code>body</code>.
 	 * @return The matching parameter info, or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameter(String in, String name) {
 		if (parameters != null)
-			for (ParameterInfo pi : parameters) 
-				if (StringUtils.isEquals(pi.getIn(), in)) 
+			for (ParameterInfo pi : parameters)
+				if (StringUtils.isEquals(pi.getIn(), in))
 					if (StringUtils.isEquals(pi.getName(), name) || "body".equals(pi.getIn()))
 						return pi;
 		return null;
@@ -672,14 +672,14 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>parameters</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
+	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>,
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
@@ -691,8 +691,8 @@ public class Operation extends SwaggerElement {
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -704,14 +704,14 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>parameters</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, 
+	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>,
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
@@ -723,8 +723,8 @@ public class Operation extends SwaggerElement {
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -733,11 +733,11 @@ public class Operation extends SwaggerElement {
 		parameters = addToList(parameters, value);
 		return this;
 	}
-	
+
 	/**
 	 * Same as {@link #addParameters(Collection)}.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -764,10 +764,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>responses</property>.
-	 * 
+	 *
 	 * <p>
 	 * The list of possible responses as they are returned from executing this operation.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,ResponseInfo> getResponses() {
@@ -777,7 +777,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Returns the response info with the given status code.
-	 * 
+	 *
 	 * @param status The HTTP status code.
 	 * @return The response info, or <jk>null</jk> if not found.
 	 */
@@ -789,10 +789,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>responses</property>.
-	 * 
+	 *
 	 * <p>
 	 * The list of possible responses as they are returned from executing this operation.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
@@ -805,10 +805,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>responses</property> property.
-	 * 
+	 *
 	 * <p>
 	 * The list of possible responses as they are returned from executing this operation.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -821,7 +821,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>responses</property> property.
-	 * 
+	 *
 	 * @param statusCode The HTTP status code.
 	 * @param response The response description.
 	 * @return This object (for method chaining).
@@ -832,8 +832,8 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #addResponses(Map)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -853,11 +853,11 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
-	 * 
+	 *
 	 * <p>
 	 * The transfer protocol for the operation.
 	 * <br>The value overrides the Swagger Object <code>schemes</code> definition.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<String> getSchemes() {
@@ -866,12 +866,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schemes</property>.
-	 * 
+	 *
 	 * <p>
 	 * The transfer protocol for the operation.
 	 * <br>The value overrides the Swagger Object <code>schemes</code> definition.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -890,12 +890,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>schemes</property> property.
-	 * 
+	 *
 	 * <p>
 	 * The transfer protocol for the operation.
 	 * <br>The value overrides the Swagger Object <code>schemes</code> definition.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -907,8 +907,8 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #addSchemes(Collection)}.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -933,10 +933,10 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
-	 * 
+	 *
 	 * <p>
 	 * Declares this operation to be deprecated.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getDeprecated() {
@@ -945,22 +945,22 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
-	 * 
+	 *
 	 * <p>
 	 * Declares this operation to be deprecated.
-	 * 
+	 *
 	 * @return The property value, or <jk>false</jk> if it is not set.
 	 */
 	public boolean isDeprecated() {
 		return deprecated != null && deprecated == true;
 	}
-	
+
 	/**
 	 * Bean property setter:  <property>deprecated</property>.
-	 * 
+	 *
 	 * <p>
 	 * Declares this operation to be deprecated.
-	 * 
+	 *
 	 * @param value T
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
@@ -972,7 +972,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDeprecated(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -985,16 +985,16 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>security</property>.
-	 * 
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for this operation.
 	 * <br>The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
-	 * 
+	 *
 	 * <p>
 	 * This definition overrides any declared top-level security.
 	 * <br>To remove a top-level <code>security</code> declaration, an empty array can be used.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Map<String,List<String>>> getSecurity() {
@@ -1003,17 +1003,17 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>security</property>.
-	 * 
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for this operation.
 	 * <br>The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
-	 * 
+	 *
 	 * <p>
 	 * This definition overrides any declared top-level security.
 	 * <br>To remove a top-level <code>security</code> declaration, an empty array can be used.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1025,17 +1025,17 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>security</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for this operation.
 	 * <br>The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
-	 * 
+	 *
 	 * <p>
 	 * This definition overrides any declared top-level security.
 	 * <br>To remove a top-level <code>security</code> declaration, an empty array can be used.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * The new value for this property.
@@ -1048,8 +1048,8 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #addSecurity(Collection)}.
-	 * 
-	 * @param scheme 
+	 *
+	 * @param scheme
 	 * 	The scheme name.
 	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
@@ -1061,11 +1061,11 @@ public class Operation extends SwaggerElement {
 		m.put(scheme, Arrays.asList(alternatives));
 		return addSecurity(Collections.singletonList(m));
 	}
-	
+
 	/**
 	 * Same as {@link #addSecurity(Collection)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -1086,7 +1086,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the summary property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the summary property is not null or empty.
 	 */
 	public boolean hasSummary() {
@@ -1095,7 +1095,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the description property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the description property is not null or empty.
 	 */
 	public boolean hasDescription() {
@@ -1104,17 +1104,17 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if this operation has the specified tag associated with it.
-	 * 
+	 *
 	 * @param name The tag name.
 	 * @return <jk>true</jk> if this operation has the specified tag associated with it.
 	 */
 	public boolean hasTag(String name) {
 		return tags != null && tags.contains(name);
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if this operation has no tags associated with it.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this operation has no tags associated with it.
 	 */
 	public boolean hasNoTags() {
@@ -1123,7 +1123,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if this operation has parameters associated with it.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this operation has parameters associated with it.
 	 */
 	public boolean hasParameters() {
@@ -1132,7 +1132,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if this operation has responses associated with it.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this operation has responses associated with it.
 	 */
 	public boolean hasResponses() {
@@ -1177,7 +1177,7 @@ public class Operation extends SwaggerElement {
 			case "schemes": return setSchemes(null).schemes(value);
 			case "deprecated": return deprecated(value);
 			case "security": return setSecurity(null).securities(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}

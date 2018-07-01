@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-option-element">&lt;option&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -28,10 +28,10 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-disabled">disabled</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Whether the form control is disabled.
-	 * 
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -44,10 +44,10 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-label">label</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * User-visible label.
-	 * 
+	 *
 	 * @param label The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -58,10 +58,10 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-selected">selected</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Whether the option is selected by default.
-	 * 
+	 *
 	 * @param selected
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -74,10 +74,10 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-value">value</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Value to be used for form submission.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

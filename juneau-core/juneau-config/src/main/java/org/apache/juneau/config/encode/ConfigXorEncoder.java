@@ -18,10 +18,10 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 /**
  * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.
- * 
+ *
  * <p>
  * This is not intended to be used as strong encryption.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>

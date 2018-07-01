@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a single entry in a configuration.
- * 
+ *
  * This is a read-only object.
  */
 public class ConfigEntry {
@@ -30,26 +30,26 @@ public class ConfigEntry {
 	final String key, value, comment;
 	final String modifiers;
 	final List<String> preLines;
-	
+
 	static final ConfigEntry NULL = new ConfigEntry(null, null, null, null, null);
-	
+
 	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
 
 	ConfigEntry(String line, List<String> preLines) {
 		this.rawLine = line;
 		int i = line.indexOf('=');
 		String key = line.substring(0, i).trim();
-		
+
 		int modIndex = key.length();
-		for (int j = key.length()-1; j > 0; j--) 
+		for (int j = key.length()-1; j > 0; j--)
 			if (MOD_CHARS.contains(key.charAt(j)))
 				modIndex--;
 
 		this.modifiers = key.substring(modIndex);
 		this.key = key.substring(0, modIndex);
-		
+
 		line = line.substring(i+1);
-	
+
 		i = line.indexOf('#');
 		if (i != -1) {
 			String[] l2 = StringUtils.split(line, '#', 2);
@@ -61,12 +61,12 @@ public class ConfigEntry {
 		} else {
 			this.comment = null;
 		}
-	
+
 		this.value = StringUtils.replaceUnicodeSequences(line.trim());
 
 		this.preLines = immutableList(preLines);
 	}
-	
+
 	ConfigEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
 		this.rawLine = null;
 		this.key = key;
@@ -75,19 +75,19 @@ public class ConfigEntry {
 		this.modifiers = modifiers;
 		this.preLines = immutableList(preLines);
 	}
-	
+
 	/**
 	 * Returns the raw value of this entry.
-	 * 
+	 *
 	 * @return The raw value of this entry.
 	 */
 	public String getValue() {
 		return value;
 	}
-	
+
 	/**
 	 * Returns the same-line comment of this entry.
-	 * 
+	 *
 	 * @return The same-line comment of this entry.
 	 */
 	public String getComment() {
@@ -96,7 +96,7 @@ public class ConfigEntry {
 
 	/**
 	 * Returns the pre-lines of this entry.
-	 * 
+	 *
 	 * @return The pre-lines of this entry as an unmodifiable list.
 	 */
 	public List<String> getPreLines() {
@@ -105,7 +105,7 @@ public class ConfigEntry {
 
 	/**
 	 * Returns whether this entry has the specified modifier.
-	 * 
+	 *
 	 * @param m The modifier character.
 	 * @return <jk>true</jk> if this entry is encoded.
 	 */
@@ -115,13 +115,13 @@ public class ConfigEntry {
 
 	/**
 	 * Returns the modifiers for this entry.
-	 * 
+	 *
 	 * @return The modifiers for this entry, or an empty string if it has no modifiers.
 	 */
 	public String getModifiers() {
 		return modifiers;
 	}
-	
+
 	Writer writeTo(Writer w) throws IOException {
 		if (value == null)
 			return w;
@@ -132,7 +132,7 @@ public class ConfigEntry {
 				char c = rawLine.charAt(i);
 				if (c == '\n')
 					w.append('\n').append('\t');
-				else if (c != '\r') 
+				else if (c != '\r')
 					w.append(c);
 			}
 			w.append('\n');
@@ -141,7 +141,7 @@ public class ConfigEntry {
 			if (modifiers != null)
 				w.append(modifiers);
 			w.append(" = ");
-			
+
 			String val = value;
 			for (int i = 0; i < val.length(); i++) {
 				char c = val.charAt(i);
@@ -155,14 +155,14 @@ public class ConfigEntry {
 					}
 				}
 			}
-				
-			if (isNotEmpty(comment)) 
+
+			if (isNotEmpty(comment))
 				w.append(" # ").append(comment);
-			
+
 			w.append('\n');
 		}
 		return w;
 	}
-	
+
 	private static final AsciiSet REPLACE_CHARS = AsciiSet.create("\\#");
 }

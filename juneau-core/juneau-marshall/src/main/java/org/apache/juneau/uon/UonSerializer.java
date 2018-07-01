@@ -18,19 +18,19 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>text/uon</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/uon</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * This serializer provides several serialization options.
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
- * 
+ *
  * <p>
  * The following shows a sample object defined in Javascript:
  * <p class='bcode'>
@@ -55,7 +55,7 @@ import org.apache.juneau.urlencoding.*;
  * 		]
  * 	}
  * </p>
- * 
+ *
  * <p>
  * Using the "strict" syntax defined in this document, the equivalent UON notation would be as follows:
  * <p class='bcode'>
@@ -80,16 +80,16 @@ import org.apache.juneau.urlencoding.*;
  * 		)
  * 	)
  * </p>
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
- * 
+ *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
- * 
+ *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
  * 		<jk>public</jk> Person(String s);
@@ -98,17 +98,17 @@ import org.apache.juneau.urlencoding.*;
  * 		<jk>public</jk> Address getAddress();
  * 		<jk>public boolean</jk> deceased;
  * 	}
- * 
+ *
  * 	<jk>public class</jk> Address {
  * 		<jk>public</jk> String getStreet();
  * 		<jk>public</jk> String getCity();
  * 		<jk>public</jk> String getState();
  * 		<jk>public int</jk> getZip();
  * 	}
- * 
+ *
  * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>,
  * 		<js>"NY"</js>, 12345, <jk>false</jk>);
- * 
+ *
  * 	<jc>// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
@@ -123,24 +123,24 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 * 
+	 *
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -149,47 +149,47 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding(boolean)}
 	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
 	 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
 	 * URL-encoding of non-valid URI characters.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a non-encoding UON serializer.</jc>
 	 * 	UonSerializer s1 = UonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Create an encoding UON serializer.</jc>
 	 * 	UonSerializer s2 = UonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.encoding()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	ObjectMap m = <jk>new</jk> ObjectMap().append("foo", "foo bar");
-	 * 	
+	 *
 	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
 	 * 	String uon1 = s1.serialize(m)
-	 * 	
+	 *
 	 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
 	 * 	String uon2 = s2.serialize(m)
 	 * </p>
@@ -198,51 +198,51 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.paramFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link ParamFormat})
 	 * 	<li><b>Default:</b>  <js>"UON"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormat(ParamFormat)}
 	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormatPlain()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
-	 * 
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul>
 	 * 	<li class='jf'>{@link ParamFormat#UON} - Use UON notation for parameters.
 	 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a normal UON serializer.</jc>
 	 * 	UonSerializer s1 = UonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Create a plain-text UON serializer.</jc>
 	 * 	UonSerializer s2 = UonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	ObjectMap m = <jk>new</jk> ObjectMap()
 	 * 		.append(<js>"foo"</js>, <js>"bar"</js>);
 	 * 		.append(<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>});
-	 * 	
+	 *
 	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
 	 * 	String uon1 = s1.serialize(m)
-	 * 	
+	 *
 	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
 	 * 	String uon2 = s2.serialize(m)
 	 * </p>
@@ -275,7 +275,7 @@ public class UonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore ps) {
@@ -290,7 +290,7 @@ public class UonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Encoding(PropertyStore ps) {
@@ -306,13 +306,13 @@ public class UonSerializer extends WriterSerializer {
 	final boolean
 		encodeChars,
 		addBeanTypes;
-	
+
 	final ParamFormat
 		paramFormat;
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -322,7 +322,7 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -361,14 +361,14 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Instantiates a new clean-slate {@link UonSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> UonSerializerBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link UonSerializerBuilder} object.
 	 */
 	public static UonSerializerBuilder create() {
@@ -384,7 +384,7 @@ public class UonSerializer extends WriterSerializer {
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new UonSerializerSession(this, null, args);
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

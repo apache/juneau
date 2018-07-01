@@ -14,31 +14,31 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>If-Modified-Since</l> HTTP request header.
- * 
+ *
  * <p>
  * Allows a 304 Not Modified to be returned if content is unchanged.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The If-Modified-Since request-header field is used with a method to make it conditional:
  * if the requested variant has not been modified since the time specified in this field, an entity will not be returned
  * from the server; instead, a 304 (not modified) response will be returned without any message-body.
- * 
+ *
  * <p class='bcode'>
  * 	If-Modified-Since = "If-Modified-Since" ":" HTTP-date
  * </p>
- * 
+ *
  * <p>
  * An example of the field is:
  * <p class='bcode'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
- * 
+ *
  * <p>
  * A GET method with an If-Modified-Since header and no Range header requests that the identified entity be transferred
  * only if it has been modified since the date given by the If-Modified-Since header.
@@ -52,23 +52,23 @@ package org.apache.juneau.http;
  * 	<li>If the variant has not been modified since a valid If-Modified-Since date, the server SHOULD return a 304
  * 		(Not Modified) response.
  * </ol>
- * 
+ *
  * <p>
  * The purpose of this feature is to allow efficient updates of cached information with a minimum amount of transaction
  * overhead.
- * 
+ *
  * <p>
  * Note: The Range request-header field modifies the meaning of If-Modified-Since; see section 14.35 for full details.
- * 
+ *
  * <p>
  * Note: If-Modified-Since times are interpreted by the server, whose clock might not be synchronized with the client.
- * 
+ *
  * <p>
  * Note: When handling an If-Modified-Since header field, some servers will use an exact date comparison function,
  * rather than a less-than function, for deciding whether to send a 304 (Not Modified) response.
  * To get best results when sending an If-Modified-Since header field for cache validation, clients are
  * advised to use the exact date string received in a previous Last-Modified header field whenever possible.
- * 
+ *
  * <p>
  * Note: If a client uses an arbitrary date in the If-Modified-Since header instead of a date taken from the
  * Last-Modified header for the same request, the client should be aware of the fact that this date is interpreted in
@@ -81,7 +81,7 @@ package org.apache.juneau.http;
  * Corrections for different time bases between client and server are at best approximate due to network latency.
  * The result of a request having both an If-Modified-Since header field and either an If-Match or an
  * If-Unmodified-Since header fields is undefined by this specification.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -91,7 +91,7 @@ public final class IfModifiedSince extends HeaderDate {
 
 	/**
 	 * Returns a parsed <code>If-Modified-Since</code> header.
-	 * 
+	 *
 	 * @param value The <code>If-Modified-Since</code> header string.
 	 * @return The parsed <code>If-Modified-Since</code> header, or <jk>null</jk> if the string was null.
 	 */

@@ -35,7 +35,7 @@ public class UonPartParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UonPartParserBuilder(PropertyStore ps) {
@@ -410,7 +410,7 @@ public class UonPartParserBuilder extends UonParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -428,7 +428,7 @@ public class UonPartParserBuilder extends UonParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public UonPartParserBuilder set(String name, Object value) {
 		super.set(name, value);

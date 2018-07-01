@@ -25,7 +25,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestMethodGuardsTest {
-	
+
 	//=================================================================================================================
 	// Overlapping guards
 	//=================================================================================================================
@@ -54,7 +54,7 @@ public class RestMethodGuardsTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_overlappingOneGuard() throws Exception {
 		a.get("/overlappingOneGuard?t1=1").execute().assertBody("OK1");

@@ -26,15 +26,15 @@ import org.apache.juneau.utils.*;
 
 /**
  * Contact information for the exposed API.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
  * 		<js>"email"</js>: <js>"support@swagger.io"</js>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -63,35 +63,35 @@ public class Contact extends SwaggerElement {
 	 * Default constructor.
 	 */
 	public Contact() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public Contact(Contact copyFrom) {
 		super(copyFrom);
-		
+
 		this.name = copyFrom.name;
 		this.url = copyFrom.url;
 		this.email = copyFrom.email;
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public Contact copy() {
 		return new Contact(this);
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>name</property>.
-	 * 
+	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
@@ -100,11 +100,11 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
-	 * 
+	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -116,7 +116,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setName(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -129,10 +129,10 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>url</property>.
-	 * 
+	 *
 	 * <p>
-	 * The URL pointing to the contact information. 
-	 * 
+	 * The URL pointing to the contact information.
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public URI getUrl() {
@@ -141,15 +141,15 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>url</property>.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * <br>Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -161,7 +161,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setUrl(URI)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
@@ -174,10 +174,10 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>email</property>.
-	 * 
+	 *
 	 * <p>
-	 * The email address of the contact person/organization. 
-	 * 
+	 * The email address of the contact person/organization.
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getEmail() {
@@ -186,11 +186,11 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>email</property>.
-	 * 
+	 *
 	 * <p>
-	 * The email address of the contact person/organization. 
-	 * 
-	 * @param value 
+	 * The email address of the contact person/organization.
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -203,7 +203,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setEmail(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -217,7 +217,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the name property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the name property is not null or empty.
 	 */
 	public boolean hasName() {
@@ -226,7 +226,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the URL property is not null.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the URL property is not null.
 	 */
 	public boolean hasUrl() {
@@ -235,7 +235,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the email property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the email property is not null or empty.
 	 */
 	public boolean hasEmail() {
@@ -262,12 +262,12 @@ public class Contact extends SwaggerElement {
 			case "name": return name(value);
 			case "url": return url(value);
 			case "email": return email(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
 	}
-	
+
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = new ASet<String>()

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -20,7 +20,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for constructing {@link ReaderResource} objects.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ReaderResource">Overview &gt; juneau-rest-server &gt; ReaderResource</a>
@@ -34,7 +34,7 @@ public final class ReaderResourceBuilder {
 
 	/**
 	 * Specifies the resource media type string.
-	 * 
+	 *
 	 * @param mediaType The resource media type string.
 	 * @return This object (for method chaining).
 	 */
@@ -45,7 +45,7 @@ public final class ReaderResourceBuilder {
 
 	/**
 	 * Specifies the resource media type string.
-	 * 
+	 *
 	 * @param mediaType The resource media type string.
 	 * @return This object (for method chaining).
 	 */
@@ -56,10 +56,10 @@ public final class ReaderResourceBuilder {
 
 	/**
 	 * Specifies the contents for this resource.
-	 * 
+	 *
 	 * <p>
 	 * This method can be called multiple times to add more content.
-	 * 
+	 *
 	 * @param contents
 	 * 	The resource contents.
 	 * 	<br>If multiple contents are specified, the results will be concatenated.
@@ -79,7 +79,7 @@ public final class ReaderResourceBuilder {
 
 	/**
 	 * Specifies an HTTP response header value.
-	 * 
+	 *
 	 * @param name The HTTP header name.
 	 * @param value
 	 * 	The HTTP header value.
@@ -93,7 +93,7 @@ public final class ReaderResourceBuilder {
 
 	/**
 	 * Specifies HTTP response header values.
-	 * 
+	 *
 	 * @param headers
 	 * 	The HTTP headers.
 	 * 	<br>Values will be converted to <code>Strings</code> using {@link Object#toString()}.
@@ -106,7 +106,7 @@ public final class ReaderResourceBuilder {
 
 	/**
 	 * Specifies the variable resolver to use for this resource.
-	 * 
+	 *
 	 * @param varResolver The variable resolver.
 	 * @return This object (for method chaining).
 	 */
@@ -117,7 +117,7 @@ public final class ReaderResourceBuilder {
 
 	/**
 	 * Create a new {@link ReaderResource} using values in this builder.
-	 * 
+	 *
 	 * @return A new immutable {@link ReaderResource} object.
 	 * @throws IOException
 	 */

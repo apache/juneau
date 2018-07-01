@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Represents a list of {@link JsonSchema} objects.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
@@ -33,7 +33,7 @@ public class JsonSchemaArray extends LinkedList<JsonSchema> {
 
 	/**
 	 * Constructor with predefined types to add to this list.
-	 * 
+	 *
 	 * @param schemas The list of schemas in this array.
 	 */
 	public JsonSchemaArray(JsonSchema...schemas) {
@@ -42,7 +42,7 @@ public class JsonSchemaArray extends LinkedList<JsonSchema> {
 
 	/**
 	 * Convenience method for adding one or more {@link JsonSchema} objects to this array.
-	 * 
+	 *
 	 * @param schemas The {@link JsonSchema} objects to add to this array.
 	 * @return This object (for method chaining).
 	 */

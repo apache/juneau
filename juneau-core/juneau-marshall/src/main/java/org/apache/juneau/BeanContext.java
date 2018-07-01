@@ -31,7 +31,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Core class of the Juneau architecture.
- * 
+ *
  * <p>
  * This class servers multiple purposes:
  * <ul class='spaced-list'>
@@ -41,15 +41,15 @@ import org.apache.juneau.transform.*;
  * 		Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter BeanFilters},
  * 		{@link PropertyNamer PropertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * </ul>
- * 
+ *
  * <p>
  * All serializers and parsers extend from this context so that they can handle POJOs using a common framework.
- * 
+ *
  * <h5 class='topic'>Bean Contexts</h5>
- * 
+ *
  * Bean contexts are created through the {@link BeanContext#create() BeanContext.create()} and {@link BeanContextBuilder#build()} methods.
  * <br>These context objects are read-only, reusable, and thread-safe.
- * 
+ *
  * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
  * These <code>ClassMeta</code> objects are time-consuming to construct.
@@ -57,39 +57,39 @@ import org.apache.juneau.transform.*;
  * the same cache.  This allows for efficient reuse of <code>ClassMeta</code> objects so that the information about
  * classes only needs to be calculated once.
  * Because of this, many of the properties defined on the {@link BeanContext} class cannot be overridden on the session.
- * 
+ *
  * <h5 class='topic'>Bean Sessions</h5>
- * 
+ *
  * Whereas <code>BeanContext</code> objects are permanent, unchangeable, cached, and thread-safe,
  * {@link BeanSession} objects are ephemeral and not thread-safe.
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
  * {@link BeanMap} objects can only be created through the session.
- * 
+ *
  * <h5 class='topic'>BeanContext configuration properties</h5>
- * 
+ *
  * <code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are
  * handled.  These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
- * 
+ *
  * <p>
  * Some settings (e.g. {@link #BEAN_beansRequireDefaultConstructor}) are used to differentiate between bean
  * and non-bean classes.
  * Attempting to create a bean map around one of these objects will throw a {@link BeanRuntimeException}.
  * The purpose for this behavior is so that the serializers can identify these non-bean classes and convert them to
  * plain strings using the {@link Object#toString()} method.
- * 
+ *
  * <p>
  * Some settings (e.g. {@link #BEAN_beanFieldVisibility}) are used to determine what kinds of properties are
  * detected on beans.
- * 
+ *
  * <p>
  * Some settings (e.g. {@link #BEAN_beanMapPutReturnsOldValue}) change the runtime behavior of bean maps.
- * 
+ *
  * <p>
  * Settings are specified using the {@link BeanContextBuilder#set(String, Object)} method and related convenience
  * methods.
- * 
+ *
  * <h5 class='section'>Example:</h5>
- * 
+ *
  * <p class='bcode'>
  * 	<jc>// Construct a context from scratch.</jc>
  * 	BeanContext beanContext = BeanContext
@@ -98,12 +98,12 @@ import org.apache.juneau.transform.*;
  * 		.notBeanClasses(Foo.<jk>class</jk>)
  * 		.build();
  * </p>
- * 
+ *
  * <h5 class='topic'>Bean Maps</h5>
- * 
+ *
  * {@link BeanMap BeanMaps} are wrappers around Java beans that allow properties to be retrieved and
  * set using the common {@link Map#put(Object,Object)} and {@link Map#get(Object)} methods.
- * 
+ *
  * <p>
  * Bean maps are created in two ways...
  * <ol>
@@ -112,9 +112,9 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link BeanSession#newBeanMap(Class) BeanSession.newBeanMap()} - Create a new bean instance wrapped in a
  * 		{@code Map} wrapper.
  * </ol>
- * 
+ *
  * <h5 class='section'>Example:</h5>
- * 
+ *
  * <p class='bcode'>
  * 	<jc>// A sample bean class</jc>
  * 	<jk>public class</jk> Person {
@@ -123,22 +123,22 @@ import org.apache.juneau.transform.*;
  * 		<jk>public int</jk> getAge();
  * 		<jk>public void</jk> setAge(<jk>int</jk> age);
  * 	}
- * 
+ *
  * 	<jc>// Create a new bean session</jc>
  * 	BeanSession session = BeanContext.<jsf>DEFAULT</jsf>.createSession();
- * 
+ *
  * 	<jc>// Wrap an existing bean in a new bean map</jc>
  * 	BeanMap&lt;Person&gt; m1 = session.toBeanMap(<jk>new</jk> Person());
  * 	m1.put(<js>"name"</js>, <js>"John Smith"</js>);
  * 	m1.put(<js>"age"</js>, 45);
- * 
+ *
  * 	<jc>// Create a new bean instance wrapped in a new bean map</jc>
  * 	BeanMap&lt;Person&gt; m2 = session.newBeanMap(Person.<jk>class</jk>);
  * 	m2.put(<js>"name"</js>, <js>"John Smith"</js>);
  * 	m2.put(<js>"age"</js>, 45);
  * 	Person p = m2.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.ContextsBuildersSessionsPropertyStores">Overview &gt; juneau-marshall &gt; Contexts, Builders, Sessions, and PropertyStores</a>
@@ -151,28 +151,28 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanClassVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
-	 * 
+	 *
 	 * <p>
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class and be serialized as a string.
 	 * <br>Use this setting to reduce the visibility requirement.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that serializes protected classes.</jc>
@@ -180,7 +180,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanClassVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -192,28 +192,28 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Minimum bean constructor visibility.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanConstructorVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Only look for constructors with the specified minimum visibility.
-	 * 
+	 *
 	 * <p>
-	 * This setting affects the logic for finding no-arg constructors for bean.  
+	 * This setting affects the logic for finding no-arg constructors for bean.
 	 * <br>Normally, only <jk>public</jk> no-arg constructors are used.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that looks for protected no-arg constructors.</jc>
@@ -221,7 +221,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanConstructorVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -233,19 +233,19 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean dictionary.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#beanDictionary()} 
-	 * 			<li class='ja'>{@link BeanProperty#beanDictionary()} 
+	 * 			<li class='ja'>{@link Bean#beanDictionary()}
+	 * 			<li class='ja'>{@link BeanProperty#beanDictionary()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
@@ -254,21 +254,21 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanFilterBuilder#beanDictionary(Class...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The list of classes that make up the bean dictionary in this bean context.
-	 * 
+	 *
 	 * <p>
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
 	 * <br>The names are defined through the {@link Bean#typeName() @Bean.typeName()} annotation defined on the bean class.
 	 * <br>For example, if a class <code>Foo</code> has a type-name of <js>"myfoo"</js>, then it would end up serialized
 	 * as <js>"{_type:'myfoo',...}"</js>.
-	 * 
+	 *
 	 * <p>
 	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
-	 * 
+	 *
 	 * <p>
 	 * Values can consist of any of the following types:
 	 * <ul>
@@ -277,7 +277,7 @@ public class BeanContext extends Context {
 	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
@@ -285,26 +285,26 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
 	 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
 	 * 	<ja>@Bean</ja>(beanDictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyBean {...}
-	 * 
+	 *
 	 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
 	 * 	ReaderParser p = HtmlParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanDictionary(HtmlBeanDictionary.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; juneau-marshall &gt; Bean Names and Dictionaries</a>
@@ -324,28 +324,28 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Minimum bean field visibility.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFieldVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Only look for bean fields with the specified minimum visibility.
-	 * 
+	 *
 	 * <p>
 	 * This affects which fields on a bean class are considered bean properties.
 	 * <br>Normally only <jk>public</jk> fields are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that looks for protected fields.</jc>
@@ -353,13 +353,13 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanFieldVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beanFieldVisibility</jsf>, <js>"PROTECTED"</js>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Disable using fields as properties entirely.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -371,14 +371,14 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean filters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Class...)}
@@ -386,13 +386,13 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * <br>It's useful when you want to use the <code>@Bean</code> annotation functionality, but you don't have the ability to alter 
+	 * <br>It's useful when you want to use the <code>@Bean</code> annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
-	 * 
+	 *
 	 * <p>
 	 * Values can consist of any of the following types:
 	 * <ul class='spaced-list'>
@@ -404,31 +404,31 @@ public class BeanContext extends Context {
 	 * 		All other bean properties will be ignored.
 	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a bean filter for the MyBean class.</jc>
 	 * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
-	 * 
+	 *
 	 * 		<jc>// Must provide a no-arg constructor!</jc>
 	 * 		<jk>public</jk> MyBeanFilter() {
 	 * 			includeProperties(<js>"foo,bar,baz"</js>);  <jc>// The properties we want exposed.</jc>
 	 * 		}
-	 * 	}	
-	 * 
+	 * 	}
+	 *
 	 * 	<jc>// Associate our bean filter with a serializer.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanFilters(MyBeanFilter.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_beanFilters</jsf>, MyBeanFilter.<jk>class</jk>)
 	 * 		.build();
-	 * </p>		
-	 * 
+	 * </p>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; juneau-marshall &gt; BeanFilters</a>
@@ -449,30 +449,30 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * values.
 	 * <br>Otherwise, it returns <jk>null</jk>.
-	 * 
+	 *
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty during serialization.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that creates BeanMaps with normal put() behavior.</jc>
@@ -480,13 +480,13 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanMapPutReturnsOldValue()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	BeanMap&lt;MyBean&gt; bm = s.createSession().toBeanMap(<jk>new</jk> MyBean());
 	 * 	bm.put(<js>"foo"</js>, <js>"bar"</js>);
 	 * 	Object oldValue = bm.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
@@ -496,28 +496,28 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Minimum bean method visibility.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanMethodVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Only look for bean methods with the specified minimum visibility.
-	 * 
+	 *
 	 * <p>
 	 * This affects which methods are detected as getters and setters on a bean class.
 	 * <br>Normally only <jk>public</jk> getters and setters are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that looks for protected getters and setters.</jc>
@@ -525,7 +525,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanMethodVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -537,28 +537,28 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireDefaultConstructor.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 * 
+	 *
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
@@ -566,7 +566,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beansRequireDefaultConstructor()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -578,28 +578,28 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Beans require Serializable interface.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSerializable.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 * 
+	 *
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
@@ -607,7 +607,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beansRequireSerializable()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -619,25 +619,25 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Beans require setters for getters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSettersForGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * <br>Otherwise, they will be ignored.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
@@ -645,7 +645,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beansRequireSettersForGetter()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -657,27 +657,27 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Beans require at least one property.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSomeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSomeProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 * 
+	 *
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
@@ -685,7 +685,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beansRequireSomeProperties(<jk>false</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -697,27 +697,27 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean type property name.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"_type"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#typePropertyName()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanTypePropertyName(String)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
 	 * parser knows the data type to reconstruct.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses 'type' instead of '_type' for dictionary names.</jc>
@@ -725,14 +725,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanTypePropertyName(<js>"type"</js>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beanTypePropertyName</jsf>, <js>"type"</js>)
 	 * 		.build();
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; juneau-marshall &gt; Bean Names and Dictionaries</a>
@@ -742,20 +742,20 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Debug mode.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#debug(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#debug()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Enables the following additional information during serialization:
@@ -766,7 +766,7 @@ public class BeanContext extends Context {
 	 * 	<li>
 	 * 		Enables {@link Serializer#SERIALIZER_detectRecursions}.
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Enables the following additional information during parsing:
 	 * <ul class='spaced-list'>
@@ -774,7 +774,7 @@ public class BeanContext extends Context {
 	 * 		When bean setters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer with debug enabled.</jc>
@@ -782,7 +782,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.debug()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -794,33 +794,33 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  POJO examples.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.examples.smo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Example} 
+	 * 			<li class='ja'>{@link Example}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#example(Class,Object)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies an example of the specified class.
-	 * 
+	 *
 	 * <p>
 	 * Examples are used in cases such as POJO examples in Swagger documents.
-	 * 
+	 *
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
@@ -828,14 +828,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_examples</jsf>, MyBean.<jk>class</jk>.getName(), <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
 	 * 		.build();
 	 * </p>
-	 * 
+	 *
 	 * POJO examples can also be defined on classes via the following:
 	 * <ul class='spaced-list'>
 	 * 	<li>A static field annotated with {@link Example @Example}.
@@ -847,18 +847,18 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean property excludes.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.excludeProperties.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#excludeProperties()} 
+	 * 			<li class='ja'>{@link Bean#excludeProperties()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(Class, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(String, String)}
@@ -866,23 +866,23 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanFilterBuilder#excludeProperties(String...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean class.
-	 * 
+	 *
 	 * <p>
 	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
 	 * names.
 	 * The key <js>"*"</js> means all bean classes.
-	 * 
+	 *
 	 * <p>
 	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <code>foo</code> and
 	 * <code>bar</code> properties on any beans whose simple class name is <code>Bean1</code>.
-	 * 
+	 *
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
@@ -890,13 +890,13 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.excludeProperties(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_excludeProperties</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Alternate using JSON object.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -908,18 +908,18 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Find fluent setters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.fluentSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#fluentSetters()} 
+	 * 			<li class='ja'>{@link Bean#fluentSetters()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#fluentSetters(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#fluentSetters()}
@@ -927,11 +927,11 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanFilterBuilder#fluentSetters()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, fluent setters are detected on beans.
-	 * 
+	 *
 	 * <p>
 	 * Fluent setters must have the following attributes:
 	 * <ul>
@@ -940,7 +940,7 @@ public class BeanContext extends Context {
 	 * 	<li>Take in one parameter.
 	 * 	<li>Return the bean itself.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that finds fluent setters.</jc>
@@ -948,7 +948,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.fluentSetters()
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -960,25 +960,25 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
@@ -986,7 +986,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.ingoreInvocationExceptionsOnGetters()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -998,25 +998,25 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
@@ -1024,7 +1024,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.ignoreInvocationExceptionsOnSetters()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1036,24 +1036,24 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Ignore properties without setters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignorePropertiesWithoutSetters(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
@@ -1061,7 +1061,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.ignorePropertiesWithoutSetters(<jk>false</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1073,25 +1073,25 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that ignores missing bean properties.</jc>
@@ -1099,7 +1099,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.ignoreUnknownBeanProperties()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1111,24 +1111,24 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Ignore unknown properties with null values.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownNullBeanProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
@@ -1136,7 +1136,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.ignoreUnknownNullBeanProperties(<jk>false</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1148,26 +1148,26 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Implementation classes.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.implClasses.smc"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#implClasses(Map)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#implClass(Class, Class)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 	 * parse).
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeanInterfaces.</jc>
@@ -1175,7 +1175,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.implClass(MyBeanInterface.<jk>class</jk>, MyBeanImpl.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1187,19 +1187,19 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean property includes.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.properties.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#properties()} 
-	 * 			<li class='ja'>{@link BeanProperty#properties()} 
+	 * 			<li class='ja'>{@link Bean#properties()}
+	 * 			<li class='ja'>{@link BeanProperty#properties()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Class, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(String, String)}
@@ -1207,23 +1207,23 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanFilterBuilder#properties(String...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
-	 * 
+	 *
 	 * <p>
 	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
 	 * names.
 	 * The key <js>"*"</js> means all bean classes.
-	 * 
+	 *
 	 * <p>
 	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <code>foo</code> and
 	 * <code>bar</code> properties on the specified bean.
-	 * 
+	 *
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
@@ -1231,13 +1231,13 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.includeProperties(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_includeProperties</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Alternate using JSON object.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1249,20 +1249,20 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Locale.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.locale.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
 	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link Locale#getDefault()})
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
 	 * 			<li class='jm'>{@link BeanSessionArgs#locale(Locale)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses the specified locale if it's not passed in through session args.</jc>
@@ -1270,13 +1270,13 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.locale(Locale.<jsf>UK</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_locale</jsf>, Locale.<jsf>UK</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Define on session-args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
 	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
@@ -1288,24 +1288,24 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Media type.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.mediaType.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link MediaType})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
 	 * 			<li class='jm'>{@link BeanSessionArgs#mediaType(MediaType)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses the specified media type if it's not passed in through session args.</jc>
@@ -1313,13 +1313,13 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.mediaType(MediaType.<jsf>JSON</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_mediaType</jsf>, MediaType.<jsf>JSON</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * <jc>// Define on session-args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
 	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
@@ -1331,18 +1331,18 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean class exclusions.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
 	 * 	<li><b>Data type:</b>  <code>Set&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link BeanIgnore} 
+	 * 			<li class='ja'>{@link BeanIgnore}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
@@ -1350,19 +1350,19 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
 	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
-	 * 
+	 *
 	 * <p>
 	 * Values can consist of any of the following types:
 	 * <ul>
 	 * 	<li>Classes.
 	 * 	<li>Arrays and collections of classes.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that doesn't treat MyBean as a bean class.</jc>
@@ -1370,7 +1370,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.notBeanClasses(MyBean.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1392,7 +1392,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean package exclusions.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
@@ -1409,7 +1409,7 @@ public class BeanContext extends Context {
 	 * 		<li><code>java.util.*</code>
 	 * 	</ul>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(String...)}
@@ -1417,24 +1417,24 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
-	 * 
+	 *
 	 * <p>
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
-	 * 
+	 *
 	 * <p>
 	 * Note that you can specify suffix patterns to include all subpackages.
-	 * 
+	 *
 	 * <p>
 	 * Values can consist of any of the following types:
 	 * <ul>
 	 * 	<li>Strings.
 	 * 	<li>Arrays and collections of strings.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores beans in the specified packages.</jc>
@@ -1442,7 +1442,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.notBeanPackages(<js>"org.apache.foo"</js>, <js>"org.apache.bar.*"</js>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1465,19 +1465,19 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  POJO swaps.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Object&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Swap} 
-	 * 			<li class='ja'>{@link Swaps} 
+	 * 			<li class='ja'>{@link Swap}
+	 * 			<li class='ja'>{@link Swaps}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
@@ -1485,20 +1485,20 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * POJO swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
 	 * and "swap in" the non-serializable class during parsing.
-	 * 
+	 *
 	 * <p>
 	 * An example of a POJO swap would be a <code>Calendar</code> object that gets swapped out for an ISO8601 string.
-	 * 
+	 *
 	 * <p>
 	 * Multiple POJO swaps can be associated with a single class.
 	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
 	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap.mediaTypes()} are used to come up with the best match.
-	 * 
+	 *
 	 * <p>
 	 * Values can consist of any of the following types:
 	 * <ul>
@@ -1507,55 +1507,55 @@ public class BeanContext extends Context {
 	 * 	<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
 	 * 	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
 	 * 		<jc>// ISO8601 formatter.</jc>
 	 * 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
-	 * 		
+	 *
 	 * 		<ja>@Override</ja>
 	 * 		<jk>public</jk> String swap(BeanSession session, Date o) {
 	 * 			<jk>return</jk> <jf>format</jf>.format(o);
 	 * 		}
-	 * 		
+	 *
 	 * 		<ja>@Override</ja>
 	 * 		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> Exception {
 	 * 			<jk>return</jk> <jf>format</jf>.parse(o);
 	 * 		}
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Sample bean with a Date field.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> Date <jf>date</jf> = <jk>new</jk> Date(112, 2, 3, 4, 5, 6);
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Create a serializer that uses our date swap.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.pojoSwaps(MyDateSwap.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_pojoSwaps</jsf>, MyDateSwap.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Produces "{date:'2012-03-03T04:05:06-0500'}"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());	
-	 * 	
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 *
 	 * 	<jc>// Create a serializer that uses our date swap.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.pojoSwaps(MyDateSwap.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Use our parser to parse a bean.</jc>
 	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; juneau-marshall &gt; PojoSwaps</a>
@@ -1580,28 +1580,28 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Bean property namer.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> {@link PropertyNamer}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link PropertyNamerDefault}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#propertyNamer()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
 	 * 			<li class='jm'>{@link BeanFilterBuilder#propertyNamer(Class)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The class to use for calculating bean property names.
-	 * 
+	 *
 	 * <p>
 	 * Predefined classes:
 	 * <ul>
@@ -1609,7 +1609,7 @@ public class BeanContext extends Context {
 	 * 	<li>{@link PropertyNamerDLC} - Dashed-lower-case names.
 	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names.</jc>
@@ -1618,7 +1618,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.propertyNamer(PropertyNamerDLC.<jk>class</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1630,18 +1630,18 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Sort bean properties.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#sort()} 
+	 * 			<li class='ja'>{@link Bean#sort()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#sortProperties(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#sortProperties()}
@@ -1649,19 +1649,19 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanFilterBuilder#sortProperties()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
 	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 * <br>On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
 	 * <br>On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
-	 * 
+	 *
 	 * <p>
 	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
 	 * in the Java file.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that sorts bean properties.</jc>
@@ -1669,7 +1669,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.sortProperties()
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1681,20 +1681,20 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  TimeZone.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link TimeZone})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
 	 * 			<li class='jm'>{@link BeanSessionArgs#timeZone(TimeZone)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses GMT if the timezone is not specified in the session args.</jc>
@@ -1702,13 +1702,13 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.timeZone(TimeZone.<jsf>GMT</jsf>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_timeZone</jsf>, TimeZone.<jsf>GMT</jsf>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Define on session-args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
 	 * 	<jk>try</jk> (WriterSerializerSession ss = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(sessionArgs)) {
@@ -1720,23 +1720,23 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Use enum names.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useEnumNames.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#useEnumNames()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer with debug enabled.</jc>
@@ -1744,26 +1744,26 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.useEnumNames()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_useEnumNames</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Enum with overridden toString().</jc>
 	 * 	<jc>// Will be serialized as ONE/TWO/THREE even though there's a toString() method..
 	 * 	<jk>public enum</jk> Option {
 	 * 		<jsf>ONE</jsf>(1),
 	 * 		<jsf>TWO</jsf>(2),
 	 * 		<jsf>THREE</jsf>(3);
-	 * 
+	 *
 	 * 		<jk>private int</jk> <jf>i</jf>;
-	 * 		
+	 *
 	 * 		Option(<jk>int</jk> i) {
 	 * 			<jk>this</jk>.<jf>i</jf> = i;
 	 * 		}
-	 * 
+	 *
 	 * 		<ja>@Override</ja>
 	 * 		<jk>public</jk> String toString() {
 	 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>i</jf>);
@@ -1774,25 +1774,25 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Use interface proxies.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#useInterfaceProxies(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * <br>Otherwise, throws a {@link BeanRuntimeException}.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that doesn't try to make interface proxies.</jc>
@@ -1800,7 +1800,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.useInterfaceProxies(<jk>false</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1812,25 +1812,25 @@ public class BeanContext extends Context {
 
 	/**
 	 * Configuration property:  Use Java Introspector.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * <br>Most {@link Bean @Bean} annotations will be ignored.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that only uses the built-in java bean introspector for finding properties.</jc>
@@ -1838,7 +1838,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.useJavaBeanIntrospector(<jk>false</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1940,10 +1940,10 @@ public class BeanContext extends Context {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * <p>
 	 * Typically only called from {@link ContextBuilder#build(Class)} method.
-	 * 
+	 *
 	 * @param ps The property store containing the unmodifiable configuration for this bean context.
 	 */
 	public BeanContext(PropertyStore ps) {
@@ -1975,7 +1975,7 @@ public class BeanContext extends Context {
 		beanFieldVisibility = getProperty(BEAN_beanFieldVisibility, Visibility.class, PUBLIC);
 
 		notBeanClasses = getClassArrayProperty(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
-		
+
 		propertyNamer = getInstanceProperty(BEAN_propertyNamer, PropertyNamer.class, PropertyNamerDefault.class);
 
 		List<String> l1 = new LinkedList<>();
@@ -2015,11 +2015,11 @@ public class BeanContext extends Context {
 			}
 		}
 		pojoSwaps = lpf.toArray(new PojoSwap[lpf.size()]);
-		
+
 		examples = getMapProperty(BEAN_examples, Object.class);
-		
+
 		implClasses = getClassMapProperty(BEAN_implClasses);
-		
+
 		Map<String,String[]> m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_includeProperties, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
@@ -2033,7 +2033,7 @@ public class BeanContext extends Context {
 		locale = getInstanceProperty(BEAN_locale, Locale.class, null);
 		timeZone = getInstanceProperty(BEAN_timeZone, TimeZone.class, null);
 		mediaType = getInstanceProperty(BEAN_mediaType, MediaType.class, null);
-		
+
 		if (! cmCacheCache.containsKey(beanHashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
 			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class), findExample(String.class)));
@@ -2053,13 +2053,13 @@ public class BeanContext extends Context {
 	public BeanContextBuilder builder() {
 		return new BeanContextBuilder(getPropertyStore());
 	}
-	
+
 	/**
 	 * Instantiates a new clean-slate {@link BeanContextBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> BeanContextBuilder()</code>.
-	 * 
+	 *
 	 * @return A new {@link JsonSerializerBuilder} object.
 	 */
 	public static BeanContextBuilder create() {
@@ -2068,11 +2068,11 @@ public class BeanContext extends Context {
 
 	/**
 	 * Create a new bean session based on the properties defined on this context.
-	 * 
+	 *
 	 * <p>
 	 * Use this method for creating sessions if you don't need to override any
 	 * properties or locale/timezone currently set on this context.
-	 * 
+	 *
 	 * @return A new session object.
 	 */
 	@Override /* Context */
@@ -2083,12 +2083,12 @@ public class BeanContext extends Context {
 	/**
 	 * Create a new bean session based on the properties defined on this context combined with the specified
 	 * runtime args.
-	 * 
+	 *
 	 * <p>
 	 * Use this method for creating sessions if you don't need to override any
 	 * properties or locale/timezone currently set on this context.
-	 * 
-	 * @param args 
+	 *
+	 * @param args
 	 * 	The session arguments.
 	 * @return A new session object.
 	 */
@@ -2100,49 +2100,49 @@ public class BeanContext extends Context {
 	public final Session createSession(SessionArgs args) {
 		throw new NoSuchMethodError();
 	}
-	
+
 	/**
-	 * Same as {@link #createSession(BeanSessionArgs)} except always returns a {@link BeanSession} object unlike {@link #createSession(BeanSessionArgs)} 
+	 * Same as {@link #createSession(BeanSessionArgs)} except always returns a {@link BeanSession} object unlike {@link #createSession(BeanSessionArgs)}
 	 * which is meant to be overridden by subclasses.
-	 * 
+	 *
 	 * @param args The session arguments.
 	 * @return A new session object.
 	 */
 	public final BeanSession createBeanSession(BeanSessionArgs args) {
 		return new BeanSession(this, args);
 	}
-	
+
 	/**
-	 * Same as {@link #createSession()} except always returns a {@link BeanSession} object unlike {@link #createSession()} 
+	 * Same as {@link #createSession()} except always returns a {@link BeanSession} object unlike {@link #createSession()}
 	 * which is meant to be overridden by subclasses.
-	 * 
+	 *
 	 * @return A new session object.
 	 */
  	public final BeanSession createBeanSession() {
 		return new BeanSession(this, createDefaultBeanSessionArgs());
 	}
- 	
+
  	@Override /* Context */
 	public BeanSessionArgs createDefaultSessionArgs() {
  		return createDefaultBeanSessionArgs();
 	}
- 	
+
 	/**
 	 * Same as {@link #createDefaultSessionArgs()} except always returns a {@link BeanSessionArgs} unlike
 	 * {@link #createDefaultBeanSessionArgs()} which is meant to be overridden by subclasses.
-	 * 
+	 *
 	 * @return A new session arguments object.
 	 */
 	public final BeanSessionArgs createDefaultBeanSessionArgs() {
 		return new BeanSessionArgs(null, null, null, null);
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.
-	 * 
+	 *
 	 * <p>
 	 * Useful for testing purposes.
-	 * 
+	 *
 	 * @param bc The bean context to compare to.
 	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
 	 */
@@ -2153,7 +2153,7 @@ public class BeanContext extends Context {
 	/**
 	 * Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
 	 * specified on this context class.
-	 * 
+	 *
 	 * @param c The class type being tested.
 	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
 	 */
@@ -2177,7 +2177,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is a bean.
-	 * 
+	 *
 	 * @param o The object to test.
 	 * @return <jk>true</jk> if the specified object is a bean.  <jk>false</jk> if the bean is <jk>null</jk>.
 	 */
@@ -2203,7 +2203,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns the {@link BeanMeta} class for the specified class.
-	 * 
+	 *
 	 * @param <T> The class type to get the meta-data on.
 	 * @param c The class to get the meta-data on.
 	 * @return
@@ -2218,7 +2218,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
-	 * 
+	 *
 	 * @param <T> The class type being wrapped.
 	 * @param type The class to resolve.
 	 * @return
@@ -2231,7 +2231,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
-	 * 
+	 *
 	 * @param <T> The class type being wrapped.
 	 * @param type The class to resolve.
 	 * @param waitForInit
@@ -2270,16 +2270,16 @@ public class BeanContext extends Context {
 	/**
 	 * Used to resolve <code>ClassMetas</code> of type <code>Collection</code> and <code>Map</code> that have
 	 * <code>ClassMeta</code> values that themselves could be collections or maps.
-	 * 
+	 *
 	 * <p>
 	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the element type.
-	 * 
+	 *
 	 * <p>
 	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value types.
-	 * 
+	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
 	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
@@ -2295,7 +2295,7 @@ public class BeanContext extends Context {
 	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> -
 	 * 		A map containing string keys and values of lists containing beans.
 	 * </ul>
-	 * 
+	 *
 	 * @param type
 	 * 	The class to resolve.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -2484,7 +2484,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
-	 * 
+	 *
 	 * @param <T> The class of the object being passed in.
 	 * @param o The class to find the class type for.
 	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
@@ -2498,7 +2498,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Used for determining the class type on a method or field where a {@code @BeanProperty} annotation may be present.
-	 * 
+	 *
 	 * @param <T> The class type we're wrapping.
 	 * @param p The property annotation on the type if there is one.
 	 * @param t The type.
@@ -2557,7 +2557,7 @@ public class BeanContext extends Context {
 	/**
 	 * Returns the {@link PojoSwap} associated with the specified class, or <jk>null</jk> if there is no POJO swap
 	 * associated with the class.
-	 * 
+	 *
 	 * @param <T> The class associated with the swap.
 	 * @param c The class associated with the swap.
 	 * @return The swap associated with the class, or null if there is no association.
@@ -2573,7 +2573,7 @@ public class BeanContext extends Context {
 		}
 		return null;
 	}
-	
+
 	private final Object findExample(Class<?> c) {
 		if (c != null) {
 			Object o = examples.get(c.getName());
@@ -2589,7 +2589,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Checks whether a class has a {@link PojoSwap} associated with it in this bean context.
-	 * 
+	 *
 	 * @param c The class to check.
 	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoSwap} associated with it.
 	 */
@@ -2610,7 +2610,7 @@ public class BeanContext extends Context {
 	/**
 	 * Returns the {@link BeanFilter} associated with the specified class, or <jk>null</jk> if there is no bean filter
 	 * associated with the class.
-	 * 
+	 *
 	 * @param <T> The class associated with the bean filter.
 	 * @param c The class associated with the bean filter.
 	 * @return The bean filter associated with the class, or null if there is no association.
@@ -2625,7 +2625,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns the type property name as defined by {@link #BEAN_beanTypePropertyName}.
-	 * 
+	 *
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
 	protected final String getBeanTypePropertyName() {
@@ -2634,7 +2634,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns the bean registry defined in this bean context defined by {@link #BEAN_beanDictionary}.
-	 * 
+	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
 	protected final BeanRegistry getBeanRegistry() {
@@ -2643,7 +2643,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Gets the no-arg constructor for the specified class.
-	 * 
+	 *
 	 * @param <T> The class to check.
 	 * @param c The class to check.
 	 * @param v The minimum visibility for the constructor.
@@ -2687,7 +2687,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns the {@link #BEAN_includeProperties} setting for the specified class.
-	 * 
+	 *
 	 * @param c The class.
 	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
 	 */
@@ -2709,7 +2709,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns the {@link #BEAN_excludeProperties} setting for the specified class.
-	 * 
+	 *
 	 * @param c The class.
 	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
 	 */
@@ -2731,15 +2731,15 @@ public class BeanContext extends Context {
 
 	/**
 	 * Creates an instance of the specified class.
-	 * 
-	 * @param c 
+	 *
+	 * @param c
 	 * 	The class to cast to.
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @return 
+	 * @return
 	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws 
+	 * @throws
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	public <T> T newInstance(Class<T> c, Object c2) {
@@ -2748,21 +2748,21 @@ public class BeanContext extends Context {
 
 	/**
 	 * Creates an instance of the specified class.
-	 * 
-	 * @param c 
+	 *
+	 * @param c
 	 * 	The class to cast to.
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	The arguments to pass to the constructor.
-	 * @return 
+	 * @return
 	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws 
+	 * @throws
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	public <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
@@ -2771,40 +2771,40 @@ public class BeanContext extends Context {
 
 	/**
 	 * Creates an instance of the specified class from within the context of another object.
-	 * 
+	 *
 	 * @param outer
 	 * 	The outer object.
 	 * 	Can be <jk>null</jk>.
-	 * @param c 
+	 * @param c
 	 * 	The class to cast to.
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	The arguments to pass to the constructor.
-	 * @return 
+	 * @return
 	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws 
+	 * @throws
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
 		return ClassUtils.newInstanceFromOuter(outer, c, c2, fuzzyArgs, args);
 	}
-	
+
 	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <code>Object</code>.
-	 * 
+	 *
 	 * <p>
 	 * This <code>ClassMeta</code> is often used to represent "any object type" when an object type is not known.
-	 * 
+	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
-	 * 
+	 *
 	 * @return The {@link ClassMeta} object associated with the <code>Object</code> class.
 	 */
 	protected final ClassMeta<Object> object() {
@@ -2813,14 +2813,14 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <code>String</code>.
-	 * 
+	 *
 	 * <p>
 	 * This <code>ClassMeta</code> is often used to represent key types in maps.
-	 * 
+	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
-	 * 
+	 *
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
 	protected final ClassMeta<String> string() {
@@ -2829,14 +2829,14 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <code>Class</code>.
-	 * 
+	 *
 	 * <p>
 	 * This <code>ClassMeta</code> is often used to represent key types in maps.
-	 * 
+	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
-	 * 
+	 *
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
 	protected final ClassMeta<Class> _class() {

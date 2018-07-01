@@ -35,7 +35,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public SoapXmlSerializerBuilder(PropertyStore ps) {
@@ -54,13 +54,13 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Configuration property:  The <code>SOAPAction</code> HTTP header value to set on responses.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link SoapXmlSerializer#SOAPXML_SOAPAction}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <js>"http://www.w3.org/2003/05/soap-envelope"</js>.
 	 * @return This object (for method chaining).
@@ -565,7 +565,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public SoapXmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

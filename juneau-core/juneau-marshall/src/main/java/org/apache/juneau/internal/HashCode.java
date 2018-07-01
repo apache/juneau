@@ -14,7 +14,7 @@ package org.apache.juneau.internal;
 
 /**
  * Utility class for generating integer hash codes.
- * 
+ *
  * <p>
  * General usage:
  * <p class='bcode'>
@@ -27,7 +27,7 @@ public class HashCode {
 
 	/**
 	 * Create a new HashCode object.
-	 * 
+	 *
 	 * @return A new HashCode object.
 	 */
 	public static final HashCode create() {
@@ -36,7 +36,7 @@ public class HashCode {
 
 	/**
 	 * Hashes the hashcode of the specified object into this object.
-	 * 
+	 *
 	 * @param o The object whose hashcode will be hashed with this object.
 	 * @return This object (for method chaining).
 	 */
@@ -48,10 +48,10 @@ public class HashCode {
 
 	/**
 	 * Hashes the hashcode into this object.
-	 * 
+	 *
 	 * <p>
 	 * The formula is simply <code>hashCode = 31*hashCode + i;</code>
-	 * 
+	 *
 	 * @param i The hashcode to hash into this object's hashcode.
 	 * @return This object (for method chaining).
 	 */
@@ -62,7 +62,7 @@ public class HashCode {
 
 	/**
 	 * Return the calculated hashcode value.
-	 * 
+	 *
 	 * @return The calculated hashcode.
 	 */
 	public int get() {
@@ -71,14 +71,14 @@ public class HashCode {
 
 	/**
 	 * Converts the object to a normalized form before grabbing it's hashcode.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling (e.g. converting numbers to strings so that
 	 * <code>123</code> and <js>"123"</js> end up creating the same hashcode.)
-	 * 
+	 *
 	 * <p>
 	 * Default implementation does nothing.
-	 * 
+	 *
 	 * @param o The object to normalize before getting it's hashcode.
 	 * @return The normalized object.
 	 */

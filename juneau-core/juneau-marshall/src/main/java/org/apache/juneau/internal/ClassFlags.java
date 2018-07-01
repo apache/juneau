@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -16,39 +16,39 @@ package org.apache.juneau.internal;
  * Identifies possible modifiers on classes, methods, fields, and constructors.
  */
 public enum ClassFlags {
-	
+
 	/** PUBLIC */
-	PUBLIC, 
+	PUBLIC,
 
 	/** NOT_PUBLIC */
 	NOT_PUBLIC,
 
 	/** STATIC */
-	STATIC, 
+	STATIC,
 
 	/** NOT_STATIC */
 	NOT_STATIC,
 
 	/** HAS_ARGS */
-	HAS_ARGS, 
+	HAS_ARGS,
 
 	/** HAS_NO_ARGS */
 	HAS_NO_ARGS,
 
 	/** DEPRECATED */
-	DEPRECATED, 
+	DEPRECATED,
 
 	/** NOT_DEPRECATED */
 	NOT_DEPRECATED,
 
 	/** ABSTRACT */
-	ABSTRACT, 
+	ABSTRACT,
 
 	/** NOT_ABSTRACT */
 	NOT_ABSTRACT,
-	
+
 	/** TRANSIENT */
-	TRANSIENT, 
+	TRANSIENT,
 
 	/** NOT_TRANSIENT */
 	NOT_TRANSIENT

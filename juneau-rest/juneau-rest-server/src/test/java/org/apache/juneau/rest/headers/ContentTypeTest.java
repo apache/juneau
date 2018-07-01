@@ -30,7 +30,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ContentTypeTest {
-	
+
 	//=================================================================================================================
 	// Setup classes
 	//=================================================================================================================
@@ -52,11 +52,11 @@ public class ContentTypeTest {
 			};
 		}
 	}
-	
+
 	public static class P1 extends DummyParser { public P1(PropertyStore ps) {super(ps, "p1", "text/p1");}}
 	public static class P2 extends DummyParser { public P2(PropertyStore ps) {super(ps, "p2", "text/p2");}}
 	public static class P3 extends DummyParser { public P3(PropertyStore ps) {super(ps, "p3", "text/p3");}}
-	
+
 	//=================================================================================================================
 	// Test that default Content-Type headers on servlet annotation are picked up.
 	//=================================================================================================================
@@ -72,7 +72,7 @@ public class ContentTypeTest {
 		}
 	}
 	private static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
 		a.put("/", null).execute().assertBody("p2");
@@ -89,7 +89,7 @@ public class ContentTypeTest {
 	// Test that default Content-Type headers on servlet annotation are picked up
 	// when @RestMethod.parsers/serializers annotations are used.
 	//=================================================================================================================
-	
+
 	@RestResource(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
@@ -101,7 +101,7 @@ public class ContentTypeTest {
 		}
 	}
 	private static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
 		b.put("/", null).contentType("text/p3").execute().assertBody("p3");
@@ -111,13 +111,13 @@ public class ContentTypeTest {
 	public void b02_restMethodWithParsersSerializers_invalid() throws Exception {
 		b.put("?noTrace=true", null).execute()
 			.assertStatus(415)
-			.assertBodyContains( 
+			.assertBodyContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
 		b.put("?noTrace=true", null).contentType("text/p1").execute()
 			.assertStatus(415)
-			.assertBodyContains( 
+			.assertBodyContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
@@ -128,12 +128,12 @@ public class ContentTypeTest {
 				"Supported media-types: ['text/p3']"
 			);
 	}
-	
+
 	//=================================================================================================================
 	// Test that default Content-Type headers on servlet annotation are picked up
 	// when @RestMethod.addParsers/addSerializers annotations are used.
 	//=================================================================================================================
-	
+
 	@RestResource(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
@@ -153,7 +153,7 @@ public class ContentTypeTest {
 		c.put("/", null).contentType("text/p2").execute().assertBody("p2");
 		c.put("/", null).contentType("text/p3").execute().assertBody("p3");
 	}
-	
+
 	@Test
 	public void c02_restMethodAddParsersSerializersInherit_invalid() throws Exception {
 		c.put("?noTrace=true", null).contentType("text/p4").execute()
@@ -168,7 +168,7 @@ public class ContentTypeTest {
 	// Test that default Content-Type headers on method annotation are picked up
 	// when @RestMethod.parsers/serializers annotations are used.
 	//=================================================================================================================
-	
+
 	@RestResource(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
@@ -217,7 +217,7 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	
+
 	private static MockRest f = MockRest.create(F.class);
 
 	@Test

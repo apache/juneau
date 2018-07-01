@@ -35,7 +35,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UrlEncodingSerializerBuilder(PropertyStore ps) {
@@ -54,17 +54,17 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -75,15 +75,15 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public UrlEncodingSerializerBuilder expandedParams() {
@@ -610,7 +610,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

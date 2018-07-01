@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -30,7 +30,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResponsesAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -45,7 +45,7 @@ public class ResponsesAnnotationTest {
 	//=================================================================================================================
 	// @Responses on POJO
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class A {
 
@@ -105,7 +105,7 @@ public class ResponsesAnnotationTest {
 		@RestMethod(name=GET,path="/examples")
 		public void a07(A07 r) {}
 	}
-	
+
 	@Test
 	public void a01_Responses_onPojo_code() throws Exception {
 		Operation x = getSwagger(new A()).getPaths().get("/code").get("get");
@@ -148,7 +148,7 @@ public class ResponsesAnnotationTest {
 		assertObjectEquals("{foo:'a'}", x.getResponse(100).getExamples());
 		assertObjectEquals("{foo:'b'}", x.getResponse(101).getExamples());
 	}
-	
+
 	//=================================================================================================================
 	// @Responses on parameter
 	//=================================================================================================================
@@ -162,7 +162,7 @@ public class ResponsesAnnotationTest {
 			@Responses({
 				@Response(code=100),
 				@Response(code=101)
-			}) 
+			})
 			B01 r) {}
 
 		public static class B02 {}
@@ -219,7 +219,7 @@ public class ResponsesAnnotationTest {
 			})
 			B07 r) {}
 	}
-	
+
 	@Test
 	public void b01_Response_onParameter_code() throws Exception {
 		Operation x = getSwagger(new B()).getPaths().get("/code").get("get");

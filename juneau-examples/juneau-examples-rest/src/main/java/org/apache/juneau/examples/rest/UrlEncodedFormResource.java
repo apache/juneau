@@ -34,8 +34,8 @@ import org.apache.juneau.transforms.*;
 	messages="nls/UrlEncodedFormResource",
 	title="URL-Encoded form example",
 	htmldoc=@HtmlDoc(
-		widgets={ 
-			ThemeMenuItem.class 
+		widgets={
+			ThemeMenuItem.class
 		},
 		navlinks={
 			"up: request:/..",
@@ -62,7 +62,7 @@ public class UrlEncodedFormResource extends BasicRestServlet {
 
 	/** GET request handler */
 	@RestMethod(
-		name=GET, 
+		name=GET,
 		path="/",
 		htmldoc=@HtmlDoc(
 			script={

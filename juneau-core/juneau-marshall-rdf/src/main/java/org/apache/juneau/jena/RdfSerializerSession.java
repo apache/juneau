@@ -28,9 +28,9 @@ import com.hp.hpl.jena.rdf.model.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.
- * 
+ *
  * <p>
- * This class is NOT thread safe.  
+ * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -53,7 +53,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -65,7 +65,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	protected RdfSerializerSession(RdfSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-				
+
 		rdfLanguage = getProperty(RDF_language, String.class, ctx.rdfLanguage);
 		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, ctx.juneauNs);
 		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, ctx.juneauBpNs);
@@ -96,12 +96,12 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			writer.setProperty("tab", isUseWhitespace() ? 2 : 0);
 			writer.setProperty("attributeQuoteChar", Character.toString(getQuoteChar()));
 		}
-		
+
 		for (Map.Entry<String,Object> e : ctx.jenaSettings.entrySet())
 			if (e.getKey().startsWith(propPrefix, 5))
 				writer.setProperty(e.getKey().substring(5 + propPrefix.length()), e.getValue());
-		
-		for (String k : getPropertyKeys()) 
+
+		for (String k : getPropertyKeys())
 			if (k.startsWith("RdfCommon.jena.") && k.startsWith(propPrefix, 15))
 				writer.setProperty(k.substring(15 + propPrefix.length()), getProperty(k));
 	}
@@ -133,7 +133,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
@@ -157,7 +157,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	private String encodeElementName(Object o) {
 		return XmlUtils.encodeElementName(toString(o));
 	}
-	
+
 	@Override /* Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 
@@ -184,7 +184,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		writer.write(model, out.getWriter(), "http://unknown/");
 	}
 
-	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, 
+	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType,
 			String attrName, BeanPropertyMeta bpm, Resource parentResource) throws Exception {
 		Model m = model;
 
@@ -284,7 +284,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			serializeBeanMap(bm, (Resource)n, typeName);
 
 		} else if (sType.isCollectionOrArray() || (wType != null && wType.isCollection())) {
-			
+
 			Collection c = sort(sType.isCollection() ? (Collection)o : toList(sType.getInnerClass(), o));
 			RdfCollectionFormat f = collectionFormat;
 			RdfClassMeta cRdf = cRdf(sType);
@@ -294,17 +294,17 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				f = cRdf.getCollectionFormat();
 			if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 				f = bpRdf.getCollectionFormat();
-			
+
 			switch (f) {
 				case BAG: n = serializeToContainer(c, eType, m.createBag()); break;
 				case LIST: n = serializeToList(c, eType); break;
 				case MULTI_VALUED: serializeToMultiProperties(c, eType, bpm, attrName, parentResource); break;
 				default: n = serializeToContainer(c, eType, m.createSeq());
 			}
-		
+
 		} else if (sType.isReader() || sType.isInputStream()) {
 			n = m.createLiteral(encodeTextInvalidChars(IOUtils.read(o)));
-		
+
 		} else {
 			n = m.createLiteral(encodeTextInvalidChars(toString(o)));
 		}
@@ -350,12 +350,12 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		List<BeanPropertyValue> l = m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
 		Collections.reverse(l);
 		for (BeanPropertyValue bpv : l) {
-			
+
 			BeanPropertyMeta bpMeta = bpv.getMeta();
 			ClassMeta<?> cMeta = bpMeta.getClassMeta();
 			RdfBeanPropertyMeta bpRdf = bpRdf(bpMeta);
 			XmlBeanPropertyMeta bpXml = bpXml(bpMeta);
-			
+
 			if (bpRdf.isBeanUri())
 				continue;
 
@@ -403,13 +403,13 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		return model.createList(l.iterator());
 	}
 
-	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType, 
+	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType,
 			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws Exception {
-		
+
 		ClassMeta<?> elementType = sType.getElementType();
 		RdfBeanPropertyMeta bpRdf = bpRdf(bpm);
 		XmlBeanPropertyMeta bpXml = bpXml(bpm);
-		
+
 		for (Object e : c) {
 			Namespace ns = bpRdf.getNamespace();
 			if (ns == null && useXmlNamespaces)
@@ -423,7 +423,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			parentResource.addProperty(p, n2);
 		}
 	}
-	
+
 	private static RdfClassMeta cRdf(ClassMeta<?> cm) {
 		return cm.getExtendedMeta(RdfClassMeta.class);
 	}
@@ -431,7 +431,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	private static XmlBeanPropertyMeta bpXml(BeanPropertyMeta pMeta) {
 		return pMeta == null ? XmlBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
 	}
-	
+
 	private static RdfBeanPropertyMeta bpRdf(BeanPropertyMeta pMeta) {
 		return pMeta == null ? RdfBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(RdfBeanPropertyMeta.class);
 	}

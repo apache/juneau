@@ -21,7 +21,7 @@ import javax.servlet.http.*;
 
 /**
  * Class that handles the basic lifecycle of an HTTP REST call.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_callHandler}
@@ -31,7 +31,7 @@ public interface RestCallHandler {
 
 	/**
 	 * Represents no RestCallHandler.
-	 * 
+	 *
 	 * <p>
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
 	 * ultimately {@link BasicRestCallHandler} if not specified at any level.
@@ -40,7 +40,7 @@ public interface RestCallHandler {
 
 	/**
 	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
-	 * 
+	 *
 	 * @param req The request object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
 	 * @return The wrapped request object.
 	 * @throws ServletException If any errors occur trying to interpret the request.
@@ -50,7 +50,7 @@ public interface RestCallHandler {
 	/**
 	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
 	 * and the request returned by {@link #createRequest(HttpServletRequest)}.
-	 * 
+	 *
 	 * @param req The request object returned by {@link #createRequest(HttpServletRequest)}.
 	 * @param res The response object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
 	 * @return The wrapped response object.
@@ -60,7 +60,7 @@ public interface RestCallHandler {
 
 	/**
 	 * The main service method.
-	 * 
+	 *
 	 * @param r1 The incoming HTTP servlet request object.
 	 * @param r2 The incoming HTTP servlet response object.
 	 * @throws ServletException
@@ -71,7 +71,7 @@ public interface RestCallHandler {
 	/**
 	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or
 	 * returned by the Java method.
-	 * 
+	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @param output The output to serialize in the response.
@@ -82,7 +82,7 @@ public interface RestCallHandler {
 
 	/**
 	 * Handle the case where a matching method was not found.
-	 * 
+	 *
 	 * @param rc The HTTP response code.
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -92,7 +92,7 @@ public interface RestCallHandler {
 
 	/**
 	 * Method for handling response errors.
-	 * 
+	 *
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 * @param e The exception that occurred.
@@ -102,7 +102,7 @@ public interface RestCallHandler {
 
 	/**
 	 * Method for rendering response errors.
-	 * 
+	 *
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 * @param e The exception that occurred.
@@ -112,7 +112,7 @@ public interface RestCallHandler {
 
 	/**
 	 * Returns the session objects for the specified request.
-	 * 
+	 *
 	 * @param req The REST request.
 	 * @return The session objects for that request.
 	 */

@@ -45,10 +45,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Default implementation of {@link RestInfoProvider}.
- * 
+ *
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST resources are documented.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
@@ -56,16 +56,16 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class BasicRestInfoProvider implements RestInfoProvider {
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private static final String PREFIX = "BasicRestInfoProvider.";
-	
+
 	/**
 	 * Configuration property:  Ignore types from schema definitions.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BasicRestInfoProvider.ignoreTypes.s"</js>
@@ -73,12 +73,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<li><b>Default:</b>  <jk>null</jk>.
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Defines class name patterns that should be ignored when generating schema definitions in the generated 
+	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
 	 * Swagger documentation.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
@@ -90,7 +90,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * </p>
 	 */
 	public static final String INFOPROVIDER_ignoreTypes = PREFIX + "ignoreTypes.s";
-	
+
 
 	private final RestContext context;
 	private final String
@@ -102,17 +102,17 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param context The resource context.
 	 */
 	public BasicRestInfoProvider(RestContext context) {
 		this.context = context;
-		
+
 		PropertyStore ps = context.getPropertyStore();
 		this.ignoreTypes = new LinkedHashSet<>();
-		for (String s : split(ps.getProperty(INFOPROVIDER_ignoreTypes, String.class, ""))) 
+		for (String s : split(ps.getProperty(INFOPROVIDER_ignoreTypes, String.class, "")))
 			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
-		
+
 		Builder b = new Builder(context);
 		this.siteName = b.siteName;
 		this.title = b.title;
@@ -124,7 +124,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			siteName,
 			title,
 			description;
-		
+
 		Builder(RestContext context) {
 
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
@@ -142,21 +142,21 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 	/**
 	 * Returns the localized swagger for this REST resource.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to customize the Swagger.
-	 * 
+	 *
 	 * @param req The incoming HTTP request.
-	 * @return 
+	 * @return
 	 * 	A new Swagger instance.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws Exception
 	 */
 	@Override /* RestInfoProvider */
 	public Swagger getSwagger(RestRequest req) throws Exception {
-		
+
 		Locale locale = req.getLocale();
-		
+
 		// Find it in the cache.
 		// Swaggers are cached by user locale and an int hash of the @RestMethods they have access to.
 		HashCode userHash = HashCode.create();
@@ -164,30 +164,30 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			if (sm.isRequestAllowed(req))
 				userHash.add(sm.hashCode());
 		int hashCode = userHash.get();
-		
+
 		if (! swaggers.containsKey(locale))
 			swaggers.putIfAbsent(locale, new ConcurrentHashMap<Integer,Swagger>());
-		
+
 		Swagger swagger = swaggers.get(locale).get(hashCode);
 		if (swagger != null)
 			return swagger;
 
 		// Wasn't cached...need to create one.
-		
+
 		Object resource = context.getResource();
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
 		MessageBundle mb = context.getMessages();
 		Class<?> c = context.getResource().getClass();
 		JsonSchemaSerializerSession js = req.getContext().getJsonSchemaSerializer().createSession();
-		
+
 		// Load swagger JSON from classpath.
 		ObjectMap omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, ClassUtils.getSimpleName(resource.getClass()) + ".json", locale);
 		if (omSwagger == null)
 			omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, resource.getClass().getSimpleName() + ".json", locale);
 		if (omSwagger == null)
 			omSwagger = new ObjectMap();
-		
+
 		// Combine it with @RestResource(swagger)
 		for (Map.Entry<Class<?>,RestResource> e : findAnnotationsMapParentFirst(RestResource.class, resource.getClass()).entrySet()) {
 			RestResource rr = e.getValue();
@@ -205,47 +205,47 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					resolve(vr, rr.description())
 				)
 			);
-			
+
 			ResourceSwagger r = rr.swagger();
-			
+
 			omSwagger.appendAll(parseMap(vr, r.value(), "@ResourceSwagger(value) on class {0}", c));
-			
+
 			if (! empty(r)) {
 				ObjectMap info = omSwagger.getObjectMap("info", true);
 				info.appendSkipEmpty("title", resolve(vr, r.title()));
 				info.appendSkipEmpty("description", resolve(vr, r.description()));
 				info.appendSkipEmpty("version", resolve(vr, r.version()));
 				info.appendSkipEmpty("termsOfService", resolve(vr, r.termsOfService()));
-				info.appendSkipEmpty("contact", 
+				info.appendSkipEmpty("contact",
 					merge(
-						info.getObjectMap("contact"), 
+						info.getObjectMap("contact"),
 						toMap(vr, r.contact(), "@ResourceSwagger(contact) on class {0}", c)
 					)
 				);
-				info.appendSkipEmpty("license", 
+				info.appendSkipEmpty("license",
 					merge(
-						info.getObjectMap("license"), 
+						info.getObjectMap("license"),
 						toMap(vr, r.license(), "@ResourceSwagger(license) on class {0}", c)
 					)
 				);
 			}
 
-			omSwagger.appendSkipEmpty("externalDocs", 
+			omSwagger.appendSkipEmpty("externalDocs",
 				merge(
-					omSwagger.getObjectMap("externalDocs"), 
+					omSwagger.getObjectMap("externalDocs"),
 					toMap(vr, r.externalDocs(), "@ResourceSwagger(externalDocs) on class {0}", c)
 				)
 			);
-			omSwagger.appendSkipEmpty("tags", 
+			omSwagger.appendSkipEmpty("tags",
 				merge(
-					omSwagger.getObjectList("tags"), 
+					omSwagger.getObjectList("tags"),
 					toList(vr, r.tags(), "@ResourceSwagger(tags) on class {0}", c)
 				)
 			);
 		}
 
 		omSwagger.appendSkipEmpty("externalDocs", parseMap(vr, mb.findFirstString(locale, "externalDocs"), "Messages/externalDocs on class {0}", c));
-		
+
 		ObjectMap info = omSwagger.getObjectMap("info", true);
 		info.appendSkipEmpty("title", resolve(vr, mb.findFirstString(locale, "title")));
 		info.appendSkipEmpty("description", resolve(vr, mb.findFirstString(locale, "description")));
@@ -259,11 +259,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		ObjectList
 			produces = omSwagger.getObjectList("produces", true),
 			consumes = omSwagger.getObjectList("consumes", true);
-		if (consumes.isEmpty()) 
+		if (consumes.isEmpty())
 			consumes.addAll(req.getContext().getConsumes());
-		if (produces.isEmpty()) 
+		if (produces.isEmpty())
 			produces.addAll(req.getContext().getProduces());
-		
+
 		Map<String,ObjectMap> tagMap = new LinkedHashMap<>();
 		if (omSwagger.containsKey("tags")) {
 			for (ObjectMap om : omSwagger.getObjectList("tags").elements(ObjectMap.class)) {
@@ -273,7 +273,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				tagMap.put(name, om);
 			}
 		}
-		
+
 		String s = mb.findFirstString(locale, "tags");
 		if (s != null) {
 			for (ObjectMap m : parseListOrCdl(vr, s, "Messages/tags on class {0}", c).elements(ObjectMap.class)) {
@@ -289,75 +289,75 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 		// Load our existing bean definitions into our session.
 		ObjectMap definitions = omSwagger.getObjectMap("definitions", true);
-		for (String defId : definitions.keySet()) 
+		for (String defId : definitions.keySet())
 			js.addBeanDef(defId, definitions.getObjectMap(defId));
-		
+
 		// Iterate through all the @RestMethod methods.
 		for (RestJavaMethod sm : context.getCallMethods().values()) {
-			
+
 			// Skip it if user doesn't have access.
 			if (! sm.isRequestAllowed(req))
 				continue;
-			
+
 			Method m = sm.method;
 			RestMethod rm = m.getAnnotation(RestMethod.class);
 			String mn = m.getName();
-			
+
 			// Get the operation from the existing swagger so far.
 			ObjectMap op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
-			
+
 			// Add @RestMethod(swagger)
 			MethodSwagger ms = rm.swagger();
 
 			op.appendAll(parseMap(vr, ms.value(), "@MethodSwagger(value) on class {0} method {1}", c, m));
-			op.appendSkipEmpty("operationId", 
+			op.appendSkipEmpty("operationId",
 				firstNonEmpty(
-					resolve(vr, ms.operationId()), 
-					op.getString("operationId"), 
+					resolve(vr, ms.operationId()),
+					op.getString("operationId"),
 					mn
 				)
 			);
-			op.appendSkipEmpty("summary", 
+			op.appendSkipEmpty("summary",
 				firstNonEmpty(
-					resolve(vr, ms.summary()), 
+					resolve(vr, ms.summary()),
 					resolve(vr, mb.findFirstString(locale, mn + ".summary")),
-					op.getString("summary"), 
+					op.getString("summary"),
 					resolve(vr, rm.summary())
 				)
 			);
-			op.appendSkipEmpty("description", 
+			op.appendSkipEmpty("description",
 				firstNonEmpty(
-					resolve(vr, ms.description()), 
+					resolve(vr, ms.description()),
 					resolve(vr, mb.findFirstString(locale, mn + ".description")),
-					op.getString("description"), 
+					op.getString("description"),
 					resolve(vr, rm.description())
 				)
 			);
-			op.appendSkipEmpty("deprecated", 
+			op.appendSkipEmpty("deprecated",
 				firstNonEmpty(
 					resolve(vr, ms.deprecated()),
 					(m.getAnnotation(Deprecated.class) != null || m.getDeclaringClass().getAnnotation(Deprecated.class) != null) ? "true" : null
 				)
 			);
-			op.appendSkipEmpty("tags", 
+			op.appendSkipEmpty("tags",
 				merge(
 					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
 					parseListOrCdl(vr, ms.tags(), "@MethodSwagger(tags) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("schemes", 
+			op.appendSkipEmpty("schemes",
 				merge(
 					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
 					parseListOrCdl(vr, ms.schemes(), "@MethodSwagger(schemes) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("consumes", 
+			op.appendSkipEmpty("consumes",
 				firstNonEmpty(
 					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
 					parseListOrCdl(vr, ms.consumes(), "@MethodSwagger(consumes) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("produces", 
+			op.appendSkipEmpty("produces",
 				firstNonEmpty(
 					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
 					parseListOrCdl(vr, ms.produces(), "@MethodSwagger(produces) on class {0} method {1}", c, m)
@@ -369,56 +369,56 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					parseList(vr, ms.parameters(), "@MethodSwagger(parameters) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("responses", 
+			op.appendSkipEmpty("responses",
 				merge(
 					parseMap(vr, mb.findFirstString(locale, mn + ".responses"), "Messages/responses on class {0} method {1}", c, m),
 					parseMap(vr, ms.responses(), "@MethodSwagger(responses) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("externalDocs", 
+			op.appendSkipEmpty("externalDocs",
 				merge(
-					op.getObjectMap("externalDocs"), 
+					op.getObjectMap("externalDocs"),
 					parseMap(vr, mb.findFirstString(locale, mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
 					toMap(vr, ms.externalDocs(), "@MethodSwagger(externalDocs) on class {0} method {1}", c, m)
 				)
 			);
-			
+
 			if (op.containsKey("tags"))
-				for (String tag : op.getObjectList("tags").elements(String.class)) 
+				for (String tag : op.getObjectList("tags").elements(String.class))
 					if (! tagMap.containsKey(tag))
 						tagMap.put(tag, new ObjectMap().append("name", tag));
-			
+
 			ObjectMap paramMap = new ObjectMap();
 			if (op.containsKey("parameters"))
-				for (ObjectMap param : op.getObjectList("parameters").elements(ObjectMap.class)) 
+				for (ObjectMap param : op.getObjectList("parameters").elements(ObjectMap.class))
 					paramMap.put(param.getString("in") + '.' + ("body".equals(param.getString("in")) ? "body" : param.getString("name")), param);
-		
+
 			// Finally, look for parameters defined on method.
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
-				
+
 				RestParamType in = mp.getParamType();
-				
+
 				if (in == OTHER || in == RESPONSE || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
 					continue;
-				
+
 				String key = in.toString() + '.' + (in == BODY ? "body" : mp.getName());
-				
+
 				ObjectMap param = paramMap.getObjectMap(key, true);
-					
+
 				param.append("in", in);
-				
+
 				if (in != BODY)
 					param.append("name", mp.name);
-				
+
 				ObjectMap pi = resolve(vr, mp.getApi(), "ParameterInfo on class {0} method {1}", c, m);
 
 				// Common to all
 				param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
 				param.appendSkipEmpty("required", resolve(vr, pi.getString("required")));
-				
+
 				if (in == BODY) {
 					param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
-					param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));					
+					param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
 					param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
 					param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
 				} else {
@@ -443,22 +443,22 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
 					param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
 					param.appendSkipEmpty("items", parseMap(vr, pi.get("items"), "ParameterInfo/items on class {0} method {1}", c, m));
-					
+
 					// Technically Swagger doesn't support schema on non-body parameters, but we do.
 					param.appendSkipEmpty("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
 				}
-				
+
 				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 					param.put("required", true);
-				
+
 				addXExamples(req, sm, param, in.toString(), js, mp.getType());
 			}
-			
+
 			if (! paramMap.isEmpty())
 				op.put("parameters", paramMap.values());
 
 			ObjectMap responses = op.getObjectMap("responses", true);
-						
+
 			// Gather responses from @Response-annotated exceptions.
 			for (RestMethodThrown rt : context.getRestMethodThrowns(m)) {
 				ObjectMap md = resolve(vr, rt.getApi(), "RestMethodThrown on class {0} method {1}", c, m);
@@ -472,10 +472,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					om.appendSkipEmpty("headers", parseMap(vr, response.get("headers"), "RestMethodThrown/headers on class {0} method {1}", c, m));
 				}
 			}
-			
+
 			RestMethodReturn r = context.getRestMethodReturn(m);
 			String rStatus = r.getCode() == 0 ? "200" : String.valueOf(r.getCode());
-			
+
 			ObjectMap rom = responses.getObjectMap(rStatus, true);
 
 			if (r.getType() != void.class) {
@@ -491,15 +491,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 			// Finally, look for @ResponseHeader parameters defined on method.
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
-				
+
 				RestParamType in = mp.getParamType();
-				
+
 				if (in == RESPONSE_HEADER) {
 					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseHeader on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						String name = mp.getName();
 						ObjectMap pi2 = pi.getObjectMap(code, true);
-						
+
 						ObjectMap header = responses.getObjectMap(code, true).getObjectMap("headers", true).getObjectMap(name, true);
 
 						header.appendSkipEmpty("description", resolve(vr, pi2.getString("description")));
@@ -522,14 +522,14 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						header.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@ResponseHeader/examples on class {0} method {1}", c, m));
 						header.appendSkipEmpty("items", parseMap(vr, pi2.get("items"), "@ResponseHeader/items on class {0} method {1}", c, m));
 					}
-				
+
 				} else if (in == RESPONSE) {
 					ObjectMap pi = resolve(vr, mp.getApi(), "@Response on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
-						
+
 						ObjectMap response = responses.getObjectMap(code, true);
-						
+
 						response.appendSkipEmpty("description", resolve(vr, pi2.getString("description")));
 						response.appendSkipEmpty("schema", parseMap(vr, pi2.get("schema"), "@Response/schema on class {0} method {1}", c, m));
 						response.appendSkipEmpty("headers", parseMap(vr, pi2.get("headers"), "@Response/headers on class {0} method {1}", c, m));
@@ -545,32 +545,32 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 						response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
 					}
-					
+
 				} else if (in == RESPONSE_STATUS) {
 					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseStatus on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
-					
+
 						ObjectMap response = responses.getObjectMap(code, true);
 
 						response.appendSkipEmpty("description", resolve(vr, pi2.getString("description")));
 					}
 				}
 			}
-			
+
 			// Add default response descriptions.
 			for (Map.Entry<String,Object> e : responses.entrySet()) {
 				String key = e.getKey();
 				ObjectMap val = responses.getObjectMap(key);
-				if (StringUtils.isDecimal(key)) 
+				if (StringUtils.isDecimal(key))
 					val.appendIf(false, true, true, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
 			}
-			
+
 			if (responses.isEmpty())
 				op.remove("responses");
 			else
 				op.put("responses", new TreeMap<>(responses));
-			
+
 			if (! op.containsKey("consumes")) {
 				List<MediaType> mConsumes = sm.supportedContentTypes;
 				if (! mConsumes.equals(consumes))
@@ -583,21 +583,21 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					op.put("produces", mProduces);
 			}
 		}
-		
-		if (js.getBeanDefs() != null) 
+
+		if (js.getBeanDefs() != null)
 			for (Map.Entry<String,ObjectMap> e : js.getBeanDefs().entrySet())
 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");
-			
+
 		if (! tagMap.isEmpty())
 			omSwagger.put("tags", tagMap.values());
-		
+
 		if (consumes.isEmpty())
 			omSwagger.remove("consumes");
 		if (produces.isEmpty())
 			omSwagger.remove("produces");
-		
+
 //		try {
 //			if (! omSwagger.isEmpty())
 //				assertNoEmpties(omSwagger);
@@ -605,19 +605,19 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 //			System.err.println(omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE));
 //			throw e1;
 //		}
-		
+
 		try {
 			String swaggerJson = omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE);
 			swagger = jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new RestServletException("Error detected in swagger.").initCause(e);
 		}
-		
+
 		swaggers.get(locale).put(hashCode, swagger);
-		
+
 		return swagger;
 	}
-	
+
 //	private static void assertNoEmpties(ObjectMap om) throws SwaggerException {
 //		if (om.isEmpty())
 //			throw new SwaggerException(null, "Empty map detected.");
@@ -629,7 +629,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 //				assertNoEmpties((ObjectList)val);
 //		}
 //	}
-//	
+//
 //	private static void assertNoEmpties(ObjectList ol) throws SwaggerException {
 //		if (ol.isEmpty())
 //			throw new SwaggerException(null, "Empty list detected.");
@@ -644,7 +644,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	//=================================================================================================================
 	// Utility methods
 	//=================================================================================================================
-	
+
 	private ObjectMap resolve(VarResolverSession vs, ObjectMap om, String location, Object...args) throws ParseException {
 		if (om == null)
 			return om;
@@ -654,9 +654,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
 		}
 	}
-	
+
 	private ObjectMap resolve(VarResolverSession vs, ObjectMap om) throws ParseException {
-		ObjectMap om2 = om.containsKey("_value") ? parseMap(vs, om.remove("_value")) : new ObjectMap(); 
+		ObjectMap om2 = om.containsKey("_value") ? parseMap(vs, om.remove("_value")) : new ObjectMap();
 		for (Map.Entry<String,Object> e : om.entrySet()) {
 			Object val = e.getValue();
 			if (val instanceof ObjectMap) {
@@ -672,7 +672,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	}
 
 	private ObjectList resolve(VarResolverSession vs, ObjectList om) throws ParseException {
-		ObjectList ol2 = new ObjectList(); 
+		ObjectList ol2 = new ObjectList();
 		for (Object val : om) {
 			if (val instanceof ObjectMap) {
 				val = resolve(vs, (ObjectMap)val);
@@ -685,7 +685,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		}
 		return ol2;
 	}
-	
+
 	private String resolve(VarResolverSession vs, String[] s) {
 		return resolve(vs, joinnl(s));
 	}
@@ -705,7 +705,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	private ObjectMap parseMap(VarResolverSession vs, Object o) throws ParseException {
 		if (o == null)
 			return null;
-		if (o instanceof String[]) 
+		if (o instanceof String[])
 			o = joinnl((String[])o);
 		if (o instanceof String) {
 			String s = o.toString();
@@ -717,10 +717,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			if (! isObjectMap(s, true))
 				s = "{" + s + "}";
 			return new ObjectMap(s);
-		} 
+		}
 		if (o instanceof ObjectMap)
 			return (ObjectMap)o;
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected ObjectMap or String.", o.getClass().getName()); 
+		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected ObjectMap or String.", o.getClass().getName());
 	}
 
 	private ObjectList parseList(VarResolverSession vs, Object o, String location, Object...locationArgs) throws ParseException {
@@ -737,8 +737,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
 		}
-	}	
-	
+	}
+
 	private Object parseAnything(VarResolverSession vs, Object o, String location, Object...locationArgs) throws ParseException {
 		try {
 			if (o == null)
@@ -776,7 +776,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			return om2;
 		return om.appendAll(om2);
 	}
-	
+
 	private ObjectMap merge(ObjectMap...maps) {
 		ObjectMap m = maps[0];
 		for (int i = 1; i < maps.length; i++) {
@@ -788,7 +788,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		}
 		return m;
 	}
-	
+
 	private ObjectList merge(ObjectList...lists) {
 		ObjectList l = lists[0];
 		for (int i = 1; i < lists.length; i++) {
@@ -824,7 +824,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		om.appendSkipEmpty("email", vs.resolve(a.email()));
 		return om.isEmpty() ? null : om;
 	}
-	
+
 	private ObjectMap toMap(VarResolverSession vs, License a, String location, Object...locationArgs) throws ParseException {
 		if (empty(a))
 			return null;
@@ -846,7 +846,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (aa.length == 0)
 			return null;
 		ObjectList ol = new ObjectList();
-		for (Tag a : aa) 
+		for (Tag a : aa)
 			ol.add(toMap(vs, a, location, locationArgs));
 		return ol.isEmpty() ? null : ol;
 	}
@@ -855,24 +855,24 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		BeanSession bs = req.getBeanSession();
 		if (bs == null)
 			bs = BeanContext.DEFAULT.createBeanSession();
-		
+
 		ClassMeta<?> cm = bs.getClassMeta(type);
-		
+
 		if (schema.getBoolean("ignore", false))
 			return null;
-			
-		if (schema.containsKey("type") || schema.containsKey("$ref")) 
+
+		if (schema.containsKey("type") || schema.containsKey("$ref"))
 			return schema;
-		
-		for (Pattern p : ignoreTypes) 
+
+		for (Pattern p : ignoreTypes)
 			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
 				return null;
-		
+
 		return fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
 	}
-	
-	/** 
-	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes. 
+
+	/**
+	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
 	 */
 	private ObjectMap fixSwaggerExtensions(ObjectMap om) {
 		om.appendSkipNull("discriminator", om.remove("x-discriminator"));
@@ -882,22 +882,22 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		om.appendSkipNull("example", om.remove("x-example"));
 		return om;
 	}
-	
+
 	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap piri, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
-		
+
 		Object example = piri.get("x-example");
-		
+
 		if (example == null) {
 			ObjectMap schema = resolve(js, piri.getObjectMap("schema"));
-			if (schema != null) 
+			if (schema != null)
 				example = schema.getWithDefault("example", schema.get("x-example"));
 		}
 
 		if (example == null)
 			return;
-		
+
 		boolean isOk = "ok".equals(in), isBody = "body".equals(in);
-		
+
 		String sex = example.toString();
 		if (isJson(sex)) {
 			example = JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT.serialize(example), type);
@@ -907,7 +907,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				example = cm.getStringTransform().transform(sex);
 			}
 		}
-		
+
 		String examplesKey = isOk ? "examples" : "x-examples";  // Parameters don't have an examples attribute.
 
 		ObjectMap examples = piri.getObjectMap(examplesKey);
@@ -917,7 +917,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (isOk || isBody) {
 			List<MediaType> mediaTypes = isOk ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
 			ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
-			
+
 			for (MediaType mt : mediaTypes) {
 				if (mt != MediaType.HTML) {
 					Serializer s2 = sm.getSerializers().getSerializer(mt);
@@ -945,30 +945,30 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				s = sm.getPathPattern().replace("{"+paramName+"}", urlEncodeLax(s));
  			examples.put("example", s);
 		}
-		
+
 		if (! examples.isEmpty())
 			piri.put(examplesKey, examples);
 	}
-	
+
 	private ObjectMap resolve(JsonSchemaSerializerSession js, ObjectMap m) {
 		if (m == null)
 			return null;
 		if (m.containsKey("$ref") && js.getBeanDefs() != null) {
 			String ref = m.getString("$ref");
-			if (ref.startsWith("#/definitions/")) 
+			if (ref.startsWith("#/definitions/"))
 				return js.getBeanDefs().get(ref.substring(14));
 		}
 		return m;
 	}
-	
+
 	private static class SwaggerException extends ParseException {
 		private static final long serialVersionUID = 1L;
-		
+
 		SwaggerException(Exception e, String location, Object...locationArgs) {
 			super(e, "Swagger exception:  at " + format(location, locationArgs));
 		}
 	}
-	
+
 	private ObjectMap getOperation(ObjectMap om, String path, String httpMethod) {
 		if (! om.containsKey("paths"))
 			om.put("paths", new ObjectMap());
@@ -983,10 +983,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 	/**
 	 * Returns the localized summary of the specified java method on this servlet.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own summary.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
@@ -996,7 +996,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(summary=<js>"Summary of my method"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
-	 * 	
+	 *
 	 * 	<cc>// Pulled from some other location</cc>
 	 * 	<ja>@RestMethod</ja>(summary=<js>"$L{myLocalizedSummary}"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
@@ -1012,16 +1012,16 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.summary</ck> = <cv>Summary of my method.</cv>
-	 * 	
+	 *
 	 * 	<cc>// Pulled from some other location</cc>
 	 * 	<ck>MyClass.myMethod.summary</ck> = <cv>$C{MyStrings/MyClass.myMethod.summary}</cv>
 	 * 		</p>
 	 * </ol>
-	 * 
+	 *
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
 	 * @return The localized summary of the method, or <jk>null</jk> if none was found.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Override /* RestInfoProvider */
 	public String getMethodSummary(Method method, RestRequest req) throws Exception {
@@ -1033,16 +1033,16 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			if (o != null)
 				s = o.getSummary();
 		}
-		
+
 		return isEmpty(s) ? null : vr.resolve(s);
 	}
 
 	/**
 	 * Returns the localized description of the specified java method on this servlet.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own description.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
@@ -1052,7 +1052,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(description=<js>"Description of my method"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
-	 * 	
+	 *
 	 * 	<cc>// Pulled from some other location</cc>
 	 * 	<ja>@RestMethod</ja>(description=<js>"$L{myLocalizedDescription}"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
@@ -1068,37 +1068,37 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.description</ck> = <cv>Description of my method.</cv>
-	 * 	
+	 *
 	 * 	<cc>// Pulled from some other location</cc>
 	 * 	<ck>MyClass.myMethod.description</ck> = <cv>$C{MyStrings/MyClass.myMethod.description}</cv>
 	 * 		</p>
 	 * </ol>
-	 * 
+	 *
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
 	 * @return The localized description of the method, or <jk>null</jk> if none was found.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Override /* RestInfoProvider */
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
-		
+
 		String s = joinnl(method.getAnnotation(RestMethod.class).description());
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)
 				s = o.getDescription();
 		}
-		
+
 		return isEmpty(s) ? null : vr.resolve(s);
 	}
 
 	/**
 	 * Returns the localized site name of this REST resource.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own site name.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
@@ -1108,7 +1108,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(siteName=<js>"My Site"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
-	 * 	
+	 *
 	 * 	<jc>// Pulled from some other location</jc>
 	 * 	<ja>@RestResource</ja>(siteName=<js>"$L{myLocalizedSiteName}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
@@ -1124,15 +1124,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.siteName</ck> = <cv>My Site</cv>
-	 * 	
+	 *
 	 * 	<cc>// Pulled from some other location</cc>
 	 * 	<ck>MyClass.siteName</ck> = <cv>$C{MyStrings/MyClass.siteName}</cv>
 	 * 		</p>
 	 * </ol>
-	 * 
+	 *
 	 * @param req The current request.
 	 * @return The localized site name of this REST resource, or <jk>null</jk> if none was found.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Override /* RestInfoProvider */
 	public String getSiteName(RestRequest req) throws Exception {
@@ -1147,10 +1147,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 	/**
 	 * Returns the localized title of this REST resource.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own title.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
@@ -1160,7 +1160,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(title=<js>"My Resource"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
-	 * 	
+	 *
 	 * 	<jc>// Pulled from some other location</jc>
 	 * 	<ja>@RestResource</ja>(title=<js>"$L{myLocalizedTitle}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
@@ -1176,16 +1176,16 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.title</ck> = <cv>My Resource</cv>
-	 * 	
+	 *
 	 * 	<cc>// Pulled from some other location</cc>
 	 * 	<ck>MyClass.title</ck> = <cv>$C{MyStrings/MyClass.title}</cv>
 	 * 		</p>
 	 * 	<li><ck>/info/title</ck> entry in swagger file.
 	 * </ol>
-	 * 
+	 *
 	 * @param req The current request.
 	 * @return The localized title of this REST resource, or <jk>null</jk> if none was found.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Override /* RestInfoProvider */
 	public String getTitle(RestRequest req) throws Exception {
@@ -1203,10 +1203,10 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 	/**
 	 * Returns the localized description of this REST resource.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own description.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
@@ -1216,7 +1216,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(description=<js>"My Resource"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
-	 * 	
+	 *
 	 * 	<jc>// Pulled from some other location</jc>
 	 * 	<ja>@RestResource</ja>(description=<js>"$L{myLocalizedDescription}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
@@ -1232,16 +1232,16 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<p class='bcode'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.description</ck> = <cv>My Resource</cv>
-	 * 	
+	 *
 	 * 	<cc>// Pulled from some other location</cc>
 	 * 	<ck>MyClass.description</ck> = <cv>$C{MyStrings/MyClass.description}</cv>
 	 * 		</p>
 	 * 	<li><ck>/info/description</ck> entry in swagger file.
 	 * </ol>
-	 * 
+	 *
 	 * @param req The current request.
 	 * @return The localized description of this REST resource, or <jk>null</jk> if none was was found.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Override /* RestInfoProvider */
 	public String getDescription(RestRequest req) throws Exception {

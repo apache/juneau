@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -34,49 +34,49 @@ public class PetStore {
 	ConcurrentHashMap<String,User> userDb = new ConcurrentHashMap<>();
 
 	public PetStore init() throws Exception {
-		
+
 		// Load our databases from local JSON files.
-		
+
 		JsonParser parser = JsonParser.create().build();
-		
+
 		// Note that these must be loaded in the specified order to prevent IdNotFound exceptions.
-		for (Species s : parser.parse(getStream("Species.json"), Species[].class)) 
+		for (Species s : parser.parse(getStream("Species.json"), Species[].class))
 			add(s);
-		for (Tag t : parser.parse(getStream("Tags.json"), Tag[].class)) 
+		for (Tag t : parser.parse(getStream("Tags.json"), Tag[].class))
 			add(t);
-		
+
 		parser = parser.builder().pojoSwaps(new CategorySwap(), new TagSwap()).build();
-		for (Pet p : parser.parse(getStream("Pets.json"), Pet[].class)) 
+		for (Pet p : parser.parse(getStream("Pets.json"), Pet[].class))
 			add(p);
-		
+
 		parser = parser.builder().pojoSwaps(new PetSwap()).build();
-		for (Order o : parser.parse(getStream("Orders.json"), Order[].class)) 
+		for (Order o : parser.parse(getStream("Orders.json"), Order[].class))
 			add(o);
 
-		for (User u : parser.parse(getStream("Users.json"), User[].class)) 
+		for (User u : parser.parse(getStream("Users.json"), User[].class))
 			add(u);
-		
+
 		return this;
 	}
-	
+
 	private InputStream getStream(String fileName) {
 		return getClass().getResourceAsStream(fileName);
 	}
-	
+
 	public Pet getPet(long id) throws IdNotFound {
 		Pet value = petDb.get(id);
 		if (value == null)
 			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
-	
+
 	public Species getSpecies(long id) throws IdNotFound {
 		Species value = speciesDb.get(id);
 		if (value == null)
 			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
-	
+
 	public Species getSpecies(String name) throws IdNotFound {
 		for (Species value : speciesDb.values())
 			if (value.getName().equals(name))
@@ -90,14 +90,14 @@ public class PetStore {
 			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
-	
+
 	public Tag getTag(long id) throws IdNotFound {
 		Tag value =  tagDb.get(id);
 		if (value == null)
 			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
-	
+
 	public Tag getTag(String name) throws InvalidTag  {
 		for (Tag value : tagDb.values())
 			if (value.getName().equals(name))
@@ -159,7 +159,7 @@ public class PetStore {
 			throw new IdConflict(value.getId(), Species.class);
 		return value;
 	}
-	
+
 	public Order add(Order value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(orderDb.nextId());
@@ -168,7 +168,7 @@ public class PetStore {
 			throw new IdConflict(value.getId(), Order.class);
 		return value;
 	}
-	
+
 	public Tag add(Tag value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(tagDb.nextId());
@@ -177,7 +177,7 @@ public class PetStore {
 			throw new IdConflict(value.getId(), Tag.class);
 		return value;
 	}
-	
+
 	public User add(User value) throws IdConflict, InvalidUsername {
 		assertValidUsername(value.getUsername());
 		User old = userDb.putIfAbsent(value.getUsername(), value);
@@ -185,7 +185,7 @@ public class PetStore {
 			throw new IdConflict(value.getUsername(), User.class);
 		return value;
 	}
-	
+
 	public Pet create(PetCreate pc) {
 		Pet p = new Pet();
 		p.name(pc.getName());
@@ -243,7 +243,7 @@ public class PetStore {
 			throw new IdNotFound(value.getId(), Order.class);
 		return value;
 	}
-	
+
 	public Tag update(Tag value) throws IdNotFound, InvalidTag {
 		assertValidTag(value.getName());
 		Tag old = tagDb.replace(value.getId(), value);
@@ -251,7 +251,7 @@ public class PetStore {
 			throw new IdNotFound(value.getId(), Tag.class);
 		return value;
 	}
-	
+
 	public User update(User value) throws IdNotFound, InvalidUsername {
 		assertValidUsername(value.getUsername());
 		User old = userDb.replace(value.getUsername(), value);
@@ -267,15 +267,15 @@ public class PetStore {
 	public void removeCategory(long id) throws IdNotFound {
 		speciesDb.remove(getSpecies(id).getId());
 	}
-	
+
 	public void removeOrder(long id) throws IdNotFound {
 		orderDb.remove(getOrder(id).getId());
 	}
-	
+
 	public void removeTag(long id) throws IdNotFound {
 		tagDb.remove(getTag(id).getId());
 	}
-	
+
 	public void removeUser(String username) throws IdNotFound {
 		userDb.remove(getUser(username).getUsername());
 	}
@@ -292,7 +292,7 @@ public class PetStore {
 
 	public Collection<Pet> getPetsByStatus(PetStatus[] status) {
 		List<Pet> list = new ArrayList<>();
-		for (Pet p : petDb.values()) 
+		for (Pet p : petDb.values())
 			if (p.hasStatus(status))
 				list.add(p);
 		return list;
@@ -302,7 +302,7 @@ public class PetStore {
 		for (String tag : tags)
 			assertValidTag(tag);
 		List<Pet> list = new ArrayList<>();
-		for (Pet p : petDb.values()) 
+		for (Pet p : petDb.values())
 			if (p.hasTag(tags))
 				list.add(p);
 		return list;
@@ -319,11 +319,11 @@ public class PetStore {
 		}
 		return m;
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	public class CategorySwap extends PojoSwap<Species,String> {
 		@Override
 		public String swap(BeanSession bs, Species o) throws Exception {
@@ -334,7 +334,7 @@ public class PetStore {
 			return getSpecies(o);
 		}
 	}
-	
+
 	public class TagSwap extends PojoSwap<Tag,String> {
 		@Override
 		public String swap(BeanSession bs, Tag o) throws Exception {

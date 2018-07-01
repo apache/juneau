@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -14,15 +14,15 @@ package org.apache.juneau.internal;
 
 /**
  * An interface for creating objects from other objects such as a <code>String</code> or <code>Reader</code>.
- * 
+ *
  * @param <I> Input type.
  * @param <O> Output type.
  */
 public abstract class Transform<I,O> {
-	
+
 	/**
 	 * Method for instantiating an object from another object.
-	 * 
+	 *
 	 * @param in The input object.
 	 * @return The output object.
 	 */
@@ -32,8 +32,8 @@ public abstract class Transform<I,O> {
 
 	/**
 	 * Method for instantiating an object from another object.
-	 * 
-	 * @param outer The context object. 
+	 *
+	 * @param outer The context object.
 	 * @param in The input object.
 	 * @return The output object.
 	 */

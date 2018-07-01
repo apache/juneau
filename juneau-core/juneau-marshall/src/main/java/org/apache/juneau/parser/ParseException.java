@@ -29,7 +29,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -39,7 +39,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param causedBy The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -50,7 +50,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param causedBy The cause of this exception.
 	 */
 	public ParseException(Throwable causedBy) {
@@ -59,7 +59,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param session The parser session.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -70,7 +70,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param session The parser session.
 	 * @param causedBy The cause of this exception.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
@@ -82,7 +82,7 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param session The parser session.
 	 * @param causedBy The inner exception.
 	 */
@@ -94,19 +94,19 @@ public class ParseException extends FormattedException {
 	private static String getMessage(ParserSession session, String msg, Object... args) {
 		if (args.length != 0)
 			msg = format(msg, args);
-		
+
 		if (session != null) {
 			Position p = session.getPosition();
-			
+
 			msg += "\n\tAt: " + p;
 
 			ObjectMap lastLocation = session.getLastLocation();
 			if (lastLocation != null) {
 				msg += "\n\tWhile parsing into: ";
-				for (Map.Entry<String,Object> e : lastLocation.entrySet()) 
+				for (Map.Entry<String,Object> e : lastLocation.entrySet())
 					msg += "\n\t\t" + e.getKey() + ": " + e.getValue();
 			}
-			
+
 			String lines = session.getInputAsString();
 			if (lines == null)
 				msg += "\n\tUse BEAN_debug setting to display content.";
@@ -121,10 +121,10 @@ public class ParseException extends FormattedException {
 
 	/**
 	 * Returns the highest-level <code>ParseException</code> in the stack trace.
-	 * 
+	 *
 	 * <p>
 	 * Useful for JUnit testing of error conditions.
-	 * 
+	 *
 	 * @return The root parse exception, or this exception if there isn't one.
 	 */
 	public ParseException getRootCause() {

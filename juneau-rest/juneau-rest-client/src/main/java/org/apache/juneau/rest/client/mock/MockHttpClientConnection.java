@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -23,18 +23,18 @@ import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpClientConnection} specifically for use in mocked connections using the {@link MockHttpConnection} class.
- * 
+ *
  * This implementation is NOT thread safe.
  */
 public class MockHttpClientConnection implements HttpClientConnection {
-	
+
 	private final MockHttpConnection c;
 	private volatile MockHttpRequest req;
 	private volatile MockHttpResponse res;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param c The API for performing the connections.
 	 */
 	public MockHttpClientConnection(MockHttpConnection c) {
@@ -80,7 +80,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 		try {
 			RequestLine rl = request.getRequestLine();
 			req = c.request(rl.getMethod(), rl.getUri(), null);
-			for (Header h : request.getAllHeaders()) 
+			for (Header h : request.getAllHeaders())
 				req.header(h.getName(), h.getValue());
 		} catch (Exception e) {
 			throw new HttpException(e.getMessage(), e);
@@ -98,7 +98,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 			res = req.execute();
 			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
 			for (Map.Entry<String,String[]> e : res.getHeaders().entrySet())
-				for (String hv : e.getValue()) 
+				for (String hv : e.getValue())
 					response.addHeader(e.getKey(), hv);
 			return response;
 		} catch (Exception e) {

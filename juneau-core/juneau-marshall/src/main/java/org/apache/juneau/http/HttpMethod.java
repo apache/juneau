@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Represents valid HTTP 1.1 method names per the RFC 2616 spec.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -65,10 +65,10 @@ public enum HttpMethod {
 
 	/**
 	 * Returns the enum for the specified key.
-	 * 
+	 *
 	 * <p>
 	 * Case is ignored.
-	 * 
+	 *
 	 * @param key The HTTP method name.
 	 * @return The HttpMethod enum, or {@link #OTHER} if it's not a standard method name.
 	 */

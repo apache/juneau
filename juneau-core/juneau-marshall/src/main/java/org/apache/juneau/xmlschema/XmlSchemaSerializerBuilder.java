@@ -33,7 +33,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public XmlSchemaSerializerBuilder(PropertyStore ps) {
@@ -588,7 +588,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -16,7 +16,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Encapsulates request-level properties.
- * 
+ *
  * <p>
  * These are properties specified for a single HTTP request that extends the properties defined on {@link RestMethodProperties}
  * and are accessible and modifiable through the following:
@@ -26,7 +26,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='jm'>{@link RestResponse#getProperties()}
  * 	<li class='jm'>{@link RestResponse#prop(String, Object)}
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; juneau-rest-server &gt; Properties</a>
@@ -37,7 +37,7 @@ public class RequestProperties extends ResolvingObjectMap {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param varResolver The request variable resolver session.
 	 * @param inner The inner properties defined on the resource context.
 	 */

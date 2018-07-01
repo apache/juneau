@@ -54,7 +54,7 @@ public class RestResourcePathTest {
 	public static class A02 extends A02a {}
 
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_nestedChildren() throws Exception {
 		// Since we're not running from a servlet container, we access A directly with no path.

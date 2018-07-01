@@ -31,18 +31,18 @@ public class Person {
 	private static int nextPersonId = 1;
 
 	// Bean properties
-	@Rdf(beanUri=true) 
+	@Rdf(beanUri=true)
 	public URI uri;
-	
+
 	private URI addressBookUri;
-	
+
 	public int id;
-	
+
 	public String name;
-	
-	@Swap(CalendarSwap.DateMedium.class) 
+
+	@Swap(CalendarSwap.DateMedium.class)
 	public Calendar birthDate;
-	
+
 	public LinkedList<Address> addresses = new LinkedList<>();
 
 	/** Bean constructor - Needed for instantiating on server side */

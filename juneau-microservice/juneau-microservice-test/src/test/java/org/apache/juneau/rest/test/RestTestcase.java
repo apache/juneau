@@ -22,7 +22,7 @@ import org.junit.*;
 
 /**
  * Superclass of REST testcases that start up the REST test microservice before running the tests locally.
- * 
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RestTestcase {
@@ -30,10 +30,10 @@ public class RestTestcase {
 	private static boolean microserviceStarted;
 
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.
-	private static Map<String,RestClient> clients = new LinkedHashMap<String,RestClient>();
+	private static Map<String,RestClient> clients = new LinkedHashMap<>();
 
 	// Reusable object cache that lives for the duration of a testcase class.
-	private static Map<String,Object> cache = new LinkedHashMap<String,Object>();
+	private static Map<String,Object> cache = new LinkedHashMap<>();
 
 	@BeforeClass
 	public static void setUp() {

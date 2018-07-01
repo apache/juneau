@@ -19,10 +19,10 @@ import java.lang.annotation.*;
 
 /**
  * Annotation for specifying various XML options for the XML and RDF/XML serializers.
- * 
+ *
  * <p>
  * Can be applied to Java packages, types, fields, and methods.
- * 
+ *
  * <p>
  * Can be used for the following:
  * <ul>
@@ -39,10 +39,10 @@ public @interface Xml {
 
 	/**
 	 * Sets the name of the XML child elements for bean properties of type collection and array.
-	 * 
+	 *
 	 * <p>
 	 * Applies only to collection and array bean properties.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
@@ -50,7 +50,7 @@ public @interface Xml {
 	 * 		<jk>public</jk> String[] <jf>children</jf> = {<js>"foo"</js>,<js>"bar"</js>};
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Without the <ja>@Xml</ja> annotation, serializing this bean as XML would have produced the following...
 	 * <p class='bcode'>
@@ -61,7 +61,7 @@ public @interface Xml {
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * With the annotations, serializing this bean as XML produces the following...
 	 * <p class='bcode'>
@@ -77,29 +77,29 @@ public @interface Xml {
 
 	/**
 	 * The {@link XmlFormat} to use for serializing this object type.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
-	 * 
+	 *
 	 * 		<jc>// Normally, bean properties would be rendered as child elements of the bean element.</jc>
 	 * 		<jc>// Override so that it's rendered as a "f1='123'" attribute on the bean element instead.</jc>
 	 * 		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>}
 	 * 		<jk>public int</jk> f1 = 123;
-	 * 
+	 *
 	 * 		<jc>// Normally, bean URL properties would be rendered as XML attributes on the bean element.</jc>
 	 * 		<jc>// Override so that it's rendered as an &lt;href&gt;http://foo&lt;/href&gt; child element instead.</jc>
 	 * 		<ja>@BeanProperty</ja>(uri=<jk>true</jk>)
 	 * 		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENT</jsf>}
 	 * 		<jk>public</jk> URL <jf>href</jf> = <jk>new</jk> URL(<js>"http://foo"</js>);
-	 * 
+	 *
 	 * 		<jc>// Normally, collection properties would be grouped under a single &lt;children&gt; child element on the bean element.</jc>
 	 * 		<jc>// Override so that entries are directly children of the bean element with each entry having an element name of &lt;child&gt;.</jc>
 	 * 		<ja>@Xml</ja>(format=XmlFormat.<jsf>COLLAPSED</jsf>, childName=<js>"child"</js>}
 	 * 		<jk>public</jk> String[] <jf>children</jf> = <js>"foo"</js>,<js>"bar"</js>};
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Without the <ja>@Xml</ja> annotations, serializing this bean as XML would have produced the following...
 	 * <p class='bcode'>
@@ -111,7 +111,7 @@ public @interface Xml {
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * With the annotations, serializing this bean as XML produces the following...
 	 * <p class='bcode'>
@@ -126,7 +126,7 @@ public @interface Xml {
 
 	/**
 	 * Sets the namespace URI of this property or class.
-	 * 
+	 *
 	 * <p>
 	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link XmlNs @XmlNs} with the
 	 * same name through the {@link XmlSchema#xmlNs() @XmlSchema.xmlNs()} annotation on the package.
@@ -135,7 +135,7 @@ public @interface Xml {
 
 	/**
 	 * Sets the XML prefix of this property or class.
-	 * 
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		When applied to a {@link ElementType#TYPE}, namespace is applied to all properties in the class, and all
@@ -144,7 +144,7 @@ public @interface Xml {
 	 * 		When applied to bean properties on {@link ElementType#METHOD} and {@link ElementType#FIELD}, applies
 	 * 		to the bean property.
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a
 	 * {@link XmlNs @XmlNs} with the same name through the {@link XmlSchema#xmlNs() @XmlSchema.xmlNs()} annotation on the package.

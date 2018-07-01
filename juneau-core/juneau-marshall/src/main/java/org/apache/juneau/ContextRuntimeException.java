@@ -23,7 +23,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cause The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -34,7 +34,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
@@ -44,7 +44,7 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cause The initial cause of the exception.
 	 */
 	public ContextRuntimeException(Throwable cause) {

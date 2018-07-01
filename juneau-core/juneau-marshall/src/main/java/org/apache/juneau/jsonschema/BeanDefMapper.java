@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -23,15 +23,15 @@ public interface BeanDefMapper {
 
 	/**
 	 * Returns the ID for the specified class.
-	 * 
+	 *
 	 * @param cm The class.
 	 * @return The ID for the specified class.
 	 */
 	String getId(ClassMeta<?> cm);
-	
+
 	/**
 	 * Returns the URI for the specified class.
-	 * 
+	 *
 	 * @param cm The class.
 	 * @return The URI for the specified class.
 	 */
@@ -39,7 +39,7 @@ public interface BeanDefMapper {
 
 	/**
 	 * Returns the URI for the specified class by its ID.
-	 * 
+	 *
 	 * @param id The class ID.
 	 * @return The URI for the specified class.
 	 */

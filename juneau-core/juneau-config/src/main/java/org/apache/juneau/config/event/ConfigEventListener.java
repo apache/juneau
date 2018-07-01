@@ -21,7 +21,7 @@ public interface ConfigEventListener {
 
 	/**
 	 * Gets called immediately after a config file has been loaded.
-	 * 
+	 *
 	 * @param events The change events.
 	 */
 	void onConfigChange(List<ConfigEvent> events);

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -25,36 +25,36 @@ import org.apache.juneau.json.*;
 
 /**
  * Represents an immutable collection of properties.
- * 
+ *
  * <p>
  * The general idea behind a property store is to serve as a reusable configuration of an artifact (e.g. a Serializer)
  * such that the artifact can be cached and reused if the property stores are 'equal'.
- * 
+ *
  * <h5 class='topic'>Concept</h5>
- * 
+ *
  * <p>
  * For example, two serializers of the same type created with the same configuration will always end up being
- * the same serializer: 
- * 
+ * the same serializer:
+ *
  * <p class='bcode'>
  * 	WriterSerializer s1 = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySwap.<jk>class</jk>).simple().build();
  * 	WriterSerializer s2 = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MySwap.<jk>class</jk>).build();
  * 	<jk>assert</jk>(s1 == s2);
  * </p>
- * 
+ *
  * <p>
- * This has the effect of significantly improving performance, especially if you're creating many Serializers and 
+ * This has the effect of significantly improving performance, especially if you're creating many Serializers and
  * Parsers.
- * 
+ *
  * <h5 class='topic'>PropertyStoreBuilder</h5>
- * 
+ *
  * <p>
  * The {@link PropertyStoreBuilder} class is used to build up and instantiate immutable <code>PropertyStore</code>
  * objects.
- * 
+ *
  * <p>
  * In the example above, the property store being built looks like the following:
- *  
+ *
  * <p class='bcode'>
  * 	PropertyStore ps = PropertyStore
  * 		.<jsm>create</jsm>()
@@ -62,13 +62,13 @@ import org.apache.juneau.json.*;
  * 		.set(<js>"JsonSerializer.simpleMode.b"</js>, <jk>true</jk>)
  * 		.build();
  * </p>
- * 
+ *
  * <p>
  * Property stores are immutable, comparable, and their hashcodes are calculated exactly one time.
  * That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
- * 
+ *
  * <h5 class='topic'>Property naming convention</h5>
- * 
+ *
  * <p>
  * Property names must have the following format...
  * <p class='bcode'>
@@ -106,36 +106,36 @@ import org.apache.juneau.json.*;
  * 			<li><js>"omo"</js>:  <code>LinkedHashMap&lt;String,Object&gt;</code>
  * 		</ul>
  * </ul>
- * 
+ *
  * <p>
  * For example, <js>"BeanContext.pojoSwaps.lc"</js> refers to a property on the <code>BeanContext</code> class
  * called <code>pojoSwaps</code> that has a data type of <code>List&lt;Class&gt;</code>.
- * 
+ *
  * <h5 class='topic'>Property value normalization</h5>
- * 
+ *
  * <p>
- * Property values get 'normalized' when they get set.  
+ * Property values get 'normalized' when they get set.
  * For example, calling <code>propertyStore.set(<js>"BeanContext.debug.b"</js>, <js>"true"</js>)</code> will cause the property
- * value to be converted to a boolean. 
- * 
+ * value to be converted to a boolean.
+ *
  * <h5 class='topic'>Set types</h5>
- * 
+ *
  * <p>
  * The <js>"sX"</js> property types are sorted sets.
  * <br>Use these for collections of objects where the order is not important.
- * <br>Internally, a <code>TreeSet</code> is used so that the order in which you add elements does not affect the 
+ * <br>Internally, a <code>TreeSet</code> is used so that the order in which you add elements does not affect the
  * resulting order of the property.
- * 
+ *
  * <h5 class='topic'>List types</h5>
- * 
+ *
  * <p>
  * The <js>"lX"</js> property types are ordered lists.
  * <br>Use these in cases where the order in which entries are added is important.
- * 
+ *
  * <p>
  * Adding to a list property will cause the new entries to be added to the BEGINNING of the list.
  * <br>This ensures that the resulting order of the list is in most-to-least importance.
- * 
+ *
  * <p>
  * For example, multiple calls to <code>pojoSwaps()</code> causes new entries to be added to the beginning of the list
  * so that previous values can be 'overridden':
@@ -143,7 +143,7 @@ import org.apache.juneau.json.*;
  * 	<jc>// Swap order:  [MySwap2.class, MySwap1.class]</jc>
  * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>).pojoSwaps(MySwap2.<jk>class</jk>).build();
  * </p>
- * 
+ *
  * <p>
  * Note that the order is different when passing multiple values into the <code>pojoSwaps()</code> method, in which
  * case the order should be first-match-wins:
@@ -151,7 +151,7 @@ import org.apache.juneau.json.*;
  * 	<jc>// Swap order:  [MySwap1.class, MySwap2.class]</jc>
  * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>).build();
  * </p>
- * 
+ *
  * <p>
  * Combined, the results look like this:
  * <p class='bcode'>
@@ -163,41 +163,41 @@ import org.apache.juneau.json.*;
  * 		.pojoSwaps(MySwap4.<jk>class</jk>)
  * 		.build();
  * </p>
- * 
+ *
  * <h5 class='topic'>Map types</h5>
- * 
+ *
  * <p>
  * The <js>"smX"</js> and <js>"omX"</js> are sorted and order maps respectively.
- * 
+ *
  * <h5 class='topic'>Command properties</h5>
- * 
+ *
  * <p>
  * Set and list properties have the additional convenience 'command' names for adding and removing entries:
  * <p class='bcode'>
  * 	<js>"{class}.{name}.{type}/add"</js>  <jc>// Add a value to the set/list.</jc>
  * 	<js>"{class}.{name}.{type}/remove"</js>  <jc>// Remove a value from the set/list.</jc>
  * </p>
- * 
+ *
  * <p>
  * Map properties have the additional convenience property name for adding and removing map entries:
  * <p class='bcode'>
  * 	<js>"{class}.{name}.{type}/add.{key}"</js>  <jc>// Add a map entry (or delete if the value is null).</jc>
  * </p>
- * 
+ *
  * <h5 class='topic'>Setting properties</h5>
- * 
+ *
  * <p>
  * TODO
- * 
+ *
  * <h5 class='topic'>Retrieving properties</h5>
- * 
+ *
  * <p>
  * TODO
- * 
+ *
  */
 @SuppressWarnings("unchecked")
 public final class PropertyStore {
-	
+
 	/**
 	 * A default empty property store.
 	 */
@@ -209,35 +209,35 @@ public final class PropertyStore {
 	// Created by PropertyStoreBuilder.build()
 	PropertyStore(Map<String,PropertyGroupBuilder> propertyMaps) {
 		TreeMap<String,PropertyGroup> m = new TreeMap<>();
-		for (Map.Entry<String,PropertyGroupBuilder> p : propertyMaps.entrySet()) 
+		for (Map.Entry<String,PropertyGroupBuilder> p : propertyMaps.entrySet())
 			m.put(p.getKey(), p.getValue().build());
 		this.groups = Collections.unmodifiableSortedMap(m);
 		this.hashCode = groups.hashCode();
 	}
-	
+
 	/**
 	 * Creates a new empty builder for a property store.
-	 * 
+	 *
 	 * @return A new empty builder for a property store.
 	 */
 	public static PropertyStoreBuilder create() {
 		return new PropertyStoreBuilder();
 	}
-	
+
 	/**
 	 * Creates a new property store builder initialized with the values in this property store.
-	 * 
+	 *
 	 * @return A new property store builder.
 	 */
 	public PropertyStoreBuilder builder() {
 		return new PropertyStoreBuilder(this);
 	}
-	
+
 	private Property findProperty(String key) {
 		String g = group(key);
 		String k = key.substring(g.length()+1);
 		PropertyGroup pm = groups.get(g);
-		
+
 		if (pm != null) {
 			Property p = pm.get(k);
 			if (p != null)
@@ -247,13 +247,13 @@ public final class PropertyStore {
 		String s = System.getProperty(key);
 		if (s != null)
 			return PropertyStoreBuilder.MutableProperty.create(k, s).build();
-		
+
 		return null;
 	}
 
 	/**
 	 * Returns the raw property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
@@ -264,7 +264,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param c The class to cast or convert the value to.
 	 * @param def The default value.
@@ -277,7 +277,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default value.
@@ -287,10 +287,10 @@ public final class PropertyStore {
 		Property p = findProperty(key);
 		return p == null ? def : (Class<T>)p.as(Class.class);
 	}
-	
+
 	/**
 	 * Returns the array property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value, or an empty array if it doesn't exist.
@@ -299,10 +299,10 @@ public final class PropertyStore {
 		Property p = findProperty(key);
 		return (T[]) (p == null ? Array.newInstance(eType, 0) : p.asArray(eType));
 	}
-	
+
 	/**
 	 * Returns the array property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value.
@@ -315,7 +315,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class array property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
@@ -326,7 +326,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class array property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param def The default value.
 	 * @return The property value, or an empty array if it doesn't exist.
@@ -338,7 +338,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class array property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value, or an empty array if it doesn't exist.
@@ -350,7 +350,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
@@ -359,10 +359,10 @@ public final class PropertyStore {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_SET : p.asSet(eType);
 	}
-	
+
 	/**
 	 * Returns the set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value if the property doesn't exist or is empty.
@@ -375,7 +375,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
 	 */
@@ -386,7 +386,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
@@ -398,7 +398,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
@@ -407,10 +407,10 @@ public final class PropertyStore {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_LIST : p.asList(eType);
 	}
-	
+
 	/**
 	 * Returns the list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value if the property doesn't exist or is empty.
@@ -423,7 +423,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
 	 */
@@ -434,7 +434,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
@@ -446,7 +446,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the map property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
@@ -455,10 +455,10 @@ public final class PropertyStore {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_MAP : p.asMap(eType);
 	}
-	
+
 	/**
 	 * Returns the class map property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
 	 */
@@ -469,7 +469,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the class map property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
@@ -481,14 +481,14 @@ public final class PropertyStore {
 
 	/**
 	 * Returns an instance of the specified class, string, or object property.
-	 * 
+	 *
 	 * <p>
 	 * If instantiating a class, assumes the class has a no-arg constructor.
 	 * Otherwise, throws a runtime exception.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param def 
+	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>, or <jk>null</jk>.
 	 * @return A new property instance.
@@ -496,20 +496,20 @@ public final class PropertyStore {
 	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
 		return getInstanceProperty(key, type, def, false);
 	}
-	
+
 	/**
 	 * Returns an instance of the specified class, string, or object property.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param def 
+	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -520,18 +520,18 @@ public final class PropertyStore {
 
 	/**
 	 * Returns an instance of the specified class, string, or object property.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param outer The outer object if the class we're instantiating is an inner class.
 	 * @param type The class type of the property.
-	 * @param def 
+	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -542,7 +542,7 @@ public final class PropertyStore {
 			return p.asInstance(outer, type, fuzzyArgs, args);
 		if (def == null)
 			return null;
-		if (def instanceof Class) 
+		if (def instanceof Class)
 			return ClassUtils.newInstance(type, def, fuzzyArgs, args);
 		if (type.isInstance(def))
 			return (T)def;
@@ -551,7 +551,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the specified property as an array of instantiated objects.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
@@ -563,15 +563,15 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the specified property as an array of instantiated objects.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -582,16 +582,16 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the specified property as an array of instantiated objects.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param outer The outer object if the class we're instantiating is an inner class.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -603,12 +603,12 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the keys found in the specified property group.
-	 * 
+	 *
 	 * <p>
 	 * The keys are NOT prefixed with group names.
-	 * 
+	 *
 	 * @param group The group name.
-	 * @return The set of property keys, or an empty set if the group was not found. 
+	 * @return The set of property keys, or an empty set if the group was not found.
 	 */
 	public Set<String> getPropertyKeys(String group) {
 		if (group == null)
@@ -621,10 +621,10 @@ public final class PropertyStore {
 	public int hashCode() {
 		return hashCode;
 	}
-	
+
 	/**
 	 * Returns a hashcode of this property store using only the specified group names.
-	 * 
+	 *
 	 * @param groups The names of the property groups to use in the calculation.
 	 * @return The hashcode.
 	 */
@@ -640,14 +640,14 @@ public final class PropertyStore {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o instanceof PropertyStore) 
+		if (o instanceof PropertyStore)
 			return (this.groups.equals(((PropertyStore)o).groups));
 		return false;
 	}
 
 	/**
 	 * Compares two property stores, but only based on the specified group names.
-	 * 
+	 *
 	 * @param ps The property store to compare to.
 	 * @param groups The groups to compare.
 	 * @return <jk>true</jk> if the two property stores are equal in the specified groups.
@@ -668,40 +668,40 @@ public final class PropertyStore {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Used for debugging.
-	 * 
+	 *
 	 * <p>
 	 * Allows property stores to be serialized to easy-to-read JSON objects.
-	 * 
+	 *
 	 * @param beanSession The bean session.
 	 * @return The property groups.
 	 */
 	public Map<String,PropertyGroup> swap(BeanSession beanSession) {
 		return groups;
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// PropertyGroup
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	static class PropertyGroup {
 		final SortedMap<String,Property> properties;
 		private final int hashCode;
-		
+
 		PropertyGroup(Map<String,MutableProperty> properties) {
 			TreeMap<String,Property> m = new TreeMap<>();
-			for (Map.Entry<String,MutableProperty> p : properties.entrySet()) 
+			for (Map.Entry<String,MutableProperty> p : properties.entrySet())
 				m.put(p.getKey(), p.getValue().build());
 			this.properties = Collections.unmodifiableSortedMap(m);
 			this.hashCode = this.properties.hashCode();
 		}
-		
+
 		PropertyGroupBuilder builder() {
 			return new PropertyGroupBuilder(properties);
 		}
-		
+
 		Property get(String key) {
 			return properties.get(key);
 		}
@@ -734,7 +734,7 @@ public final class PropertyStore {
 	static class Property {
 		private final String name;
 		final Object value;
-		private final int hashCode; 
+		private final int hashCode;
 		private final PropertyType type;
 
 		Property(String name, Object value, PropertyType type) {
@@ -743,40 +743,40 @@ public final class PropertyStore {
 			this.type = type;
 			this.hashCode = value.hashCode();
 		}
-		
+
 		MutableProperty mutable() {
 			switch(type) {
-				case STRING:  
+				case STRING:
 				case BOOLEAN:
 				case INTEGER:
-				case CLASS:  
+				case CLASS:
 				case OBJECT: return new MutableSimpleProperty(name, type, value);
 				case SET_STRING:
 				case SET_INTEGER:
 				case SET_CLASS: return new MutableSetProperty(name, type, value);
 				case LIST_STRING:
 				case LIST_INTEGER:
-				case LIST_CLASS: 
+				case LIST_CLASS:
 				case LIST_OBJECT: return new MutableListProperty(name, type, value);
-				case SORTED_MAP_STRING: 
-				case SORTED_MAP_INTEGER: 
-				case SORTED_MAP_CLASS: 
+				case SORTED_MAP_STRING:
+				case SORTED_MAP_INTEGER:
+				case SORTED_MAP_CLASS:
 				case SORTED_MAP_OBJECT: return new MutableMapProperty(name, type, value);
-				case ORDERED_MAP_STRING: 
-				case ORDERED_MAP_INTEGER: 
-				case ORDERED_MAP_CLASS: 
+				case ORDERED_MAP_STRING:
+				case ORDERED_MAP_INTEGER:
+				case ORDERED_MAP_CLASS:
 				case ORDERED_MAP_OBJECT: return new MutableLinkedMapProperty(name, type, value);
 			}
 			throw new ConfigException("Invalid type specified: ''{0}''", type);
 		}
-		
+
 		public <T> T as(Class<T> c) {
 			Class<?> c2 = ClassUtils.getPrimitiveWrapper(c);
 			if (c2 != null)
 				c = (Class<T>)c2;
 			if (c.isInstance(value))
 				return (T)value;
-			if (c.isArray() && value instanceof Collection) 
+			if (c.isArray() && value instanceof Collection)
 				return (T)asArray(c.getComponentType());
 			if (type == STRING) {
 				T t = ClassUtils.fromString(c, value.toString());
@@ -785,7 +785,7 @@ public final class PropertyStore {
 			}
 			throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}'' on property ''{2}''", type, c, name);
 		}
-		
+
 		public <T> T[] asArray(Class<T> eType) {
 			if (value instanceof Collection) {
 				Collection<?> l = (Collection<?>)value;
@@ -808,7 +808,7 @@ public final class PropertyStore {
 			}
 			throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
 		}
-		
+
 		public <T> Set<T> asSet(Class<T> eType) {
 			if (type == SET_STRING && eType == String.class || type == SET_INTEGER && eType == Integer.class || type == SET_CLASS && eType == Class.class) {
 				return (Set<T>)value;
@@ -837,7 +837,7 @@ public final class PropertyStore {
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''List<{1}>'' on property ''{2}''", type, eType, name);
 					l.add(t);
 				}
-				return unmodifiableList(l); 
+				return unmodifiableList(l);
 			} else {
 				throw new ConfigException("Invalid property conversion ''{0}'' to ''List<{1}>'' on property ''{2}''", type, eType, name);
 			}
@@ -845,9 +845,9 @@ public final class PropertyStore {
 
 		public <T> Map<String,T> asMap(Class<T> eType) {
 			if (
-				eType == String.class && (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING) 
-				|| eType == Integer.class && (type == SORTED_MAP_INTEGER || type == ORDERED_MAP_INTEGER) 
-				|| eType == Class.class && (type == SORTED_MAP_CLASS || type == ORDERED_MAP_CLASS) 
+				eType == String.class && (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING)
+				|| eType == Integer.class && (type == SORTED_MAP_INTEGER || type == ORDERED_MAP_INTEGER)
+				|| eType == Class.class && (type == SORTED_MAP_CLASS || type == ORDERED_MAP_CLASS)
 				|| (type == SORTED_MAP_OBJECT || type == ORDERED_MAP_OBJECT)) {
 				return (Map<String,T>)value;
 			} else if (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING) {
@@ -858,16 +858,16 @@ public final class PropertyStore {
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''Map<String,{1}>'' on property ''{2}''", type, eType, name);
 					m.put(e.getKey(), t);
 				}
-				return unmodifiableMap(m); 
+				return unmodifiableMap(m);
 			} else {
 				throw new ConfigException("Invalid property conversion ''{0}'' to ''Map<String,{1}>'' on property ''{2}''", type, eType, name);
 			}
 		}
 
 		public <T> T asInstance(Object outer, Class<T> iType, boolean fuzzyArgs, Object...args) {
-			if (type == STRING) 
+			if (type == STRING)
 				return ClassUtils.fromString(iType, value.toString());
-			else if (type == OBJECT || type == CLASS) 
+			else if (type == OBJECT || type == CLASS)
 				return ClassUtils.newInstanceFromOuter(outer, iType, value, fuzzyArgs, args);
 			throw new ConfigException("Invalid property instantiation ''{0}'' to ''{1}'' on property ''{2}''", type, iType, name);
 		}
@@ -881,7 +881,7 @@ public final class PropertyStore {
 					Object o2 = null;
 					if (eType.isInstance(o))
 						o2 = o;
-					else if (type == SET_STRING || type == LIST_STRING) 
+					else if (type == SET_STRING || type == LIST_STRING)
 						o2 = ClassUtils.fromString(eType, o.toString());
 					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
 						o2 = ClassUtils.newInstanceFromOuter(outer, eType, o, fuzzyArgs, args);
@@ -898,23 +898,23 @@ public final class PropertyStore {
 		public int hashCode() {
 			return hashCode;
 		}
-		
+
 		@Override /* Object */
 		public boolean equals(Object o) {
 			if (o instanceof Property)
 				return ((Property)o).value.equals(value);
 			return false;
 		}
-		
+
 		public Object swap(BeanSession beanSession) {
 			return value;
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	private static String group(String key) {
 		if (key == null || key.indexOf('.') == -1 || key.charAt(key.length()-1) == '.')
 			throw new ConfigException("Invalid property name specified: ''{0}''", key);

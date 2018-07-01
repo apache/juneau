@@ -27,7 +27,7 @@ public final class EncoderMatch {
 
 	/**
 	 * Returns the encoding of the encoder that matched the HTTP <code>Accept-Encoding</code> header value.
-	 * 
+	 *
 	 * @return The encoding of the match.
 	 */
 	public String getEncoding() {
@@ -36,7 +36,7 @@ public final class EncoderMatch {
 
 	/**
 	 * Returns the encoder that matched the HTTP <code>Accept-Encoding</code> header value.
-	 * 
+	 *
 	 * @return The encoder of the match.
 	 */
 	public Encoder getEncoder() {

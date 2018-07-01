@@ -17,14 +17,14 @@ import java.util.*;
 
 /**
  * Utility class for finding resources for a class.
- * 
+ *
  * <p>
  * Same as {@link ClasspathResourceFinderSimple}, but first searches the working directory for the file before
  * looking in the classpath.
  * <br>Path traversals outside the working directory are not allowed for security reasons.
  */
 public class ClasspathResourceFinderBasic extends ClasspathResourceFinderSimple {
-	
+
 	/**
 	 * Reusable instance.
 	 */
@@ -37,17 +37,17 @@ public class ClasspathResourceFinderBasic extends ClasspathResourceFinderSimple 
 			return is;
 		return findClasspathResource(baseClass, name, locale);
 	}
-	
+
 	/**
 	 * Workhorse method for retrieving a resource from the file system.
-	 * 
+	 *
 	 * <p>
 	 * This method can be overridden by subclasses to provide customized handling of resource retrieval from file systems.
-	 * 
+	 *
 	 * @param name The resource name.
-	 * @param locale 
+	 * @param locale
 	 * 	The resource locale.
-	 * 	<br>Can be <jk>null</jk>.  
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
 	 * @throws IOException
 	 */

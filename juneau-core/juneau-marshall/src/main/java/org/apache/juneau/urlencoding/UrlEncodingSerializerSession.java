@@ -26,7 +26,7 @@ import org.apache.juneau.uon.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UrlEncodingSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -38,7 +38,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -260,7 +260,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 					addAmp = true;
 				}
-				
+
 			}
 		}
 		return out;

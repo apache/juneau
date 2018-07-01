@@ -17,17 +17,17 @@ import org.apache.juneau.internal.*;
 
 /**
  * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.
- * 
+ *
  * <p>
  * The class being created must be one of the following in order to convert it from a string:
- * 
+ *
  * <ul>
  * 	<li>
  * 		An <jk>enum</jk>.
  * 	<li>
  * 		Have a public constructor with a single <code>String</code> parameter.
  * 	<li>
- * 		Have one of the following public static methods that takes in a single <code>String</code> parameter: 
+ * 		Have one of the following public static methods that takes in a single <code>String</code> parameter:
  * 		<ul>
  * 			<li><code>fromString</code>
  * 			<li><code>fromValue</code>

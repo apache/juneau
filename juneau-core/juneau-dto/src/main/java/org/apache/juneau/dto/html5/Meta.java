@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-meta-element">&lt;meta&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -29,10 +29,10 @@ public class Meta extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a>
 	 * attribute.
-	 * 
+	 *
 	 * <p>
 	 * Character encoding declaration.
-	 * 
+	 *
 	 * @param charset The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -44,10 +44,10 @@ public class Meta extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a>
 	 * attribute.
-	 * 
+	 *
 	 * <p>
 	 * Value of the element.
-	 * 
+	 *
 	 * @param content The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -59,10 +59,10 @@ public class Meta extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv">http-equiv</a>
 	 * attribute.
-	 * 
+	 *
 	 * <p>
 	 * Pragma directive.
-	 * 
+	 *
 	 * @param httpequiv The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -73,10 +73,10 @@ public class Meta extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-name">name</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Metadata name.
-	 * 
+	 *
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

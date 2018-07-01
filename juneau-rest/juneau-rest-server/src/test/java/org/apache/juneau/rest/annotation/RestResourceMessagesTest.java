@@ -31,14 +31,14 @@ public class RestResourceMessagesTest {
 	//====================================================================================================
 	// Setup
 	//====================================================================================================
-	
+
 	static ObjectMap convertToMap(ResourceBundle rb) {
 		ObjectMap m = new ObjectMap();
 		for (String k : rb.keySet())
 			m.put(k, rb.getString(k));
 		return m;
 	}
-	
+
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
@@ -57,15 +57,15 @@ public class RestResourceMessagesTest {
 		// Parent resource should just pick up values from its bundle.
 		a.get("/").execute().assertBody("{key1:'value1a',key2:'value2a'}");
 	}
-	
+
 	//====================================================================================================
 	// Overridden on subclass.
 	//====================================================================================================
-	
+
 	@RestResource(messages="RestResourceMessagesTest2")
 	public static class B extends A {}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01() throws Exception {
 		// Child resource should pick up values from both parent and child,

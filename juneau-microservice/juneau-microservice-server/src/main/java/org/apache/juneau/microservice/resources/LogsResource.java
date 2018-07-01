@@ -62,17 +62,17 @@ public class LogsResource extends BasicRestServlet {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private static final String PREFIX = "LogsResource.";
-	
+
 	/**
 	 * Configuration property:  Root directory.
 	 */
 	public static final String LOGS_RESOURCE_logDir = PREFIX + "logDir.s";
-	
+
 	/**
 	 * Configuration property:  Allow deletes on files.
 	 */
 	public static final String LOGS_RESOURCE_allowDeletes = PREFIX + "allowDeletes.b";
-	
+
 	/**
 	 * Configuration property:  Log entry format.
 	 */
@@ -91,13 +91,13 @@ public class LogsResource extends BasicRestServlet {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	private File logDir;
 	private LogEntryFormatter leFormatter;
 	boolean allowDeletes;
 
 
-	@RestHook(INIT) 
+	@RestHook(INIT)
 	public void init(RestContextBuilder b) throws Exception {
 		RestContextProperties p = b.getProperties();
 		logDir = new File(p.getString(LOGS_RESOURCE_logDir));
@@ -110,7 +110,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, 
+		name=GET,
 		path="/*",
 		summary="View information on file or directory",
 		description="Returns information about the specified file or directory.",
@@ -133,13 +133,13 @@ public class LogsResource extends BasicRestServlet {
 		description="View the contents of a log file."
 	)
 	public void viewFile(
-			RestResponse res, 
-			@PathRemainder String path, 
-			@Query(name="highlight", description="Add severity color highlighting.", example="true") boolean highlight, 
-			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start, 
-			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end, 
-			@Query(name="thread", description="Thread name filter.\nOnly show log entries with the specified thread name.", example="thread-pool-33-thread-1") String thread, 
-			@Query(name="loggers", description="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", example="['LinkIndexService','LinkIndexRestService']") String[] loggers, 
+			RestResponse res,
+			@PathRemainder String path,
+			@Query(name="highlight", description="Add severity color highlighting.", example="true") boolean highlight,
+			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start,
+			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end,
+			@Query(name="thread", description="Thread name filter.\nOnly show log entries with the specified thread name.", example="thread-pool-33-thread-1") String thread,
+			@Query(name="loggers", description="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", example="['LinkIndexService','LinkIndexRestService']") String[] loggers,
 			@Query(name="severity", description="Severity filter.\nOnly show log entries with the specified severity.", example="['ERROR','WARN']") String[] severity
 		) throws NotFound, MethodNotAllowed, IOException {
 
@@ -203,11 +203,11 @@ public class LogsResource extends BasicRestServlet {
 	)
 	public LogParser viewParsedEntries(
 			RestRequest req,
-			@PathRemainder String path, 
-			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start, 
-			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end, 
-			@Query(name="thread", description="Thread name filter.\nOnly show log entries with the specified thread name.", example="thread-pool-33-thread-1") String thread, 
-			@Query(name="loggers", description="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", example="['LinkIndexService','LinkIndexRestService']") String[] loggers, 
+			@PathRemainder String path,
+			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start,
+			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end,
+			@Query(name="thread", description="Thread name filter.\nOnly show log entries with the specified thread name.", example="thread-pool-33-thread-1") String thread,
+			@Query(name="loggers", description="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", example="['LinkIndexService','LinkIndexRestService']") String[] loggers,
 			@Query(name="severity", description="Severity filter.\nOnly show log entries with the specified severity.", example="['ERROR','WARN']") String[] severity
 		) throws NotFound, IOException {
 
@@ -220,7 +220,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name="DOWNLOAD", 
+		name="DOWNLOAD",
 		path="/*",
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
@@ -235,7 +235,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=DELETE, 
+		name=DELETE,
 		path="/*",
 		summary="Delete log file",
 		description="Delete a log file on the file system."
@@ -245,7 +245,7 @@ public class LogsResource extends BasicRestServlet {
 		return new RedirectToRoot();
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ public class LogsResource extends BasicRestServlet {
 			super(file);
 		}
 	}
-	
+
 	@Response(description="Redirect to root page on success")
 	static class RedirectToRoot extends RedirectToServletRoot {}
 
@@ -313,12 +313,12 @@ public class LogsResource extends BasicRestServlet {
 			}
 			return l;
 		}
-		
+
 		public Set<FileResource> getFiles() {
 			if (f.isFile() || ! includeChildren)
 				return null;
 			Set<FileResource> s = new TreeSet<>(FILE_COMPARATOR);
-			for (File fc : f.listFiles(FILE_FILTER)) 
+			for (File fc : f.listFiles(FILE_FILTER))
 				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
 			return s;
 		}
@@ -339,7 +339,7 @@ public class LogsResource extends BasicRestServlet {
 		};
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ public class LogsResource extends BasicRestServlet {
 			return f;
 		throw new NotFound("File not found.");
 	}
-	
+
 	private void deleteFile(File f) {
 		if (! allowDeletes)
 			throw new MethodNotAllowed("DELETE not enabled");

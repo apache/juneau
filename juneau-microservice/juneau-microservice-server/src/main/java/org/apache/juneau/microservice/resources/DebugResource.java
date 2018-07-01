@@ -44,9 +44,9 @@ public class DebugResource extends BasicRestServlet {
 
 	/**
 	 * [GET /] - Shows child utilities.
-	 * 
+	 *
 	 * @return Child utility links.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@RestMethod(name=GET, path="/", description="Show contents of config file.")
 	public ResourceDescriptions getChildren() throws Exception {

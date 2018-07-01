@@ -16,10 +16,10 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Class used to resolve {@link Class} objects to instances.
- * 
+ *
  * <p>
  * Used to convert classes defined via {@link RestResource#children() @RestResource.children()} into child instances.
- * 
+ *
  * <p>
  * Subclasses can be created to provide customized resource resolution.
  * These can be associated with REST resources in one of the following ways:
@@ -28,13 +28,13 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li>{@link RestContextBuilder#resourceResolver(Class)}/{@link RestContextBuilder#resourceResolver(RestResourceResolver)}
  * 		methods.
  * </ul>
- * 
+ *
  * Implementations must provide one of the following public constructors:
  * <ul>
  * 	<li>RestResourceResolver()
  * 	<li>RestResourceResolver(RestContext)
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; juneau-rest-server &gt; Resource Resolvers</a>
@@ -44,23 +44,23 @@ public interface RestResourceResolver {
 
 	/**
 	 * Represents no RestResourceResolver.
-	 * 
+	 *
 	 * <p>
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
 	 * ultimately {@link BasicRestResourceResolver} if not specified at any level.
 	 */
 	public interface Null extends RestResourceResolver {}
-	
+
 	/**
 	 * Resolves the specified class to a resource object.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own custom resolution.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation simply creates a new class instance using {@link Class#newInstance()}.
-	 * 
-	 * @param parent 
+	 *
+	 * @param parent
 	 * 	The parent resource (i.e. the instance whose class has the {@link RestResource#children() @RestResource.children()} annotation.
 	 * @param c The class to resolve.
 	 * @param builder The initialization configuration for the resource.

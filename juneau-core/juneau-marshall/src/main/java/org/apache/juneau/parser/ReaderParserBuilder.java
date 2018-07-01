@@ -34,30 +34,30 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public ReaderParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
-	
-	
+
+
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
 
 	/**
 	 * Configuration property:  File charset.
-	 * 
+	 *
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
@@ -68,16 +68,16 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  File charset.
-	 * 
+	 *
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
@@ -88,16 +88,16 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  Input stream charset.
-	 * 
+	 *
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
@@ -108,16 +108,16 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  Input stream charset.
-	 * 
+	 *
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
@@ -497,7 +497,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -515,7 +515,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public ReaderParserBuilder set(String name, Object value) {
 		super.set(name, value);

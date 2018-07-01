@@ -124,14 +124,14 @@ public class RestMethodInheritTest {
 			return "F3";
 		}
 	}
-	
+
 	//=================================================================================================================
 	// Test serializer inheritance.
 	//=================================================================================================================
 
 	@RestResource(serializers={S1.class,S2.class})
 	public static class A {}
-	
+
 	@RestResource(serializers={S3.class,S4.class,Inherit.class})
 	public static class A01 extends A {}
 
@@ -171,7 +171,7 @@ public class RestMethodInheritTest {
 	//=================================================================================================================
 	// Test parser inheritance.
 	//=================================================================================================================
-	
+
 	@RestResource(parsers={P1.class,P2.class})
 	public static class B {}
 
@@ -214,7 +214,7 @@ public class RestMethodInheritTest {
 	//=================================================================================================================
 	// Test filter inheritance.
 	//=================================================================================================================
-	
+
 	@RestResource(pojoSwaps={F1Swap.class})
 	public static class D {}
 
@@ -267,7 +267,7 @@ public class RestMethodInheritTest {
 	//=================================================================================================================
 	// Test properties inheritance.
 	//=================================================================================================================
-	
+
 	@RestResource(properties={@Property(name="p1",value="v1"), @Property(name="p2",value="v2")})
 	public static class E {}
 

@@ -26,7 +26,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * This is the root document object for the API specification.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -44,15 +44,15 @@ public class Swagger extends SwaggerElement {
 			return o1.replace('{', '@').compareTo(o2.replace('{', '@'));
 		}
 	};
-	
-	private String 
+
+	private String
 		swagger = "2.0",
-		host, 
+		host,
 		basePath;
 	private Info info;
 	private ExternalDocumentation externalDocs;
 	private List<String> schemes;
-	private List<MediaType> 
+	private List<MediaType>
 		consumes,
 		produces;
 	private List<Tag> tags;
@@ -67,11 +67,11 @@ public class Swagger extends SwaggerElement {
 	 * Default constructor.
 	 */
 	public Swagger() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public Swagger(Swagger copyFrom) {
 		super(copyFrom);
@@ -89,7 +89,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.tags != null)
 			for (Tag t : copyFrom.tags)
 				this.tags.add(t.copy());
-		
+
 		this.security = copyFrom.security == null ? null : new ArrayList<Map<String,List<String>>>();
 		if (copyFrom.security != null)
 			for (Map<String,List<String>> m : copyFrom.security) {
@@ -104,7 +104,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.definitions != null)
 			for (Map.Entry<String,ObjectMap> e : copyFrom.definitions.entrySet())
 				this.definitions.put(e.getKey(), new ObjectMap(e.getValue()));
-		
+
 		this.parameters = copyFrom.parameters == null ? null : new LinkedHashMap<String,ParameterInfo>();
 		if (copyFrom.parameters != null)
 			for (Map.Entry<String,ParameterInfo> e : copyFrom.parameters.entrySet())
@@ -129,25 +129,25 @@ public class Swagger extends SwaggerElement {
 				this.paths.put(e.getKey(), m);
 			}
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public Swagger copy() {
 		return new Swagger(this);
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>swagger</property>.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the Swagger Specification version being used.
-	 * 
+	 *
 	 * <p>
 	 * It can be used by the Swagger UI and other clients to interpret the API listing.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getSwagger() {
@@ -156,14 +156,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>swagger</property>.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the Swagger Specification version being used.
-	 * 
+	 *
 	 * <p>
 	 * It can be used by the Swagger UI and other clients to interpret the API listing.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -175,7 +175,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setSwagger(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -188,13 +188,13 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>info</property>.
-	 * 
+	 *
 	 * <p>
 	 * Provides metadata about the API.
-	 * 
+	 *
 	 * <p>
 	 * The metadata can be used by the clients if needed.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Info getInfo() {
@@ -203,14 +203,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>info</property>.
-	 * 
+	 *
 	 * <p>
 	 * Provides metadata about the API.
-	 * 
+	 *
 	 * <p>
 	 * The metadata can be used by the clients if needed.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -222,8 +222,8 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setInfo(Info)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -243,10 +243,10 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>host</property>.
-	 * 
+	 *
 	 * <p>
 	 * The host (name or IP) serving the API.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getHost() {
@@ -255,11 +255,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>host</property>.
-	 * 
+	 *
 	 * <p>
 	 * The host (name or IP) serving the API.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
@@ -276,7 +276,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setHost(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -293,10 +293,10 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>basePath</property>.
-	 * 
+	 *
 	 * <p>
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getBasePath() {
@@ -305,11 +305,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>basePath</property>.
-	 * 
+	 *
 	 * <p>
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>If it is not included, the API is served directly under the <code>host</code>.
 	 * 	<br>The value MUST start with a leading slash (/).
@@ -324,7 +324,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setBasePath(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -340,14 +340,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
-	 * 
+	 *
 	 * <p>
 	 * The transfer protocol of the API.
-	 * 
+	 *
 	 * <p>
 	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<String> getSchemes() {
@@ -356,15 +356,15 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schemes</property>.
-	 * 
+	 *
 	 * <p>
 	 * The transfer protocol of the API.
-	 * 
+	 *
 	 * <p>
 	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -383,16 +383,16 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>schemes</property> property.
-	 * 
+	 *
 	 * <p>
 	 * The transfer protocol of the API.
-	 * 
+	 *
 	 * <p>
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
 	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -411,7 +411,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Same as {@link #addSchemes(Collection)}.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -437,13 +437,13 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>consumes</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can consume.
-	 * 
+	 *
 	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<MediaType> getConsumes() {
@@ -452,14 +452,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>consumes</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can consume.
-	 * 
+	 *
 	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -472,14 +472,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>consumes</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Values MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -492,7 +492,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>consumes</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -517,16 +517,16 @@ public class Swagger extends SwaggerElement {
 		consumes = addToList(consumes, values, MediaType.class);
 		return this;
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>produces</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
-	 * 
+	 *
 	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<MediaType> getProduces() {
@@ -535,14 +535,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>produces</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
-	 * 
+	 *
 	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -555,14 +555,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>produces</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
-	 * 
+	 *
 	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -575,7 +575,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>produces</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -603,10 +603,10 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>paths</property>.
-	 * 
+	 *
 	 * <p>
 	 * The available paths and operations for the API.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,OperationMap> getPaths() {
@@ -615,11 +615,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>paths</property>.
-	 * 
+	 *
 	 * <p>
 	 * The available paths and operations for the API.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -631,14 +631,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>produces</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
-	 * 
+	 *
 	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -647,10 +647,10 @@ public class Swagger extends SwaggerElement {
 		paths = addToSortedMap(paths, values, PATH_COMPARATOR);
 		return this;
 	}
-	
+
 	/**
 	 * Adds a single value to the <property>paths</property> property.
-	 * 
+	 *
 	 * @param path The path template.
 	 * @param methodName The HTTP method name.
 	 * @param operation The operation that describes the path.
@@ -670,7 +670,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>paths</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -692,13 +692,13 @@ public class Swagger extends SwaggerElement {
 		paths = addToMap((Map)paths, values, String.class, Map.class, String.class, Operation.class);
 		return this;
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>definitions</property>.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,ObjectMap> getDefinitions() {
@@ -707,11 +707,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>definitions</property>.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -723,11 +723,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>definitions</property> property.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -739,7 +739,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>definitions</property> property.
-	 * 
+	 *
 	 * @param name A definition name.
 	 * @param schema The schema that the name defines.
 	 * @return This object (for method chaining).
@@ -751,7 +751,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>definitions</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -773,7 +773,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Convenience method for testing whether this Swagger has one or more definitions defined.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this Swagger has one or more definitions defined.
 	 */
 	public boolean hasDefinitions() {
@@ -782,13 +782,13 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>parameters</property>.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold parameters that can be used across operations.
-	 * 
+	 *
 	 * <p>
 	 * This property does not define global parameters for all operations.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,ParameterInfo> getParameters() {
@@ -797,13 +797,13 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>parameters</property>.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold parameters that can be used across operations.
-	 * 
+	 *
 	 * <p>
 	 * This property does not define global parameters for all operations.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -816,14 +816,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>parameters</property> property.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold parameters that can be used across operations.
-	 * 
+	 *
 	 * <p>
 	 * This property does not define global parameters for all operations.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -835,7 +835,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>parameter</property> property.
-	 * 
+	 *
 	 * @param name The parameter name.
 	 * @param parameter The parameter definition.
 	 * @return This object (for method chaining).
@@ -847,7 +847,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>properties</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -869,13 +869,13 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>responses</property>.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold responses that can be used across operations.
-	 * 
+	 *
 	 * <p>
 	 * This property does not define global responses for all operations.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,ResponseInfo> getResponses() {
@@ -884,14 +884,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>responses</property>.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold responses that can be used across operations.
-	 * 
+	 *
 	 * <p>
 	 * This property does not define global responses for all operations.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -903,14 +903,14 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>responses</property> property.
-	 * 
+	 *
 	 * <p>
 	 * An object to hold responses that can be used across operations.
-	 * 
+	 *
 	 * <p>
 	 * This property does not define global responses for all operations.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -922,7 +922,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>responses</property> property.
-	 * 
+	 *
 	 * @param name The response name.
 	 * @param response The response definition.
 	 * @return This object (for method chaining).
@@ -934,7 +934,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>properties</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -956,10 +956,10 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>securityDefinitions</property>.
-	 * 
+	 *
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,SecurityScheme> getSecurityDefinitions() {
@@ -968,11 +968,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>securityDefinitions</property>.
-	 * 
+	 *
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -984,11 +984,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>securityDefinitions</property> property.
-	 * 
+	 *
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -1000,7 +1000,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>securityDefinitions</property> property.
-	 * 
+	 *
 	 * @param name A security name.
 	 * @param securityScheme A security schema.
 	 * @return This object (for method chaining).
@@ -1012,7 +1012,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>securityDefinitions</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -1034,15 +1034,15 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>security</property>.
-	 * 
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
-	 * 
+	 *
 	 * <p>
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
 	 * <br>Individual operations can override this definition.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Map<String,List<String>>> getSecurity() {
@@ -1051,15 +1051,15 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>security</property>.
-	 * 
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
-	 * 
+	 *
 	 * <p>
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
 	 * <br>Individual operations can override this definition.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -1072,16 +1072,16 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>security</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
-	 * 
+	 *
 	 * <p>
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
 	 * <br>Individual operations can override this definition.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -1094,9 +1094,9 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>securityDefinitions</property> property.
-	 * 
+	 *
 	 * @param scheme The security scheme that applies to this operation
-	 * @param alternatives 
+	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
 	 * @return This object (for method chaining).
 	 */
@@ -1108,7 +1108,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>securityDefinitions</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -1136,10 +1136,10 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Tag> getTags() {
@@ -1148,11 +1148,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>tags</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
 	 * 	<br>Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
@@ -1168,11 +1168,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>security</property> property.
-	 * 
+	 *
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
 	 * 	<br>Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
@@ -1189,7 +1189,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>tags</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -1218,7 +1218,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Convenience method for testing whether this Swagger has one or more tags defined.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this Swagger has one or more tags defined.
 	 */
 	public boolean hasTags() {
@@ -1227,10 +1227,10 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
-	 * 
+	 *
 	 * <p>
 	 * Additional external documentation.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
@@ -1239,10 +1239,10 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
-	 * 
+	 *
 	 * <p>
 	 * Additional external documentation.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -1255,8 +1255,8 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -1318,7 +1318,7 @@ public class Swagger extends SwaggerElement {
 			case "security": return setSecurity(null).securities(value);
 			case "tags": return setTags(null).tags(value);
 			case "externalDocs": return externalDocs(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
@@ -1344,7 +1344,7 @@ public class Swagger extends SwaggerElement {
 			.appendIf(externalDocs != null, "externalDocs");
 		return new MultiSet<>(s, super.keySet());
 	}
-	
+
 	@Override /* Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);
@@ -1352,7 +1352,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Resolves a <js>"$ref"</js> tags to nodes in this swagger document.
-	 * 
+	 *
 	 * @param ref The ref tag value.
 	 * @param c The class to convert the reference to.
 	 * @return The referenced node, or <jk>null</jk> if the ref was <jk>null</jk> or empty or not found.
@@ -1365,7 +1365,7 @@ public class Swagger extends SwaggerElement {
 		try {
 			return new PojoRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName()); 
+			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName());
 		}
 	}
 }

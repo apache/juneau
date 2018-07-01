@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-blockquote-element">&lt;blockquote&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -29,10 +29,10 @@ public class Blockquote extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-blockquote-cite">cite</a>
 	 * attribute.
-	 * 
+	 *
 	 * <p>
 	 * Link to the source of the quotation.
-	 * 
+	 *
 	 * @param cite The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

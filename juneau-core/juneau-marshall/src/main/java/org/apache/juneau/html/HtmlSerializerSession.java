@@ -31,7 +31,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link HtmlSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -50,7 +50,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -86,7 +86,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Converts the specified output target object to an {@link HtmlWriter}.
-	 * 
+	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link HtmlWriter}.
 	 * @throws Exception
@@ -103,7 +103,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is a URL.
-	 * 
+	 *
 	 * @param cm The ClassMeta of the object being serialized.
 	 * @param pMeta
 	 * 	The property metadata of the bean property of the object.
@@ -123,7 +123,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Returns the anchor text to use for the specified URL object.
-	 * 
+	 *
 	 * @param pMeta
 	 * 	The property metadata of the bean property of the object.
 	 * 	Can be <jk>null</jk> if the object isn't from a bean property.
@@ -170,7 +170,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlSerializer#HTML_addKeyValueTableHeaders} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link HtmlSerializer#HTML_addKeyValueTableHeaders} setting value for this session.
 	 */
 	public final boolean isAddKeyValueTableHeaders() {
@@ -179,7 +179,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlSerializer#HTML_addBeanTypes} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link HtmlSerializer#HTML_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
@@ -199,7 +199,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Main serialization routine.
-	 * 
+	 *
 	 * @param session The serialization context object.
 	 * @param o The object being serialized.
 	 * @param w The writer to serialize to.
@@ -210,7 +210,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth()-1, true);
 		return w;
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* XmlSerializerSession */
 	protected ContentResult serializeAnything(
@@ -224,14 +224,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			boolean isMixed,
 			boolean preserveWhitespace,
 			BeanPropertyMeta pMeta) throws Exception {
-		
-		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML). 
+
+		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML).
 		ClassMeta<?> type = push(elementName, o, eType);
 		pop();
-		
-		if (type == null) 
+
+		if (type == null)
 			type = object();
-		else if (type.isDelegate()) 
+		else if (type.isDelegate())
 			type = ((Delegate)o).getClassMeta();
 		PojoSwap swap = type.getPojoSwap(this);
 		if (swap != null) {
@@ -242,15 +242,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		}
 
 		HtmlClassMeta cHtml = cHtml(type);
-		
-		if (type.isMapOrBean() && ! cHtml.isXml()) 
+
+		if (type.isMapOrBean() && ! cHtml.isXml())
 			return serializeAnything(out, o, eType, elementName, pMeta, 0, false);
-		
+
 		return super.serializeAnything(out, o, eType, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
 	}
 	/**
 	 * Serialize the specified object to the specified writer.
-	 * 
+	 *
 	 * @param out The writer.
 	 * @param o The object to serialize.
 	 * @param eType The expected type of the object if this is a bean property.
@@ -326,7 +326,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			HtmlClassMeta cHtml = cHtml(sType);
 			HtmlBeanPropertyMeta bpHtml = bpHtml(pMeta);
-			
+
 			HtmlRender render = firstNonNull(bpHtml.getRender(), cHtml.getRender());
 
 			if (render != null) {
@@ -559,7 +559,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		boolean isCdc = cHtml.isHtmlCdc() || bpHtml.isHtmlCdc();
 		boolean isSdc = cHtml.isHtmlSdc() || bpHtml.isHtmlSdc();
 		boolean isDc = isCdc || isSdc;
-		
+
 		int i = indent;
 		if (c.isEmpty()) {
 			out.appendln(i, "<ul></ul>");
@@ -723,7 +723,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	private static String getAnchorText(BeanPropertyMeta pMeta) {
 		return pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getAnchorText();
 	}
-	
+
 	private static HtmlClassMeta cHtml(ClassMeta<?> cm) {
 		return cm.getExtendedMeta(HtmlClassMeta.class);
 	}
@@ -764,9 +764,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return null;
 		if (cm.getInnerClass().isAnnotationPresent(HtmlLink.class))
 			return null;
-		
+
 		HtmlClassMeta cHtml = cHtml(cm);
-		
+
 		if (cHtml.isNoTables() || bpHtml.isNoTables())
 			return null;
 		if (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())

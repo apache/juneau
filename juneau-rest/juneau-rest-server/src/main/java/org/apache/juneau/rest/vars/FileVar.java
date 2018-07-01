@@ -19,19 +19,19 @@ import org.apache.juneau.utils.*;
 
 /**
  * File resource variable resolver
- * 
+ *
  * <p>
  * The format for this var is <js>"$F{path[,defaultValue]}"</js>.
- * 
+ *
  * <p>
  * File variables resolve to the contents of resource files located on the classpath or local JVM directory.
  * They use the {@link RestRequest#getClasspathReaderResource(String)} method to retrieve the contents of the file.
  * That in turn uses the {@link ClasspathResourceFinder} associated with the servlet class to find the file.
- * 
+ *
  * <p>
  * The {@link ClasspathResourceFinder} is similar to {@link Class#getResourceAsStream(String)} except if it doesn't find the
  * resource on this class, it searches up the parent hierarchy chain.
- * 
+ *
  * <p>
  * If the resource cannot be found in the classpath, then an attempt is made to look in the JVM working directory.
  * <br>Path traversals outside the working directory are not allowed for security reasons.
@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * 	<li><js>"MyResource_ja.txt"</js>
  * 	<li><js>"MyResource.txt"</js>
  * </ol>
- * 
+ *
  * <p>
  * Example:
  * <p class='bcode'>
@@ -55,11 +55,11 @@ import org.apache.juneau.utils.*;
  * 		)
  * 	)
  * </p>
- * 
+ *
  * <p>
  * Files of type HTML, XHTML, XML, JSON, Javascript, and CSS will be stripped of comments.
  * This allows you to place license headers in files without them being serialized to the output.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
@@ -84,17 +84,17 @@ public class FileVar extends DefaultingVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
-		
+
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, false);
 		if (req != null) {
 			ReaderResource rr = req.getClasspathReaderResource(key);
-			return (rr == null ? null : rr.toCommentStrippedString());			
+			return (rr == null ? null : rr.toCommentStrippedString());
 		}
 
 		ClasspathResourceManager crm = session.getSessionObject(ClasspathResourceManager.class, SESSION_crm, false);
-		if (crm != null) 
+		if (crm != null)
 			return crm.getString(key);
-		
+
 		return null;
 	}
 }

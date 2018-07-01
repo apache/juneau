@@ -14,17 +14,17 @@ package org.apache.juneau.transform;
 
 /**
  * Identifies a class as being a builder for a bean class.
- * 
+ *
  * <p>
  * This interface has no methods to implement.
  * <br>It's purpose is to identify a class as a builder when it's used on a constructor of the built class.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; juneau-marshall &gt; POJO Builders</a>
  * </ul>
- * 
- * @param <T> The type of objects that this builder creates. 
+ *
+ * @param <T> The type of objects that this builder creates.
  */
 public interface Builder<T> {
 }

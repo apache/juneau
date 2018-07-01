@@ -14,19 +14,19 @@ package org.apache.juneau.svl;
 
 /**
  * Abstract superclass of all Simple Var Language variables that write their values directly to a writer.
- * 
+ *
  * <p>
  * Note the difference between this class and {@link SimpleVar} that returns simple string values.
  * <br>Unlike the {@link SimpleVar} class, the output from this class cannot contain nested variables.
  * <br>However, this class can be more efficient for variables that produce large amounts of output so that the creation
  * of large in-memory strings is avoided.
- * 
+ *
  * <p>
  * Subclasses must implement the following method:
  * <ul>
  * 	<li class='jm'>{@link #resolveTo(VarResolverSession, java.io.Writer, String)}
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
@@ -36,7 +36,7 @@ public abstract class StreamedVar extends Var {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>)
 	 */
 	public StreamedVar(String name) {

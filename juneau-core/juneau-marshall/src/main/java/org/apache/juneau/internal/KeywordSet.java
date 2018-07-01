@@ -22,7 +22,7 @@ public final class KeywordSet {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param keywords The list of keywords.
 	 */
 	public KeywordSet(String... keywords) {
@@ -32,7 +32,7 @@ public final class KeywordSet {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string exists in this store.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if the specified string exists in this store.
 	 */

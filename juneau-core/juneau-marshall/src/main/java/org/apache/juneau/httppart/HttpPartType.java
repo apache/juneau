@@ -31,7 +31,7 @@ public enum HttpPartType {
 
 	/** An HTTP header */
 	HEADER,
-	
+
 	/** A non-standard field */
 	OTHER;
 }

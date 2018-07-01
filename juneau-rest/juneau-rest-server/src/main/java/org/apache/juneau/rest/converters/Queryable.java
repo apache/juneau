@@ -17,11 +17,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * Converter for enabling of {@link PojoQuery} support on response objects returned by a <code>@RestMethod</code> method.
- * 
+ *
  * <p>
  * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}
  * class.
- * 
+ *
  * <p>
  * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps},
  * arrays of beans, etc...):
@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * 		<br>Comma-delimited list of columns to sort by.
  * 		<br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
  * 		<br>The default is ascending order.
- * 		<br>Example: 
+ * 		<br>Example:
  * 		<p class='bcode'>
  * 	&amp;o=name,birthDate-
  * 		</p>
@@ -61,7 +61,7 @@ import org.apache.juneau.utils.*;
  * 		<br>Only return the specified number of rows.
  * 		<br>Default is {@code 0} (meaning return all rows).
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link PojoQuery} - Additional information on filtering POJO models.
@@ -70,7 +70,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public final class Queryable implements RestConverter {
-	
+
 	/**
 	 * Swagger parameters for this converter.
 	 */
@@ -82,7 +82,7 @@ public final class Queryable implements RestConverter {
 		+ "{in:'query',name:'p',description:'Position.\nOnly return rows starting at the specified index position (zero-indexed).\nDefault is 0',schema:{type:'integer'},x-examples:{example:'?p=100'}},"
 		+ "{in:'query',name:'l',description:'Limit.\nOnly return the specified number of rows.\nDefault is 0 (meaning return all rows).',schema:{type:'integer'},x-examples:{example:'?l=100'}}"
 	;
-	
+
 	@Override /* RestConverter */
 	public Object convert(RestRequest req, Object o) {
 		if (o == null)

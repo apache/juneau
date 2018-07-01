@@ -45,10 +45,10 @@ import org.apache.juneau.rest.exception.*;
 @SuppressWarnings("javadoc")
 public class ConfigResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	@RestMethod(
-		name=GET, 
-		path="/", 
+		name=GET,
+		path="/",
 		summary="Get config file contents",
 		description="Show contents of config file as an ObjectMap.",
 		swagger=@MethodSwagger(
@@ -62,7 +62,7 @@ public class ConfigResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, 
+		name=GET,
 		path="/edit",
 		summary="Render form entry page for editing config file",
 		description="Renders a form entry page for editing the raw text of a config file."
@@ -83,7 +83,7 @@ public class ConfigResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, 
+		name=GET,
 		path="/{section}",
 		summary="Get config file section contents",
 		description="Show contents of config file section as an ObjectMap.",
@@ -96,12 +96,12 @@ public class ConfigResource extends BasicRestServlet {
 	public ObjectMap getConfigSection(
 			@Path(name="section", description="Section name in config file.", example="REST") String section
 		) throws SectionNotFound, BadConfig {
-		
+
 		return getSection(section);
 	}
 
 	@RestMethod(
-		name=GET, 
+		name=GET,
 		path="/{section}/{key}",
 		summary="Get config file entry value",
 		description="Show value of config file entry as a simple string.",
@@ -115,12 +115,12 @@ public class ConfigResource extends BasicRestServlet {
 			@Path(name="section", description="Section name in config file.", example="REST") String section,
 			@Path(name="key", description="Key name in section.", example="theme") String key
 		) throws SectionNotFound, BadConfig {
-		
+
 		return getSection(section).getString(key);
 	}
 
 	@RestMethod(
-		name=POST, 
+		name=POST,
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from a FORM post.",
@@ -138,7 +138,7 @@ public class ConfigResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=PUT, 
+		name=PUT,
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from raw text.",
@@ -151,12 +151,12 @@ public class ConfigResource extends BasicRestServlet {
 	public ObjectMap setConfigContents(
 			@Body(description="New contents in INI file format.") Reader contents
 		) throws Exception {
-		
+
 		return getServletConfig().getConfig().load(contents, true).asMap();
 	}
 
 	@RestMethod(
-		name=PUT, 
+		name=PUT,
 		path="/{section}",
 		summary="Update config section contents",
 		description="Add or overwrite a config file section.",
@@ -169,17 +169,17 @@ public class ConfigResource extends BasicRestServlet {
 	public ObjectMap setConfigSection(
 			@Path(name="section", description="Section name in config file.", example="REST") String section,
 			@Body(
-				description="New contents of config section as a simple map of key/value pairs.", 
+				description="New contents of config section as a simple map of key/value pairs.",
 				example="{theme:'servlet:/htdocs/themes/dark.css'}"
 			) Map<String,Object> contents
 		) throws Exception {
-		
+
 		getServletConfig().getConfig().setSection(section, null, contents);
 		return getSection(section);
 	}
 
 	@RestMethod(
-		name=PUT, 
+		name=PUT,
 		path="/{section}/{key}",
 		summary="Update config entry value",
 		description="Add or overwrite a config file entry.",
@@ -194,11 +194,11 @@ public class ConfigResource extends BasicRestServlet {
 			@Path(name="key", description="Key name in section.", example="theme") String key,
 			@Body(description="New value for entry.", example="servlet:/htdocs/themes/dark.css") String value
 		) throws SectionNotFound, BadConfig {
-		
+
 		getServletConfig().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
@@ -211,7 +211,7 @@ public class ConfigResource extends BasicRestServlet {
 			super("Section not found.");
 		}
 	}
-	
+
 	@Response(description="The configuration file contained syntax errors and could not be parsed.")
 	private class BadConfig extends InternalServerError {
 		private static final long serialVersionUID = 1L;
@@ -220,7 +220,7 @@ public class ConfigResource extends BasicRestServlet {
 			super(e, "The configuration file contained syntax errors and could not be parsed.");
 		}
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------

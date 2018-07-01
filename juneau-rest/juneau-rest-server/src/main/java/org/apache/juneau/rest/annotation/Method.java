@@ -20,10 +20,10 @@ import java.lang.annotation.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the HTTP
  * method.
- * 
+ *
  * <p>
  * Typically used for HTTP method handlers of type <js>"*"</js> (i.e. handle all requests).
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"*"</js>)
@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- * 
+ *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -41,7 +41,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; juneau-rest-server &gt; Method Parameters</a>

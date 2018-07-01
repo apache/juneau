@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -33,7 +33,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public OutputStreamSerializerBuilder(PropertyStore ps) {
@@ -47,16 +47,16 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Binary output format.
-	 * 
+	 *
 	 * <p>
 	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
-	 * 
+	 *
 	 * <ul>
 	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
@@ -64,7 +64,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	public OutputStreamSerializerBuilder binaryFormat(BinaryFormat value) {
 		return set(OSSERIALIZER_binaryFormat, value);
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
@@ -376,7 +376,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -442,7 +442,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override /* Context */
 	public OutputStreamSerializer build() {
 		return null;

@@ -18,11 +18,11 @@ import java.util.*;
 
 /**
  * Interface for finding classpath resources.
- * 
+ *
  * <p>
  * Essentially a wrapper around {@link Class#getResourceAsStream(String)}, but with support for looking up resources
  * with localized names (e.g. <js>"myfile_ja_JP.txt"</js>).
- * 
+ *
  * <p>
  * The following predefined implementations are provided:
  * <ul>
@@ -34,7 +34,7 @@ import java.util.*;
  * </ul>
  */
 public interface ClasspathResourceFinder {
-	
+
 	/**
 	 * Represents "no" classpath resource finder.
 	 */
@@ -47,12 +47,12 @@ public interface ClasspathResourceFinder {
 
 	/**
 	 * Returns the contents of the resource with the specified name.
-	 * 
-	 * @param baseClass 
+	 *
+	 * @param baseClass
 	 * 	The class to use to retrieve the resource.
-	 * @param name The resource name.  
+	 * @param name The resource name.
 	 * 	See {@link Class#getResource(String)} for format.
-	 * @param locale 
+	 * @param locale
 	 * 	The locale of the resource to retrieve.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.

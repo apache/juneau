@@ -16,7 +16,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of entity validator values.
- * 
+ *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * 	If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
  * 	If-Match: *
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -36,7 +36,7 @@ public class HeaderEntityValidatorArray {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param value The raw header value.
 	 */
 	protected HeaderEntityValidatorArray(String value) {
@@ -49,7 +49,7 @@ public class HeaderEntityValidatorArray {
 
 	/**
 	 * Returns this header value as an array of {@link EntityValidator} objects.
-	 * 
+	 *
 	 * @return this header value as an array of {@link EntityValidator} objects.
 	 */
 	public EntityValidator[] asValidators() {

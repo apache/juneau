@@ -36,14 +36,14 @@ import org.apache.juneau.rest.exception.*;
 
 /**
  * Abstract class for defining Remoteable services.
- * 
+ *
  * <p>
  * Remoteable services are POJOs whose methods can be invoked remotely through proxy interfaces.
- * 
+ *
  * <p>
  * To implement a remoteable service, developers must simply subclass from this class and implement the
  * {@link #getServiceMap()} method that maps java interfaces to POJO instances.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RemoteableProxies">Overview &gt; juneau-rest-server &gt; Remoteable Proxies</a>
@@ -60,10 +60,10 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 
 	/**
 	 * Returns the list of interfaces to their implementation objects.
-	 * 
+	 *
 	 * <p>
 	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.
-	 * 
+	 *
 	 * @return The service map.
 	 * @throws Exception
 	 */
@@ -74,7 +74,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	//--------------------------------------------------------------------------------
 
 	@RestMethod(
-		name=GET, 
+		name=GET,
 		path="/",
 		summary="List of available remoteable interfaces",
 		description="Shows a list of the interfaces registered with this remoteable servlet."
@@ -82,15 +82,15 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	public List<LinkString> getInterfaces() throws Exception {
 		List<LinkString> l = new LinkedList<>();
 		boolean useAll = ! useOnlyAnnotated();
-		for (Class<?> c : getServiceMap().keySet()) 
+		for (Class<?> c : getServiceMap().keySet())
 			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())
 				l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));
 		return l;
 	}
 
 	@RestMethod(
-		name=GET, 
-		path="/{javaInterface}", 
+		name=GET,
+		path="/{javaInterface}",
 		summary="List of available methods on interface",
 		description="Shows a list of all the exposed methods on an interface.",
 		htmldoc=@HtmlDoc(
@@ -100,16 +100,16 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	public Collection<LinkString> listMethods(
 			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface
 		) throws Exception {
-		
+
 		List<LinkString> l = new ArrayList<>();
-		for (String s : getMethods(javaInterface).keySet()) 
+		for (String s : getMethods(javaInterface).keySet())
 			l.add(new LinkString(s, "servlet:/{0}/{1}", urlEncode(javaInterface), urlEncode(s)));
 		return l;
 	}
 
 	@RestMethod(
-		name=GET, 
-		path="/{javaInterface}/{javaMethod}", 
+		name=GET,
+		path="/{javaInterface}/{javaMethod}",
 		summary="Form entry for interface method call",
 		description="Shows a form entry page for executing a remoteable interface method.",
 		htmldoc=@HtmlDoc(
@@ -120,17 +120,17 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		)
 	)
 	public Div showEntryForm(
-			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
+			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface,
 			@Path(name="javaMethod", description="Java method name", example="myMethod") String javaMethod
 		) throws NotFound, Exception {
-		
+
 		// Find the method.
 		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
 		if (m == null)
 			throw new NotFound("Method not found");
 
 		Table t = table();
-		
+
 		Type[] types = m.getGenericParameterTypes();
 		if (types.length == 0) {
 			t.child(tr(td("No arguments").colspan(3).style("text-align:center")));
@@ -141,7 +141,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));
 			}
 		}
-		
+
 		t.child(
 			tr(
 				td().colspan(3).style("text-align:right").children(
@@ -153,10 +153,10 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		);
 
 		return div(form().id("form").action("request:/").method(POST).children(t));
-	} 
+	}
 
 	@RestMethod(
-		name=POST, 
+		name=POST,
 		path="/{javaInterface}/{javaMethod}",
 		summary="Invoke an interface method",
 		description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",
@@ -188,7 +188,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 			Reader r,
 			ReaderParser p,
 			@Header("Content-Type") ContentType contentType,
-			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface, 
+			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface,
 			@Path(name="javaMethod", description="Java method name", example="myMethod") String javaMethod
 		) throws UnsupportedMediaType, NotFound, Exception {
 

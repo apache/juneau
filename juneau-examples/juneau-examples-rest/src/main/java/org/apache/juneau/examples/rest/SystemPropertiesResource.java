@@ -37,8 +37,8 @@ import org.apache.juneau.rest.widget.*;
 	description="REST interface for performing CRUD operations on system properties.",
 
 	htmldoc=@HtmlDoc(
-		
-		// Widget used for content-type and styles pull-down menus.		
+
+		// Widget used for content-type and styles pull-down menus.
 		widgets={
 			ContentTypeMenuItem.class,
 			ThemeMenuItem.class
@@ -63,17 +63,17 @@ import org.apache.juneau.rest.widget.*;
 			"	<p>Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.</p>",
 			"</div>"
 		},
-			
+
 		// Custom CSS styles applied to HTML view.
 		style={
 			"aside {display:table-caption} ",
 			"aside p {margin: 0px 20px;}"
 		},
-		
+
 		// Allow text wrapping in cells.
 		nowrap="false"
 	),
-		
+
 	// Properties that get applied to all serializers and parsers.
 	properties={
 		// Use single quotes.
@@ -126,7 +126,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	public String getSystemProperty(
 			@Path(name="propertyName", description="The system property name.", example="PATH") String propertyName
 		) throws NotAcceptable {
-		
+
 		return System.getProperty(propertyName);
 	}
 
@@ -137,10 +137,10 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public RedirectToServletRoot setSystemProperty(
-			@Path(name="propertyName", description="The system property name") String propertyName, 
+			@Path(name="propertyName", description="The system property name") String propertyName,
 			@Body(description="The new system property value") String value
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
-		
+
 		System.setProperty(propertyName, value);
 		return RedirectToServletRoot.INSTANCE;
 	}
@@ -154,7 +154,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	public RedirectToServletRoot setSystemProperties(
 			@Body(description="The new system property values", example="{key1:'val1',key2:123}") java.util.Properties newProperties
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
-		
+
 		System.setProperties(newProperties);
 		return RedirectToServletRoot.INSTANCE;
 	}
@@ -168,7 +168,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	public RedirectToServletRoot deleteSystemProperty(
 			@Path(name="propertyName", description="The system property name", example="PATH") String propertyName
 		) throws UserNotAdminException, NotAcceptable {
-		
+
 		System.clearProperty(propertyName);
 		return RedirectToServletRoot.INSTANCE;
 	}
@@ -210,19 +210,19 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public RedirectToServletRoot formPagePost(
-			@FormData("name") String name, 
+			@FormData("name") String name,
 			@FormData("value") String value
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
-		
+
 		System.setProperty(name, value);
 		return RedirectToServletRoot.INSTANCE;
 	}
-	
-	
+
+
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	// Beans
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	@Response(description="User is not an administrator.")
 	public static class UserNotAdminException extends Forbidden {
 		private static final long serialVersionUID = 1L;
@@ -231,5 +231,5 @@ public class SystemPropertiesResource extends BasicRestServlet {
 			super("User is not an administrator");
 		}
 	}
-	
+
 }

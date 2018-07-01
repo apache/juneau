@@ -14,7 +14,7 @@ package org.apache.juneau.dto.jsonschema;
 
 /**
  * Represents a JSON property in the JSON-Schema core specification.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
@@ -29,7 +29,7 @@ public class JsonSchemaProperty extends JsonSchema {
 
 	/**
 	 * Convenience constructor.
-	 * 
+	 *
 	 * @param name The name of this property.
 	 */
 	public JsonSchemaProperty(String name) {
@@ -38,7 +38,7 @@ public class JsonSchemaProperty extends JsonSchema {
 
 	/**
 	 * Convenience constructor.
-	 * 
+	 *
 	 * @param name The name of this property.
 	 * @param type The JSON type of this property.
 	 */

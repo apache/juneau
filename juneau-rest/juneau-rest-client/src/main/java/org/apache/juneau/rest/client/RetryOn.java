@@ -16,7 +16,7 @@ import org.apache.http.*;
 
 /**
  * Used to determine whether a request should be retried based on the HTTP response code.
- * 
+ *
  * <p>
  * Subclasses should override either the {@link #onCode(int)} method (if you only care about the HTTP status code)
  * or {@link #onResponse(HttpResponse)} (if you want full access to the HTTP response object.
@@ -45,7 +45,7 @@ public abstract class RetryOn {
 
 	/**
 	 * Subclasses should override this method to determine whether the HTTP response is retryable.
-	 * 
+	 *
 	 * @param response The HTTP response object.  May be <jk>null</jk> if a connection could not be made.
 	 * @return <jk>true</jk> if the specified response code is retryable.
 	 */
@@ -55,7 +55,7 @@ public abstract class RetryOn {
 
 	/**
 	 * Subclasses should override this method to determine whether the HTTP response is retryable.
-	 * 
+	 *
 	 * @param httpResponseCode The HTTP response code.  <code>-1</code> if a connection could not be made.
 	 * @return <jk>true</jk> if the specified response code is retryable.
 	 */

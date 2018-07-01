@@ -26,11 +26,11 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Convenience class for constructing instances of <code>List&lt;NameValuePair&gt;</code> for the
  * {@link UrlEncodedFormEntity} class.
- * 
+ *
  * <p>
  * Instances of this method can be passed directly to the {@link RestClient#doPost(Object, Object)} method or
  * {@link RestCall#input(Object)} methods to perform URL-encoded form posts.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
@@ -45,7 +45,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 
 	/**
 	 * Appends the specified pair to the end of this list.
-	 * 
+	 *
 	 * @param pair The pair to append to this list.
 	 * @return This object (for method chaining).
 	 */
@@ -56,10 +56,10 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 
 	/**
 	 * Appends the specified name/value pair to the end of this list.
-	 * 
+	 *
 	 * <p>
 	 * The value is simply converted to a string using <code>toString()</code>, or <js>"null"</js> if <jk>null</jk>.
-	 * 
+	 *
 	 * @param name The pair name.
 	 * @param value The pair value.
 	 * @return This object (for method chaining).
@@ -71,18 +71,18 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 
 	/**
 	 * Appends the specified name/value pair to the end of this list.
-	 * 
+	 *
 	 * <p>
 	 * The value is converted to UON notation using the {@link UrlEncodingSerializer} defined on the client.
-	 * 
+	 *
 	 * @param name The pair name.
 	 * @param value The pair value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
-	 * @param schema 
+	 * @param schema
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.  
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 	<br>Ignored if the serializer parser is not a subclass of {@link OapiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */

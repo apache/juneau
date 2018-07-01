@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-output-element">&lt;output&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -28,10 +28,10 @@ public class Output extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-output-for">for</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Specifies controls from which the output was calculated.
-	 * 
+	 *
 	 * @param _for The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -42,10 +42,10 @@ public class Output extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Associates the control with a form element.
-	 * 
+	 *
 	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -56,10 +56,10 @@ public class Output extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
-	 * 
+	 *
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

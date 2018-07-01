@@ -25,17 +25,17 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Response handler for POJOs not handled by other handlers.
- * 
+ *
  * <p>
  * This uses the serializers defined on the response to serialize the POJO.
- * 
+ *
  * <p>
  * The {@link Serializer} used is based on the <code>Accept</code> header on the request.
- * 
+ *
  * <p>
  * The <code>Content-Type</code> header is set to the mime-type defined on the selected serializer based on the
  * <code>produces</code> value passed in through the constructor.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
@@ -49,17 +49,17 @@ public class DefaultHandler implements ResponseHandler {
 		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
-		
+
 		if (sm != null) {
 			Serializer s = sm.getSerializer();
 			MediaType mediaType = res.getMediaType();
 			if (mediaType == null)
 				mediaType = sm.getMediaType();
-			
+
 			MediaType responseType = s.getResponseContentType();
 			if (responseType == null)
 				responseType = mediaType;
-			
+
 			res.setContentType(responseType.toString());
 
 			try {
@@ -97,16 +97,16 @@ public class DefaultHandler implements ResponseHandler {
 			} catch (SerializeException e) {
 				throw new InternalServerError(e);
 			}
-		
+
 		// Non-existent Accept or plain/text can just be serialized as-is.
 		} else if ("".equals(accept) || "plain/text".equals(accept)) {
 			FinishablePrintWriter w = res.getNegotiatedWriter();
 			ClassMeta<?> cm = req.getBeanSession().getClassMetaForObject(output);
-			if (cm != null) 
+			if (cm != null)
 				w.append(cm.toString(output));
 			w.flush();
 			w.finish();
-		
+
 		} else {
 			throw new NotAcceptable(
 				"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",

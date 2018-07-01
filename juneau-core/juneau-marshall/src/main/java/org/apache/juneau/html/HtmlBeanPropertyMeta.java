@@ -26,7 +26,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Default instance.
 	 */
 	public static final HtmlBeanPropertyMeta DEFAULT = new HtmlBeanPropertyMeta();
-	
+
 	private final boolean noTables, noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender render;
@@ -34,7 +34,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
 	 * @throws Exception If render class could not be instantiated.
 	 */
@@ -65,7 +65,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		this.link = null;
 		this.anchorText = null;
 	}
-	
+
 	static final class Builder {
 		boolean noTables, noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
@@ -91,7 +91,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the format of this bean property
-	 * 
+	 *
 	 * @return The value of the {@link Html#format()} annotation.
 	 */
 	protected HtmlFormat getFormat() {
@@ -100,16 +100,16 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 */
 	protected boolean isXml() {
 		return format == HtmlFormat.XML;
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 */
 	protected boolean isPlainText() {
@@ -118,7 +118,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
 	 */
 	protected boolean isHtml() {
@@ -127,7 +127,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
 	 */
 	protected boolean isHtmlCdc() {
@@ -136,7 +136,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
 	 */
 	protected boolean isHtmlSdc() {
@@ -145,7 +145,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns whether this bean property should not be serialized as an HTML table.
-	 * 
+	 *
 	 * @return
 	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTables() @Html.noTables()} is
 	 * 	<jk>true</jk>.
@@ -156,7 +156,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns whether this bean property should not include table headers when serialized as an HTML table.
-	 * 
+	 *
 	 * @return
 	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTableHeaders() @Html.noTableHeaders()} is
 	 * 	<jk>true</jk>.
@@ -167,10 +167,10 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the render class for rendering the style and contents of this property value in HTML.
-	 * 
+	 *
 	 * <p>
 	 * This value is specified via the {@link Html#render() @Html.render()} annotation.
-	 * 
+	 *
 	 * @return The render class, never <jk>null</jk>.
 	 */
 	public HtmlRender getRender() {
@@ -179,10 +179,10 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Adds a hyperlink to this value in HTML.
-	 * 
+	 *
 	 * <p>
 	 * This value is specified via the {@link Html#link() @Html.link()} annotation.
-	 * 
+	 *
 	 * @return The link string, or <jk>null</jk> if not specified.
 	 */
 	public String getLink() {
@@ -191,10 +191,10 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Specifies the anchor text for this property.
-	 * 
+	 *
 	 * <p>
 	 * This value is specified via the {@link Html#anchorText() @Html.anchorText()} annotation.
-	 * 
+	 *
 	 * @return The link string, or <jk>null</jk> if not specified.
 	 */
 	public String getAnchorText() {

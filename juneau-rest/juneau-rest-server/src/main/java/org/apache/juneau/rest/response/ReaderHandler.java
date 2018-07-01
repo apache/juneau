@@ -20,10 +20,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Response handler for {@link Reader} objects.
- * 
+ *
  * <p>
  * Simply pipes the contents of the {@link Reader} to {@link RestResponse#getNegotiatedWriter()}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>

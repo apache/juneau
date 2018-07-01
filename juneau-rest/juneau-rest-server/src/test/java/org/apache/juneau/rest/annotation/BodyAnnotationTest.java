@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -38,7 +38,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc","serial"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BodyAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -53,7 +53,7 @@ public class BodyAnnotationTest {
 	//=================================================================================================================
 	// @Body on parameter
 	//=================================================================================================================
-	
+
 	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
 	public static class A {
 		@RestMethod(name=PUT, path="/String")
@@ -134,7 +134,7 @@ public class BodyAnnotationTest {
 		}
 	}
 	private static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01a_onParameter_String() throws Exception {
 		a.put("/String", "'foo'").json().execute().assertBody("'foo'");
@@ -271,18 +271,18 @@ public class BodyAnnotationTest {
 		// When Content-Type not matched, treated as plain text.
 		a.put("/StringTransform", "'a'").execute().assertBody("'\\'a\\''");
 	}
-	
+
 	//=================================================================================================================
 	// @Body on POJO
 	//=================================================================================================================
-	
+
 	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
 	public static class B {
 		@RestMethod(name=PUT, path="/StringTransform")
 		public B01 b01(B01 b) {
 			return b;
 		}
-		@Body 
+		@Body
 		public static class B01 {
 			private String val;
 			public B01(String val) { this.val = val; }
@@ -306,7 +306,7 @@ public class BodyAnnotationTest {
 		public B04 b04(B04 b) throws Exception {
 			return b;
 		}
-		@Body 
+		@Body
 		public static class B04 {
 			String s;
 			public B04(InputStream in) throws Exception { this.s = IOUtils.read(in); }
@@ -316,7 +316,7 @@ public class BodyAnnotationTest {
 		public B05 b05(B05 b) throws Exception {
 			return b;
 		}
-		@Body 
+		@Body
 		public static class B05 {
 			private String s;
 			public B05(Reader in) throws Exception { this.s = IOUtils.read(in); }
@@ -462,13 +462,13 @@ public class BodyAnnotationTest {
 		a.put("/Reader?body=null", null).execute().assertBody("'null'");
 		a.put("/Reader?body=", null).execute().assertBody("''");
 	}
-	
+
 	// It's not currently possible to pass in a &body parameter for InputStream/Reader transforms.
-	
+
 	//=================================================================================================================
 	// No serializers or parsers needed when using only streams and readers.
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class D {
 		@RestMethod(name=PUT, path="/String")
@@ -530,7 +530,7 @@ public class BodyAnnotationTest {
 			public D08(InputStream in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		
+
 		@RestMethod(name=PUT, path="/ReaderTransformBodyOnPojo")
 		public Reader d09(D09 b) throws Exception {
 			return new StringReader(b.toString());
@@ -543,7 +543,7 @@ public class BodyAnnotationTest {
 		}
 	}
 	private static MockRest d = MockRest.create(D.class);
-	
+
 	@Test
 	public void d01a_noMediaTypes_String() throws Exception {
 		d.put("/String", "a").execute().assertBody("a");
@@ -616,11 +616,11 @@ public class BodyAnnotationTest {
 	public void d09b_noMediaTypes_ReaderTransformBodyOnPojo_withContentType() throws Exception {
 		d.put("/ReaderTransformBodyOnPojo", "a").json().execute().assertBody("a");
 	}
-	
+
 	//=================================================================================================================
 	// Complex POJOs
 	//=================================================================================================================
-	
+
 	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
 	public static class E {
 		@RestMethod(name=PUT, path="/B")
@@ -633,7 +633,7 @@ public class BodyAnnotationTest {
 		}
 	}
 	private static MockRest e = MockRest.create(E.class);
-	
+
 	@Test
 	public void e01_complexPojos_B_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
@@ -654,11 +654,11 @@ public class BodyAnnotationTest {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a").execute().assertBody(expected);
 	}
-	
+
 	//=================================================================================================================
 	// Form POSTS with @Body parameter
 	//=================================================================================================================
-	
+
 	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class F {
 		@RestMethod(name=POST, path="/*")
@@ -682,7 +682,7 @@ public class BodyAnnotationTest {
 		f.post("?p1=p3&p2=4", "{p1:'p1',p2:2}").json().execute().assertBody("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 		f.post("?p1=p3&p2=4", "{}").json().execute().assertBody("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 	}
-	
+
 	//=================================================================================================================
 	// Test multi-part parameter keys on bean properties of type array/Collection (i.e. &key=val1,&key=val2)
 	// using @UrlEncoding(expandedParams=true) annotation on bean.
@@ -695,9 +695,9 @@ public class BodyAnnotationTest {
 		public DTOs.C g(@Body DTOs.C content) throws Exception {
 			return content;
 		}
-	}	
+	}
 	static MockRest g = MockRest.create(G.class);
-	
+
 	@Test
 	public void g01() throws Exception {
 		String in = ""
@@ -723,7 +723,7 @@ public class BodyAnnotationTest {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 		g.post("/", in).urlEnc().execute().assertBody(in);
 	}
-	
+
 	//=================================================================================================================
 	// Test multi-part parameter keys on bean properties of type array/Collection (i.e. &key=val1,&key=val2)
 	// using URLENC_expandedParams property.
@@ -743,7 +743,7 @@ public class BodyAnnotationTest {
 		}
 	}
 	static MockRest h = MockRest.create(H.class);
-	
+
 	@Test
 	public void h01() throws Exception {
 		String in = ""
@@ -769,11 +769,11 @@ public class BodyAnnotationTest {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 		h.post("/", in).urlEnc().execute().assertBody(in);
 	}
-	
+
 	//=================================================================================================================
 	// Test behavior of @Body(required=true).
 	//=================================================================================================================
-	
+
 	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
 		@RestMethod(name=POST)
@@ -782,14 +782,14 @@ public class BodyAnnotationTest {
 		}
 	}
 	static MockRest i = MockRest.create(I.class);
-	
+
 	@Test
 	public void i01() throws Exception {
 		i.post("/", "").json().execute().assertStatus(400).assertBodyContains("Required value not provided.");
 		i.post("/", "{}").json().execute().assertStatus(200);
 	}
 
-	
+
 	//=================================================================================================================
 	// Swagger - @Body on POJO
 	//=================================================================================================================
@@ -797,7 +797,7 @@ public class BodyAnnotationTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@RestResource
 	public static class SA {
 
@@ -846,7 +846,7 @@ public class BodyAnnotationTest {
 		@RestMethod(name=GET,path="/mixed")
 		public void sa03(SA03 h) {}
 	}
-		
+
 	@Test
 	public void sa01_Body_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("body", null);
@@ -874,14 +874,14 @@ public class BodyAnnotationTest {
 		assertObjectEquals("'b'", x.getExample());
 		assertObjectEquals("{foo:'baz'}", x.getExamples());
 	}
-		
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource
 	public static class SB {
-		
+
 		@Body(schema=@Schema(" type:'b' "))
 		public static class SB01 {}
 		@RestMethod(name=GET,path="/schemaValue")
@@ -906,7 +906,7 @@ public class BodyAnnotationTest {
 		@RestMethod(name=GET,path="/autoDetectStringObject")
 		public void sb04(SB04 b) {}
 	}
-		
+
 	@Test
 	public void sb01_Body_onPojo_schemaValue() throws Exception {
 		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getParameter("body", null);
@@ -927,11 +927,11 @@ public class BodyAnnotationTest {
 		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("body", null);
 		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@RestResource
 	public static class SC {
 
@@ -947,7 +947,7 @@ public class BodyAnnotationTest {
 		@RestMethod(name=GET,path="/examples")
 		public void sc02(SC02 h) {}
 	}
-	
+
 
 	@Test
 	public void sc01_Body_onPojo_example() throws Exception {
@@ -998,7 +998,7 @@ public class BodyAnnotationTest {
 				"example:'a',",
 				"examples:{foo:'bar'}"
 			}) TA02 b) {}
-		
+
 		public static class TA03 {
 			public TA03(String x) {}
 		}
@@ -1019,7 +1019,7 @@ public class BodyAnnotationTest {
 				examples=" {foo:'baz'} "
 			) TA03 b) {}
 	}
-	
+
 	@Test
 	public void ta01_Body_onParameter_basic() throws Exception {
 		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("body", null);
@@ -1047,11 +1047,11 @@ public class BodyAnnotationTest {
 		assertObjectEquals("'b'", x.getExample());
 		assertObjectEquals("{foo:'baz'}", x.getExamples());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@RestResource
 	public static class TB {
 
@@ -1116,7 +1116,7 @@ public class BodyAnnotationTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@RestResource
 	public static class TC {
 
@@ -1130,7 +1130,7 @@ public class BodyAnnotationTest {
 		@RestMethod(name=GET,path="/examples")
 		public void tc02(@Body(examples={" foo:'bar' "}) TC02 b) {}
 	}
-	
+
 	@Test
 	public void tc01_Body_onParameter_example() throws Exception {
 		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("body", null);

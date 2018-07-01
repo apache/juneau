@@ -32,7 +32,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public JsoParserBuilder(PropertyStore ps) {
@@ -72,7 +72,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 		super.debugOutputLines(value);
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public JsoParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
@@ -426,7 +426,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public JsoParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -444,7 +444,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public JsoParserBuilder set(String name, Object value) {
 		super.set(name, value);

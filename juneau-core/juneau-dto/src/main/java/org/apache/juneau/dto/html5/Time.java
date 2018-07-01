@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-time-element">&lt;time&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -29,10 +29,10 @@ public class Time extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-time-datetime">datetime</a>
 	 * attribute.
-	 * 
+	 *
 	 * <p>
 	 * Machine-readable value.
-	 * 
+	 *
 	 * @param datetime The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

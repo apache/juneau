@@ -26,18 +26,18 @@ import org.apache.juneau.svl.*;
 /**
  * Represents the contents of a text file with convenience methods for resolving SVL variables and adding
  * HTTP response headers.
- * 
+ *
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
  * <br>This allows these objects to be returned as responses by REST methods.
- * 
+ *
  * <p>
  * <l>ReaderResources</l> are meant to be thread-safe and reusable objects.
  * <br>The contents of the request passed into the constructor are immediately converted to read-only strings.
- * 
+ *
  * <p>
  * Instances of this class can be built using {@link ReaderResourceBuilder}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ReaderResource">Overview &gt; juneau-rest-server &gt; ReaderResource</a>
@@ -49,10 +49,10 @@ public class ReaderResource implements Writable {
 	private final String[] contents;
 	private final VarResolverSession varSession;
 	private final Map<String,Object> headers;
-	
+
 	/**
 	 * Creates a new instance of a {@link ReaderResourceBuilder}
-	 * 
+	 *
 	 * @return A new instance of a {@link ReaderResourceBuilder}
 	 */
 	public static ReaderResourceBuilder create() {
@@ -61,7 +61,7 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param varSession Optional variable resolver for resolving variables in the string.
@@ -103,10 +103,10 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Get the HTTP response headers.
-	 * 
-	 * @return 
-	 * 	The HTTP response headers.  
-	 * 	<br>An unmodifiable map.  
+	 *
+	 * @return
+	 * 	The HTTP response headers.
+	 * 	<br>An unmodifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Map<String,Object> getHeaders() {
@@ -144,10 +144,10 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Same as {@link #toString()} but strips comments from the text before returning it.
-	 * 
+	 *
 	 * <p>
 	 * Supports stripping comments from the following media types: HTML, XHTML, XML, JSON, Javascript, CSS.
-	 * 
+	 *
 	 * @return The resource contents stripped of any comments.
 	 */
 	public String toCommentStrippedString() {

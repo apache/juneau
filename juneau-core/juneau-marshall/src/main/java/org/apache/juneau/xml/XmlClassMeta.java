@@ -34,7 +34,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public XmlClassMeta(ClassMeta<?> cm) {
@@ -54,7 +54,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Xml @Xml} annotation defined on the class.
-	 * 
+	 *
 	 * @return
 	 * 	The value of the annotation defined on the class, or <jk>null</jk> if annotation is not specified.
 	 */
@@ -64,7 +64,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Xml#format() @Xml.format()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.
 	 */
 	protected XmlFormat getFormat() {
@@ -73,7 +73,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Xml#childName() @Xml.childName()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getChildName() {
@@ -82,7 +82,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the XML namespace associated with this class.
-	 * 
+	 *
 	 * <p>
 	 * Namespace is determined in the following order of {@link Xml#prefix() @Xml.prefix()} annotation:
 	 * <ol>
@@ -93,7 +93,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 * 	<li>Interfaces.
 	 * 	<li>Interface packages.
 	 * </ol>
-	 * 
+	 *
 	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	public Namespace getNamespace() {

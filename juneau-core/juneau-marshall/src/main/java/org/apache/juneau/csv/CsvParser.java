@@ -34,7 +34,7 @@ public class CsvParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public CsvParser(PropertyStore ps) {
@@ -48,11 +48,11 @@ public class CsvParser extends ReaderParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link CsvParserBuilder} object.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link CsvParserBuilder} object.
 	 */
 	public static CsvParserBuilder create() {

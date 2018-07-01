@@ -24,18 +24,18 @@ import org.apache.juneau.rest.response.*;
 
 /**
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.
- * 
+ *
  * <p>
  * This class is handled special by the {@link StreamableHandler} class.
  * <br>This allows these objects to be returned as responses by REST methods.
- * 
+ *
  * <p>
  * <l>StreamResources</l> are meant to be thread-safe and reusable objects.
  * <br>The contents of the request passed into the constructor are immediately converted to read-only byte arrays.
- * 
+ *
  * <p>
  * Instances of this class can be built using {@link StreamResourceBuilder}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StreamResource">Overview &gt; juneau-rest-server &gt; StreamResource</a>
@@ -49,16 +49,16 @@ public class StreamResource implements Streamable {
 
 	/**
 	 * Creates a new instance of a {@link StreamResourceBuilder}
-	 * 
+	 *
 	 * @return A new instance of a {@link StreamResourceBuilder}
 	 */
 	public static StreamResourceBuilder create() {
 		return new StreamResourceBuilder();
 	}
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param contents
@@ -101,10 +101,10 @@ public class StreamResource implements Streamable {
 
 	/**
 	 * Get the HTTP response headers.
-	 * 
-	 * @return 
-	 * 	The HTTP response headers.  
-	 * 	<br>An unmodifiable map.  
+	 *
+	 * @return
+	 * 	The HTTP response headers.
+	 * 	<br>An unmodifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Map<String,Object> getHeaders() {

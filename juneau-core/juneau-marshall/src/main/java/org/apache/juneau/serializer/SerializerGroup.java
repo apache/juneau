@@ -22,9 +22,9 @@ import org.apache.juneau.http.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
@@ -34,19 +34,19 @@ import org.apache.juneau.http.*;
  * 	<li>
  * 		Clones existing groups and all serializers within the group in a single method call.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Match ordering</h5>
- * 
+ *
  * Serializers are matched against <code>Accept</code> strings in the order they exist in this group.
- * 
+ *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous serializers to be overridden through subsequent calls.
- * 
+ *
  * <p>
  * For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
  * will result in the order <code>S3, S4, S1, S2</code>.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new serializer group</jc>
@@ -54,10 +54,10 @@ import org.apache.juneau.http.*;
  * 		.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>); <jc>// Add some serializers to it</jc>
  * 		.ws().pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>) <jc>// Change settings for all serializers in the group.</jc>
  * 		.build();
- * 
+ *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>
  * 	WriterSerializer s = g.getWriterSerializer(<js>"text/foo, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>);
- * 
+ *
  * 	<jc>// Serialize a bean to JSON text </jc>
  * 	AddressBook addressBook = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
  * 	String json = s.serialize(addressBook);
@@ -76,19 +76,19 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Instantiates a new clean-slate {@link SerializerGroupBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> SerializerGroupBuilder()</code>.
-	 * 
+	 *
 	 * @return A new {@link SerializerGroupBuilder} object.
 	 */
 	public static SerializerGroupBuilder create() {
 		return new SerializerGroupBuilder();
 	}
-	
+
 	/**
 	 * Returns a builder that's a copy of the settings on this serializer group.
-	 * 
+	 *
 	 * @return A new {@link SerializerGroupBuilder} initialized to this group.
 	 */
 	@Override /* Context */
@@ -98,7 +98,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The modifiable properties that were used to initialize the serializers.
 	 * 	A snapshot of these will be made so that we can clone and modify this group.
@@ -130,13 +130,13 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Searches the group for a serializer that can handle the specified <code>Accept</code> value.
-	 * 
+	 *
 	 * <p>
 	 * The <code>accept</code> value complies with the syntax described in RFC2616, Section 14.1, as described below:
 	 * <p class='bcode'>
 	 * 	Accept         = "Accept" ":"
 	 * 	                  #( media-range [ accept-params ] )
-	 * 
+	 *
 	 * 	media-range    = ( "*\/*"
 	 * 	                  | ( type "/" "*" )
 	 * 	                  | ( type "/" subtype )
@@ -144,10 +144,10 @@ public final class SerializerGroup extends BeanContext {
 	 * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
 	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * The returned object includes both the serializer and media type that matched.
-	 * 
+	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
 	 * @return The serializer and media type that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
@@ -168,7 +168,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getSerializerMatch(String)} but matches using a {@link MediaType} instance.
-	 * 
+	 *
 	 * @param mediaType The HTTP media type.
 	 * @return The serializer and media type that matched the media type, or <jk>null</jk> if no match was made.
 	 */
@@ -178,7 +178,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getSerializerMatch(String)} but returns just the matched serializer.
-	 * 
+	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
 	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
@@ -189,7 +189,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getSerializerMatch(MediaType)} but returns just the matched serializer.
-	 * 
+	 *
 	 * @param mediaType The HTTP media type.
 	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
@@ -201,7 +201,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getSerializer(String)}, but casts it to a {@link WriterSerializer}.
-	 * 
+	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
 	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
@@ -211,7 +211,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link WriterSerializer}.
-	 * 
+	 *
 	 * @param mediaType The HTTP media type.
 	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
@@ -221,7 +221,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getSerializer(String)}, but casts it to an {@link OutputStreamSerializer}.
-	 * 
+	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
 	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
@@ -231,7 +231,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link OutputStreamSerializer}.
-	 * 
+	 *
 	 * @param mediaType The HTTP media type.
 	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
@@ -241,10 +241,10 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Returns the media types that all serializers in this group can handle.
-	 * 
+	 *
 	 * <p>
 	 * Entries are ordered in the same order as the serializers in the group.
-	 * 
+	 *
 	 * @return An unmodifiable list of media types.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
@@ -253,7 +253,7 @@ public final class SerializerGroup extends BeanContext {
 
 	/**
 	 * Returns a copy of the serializers in this group.
-	 * 
+	 *
 	 * @return An unmodifiable list of serializers in this group.
 	 */
 	public List<Serializer> getSerializers() {

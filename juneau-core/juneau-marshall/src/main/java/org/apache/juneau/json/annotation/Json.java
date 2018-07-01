@@ -19,10 +19,10 @@ import java.lang.annotation.*;
 
 /**
  * Annotation for specifying various JSON options for the JSON serializers and parsers.
- * 
+ *
  * <p>
  * Can be applied to Java types.
- * 
+ *
  * <p>
  * Can be used for the following:
  * <ul class='spaced-list'>
@@ -38,13 +38,13 @@ public @interface Json {
 
 	/**
 	 * Wraps beans in a JSON object with the specified attribute name.
-	 * 
+	 *
 	 * <p>
 	 * Applies only to {@link ElementType#TYPE}.
-	 * 
+	 *
 	 * <p>
 	 * This annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@Json</ja>(wrapperAttr=<js>"myWrapper"</js>)
@@ -52,7 +52,7 @@ public @interface Json {
 	 * 		<jk>public int</jk> f1 = 123;
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Without the <ja>@Json</ja> annotations, serializing this bean as JSON would have produced the following...
 	 * <p class='bcode'>
@@ -60,7 +60,7 @@ public @interface Json {
 	 * 		f1: 123
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * With the annotations, serializing this bean as JSON produces the following...
 	 * <p class='bcode'>

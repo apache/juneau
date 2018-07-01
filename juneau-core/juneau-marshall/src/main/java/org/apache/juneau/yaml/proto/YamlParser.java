@@ -17,16 +17,16 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses any valid JSON text into a POJO model.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Content-Type</code> types:  <code><b>application/json, text/json</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
  * time that it takes the built-in Java DOM parsers to parse equivalent XML.
- * 
+ *
  * <p>
  * This parser handles all valid JSON syntax.
  * In addition, when strict mode is disable, the parser also handles the following:
@@ -40,10 +40,10 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		Unquoted attributes.
  * </ul>
- * 
+ *
  * <p>
  * Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
- * 
+ *
  * <p>
  * This parser handles the following input, and automatically returns the corresponding Java class.
  * <ul class='spaced-list'>
@@ -68,7 +68,7 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
  * </ul>
- * 
+ *
  * <p>
  * Input can be any of the following:
  * <ul class='spaced-list'>
@@ -91,7 +91,7 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		<js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
  * </ul>
- * 
+ *
  * <p>
  * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the
  * {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)} or {@link ObjectList#ObjectList(CharSequence)
@@ -120,7 +120,7 @@ public class YamlParser extends ReaderParser {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Strict(PropertyStore ps) {
@@ -135,7 +135,7 @@ public class YamlParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public YamlParser(PropertyStore ps) {
@@ -144,7 +144,7 @@ public class YamlParser extends ReaderParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
@@ -159,14 +159,14 @@ public class YamlParser extends ReaderParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link YamlParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> YamlParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link YamlParserBuilder} object.
 	 */
 	public static YamlParserBuilder create() {
@@ -177,7 +177,7 @@ public class YamlParser extends ReaderParser {
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new YamlParserSession(this, args);
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

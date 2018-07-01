@@ -18,15 +18,15 @@ import org.apache.juneau.rest.widget.*;
 
 /**
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
- * 
+ *
  * <p>
- * Used with {@link RestResource#htmldoc() @RestResource.htmldoc()} and {@link RestMethod#htmldoc() @RestMethod.htmldoc()} 
+ * Used with {@link RestResource#htmldoc() @RestResource.htmldoc()} and {@link RestMethod#htmldoc() @RestMethod.htmldoc()}
  * to customize the HTML view of serialized POJOs.
- * 
+ *
  * <p>
  * All annotations specified here have no effect on any serializers other than {@link HtmlDocSerializer} and is
  * provided as a shorthand method of for specifying configuration properties.
- * 
+ *
  * <p>
  * For example, the following two methods for defining the HTML nav links are considered equivalent:
  * <p class='bcode'>
@@ -36,7 +36,7 @@ import org.apache.juneau.rest.widget.*;
  * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
  * 		}
  * 	)
- * 
+ *
  * 	<jc>// Defined via annotation.</jc>
  * 	<ja>@RestResource</ja>(
  * 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.widget.*;
  * 		)
  * 	)
  * </p>
- * 
+ *
  * <p>
  * The purpose of these annotation is to populate the HTML document view which by default consists of the following
  * structure:
@@ -77,7 +77,7 @@ import org.apache.juneau.rest.widget.*;
  * 		&lt;/body&gt;
  * 	&lt;/html&gt;</xt>
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
@@ -87,10 +87,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML aside section contents.
-	 * 
+	 *
 	 * <p>
 	 * The aside section typically floats on the right side of the page.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -101,13 +101,13 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -121,7 +121,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_aside}
@@ -132,10 +132,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML footer section contents.
-	 * 
+	 *
 	 * <p>
 	 * The footer section typically floats on the bottom of the page.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -146,13 +146,13 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -166,7 +166,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_footer}
@@ -177,7 +177,7 @@ public @interface HtmlDoc {
 
 	/**
 	 * Adds arbitrary content to the HTML <xt>&lt;head&gt;</xt> element on the page.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -185,20 +185,20 @@ public @interface HtmlDoc {
 	 * 			head={
 	 * 				<jc>// Add a shortcut link in the browser tab</jc>
 	 * 				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>,
-	 * 
+	 *
 	 * 				<jc>// Reload the page every 5 seconds </jc>
 	 * 				<js>"&lt;meta http-equiv='refresh' content='5'&gt;"</js>
 	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -210,7 +210,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_head}
@@ -221,11 +221,11 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML header section contents.
-	 * 
+	 *
 	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
 	 * to be whatever you want.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -236,7 +236,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -246,7 +246,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
@@ -256,7 +256,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class if not overridden.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_header}
@@ -267,10 +267,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML nav section contents.
-	 * 
+	 *
 	 * <p>
 	 * The nav section of the page contains the links.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -281,7 +281,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -289,7 +289,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		When {@link #navlinks()} is also specified, this content is placed AFTER the navigation links.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -303,7 +303,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nav}
@@ -314,10 +314,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the links in the HTML nav section.
-	 * 
+	 *
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
-	 * 
+	 *
 	 * <p>
 	 * The value is an array of strings with two possible values:
 	 * <ul>
@@ -325,7 +325,7 @@ public @interface HtmlDoc {
 	 * 		<br><js>"google: http://google.com"</js>
 	 * 	<li>Arbitrary HTML.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -337,11 +337,11 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -357,7 +357,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_navlinks}
@@ -368,14 +368,14 @@ public @interface HtmlDoc {
 
 	/**
 	 * Specifies the text to display when serializing an empty array or collection.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_noResultsMessage}
@@ -386,10 +386,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
-	 * 
+	 *
 	 * <p>
 	 * This only applies to the rendered data portion of the page.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nowrap}
@@ -400,7 +400,7 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML script section contents.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -411,13 +411,13 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is Javascript.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -431,7 +431,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_script}
@@ -442,7 +442,7 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the HTML CSS style section contents.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -454,13 +454,13 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is CSS.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -474,7 +474,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_style}
@@ -485,10 +485,10 @@ public @interface HtmlDoc {
 
 	/**
 	 * Sets the CSS URL in the HTML CSS style section.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -497,13 +497,13 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is a URL.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
@@ -511,7 +511,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_stylesheet}
@@ -522,11 +522,11 @@ public @interface HtmlDoc {
 
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
-	 * 
+	 *
 	 * <p>
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -535,7 +535,7 @@ public @interface HtmlDoc {
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_template}
@@ -546,15 +546,15 @@ public @interface HtmlDoc {
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.class;
 
 	/**
-	 * Configuration property:  HTML Widgets. 
-	 * 
+	 * Configuration property:  HTML Widgets.
+	 *
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
-	 * 
+	 *
 	 * <p>
 	 * Widgets resolve the following variables:
-	 * 
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
@@ -567,11 +567,11 @@ public @interface HtmlDoc {
 	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
 	 * 			 in the HTML page.
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
 	 * and aside section of the page:
-	 * 
+	 *
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		widgets={
@@ -587,7 +587,7 @@ public @interface HtmlDoc {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -595,7 +595,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		Values are appended to the existing list.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>

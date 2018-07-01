@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -35,10 +35,10 @@ public class ConfigMap implements ConfigStoreListener {
 	private final String name;               // The name  of this object.
 
 	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
-	
+
 	// Changes that have been applied since the last load.
 	private final List<ConfigEvent> changes = Collections.synchronizedList(new ArrayList<ConfigEvent>());
-	
+
 	// Registered listeners listening for changes during saves or reloads.
 	private final Set<ConfigEventListener> listeners = Collections.synchronizedSet(new HashSet<ConfigEventListener>());
 
@@ -47,12 +47,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 	// The original entries of this map before any changes were applied.
 	final Map<String,ConfigSection> oentries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigSection>());
-	
+
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param store The config store.
 	 * @param name The config name.
 	 * @throws IOException
@@ -68,15 +68,15 @@ public class ConfigMap implements ConfigStoreListener {
 		this.name = null;
 		load(contents);
 	}
-	
+
 	private ConfigMap load(String contents) {
 		if (contents == null)
 			contents = "";
 		this.contents = contents;
-		
+
 		entries.clear();
 		oentries.clear();
-		
+
 		List<String> lines = new LinkedList<>();
 		try (Scanner scanner = new Scanner(contents)) {
 			while (scanner.hasNextLine()) {
@@ -91,7 +91,7 @@ public class ConfigMap implements ConfigStoreListener {
 				lines.add(line);
 			}
 		}
-		
+
 		// Add [blank] section.
 		boolean inserted = false;
 		boolean foundComment = false;
@@ -104,12 +104,12 @@ public class ConfigMap implements ConfigStoreListener {
 					inserted = true;
 				}
 				break;
-			} 
+			}
 			foundComment = true;
 		}
 		if (! inserted)
 			lines.add(0, "[]");
-		
+
 		// Collapse any multi-lines.
 		ListIterator<String> li = lines.listIterator(lines.size());
 		String accumulator = null;
@@ -130,19 +130,19 @@ public class ConfigMap implements ConfigStoreListener {
 				accumulator = null;
 			}
 		}
-		
+
 		lines = new ArrayList<>(lines);
 		int last = lines.size()-1;
 		int S1 = 1; // Looking for section.
 		int S2 = 2; // Found section, looking for start.
 		int state = S1;
-		
+
 		List<ConfigSection> sections = new ArrayList<>();
-		
+
 		for (int i = last; i >= 0; i--) {
 			String l = lines.get(i);
 			char c = firstChar(l);
-			
+
 			if (state == S1) {
 				if (c == '[') {
 					state = S2;
@@ -157,7 +157,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		sections.add(new ConfigSection(lines.subList(0, last+1)));
-		
+
 		for (int i = sections.size() - 1; i >= 0; i--) {
 			ConfigSection cs = sections.get(i);
 			if (entries.containsKey(cs.name))
@@ -168,20 +168,20 @@ public class ConfigMap implements ConfigStoreListener {
 		oentries.putAll(entries);
 		return this;
 	}
-	
-	
+
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Getters
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Reads an entry from this map.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
-	 * @param key 
+	 * @param key
 	 * 	The entry key.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The entry, or <jk>null</jk> if the entry doesn't exist.
@@ -200,11 +200,11 @@ public class ConfigMap implements ConfigStoreListener {
 
 	/**
 	 * Returns the pre-lines on the specified section.
-	 * 
+	 *
 	 * <p>
 	 * The pre-lines are all lines such as blank lines and comments that preceed a section.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
@@ -224,7 +224,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 	/**
 	 * Returns the keys of the entries in the specified section.
-	 * 
+	 *
 	 * @return
 	 * 	An unmodifiable set of keys.
 	 */
@@ -234,8 +234,8 @@ public class ConfigMap implements ConfigStoreListener {
 
 	/**
 	 * Returns the keys of the entries in the specified section.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
@@ -247,11 +247,11 @@ public class ConfigMap implements ConfigStoreListener {
 		ConfigSection cs = entries.get(section);
 		return cs == null ? Collections.<String>emptySet() : Collections.unmodifiableSet(cs.entries.keySet());
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if this config has the specified section.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
@@ -261,15 +261,15 @@ public class ConfigMap implements ConfigStoreListener {
 		checkSectionName(section);
 		return entries.get(section) != null;
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Setters
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds a new section or replaces the pre-lines on an existing section.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
@@ -282,27 +282,27 @@ public class ConfigMap implements ConfigStoreListener {
 		checkSectionName(section);
 		return applyChange(true, ConfigEvent.setSection(section, preLines));
 	}
-	
+
 	/**
 	 * Adds or overwrites an existing entry.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
-	 * @param key 
+	 * @param key
 	 * 	The entry key.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @param value 
+	 * @param value
 	 * 	The entry value.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
-	 * @param modifiers 
+	 * @param modifiers
 	 * 	Optional modifiers.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
-	 * @param comment 
-	 * 	Optional comment.  
+	 * @param comment
+	 * 	Optional comment.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
-	 * @param preLines 
+	 * @param preLines
 	 * 	Optional pre-lines.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
 	 * @return This object (for method chaining).
@@ -314,14 +314,14 @@ public class ConfigMap implements ConfigStoreListener {
 			throw new ConfigException("Invalid modifiers: {0}", modifiers);
 		return applyChange(true, ConfigEvent.setEntry(section, key, value, modifiers, comment, preLines));
 	}
-	
+
 	/**
 	 * Removes a section.
-	 * 
+	 *
 	 * <p>
 	 * This eliminates all entries in the section as well.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
@@ -331,15 +331,15 @@ public class ConfigMap implements ConfigStoreListener {
 		checkSectionName(section);
 		return applyChange(true, ConfigEvent.removeSection(section));
 	}
-		
+
 	/**
 	 * Removes an entry.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
-	 * @param key 
+	 * @param key
 	 * 	The entry key.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -366,10 +366,10 @@ public class ConfigMap implements ConfigStoreListener {
 				if (oe == null)
 					oe = ConfigEntry.NULL;
 				cs.addEntry(
-					ce.getKey(), 
-					ce.getValue() == null ? oe.value : ce.getValue(), 
-					ce.getModifiers() == null ? oe.modifiers : ce.getModifiers(), 
-					ce.getComment() == null ? oe.comment : ce.getComment(), 
+					ce.getKey(),
+					ce.getValue() == null ? oe.value : ce.getValue(),
+					ce.getModifiers() == null ? oe.modifiers : ce.getModifiers(),
+					ce.getComment() == null ? oe.comment : ce.getComment(),
 					ce.getPreLines() == null ? oe.preLines : ce.getPreLines()
 				);
 			} else if (ce.getType() == SET_SECTION) {
@@ -391,12 +391,12 @@ public class ConfigMap implements ConfigStoreListener {
 		} finally {
 			writeUnlock();
 		}
-		return this;	
-	}	
-	
+		return this;
+	}
+
 	/**
 	 * Overwrites the contents of the config file.
-	 * 
+	 *
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
 	 * @return This object (for method chaining).
@@ -404,7 +404,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @throws InterruptedException
 	 */
 	public ConfigMap load(String contents, boolean synchronous) throws IOException, InterruptedException {
-		
+
 		if (synchronous) {
 			final CountDownLatch latch = new CountDownLatch(1);
 			ConfigStoreListener l = new ConfigStoreListener() {
@@ -422,25 +422,25 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 		return this;
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Lifecycle events
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Persist any changes made to this map and signal all listeners.
-	 * 
+	 *
 	 * <p>
 	 * If the underlying contents of the file have changed, this will reload it and apply the changes
 	 * on top of the modified file.
-	 * 
+	 *
 	 * <p>
 	 * Subsequent changes made to the underlying file will also be signaled to all listeners.
-	 * 
+	 *
 	 * <p>
 	 * We try saving the file up to 10 times.
 	 * <br>If the file keeps changing on the file system, we throw an exception.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */
@@ -452,7 +452,7 @@ public class ConfigMap implements ConfigStoreListener {
 				if (i == 10)
 					throw new ConfigException("Unable to store contents of config to store.");
 				String currentContents = store.write(name, contents, newContents);
-				if (currentContents == null) 
+				if (currentContents == null)
 					break;
 				onChange(currentContents);
 			}
@@ -463,14 +463,14 @@ public class ConfigMap implements ConfigStoreListener {
 		return this;
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Listeners
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Registers an event listener on this map.
-	 * 
+	 *
 	 * @param listener The new listener.
 	 * @return This object (for method chaining).
 	 */
@@ -478,10 +478,10 @@ public class ConfigMap implements ConfigStoreListener {
 		listeners.add(listener);
 		return this;
 	}
-	
+
 	/**
 	 * Unregisters an event listener from this map.
-	 * 
+	 *
 	 * @param listener The listener to remove.
 	 * @return This object (for method chaining).
 	 */
@@ -489,7 +489,7 @@ public class ConfigMap implements ConfigStoreListener {
 		listeners.remove(listener);
 		return this;
 	}
-	
+
 	@Override /* ConfigStoreListener */
 	public void onChange(String newContents) {
 		List<ConfigEvent> changes = null;
@@ -498,7 +498,7 @@ public class ConfigMap implements ConfigStoreListener {
 			if (! StringUtils.isEquals(contents, newContents)) {
 				changes = findDiffs(newContents);
 				load(newContents);
-				
+
 				// Reapply our changes on top of the modifications.
 				for (ConfigEvent ce : this.changes)
 					applyChange(false, ce);
@@ -509,7 +509,7 @@ public class ConfigMap implements ConfigStoreListener {
 		if (changes != null && ! changes.isEmpty())
 			signal(changes);
 	}
-	
+
 	@Override /* Object */
 	public String toString() {
 		readLock();
@@ -519,16 +519,16 @@ public class ConfigMap implements ConfigStoreListener {
 			readUnlock();
 		}
 	}
-	
+
 	/**
 	 * Returns the values in this config map as a map of maps.
-	 * 
+	 *
 	 * <p>
 	 * This is considered a snapshot copy of the config map.
-	 * 
+	 *
 	 * <p>
 	 * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.
-	 * 
+	 *
 	 * @return A copy of this config as a map of maps.
 	 */
 	public ObjectMap asMap() {
@@ -549,7 +549,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 	/**
 	 * Serializes this map to the specified writer.
-	 * 
+	 *
 	 * @param w The writer to serialize to.
 	 * @return The same writer passed in.
 	 * @throws IOException
@@ -567,7 +567,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 	/**
 	 * Does a rollback of any changes on this map currently in memory.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ConfigMap rollback() {
@@ -583,7 +583,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return this;
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Private methods
 	//--------------------------------------------------------------------------------
@@ -694,19 +694,19 @@ public class ConfigMap implements ConfigStoreListener {
 			throw new RuntimeException(e);  // Not possible.
 		}
 	}
-	
-	
+
+
 	//---------------------------------------------------------------------------------------------
 	// ConfigSection
 	//---------------------------------------------------------------------------------------------
-	
+
 	class ConfigSection {
 
 		final String name;   // The config section name, or blank if the default section.  Never null.
 
 		final List<String> preLines = Collections.synchronizedList(new ArrayList<String>());
 		private final String rawLine;
-		
+
 		final Map<String,ConfigEntry> oentries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigEntry>());
 		final Map<String,ConfigEntry> entries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigEntry>());
 
@@ -717,19 +717,19 @@ public class ConfigMap implements ConfigStoreListener {
 			this.name = name;
 			this.rawLine = "[" + name + "]";
 		}
-		
+
 		/**
 		 * Constructor.
 		 */
 		ConfigSection(List<String> lines) {
-			
+
 			String name = null, rawLine = null;
-			
+
 			int S1 = 1; // Looking for section.
 			int S2 = 2; // Found section, looking for end.
 			int state = S1;
 			int start = 0;
-			
+
 			for (int i = 0; i < lines.size(); i++) {
 				String l = lines.get(i);
 				char c = StringUtils.firstNonWhitespaceChar(l);
@@ -750,15 +750,15 @@ public class ConfigMap implements ConfigStoreListener {
 							throw new ConfigException("Duplicate entry found in section [{0}] of configuration:  {1}", name, e.key);
 						entries.put(e.key, e);
 						start = i+1;
-					} 
+					}
 				}
 			}
-			
+
 			this.name = name;
 			this.rawLine = rawLine;
 			this.oentries.putAll(entries);
 		}
-		
+
 		ConfigSection addEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
 			ConfigEntry e = new ConfigEntry(key, value, modifiers, comment, preLines);
 			this.entries.put(e.key, e);
@@ -770,11 +770,11 @@ public class ConfigMap implements ConfigStoreListener {
 			this.preLines.addAll(preLines);
 			return this;
 		}
-		
+
 		Writer writeTo(Writer w) throws IOException {
 			for (String s : preLines)
 				w.append(s).append('\n');
-			
+
 			if (! name.equals(""))
 				w.append(rawLine).append('\n');
 			else {
@@ -783,9 +783,9 @@ public class ConfigMap implements ConfigStoreListener {
 					w.append('\n');
 			}
 
-			for (ConfigEntry e : entries.values()) 
+			for (ConfigEntry e : entries.values())
 				e.writeTo(w);
-			
+
 			return w;
 		}
 	}

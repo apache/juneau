@@ -32,7 +32,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public JsoSerializerBuilder(PropertyStore ps) {
@@ -515,7 +515,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

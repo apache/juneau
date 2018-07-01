@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpServletResponse} for mocking purposes.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
@@ -44,11 +44,11 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	private int sc;
 	private String msg;
 	private Map<String,String[]> headerMap = new LinkedHashMap<>();
-	
+
 
 	/**
 	 * Creates a new servlet response.
-	 * 
+	 *
 	 * @return A new response.
 	 */
 	public static MockServletResponse create() {
@@ -57,16 +57,16 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Returns the content length.
-	 * 
+	 *
 	 * @return The content length.
 	 */
 	public long getContentLength() {
 		return contentLength;
 	}
-	
+
 	/**
 	 * Returns the response message.
-	 * 
+	 *
 	 * @return The response message.
 	 */
 	@Override /* MockHttpResponse */
@@ -86,7 +86,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	@Override /* HttpServletResponse */
 	public ServletOutputStream getOutputStream() throws IOException {
-		return new FinishableServletOutputStream(baos); 
+		return new FinishableServletOutputStream(baos);
 	}
 
 	@Override /* HttpServletResponse */
@@ -262,7 +262,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Returns the body of the request as a string.
-	 * 
+	 *
 	 * @return The body of the request as a string.
 	 */
 	public String getBodyAsString() {
@@ -272,10 +272,10 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Throws an {@link AssertionError} if the response status does not match the expected status.
-	 * 
+	 *
 	 * @param status The expected status.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if status does not match.
@@ -285,10 +285,10 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 			throw new MockAssertionError("Response did not have the expected status.\n\tExpected=[{0}]\n\tActual=[{1}]", status, getStatus());
 		return this;
 	}
-	
+
 	/**
 	 * Throws an {@link AssertionError} if the response body does not contain the expected text.
-	 * 
+	 *
 	 * @param text The expected text of the body.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if the body does not contain the expected text.
@@ -301,14 +301,14 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Throws an {@link AssertionError} if the response body does not contain all of the expected substrings.
-	 * 
+	 *
 	 * @param substrings The expected substrings.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if the body does not contain one or more of the expected substrings.
 	 */
 	public MockServletResponse assertBodyContains(String...substrings) throws AssertionError {
-		String text = getBodyAsString(); 
-		for (String substring : substrings) 
+		String text = getBodyAsString();
+		for (String substring : substrings)
 			if (! contains(text, substring))
 				throw new MockAssertionError("Response did not have the expected substring.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
 		return this;
@@ -316,10 +316,10 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Throws an {@link AssertionError} if the response body does not match the specified pattern.
-	 * 
+	 *
 	 * <p>
 	 * A pattern is a simple string containing <js>"*"</js> to represent zero or more arbitrary characters.
-	 * 
+	 *
 	 * @param pattern The pattern to match against.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if the body does not match the specified pattern.
@@ -333,16 +333,16 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Throws an {@link AssertionError} if the response body does not match the specified regular expression.
-	 * 
+	 *
 	 * <p>
 	 * A pattern is a simple string containing <js>"*"</js> to represent zero or more arbitrary characters.
-	 * 
+	 *
 	 * @param regExp The regular expression to match against.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if the body does not match the specified regular expression.
 	 */
 	public MockServletResponse assertBodyMatchesRE(String regExp) throws AssertionError {
-		String text = getBodyAsString(); 
+		String text = getBodyAsString();
 		if (! Pattern.compile(regExp).matcher(text).matches())
 			throw new MockAssertionError("Response did not match expected regular expression.\n\tRegExp=[{0}]\n\tBody=[{1}]", regExp, text);
 		return this;
@@ -350,7 +350,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Throws an {@link AssertionError} if the response does not contain the expected character encoding.
-	 * 
+	 *
 	 * @param value The expected character encoding.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if the response does not contain the expected character encoding.
@@ -363,8 +363,8 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Throws an {@link AssertionError} if the response does not contain the expected header value.
-	 * 
-	 * @param name The header name. 
+	 *
+	 * @param name The header name.
 	 * @param value The expected header value.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if the response does not contain the expected header value.
@@ -377,15 +377,15 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Throws an {@link AssertionError} if the response header does not contain all of the expected substrings.
-	 * 
-	 * @param name The header name. 
+	 *
+	 * @param name The header name.
 	 * @param substrings The expected substrings.
 	 * @return This object (for method chaining).
 	 * @throws AssertionError Thrown if the header does not contain one or more of the expected substrings.
 	 */
 	public MockServletResponse assertHeaderContains(String name, String...substrings) {
-		String text = getHeader(name); 
-		for (String substring : substrings) 
+		String text = getHeader(name);
+		for (String substring : substrings)
 			if (! contains(text, substring))
 				throw new MockAssertionError("Response did not have the expected substring in header {0}.\n\tExpected=[{1}]\n\tHeader=[{2}]", name, substring, text);
 		return this;
@@ -393,14 +393,14 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 	/**
 	 * Returns the body of the request.
-	 * 
+	 *
 	 * @return The body of the request.
 	 */
 	@Override /* MockHttpResponse */
 	public byte[] getBody() {
 		return baos.toByteArray();
 	}
-	
+
 	@Override /* MockHttpResponse */
 	public Map<String,String[]> getHeaders() {
 		return headerMap;

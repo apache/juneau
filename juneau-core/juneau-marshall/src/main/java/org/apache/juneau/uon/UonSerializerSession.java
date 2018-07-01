@@ -23,7 +23,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -65,7 +65,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns the {@link UonSerializer#UON_addBeanTypes} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link UonSerializer#UON_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
@@ -75,7 +75,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Converts the specified output target object to an {@link UonWriter}.
-	 * 
+	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link UonWriter}.
 	 * @throws Exception
@@ -97,7 +97,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization
 	 * method.
-	 * 
+	 *
 	 * @param out The writer to serialize to.
 	 * @param o The object being serialized.
 	 * @param eType The expected type of the object if this is a bean property.

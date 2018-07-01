@@ -24,11 +24,11 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings({"javadoc","serial"})
 public class HtmlDocNavlinksTest {
-	
+
 	//=================================================================================================================
 	// Basic tests
 	//=================================================================================================================
-	
+
 	@RestResource(htmldoc=@HtmlDoc(navlinks={"a01a","a01b"}))
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
@@ -77,7 +77,7 @@ public class HtmlDocNavlinksTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01() throws Exception {
 		a.get("/a01").accept("text/html").execute().assertBodyContains("<nav><ol><li>a01a</li><li>a01b</li></ol></nav>");
@@ -122,11 +122,11 @@ public class HtmlDocNavlinksTest {
 	public void a11() throws Exception {
 		a.get("/a11").accept("text/html").execute().assertBodyContains("<nav><ol><li><a href=\"/a11b\">bar</a></li><li><a href=\"/a11a\">foo</a></li></ol></nav>");
 	}
-	
+
 	//=================================================================================================================
 	// Inheritance
 	//=================================================================================================================
-	
+
 	@RestResource(htmldoc=@HtmlDoc(navlinks={"INHERIT","b01a","b01b"}))
 	public static class B extends A {
 		@RestMethod(path="/b01")
@@ -175,8 +175,8 @@ public class HtmlDocNavlinksTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
-	
+
+
 	@Test
 	public void b01() throws Exception {
 		b.get("/b01").accept("text/html").execute().assertBodyContains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");

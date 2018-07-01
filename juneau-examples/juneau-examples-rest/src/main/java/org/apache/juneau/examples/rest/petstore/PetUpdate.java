@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -25,7 +25,7 @@ public class PetUpdate {
 	private final String species;
 	private final String[] tags;
 	private final PetStatus status;
-	
+
 	@BeanConstructor(properties="id,name,price,species,tags,status")
 	public PetUpdate(long id, String name, float price, String species, String[] tags, PetStatus status) {
 		this.id = id;
@@ -35,7 +35,7 @@ public class PetUpdate {
 		this.tags = tags;
 		this.status = status;
 	}
-	
+
 	public static PetUpdate example() {
 		return new PetUpdate(123l, "Doggie", 9.99f, "doc", new String[] {"friendly","cute"}, PetStatus.AVAILABLE);
 	}

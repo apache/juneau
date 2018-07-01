@@ -29,11 +29,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
- * 
+ *
  * <p>
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestResource">Overview &gt; juneau-rest-server &gt; @RestResource</a>
@@ -47,23 +47,23 @@ public @interface RestResource {
 
 	/**
 	 * Allow body URL parameter.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
 	 * <br>
-	 * For example:  
+	 * For example:
 	 * <p class='bcode'>
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
@@ -73,23 +73,23 @@ public @interface RestResource {
 
 	/**
 	 * Allowed method parameters.
-	 * 
+	 *
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
 	 * <br>
-	 * For example: 
+	 * For example:
 	 * <p class='bcode'>
 	 *  ?method=OPTIONS
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
@@ -99,23 +99,23 @@ public @interface RestResource {
 
 	/**
 	 * Allow header URL parameters.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
 	 * <br>
-	 * For example: 
+	 * For example:
 	 * <p class='bcode'>
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
@@ -125,7 +125,7 @@ public @interface RestResource {
 
 	/**
 	 * Class-level bean filters.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut to add bean filters to the bean contexts of the objects returned by the following methods:
 	 * <ul>
@@ -133,7 +133,7 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getSerializers()}
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
@@ -143,10 +143,10 @@ public @interface RestResource {
 
 	/**
 	 * REST call handler.
-	 * 
+	 *
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
@@ -156,10 +156,10 @@ public @interface RestResource {
 
 	/**
 	 * REST children.
-	 * 
+	 *
 	 * <p>
 	 * Defines children of this resource.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_children}
@@ -168,11 +168,11 @@ public @interface RestResource {
 	Class<?>[] children() default {};
 
 	/**
-	 * Classpath resource finder. 
-	 * 
+	 * Classpath resource finder.
+	 *
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
@@ -182,17 +182,17 @@ public @interface RestResource {
 
 	/**
 	 * Client version header.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
@@ -202,17 +202,17 @@ public @interface RestResource {
 
 	/**
 	 * Optional location of configuration file for this servlet.
-	 * 
+	 *
 	 * <p>
 	 * The configuration file .
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
@@ -221,18 +221,18 @@ public @interface RestResource {
 	String config() default "";
 
 	/**
-	 * Resource context path. 
-	 * 
+	 * Resource context path.
+	 *
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_contextPath}
@@ -242,10 +242,10 @@ public @interface RestResource {
 
 	/**
 	 * Class-level response converters.
-	 * 
+	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_converters}
@@ -255,17 +255,17 @@ public @interface RestResource {
 
 	/**
 	 * Default character encoding.
-	 * 
+	 *
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
@@ -275,17 +275,17 @@ public @interface RestResource {
 
 	/**
 	 * Default request headers.
-	 * 
+	 *
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
@@ -295,17 +295,17 @@ public @interface RestResource {
 
 	/**
 	 * Default response headers.
-	 * 
+	 *
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
@@ -315,21 +315,21 @@ public @interface RestResource {
 
 	/**
 	 * Optional servlet description.
-	 * 
+	 *
 	 * <p>
 	 * It is used to populate the Swagger description field.
 	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceDescription()} method.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
@@ -338,11 +338,11 @@ public @interface RestResource {
 	String[] description() default {};
 
 	/**
-	 * Compression encoders. 
-	 * 
+	 * Compression encoders.
+	 *
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
@@ -352,11 +352,11 @@ public @interface RestResource {
 
 	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Setting a flag is equivalent to setting the same property to <js>"true"</js>.
@@ -366,10 +366,10 @@ public @interface RestResource {
 
 	/**
 	 * Class-level guards.
-	 * 
+	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_guards}
@@ -379,13 +379,13 @@ public @interface RestResource {
 
 	/**
 	 * Provides HTML-doc-specific metadata on this method.
-	 * 
+	 *
 	 * <p>
 	 * Used to customize the output from the HTML Doc serializer.
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/addressBook"</js>,
-	 * 
+	 *
 	 * 		<jc>// Links on the HTML rendition page.
 	 * 		// "request:/..." URIs are relative to the request URI.
 	 * 		// "servlet:/..." URIs are relative to the servlet URI.
@@ -418,7 +418,7 @@ public @interface RestResource {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
@@ -427,11 +427,11 @@ public @interface RestResource {
 	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
-	 * Configuration property:  REST info provider. 
-	 * 
+	 * Configuration property:  REST info provider.
+	 *
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
@@ -441,10 +441,10 @@ public @interface RestResource {
 
 	/**
 	 * REST logger.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the logger to use for logging.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
@@ -454,37 +454,37 @@ public @interface RestResource {
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
-	 * 
+	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
 	 * </ul>
 	 */
 	String maxInput() default "";
-	
+
 	/**
-	 * Messages. 
-	 * 
+	 * Messages.
+	 *
 	 * Identifies the location of the resource bundle for this class.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_messages}
@@ -493,18 +493,18 @@ public @interface RestResource {
 	String messages() default "";
 
 	/**
-	 * Configuration property:  MIME types. 
-	 * 
+	 * Configuration property:  MIME types.
+	 *
 	 * <p>
 	 * Defines MIME-type file type mappings.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
@@ -514,12 +514,12 @@ public @interface RestResource {
 
 	/**
 	 * Java method parameter resolvers.
-	 * 
+	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
 	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
@@ -529,10 +529,10 @@ public @interface RestResource {
 
 	/**
 	 * Parser listener.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
@@ -541,18 +541,18 @@ public @interface RestResource {
 	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 
 	/**
-	 * Parsers. 
-	 * 
+	 * Parsers.
+	 *
 	 * <p>
 	 * If no value is specified, the parsers are inherited from parent class.
 	 * <br>Otherwise, this value overrides the parsers defined on the parent class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link Inherit} to inherit parsers defined on the parent class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link None} to suppress inheriting parsers defined on the parent class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_parsers}
@@ -561,11 +561,11 @@ public @interface RestResource {
 	Class<?>[] parsers() default {};
 
 	/**
-	 * HTTP part parser. 
-	 * 
+	 * HTTP part parser.
+	 *
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
@@ -574,24 +574,24 @@ public @interface RestResource {
 	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
 
 	/**
-	 * HTTP part serializer. 
-	 * 
+	 * HTTP part serializer.
+	 *
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
 	 * </ul>
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
-	
+
 	/**
-	 * Resource path.   
-	 * 
+	 * Resource path.
+	 *
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_path}
@@ -601,7 +601,7 @@ public @interface RestResource {
 
 	/**
 	 * Class-level POJO swaps.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut to add POJO swaps to the bean contexts of the objects returned by the following methods:
 	 * <ul>
@@ -609,7 +609,7 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getSerializers()}
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -619,7 +619,7 @@ public @interface RestResource {
 
 	/**
 	 * Class-level properties.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for specifying class-level properties on this servlet to the objects returned by the following methods:
 	 * <ul>
@@ -627,25 +627,25 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getSerializers()}
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
-	 * 
+	 *
 	 * <p>
 	 * Property values will be converted to the appropriate type.
-	 * 
+	 *
 	 * <p>
 	 * In some cases, properties can be overridden at runtime through the
-	 * {@link RestResponse#prop(String, Object)} method or through an {@link RequestProperties} 
+	 * {@link RestResponse#prop(String, Object)} method or through an {@link RequestProperties}
 	 * method parameter.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String,Object)}
@@ -656,17 +656,17 @@ public @interface RestResource {
 
 	/**
 	 * Render response stack traces in responses.
-	 * 
+	 *
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
@@ -676,10 +676,10 @@ public @interface RestResource {
 
 	/**
 	 * REST resource resolver.
-	 * 
+	 *
 	 * <p>
 	 * The resolver used for resolving child resources.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
@@ -689,11 +689,11 @@ public @interface RestResource {
 
 	/**
 	 * Response handlers.
-	 * 
+	 *
 	 * <p>
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
@@ -703,10 +703,10 @@ public @interface RestResource {
 
 	/**
 	 * Serializer listener.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
@@ -715,18 +715,18 @@ public @interface RestResource {
 	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
 
 	/**
-	 * Serializers. 
-	 * 
+	 * Serializers.
+	 *
 	 * <p>
 	 * If no value is specified, the serializers are inherited from parent class.
 	 * <br>Otherwise, this value overrides the serializers defined on the parent class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link Inherit} to inherit serializers defined on the parent class.
-	 * 
+	 *
 	 * <p>
 	 * Use {@link None} to suppress inheriting serializers defined on the parent class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
@@ -736,13 +736,13 @@ public @interface RestResource {
 
 	/**
 	 * Optional site name.
-	 * 
+	 *
 	 * <p>
 	 * The site name is intended to be a title that can be applied to the entire site.
-	 * 
+	 *
 	 * <p>
 	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
-	 * 
+	 *
 	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
@@ -754,14 +754,14 @@ public @interface RestResource {
 	 * 		}
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestInfoProvider#getSiteName(RestRequest)}
@@ -770,96 +770,96 @@ public @interface RestResource {
 	String siteName() default "";
 
 	/**
-	 * Static file response headers. 
-	 * 
+	 * Static file response headers.
+	 *
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
 	 * </ul>
 	 */
 	String[] staticFileResponseHeaders() default {};
-	
+
 	/**
-	 * Static file mappings. 
-	 * 
+	 * Static file mappings.
+	 *
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
 	 * </ul>
 	 */
 	String[] staticFiles() default {};
-	
+
 	/**
 	 * Supported accept media types.
-	 * 
+	 *
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 */
 	String[] produces() default {};
-	
+
 	/**
 	 * Supported content media types.
-	 * 
+	 *
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 */
 	String[] consumes() default {};
-	
+
 	/**
 	 * Provides swagger-specific metadata on this resource.
-	 * 
+	 *
 	 * <p>
 	 * Used to populate the auto-generated OPTIONS swagger documentation.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/addressBook"</js>,
-	 * 
+	 *
 	 * 		<jc>// Swagger info.</jc>
 	 * 		swagger=@ResourceSwagger({
 	 * 			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
@@ -871,7 +871,7 @@ public @interface RestResource {
 	 * 		})
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='ja'>{@link ResourceSwagger}
@@ -882,20 +882,20 @@ public @interface RestResource {
 
 	/**
 	 * Optional servlet title.
-	 * 
+	 *
 	 * <p>
 	 * It is used to populate the Swagger title field.
 	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceTitle()} method.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Corresponds to the swagger field <code>/info/title</code>.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link RestInfoProvider#getTitle(RestRequest)}
@@ -904,40 +904,40 @@ public @interface RestResource {
 	String[] title() default {};
 
 	/**
-	 * Configuration property:  Use classpath resource caching. 
-	 * 
+	 * Configuration property:  Use classpath resource caching.
+	 *
 	 * <p>
-	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related 
+	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related
 	 * methods) will be cached in memory to speed subsequent lookups.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_useClasspathResourceCaching}
 	 * </ul>
 	 */
 	String useClasspathResourceCaching() default "";
-	
+
 	/**
 	 * Use stack trace hashes.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}

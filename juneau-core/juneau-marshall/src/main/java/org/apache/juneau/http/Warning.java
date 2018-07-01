@@ -14,22 +14,22 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Warning</l> HTTP request/response header.
- * 
+ *
  * <p>
  * A general warning about possible problems with the entity body.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Warning: 199 Miscellaneous warning
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The Warning general-header field is used to carry additional information about the status or transformation of a
  * message which might not be reflected in the message.
  * This information is typically used to warn about a possible lack of semantic transparency from caching operations
  * or transformations applied to the entity body of the message.
- * 
+ *
  * <p>
  * Warning headers are sent with responses using:
  * <p class='bcode'>
@@ -43,21 +43,21 @@ package org.apache.juneau.http;
  * 	warn-text  = quoted-string
  * 	warn-date  = &lt;"&gt; HTTP-date &lt;"&gt;
  * </p>
- * 
+ *
  * <p>
  * A response MAY carry more than one Warning header.
- * 
+ *
  * <p>
  * The warn-text SHOULD be in a natural language and character set that is most likely to be intelligible to the human
  * user receiving the response.
  * This decision MAY be based on any available knowledge, such as the location of the cache or user, the
  * Accept-Language field in a request, the Content-Language field in a response, etc.
  * The default language is English and the default character set is ISO-8859-1.
- * 
+ *
  * <p>
  * If a character set other than ISO-8859-1 is used, it MUST be encoded in the warn-text using the method described in
  * RFC 2047.
- * 
+ *
  * <p>
  * Warning headers can in general be applied to any message, however some specific warn-codes are specific to caches
  * and can only be applied to response messages.
@@ -67,7 +67,7 @@ package org.apache.juneau.http;
  * to that entry except as specified for specific Warning codes.
  * It MUST then add any Warning headers received in the validating response.
  * In other words, Warning headers are those that would be attached to the most recent relevant response.
- * 
+ *
  * <p>
  * When multiple Warning headers are attached to a response, the user agent ought to inform the user of as many of them
  * as possible, in the order that they appear in the response.
@@ -77,13 +77,13 @@ package org.apache.juneau.http;
  * 	<li>Warnings in the user's preferred character set take priority over warnings in other character sets but with
  * identical warn-codes and warn-agents.
  * </ul>
- * 
+ *
  * <p>
  * Systems that generate multiple Warning headers SHOULD order them with this user agent behavior in mind.
- * 
+ *
  * <p>
  * Requirements for the behavior of caches with respect to Warnings are stated in section 13.1.2.
- * 
+ *
  * <p>
  * This is a list of the currently-defined warn-codes, each with a recommended warn-text in English, and a description
  * of its meaning.
@@ -105,18 +105,18 @@ package org.apache.juneau.http;
  * 	<li>299 Miscellaneous persistent warning The warning text MAY include arbitrary information to be presented to a
  * 		human user, or logged. A system receiving this warning MUST NOT take any automated action.
  * </ul>
- * 
+ *
  * <p>
  * If an implementation sends a message with one or more Warning headers whose version is HTTP/1.0 or lower, then the
  * sender MUST include in each warning-value a warn-date that matches the date in the response.
- * 
+ *
  * <p>
  * If an implementation receives a message with a warning-value that includes a warn-date, and that warn-date is
  * different from the Date value in the response, then that warning-value MUST be deleted from the message before
  * storing, forwarding, or using it.
  * (This prevents bad consequences of naive caching of Warning header fields.)
  * If all of the warning-values are deleted for this reason, the Warning header MUST be deleted as well.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -126,7 +126,7 @@ public final class Warning extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>Warning</code> header.
-	 * 
+	 *
 	 * @param value The <code>Warning</code> header string.
 	 * @return The parsed <code>Warning</code> header, or <jk>null</jk> if the string was null.
 	 */

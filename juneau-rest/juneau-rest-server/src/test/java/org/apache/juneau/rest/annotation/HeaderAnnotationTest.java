@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -46,7 +46,7 @@ public class HeaderAnnotationTest {
 	//=================================================================================================================
 	// @Header on POJO
 	//=================================================================================================================
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public class HeaderAnnotationTest {
 	public static class SA {
 
 		@Header(
-			name="H", 
+			name="H",
 			description={"a","b"},
 			type="string"
 		)
@@ -64,9 +64,9 @@ public class HeaderAnnotationTest {
 		}
 		@RestMethod(name=GET,path="/basic")
 		public void sa01(SA01 h) {}
-		
+
 		@Header(
-			name="H", 
+			name="H",
 			api={
 				"description:'a\nb',",
 				"type:'string'"
@@ -79,7 +79,7 @@ public class HeaderAnnotationTest {
 		public void sa02(SA02 h) {}
 
 		@Header(
-			name="H", 
+			name="H",
 			api={
 				"description:'b\nc',",
 				"type:'string'"
@@ -168,7 +168,7 @@ public class HeaderAnnotationTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@RestResource
 	public static class SC {
 
@@ -204,7 +204,7 @@ public class HeaderAnnotationTest {
 				description={"a","b"},
 				type="string"
 			) String h) {}
-		
+
 		@RestMethod(name=GET,path="/api")
 		public void ta02(
 			@Header(
@@ -264,7 +264,7 @@ public class HeaderAnnotationTest {
 
 	@RestResource
 	public static class TB {
-		
+
 		@RestMethod(name=GET,path="/schemaValue")
 		public void tb01(@Header(name="H") String h) {}
 
@@ -290,7 +290,7 @@ public class HeaderAnnotationTest {
 		@RestMethod(name=GET,path="/autoDetectBoolean")
 		public void tbo6(@Header("H") Boolean b) {}
 	}
-	
+
 	@Test
 	public void tb01_Header_onParameter_schema2() throws Exception {
 		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("header", "H");

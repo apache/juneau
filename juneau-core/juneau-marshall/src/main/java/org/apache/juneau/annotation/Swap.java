@@ -21,7 +21,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Associates {@link PojoSwap} and {@link Surrogate} classes with POJOs and bean properties.
- * 
+ *
  * <p>
  * This annotation can be used in the following locations:
  * <ul>
@@ -29,7 +29,7 @@ import org.apache.juneau.transform.*;
  * 	<li>Bean getters/setters/fields.
  * 	<li>Inside the {@link Swaps @Swaps} annotation.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; juneau-marshall &gt; @Swap Annotation</a>
@@ -43,7 +43,7 @@ public @interface Swap {
 
 	/**
 	 * The {@link PojoSwap} and {@link Surrogate} class.
-	 * 
+	 *
 	 * <p>
 	 * A synonym for {@link #value()}.
 	 */
@@ -51,21 +51,21 @@ public @interface Swap {
 
 	/**
 	 * Identifies the media types that this swap is applicable for.
-	 * 
+	 *
 	 * <p>
 	 * In the following example, the swap is only invoked by the JSON serializer:
-	 * 
+	 *
 	 * <p class='bcode'>
 	 * 	<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
 	 * 	<jk>public class</jk> MyBean { ... }
-	 * 
+	 *
 	 * 	<jk>public class</jk> ToStringSwap <jk>extends</jk> PojoSwap&lt;Object,String&gt; {
 	 * 			<jk>public</jk> String swap(BeanSession session, Object o) <jk>throws</jk> Exception {
 	 * 				<jk>return</jk> o.toString();
 	 * 			}
 	 * 		}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; juneau-marshall &gt; Per-media-type PojoSwaps</a>
@@ -75,24 +75,24 @@ public @interface Swap {
 
 	/**
 	 * Identifies a template string along with this swap.
-	 * 
+	 *
 	 * <p>
 	 * Template strings are arbitrary strings associated with swaps that help provide additional context information
 	 * for the swap class.
 	 * They're called 'templates' because their primary purpose is for providing template names, such as Apache FreeMarker
 	 * template names.
-	 * 
+	 *
 	 * <p>
 	 * The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
-	 * 
+	 *
 	 * <p class='bcode'>
 	 * 	<jc>// Our templated swap class.</jc>
 	 * 	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
-	 * 
+	 *
 	 * 		<jk>public</jk> MediaType[] forMediaTypes() {
 	 * 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
 	 * 		}
-	 * 
+	 *
 	 * 		<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
 	 * 			<jk>return</jk> getFreeMarkerReader(template, o);  <jc>// Some method that creates raw HTML.</jc>
 	 * 		}
@@ -102,7 +102,7 @@ public @interface Swap {
 	 * 	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
 	 * 	<jk>public class</jk> MyPojo {}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; juneau-marshall &gt; Templated Swaps</a>
@@ -112,7 +112,7 @@ public @interface Swap {
 
 	/**
 	 * The {@link PojoSwap} and {@link Surrogate} class.
-	 * 
+	 *
 	 * <p>
 	 * A synonym for {@link #impl()}.
 	 */

@@ -27,17 +27,17 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Java bean wrapper class.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows properties on the wrapped
  * object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
- * 
+ *
  * <p>
  * Use the {@link BeanContext} class to create instances of this class.
- * 
+ *
  * <h5 class='topic'>Bean property order</h5>
- * 
+ *
  * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()}
  * methods are as follows:
  * <ul class='spaced-list'>
@@ -48,16 +48,16 @@ import org.apache.juneau.xml.annotation.*;
  * 		If {@link Bean @Bean} annotation is not specified on the class, then the order is the same as that returned
  * 		by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
  * </ul>
- * 
+ *
  * <p>
  * <br>The order can also be overridden through the use of a {@link BeanFilter}.
- * 
+ *
  * <h5 class='topic'>POJO swaps</h5>
- * 
+ *
  * If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties
  * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the
  * property value to and from the serialized form.
- * 
+ *
  * @param <T> Specifies the type of object that this map encapsulates.
  */
 public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T> {
@@ -79,7 +79,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Instance of this class are instantiated through the BeanContext class.
-	 * 
+	 *
 	 * @param session The bean session object that created this bean map.
 	 * @param bean The bean to wrap inside this map.
 	 * @param meta The metadata associated with the bean class.
@@ -95,7 +95,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the metadata associated with this bean map.
-	 * 
+	 *
 	 * @return The metadata associated with this bean map.
 	 */
 	public BeanMeta<T> getMeta() {
@@ -104,7 +104,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the bean session that created this bean map.
-	 * 
+	 *
 	 * @return The bean session that created this bean map.
 	 */
 	public final BeanSession getBeanSession() {
@@ -113,11 +113,11 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the wrapped bean object.
-	 * 
+	 *
 	 * <p>
 	 * Triggers bean creation if bean has read-only properties set through a constructor defined by the
 	 * {@link BeanConstructor @BeanConstructor} annotation.
-	 * 
+	 *
 	 * @return The inner bean object.
 	 */
 	public T getBean() {
@@ -142,15 +142,15 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the wrapped bean object.
-	 * 
+	 *
 	 * <p>
 	 * If <code>create</code> is <jk>false</jk>, then this method may return <jk>null</jk> if the bean has read-only
 	 * properties set through a constructor defined by the {@link BeanConstructor @BeanConstructor} annotation.
-	 * 
+	 *
 	 * <p>
 	 * This method does NOT always return the bean in it's final state.
 	 * Array properties temporary stored as ArrayLists are not finalized until the {@link #getBean()} method is called.
-	 * 
+	 *
 	 * @param create If bean hasn't been instantiated yet, then instantiate it.
 	 * @return The inner bean object.
 	 */
@@ -178,7 +178,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Sets a property on the bean.
-	 * 
+	 *
 	 * <p>
 	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then you must pass
 	 * in a transformed value.
@@ -186,22 +186,22 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
 	 * {@link Swap#value() @Swap.value()} annotation, the value being passed in must be
 	 * a String containing an ISO8601 date-time string value.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
-	 * 
+	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
 	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().pojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);
-	 * 
+	 *
 	 * 	<jc>// Set the field</jc>
 	 * 	myBeanMap.put(<js>"birthDate"</js>, <js>"'1901-03-03T04:05:06-5000'"</js>);
 	 * </p>
-	 * 
+	 *
 	 * @param property The name of the property to set.
 	 * @param value The value to set the property to.
 	 * @return
@@ -225,7 +225,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			if (property.equals(beanTypePropertyName))
 				return null;
-			
+
 			p = meta.properties.get("*");
 			if (p == null)
 				throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
@@ -237,11 +237,11 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Add a value to a collection or array property.
-	 * 
+	 *
 	 * <p>
 	 * As a general rule, adding to arrays is not recommended since the array must be recreate each time this method is
 	 * called.
-	 * 
+	 *
 	 * @param property Property name or child-element name (if {@link Xml#childName() @Xml.childName()} is specified).
 	 * @param value The value to add to the collection or array.
 	 */
@@ -258,7 +258,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Gets a property on the bean.
-	 * 
+	 *
 	 * <p>
 	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then this method
 	 * will return the transformed value.
@@ -266,23 +266,23 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
 	 * {@link Swap#value() @Swap.value()} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
 	 * 	p.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
-	 * 
+	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
 	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().pojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);
-	 * 
+	 *
 	 * 	<jc>// Get the field as a string (i.e. "'1901-03-03T04:05:06-5000'")</jc>
 	 * 	String s = myBeanMap.get(<js>"birthDate"</js>);
 	 * </p>
-	 * 
+	 *
 	 * @param property The name of the property to get.
 	 * @throws
 	 * 	RuntimeException if any of the following occur.
@@ -306,7 +306,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Same as {@link #get(Object)} except bypasses the POJO filter associated with the bean property or bean filter
 	 * associated with the bean class.
-	 * 
+	 *
 	 * @param property The name of the property to get.
 	 * @return The raw property value.
 	 */
@@ -320,12 +320,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Convenience method for setting multiple property values by passing in JSON text.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	aPersonBean.load(<js>"{name:'John Smith',age:21}"</js>)
 	 * </p>
-	 * 
+	 *
 	 * @param input The text that will get parsed into a map and then added to this map.
 	 * @return This object (for method chaining).
 	 * @throws ParseException If the input contains a syntax error or is malformed.
@@ -337,7 +337,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Convenience method for setting multiple property values by passing in a reader.
-	 * 
+	 *
 	 * @param r The text that will get parsed into a map and then added to this map.
 	 * @param p The parser to use to parse the text.
 	 * @return This object (for method chaining).
@@ -351,10 +351,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Convenience method for loading this map with the contents of the specified map.
-	 * 
+	 *
 	 * <p>
 	 * Identical to {@link #putAll(Map)} except as a fluent-style method.
-	 * 
+	 *
 	 * @param entries The map containing the entries to add to this map.
 	 * @return This object (for method chaining).
 	 */
@@ -366,7 +366,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the names of all properties associated with the bean.
-	 * 
+	 *
 	 * <p>
 	 * The returned set is unmodifiable.
 	 */
@@ -388,14 +388,14 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the specified property on this bean map.
-	 * 
+	 *
 	 * <p>
 	 * Allows you to get and set an individual property on a bean without having a handle to the bean itself by using
 	 * the {@link BeanMapEntry#getValue()} and {@link BeanMapEntry#setValue(Object)} methods.
-	 * 
+	 *
 	 * <p>
 	 * This method can also be used to get metadata on a property by calling the {@link BeanMapEntry#getMeta()} method.
-	 * 
+	 *
 	 * @param propertyName The name of the property to look up.
 	 * @return The bean property, or null if the bean has no such property.
 	 */
@@ -408,7 +408,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the metadata on the specified property.
-	 * 
+	 *
 	 * @param propertyName The name of the bean property.
 	 * @return Metadata on the specified property, or <jk>null</jk> if that property does not exist.
 	 */
@@ -421,7 +421,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns the {@link ClassMeta} of the wrapped bean.
-	 * 
+	 *
 	 * @return The class type of the wrapped bean.
 	 */
 	@Override /* Delegate */
@@ -431,10 +431,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Invokes all the getters on this bean and return the values as a list of {@link BeanPropertyValue} objects.
-	 * 
+	 *
 	 * <p>
 	 * This allows a snapshot of all values to be grabbed from a bean in one call.
-	 * 
+	 *
 	 * @param ignoreNulls
 	 * 	Don't return properties whose values are null.
 	 * @param prependVals
@@ -482,7 +482,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Given a string containing variables of the form <code>"{property}"</code>, replaces those variables with property
 	 * values in this bean.
-	 * 
+	 *
 	 * @param s The string containing variables.
 	 * @return A new string with variables replaced, or the same string if no variables were found.
 	 */
@@ -492,7 +492,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns a simple collection of properties for this bean map.
-	 * 
+	 *
 	 * @return A simple collection of properties for this bean map.
 	 */
 	protected Collection<BeanPropertyMeta> getProperties() {
@@ -501,7 +501,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/**
 	 * Returns all the properties associated with the bean.
-	 * 
+	 *
 	 * @return A new set.
 	 */
 	@Override

@@ -16,68 +16,68 @@ import java.io.*;
 
 /**
  * Wraps an existing {@link Writer} where the {@link #close()} method is a no-op.
- * 
+ *
  * <p>
  * Useful in cases where you're working with streams that should not be implicitly closed.
  */
 public final class NoCloseWriter extends Writer {
 
 	private final Writer w;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param w The writer to wrap.
 	 */
 	public NoCloseWriter(Writer w) {
 		this.w = w;
 	}
-	
+
 	@Override /* Writer */
 	public Writer append(char c) throws IOException {
 		return w.append(c);
 	}
-	
+
 	@Override /* Writer */
 	public Writer append(CharSequence csq) throws IOException {
 		return w.append(csq);
 	}
-	
+
 	@Override /* Writer */
 	public Writer append(CharSequence csq, int start, int end) throws IOException {
 		return w.append(csq, start, end);
 	}
-	
+
 	@Override /* Writer */
 	public void close() throws IOException {
 		w.flush();
 	}
-	
+
 	@Override /* Writer */
 	public void flush() throws IOException {
 		w.flush();
 	}
-	
+
 	@Override /* Writer */
 	public void write(char[] cbuf) throws IOException {
 		w.write(cbuf);
 	}
-	
+
 	@Override /* Writer */
 	public void write(char[] cbuf, int off, int len) throws IOException {
 		w.write(cbuf, off, len);
 	}
-	
+
 	@Override /* Writer */
 	public void write(int c) throws IOException {
 		w.write(c);
 	}
-	
+
 	@Override /* Writer */
 	public void write(String str) throws IOException {
 		w.write(str);
 	}
-	
+
 	@Override /* Writer */
 	public void write(String str, int off, int len) throws IOException {
 		w.write(str, off, len);

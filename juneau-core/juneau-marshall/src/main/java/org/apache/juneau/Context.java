@@ -22,22 +22,22 @@ import org.apache.juneau.serializer.*;
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
  * objects.
- * 
+ *
  * <p>
  * Contexts are created through the {@link ContextBuilder#build()} method (and subclasses of {@link ContextBuilder}).
- * 
+ *
  * <p>
  * Subclasses MUST implement the following constructor:
- * 
+ *
  * <p class='bcode'>
  * 	<jk>public</jk> T(PropertyStore);
  * </p>
- * 
+ *
  * <p>
  * Besides that restriction, a context object can do anything you desire.
  * <br>However, it MUST be thread-safe and all fields should be declared final to prevent modification.
  * <br>It should NOT be used for storing temporary or state information.
- * 
+ *
  * @see PropertyStore
  */
 public abstract class Context {
@@ -47,10 +47,10 @@ public abstract class Context {
 
 	/**
 	 * Constructor for this class.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses MUST implement the same public constructor.
-	 * 
+	 *
 	 * @param ps The read-only configuration for this context object.
 	 */
 	public Context(PropertyStore ps) {
@@ -60,7 +60,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the raw property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
@@ -70,7 +70,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param c The class to cast or convert the value to.
 	 * @param def The default value.
@@ -82,7 +82,7 @@ public abstract class Context {
 
 	/**
 	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, def)</code>.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
@@ -93,7 +93,7 @@ public abstract class Context {
 
 	/**
 	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, def)</code>.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
@@ -101,10 +101,10 @@ public abstract class Context {
 	public final Integer getIntegerProperty(String key, Integer def) {
 		return getProperty(key, Integer.class, def);
 	}
-	
+
 	/**
 	 * Shortcut for calling <code>getProperty(key, Long.<jk>class</jk>, def)</code>.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
@@ -112,10 +112,10 @@ public abstract class Context {
 	public final Long getLongProperty(String key, Long def) {
 		return getProperty(key, Long.class, def);
 	}
-	
+
 	/**
 	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, def)</code>.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
@@ -126,7 +126,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the class property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default value.
@@ -135,10 +135,10 @@ public abstract class Context {
 	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type, Class<? extends T> def) {
 		return propertyStore.getClassProperty(key, type, def);
 	}
-	
+
 	/**
 	 * Returns the array property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value, or the default value if it doesn't exist.
@@ -146,10 +146,10 @@ public abstract class Context {
 	public final <T> T[] getArrayProperty(String key, Class<T> eType) {
 		return propertyStore.getArrayProperty(key, eType);
 	}
-	
+
 	/**
 	 * Returns the array property value with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value.
@@ -158,10 +158,10 @@ public abstract class Context {
 	public final <T> T[] getArrayProperty(String key, Class<T> eType, T[] def) {
 		return propertyStore.getArrayProperty(key, eType, def);
 	}
-	
+
 	/**
 	 * Returns the class array property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
@@ -171,7 +171,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the class array property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param def The default value.
 	 * @return The property value, or an empty array if it doesn't exist.
@@ -182,7 +182,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the class array property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value, or an empty array if it doesn't exist.
@@ -193,7 +193,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
@@ -201,10 +201,10 @@ public abstract class Context {
 	public final <T> Set<T> getSetProperty(String key, Class<T> eType) {
 		return propertyStore.getSetProperty(key, eType);
 	}
-	
+
 	/**
 	 * Returns the set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value if the property doesn't exist or is empty.
@@ -213,10 +213,10 @@ public abstract class Context {
 	public final <T> Set<T> getSetProperty(String key, Class<T> eType, Set<T> def) {
 		return propertyStore.getSetProperty(key, eType, def);
 	}
-	
+
 	/**
 	 * Returns the class set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
 	 */
@@ -226,7 +226,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the class set property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
@@ -237,7 +237,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
@@ -245,10 +245,10 @@ public abstract class Context {
 	public final <T> List<T> getListProperty(String key, Class<T> eType) {
 		return propertyStore.getListProperty(key, eType);
 	}
-	
+
 	/**
 	 * Returns the list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value if the property doesn't exist or is empty.
@@ -260,7 +260,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the class list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
 	 */
@@ -270,7 +270,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the class list property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
@@ -281,7 +281,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the map property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
@@ -289,10 +289,10 @@ public abstract class Context {
 	public final <T> Map<String,T> getMapProperty(String key, Class<T> eType) {
 		return propertyStore.getMapProperty(key, eType);
 	}
-	
+
 	/**
 	 * Returns the class map property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
 	 */
@@ -302,7 +302,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the class map property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
@@ -313,14 +313,14 @@ public abstract class Context {
 
 	/**
 	 * Returns an instance of the specified class, string, or object property.
-	 * 
+	 *
 	 * <p>
 	 * If instantiating a class, assumes the class has a no-arg constructor.
 	 * Otherwise, throws a runtime exception.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param def 
+	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>, or <jk>null</jk>.
 	 * @return A new property instance.
@@ -331,17 +331,17 @@ public abstract class Context {
 
 	/**
 	 * Returns an instance of the specified class, string, or object property.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param def 
+	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -352,18 +352,18 @@ public abstract class Context {
 
 	/**
 	 * Returns an instance of the specified class, string, or object property.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param outer The outer object if the class we're instantiating is an inner class.
 	 * @param type The class type of the property.
-	 * @param def 
+	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -374,7 +374,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the specified property as an array of instantiated objects.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
@@ -386,15 +386,15 @@ public abstract class Context {
 
 	/**
 	 * Returns the specified property as an array of instantiated objects.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -405,16 +405,16 @@ public abstract class Context {
 
 	/**
 	 * Returns the specified property as an array of instantiated objects.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param outer The outer object if the class we're instantiating is an inner class.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param fuzzyArgs 
-	 * 	Use fuzzy constructor arg matching.  
+	 * @param fuzzyArgs
+	 * 	Use fuzzy constructor arg matching.
 	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
 	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args 
+	 * @param args
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
@@ -425,12 +425,12 @@ public abstract class Context {
 
 	/**
 	 * Returns the keys found in the specified property group.
-	 * 
+	 *
 	 * <p>
 	 * The keys are NOT prefixed with group names.
-	 * 
+	 *
 	 * @param group The group name.
-	 * @return The set of property keys, or an empty set if the group was not found. 
+	 * @return The set of property keys, or an empty set if the group was not found.
 	 */
 	public Set<String> getPropertyKeys(String group) {
 		return propertyStore.getPropertyKeys(group);
@@ -438,20 +438,20 @@ public abstract class Context {
 
 	/**
 	 * Returns the property store associated with this context.
-	 * 
+	 *
 	 * @return The property store associated with this context.
 	 */
 	@BeanIgnore
 	public final PropertyStore getPropertyStore() {
 		return propertyStore;
 	}
-	
+
 	/**
 	 * Creates a builder from this context object.
-	 * 
+	 *
 	 * <p>
 	 * Builders are used to define new contexts (e.g. serializers, parsers) based on existing configurations.
-	 * 
+	 *
 	 * @return A new ContextBuilder object.
 	 */
 	public ContextBuilder builder() {
@@ -460,26 +460,26 @@ public abstract class Context {
 
 	/**
 	 * Create a new bean session based on the properties defined on this context.
-	 * 
+	 *
 	 * <p>
 	 * Use this method for creating sessions if you don't need to override any
 	 * properties or locale/timezone currently set on this context.
-	 * 
+	 *
 	 * @return A new session object.
 	 */
 	public Session createSession() {
 		return createSession(createDefaultSessionArgs());
 	}
-	
+
 	/**
 	 * Create a new session based on the properties defined on this context combined with the specified
 	 * runtime args.
-	 * 
+	 *
 	 * <p>
 	 * Use this method for creating sessions if you don't need to override any
 	 * properties or locale/timezone currently set on this context.
-	 * 
-	 * @param args 
+	 *
+	 * @param args
 	 * 	The session arguments.
 	 * @return A new session object.
 	 */
@@ -487,32 +487,32 @@ public abstract class Context {
 
 	/**
 	 * Defines default session arguments used when calling the {@link #createSession()} method.
-	 * 
+	 *
 	 * @return A SessionArgs object, possibly a read-only reusable instance.
 	 */
 	public abstract SessionArgs createDefaultSessionArgs();
 
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
-	 * 
+	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
 	@BeanIgnore
 	public ObjectMap asMap() {
 		return new ObjectMap();
 	}
-	
+
 	@Override /* Object */
 	public final int hashCode() {
 		return hashCode;
 	}
-	
+
 	@Override /* Object */
 	public final boolean equals(Object o) {
 		// Context objects are considered equal if they're the same class and have the same set of properties.
 		if (o == null)
 			return false;
-		if (o.getClass() != this.getClass()) 
+		if (o.getClass() != this.getClass())
 			return false;
 		Context c = (Context)o;
 		return (c.propertyStore.equals(propertyStore));

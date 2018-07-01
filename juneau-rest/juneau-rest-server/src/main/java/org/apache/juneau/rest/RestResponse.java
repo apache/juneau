@@ -32,15 +32,15 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Represents an HTTP response for a REST resource.
- * 
+ *
  * <p>
  * Essentially an extended {@link HttpServletResponse} with some special convenience methods that allow you to easily
  * output POJOs as responses.
- * 
+ *
  * <p>
  * Since this class extends {@link HttpServletResponse}, developers are free to use these convenience methods, or
  * revert to using lower level methods like any other servlet response.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
@@ -48,7 +48,7 @@ import org.apache.juneau.serializer.*;
  * 		res.setOutput(<js>"Simple string response"</js>);
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestResponse">Overview &gt; juneau-rest-server &gt; RestResponse</a>
@@ -120,12 +120,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Gets the serializer group for the response.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Serializers">Overview &gt; juneau-rest-server &gt; Serializers</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The serializer group for the response.
 	 */
 	public SerializerGroup getSerializers() {
@@ -134,7 +134,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns the media types that are valid for <code>Accept</code> headers on the request.
-	 * 
+	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
@@ -144,7 +144,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Returns the codings that are valid for <code>Accept-Encoding</code> and <code>Content-Encoding</code> headers on
 	 * the request.
-	 * 
+	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 * @throws RestServletException
 	 */
@@ -154,13 +154,13 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTTP output on the response.
-	 * 
+	 *
 	 * <p>
 	 * The object type can be anything allowed by the registered response handlers.
-	 * 
+	 *
 	 * <p>
 	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(..., path=<js>"/example2/{personId}"</js>)
@@ -169,7 +169,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		res.setOutput(p);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -178,13 +178,13 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
 	 * 		<br>This distinction affects the {@link #hasOutput()} method behavior.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param output The output to serialize to the connection.
 	 * @return This object (for method chaining).
 	 */
@@ -196,10 +196,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns a programmatic interface for setting properties for the HTML doc view.
-	 * 
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod.htmldoc()} annotation.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Declarative approach.</jc>
@@ -214,20 +214,20 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		)
 	 * 	)
 	 * 	<jk>public</jk> Object doGet(RestResponse res) {
-	 * 		
+	 *
 	 * 		<jc>// Equivalent programmatic approach.</jc>
 	 * 		res.getHtmlDocBuilder()
 	 * 			.header(<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>)
 	 * 			.aside(<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='ja'>{@link RestMethod#htmldoc()}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return A new programmatic interface for setting properties for the HTML doc view.
 	 */
 	public HtmlDocBuilder getHtmlDocBuilder() {
@@ -238,7 +238,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Retrieve the properties active for this request.
-	 * 
+	 *
 	 * <p>
 	 * This contains all resource and method level properties from the following:
 	 * <ul>
@@ -246,12 +246,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<li class='ja'>{@link RestMethod#properties()}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * The returned object is modifiable and allows you to override session-level properties before
 	 * they get passed to the serializers.
 	 * <br>However, properties are open-ended, and can be used for any purpose.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
@@ -260,21 +260,21 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		}
 	 * 	)
 	 * 	<jk>public</jk> Map doGet(RestResponse res, <ja>@Query</ja>(<js>"sortMaps"</js>) Boolean sortMaps) {
-	 * 		
+	 *
 	 * 		<jc>// Override value if specified through query parameter.</jc>
 	 * 		<jk>if</jk> (sortMaps != <jk>null</jk>)
 	 * 			res.getProperties().put(<jsf>SERIALIZER_sortMaps</jsf>, sortMaps);
-	 * 
+	 *
 	 * 		<jk>return</jk> <jsm>getMyMap</jsm>();
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; juneau-rest-server &gt; Properties</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The properties active for this request.
 	 */
 	public RequestProperties getProperties() {
@@ -283,7 +283,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Shortcut for calling <code>getProperties().append(name, value);</code> fluently.
-	 * 
+	 *
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
@@ -295,16 +295,16 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Shortcut method that allows you to use var-args to simplify setting array output.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Instead of...</jc>
 	 * 	response.setOutput(<jk>new</jk> Object[]{x,y,z});
-	 * 
+	 *
 	 * 	<jc>// ...call this...</jc>
 	 * 	response.setOutput(x,y,z);
 	 * </p>
-	 * 
+	 *
 	 * @param output The output to serialize to the connection.
 	 * @return This object (for method chaining).
 	 */
@@ -315,7 +315,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns the output that was set by calling {@link #setOutput(Object)}.
-	 * 
+	 *
 	 * @return The output object.
 	 */
 	public Object getOutput() {
@@ -324,7 +324,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns <jk>true</jk> if this response has any output associated with it.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #setOutput(Object)} has been called, even if the value passed was <jk>null</jk>.
 	 */
 	public boolean hasOutput() {
@@ -333,7 +333,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the output to a plain-text message regardless of the content type.
-	 * 
+	 *
 	 * @param text The output text to send.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -347,7 +347,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Equivalent to {@link HttpServletResponse#getOutputStream()}, except wraps the output stream if an {@link Encoder}
 	 * was found that matched the <code>Accept-Encoding</code> header.
-	 * 
+	 *
 	 * @return A negotiated output stream.
 	 * @throws NotAcceptable If unsupported Accept-Encoding value specified.
 	 * @throws IOException
@@ -356,7 +356,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		if (os == null) {
 			Encoder encoder = null;
 			EncoderGroup encoders = restJavaMethod.encoders;
-			
+
 			String ae = request.getHeader("Accept-Encoding");
 			if (! (ae == null || ae.isEmpty())) {
 				EncoderMatch match = encoders.getEncoderMatch(ae);
@@ -379,7 +379,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			}
 			@SuppressWarnings("resource")
 			ServletOutputStream sos = getOutputStream();
-			os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos)); 
+			os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos));
 		}
 		return os;
 	}
@@ -393,7 +393,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getOutputStream()} has been called.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getOutputStream()} has been called.
 	 */
 	public boolean getOutputStreamCalled() {
@@ -402,7 +402,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns the writer to the response body.
-	 * 
+	 *
 	 * <p>
 	 * This methods bypasses any specified encoders and returns a regular unbuffered writer.
 	 * Use the {@link #getNegotiatedWriter()} method if you want to use the matched encoder (if any).
@@ -414,14 +414,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Convenience method meant to be used when rendering directly to a browser with no buffering.
-	 * 
+	 *
 	 * <p>
 	 * Sets the header <js>"x-content-type-options=nosniff"</js> so that output is rendered immediately on IE and Chrome
 	 * without any buffering for content-type sniffing.
-	 * 
+	 *
 	 * <p>
 	 * This can be useful if you want to render a streaming 'console' on a web page.
-	 * 
+	 *
 	 * @param contentType The value to set as the <code>Content-Type</code> on the response.
 	 * @return The raw writer.
 	 * @throws IOException
@@ -436,7 +436,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Equivalent to {@link HttpServletResponse#getWriter()}, except wraps the output stream if an {@link Encoder} was
 	 * found that matched the <code>Accept-Encoding</code> header and sets the <code>Content-Encoding</code>
 	 * header to the appropriate value.
-	 * 
+	 *
 	 * @return The negotiated writer.
 	 * @throws NotAcceptable If unsupported charset in request header Accept-Charset.
 	 * @throws IOException
@@ -467,7 +467,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns the <code>Content-Type</code> header stripped of the charset attribute if present.
-	 * 
+	 *
 	 * @return The <code>media-type</code> portion of the <code>Content-Type</code> header.
 	 */
 	public MediaType getMediaType() {
@@ -476,7 +476,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Redirects to the specified URI.
-	 * 
+	 *
 	 * <p>
 	 * Relative URIs are always interpreted as relative to the context root.
 	 * This is similar to how WAS handles redirect requests, and is different from how Tomcat handles redirect requests.
@@ -491,7 +491,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns the HTTP-part serializer associated with this response.
-	 * 
+	 *
 	 * @return The HTTP-part serializer associated with this response.
 	 */
 	public HttpPartSerializer getPartSerializer() {

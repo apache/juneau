@@ -16,7 +16,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
- * 
+ *
  * <p>
  * More precisely, uses the {@link ClassUtils#toString(Object)} method to stringify objects.
  */

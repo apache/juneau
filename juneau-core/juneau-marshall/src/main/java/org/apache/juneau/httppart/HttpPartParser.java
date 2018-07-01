@@ -17,7 +17,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
- * 
+ *
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
@@ -25,7 +25,7 @@ import org.apache.juneau.parser.*;
  * 	<li class='jc'>{@link org.apache.juneau.httppart.uon.UonPartParser} - Parts encoded in UON notation.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parts encoded in plain text.
  * </ul>
- * 
+ *
  * <p>
  * Implementations must include either a public no-args constructor or a public constructor that takes in a single
  * {@link PropertyStore} object.
@@ -34,20 +34,20 @@ public interface HttpPartParser {
 
 	/**
 	 * Represent "no" part parser.
-	 * 
+	 *
 	 * <p>
 	 * Used to represent the absence of a part parser in annotations.
 	 */
 	public static interface Null extends HttpPartParser {}
-	
+
 	/**
 	 * Converts the specified input to the specified class type.
-	 * 
+	 *
 	 * @param partType The part type being parsed.
-	 * @param schema 
+	 * @param schema
 	 * 	Schema information about the part.
 	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.  
+	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
 	 * @param type The category of value being parsed.
 	 * @return The parsed value.

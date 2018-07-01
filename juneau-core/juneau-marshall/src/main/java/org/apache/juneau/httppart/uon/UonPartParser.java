@@ -21,9 +21,9 @@ import org.apache.juneau.uon.*;
 
 /**
  * Parses HTTP headers, query/form-data parameters, and path variables into POJOs.
- * 
+ *
  * <p>
- * This parser expects UON notation for all parts by default. 
+ * This parser expects UON notation for all parts by default.
  */
 @SuppressWarnings({ "unchecked" })
 public class UonPartParser extends UonParser implements HttpPartParser {
@@ -42,13 +42,13 @@ public class UonPartParser extends UonParser implements HttpPartParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public UonPartParser(PropertyStore ps) {
 		super(
 			ps.builder()
-				.build(), 
+				.build(),
 			"application/x-www-form-urlencoded"
 		);
 	}
@@ -60,14 +60,14 @@ public class UonPartParser extends UonParser implements HttpPartParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link UonPartParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> UonPartParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link UonPartParserBuilder} object.
 	 */
 	public static UonPartParserBuilder create() {
@@ -76,7 +76,7 @@ public class UonPartParser extends UonParser implements HttpPartParser {
 
 	/**
 	 * Convenience method for calling the parse method without a schema object.
-	 * 
+	 *
 	 * @param partType The part type being parsed.
 	 * @param in The input being parsed.
 	 * @param type The category of value being parsed.
@@ -87,7 +87,7 @@ public class UonPartParser extends UonParser implements HttpPartParser {
 	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
 		return parse(partType, null, in, type);
 	}
-	
+
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
 		if (in == null)

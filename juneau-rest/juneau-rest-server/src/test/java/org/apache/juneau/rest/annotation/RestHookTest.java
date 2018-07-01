@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -41,7 +41,7 @@ public class RestHookTest {
 	//=================================================================================================================
 	// @RestHook(PRE_CALL)
 	//=================================================================================================================
-	
+
 	@RestResource(
 		parsers=A01.class,
 		properties={
@@ -210,11 +210,11 @@ public class RestHookTest {
 		b.put("/propertiesOverriddenProgramatically", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s3");
 		b.put("/propertiesOverriddenProgramatically", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
 	}
-	
+
 	//====================================================================================================
 	// @RestHook(INIT)
 	//====================================================================================================
-	
+
 	@RestResource(children={C_Super.class,C_Sub.class})
 	public static class C {}
 	static MockRest c = MockRest.create(C.class);
@@ -391,7 +391,7 @@ public class RestHookTest {
 	)
 	public static class E {}
 	static MockRest e = MockRest.create(E.class);
-	
+
 	@RestResource(path="/super")
 	public static class E_Super {
 		protected ObjectList events = new ObjectList();
@@ -480,7 +480,7 @@ public class RestHookTest {
 	//====================================================================================================
 	// @RestHook(START_CALL)
 	//====================================================================================================
-	
+
 	@RestResource
 	public static class F extends F_Parent {
 		private boolean start3Called;
@@ -506,7 +506,7 @@ public class RestHookTest {
 		}
 	}
 	static MockRest f = MockRest.create(F.class);
-	
+
 	public static class F_Parent {
 		private boolean start1Called;
 		@RestHook(START_CALL)
@@ -531,7 +531,7 @@ public class RestHookTest {
 	//====================================================================================================
 	// @RestHook(PRE_CALL)
 	//====================================================================================================
-	
+
 	@RestResource
 	public static class G extends G_Parent {
 		private boolean pre3Called;
@@ -557,7 +557,7 @@ public class RestHookTest {
 		}
 	}
 	static MockRest g = MockRest.create(G.class);
-	
+
 	public static class G_Parent {
 		private boolean pre1Called;
 		@RestHook(PRE_CALL)
@@ -573,7 +573,7 @@ public class RestHookTest {
 			res.setHeader("pre2-called", "true");
 		}
 	}
-	
+
 	@Test
 	public void g01_preCall() throws Exception {
 		g.get("/").execute().assertBody("{'1':'true','2':'true','3':'true','4':'true'}");
@@ -582,7 +582,7 @@ public class RestHookTest {
 	//====================================================================================================
 	// @RestHook(POST_CALL)
 	//====================================================================================================
-	
+
 	@RestResource
 	public static class H extends H_Parent {
 		private boolean post3Called;
@@ -604,7 +604,7 @@ public class RestHookTest {
 		}
 	}
 	static MockRest h = MockRest.create(H.class);
-	
+
 	public static class H_Parent {
 		private boolean post1Called;
 		@RestHook(POST_CALL)

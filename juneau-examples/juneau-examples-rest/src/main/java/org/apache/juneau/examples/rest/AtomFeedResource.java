@@ -105,8 +105,8 @@ public class AtomFeedResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name=GET, 
-		path="/", 
+		name=GET,
+		path="/",
 		summary="Get the sample ATOM feed"
 	)
 	public Feed getFeed() throws Exception {
@@ -114,8 +114,8 @@ public class AtomFeedResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name=PUT, 
-		path="/", 
+		name=PUT,
+		path="/",
 		summary="Overwrite the sample ATOM feed",
 		description="Replaces the feed with the specified content, and then mirrors it as the response."
 	)

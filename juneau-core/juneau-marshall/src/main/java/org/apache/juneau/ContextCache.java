@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -19,11 +19,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * Stores a cache of {@link Context} instances mapped by the property stores used to create them.
- * 
+ *
  * <p>
  * The purpose of this class is to reuse instances of bean contexts, serializers, and parsers when they're being
  * re-created with previously-used property stores.
- * 
+ *
  * <p>
  * Since serializers and parsers are immutable and thread-safe, we reuse them whenever possible.
  */
@@ -34,9 +34,9 @@ public class ContextCache {
 	 * Reusable cache instance.
 	 */
 	public static final ContextCache INSTANCE = new ContextCache();
-	
+
 	private final static boolean USE_DEEP_MATCHING = Boolean.getBoolean("ContextCache.useDeepMatching");
-	
+
 	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<Integer,CacheEntry>> contextCache = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Class<?>,String[]> prefixCache = new ConcurrentHashMap<>();
 
@@ -63,7 +63,7 @@ public class ContextCache {
 			);
 		}
 	}
-	
+
 	static void logCache(Class<?> contextClass, boolean wasCached) {
 		if (TRACK_CACHE_HITS) {
 			synchronized(ContextCache.class) {
@@ -83,29 +83,29 @@ public class ContextCache {
 	static class CacheHit {
 		public int creates, cached;
 	}
-	
+
 	ContextCache() {}
-	
+
 	/**
 	 * Creates a new instance of the specified context-based class, or an existing instance if one with the same
 	 * property store was already created.
-	 * 
+	 *
 	 * @param c The instance of the class to create.
 	 * @param ps The property store to use to create the class.
-	 * @return The 
+	 * @return The
 	 */
 	public <T extends Context> T create(Class<T> c, PropertyStore ps) {
 		ConcurrentHashMap<Integer,CacheEntry> m = getContextCache(c);
 		String[] prefixes = getPrefixes(c);
-		
+
 		Integer hashCode = ps.hashCode(prefixes);
 		CacheEntry ce = m.get(hashCode);
 
-		if (ce != null && USE_DEEP_MATCHING && ! ce.ps.equals(ps)) 
+		if (ce != null && USE_DEEP_MATCHING && ! ce.ps.equals(ps))
 			throw new ContextRuntimeException("Property store hashcode mismatch!");
 
 		logCache(c, ce != null);
-		
+
 		if (ce == null) {
 			try {
 				ce = new CacheEntry(ps, newInstance(c, ps));
@@ -116,10 +116,10 @@ public class ContextCache {
 			}
 			m.putIfAbsent(hashCode, ce);
 		}
-		
+
 		return (T)ce.context;
 	}
-	
+
 	private ConcurrentHashMap<Integer,CacheEntry> getContextCache(Class<?> c) {
 		ConcurrentHashMap<Integer,CacheEntry> m = contextCache.get(c);
 		if (m == null) {
@@ -130,7 +130,7 @@ public class ContextCache {
 		}
 		return m;
 	}
-	
+
 	private String[] getPrefixes(Class<?> c) {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
@@ -144,7 +144,7 @@ public class ContextCache {
 		}
 		return prefixes;
 	}
-	
+
 	private <T> T newInstance(Class<T> cc, PropertyStore ps) throws Exception {
 		return (T)ClassUtils.newInstance(Context.class, cc, true, ps);
 	}
@@ -152,7 +152,7 @@ public class ContextCache {
 	private static class CacheEntry {
 		final PropertyStore ps;
 		final Context context;
-		
+
 		CacheEntry(PropertyStore ps, Context context) {
 			this.ps = ps;
 			this.context = context;

@@ -63,7 +63,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	final EncoderGroup encoders;
 	final HttpPartSerializer partSerializer;
 	final HttpPartParser partParser;
-	final Map<String,Object> 
+	final Map<String,Object>
 		defaultRequestHeaders,
 		defaultQuery,
 		defaultFormData;
@@ -71,7 +71,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	final long maxInput;
 	final BeanContext beanContext;
 	final Map<String,Widget> widgets;
-	final List<MediaType> 
+	final List<MediaType>
 		supportedAcceptTypes,
 		supportedContentTypes;
 
@@ -136,7 +136,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				RestMethod m = method.getAnnotation(RestMethod.class);
 				if (m == null)
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
-				
+
 				VarResolver vr = context.getVarResolver();
 
 				serializers = context.getSerializers();
@@ -172,12 +172,12 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				ParserBuilder uepb = null;
 				BeanContextBuilder bcb = null;
 				PropertyStore cps = context.getPropertyStore();
-				
+
 				Object[] mSerializers = merge(cps.getArrayProperty(REST_serializers, Object.class), m.serializers());
 				Object[] mParsers = merge(cps.getArrayProperty(REST_parsers, Object.class), m.parsers());
 				Object[] mPojoSwaps = merge(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
 				Object[] mBeanFilters = merge(cps.getArrayProperty(BEAN_beanFilters, Object.class), m.beanFilters());
-				
+
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
 						|| m.bpx().length > 0) {
@@ -225,7 +225,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				PropertyStore ps = context.getPropertyStore();
 				ps = ps.builder().set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps).build();
-				
+
 				if (sgb != null) {
 					sgb.apply(ps);
 					for (Property p1 : m.properties())
@@ -281,7 +281,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					uepb.beanFilters(mBeanFilters);
 					uepb.pojoSwaps(mPojoSwaps);
 				}
-				
+
 				if (bcb != null) {
 					bcb.apply(ps);
 					for (Property p1 : m.properties())
@@ -291,7 +291,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					bcb.beanFilters(mBeanFilters);
 					bcb.pojoSwaps(mPojoSwaps);
 				}
-				
+
 				if (m.properties().length > 0 || m.flags().length > 0) {
 					properties = new RestMethodProperties(properties);
 					for (Property p1 : m.properties())
@@ -362,7 +362,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				pathPattern = new UrlPathPattern(p);
 
-				if (sgb != null) 
+				if (sgb != null)
 					serializers = sgb.build();
 				if (pgb != null)
 					parsers = pgb.build();
@@ -373,19 +373,19 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				if (bcb != null)
 					beanContext = bcb.build();
 
-				supportedAcceptTypes = 
-					m.produces().length > 0 
-					? immutableList(MediaType.forStrings(resolveVars(vr, m.produces()))) 
+				supportedAcceptTypes =
+					m.produces().length > 0
+					? immutableList(MediaType.forStrings(resolveVars(vr, m.produces())))
 					: serializers.getSupportedMediaTypes();
 				supportedContentTypes =
-					m.consumes().length > 0 
-					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes()))) 
+					m.consumes().length > 0
+					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes())))
 					: parsers.getSupportedMediaTypes();
-					
+
 				methodParams = context.findParams(method, pathPattern, false);
-				
+
 				methodReturn = new RestMethodReturn(method.getGenericReturnType());
-				
+
 				methodThrowns = new RestMethodThrown[method.getExceptionTypes().length];
 				for (int i = 0; i < methodThrowns.length; i++)
 					methodThrowns[i] = new RestMethodThrown(method.getExceptionTypes()[i]);
@@ -399,7 +399,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if this Java method has any guards or matchers.
 	 */
@@ -435,7 +435,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 	/**
 	 * Workhorse method.
-	 * 
+	 *
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
@@ -614,10 +614,10 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	public int hashCode() {
 		return method.hashCode();
 	}
-	
+
 	static String[] resolveVars(VarResolver vr, String[] in) {
 		String[] out = new String[in.length];
-		for (int i = 0; i < in.length; i++) 
+		for (int i = 0; i < in.length; i++)
 			out[i] = vr.resolve(in[i]);
 		return out;
 	}

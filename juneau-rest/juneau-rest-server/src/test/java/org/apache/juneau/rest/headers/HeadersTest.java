@@ -172,7 +172,7 @@ public class HeadersTest {
 			return new String[]{"*"};
 		}
 	}
-	
+
 	@Test
 	public void a01a_accept() throws Exception {
 		a.get("/accept").accept("text/foo").execute().assertBody("text/foo");
@@ -404,7 +404,7 @@ public class HeadersTest {
 	public void a27b_warning_query() throws Exception {
 		a.get("/warning?Warning=foo").execute().assertBody("foo");
 	}
-	
+
 	//====================================================================================================
 	// Custom header.
 	//====================================================================================================
@@ -417,7 +417,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	public static class CustomHeaderParam extends RestMethodParam {
 		public CustomHeaderParam() {
 			super(RestParamType.HEADER, "Custom", CustomHeader.class);
@@ -438,7 +438,7 @@ public class HeadersTest {
 			return value;
 		}
 	}
-	
+
 	@Test
 	public void b01a_customHeader() throws Exception {
 		b.get("/").header("Custom", "foo").execute().assertBody("foo");
@@ -447,7 +447,7 @@ public class HeadersTest {
 	public void b01b_customHeader_query() throws Exception {
 		b.get("?Custom=foo").execute().assertBody("foo");
 	}
-	
+
 	//====================================================================================================
 	// Default values - Default request headers
 	//====================================================================================================
@@ -463,7 +463,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest c = MockRest.create(C.class);
-	
+
 	@Test
 	public void c01_defaultRequestHeaders_default() throws Exception {
 		c.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
@@ -492,7 +492,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest d = MockRest.create(D.class);
-	
+
 	@Test
 	public void d01_defaultRequestHeadersCaseInsensitive_default() throws Exception {
 		d.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
@@ -521,7 +521,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest e = MockRest.create(E.class);
-	
+
 	@Test
 	public void e01_annotatedHeaders_default() throws Exception {
 		e.get("/").execute().assertBody("{h1:null,h2:null,h3:null}");
@@ -550,7 +550,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest f = MockRest.create(F.class);
-	
+
 	@Test
 	public void f01_annotatedHeadersCaseInsensitive_default() throws Exception {
 		f.get("/").execute().assertBody("{h1:null,h2:null,h3:null}");
@@ -579,7 +579,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest g = MockRest.create(G.class);
-	
+
 	@Test
 	public void g01_annotatedHeadersDefault_default() throws Exception {
 		g.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
@@ -592,7 +592,7 @@ public class HeadersTest {
 	public void g03_annotatedHeadersDefault_override_caseInsensitive() throws Exception {
 		g.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
-	
+
 	@RestResource
 	public static class GB {
 		@RestMethod(name=GET)
@@ -604,7 +604,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest gb = MockRest.create(GB.class);
-	
+
 	@Test
 	public void gb01_annotatedHeadersDefault_default() throws Exception {
 		gb.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
@@ -633,7 +633,7 @@ public class HeadersTest {
 		}
 	}
 	static MockRest h = MockRest.create(H.class);
-	
+
 	@Test
 	public void h01_annotatedAndDefaultHeaders_default() throws Exception {
 		h.get("/").execute().assertBody("{h1:'4',h2:'5',h3:'6'}");

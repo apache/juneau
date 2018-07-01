@@ -26,17 +26,17 @@ public final class AsciiSet {
 
 	/**
 	 * Creates an ASCII set with the specified characters.
-	 * 
+	 *
 	 * @param chars The characters to keep in this store.
 	 * @return A new object.
 	 */
 	public static AsciiSet create(String chars) {
 		return new Builder().chars(chars).build();
 	}
-	
+
 	/**
 	 * Creates a builder for an ASCII set.
-	 * 
+	 *
 	 * @return A new builder.
 	 */
 	public static AsciiSet.Builder create() {
@@ -45,7 +45,7 @@ public final class AsciiSet {
 
 	/**
 	 * Copies an existing {@link AsciiSet} so that you can augment it with additional values.
-	 * 
+	 *
 	 * @return A builder initialized to the same characters in the copied set.
 	 */
 	public AsciiSet.Builder copy() {
@@ -60,10 +60,10 @@ public final class AsciiSet {
 	 */
 	public static class Builder {
 		final boolean[] store = new boolean[128];
-		
+
 		/**
 		 * Adds a range of characters to this set.
-		 * 
+		 *
 		 * @param start The start character.
 		 * @param end The end character.
 		 * @return This object (for method chaining).
@@ -74,10 +74,10 @@ public final class AsciiSet {
 					store[c] = true;
 			return this;
 		}
-		
+
 		/**
 		 * Shortcut for calling multiple ranges.
-		 * 
+		 *
 		 * @param s Strings of the form "A-Z" where A and Z represent the first and last characters in the range.
 		 * @return This object (for method chaining).
 		 */
@@ -89,10 +89,10 @@ public final class AsciiSet {
 			}
 			return this;
 		}
-		
+
 		/**
 		 * Adds a set of characters to this set.
-		 * 
+		 *
 		 * @param chars The characters to keep in this store.
 		 * @return This object (for method chaining).
 		 */
@@ -104,21 +104,21 @@ public final class AsciiSet {
 			}
 			return this;
 		}
-		
+
 		/**
 		 * Create a new {@link AsciiSet} object with the contents of this builder.
-		 * 
+		 *
 		 * @return A new {link AsciiSet} object.
 		 */
 		public AsciiSet build() {
 			return new AsciiSet(store);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
-	 * 
+	 *
 	 * @param c The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
@@ -130,7 +130,7 @@ public final class AsciiSet {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
-	 * 
+	 *
 	 * @param c The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
@@ -142,7 +142,7 @@ public final class AsciiSet {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains at least one character in this set.
-	 * 
+	 *
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if the string is not null and contains at least one character in this set.
 	 */
@@ -157,9 +157,9 @@ public final class AsciiSet {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains only characters in this set.
-	 * 
+	 *
 	 * @param s The string to test.
-	 * @return 
+	 * @return
 	 * 	<jk>true</jk> if the string contains only characters in this set.
 	 * 	<br>Nulls always return <jk>false</jk>.
 	 * 	<br>Blanks always return <jk>true</jk>.

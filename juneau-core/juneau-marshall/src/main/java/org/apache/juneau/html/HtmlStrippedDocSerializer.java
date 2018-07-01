@@ -17,15 +17,15 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJOs to HTTP responses as stripped HTML.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>text/html+stripped</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/html</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Produces the same output as {@link HtmlDocSerializer}, but without the header and body tags and page title and
  * description.
  * Used primarily for JUnit testing the {@link HtmlDocSerializer} class.
@@ -34,7 +34,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public HtmlStrippedDocSerializer(PropertyStore ps) {
@@ -43,7 +43,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces

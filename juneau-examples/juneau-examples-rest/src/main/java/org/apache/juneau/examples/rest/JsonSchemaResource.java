@@ -86,8 +86,8 @@ public class JsonSchemaResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name=GET, 
-		path="/", 
+		name=GET,
+		path="/",
 		summary="Get the JSON-Schema document"
 	)
 	public JsonSchema getSchema() throws Exception {
@@ -95,8 +95,8 @@ public class JsonSchemaResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name=PUT, 
-		path="/", 
+		name=PUT,
+		path="/",
 		summary="Overwrite the JSON-Schema document",
 		description="Replaces the schema document with the specified content, and then mirrors it as the response."
 	)

@@ -29,7 +29,7 @@ public class JsonClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public JsonClassMeta(ClassMeta<?> cm) {
@@ -44,7 +44,7 @@ public class JsonClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Json @Json} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Json getAnnotation() {
@@ -53,7 +53,7 @@ public class JsonClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Json#wrapperAttr() @Json.wrapperAttr()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getWrapperAttr() {

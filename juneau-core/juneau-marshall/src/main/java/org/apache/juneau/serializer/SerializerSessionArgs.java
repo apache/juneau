@@ -20,7 +20,7 @@ import org.apache.juneau.http.*;
 
 /**
  * Runtime arguments common to all serializer sessions.
- * 
+ *
  * <p>
  * This object specifies information such as session locale or URI context.
  */
@@ -36,7 +36,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param properties
 	 * 	Session-level properties.
 	 * 	<br>These override context-level properties.
@@ -62,10 +62,10 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 		this.javaMethod = javaMethod;
 		this.uriContext = uriContext;
 	}
-	
+
 	/**
 	 * The java method that called this serializer, usually the method in a REST servlet.
-	 * 
+	 *
 	 * @param javaMethod
 	 * 	The java method that called this serializer, usually the method in a REST servlet.
 	 * 	<br>Can be <jk>null</jk>.
@@ -78,7 +78,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 
 	/**
 	 * The URI context.
-	 * 
+	 *
 	 * @param uriContext
 	 * 	The URI context.
 	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
@@ -94,19 +94,19 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 		super.locale(locale);
 		return this;
 	}
-	
+
 	@Override /* BeanSessionArgs */
 	public SerializerSessionArgs timeZone(TimeZone timeZone) {
 		super.timeZone(timeZone);
 		return this;
 	}
-	
+
 	@Override /* BeanSessionArgs */
 	public SerializerSessionArgs mediaType(MediaType mediaType) {
 		super.mediaType(mediaType);
 		return this;
 	}
-	
+
 	@Override /* SessionArgs */
 	public SerializerSessionArgs properties(ObjectMap properties) {
 		super.properties(properties);

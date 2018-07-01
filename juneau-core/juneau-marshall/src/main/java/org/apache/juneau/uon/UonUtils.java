@@ -26,10 +26,10 @@ public final class UonUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string needs to be quoted per UON notation.
-	 * 
+	 *
 	 * <p>
 	 * For example, strings that start with '(' or '@' or look like boolean or numeric values need to be quoted.
-	 * 
+	 *
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if the specified string needs to be quoted per UON notation.
 	 */

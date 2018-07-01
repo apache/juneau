@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -41,14 +41,14 @@ public class StatusCodesTest {
 		}
 	}
 	private static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01a_OK() throws Exception {
 		a.put("/", "foo").execute().assertStatus(200);
 	}
-	
+
 	//=================================================================================================================
-	// Bad Request (400) 
+	// Bad Request (400)
 	//=================================================================================================================
 
 	@RestResource(parsers=JsonParser.class)
@@ -106,7 +106,7 @@ public class StatusCodesTest {
 		}
 	}
 	private static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01a_nonExistentBeanProperties() throws Exception {
 		b.put("/nonExistentBeanProperties?noTrace=true", "{f2:'foo'}").json().execute()
@@ -187,9 +187,9 @@ public class StatusCodesTest {
 				"Could not parse header 'h1'."
 			);
 	}
-	
+
 	//=================================================================================================================
-	// Not Found (404) and Method Not Allowed (405) 
+	// Not Found (404) and Method Not Allowed (405)
 	//=================================================================================================================
 
 	@RestResource
@@ -200,7 +200,7 @@ public class StatusCodesTest {
 		}
 	}
 	private static MockRest c = MockRest.create(C.class);
-	
+
 	@Test
 	public void c01_badPath() throws Exception {
 		c.get("/bad?noTrace=true").execute()
@@ -218,7 +218,7 @@ public class StatusCodesTest {
 	}
 
 	//=================================================================================================================
-	// Precondition Failed (412) 
+	// Precondition Failed (412)
 	//=================================================================================================================
 
 	@RestResource
@@ -235,7 +235,7 @@ public class StatusCodesTest {
 		}
 	}
 	private static MockRest d = MockRest.create(D.class);
-	
+
 	@Test
 	public void d01() throws Exception {
 		d.get("/?noTrace=true").execute()

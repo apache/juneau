@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomCommonAttributes</code> construct in the RFC4287 specification.
- * 
+ *
  * <h5 class='figure'>Schema</h5>
  * <p class='bcode'>
  * 	atomCommonAttributes =
@@ -33,7 +33,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		attribute xml:lang { atomLanguageTag }?,
  * 		undefinedAttribute*
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Atom'>Overview &gt; juneau-dto &gt; Atom</a>
@@ -52,7 +52,7 @@ public abstract class Common {
 
 	/**
 	 * Returns the uri base of this object.
-	 * 
+	 *
 	 * @return The URI base of this object.
 	 */
 	@Xml(prefix="xml", format=ATTR)
@@ -62,14 +62,14 @@ public abstract class Common {
 
 	/**
 	 * Sets the URI base of this object.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param base The URI base of this object.
 	 * @return This object (for method chaining).
 	 */
@@ -81,7 +81,7 @@ public abstract class Common {
 
 	/**
 	 * Returns the language of this object.
-	 * 
+	 *
 	 * @return The language of this object.
 	 */
 	@Xml(prefix="xml", format=ATTR)
@@ -91,7 +91,7 @@ public abstract class Common {
 
 	/**
 	 * Sets the language of this object.
-	 * 
+	 *
 	 * @param lang The language of this object.
 	 * @return This object (for method chaining).
 	 */

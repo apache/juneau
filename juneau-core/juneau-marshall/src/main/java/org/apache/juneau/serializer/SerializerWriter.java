@@ -20,11 +20,11 @@ import org.apache.juneau.*;
 
 /**
  * Simple wrapper around a standard {@link Writer} with additional methods.
- * 
+ *
  * <p>
  * Modeled after the Java ProcessBuilder class so that you can chain commands to reduce the need for string
  * concatenation for performance reasons.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	writer.append(<js>"foo"</js>).nl().i(5).append(<js>"bar"</js>);
@@ -72,10 +72,10 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Performs a carriage return.
-	 * 
+	 *
 	 * <p>
 	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
-	 * 
+	 *
 	 * @param depth The indentation.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
@@ -88,10 +88,10 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Performs a carriage return at the end of a line.
-	 * 
+	 *
 	 * <p>
 	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
-	 * 
+	 *
 	 * @param depth The indentation.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
@@ -105,7 +105,7 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, followed by a newline
 	 * (if the {@code useWhitespace} setting is enabled).
-	 * 
+	 *
 	 * @param indent The number of tabs to indent.
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -117,7 +117,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes the specified text followed by a newline (if the {@code useWhitespace} setting is enabled).
-	 * 
+	 *
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
@@ -128,7 +128,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
-	 * 
+	 *
 	 * @param indent The number of tabs to indent.
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -140,7 +140,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
-	 * 
+	 *
 	 * @param indent The number of tabs to indent.
 	 * @param c The character to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -153,7 +153,7 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, optionally followed by a
 	 * newline (if the {@code useWhitespace} setting is enabled).
-	 * 
+	 *
 	 * @param indent The number of tabs to indent.
 	 * @param newline If <jk>true</jk>, then a newline is written.
 	 * @param text The text to write.
@@ -180,16 +180,16 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Appends the specified object as a URI.
-	 * 
+	 *
 	 * <p>
 	 * Object is converted to a <code>String</code> using <code>toString()</code>, so this will work on {@link URL} or
 	 * {@link URI} objects, or any other type that returns a URI via it's <code>toString()</code> method.
-	 * 
+	 *
 	 * <p>
 	 * The URI is resolved based on the {@link Serializer#SERIALIZER_uriRelativity} and
 	 * {@link Serializer#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the
 	 * session.
-	 * 
+	 *
 	 * @param uri The URI to serialize.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -201,7 +201,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Appends the specified characters to this writer.
-	 * 
+	 *
 	 * @param characters The characters to append to this writer.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -214,7 +214,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Adds a whitespace character to the output if the {@code useWhitespace} setting is enabled.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
@@ -226,7 +226,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Adds the quote character specified by the {@code quoteChar} setting to the output.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
@@ -237,7 +237,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes an indent to the writer if the {@code useWhitespace} setting is enabled.
-	 * 
+	 *
 	 * @param indent The number of tabs to indent.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
@@ -251,7 +251,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes an end-of-line indent to the writer if the {@code useWhitespace} setting is enabled.
-	 * 
+	 *
 	 * @param indent The number of tabs to indent.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
@@ -265,7 +265,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled.
-	 * 
+	 *
 	 * @param indent The current indentation level.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
@@ -278,11 +278,11 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes a space if the boolean expression is <jk>true</jk> and {@code useWhitespace} is false.
-	 * 
+	 *
 	 * <p>
 	 * Intended for cases in XML where text should be separated by either a space or newline.
 	 * This ensures the text is separated by a space if whitespace is disabled.
-	 * 
+	 *
 	 * @param b The boolean flag.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -295,7 +295,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled and the boolean flag is true.
-	 * 
+	 *
 	 * @param b The boolean flag.
 	 * @param indent The current indentation level.
 	 * @return This object (for method chaining).
@@ -309,7 +309,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes the specified text to the writer.
-	 * 
+	 *
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
@@ -321,7 +321,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes the specified text to the writer.
-	 * 
+	 *
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
@@ -334,7 +334,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes the specified text to the writer if b is true.
-	 * 
+	 *
 	 * @param b Boolean flag.
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -348,7 +348,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes the specified text to the writer if b is true.
-	 * 
+	 *
 	 * @param b Boolean flag.
 	 * @param c The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.

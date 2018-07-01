@@ -19,12 +19,12 @@ import org.apache.juneau.*;
 
 /**
  * Various useful static methods for creating ATOM elements.
- * 
+ *
  * <p>
  * Typically, you'll want to do a static import on this class and then call the methods like so...
  * <p class='bcode'>
  * 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
- * 
+ *
  * 	Feed feed =
  * 		<jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>,
  * 			<js>"2013-05-08T12:29:29Z"</js>)
@@ -36,7 +36,7 @@ import org.apache.juneau.*;
  * 			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
  * 		);
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Atom'>Overview &gt; juneau-dto &gt; Atom</a>
@@ -47,7 +47,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Category} element with the specified {@link Category#term(String)} attribute.
-	 * 
+	 *
 	 * @param term The {@link Category#term(String)} attribute.
 	 * @return The new element.
 	 */
@@ -57,7 +57,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Content} element with the specified {@link Content#type(String)} attribute.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Content content() {
@@ -66,7 +66,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Content} element.
-	 * 
+	 *
 	 * @param type The {@link Content#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -77,7 +77,7 @@ public class AtomBuilder {
 	/**
 	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and
 	 * {@link Entry#updated(Calendar)} attributes.
-	 * 
+	 *
 	 * @param id The {@link Entry#id(Id)} attribute.
 	 * @param title The {@link Entry#title(Text)} attribute.
 	 * @param updated The {@link Entry#updated(Calendar)} attribute.
@@ -90,7 +90,7 @@ public class AtomBuilder {
 	/**
 	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and
 	 * {@link Entry#updated(Calendar)} attributes.
-	 * 
+	 *
 	 * @param id The {@link Entry#id(Id)} attribute.
 	 * @param title The {@link Entry#title(Text)} attribute.
 	 * @param updated The {@link Entry#updated(Calendar)} attribute.
@@ -103,7 +103,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and
 	 * {@link Feed#updated(Calendar)} attributes.
-	 * 
+	 *
 	 * @param id The {@link Feed#id(Id)} attribute.
 	 * @param title The {@link Feed#title(Text)} attribute.
 	 * @param updated The {@link Feed#updated(Calendar)} attribute.
@@ -116,7 +116,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and
 	 * {@link Feed#updated(Calendar)} attributes.
-	 * 
+	 *
 	 * @param id The {@link Feed#id(Id)} attribute.
 	 * @param title The {@link Feed#title(Text)} attribute.
 	 * @param updated The {@link Feed#updated(Calendar)} attribute.
@@ -128,7 +128,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Generator} element with the specified {@link Generator#text(String)} child node.
-	 * 
+	 *
 	 * @param text The {@link Generator#text(String)} child node.
 	 * @return The new element.
 	 */
@@ -138,14 +138,14 @@ public class AtomBuilder {
 
 	/**
 	 * Creates an {@link Icon} element with the specified {@link Icon#uri(Object)} attribute.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param uri The {@link Icon#uri(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -155,7 +155,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates an {@link Id} element with the specified {@link Id#text(String)} child node.
-	 * 
+	 *
 	 * @param text The {@link Id#text(String)} child node.
 	 * @return The new element.
 	 */
@@ -166,7 +166,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Link} element with the specified {@link Link#rel(String)}, {@link Link#type(String)}, and
 	 * {@link Link#href(String)} attributes.
-	 * 
+	 *
 	 * @param rel The {@link Link#rel(String)} attribute.
 	 * @param type The {@link Link#type(String)} attribute.
 	 * @param href The {@link Link#href(String)} attribute.
@@ -178,14 +178,14 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Logo} element with the specified {@link Logo#uri(Object)} attribute.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param uri The {@link Logo#uri(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -195,7 +195,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Person} element with the specified {@link Person#name(String)} attribute.
-	 * 
+	 *
 	 * @param name The {@link Person#name(String)} attribute.
 	 * @return The new element.
 	 */
@@ -205,7 +205,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Source} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Source source() {
@@ -214,7 +214,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Text} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Text text() {
@@ -223,7 +223,7 @@ public class AtomBuilder {
 
 	/**
 	 * Creates a {@link Text} element with the specified {@link Text#type(String)} attribute.
-	 * 
+	 *
 	 * @param type The {@link Text#type(String)} attribute.
 	 * @return The new element.
 	 */

@@ -30,16 +30,16 @@ import org.apache.juneau.utils.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
  * 	is present on the class, or the class has a {@link BeanFilter} registered with it in the bean context,
  * 	then that information is used to determine the properties on the class.
  * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
- * 
+ *
  * <h5 class='topic'>Bean property ordering</h5>
- * 
+ *
  * The order of the properties are as follows:
  * <ul class='spaced-list'>
  * 	<li>
@@ -53,10 +53,10 @@ import org.apache.juneau.utils.*;
  * 			<li>Non-standard getters/setters with {@link BeanProperty @BeanProperty} annotation defined on them.
  * 		</ul>
  * </ul>
- * 
+ *
  * <p>
  * The order can also be overridden through the use of an {@link BeanFilter}.
- * 
+ *
  * @param <T> The class type that this metadata applies to.
  */
 public class BeanMeta<T> {
@@ -105,7 +105,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param classMeta The target class.
 	 * @param ctx The bean context that created this object.
 	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
@@ -246,9 +246,9 @@ public class BeanMeta<T> {
 				String[] excludeProperties = ctx.getExcludeProperties(c);
 
 				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
-				
+
 				if (beanFilter != null) {
-					
+
 					if (beanFilter.getProperties() != null)
 						filterProps.addAll(Arrays.asList(beanFilter.getProperties()));
 
@@ -310,10 +310,10 @@ public class BeanMeta<T> {
 						if (bm.methodType == GETTER) {
 							// Two getters.  Pick the best.
 							if (bpm.getter != null) {
-								
+
 								if (m.getAnnotation(BeanProperty.class) == null && bpm.getter.getAnnotation(BeanProperty.class) != null)
 									m = bpm.getter;  // @BeanProperty annotated method takes precedence.
-								
+
 								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
 									m = bpm.getter;  // getX() overrides isX().
 							}
@@ -329,7 +329,7 @@ public class BeanMeta<T> {
 								bpm.setSetter(bm.method);
 						}
 					}
-					
+
 					// Now iterate through all the extraKeys.
 					for (BeanMethod bm : bms) {
 						if (bm.methodType == EXTRAKEYS) {
@@ -483,7 +483,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the {@link ClassMeta} of this bean.
-	 * 
+	 *
 	 * @return The {@link ClassMeta} of this bean.
 	 */
 	@BeanIgnore
@@ -493,7 +493,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean.typeName()} annotation.
-	 * 
+	 *
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */
 	public final String getDictionaryName() {
@@ -503,7 +503,7 @@ public class BeanMeta<T> {
 	/**
 	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
 	 * dictionary name of the bean.
-	 * 
+	 *
 	 * @return The type name property.
 	 */
 	public final BeanPropertyMeta getTypeProperty() {
@@ -514,12 +514,12 @@ public class BeanMeta<T> {
 	 * Possible property method types.
 	 */
 	static enum MethodType {
-		UNKNOWN, 
-		GETTER, 
-		SETTER, 
+		UNKNOWN,
+		GETTER,
+		SETTER,
 		EXTRAKEYS;
 	}
-	
+
 	/*
 	 * Temporary getter/setter method struct.
 	 */
@@ -583,7 +583,7 @@ public class BeanMeta<T> {
 
 	/*
 	 * Find all the bean methods on this class.
-	 * 
+	 *
 	 * @param c The transformed class.
 	 * @param stopClass Don't look above this class in the hierarchy.
 	 * @param v The minimum method visibility.
@@ -609,15 +609,15 @@ public class BeanMeta<T> {
 					continue;
 
 				String n = m.getName();
-				
+
 				Class<?>[] pt = m.getParameterTypes();
 				Class<?> rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
 				String bpName = bpName(bp);
-				
-				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName))) 
+
+				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
-				
+
 				if (pt.length == 0) {
 					if ("*".equals(bpName)) {
 						if (isParentClass(Collection.class, rt)) {
@@ -679,10 +679,10 @@ public class BeanMeta<T> {
 					}
 				}
 				n = pn.getPropertyName(n);
-				
+
 				if ("*".equals(bpName) && methodType == UNKNOWN)
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type on method ''{0}''.", m.getName());
-				
+
 				if (methodType != UNKNOWN) {
 					if (bpName != null && ! bpName.isEmpty()) {
 						n = bpName;
@@ -706,16 +706,16 @@ public class BeanMeta<T> {
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
 					continue;
-				
+
 				BeanProperty bp = f.getAnnotation(BeanProperty.class);
 				String bpName = bpName(bp);
-				
+
 				if (! (v.isVisible(f) || bp != null))
 					continue;
-				
-				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName))) 
+
+				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
-				
+
 				l.add(f);
 			}
 		}
@@ -739,7 +739,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the metadata on all properties associated with this bean.
-	 * 
+	 *
 	 * @return Metadata on all properties associated with this bean.
 	 */
 	public Collection<BeanPropertyMeta> getPropertyMetas() {
@@ -748,7 +748,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the metadata on the specified list of properties.
-	 * 
+	 *
 	 * @param pNames The list of properties to retrieve.  If <jk>null</jk>, returns all properties.
 	 * @return The metadata on the specified list of properties.
 	 */
@@ -763,7 +763,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns the language-specified extended metadata on this bean class.
-	 * 
+	 *
 	 * @param metaDataClass The name of the metadata class to create.
 	 * @return Extended metadata on this bean class.  Never <jk>null</jk>.
 	 */
@@ -773,7 +773,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Returns metadata about the specified property.
-	 * 
+	 *
 	 * @param name The name of the property on this bean.
 	 * @return The metadata about the property, or <jk>null</jk> if no such property exists on this bean.
 	 */
@@ -786,7 +786,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Creates a new instance of this bean.
-	 * 
+	 *
 	 * @param outer The outer object if bean class is a non-static inner member class.
 	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
 	 * @throws IllegalArgumentException Thrown by constructor.
@@ -814,7 +814,7 @@ public class BeanMeta<T> {
 	/**
 	 * Recursively determines the classes represented by parameterized types in the class hierarchy of the specified
 	 * type, and puts the results in the specified map.
-	 * 
+	 *
 	 * <p>
 	 * For example, given the following classes...
 	 * <p class='bcode'>
@@ -829,18 +829,18 @@ public class BeanMeta<T> {
 	 * <p class='bcode'>
 	 * 	{BeanA.class:[Integer.class]}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * TODO:  This code doesn't currently properly handle the following situation:
 	 * <p class='bcode'>
 	 * 	public static class BeanB&lt;T extends Number&gt; extends BeanA&lt;T&gt;;
 	 * 	public static class BeanC extends BeanB&lt;Integer&gt;;
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.
 	 * If anyone can figure out a better way of doing this, please do so!
-	 * 
+	 *
 	 * @param t The type we're recursing.
 	 * @param m Where the results are loaded.
 	 */

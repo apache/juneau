@@ -18,33 +18,33 @@ import org.apache.juneau.svl.*;
 
 /**
  * A basic if-else logic variable resolver.
- * 
+ *
  * <p>
  * The format for this var is one of the following:
  * <ul>
  * 	<li><js>"$IF{booleanArg,thenValue}"</js>
  * 	<li><js>"$IF{booleanArg,thenValue,elseValue}"</js>
  * </ul>
- * 
+ *
  * <p>
  * The boolean argument is any string.
  * <br>The following values are interpreted as <jk>true</jk>:  <js>"true"</js>,<js>"TRUE"</js>,<js>"t"</js>,
  * <js>"T"</js>,<js>"1"</js>.
  * <br>All else are interpreted as <jk>false</jk>
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves system properties and $IF vars.</jc>
  * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(IfVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
- * 
+ *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Property $IF{$S{someBooleanFlag},IS,IS NOT} set!"</js>));
  * </p>
- * 
+ *
  * <p>
  * Since this is a {@link MultipartVar}, any variables contained in the result will be recursively resolved.
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>

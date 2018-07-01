@@ -19,14 +19,14 @@ import java.lang.annotation.*;
 
 /**
  * Property name/value pair used in the {@link RestResource#properties() @RestResource.properties()} annotation.
- * 
+ *
  * <p>
  * Any of the properties defined on any of the serializers or parsers can be defined.
- * 
+ *
  * <p>
  * Property values types that are not <code>Strings</code> will automatically be converted to the correct type
  * (e.g. <code>Boolean</code>, etc...).
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; juneau-rest-server &gt; Properties</a>

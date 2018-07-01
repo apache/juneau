@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Exception thrown to trigger an error HTTP status.
- * 
+ *
  * <p>
  * REST methods on subclasses of {@link RestServlet} can throw this exception to trigger an HTTP status other than the
  * automatically-generated <code>404</code>, <code>405</code>, and <code>500</code> statuses.
@@ -57,7 +57,7 @@ public class RestException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param status The HTTP status code.
 	 * @param msg The status message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -68,14 +68,14 @@ public class RestException extends FormattedRuntimeException {
 
 	/**
 	 * Returns the root cause of this exception.
-	 * 
+	 *
 	 * <p>
 	 * The root cause is the first exception in the init-cause parent chain that's not one of the following:
 	 * <ul>
 	 * 	<li>{@link RestException}
 	 * 	<li>{@link InvocationTargetException}
 	 * </ul>
-	 * 
+	 *
 	 * @return The root cause of this exception, or <jk>null</jk> if no root cause was found.
 	 */
 	public Throwable getRootCause() {
@@ -90,11 +90,11 @@ public class RestException extends FormattedRuntimeException {
 
 	/**
 	 * Returns all error messages from all errors in this stack.
-	 * 
+	 *
 	 * <p>
 	 * Typically useful if you want to render all the error messages in the stack, but don't want to render all the
 	 * stack traces too.
-	 * 
+	 *
 	 * @param scrubForXssVulnerabilities
 	 * 	If <jk>true</jk>, replaces <js>'&lt;'</js>, <js>'&gt;'</js>, and <js>'&amp;'</js> characters with spaces.
 	 * @return All error messages from all errors in this stack.
@@ -140,7 +140,7 @@ public class RestException extends FormattedRuntimeException {
 
 	/**
 	 * Returns the number of times this exception occurred on this servlet.
-	 * 
+	 *
 	 * @return
 	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource.useStackTraceHashes()} is enabled, or <code>0</code> otherwise.
 	 */
@@ -150,7 +150,7 @@ public class RestException extends FormattedRuntimeException {
 
 	/**
 	 * Returns the HTTP status code.
-	 * 
+	 *
 	 * @return The HTTP status code.
 	 */
 	public int getStatus() {

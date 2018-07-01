@@ -29,7 +29,7 @@ public final class SerializerMatch {
 
 	/**
 	 * Returns the media type of the serializers that matched the HTTP <code>Accept</code> header value.
-	 * 
+	 *
 	 * @return The media type of the match.
 	 */
 	public MediaType getMediaType() {
@@ -38,7 +38,7 @@ public final class SerializerMatch {
 
 	/**
 	 * Returns the serializer that matched the HTTP <code>Accept</code> header value.
-	 * 
+	 *
 	 * @return The serializer of the match.
 	 */
 	public Serializer getSerializer() {

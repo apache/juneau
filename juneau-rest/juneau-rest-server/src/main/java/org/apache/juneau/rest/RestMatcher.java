@@ -16,37 +16,37 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Class used for defining method-level matchers using the {@link RestMethod#matchers() @RestMethod.matchers()} annotation.
- * 
+ *
  * <p>
  * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
  * differing based on some request attribute, such as a specific header value.
  * For example, matchers can be used to provide two different methods for handling requests from two different client
  * versions.
- * 
+ *
  * <p>
  * Java methods with matchers associated with them are always attempted before Java methods without matchers.
  * This allows a 'default' method to be defined to handle requests where no matchers match.
- * 
+ *
  * <p>
  * When multiple matchers are specified on a method, only one matcher is required to match.
  * This is opposite from the {@link RestMethod#guards() @RestMethod.guards()} annotation, where all guards are required to match in order to
  * execute the method.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
- * 
+ *
  * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)
  * 		<jk>public</jk> Object doGetWithDNT() {
  * 			<jc>// Handle request with Do-Not-Track specified</jc>
  * 		}
- * 
+ *
  * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo"</js>)
  * 		<jk>public</jk> Object doGetWithoutDNT() {
  * 			<jc>// Handle request without Do-Not-Track specified</jc>
  * 		}
  * 	}
- * 
+ *
  * 	<jk>public class</jk> IsDNT <jk>extends</jk> RestMatcher {
  * 		<ja>@Override</ja>
  * 		<jk>public boolean</jk> matches(RestRequest req) {
@@ -54,7 +54,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		}
  * 	}
  * </p>
- * 
+ *
  * <p>
  * Instances must provide one of the following public constructors:
  * <ul>
@@ -62,7 +62,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li>The following args: <code>Object resource, Method javaMethod</code>.
  * 		<br>This gives access to the servlet/resource and Java method it's applied to.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethodMatchers">Overview &gt; juneau-rest-server &gt; @RestMethod.matchers()</a>
@@ -72,7 +72,7 @@ public abstract class RestMatcher {
 
 	/**
 	 * Returns <jk>true</jk> if the specified request matches this matcher.
-	 * 
+	 *
 	 * @param req The servlet request.
 	 * @return <jk>true</jk> if the specified request matches this matcher.
 	 */
@@ -80,10 +80,10 @@ public abstract class RestMatcher {
 
 	/**
 	 * Returns <jk>true</jk> if this matcher is required to match in order for the method to be invoked.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>false</jk>, then only one of the matchers must match.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this matcher is required to match in order for the method to be invoked.
 	 */
 	public boolean mustMatch() {

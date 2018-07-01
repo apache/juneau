@@ -16,23 +16,23 @@ import org.apache.juneau.svl.*;
 
 /**
  * Environment variable variable resolver.
- * 
+ *
  * <p>
  * The format for this var is <js>"$E{envVar[,defaultValue]}"</js>.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves environment variables (e.g. "$E{PATH}")</jc>
  * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(EnvVariablesVar.<jk>class</jk>).build();
- * 
+ *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Environment variable PATH is set to $E{PATH}"</js>));
  * </p>
- * 
+ *
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>

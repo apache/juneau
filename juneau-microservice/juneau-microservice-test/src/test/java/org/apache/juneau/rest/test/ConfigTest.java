@@ -33,7 +33,7 @@ public class ConfigTest extends RestTestcase {
 	@Test
 	public void test() throws Exception {
 		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
-		
+
 		Map<String,Map<String,Object>> m = c.doGet(URL).getResponse(Map.class, String.class, ObjectMap.class);
 
 		Config cf = Config.create().memStore().build().load(m);

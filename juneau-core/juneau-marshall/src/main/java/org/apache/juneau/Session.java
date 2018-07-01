@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
- * 
+ *
  * <p>
  * Serializers and parsers use session objects to retrieve config properties and to use it as a scratchpad during
  * serialize and parse actions.
@@ -40,7 +40,7 @@ public abstract class Session {
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @param args
 	 * 	Runtime arguments.
 	 */
@@ -50,20 +50,20 @@ public abstract class Session {
 
 	/**
 	 * Returns <jk>true</jk> if this session has the specified property defined.
-	 * 
+	 *
 	 * @param key The property key.
 	 * @return <jk>true</jk> if this session has the specified property defined.
 	 */
 	public final boolean hasProperty(String key) {
 		return properties != null && properties.containsKey(key);
 	}
-	
+
 	/**
 	 * Returns the session property with the specified key.
-	 * 
+	 *
 	 * <p>
 	 * The returned type is the raw value of the property.
-	 * 
+	 *
 	 * @param key The property key.
 	 * @return The session property, or <jk>null</jk> if the property does not exist.
 	 */
@@ -75,7 +75,7 @@ public abstract class Session {
 
 	/**
 	 * Returns the session property with the specified key and type.
-	 * 
+	 *
 	 * @param key The property key.
 	 * @param type The type to convert the property to.
 	 * @param def The default value if the session property does not exist or is <jk>null</jk>.
@@ -89,13 +89,13 @@ public abstract class Session {
 		T t = properties.get(key, type);
 		return t == null ? def : t;
 	}
-	
+
 	/**
 	 * Same as {@link #getProperty(String, Class, Object)} but allows for more than one default value.
-	 * 
+	 *
 	 * @param key The property key.
 	 * @param type The type to convert the property to.
-	 * @param def 
+	 * @param def
 	 * 	The default values if the session property does not exist or is <jk>null</jk>.
 	 * 	The first non-null value is returned.
 	 * @return The session property.
@@ -104,10 +104,10 @@ public abstract class Session {
 	public final <T> T getProperty(String key, Class<T> type, T...def) {
 		return getProperty(key, type, ObjectUtils.firstNonNull(def));
 	}
-	
+
 	/**
 	 * Returns the session class property with the specified name.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default value.
@@ -120,10 +120,10 @@ public abstract class Session {
 
 	/**
 	 * Returns an instantiation of the specified class property.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param def 
+	 * @param def
 	 * 	The default instance or class to instantiate if the property doesn't exist.
 	 * @return A new property instance.
 	 */
@@ -133,7 +133,7 @@ public abstract class Session {
 
 	/**
 	 * Returns the specified property as an array of instantiated objects.
-	 * 
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
@@ -150,33 +150,33 @@ public abstract class Session {
 				t = (T[])o;
 			else {
 				t = (T[])Array.newInstance(type, Array.getLength(o));
-				for (int i = 0; i < Array.getLength(o); i++) 
+				for (int i = 0; i < Array.getLength(o); i++)
 					t[i] = newInstance(type, Array.get(o, i), null);
 			}
 		} else if (o instanceof Collection) {
 			Collection<?> c = (Collection<?>)o;
 			t = (T[])Array.newInstance(type, c.size());
 			int i = 0;
-			for (Object o2 : c) 
+			for (Object o2 : c)
 				t[i++] = newInstance(type, o2, null);
 		}
 		if (t != null)
 			return t;
 		throw new ConfigException("Could not instantiate property ''{0}'' as type {1}", key, type);
 	}
-	
+
 	/**
 	 * Returns the session properties.
-	 * 
+	 *
 	 * @return The session properties passed in through the constructor.
 	 */
 	protected ObjectMap getProperties() {
 		return properties;
 	}
-	
+
 	/**
 	 * Returns the session property keys.
-	 * 
+	 *
 	 * @return The session property keys passed in through the constructor.
 	 */
 	public Set<String> getPropertyKeys() {
@@ -201,13 +201,13 @@ public abstract class Session {
 			return t;
 		throw new ConfigException("Could not instantiate type ''{0}'' as type {1}", o, type);
 	}
-	
+
 	/**
 	 * Adds an arbitrary object to this session's cache.
-	 * 
+	 *
 	 * <p>
 	 * Can be used to store objects for reuse during a session.
-	 * 
+	 *
 	 * @param key The key.  Can be any string.
 	 * @param val The cached object.
 	 */
@@ -219,10 +219,10 @@ public abstract class Session {
 
 	/**
 	 * Adds arbitrary objects to this session's cache.
-	 * 
+	 *
 	 * <p>
 	 * Can be used to store objects for reuse during a session.
-	 * 
+	 *
 	 * @param cacheObjects
 	 * 	The objects to add to this session's cache.
 	 * 	No-op if <jk>null</jk>.
@@ -237,7 +237,7 @@ public abstract class Session {
 
 	/**
 	 * Returns an object stored in the session cache.
-	 * 
+	 *
 	 * @param c The class type of the object.
 	 * @param key The session object key.
 	 * @return The cached object, or <jk>null</jk> if it doesn't exist.
@@ -249,7 +249,7 @@ public abstract class Session {
 
 	/**
 	 * Logs a warning message.
-	 * 
+	 *
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -262,7 +262,7 @@ public abstract class Session {
 
 	/**
 	 * Returns <jk>true</jk> if warnings occurred in this session.
-	 * 
+	 *
 	 * @return <jk>true</jk> if warnings occurred in this session.
 	 */
 	public final boolean hasWarnings() {
@@ -271,7 +271,7 @@ public abstract class Session {
 
 	/**
 	 * Returns the warnings that occurred in this session.
-	 * 
+	 *
 	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
 	 */
 	public final List<String> getWarnings() {
@@ -280,10 +280,10 @@ public abstract class Session {
 
 	/**
 	 * Returns the logger associated with this session.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own logger.
-	 * 
+	 *
 	 * @return The logger associated with this session.
 	 */
 	protected final JuneauLogger getLogger() {
@@ -294,7 +294,7 @@ public abstract class Session {
 
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
-	 * 
+	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
 	public ObjectMap asMap() {
@@ -309,12 +309,12 @@ public abstract class Session {
 			return e.getLocalizedMessage();
 		}
 	}
-	
+
 	/**
 	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session.
 	 */
 	public void checkForWarnings() {
 		if (warnings != null && ! warnings.isEmpty())
-			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));		
+			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
 	}
 }

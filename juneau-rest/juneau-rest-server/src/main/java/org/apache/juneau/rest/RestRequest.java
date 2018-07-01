@@ -49,10 +49,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents an HTTP request for a REST resource.
- * 
+ *
  * <p>
  * Equivalent to {@link HttpServletRequest} except with some additional convenience methods.
- * 
+ *
  * <p>
  * For reference, given the URL <js>"http://localhost:9080/contextRoot/servletPath/foo?bar=baz#qux"</js>, the
  * following methods return the following values....
@@ -66,7 +66,7 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>{@code getRequestURL()}</td><td>{@code http://localhost:9080/contextRoot/servletPath/foo}</td></tr>
  * 	<tr><td>{@code getServletPath()}</td><td>{@code /servletPath}</td></tr>
  * </table>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestRequest">Overview &gt; juneau-rest-server &gt; RestRequest</a>
@@ -108,7 +108,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			// If this is a POST, we want to parse the query parameters ourselves to prevent
 			// the servlet code from processing the HTTP body as URL-Encoded parameters.
 			queryParams = new RequestQuery();
-			if (isPost) 
+			if (isPost)
 				RestUtils.parseQuery(getQueryString(), queryParams);
 			else
 				queryParams.putAll(req.getParameterMap());
@@ -202,7 +202,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns a string of the form <js>"HTTP method-name full-url"</js>
-	 * 
+	 *
 	 * @return A description string of the request.
 	 */
 	public String getDescription() {
@@ -212,7 +212,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getAttribute(String)} but returns a default value if not found.
-	 * 
+	 *
 	 * @param name The request attribute name.
 	 * @param def The default value if the attribute doesn't exist.
 	 * @return The request attribute value.
@@ -224,7 +224,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shorthand method for calling {@link #setAttribute(String, Object)} fluently.
-	 * 
+	 *
 	 * @param name The request attribute name.
 	 * @param value The request attribute value.
 	 * @return This object (for method chaining).
@@ -241,7 +241,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Retrieve the properties active for this request.
-	 * 
+	 *
 	 * <p>
 	 * This contains all resource and method level properties from the following:
 	 * <ul>
@@ -249,12 +249,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='ja'>{@link RestMethod#properties()}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * The returned object is modifiable and allows you to override session-level properties before
 	 * they get passed to the serializers.
 	 * <br>However, properties are open-ended, and can be used for any purpose.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
@@ -263,21 +263,21 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		}
 	 * 	)
 	 * 	<jk>public</jk> Map doGet(RestRequest req, <ja>@Query</ja>(<js>"sortMaps"</js>) Boolean sortMaps) {
-	 * 		
+	 *
 	 * 		<jc>// Override value if specified through query parameter.</jc>
 	 * 		<jk>if</jk> (sortMaps != <jk>null</jk>)
 	 * 			req.getProperties().put(<jsf>SERIALIZER_sortMaps</jsf>, sortMaps);
-	 * 
+	 *
 	 * 		<jk>return</jk> <jsm>getMyMap</jsm>();
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; juneau-rest-server &gt; Properties</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The properties active for this request.
 	 */
 	public RequestProperties getProperties() {
@@ -286,7 +286,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getProperties().append(name, value);</code> fluently.
-	 * 
+	 *
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
@@ -303,29 +303,29 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Request headers.
-	 * 
+	 *
 	 * <p>
 	 * Returns a {@link RequestHeaders} object that encapsulates access to HTTP headers on the request.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest req) {
-	 * 
+	 *
 	 * 		<jc>// Get access to headers.</jc>
 	 * 		RequestHeaders h = req.getHeaders();
-	 * 
+	 *
 	 * 		<jc>// Add a default value.</jc>
 	 * 		h.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
-	 * 
+	 *
 	 *  		<jc>// Get a header value as a POJO.</jc>
 	 * 		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
-	 * 
+	 *
 	 * 		<jc>// Get a standard header.</jc>
 	 * 		CacheControl = h.getCacheControl();
-	 * 	}			
+	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -337,14 +337,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>
 	 * 		The {@link Header @Header} annotation can be used to access individual header values.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestHeaders">Overview &gt; juneau-rest-server &gt; RequestHeaders</a>
 	 * </ul>
-	 * 
-	 * @return 
-	 * 	The headers on this request.  
+	 *
+	 * @return
+	 * 	The headers on this request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public RequestHeaders getHeaders() {
@@ -366,7 +366,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the media types that are valid for <code>Accept</code> headers on the request.
-	 * 
+	 *
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getProduces() {
@@ -375,7 +375,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the media types that are valid for <code>Content-Type</code> headers on the request.
-	 * 
+	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getConsumes() {
@@ -430,7 +430,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (h != null) {
 			MediaTypeRange[] mr = MediaTypeRange.parse(h);
 			if (mr.length > 0) {
-				List<Locale> l = new ArrayList<Locale>(mr.length);
+				List<Locale> l = new ArrayList<>(mr.length);
 				for (MediaTypeRange r : mr)
 					l.add(toLocale(r.getMediaType().getType()));
 				return enumeration(l);
@@ -445,29 +445,29 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Query parameters. 
-	 * 
+	 * Query parameters.
+	 *
 	 * <p>
 	 * Returns a {@link RequestQuery} object that encapsulates access to URL GET parameters.
-	 * 
+	 *
 	 * <p>
 	 * Similar to {@link #getParameterMap()} but only looks for query parameters in the URL and not form posts.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
-	 * 	
+	 *
 	 * 		<jc>// Get access to query parameters on the URL.</jc>
 	 * 		RequestQuery q = req.getQuery();
-	 * 	
+	 *
 	 * 		<jc>// Get query parameters converted to various types.</jc>
 	 * 		<jk>int</jk> p1 = q.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
 	 * 		String p2 = q.get(<js>"p2"</js>, String.<jk>class</jk>);
 	 * 		UUID p3 = q.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -481,13 +481,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>
 	 * 		The {@link Query @Query} annotation can be used to access individual query parameter values.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestQuery">Overview &gt; juneau-rest-server &gt; RequestQuery</a>
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The query parameters as a modifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
@@ -497,7 +497,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getQuery().getString(name)</code>.
-	 * 
+	 *
 	 * @param name The query parameter name.
 	 * @return The query parameter value, or <jk>null</jk> if not found.
 	 */
@@ -512,28 +512,28 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Form-data.
-	 * 
+	 *
 	 * <p>
 	 * Returns a {@link RequestFormData} object that encapsulates access to form post parameters.
-	 * 
+	 *
 	 * <p>
 	 * Similar to {@link #getParameterMap()}, but only looks for form data in the HTTP body.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest req) {
-	 * 	
+	 *
 	 * 		<jc>// Get access to parsed form data parameters.</jc>
 	 * 		RequestFormData fd = req.getFormData();
-	 * 		
+	 *
 	 * 		<jc>// Get form data parameters converted to various types.</jc>
 	 * 		<jk>int</jk> p1 = fd.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
 	 * 		String p2 = fd.get(<js>"p2"</js>, String.<jk>class</jk>);
 	 * 		UUID p3 = fd.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -545,13 +545,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>
 	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestFormData">Overview &gt; juneau-rest-server &gt; RequestFormData</a>
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The URL-encoded form data from the request.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws InternalServerError If query parameters could not be parsed.
@@ -581,7 +581,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getFormData().getString(name)</code>.
-	 * 
+	 *
 	 * @param name The form data parameter name.
 	 * @return The form data parameter value, or <jk>null<jk> if not found.
 	 */
@@ -596,27 +596,27 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Request path match.
-	 * 
+	 *
 	 * <p>
 	 * Returns a {@link RequestPathMatch} object that encapsulates access to everything related to the URL path.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
-	 * 	
+	 *
 	 * 		<jc>// Get access to path data.</jc>
 	 * 		RequestPathMatch pm = req.getPathMatch();
-	 * 		
+	 *
 	 * 		<jc>// Example URL:  /123/qux/true/quux</jc>
-	 * 		
+	 *
 	 * 		<jk>int</jk> foo = pm.getInt(<js>"foo"</js>);  <jc>// =123</jc>
 	 * 		String bar = pm.getString(<js>"bar"</js>);  <jc>// =qux</jc>
 	 * 		<jk>boolean</jk> baz = pm.getBoolean(<js>"baz"</js>);  <jc>// =true</jc>
 	 * 		String remainder = pm.getRemainder();  <jc>// =quux</jc>
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -628,13 +628,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>
 	 * 		The {@link Path @Path} and {@link PathRemainder @PathRemainder} annotations can be used to access individual values.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; juneau-rest-server &gt; RequestPathMatch</a>
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The path data from the URL.
 	 * 	<br>Never <jk>null</jk>.
 	 */
@@ -644,7 +644,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getPathMatch().get(name)</code>.
-	 * 
+	 *
 	 * @param name The path variable name.
 	 * @return The path variable value, or <jk>null</jk> if not found.
 	 */
@@ -654,7 +654,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut for calling <code>getPathMatch().getRemainder()</code>.
-	 * 
+	 *
 	 * @return The path remainder value, or <jk>null</jk> if not found.
 	 */
 	public String getPathRemainder() {
@@ -667,21 +667,21 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Request body.
-	 * 
+	 *
 	 * <p>
 	 * Returns a {@link RequestBody} object that encapsulates access to the HTTP request body.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doPost2(RestRequest req) {
-	 * 		
+	 *
 	 * 		<jc>// Convert body to a linked list of Person objects.</jc>
 	 * 		List&lt;Person&gt; l = req.getBody().asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
 	 * 		..
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -689,13 +689,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>
 	 * 		The {@link Body @Body} annotation can be used to access the body as well.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; juneau-rest-server &gt; RequestBody</a>
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The body of this HTTP request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
@@ -705,11 +705,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP body content as a {@link Reader}.
-	 * 
+	 *
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
 	 * string.
-	 * 
+	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 */
@@ -720,10 +720,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP body content as an {@link InputStream}.
-	 * 
+	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
-	 * 
+	 *
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
@@ -756,11 +756,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the URI context of the request.
-	 * 
+	 *
 	 * <p>
 	 * The URI context contains all the information about the URI of the request, such as the servlet URI, context
 	 * path, etc...
-	 * 
+	 *
 	 * @return The URI context of the request.
 	 */
 	public UriContext getUriContext() {
@@ -777,7 +777,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns a URI resolver that can be used to convert URIs to absolute or root-relative form.
-	 * 
+	 *
 	 * @param resolution The URI resolution rule.
 	 * @param relativity The relative URI relativity rule.
 	 * @return The URI resolver for this request.
@@ -789,7 +789,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Shortcut for calling {@link #getUriResolver()} using {@link UriResolution#ROOT_RELATIVE} and
 	 * {@link UriRelativity#RESOURCE}
-	 * 
+	 *
 	 * @return The URI resolver for this request.
 	 */
 	public UriResolver getUriResolver() {
@@ -798,12 +798,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the URI for this request.
-	 * 
+	 *
 	 * <p>
 	 * Similar to {@link #getRequestURI()} but returns the value as a {@link URI}.
 	 * It also gives you the capability to override the query parameters (e.g. add new query parameters to the existing
 	 * URI).
-	 * 
+	 *
 	 * @param includeQuery If <jk>true</jk> include the query parameters on the request.
 	 * @param addQueryParams Augment the request URI with the specified query parameters.
 	 * @return A new URI.
@@ -834,19 +834,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Resource information provider.
-	 * 
+	 *
 	 * <p>
 	 * Returns a {@link RestInfoProvider} object that encapsulates all the textual meta-data on this resource such as
 	 * descriptions, titles, and Swagger documentation.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
-	 * 
+	 *
 	 * 		<jc>// Get information provider.</jc>
 	 * 		RestInfoProvider p = req.getInfoProvider();
-	 * 		
+	 *
 	 * 		<jc>// Get localized strings.</jc>
 	 * 		String resourceTitle = p.getTitle(req);
 	 * 		String methodDescription = p.getMethodDescription(req.getMethod(), req);
@@ -854,13 +854,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		..
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The {@link RestInfoProvider} object can also be passed as a parameter on the method.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
@@ -872,21 +872,21 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The info provider on the resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public RestInfoProvider getInfoProvider() {
 		return context.getInfoProvider();
 	}
-	
+
 	/**
 	 * Returns the localized swagger associated with the resource.
-	 * 
+	 *
 	 * <p>
 	 * A shortcut for calling <code>getInfoProvider().getSwagger(request);</code>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
@@ -894,13 +894,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		<jk>return</jk> req.getSwagger().getTags();
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The {@link Swagger} object can also be passed as a parameter on the method.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
@@ -908,12 +908,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider()}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return
 	 * 	The swagger associated with the resource.
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws RestException 
-	 * @throws InternalServerError 
+	 * @throws RestException
+	 * @throws InternalServerError
 	 */
 	public Swagger getSwagger() {
 		try {
@@ -929,10 +929,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized site name.
-	 * 
+	 *
 	 * <p>
 	 * The site name is intended to be a title that can be applied to the entire site.
-	 * 
+	 *
 	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
@@ -944,13 +944,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		}
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.
-	 * 
+	 *
 	 * @return The localized site name.
-	 * @throws RestException 
-	 * @throws InternalServerError 
+	 * @throws RestException
+	 * @throws InternalServerError
 	 */
 	public String getSiteName() {
 		try {
@@ -964,13 +964,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized resource title.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.
-	 * 
+	 *
 	 * @return The localized resource title.
-	 * @throws RestException 
-	 * @throws InternalServerError 
+	 * @throws RestException
+	 * @throws InternalServerError
 	 */
 	public String getResourceTitle() {
 		try {
@@ -984,13 +984,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized resource description.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.
-	 * 
+	 *
 	 * @return The localized resource description.
-	 * @throws RestException 
-	 * @throws InternalServerError 
+	 * @throws RestException
+	 * @throws InternalServerError
 	 */
 	public String getResourceDescription() {
 		try {
@@ -1004,13 +1004,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method summary.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(Method, RestRequest)} with this object.
-	 * 
+	 *
 	 * @return The localized method description.
-	 * @throws RestException 
-	 * @throws InternalServerError 
+	 * @throws RestException
+	 * @throws InternalServerError
 	 */
 	public String getMethodSummary() {
 		try {
@@ -1024,13 +1024,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method description.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(Method, RestRequest)} with this object.
-	 * 
+	 *
 	 * @return The localized method description.
-	 * @throws RestException 
-	 * @throws InternalServerError 
+	 * @throws RestException
+	 * @throws InternalServerError
 	 */
 	public String getMethodDescription() throws RestException, InternalServerError {
 		try {
@@ -1048,12 +1048,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the serializers associated with this request.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Serializers">Overview &gt; juneau-rest-server &gt; Serializers</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializers() {
@@ -1062,12 +1062,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the parsers associated with this request.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Parsers">Overview &gt; juneau-rest-server &gt; Parsers</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParsers() {
@@ -1076,7 +1076,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the part serializer associated with this request.
-	 * 
+	 *
 	 * @return The part serializer associated with this request.
 	 */
 	public HttpPartParser getPartParser() {
@@ -1085,7 +1085,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the part serializer associated with this request.
-	 * 
+	 *
 	 * @return The part serializer associated with this request.
 	 */
 	public HttpPartSerializer getPartSerializer() {
@@ -1094,7 +1094,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the method of this request.
-	 * 
+	 *
 	 * <p>
 	 * If <code>allowHeaderParams</code> init parameter is <jk>true</jk>, then first looks for
 	 * <code>&amp;method=xxx</code> in the URL query string.
@@ -1106,10 +1106,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP 1.1 method name of the request as an enum.
-	 * 
+	 *
 	 * <p>
 	 * Note that non-RFC2616 method names resolve as {@link HttpMethod#OTHER}.
-	 * 
+	 *
 	 * @return The HTTP method.
 	 */
 	public HttpMethod getHttpMethod() {
@@ -1127,14 +1127,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns <jk>true</jk> if <code>&amp;plainText=true</code> was specified as a URL parameter.
-	 * 
+	 *
 	 * <p>
 	 * This indicates that the <code>Content-Type</code> of the output should always be set to <js>"text/plain"</js>
 	 * to make it easy to render in a browser.
-	 * 
+	 *
 	 * <p>
 	 * This feature is useful for debugging.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
@@ -1143,35 +1143,35 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the resource bundle for the request locale.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> String sayHello(RestRequest req, <ja>@Query</ja>(<js>"user"</js>) String user) {
-	 * 
+	 *
 	 * 		<jc>// Get message bundle.</jc>
 	 * 		MessageBundle mb = req.getMessageBundle();
-	 * 
+	 *
 	 * 		<jc>// Return a localized message.</jc>
 	 * 		<jk>return</jk> mb.getString(<js>"hello.message"</js>, user);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The {@link MessageBundle} object can also be passed as a parameter on the method.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Messages">Overview &gt; juneau-rest-server &gt; Messages</a>
 	 * </ul>
-	 * 
-	 * @return 
-	 * 	The resource bundle.  
+	 *
+	 * @return
+	 * 	The resource bundle.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public MessageBundle getMessageBundle() {
@@ -1180,7 +1180,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Shortcut method for calling {@link MessageBundle#getString(Locale, String, Object...)} based on the request locale.
-	 * 
+	 *
 	 * @param key The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return The localized message.
@@ -1191,11 +1191,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the resource context handling the request.
-	 * 
+	 *
 	 * <p>
 	 * Can be used to access servlet-init parameters or annotations during requests, such as in calls to
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}..
-	 * 
+	 *
 	 * @return The resource context handling the request.
 	 */
 	public RestContext getContext() {
@@ -1204,18 +1204,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the java method handling the request.
-	 * 
+	 *
 	 * <p>
 	 * Can be used to access the method name or method annotations during requests, such as in calls to
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		This returns <jk>null</jk> when evaluating servlet-level guards since the method has not been resolved at that
 	 * 		point of execution.
 	 * </ul>
-	 * 
+	 *
 	 * @return The Java method handling the request, or <code>null</code> if the method has not yet been resolved.
 	 */
 	public Method getJavaMethod() {
@@ -1224,7 +1224,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the {@link BeanSession} associated with this request.
-	 * 
+	 *
 	 * @return The request bean session.
 	 */
 	public BeanSession getBeanSession() {
@@ -1233,35 +1233,35 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Request-level variable resolver session.
-	 * 
+	 *
 	 * <p>
 	 * Used to resolve SVL variables in text.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> String sayHello(RestRequest req) {
-	 * 
+	 *
 	 * 		<jc>// Get var resolver session.</jc>
 	 * 		VarResolverSession session = getVarResolverSession();
-	 * 
+	 *
 	 * 		<jc>// Use it to construct a customized message from a query parameter.</jc>
 	 * 		<jk>return</jk> session.resolve(<js>"Hello $RQ{user}!"</js>);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The {@link VarResolverSession} object can also be passed as a parameter on the method.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The variable resolver for this request.
 	 */
 	public VarResolverSession getVarResolverSession() {
@@ -1273,7 +1273,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns an instance of a {@link ReaderResource} that represents the contents of a resource text file from the
 	 * classpath.
-	 * 
+	 *
 	 * <p>
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -1284,14 +1284,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		<jk>return</jk> req.getClasspathResourceAsString(file, <jk>true</jk>);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String, boolean)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)}
 	 * </ul>
-	 * 
+	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars
 	 * 	If <jk>true</jk>, any SVL variables will be
@@ -1314,7 +1314,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Same as {@link #getClasspathReaderResource(String, boolean, MediaType)} except uses the resource mime-type map
 	 * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.
-	 * 
+	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars
 	 * 	If <jk>true</jk>, any SVL variables will be
@@ -1329,7 +1329,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getClasspathReaderResource(String, boolean)} with <code>resolveVars == <jk>false</jk></code>
-	 * 
+	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
@@ -1340,43 +1340,43 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Config file associated with the resource.
-	 * 
+	 *
 	 * <p>
 	 * Returns a config file with session-level variable resolution.
-	 * 
+	 *
 	 * The config file is identified via one of the following:
 	 * <ul>
 	 * 	<li class='ja'>{@link RestResource#config()}
 	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
-	 * 
+	 *
 	 * 		<jc>// Get config file.</jc>
 	 * 		Config cf = req.getConfig();
-	 * 
+	 *
 	 * 		<jc>// Get simple values from config file.</jc>
 	 * 		<jk>int</jk> timeout = cf.getInt(<js>"MyResource/timeout"</js>, 10000);
-	 * 
+	 *
 	 * 		<jc>// Get complex values from config file.</jc>
 	 * 		MyBean b = cf.getObject(<js>"MyResource/myBean"</js>, MyBean.<jk>class</jk>);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The {@link Config} object can also be passed as a parameter on the method.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ConfigurationFiles">Overview &gt; juneau-rest-server &gt; Configuration Files</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return
 	 * 	The config file associated with the resource, or <jk>null</jk> if resource does not have a config file
 	 * 	associated with it.
@@ -1389,7 +1389,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the widgets used for resolving <js>"$W{...}"</js> string variables.
-	 * 
+	 *
 	 * @return
 	 * 	The widgets used for resolving <js>"$W{...}"</js> string variables.
 	 * 	Never <jk>null</jk>.
@@ -1428,25 +1428,25 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Logger.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>getContext().getLogger()</code>.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
-	 * 
-	 * 		req.getLogger().logObjects(<jsf>FINE</jsf>, <js>"Request query parameters = {0}"</js>, req.getQuery()); 		
+	 *
+	 * 		req.getLogger().logObjects(<jsf>FINE</jsf>, <js>"Request query parameters = {0}"</js>, req.getQuery());
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The {@link RestLogger} object can also be passed as a parameter on the method.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_logger}
@@ -1455,15 +1455,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#logObjects(Level, String, Object...)}
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; juneau-rest-server &gt; Logging and Error Handling</a>
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The logger associated with the resource context.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public RestLogger getLogger() {
 		return context.getLogger();
 	}
-	
+
 	void close() {
 		if (cf != null) {
 			try {

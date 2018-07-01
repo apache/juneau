@@ -38,22 +38,22 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all microservices.
- * 
+ *
  * <p>
  * A microservice defines a simple API for starting and stopping simple Java services contained in executable jars.
- * 
+ *
  * <p>
  * The general command for invoking these services is...
  * <p class='bcode'>
  * 	java -jar mymicroservice.jar [mymicroservice.cfg]
  * </p>
- * 
+ *
  * <p>
- * Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice 
+ * Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice
  * jar file.
- * 
+ *
  * <h5 class='topic'>Microservice Configuration</h5>
- * 
+ *
  * This class defines the following method for accessing configuration for your microservice:
  * <ul class='spaced-list'>
  * 	<li>
@@ -63,9 +63,9 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		{@link #getManifest()} - The manifest file for the main jar file.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Entry point Method</h5>
- * 
+ *
  * Subclasses must implement a static void main method as the entry point for the microservice.
  * Typically, this method will simply consist of the following...
  * <p class='bcode'>
@@ -73,9 +73,9 @@ import org.apache.juneau.utils.*;
  * 		<jk>new</jk> MyMicroservice(args).start();
  * 	}
  * </p>
- * 
+ *
  * <h5 class='topic'>Lifecycle Methods</h5>
- * 
+ *
  * Subclasses must implement the following lifecycle methods:
  * <ul class='spaced-list'>
  * 	<li>
@@ -85,9 +85,9 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Lifecycle Listener Methods</h5>
- * 
+ *
  * Subclasses can optionally implement the following event listener methods:
  * <ul class='spaced-list'>
  * 	<li>
@@ -97,13 +97,13 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		{@link #onConfigChange(List)} - Gets executed after a config file has been modified.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Other Methods</h5>
- * 
+ *
  * Subclasses can optionally override the following methods to provide customized behavior:
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file 
+ * 		{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file
  * 		returned by {@link #getConfig()}.
  * </ul>
  */
@@ -122,15 +122,15 @@ public abstract class Microservice implements ConfigEventListener {
 	private VarResolver vr;
 	private Map<String,ConsoleCommand> consoleCommands;
 	private boolean consoleEnabled = true;
-	
+
 	private String cfPath;
 
 	/**
-	 * Returns the Microservice instance.  
+	 * Returns the Microservice instance.
 	 * <p>
-	 * This method only works if there's only one Microservice instance in a JVM.  
+	 * This method only works if there's only one Microservice instance in a JVM.
 	 * Otherwise, it's just overwritten by the last call to {@link #Microservice(String...)}.
-	 * 
+	 *
 	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
 	 */
 	public static Microservice getInstance() {
@@ -138,10 +138,10 @@ public abstract class Microservice implements ConfigEventListener {
 			return INSTANCE;
 		}
 	}
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
@@ -153,7 +153,7 @@ public abstract class Microservice implements ConfigEventListener {
 		setArgs(new Args(args));
 		setManifest(this.getClass());
 	}
-	
+
 	private static void setInstance(Microservice m) {
 		synchronized(Microservice.class) {
 			INSTANCE = m;
@@ -163,7 +163,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Specifies the path of the config file for this microservice.
-	 * 
+	 *
 	 * <p>
 	 * If you do not specify the config file location, we attempt to resolve it through the following methods:
 	 * <ol>
@@ -172,10 +172,10 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	<li>A config file in the same location and with the same name as the executable jar file.
 	 * 		(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
 	 * </ol>
-	 * 
+	 *
 	 * <p>
 	 * If this path does not exist, a {@link FileNotFoundException} will be thrown from the {@link #start()} command.
-	 * 
+	 *
 	 * @param cfPath The absolute or relative path of the config file.
 	 * @param create Create the file if it doesn't exist.
 	 * @return This object (for method chaining).
@@ -195,11 +195,11 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Specifies the config for this microservice.
-	 * 
+	 *
 	 * <p>
 	 * Note that if you use this method instead of {@link #setConfig(String,boolean)}, the config file will not use
 	 * the variable resolver constructed from {@link #createVarResolver()}.
-	 * 
+	 *
 	 * @param cf The config file for this application, or <jk>null</jk> if no config file is needed.
 	 */
 	public void setConfig(Config cf) {
@@ -208,7 +208,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Specifies the manifest file of the jar file this microservice is contained within.
-	 * 
+	 *
 	 * <p>
 	 * If you do not specify the manifest file, we attempt to resolve it through the following methods:
 	 * <ol>
@@ -217,7 +217,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 		is located in the project root.
 	 * 	<li>Using the class loader for this class to find the file at the URL <js>"META-INF/MANIFEST.MF"</js>.
 	 * </ol>
-	 * 
+	 *
 	 * @param mf The manifest file of this microservice.
 	 * @return This object (for method chaining).
 	 */
@@ -229,7 +229,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Shortcut for calling <code>setManifest(<jk>new</jk> ManifestFile(mf))</code>.
-	 * 
+	 *
 	 * @param mf The manifest file of this microservice.
 	 * @return This object (for method chaining).
 	 */
@@ -239,7 +239,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Convenience method for specifying the manifest contents directly.
-	 * 
+	 *
 	 * @param contents The lines in the manifest file.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -251,7 +251,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Same as {@link #setManifest(Manifest)} except specified through a {@link File} object.
-	 * 
+	 *
 	 * @param f The manifest file of this microservice.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
@@ -261,9 +261,9 @@ public abstract class Microservice implements ConfigEventListener {
 	}
 
 	/**
-	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the  
+	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the
 	 * specified class is contained within.
-	 * 
+	 *
 	 * @param c The class whose jar file contains the manifest to use for this microservice.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
@@ -274,7 +274,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Creates the {@link VarResolver} used to resolve variables in the config file returned by {@link #getConfig()}.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation resolves the following variables:
 	 * <ul class='doctree'>
@@ -285,16 +285,16 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.IfVar} - <code>$IF{arg,then[,else]}</code>
 	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.SwitchVar} - <code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code>
 	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.CoalesceVar} - <code>$CO{arg1[,arg2...]}</code>
-	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code> 
+	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code>
 	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.NotEmptyVar} - <code>$NE{arg}</code>
 	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.UpperCaseVar} - <code>$UC{arg}</code>
 	 * 	<li class='jc'>{@link org.apache.juneau.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
 	 * 	<li class='jc'>{@link org.apache.juneau.config.vars.ConfigVar} - <code>$C{key[,default]}</code>
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jd>/**
@@ -322,7 +322,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	<jc>// Example java code</jc>
 	 * 	String myentry = getConfig().getString(<js>"MySection/myEntry"</js>); <jc>// == "[foo]"</js>
 	 * </p>
-	 * 
+	 *
 	 * @return A new {@link VarResolver}.
 	 */
 	protected VarResolverBuilder createVarResolver() {
@@ -336,13 +336,13 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Returns the command-line arguments passed into the application.
-	 * 
+	 *
 	 * <p>
 	 * This method can be called from the class constructor.
-	 * 
+	 *
 	 * <p>
 	 * See {@link Args} for details on using this method.
-	 * 
+	 *
 	 * @return The command-line arguments passed into the application.
 	 */
 	public Args getArgs() {
@@ -351,7 +351,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Sets the arguments for this microservice.
-	 * 
+	 *
 	 * @param args The arguments for this microservice.
 	 * @return This object (for method chaining).
 	 */
@@ -363,7 +363,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Returns the external INI-style configuration file that can be used to configure your microservice.
-	 * 
+	 *
 	 * <p>
 	 * The config location is determined in the following order:
 	 * <ol class='spaced-list'>
@@ -372,73 +372,73 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	<li>
 	 * 		The <code>Main-Config</code> entry in the microservice jar manifest file.
 	 * 	<li>
-	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g. 
+	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g.
 	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
 	 * </ol>
-	 * 
+	 *
 	 * <p>
 	 * If all methods for locating the config fail, then this method returns <jk>null</jk>.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can set their own config file by calling the {@link #setConfig(Config)} method.
-	 * 
+	 *
 	 * <p>
 	 * String variables defined by {@link #createVarResolver()} are automatically resolved when using this method.
-	 * 
+	 *
 	 * <p>
 	 * This method can be called from the class constructor.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cc># My section</cc>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cs>[MySection]</cs>
-	 * 
+	 *
 	 * 	<cc># An integer</cc>
 	 * 	<ck>anInt</ck> = 1
-	 * 
+	 *
 	 * 	<cc># A boolean</cc>
 	 * 	<ck>aBoolean</ck> = true
-	 * 
+	 *
 	 * 	<cc># An int array</cc>
 	 * 	<ck>anIntArray</ck> = 1,2,3
-	 * 
+	 *
 	 * 	<cc># A POJO that can be converted from a String</cc>
 	 * 	<ck>aURL</ck> = http://foo
-	 * 
+	 *
 	 * 	<cc># A POJO that can be converted from JSON</cc>
 	 * 	<ck>aBean</ck> = {foo:'bar',baz:123}
-	 * 
+	 *
 	 * 	<cc># A system property</cc>
 	 * 	<ck>locale</ck> = $S{java.locale, en_US}
-	 * 
+	 *
 	 * 	<cc># An environment variable</cc>
 	 * 	<ck>path</ck> = $E{PATH, unknown}
-	 * 
+	 *
 	 * 	<cc># A manifest file entry</cc>
 	 * 	<ck>mainClass</ck> = $MF{Main-Class}
-	 * 
+	 *
 	 * 	<cc># Another value in this config file</cc>
 	 * 	<ck>sameAsAnInt</ck> = $C{MySection/anInt}
-	 * 
+	 *
 	 * 	<cc># A command-line argument in the form "myarg=foo"</cc>
 	 * 	<ck>myArg</ck> = $A{myarg}
-	 * 
+	 *
 	 * 	<cc># The first command-line argument</cc>
 	 * 	<ck>firstArg</ck> = $A{0}
-	 * 
+	 *
 	 * 	<cc># Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.</cc>
 	 * 	<ck>nested</ck> = $S{mySystemProperty,$E{MY_ENV_VAR,$A{0}}}
-	 * 
+	 *
 	 * 	<cc># A POJO with embedded variables</cc>
 	 * 	<ck>aBean2</ck> = {foo:'$A{0}',baz:$C{MySection/anInt}}
 	 * </p>
-	 * 
+	 *
 	 * <p class='bcode'>
 	 * 	<jc>// Java code for accessing config entries above.</jc>
 	 * 	Config cf = getConfig();
-	 * 
+	 *
 	 * 	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>);
 	 * 	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>);
 	 * 	<jk>int</jk>[] anIntArray = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"MySection/anIntArray"</js>);
@@ -451,7 +451,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	String myArg = cf.getString(<js>"MySection/myArg"</js>);
 	 * 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>);
 	 * </p>
-	 * 
+	 *
 	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
 	 */
 	public Config getConfig() {
@@ -460,22 +460,22 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Returns the main jar manifest file contents as a simple {@link ObjectMap}.
-	 * 
+	 *
 	 * <p>
-	 * This map consists of the contents of {@link Manifest#getMainAttributes()} with the keys and entries converted to 
+	 * This map consists of the contents of {@link Manifest#getMainAttributes()} with the keys and entries converted to
 	 * simple strings.
 	 * <p>
 	 * This method can be called from the class constructor.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
 	 * 	String mainClass = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
-	 * 
+	 *
 	 * 	<jc>// Get Rest-Resources from manifest file.</jc>
 	 * 	String[] restResources = Microservice.<jsm>getManifest</jsm>().getStringArray(<js>"Rest-Resources"</js>);
 	 * </p>
-	 * 
+	 *
 	 * @return The manifest file from the main jar, or <jk>null</jk> if the manifest file could not be retrieved.
 	 */
 	public ManifestFile getManifest() {
@@ -486,7 +486,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * Returns the variable resolver for resolving variables in strings and files.
 	 * <p>
 	 * See the {@link #createVarResolver()} method for the list of available resolution variables.
-	 * 
+	 *
 	 * @return The VarResolver used by this Microservice, or <jk>null</jk> if it was never created.
 	 */
 	public VarResolver getVarResolver() {
@@ -495,26 +495,26 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Returns the logger for this microservice.
-	 * 
+	 *
 	 * @return The logger for this microservice.
 	 */
 	public Logger getLogger() {
 		return logger;
 	}
-	
+
 	//--------------------------------------------------------------------------------
 	// Abstract lifecycle methods.
 	//--------------------------------------------------------------------------------
 
 	/**
 	 * Start this application.
-	 * 
+	 *
 	 * <p>
 	 * Default implementation simply calls {@link #onStart()}.
-	 * 
+	 *
 	 * <p>
 	 * Overridden methods MUST call this method FIRST so that the {@link #onStart()} method is called.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
@@ -557,7 +557,7 @@ public abstract class Microservice implements ConfigEventListener {
 		if (cfPath != null)
 			cf = cfb.name(cfPath).varResolver(createVarResolver().defaultVars().build()).build();
 
-		
+
 		// --------------------------------------------------------------------------------
 		// Find config file.
 		// Can either be passed in as first parameter, or we discover it using
@@ -582,10 +582,10 @@ public abstract class Microservice implements ConfigEventListener {
 		}
 
 		vr = createVarResolver().build();
-		
+
 		if (cfPath != null)
 			System.setProperty("juneau.configFile", cfPath);
-		
+
 		// --------------------------------------------------------------------------------
 		// Set system properties.
 		// --------------------------------------------------------------------------------
@@ -616,7 +616,7 @@ public abstract class Microservice implements ConfigEventListener {
 		} else {
 			out(mb, "RunningClassWithConfig", getClass().getSimpleName(), cfPath);
 		}
-				
+
 		Runtime.getRuntime().addShutdownHook(
 			new Thread() {
 				@Override /* Thread */
@@ -631,10 +631,10 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Start the console for this application.
-	 * 
+	 *
 	 * <p>
 	 * Note that this is typically started after all initialization has occurred so that the console output isn't polluted.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
@@ -643,7 +643,7 @@ public abstract class Microservice implements ConfigEventListener {
 		for (ConsoleCommand cc : createConsoleCommands())
 			consoleCommands.put(cc.getName(), cc);
 		consoleCommands = unmodifiableMap(consoleCommands);
-		
+
 		final Map<String,ConsoleCommand> commands = consoleCommands;
 		final MessageBundle mb2 = mb;
 		if (! consoleCommands.isEmpty()) {
@@ -653,12 +653,12 @@ public abstract class Microservice implements ConfigEventListener {
 				public void run() {
 					Scanner in = getConsoleReader();
 					PrintWriter out = getConsoleWriter();
-					
+
 					out.println(mb2.getString("ListOfAvailableCommands"));
-					for (ConsoleCommand cc : commands.values()) 
+					for (ConsoleCommand cc : commands.values())
 						out.append("\t").append(cc.getName()).append(" -- ").append(cc.getInfo()).println();
 					out.println();
-					
+
 					while (true) {
 						String line = null;
 						out.append("> ").flush();
@@ -683,13 +683,13 @@ public abstract class Microservice implements ConfigEventListener {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Initialize the logging for this microservice.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide customized logging.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation uses the <cs>Logging</cs> section in the config file to set up logging:
 	 * <p class='bcode'>
@@ -698,25 +698,25 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	# See FileHandler Java class for details.
 	 * 	#================================================================================</cc>
 	 * 	<cs>[Logging]</cs>
-	 * 
+	 *
 	 * 	<cc># The directory where to create the log file.
 	 * 	# Default is ".".</cc>
 	 * 	<ck>logDir</ck> = logs
-	 * 
+	 *
 	 * 	<cc># The name of the log file to create for the main logger.
 	 * 	# The logDir and logFile make up the pattern that's passed to the FileHandler
 	 * 	# constructor.
 	 * 	# If value is not specified, then logging to a file will not be set up.</cc>
 	 * 	<ck>logFile</ck> = microservice.%g.log
-	 * 
+	 *
 	 * 	<cc># Whether to append to the existing log file or create a new one.
 	 * 	# Default is false.</cc>
 	 * 	<ck>append</ck> =
-	 * 
+	 *
 	 * 	<cc># The SimpleDateFormat format to use for dates.
 	 * 	# Default is "yyyy.MM.dd hh:mm:ss".</cc>
 	 * 	<ck>dateFormat</ck> =
-	 * 
+	 *
 	 * 	<cc># The log message format.
 	 * 	# The value can contain any of the following variables:
 	 * 	# 	{date} - The date, formatted per dateFormat.
@@ -729,32 +729,32 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	#	{exception} - The localized exception message.
 	 * 	# Default is "[{date} {level}] {msg}%n".</cc>
 	 * 	<ck>format</ck> =
-	 * 
+	 *
 	 * 	<cc># The maximum log file size.
 	 * 	# Suffixes available for numbers.
 	 * 	# See Config.getInt(String,int) for details.
 	 * 	# Default is 1M.</cc>
 	 * 	<ck>limit</ck> = 10M
-	 * 
+	 *
 	 * 	<cc># Max number of log files.
 	 * 	# Default is 1.</cc>
 	 * 	<ck>count</ck> = 5
-	 * 
+	 *
 	 * 	<cc># Default log levels.
 	 * 	# Keys are logger names.
 	 * 	# Values are serialized Level POJOs.</cc>
 	 * 	<ck>levels</ck> = { org.apache.juneau:'INFO' }
-	 * 
+	 *
 	 * 	<cc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
 	 * 	# Useful for preventing log files from filling up with duplicate stack traces.
 	 * 	# Default is false.</cc>
 	 * 	<ck>useStackTraceHashes</ck> = true
-	 * 
+	 *
 	 * 	<cc># The default level for the console logger.
 	 * 	# Default is WARNING.</cc>
 	 * 	<ck>consoleLevel</ck> = WARNING
 	 * </p>
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	protected void initLogging() throws Exception {
@@ -790,10 +790,10 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Joins the application with the current thread.
-	 * 
+	 *
 	 * <p>
 	 * Default implementation is a no-op.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
@@ -803,13 +803,13 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Stop this application.
-	 * 
+	 *
 	 * <p>
 	 * Default implementation simply calls {@link #onStop()}.
-	 * 
+	 *
 	 * <p>
 	 * Overridden methods MUST call this method LAST so that the {@link #onStop()} method is called.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public Microservice stop() {
@@ -833,7 +833,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Called at the beginning of the {@link #start()} call.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -841,7 +841,7 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Called at the end of the {@link #stop()} call.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -849,39 +849,39 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Called if one or more changes occur in the config file.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to listen for config file changes.
-	 * 
+	 *
 	 * @param events The list of changes in the config file.
 	 */
 	@Override /* ConfigEventListener */
 	public void onConfigChange(List<ConfigEvent> events) {}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Other methods.
 	//--------------------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the console commands associated with this microservice.
-	 * 
+	 *
 	 * @return The console commands associated with this microservice as an unmodifiable map.
 	 */
 	public final Map<String,ConsoleCommand> getConsoleCommands() {
 		return consoleCommands;
 	}
-	
+
  	/**
 	 * Constructs the list of available console commands.
-	 * 
+	 *
 	 * <p>
 	 * By default, uses the <js>"Console/commands"</js> list in the config file.
 	 * Subclasses can override this method and modify or augment this list to provide their own console commands.
-	 * 
+	 *
 	 * <p>
-	 * The order of the commands returned by this method is the order they will be listed 
-	 * 
+	 * The order of the commands returned by this method is the order they will be listed
+	 *
 	 * @return A mutable list of console command instances.
 	 * @throws Exception
 	 */
@@ -891,37 +891,37 @@ public abstract class Microservice implements ConfigEventListener {
 			l.add((ConsoleCommand)Class.forName(s).newInstance());
 		return l;
 	}
-	
+
 	/**
 	 * Returns the console reader.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own console input.
-	 * 
+	 *
 	 * @return The console reader.  Never <jk>null</jk>.
 	 */
 	public Scanner getConsoleReader() {
 		return consoleReader;
 	}
-	
+
 	/**
 	 * Returns the console writer.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own console output.
-	 * 
+	 *
 	 * @return The console writer.  Never <jk>null</jk>.
 	 */
 	public PrintWriter getConsoleWriter() {
 		return consoleWriter;
 	}
-	
+
 	/**
 	 * Prints a localized message to the console writer.
-	 * 
+	 *
 	 * <p>
 	 * Ignored if <js>"Console/enabled"</js> is <jk>false</jk>.
-	 * 
+	 *
 	 * @param mb The message bundle containing the message.
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -933,10 +933,10 @@ public abstract class Microservice implements ConfigEventListener {
 
 	/**
 	 * Prints a localized message to STDERR.
-	 * 
+	 *
 	 * <p>
 	 * Ignored if <js>"Console/enabled"</js> is <jk>false</jk>.
-	 * 
+	 *
 	 * @param mb The message bundle containing the message.
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.

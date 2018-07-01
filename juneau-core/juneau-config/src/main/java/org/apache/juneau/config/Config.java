@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Main configuration API class.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
@@ -53,18 +53,18 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  Configuration name.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.name.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"Configuration.cfg"</js>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#name(String)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the configuration name.
@@ -75,18 +75,18 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  Configuration store.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.store.o"</js>
 	 * 	<li><b>Data type:</b>  {@link ConfigStore}
 	 * 	<li><b>Default:</b>  {@link ConfigFileStore#DEFAULT}
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#store(ConfigStore)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The configuration store used for retrieving and storing configurations.
@@ -95,19 +95,19 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  POJO serializer.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.serializer.o"</js>
 	 * 	<li><b>Data type:</b>  {@link WriterSerializer}
 	 * 	<li><b>Default:</b>  {@link JsonSerializer#DEFAULT_LAX}
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#serializer(Class)}
 	 * 			<li class='jm'>{@link ConfigBuilder#serializer(WriterSerializer)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The serializer to use for serializing POJO values.
@@ -116,19 +116,19 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  POJO parser.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.parser.o"</js>
 	 * 	<li><b>Data type:</b>  {@link ReaderParser}
 	 * 	<li><b>Default:</b>  {@link JsonParser#DEFAULT}
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#parser(Class)}
 	 * 			<li class='jm'>{@link ConfigBuilder#parser(ReaderParser)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The parser to use for parsing values to POJOs.
@@ -137,19 +137,19 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  Value encoder.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.encoder.o"</js>
 	 * 	<li><b>Data type:</b>  {@link ConfigEncoder}
 	 * 	<li><b>Default:</b>  {@link ConfigXorEncoder#INSTANCE}
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#encoder(Class)}
 	 * 			<li class='jm'>{@link ConfigBuilder#encoder(ConfigEncoder)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The encoder to use for encoding encoded configuration values.
@@ -158,19 +158,19 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  SVL variable resolver.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.varResolver.o"</js>
 	 * 	<li><b>Data type:</b>  {@link VarResolver}
 	 * 	<li><b>Default:</b>  {@link VarResolver#DEFAULT}
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#varResolver(Class)}
 	 * 			<li class='jm'>{@link ConfigBuilder#varResolver(VarResolver)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The resolver to use for resolving SVL variables.
@@ -179,18 +179,18 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  Binary value line length.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.binaryLineLength.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>-1</code>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#binaryLineLength(int)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When serializing binary values, lines will be split after this many characters.
@@ -200,22 +200,22 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  Binary value format.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.binaryFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
 	 * 	<li><b>Default:</b>  {@link BinaryFormat#BASE64}
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#binaryFormat(BinaryFormat)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The format to use when persisting byte arrays.
-	 * 
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul>
@@ -228,38 +228,38 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Configuration property:  Multi-line values should always be on separate lines.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.multiLineValuesOnSeparateLines.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#multiLineValuesOnSeparateLines()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, multi-line values will always be placed on a separate line from the key.
 	 */
 	public static final String CONFIG_multiLineValuesOnSeparateLines = PREFIX + "multiLineValuesOnSeparateLines.b";
-	
+
 	/**
 	 * Configuration property:  Read-only.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.readOnly.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#readOnly()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
@@ -286,22 +286,22 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Instantiates a new clean-slate {@link ConfigBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> ConfigBuilder()</code>.
-	 * 
+	 *
 	 * @return A new {@link ConfigBuilder} object.
 	 */
 	public static ConfigBuilder create() {
 		return new ConfigBuilder();
 	}
-	
+
 	/**
 	 * Same as {@link #create()} but initializes the builder with the specified config name.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> ConfigBuilder().name(name)</code>.
-	 * 
+	 *
 	 * @param name The configuration name.
 	 * @return A new {@link ConfigBuilder} object.
 	 */
@@ -313,17 +313,17 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public ConfigBuilder builder() {
 		return new ConfigBuilder(getPropertyStore());
 	}
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public Config(PropertyStore ps) throws IOException {
 		super(ps);
-		
+
 		name = getStringProperty(CONFIG_name, "Configuration.cfg");
 		store = getInstanceProperty(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
 		configMap = store.getMap(name);
@@ -343,8 +343,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		multiLineValuesOnSeparateLines = getBooleanProperty(CONFIG_multiLineValuesOnSeparateLines, false);
 		readOnly = getBooleanProperty(CONFIG_readOnly, false);
 	}
-	
-	Config(Config copyFrom, VarResolverSession varSession) { 
+
+	Config(Config copyFrom, VarResolverSession varSession) {
 		super(null);
 		name = copyFrom.name;
 		store = copyFrom.store;
@@ -360,20 +360,20 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		readOnly = copyFrom.readOnly;
 		beanSession = copyFrom.beanSession;
 	}
-	
+
 	/**
 	 * Creates a copy of this config using the specified var session for resolving variables.
-	 * 
+	 *
 	 * <p>
 	 * This creates a shallow copy of the config but replacing the variable resolver.
-	 * 
+	 *
 	 * @param varSession The var session used for resolving string variables.
 	 * @return A new config object.
 	 */
 	public Config resolving(VarResolverSession varSession) {
 		return new Config(this, varSession);
 	}
-	
+
 
 	//--------------------------------------------------------------------------------
 	// Workhorse getters
@@ -381,23 +381,23 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Returns the specified value as a string from the config file.
-	 * 
+	 *
 	 * <p>
 	 * Unlike {@link #getString(String)}, this method doesn't replace SVL variables.
-	 * 
-	 * @param key The key.  
+	 *
+	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or value doesn't exist.
 	 */
 	public String get(String key) {
-		
+
 		String sname = sname(key);
-		String skey = skey(key); 
-		
+		String skey = skey(key);
+
 		ConfigEntry ce = configMap.getEntry(sname, skey);
-		
+
 		if (ce == null || ce.getValue() == null)
 			return null;
-		
+
 		String val = ce.getValue();
 		for (ConfigMod m : ConfigMod.asModifiersReverse(ce.getModifiers())) {
 			if (m == ENCODED) {
@@ -405,10 +405,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 					val = encoder.decode(key, val);
 			}
 		}
-		
+
 		return val;
 	}
-		
+
 
 	//--------------------------------------------------------------------------------
 	// Workhorse setters
@@ -416,8 +416,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Sets a value in this config.
-	 * 
-	 * @param key The key.  
+	 *
+	 * @param key The key.
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -426,14 +426,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		checkWrite();
 		assertFieldNotNull(key, "key");
 		String sname = sname(key);
-		String skey = skey(key); 
-		
+		String skey = skey(key);
+
 		ConfigEntry ce = configMap.getEntry(sname, skey);
 		if (ce == null && value == null)
 			return this;
-		
+
 		String mod = ce == null ? "" : ce.getModifiers();
-		
+
 		String s = asString(value);
 		for (ConfigMod m : ConfigMod.asModifiers(mod)) {
 			if (m == ENCODED) {
@@ -448,10 +448,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered
 	 * serializer.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling <code>put(key, value, isEncoded(key))</code>.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param value The new value POJO.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
@@ -466,7 +466,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Same as {@link #set(String, Object)} but allows you to specify the serializer to use to serialize the
 	 * value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param value The new value.
 	 * @param serializer
@@ -480,22 +480,22 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public Config set(String key, Object value, Serializer serializer) throws SerializeException {
 		return set(key, serialize(value, serializer));
 	}
-	
+
 	/**
 	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param value The new value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @param modifier 
+	 * @param modifier
 	 * 	Optional modifier to apply to the value.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @param comment 
+	 * @param comment
 	 * 	Optional same-line comment to add to this value.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @param preLines 
+	 * @param preLines
 	 * 	Optional comment or blank lines to add before this entry.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
@@ -509,19 +509,19 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param value The new value.
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @param modifiers 
+	 * @param modifiers
 	 * 	Optional modifiers to apply to the value.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @param comment 
+	 * @param comment
 	 * 	Optional same-line comment to add to this value.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @param preLines 
+	 * @param preLines
 	 * 	Optional comment or blank lines to add before this entry.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
@@ -533,8 +533,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		checkWrite();
 		assertFieldNotNull(key, "key");
 		String sname = sname(key);
-		String skey = skey(key); 
-		
+		String skey = skey(key);
+
 		String s = serialize(value, serializer);
 		if (modifiers != null) {
 			for (ConfigMod m : modifiers) {
@@ -543,14 +543,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 				}
 			}
 		}
-		
+
 		configMap.setEntry(sname, skey, s, modifiers == null ? null : ConfigMod.asString(modifiers), comment, preLines);
 		return this;
 	}
 
 	/**
 	 * Removes an entry with the specified key.
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -558,18 +558,18 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public Config remove(String key) {
 		checkWrite();
 		String sname = sname(key);
-		String skey = skey(key); 
+		String skey = skey(key);
 		configMap.removeEntry(sname, skey);
 		return this;
 	}
-	
+
 	/**
 	 * Encodes and unencoded entries in this config.
-	 * 
+	 *
 	 * <p>
 	 * If any entries in the config are marked as encoded but not actually encoded,
 	 * this will encode them.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
@@ -583,17 +583,17 @@ public final class Config extends Context implements ConfigEventListener, Writab
 				}
 			}
 		}
-		
+
 		return this;
 	}
-	
+
 	//--------------------------------------------------------------------------------
 	// API methods
 	//--------------------------------------------------------------------------------
 
 	/**
 	 * Gets the entry with the specified key.
-	 * 
+	 *
 	 * <p>
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
@@ -602,7 +602,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
@@ -617,7 +617,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Gets the entry with the specified key.
-	 * 
+	 *
 	 * <p>
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
@@ -626,7 +626,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist.
@@ -642,7 +642,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Gets the entry with the specified key, splits the value on commas, and returns the values as trimmed strings.
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The value, or an empty array if the section or key does not exist.
 	 */
@@ -652,7 +652,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getStringArray(String)} but returns a default value if the value cannot be found.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist or is blank.
@@ -667,10 +667,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Convenience method for getting int config values.
-	 * 
+	 *
 	 * <p>
 	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -678,7 +678,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li>
 	 * 		<code><js>"100M"</js> => 104857600</code>
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Uses {@link Integer#decode(String)} underneath, so any of the following integer formats are supported:
 	 * <ul>
@@ -687,7 +687,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li><js>"#..."</js>
 	 * 	<li><js>"0..."</js>
 	 * </ul>
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
 	 */
@@ -697,7 +697,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getInt(String)} but returns a default value if not set.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the value does not exist or the value is empty.
@@ -711,7 +711,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Convenience method for getting boolean config values.
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The value, or <jk>false</jk> if the section or key does not exist or cannot be parsed as a boolean.
 	 */
@@ -721,7 +721,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Convenience method for getting boolean config values.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as a boolean.
@@ -733,10 +733,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Convenience method for getting long config values.
-	 * 
+	 *
 	 * <p>
 	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -744,7 +744,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li>
 	 * 		<code><js>"100M"</js> => 104857600</code>
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Uses {@link Long#decode(String)} underneath, so any of the following number formats are supported:
 	 * <ul>
@@ -753,7 +753,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li><js>"#..."</js>
 	 * 	<li><js>"0..."</js>
 	 * </ul>
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
 	 */
@@ -763,7 +763,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getLong(String)} but returns a default value if not set.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the value does not exist or the value is empty.
@@ -774,10 +774,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			return def;
 		return parseLongWithSuffix(s);
 	}
-	
+
 	/**
 	 * Convenience method for getting double config values.
-	 * 
+	 *
 	 * <p>
 	 * Uses {@link Double#valueOf(String)} underneath, so any of the following number formats are supported:
 	 * <ul>
@@ -786,7 +786,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li><js>"#..."</js>
 	 * 	<li><js>"0..."</js>
 	 * </ul>
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
 	 */
@@ -796,7 +796,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getDouble(String)} but returns a default value if not set.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the value does not exist or the value is empty.
@@ -810,7 +810,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Convenience method for getting float config values.
-	 * 
+	 *
 	 * <p>
 	 * Uses {@link Float#valueOf(String)} underneath, so any of the following number formats are supported:
 	 * <ul>
@@ -819,7 +819,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li><js>"#..."</js>
 	 * 	<li><js>"0..."</js>
 	 * </ul>
-	 * 
+	 *
 	 * @param key The key.
 	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
 	 */
@@ -829,7 +829,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getFloat(String)} but returns a default value if not set.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the value does not exist or the value is empty.
@@ -843,16 +843,16 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Convenience method for getting byte array config values.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to calling the following:
 	 * <p class='bcode'>
 	 * 	<jk>byte</jk>[] b = config.getObject(key, <jk>byte</jk>[].<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link #CONFIG_binaryFormat} setting.
-	 * 
-	 * @param key The key.  
+	 *
+	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 * @throws ParseException If value could not be converted to a byte array.
 	 */
@@ -864,11 +864,11 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			return new byte[0];
 		return getObject(key, byte[].class);
 	}
-	
+
 	/**
 	 * Same as {@link #getBytes(String)} but with a default value if the entry doesn't exist.
-	 * 
-	 * @param key The key.  
+	 *
+	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @return The value, or the default value if the section or key does not exist.
 	 * @throws ParseException If value could not be converted to a byte array.
@@ -884,7 +884,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 * 
+	 *
 	 * <p>
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
@@ -893,49 +893,49 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myListOfStrings"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myListOfBeans"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/my2dListOfStrings"</js>, LinkedList.<jk>class</jk>,
 	 * 		LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map m = cf.getObject(<js>"MySection/myMapOfListsOfBeans"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
-	 * 
+	 *
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value
 	 * types.
-	 * 
+	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
-	 * 
+	 *
 	 * @param key The key.
 	 * @param type
 	 * 	The object type to create.
@@ -953,7 +953,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getObject(String, Type, Type...)} but allows you to specify the parser to use to parse the value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
@@ -975,30 +975,30 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getObject(String, Type, Type...)} except optimized for a non-parameterized class.
-	 * 
+	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 * 
+	 *
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = cf.getObject(<js>"MySection/mySimpleString"</js>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = cf.getObject(<js>"MySection/myBean"</js>, MyBean.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a bean array.</jc>
 	 * 	MyBean[] b = cf.getObject(<js>"MySection/myBeanArray"</js>, MyBean[].<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myList"</js>, LinkedList.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * @param <T> The class type of the object being created.
 	 * @param key The key.
 	 * @param type The object type to create.
@@ -1013,7 +1013,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Same as {@link #getObject(String, Class)} but allows you to specify the parser to use to parse the value.
-	 * 
+	 *
 	 * @param <T> The class type of the object being created.
 	 * @param key The key.
 	 * @param parser
@@ -1032,10 +1032,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #getObject(String, Class)}, but with a default value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @param type The class to convert the value to.
@@ -1049,7 +1049,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Same as {@link #getObjectWithDefault(String, Object, Class)} but allows you to specify the parser to use to parse
 	 * the value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
@@ -1067,10 +1067,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #getObject(String, Type, Type...)}, but with a default value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param def The default value if the value does not exist.
 	 * @param type
@@ -1090,7 +1090,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Same as {@link #getObjectWithDefault(String, Object, Type, Type...)} but allows you to specify the parser to use
 	 * to parse the value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param parser
 	 * 	The parser to use for parsing the object.
@@ -1114,8 +1114,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Returns the keys of the entries in the specified section.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name to write from.
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -1128,8 +1128,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Copies the entries in a section to the specified bean by calling the public setters on that bean.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name to write from.
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -1152,7 +1152,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		Set<String> keys = configMap.getKeys(section);
 		if (keys == null)
 			throw new IllegalArgumentException("Section '"+section+"' not found in configuration.");
-		
+
 		BeanMap<?> bm = beanSession.toBeanMap(bean);
 		for (String k : keys) {
 			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
@@ -1163,14 +1163,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 				bm.put(k, getObject(section + '/' + k, bpm.getClassMeta().getInnerClass()));
 			}
 		}
-		
+
 		return this;
 	}
 
 	/**
 	 * Shortcut for calling <code>getSectionAsBean(sectionName, c, <jk>false</jk>)</code>.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name to write from.
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -1184,10 +1184,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Converts this config file section to the specified bean instance.
-	 * 
+	 *
 	 * <p>
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
-	 * 
+	 *
 	 * <h5 class='figure'>Example config file</h5>
 	 * <p class='bcode'>
 	 * 	<cs>[MyAddress]</cs>
@@ -1197,7 +1197,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<ck>state</ck> = <cv>NY</cv>
 	 * 	<ck>zip</ck> = <cv>12345</cv>
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='figure'>Example bean</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> Address {
@@ -1206,14 +1206,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 		public int zip;
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='figure'>Example usage</h5>
 	 * <p class='bcode'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
 	 * </p>
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name to write from.
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -1227,12 +1227,12 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
 		assertFieldNotNull(c, "c");
 		section = section(section);
-		
+
 		if (! configMap.hasSection(section))
 			return null;
 
 		Set<String> keys = configMap.getKeys(section);
-		
+
 		BeanMap<T> bm = beanSession.newBeanMap(c);
 		for (String k : keys) {
 			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
@@ -1243,39 +1243,39 @@ public final class Config extends Context implements ConfigEventListener, Writab
 				bm.put(k, getObject(section + '/' + k, bpm.getClassMeta().getInnerClass()));
 			}
 		}
-		
+
 		return bm.getBean();
 	}
 
 	/**
 	 * Returns a section of this config copied into an {@link ObjectMap}.
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name to write from.
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new {@link ObjectMap}, or <jk>null</jk> if the section doesn't exist.
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public ObjectMap getSectionAsMap(String section) throws ParseException {
 		section = section(section);
-		
+
 		if (! configMap.hasSection(section))
 			return null;
-		
+
 		Set<String> keys = configMap.getKeys(section);
-		
+
 		ObjectMap om = new ObjectMap();
-		for (String k : keys) 
+		for (String k : keys)
 			om.put(k, getObject(section + '/' + k, Object.class));
 		return om;
 	}
-	
-	
+
+
 	/**
 	 * Wraps a config file section inside a Java interface so that values in the section can be read and
 	 * write using getters and setters.
-	 * 
+	 *
 	 * <h5 class='figure'>Example config file</h5>
 	 * <p class='bcode'>
 	 * 	<cs>[MySection]</cs>
@@ -1286,50 +1286,50 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
 	 * 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='figure'>Example interface</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public interface</jk> MyConfigInterface {
-	 * 
+	 *
 	 * 		String getString();
 	 * 		<jk>void</jk> setString(String x);
-	 * 
+	 *
 	 * 		<jk>int</jk> getInt();
 	 * 		<jk>void</jk> setInt(<jk>int</jk> x);
-	 * 
+	 *
 	 * 		MyEnum getEnum();
 	 * 		<jk>void</jk> setEnum(MyEnum x);
-	 * 
+	 *
 	 * 		MyBean getBean();
 	 * 		<jk>void</jk> setBean(MyBean x);
-	 * 
+	 *
 	 * 		<jk>int</jk>[][][] getInt3dArray();
 	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
-	 * 
+	 *
 	 * 		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
 	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='figure'>Example usage</h5>
 	 * <p class='bcode'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 * 
+	 *
 	 * 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jk>int</jk> myInt = ci.getInt();
-	 * 
+	 *
 	 * 	ci.setBean(<jk>new</jk> MyBean());
-	 * 
+	 *
 	 * 	cf.save();
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='notes'>
 	 * <ul class='spaced-list'>
 	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
 	 * </ul>
-	 * 
-	 * @param section 
+	 *
+	 * @param section
 	 * 	The section name to write from.
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -1365,7 +1365,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Returns <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
-	 * 
+	 *
 	 * @param key The key.
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
@@ -1375,15 +1375,15 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Creates the specified section if it doesn't exist.
-	 * 
+	 *
 	 * <p>
 	 * Returns the existing section if it already exists.
-	 * 
-	 * @param name 
+	 *
+	 * @param name
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank for the default section.
-	 * @param preLines 
+	 * @param preLines
 	 * 	Optional comment and blank lines to add immediately before the section.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
 	 * @return The appended or existing section.
@@ -1399,35 +1399,35 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Creates the specified section if it doesn't exist.
-	 * 
-	 * @param name 
+	 *
+	 * @param name
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank for the default section.
-	 * @param preLines 
+	 * @param preLines
 	 * 	Optional comment and blank lines to add immediately before the section.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
-	 * @param contents 
+	 * @param contents
 	 * 	Values to set in the new section.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return The appended or existing section.
-	 * @throws SerializeException 
+	 * @throws SerializeException
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config setSection(String name, List<String> preLines, Map<String,Object> contents) throws SerializeException {
 		checkWrite();
 		configMap.setSection(section(name), preLines);
-		
+
 		if (contents != null)
 			for (Map.Entry<String,Object> e : contents.entrySet())
 				set(section(name) + '/' + e.getKey(), e.getValue());
-		
+
 		return this;
 	}
 
 	/**
 	 * Removes the section with the specified name.
-	 * 
+	 *
 	 * @param name The name of the section to remove
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -1437,10 +1437,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		configMap.removeSection(name);
 		return this;
 	}
-	
+
 	/**
 	 * Loads the contents of the specified map of maps into this config.
-	 * 
+	 *
 	 * @param m The maps to load.
 	 * @return This object (for method chaining).
 	 * @throws SerializeException
@@ -1455,9 +1455,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Commit the changes in this config to the store.
-	 * 
+	 *
 	 * @return This object (for method chaining).
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config commit() throws IOException {
@@ -1468,10 +1468,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Saves this config file to the specified writer as an INI file.
-	 * 
+	 *
 	 * <p>
 	 * The writer will automatically be closed.
-	 * 
+	 *
 	 * @param w The writer to send the output to.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to send contents to the writer.
@@ -1483,10 +1483,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Add a listener to this config to react to modification events.
-	 * 
+	 *
 	 * <p>
 	 * Listeners should be removed using {@link #removeListener(ConfigEventListener)}.
-	 * 
+	 *
 	 * @param listener The new listener to add.
 	 * @return This object (for method chaining).
 	 */
@@ -1494,10 +1494,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		listeners.add(listener);
 		return this;
 	}
-	
+
 	/**
 	 * Removes a listener from this config.
-	 * 
+	 *
 	 * @param listener The listener to remove.
 	 * @return This object (for method chaining).
 	 */
@@ -1508,16 +1508,16 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Closes this configuration object by unregistering it from the underlying config map.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	public void close() throws IOException {
 		configMap.unregister(this);
 	}
-	
+
 	/**
 	 * Overwrites the contents of the config file.
-	 * 
+	 *
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
 	 * @return This object (for method chaining).
@@ -1533,7 +1533,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Overwrites the contents of the config file.
-	 * 
+	 *
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
 	 * @return This object (for method chaining).
@@ -1549,7 +1549,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Does a rollback of any changes on this config currently in memory.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
@@ -1561,25 +1561,25 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	/**
 	 * Returns the values in this config map as a map of maps.
-	 * 
+	 *
 	 * <p>
 	 * This is considered a snapshot copy of the config map.
-	 * 
+	 *
 	 * <p>
 	 * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.
-	 * 
+	 *
 	 * @return A copy of this config as a map of maps.
 	 */
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return configMap.asMap();
 	}
-	
-	
+
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Interface methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Unused.
 	 */
@@ -1601,25 +1601,25 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		for (ConfigEventListener l : listeners)
 			l.onConfigChange(events);
 	}
-	
+
 	@Override /* Writable */
 	public MediaType getMediaType() {
 		return MediaType.PLAIN;
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	private String serialize(Object value, Serializer serializer) throws SerializeException {
 		if (value == null)
 			return "";
 		if (serializer == null)
 			serializer = this.serializer;
 		Class<?> c = value.getClass();
-		if (value instanceof CharSequence) 
-			return nlIfMl((CharSequence)value); 
+		if (value instanceof CharSequence)
+			return nlIfMl((CharSequence)value);
 		if (isSimpleType(c))
 			return value.toString();
 
@@ -1636,11 +1636,11 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			if (l <= 0 || s.length() <= l)
 				return s;
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < s.length(); i += l) 
+			for (int i = 0; i < s.length(); i += l)
 				sb.append(binaryLineLength > 0 ? "\n" : "").append(s.substring(i, Math.min(s.length(), i + l)));
 			return sb.toString();
 		}
-		
+
 		String r = null;
 		if (multiLineValuesOnSeparateLines)
 			r = "\n" + (String)serializer.serialize(value);
@@ -1651,14 +1651,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			return r.substring(1, r.length()-1);
 		return r;
 	}
-	
+
 	private String nlIfMl(CharSequence cs) {
 		String s = cs.toString();
 		if (s.indexOf('\n') != -1 && multiLineValuesOnSeparateLines)
 			return "\n" + s;
 		return s;
 	}
-	
+
 	@SuppressWarnings({ "unchecked" })
 	private <T> T parse(String s, Parser parser, Type type, Type...args) throws ParseException {
 
@@ -1667,7 +1667,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 		if (isSimpleType(type))
 			return (T)beanSession.convertToType(s, (Class<?>)type);
-		
+
 		if (type == byte[].class) {
 			if (s.indexOf('\n') != -1)
 				s = s.replaceAll("\n", "");
@@ -1681,10 +1681,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 				throw new ParseException(e, "Value could not be converted to a byte array.");
 			}
 		}
-		
+
 		if (parser == null)
 			parser = this.parser;
-		
+
 		if (parser instanceof JsonParser) {
 			char s1 = firstNonWhitespaceChar(s);
 			if (isArray(type) && s1 != '[')
@@ -1731,13 +1731,13 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			return "";
 		return section;
 	}
-	
+
 	private void checkWrite() {
 		if (readOnly)
 			throw new UnsupportedOperationException("Cannot call this method on a read-only configuration.");
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1746,7 +1746,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public String toString() {
 		return configMap.toString();
 	}
-	
+
 	@Override /* Object */
 	protected void finalize() throws Throwable {
 		close();

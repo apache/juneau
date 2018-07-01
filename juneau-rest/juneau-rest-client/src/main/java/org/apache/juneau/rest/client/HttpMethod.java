@@ -52,7 +52,7 @@ public enum HttpMethod {
 
 	/**
 	 * Returns whether this HTTP method normally has content.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this HTTP method normally has content.
 	 */
 	public boolean hasContent() {

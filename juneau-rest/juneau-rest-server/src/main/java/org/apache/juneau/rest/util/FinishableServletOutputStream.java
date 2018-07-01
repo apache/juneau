@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -26,10 +26,10 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 	final OutputStream os;
 	final ServletOutputStream sos;
 	final Finishable f;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param os The wrapped output stream.
 	 */
 	public FinishableServletOutputStream(OutputStream os) {
@@ -37,32 +37,32 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 		this.sos = (os instanceof ServletOutputStream ? (ServletOutputStream)os : null);
 		this.f = (os instanceof Finishable ? (Finishable)os : null);
 	}
-	
+
 	@Override /* OutputStream */
 	public final void write(byte[] b, int off, int len) throws IOException {
 		os.write(b, off, len);
 	}
-	
+
 	@Override /* OutputStream */
 	public final void write(int b) throws IOException {
 		os.write(b);
 	}
-	
+
 	@Override /* OutputStream */
 	public final void flush() throws IOException {
 		os.flush();
 	}
-	
+
 	@Override /* OutputStream */
 	public final void close() throws IOException {
 		os.close();
 	}
-	
+
 	@Override /* ServletOutputStream */
 	public boolean isReady() {
 		return sos == null ? true : sos.isReady();
 	}
-	
+
 	@Override /* ServletOutputStream */
 	public void setWriteListener(WriteListener arg0) {
 		if (sos != null)
@@ -71,7 +71,7 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 
 	/**
 	 * Calls {@link Finishable#finish()} on the underlying output stream.
-	 * 
+	 *
 	 * <p>
 	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
 	 */

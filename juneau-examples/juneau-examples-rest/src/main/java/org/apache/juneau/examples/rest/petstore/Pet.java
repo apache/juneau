@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -30,7 +30,7 @@ public class Pet {
 	private List<String> photoUrls;
 	private List<Tag> tags;
 	private PetStatus status;
-	
+
 	// This shows an example generated from a static method.
 	@Example
 	public static Pet example() {
@@ -51,36 +51,36 @@ public class Pet {
 		this.id = id;
 		return this;
 	}
-	
+
 	public Species getSpecies() {
 		return species;
 	}
-	
+
 	public Pet species(Species species) {
 		this.species = species;
 		return this;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public Pet name(String name) {
 		this.name = name;
 		return this;
 	}
-	
+
 	@URI
 	@Xml(childName="photoUrl")
 	public List<String> getPhotoUrls() {
 		return photoUrls;
 	}
-	
+
 	public Pet photoUrls(List<String> photoUrls) {
 		this.photoUrls = photoUrls;
 		return this;
 	}
-	
+
 	public List<Tag> getTags() {
 		return tags;
 	}
@@ -89,7 +89,7 @@ public class Pet {
 		this.tags = tags;
 		return this;
 	}
-	
+
 	public Pet tags(Tag...tags) {
 		this.tags = Arrays.asList(tags);
 		return this;
@@ -98,12 +98,12 @@ public class Pet {
 	public PetStatus getStatus() {
 		return status;
 	}
-	
+
 	public Pet status(PetStatus status) {
 		this.status = status;
 		return this;
 	}
-	
+
 	public boolean hasStatus(PetStatus...statuses) {
 		for (PetStatus status : statuses)
 			if (this.status == status)
@@ -118,12 +118,12 @@ public class Pet {
 					return true;
 		return false;
 	}
-	
+
 	@BeanProperty(format="$%.2f")  // Renders price in dollars.
 	public float getPrice() {
 		return price;
 	}
-	
+
 	public Pet price(float price) {
 		this.price = price;
 		return this;

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -16,14 +16,14 @@ import org.apache.juneau.internal.*;
 
 /**
  * Used to convert property values to standardized Boolean/Integer/Class/Object values in property store builders.
- * 
+ *
  * @param <T> The normalized form.
  */
 public interface PropertyConverter<T> {
-	
+
 	/**
 	 * Convert the value to normalized form.
-	 *  
+	 *
 	 * @param o The raw value.
 	 * @return The converted value.
 	 */
@@ -38,7 +38,7 @@ public interface PropertyConverter<T> {
 			return ClassUtils.toString(o);
 		}
 	};
-	
+
 	/**
 	 * Converts objects to integers.
 	 */
@@ -54,7 +54,7 @@ public interface PropertyConverter<T> {
 			}
 		}
 	};
-		
+
 	/**
 	 * Converts objects to booleans.
 	 */
@@ -66,7 +66,7 @@ public interface PropertyConverter<T> {
 			return Boolean.parseBoolean(o.toString());
 		}
 	};
-		
+
 	/**
 	 * Converts objects to classes.
 	 */
@@ -82,7 +82,7 @@ public interface PropertyConverter<T> {
 			}
 		}
 	};
-	
+
 	/**
 	 * Converts objects to objects.
 	 */

@@ -35,7 +35,7 @@ public class RootResourcesTest extends RestTestcase {
 	@Test
 	public void testJson() throws Exception {
 		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
-		
+
 		try (RestCall r = client.doGet("")) {
 			ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 			assertEquals("helloWorld", x[0].getName());
@@ -78,13 +78,13 @@ public class RootResourcesTest extends RestTestcase {
 	@Test
 	public void testHtmlStripped() throws Exception {
 		try (RestClient client = SamplesMicroservice.client().parser(HtmlParser.DEFAULT).accept("text/html+stripped").build()) {
-			
+
 			try (RestCall r = client.doGet("")) {
 				ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 				assertEquals("helloWorld", x[0].getName());
 				assertEquals("Hello World", x[0].getDescription());
 			}
-	
+
 			try (RestCall r = jsonClient.doOptions("").accept("text/json")) {
 				ObjectMap x2 = r.getResponse(ObjectMap.class);
 				String s = x2.getObjectMap("info").getString("description");

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -36,7 +36,7 @@ public class AddPetMenuItem extends MenuItemWidget {
 					tr(
 						th("Name:"),
 						td(input().name("name").type("text")),
-						td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'")) 
+						td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'"))
 					),
 					tr(
 						th("Species:"),
@@ -45,17 +45,17 @@ public class AddPetMenuItem extends MenuItemWidget {
 								option("cat"), option("dog"), option("bird"), option("fish"), option("mouse"), option("rabbit"), option("snake")
 							)
 						),
-						td(new Tooltip("(?)", "The kind of animal.")) 
+						td(new Tooltip("(?)", "The kind of animal."))
 					),
 					tr(
 						th("Price:"),
 						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100).value(9.99)),
-						td(new Tooltip("(?)", "The price to charge for this pet.")) 
+						td(new Tooltip("(?)", "The price to charge for this pet."))
 					),
 					tr(
 						th("Tags:"),
 						td(input().name("tags").type("text")),
-						td(new Tooltip("(?)", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'")) 
+						td(new Tooltip("(?)", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'"))
 					),
 					tr(
 						td().colspan(2).style("text-align:right").children(

@@ -19,9 +19,9 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses POJOs from HTTP responses as Java {@link ObjectInputStream ObjectInputStreams}.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Consumes <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>
  */
 public final class JsoParser extends InputStreamParser {
@@ -40,7 +40,7 @@ public final class JsoParser extends InputStreamParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public JsoParser(PropertyStore ps) {
@@ -51,17 +51,17 @@ public final class JsoParser extends InputStreamParser {
 	public JsoParserBuilder builder() {
 		return new JsoParserBuilder(getPropertyStore());
 	}
-	
+
 	/**
 	 * Instantiates a new clean-slate {@link JsoParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> JsoParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link JsoParserBuilder} object.
 	 */
 	public static JsoParserBuilder create() {

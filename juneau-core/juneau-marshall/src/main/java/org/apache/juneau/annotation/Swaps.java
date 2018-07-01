@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 
 /**
  * Used to associate multiple swaps with the same POJO class.
- * 
+ *
  * <p class='bcode'>
  * 	<ja>@Swaps</ja>(
  * 		{
@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * 	)
  * 	<jk>public class</jk> MyPojo {}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; juneau-marshall &gt; @Swap Annotation</a>

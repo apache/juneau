@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedHashMap} with a convenience {@link #append(Object,Object)} method.
- * 
+ *
  * <p>
  * Primarily used for testing purposes for quickly creating populated maps.
  * <p class='bcode'>
@@ -24,7 +24,7 @@ import java.util.*;
  * 	Map&lt;String,Integer&gt; m = <jk>new</jk> AMap&lt;String,Integer&gt;()
  * 		.append(<js>"foo"</js>,1).append(<js>"bar"</js>,2);
  * </p>
- * 
+ *
  * @param <K> The key type.
  * @param <V> The value type.
  */
@@ -33,7 +33,7 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 
 	/**
 	 * Adds an entry to this map.
-	 * 
+	 *
 	 * @param k The key.
 	 * @param v The value.
 	 * @return This object (for method chaining).

@@ -37,7 +37,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public XmlParserBuilder(PropertyStore ps) {
@@ -56,15 +56,15 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  XML event allocator.
-	 * 
+	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -74,17 +74,17 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key is
 	 * the root element name.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -95,15 +95,15 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>preserveRootElement(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public XmlParserBuilder preserveRootElement() {
@@ -112,15 +112,15 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  XML reporter.
-	 * 
+	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -130,15 +130,15 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  XML resolver.
-	 * 
+	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -148,16 +148,16 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Enable validation.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -168,15 +168,15 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Enable validation.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>validating(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public XmlParserBuilder validating() {
@@ -212,7 +212,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		super.debugOutputLines(value);
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public XmlParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
@@ -566,7 +566,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -584,7 +584,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public XmlParserBuilder set(String name, Object value) {
 		super.set(name, value);

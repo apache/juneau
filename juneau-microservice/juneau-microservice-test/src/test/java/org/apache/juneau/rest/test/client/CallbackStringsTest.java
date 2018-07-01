@@ -43,7 +43,7 @@ public class CallbackStringsTest {
 			return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
 		}
 		private Map<String,Object> getFooHeaders(RestRequest req) {
-			Map<String,Object> m = new TreeMap<String,Object>();
+			Map<String,Object> m = new TreeMap<>();
 			for (Map.Entry<String,String[]> e : req.getHeaders().entrySet())
 				if (e.getKey().startsWith("Foo-"))
 					m.put(e.getKey(), e.getValue()[0]);

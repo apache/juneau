@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -28,7 +28,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ContentEncodingTest {
-	
+
 	//=================================================================================================================
 	// Setup classes
 	//=================================================================================================================
@@ -39,11 +39,11 @@ public class ContentEncodingTest {
 			return new String[]{"mycoding"};
 		}
 	}
-	
+
 	//=================================================================================================================
 	// Test with no compression enabled.
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class A {
 		@RestMethod(name=PUT)
@@ -68,11 +68,11 @@ public class ContentEncodingTest {
 				"Supported codings: ['identity']"
 			);
 	}
-	
+
 	//=================================================================================================================
 	// Test with compression enabled.
 	//=================================================================================================================
-	
+
 	@RestResource(encoders=MyEncoder.class)
 	public static class B {
 		@RestMethod(name=PUT, path="/")
@@ -81,7 +81,7 @@ public class ContentEncodingTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01_withCompression_identity() throws Exception {
 		b.put("/", "foo").execute().assertBody("foo");

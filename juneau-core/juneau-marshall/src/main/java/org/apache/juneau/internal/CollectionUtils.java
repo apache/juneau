@@ -25,7 +25,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Reverses the order of a {@link LinkedHashMap}.
-	 * 
+	 *
 	 * @param in The map to reverse the order on.
 	 * @return A new {@link LinkedHashMap} with keys in reverse order.
 	 */
@@ -46,7 +46,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Add a value to a list if the value is not null.
-	 * 
+	 *
 	 * @param l The list to add to.
 	 * @param o The element to add.
 	 * @return The same list.
@@ -59,10 +59,10 @@ public final class CollectionUtils {
 
 	/**
 	 * Adds the contents of one list to the other in reverse order.
-	 * 
+	 *
 	 * <p>
 	 * i.e. add values from 2nd list from end-to-start order to the end of the 1st list.
-	 * 
+	 *
 	 * @param list The list to append to.
 	 * @param append Contains the values to append to the list.
 	 * @return The same list.
@@ -76,10 +76,10 @@ public final class CollectionUtils {
 
 	/**
 	 * Adds the contents of the array to the list in reverse order.
-	 * 
+	 *
 	 * <p>
 	 * i.e. add values from the array from end-to-start order to the end of the list.
-	 * 
+	 *
 	 * @param list The list to append to.
 	 * @param append Contains the values to append to the list.
 	 * @return The same list.
@@ -90,10 +90,10 @@ public final class CollectionUtils {
 			list.add(append[i]);
 		return list;
 	}
-	
+
 	/**
 	 * Returns a reverse iterable of the specified collection.
-	 * 
+	 *
 	 * @param c The collection to iterate over.
 	 * @return An iterable over the collection in reverse order.
 	 */
@@ -112,7 +112,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Same as {@link Collections#reverse(List)}, but returns the list.
-	 * 
+	 *
 	 * @param l The list being reversed
 	 * @return The same list.
 	 */
@@ -120,12 +120,12 @@ public final class CollectionUtils {
 		Collections.reverse(l);
 		return l;
 	}
-	
+
 	/**
 	 * Creates a new copy of a list in reverse order.
-	 * 
+	 *
 	 * @param l The old list.
-	 * @return 
+	 * @return
 	 * 	A new list with reversed entries.
 	 * 	<br>Returns <jk>null</jk> if the list was <jk>null</jk>.
 	 * 	<br>Returns the same list if the list is empty.
@@ -137,10 +137,10 @@ public final class CollectionUtils {
 		Collections.reverse(l2);
 		return l2;
 	}
-	
+
 	/**
 	 * Collapses a collection of individual objects, arrays, and collections into a single list of objects.
-	 * 
+	 *
 	 * @param o The collection of objects to collapse.
 	 * @return A new linked-list of objects.
 	 */
@@ -150,7 +150,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Same as {@link #collapse(Object...)} but allows you to supply your own list to append to.
-	 * 
+	 *
 	 * @param l The list to append to.
 	 * @param o The collection of objects to collapse.
 	 * @return The same list passed in.
@@ -163,7 +163,7 @@ public final class CollectionUtils {
 					for (int i = 0; i < Array.getLength(o2); i++)
 						collapse(l, Array.get(o2, i));
 				} else if (o2 instanceof Collection) {
-					for (Object o3 : (Collection<Object>)o2) 
+					for (Object o3 : (Collection<Object>)o2)
 						collapse(l, o3);
 				} else {
 					l.add(o2);
@@ -172,10 +172,10 @@ public final class CollectionUtils {
 		}
 		return l;
 	}
-	
+
 	/**
 	 * Creates an immutable list from the specified collection.
-	 * 
+	 *
 	 * @param l The collection to copy from.
 	 * @return An unmodifiable {@link ArrayList} copy of the collection, or a {@link Collections#emptyList()}
 	 * 	if the collection was empty or <jk>null</jk>.
@@ -185,10 +185,10 @@ public final class CollectionUtils {
 			return Collections.emptyList();
 		return Collections.unmodifiableList(new ArrayList<>(l));
 	}
-	
+
 	/**
 	 * Creates an unmodifiable list from the specified collection.
-	 * 
+	 *
 	 * @param l The collection to copy from.
 	 * @return An unmodifiable view of the list, or a {@link Collections#emptyList()}
 	 * 	if the list was empty or <jk>null</jk>.
@@ -201,7 +201,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Creates an immutable list from the specified array.
-	 * 
+	 *
 	 * @param l The array to copy from.
 	 * @return An unmodifiable {@link ArrayList} copy of the collection, or a {@link Collections#emptyList()}
 	 * 	if the collection was empty or <jk>null</jk>.
@@ -211,10 +211,10 @@ public final class CollectionUtils {
 			return Collections.emptyList();
 		return Collections.unmodifiableList(new ArrayList<>(Arrays.asList(l)));
 	}
-	
+
 	/**
 	 * Creates an immutable map from the specified map.
-	 * 
+	 *
 	 * @param m The map to copy from.
 	 * @return An unmodifiable {@link LinkedHashMap} copy of the collection, or a {@link Collections#emptyMap()}
 	 * 	if the collection was empty or <jk>null</jk>.
@@ -224,10 +224,10 @@ public final class CollectionUtils {
 			return Collections.emptyMap();
 		return Collections.unmodifiableMap(new LinkedHashMap<>(m));
 	}
-	
+
 	/**
 	 * Creates an unmodifiable map from the specified map.
-	 * 
+	 *
 	 * @param m The map to copy from.
 	 * @return An unmodifiable view of the collection, or a {@link Collections#emptyMap()}
 	 * 	if the collection was empty or <jk>null</jk>.
@@ -240,7 +240,7 @@ public final class CollectionUtils {
 
 	/**
 	 * Asserts that all entries in the list are either instances or subclasses of at least one of the specified classes.
-	 * 
+	 *
 	 * @param l The list to check.
 	 * @param c The valid classes.
 	 */
@@ -259,7 +259,7 @@ public final class CollectionUtils {
 				throw new FormattedRuntimeException("Invalid list entry ''{0}'' ({1}).  Not one of the following types: {2}", string(o), className(o), c);
 		}
 	}
-	
+
 	static String string(Object value) {
 		return JsonSerializer.DEFAULT_LAX.toString(value);
 	}
@@ -267,5 +267,5 @@ public final class CollectionUtils {
 	static String className(Object value) {
 		return value.getClass().getSimpleName();
 	}
-	
+
 }

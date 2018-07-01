@@ -43,7 +43,7 @@ public class FormDataTest extends RestTestcase {
 		}
 	}
 	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
-	
+
 	@Test
 	public void a01_formDataMethod() throws Exception {
 		String r = a.doPost("")

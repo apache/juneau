@@ -25,9 +25,9 @@ import org.apache.juneau.serializer.*;
 /**
  * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during
  * parsing.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * <p>
  * <code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle
  * POJOs that aren't automatically handled by the serializers or parsers.
@@ -35,21 +35,21 @@ import org.apache.juneau.serializer.*;
  * By defining a special {@code Date} swap and associating it with a serializer and parser, you can convert a
  * {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into a
  * {@code Date} object during parsing.
- * 
+ *
  * <p>
  * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
- * 
+ *
  * <p>
  * <code>PojoSwaps</code> are associated with serializers and parsers through the following:
  * <ul>
- * 	<li class='ja'>{@link Swap @Swap} 
- * 	<li class='ja'>{@link Swaps @Swaps} 
+ * 	<li class='ja'>{@link Swap @Swap}
+ * 	<li class='ja'>{@link Swaps @Swaps}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(boolean, Object...)}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
  * </ul>
- * 
+ *
  * <p>
  * <code>PojoSwaps</code> have two parameters:
  * <ol>
@@ -60,9 +60,9 @@ import org.apache.juneau.serializer.*;
  * {@link BeanMap#get(Object)}.
  * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
  * {@link BeanMap#put(String,Object)}.
- * 
+ *
  * <h5 class='topic'>Swap Class Type {@code <S>}</h5>
- * 
+ *
  * <p>
  * The swapped object representation of an object must be an object type that the serializers can natively convert to
  * JSON (or language-specific equivalent).
@@ -83,18 +83,18 @@ import org.apache.juneau.serializer.*;
  * 	<li>
  * 		An array of anything on this list.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Normal Class Type {@code <T>}</h5>
- * 
+ *
  * <p>
  * The normal object representation of an object.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; juneau-marshall &gt; PojoSwaps</a>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; juneau-marshall &gt; @Swap Annotation</a>
  * </ul>
- * 
+ *
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */
@@ -128,7 +128,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Constructor for when the normal and transformed classes are already known.
-	 * 
+	 *
 	 * @param normalClass The normal class (cannot be serialized).
 	 * @param swapClass The transformed class (serializable).
 	 */
@@ -141,13 +141,13 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns the media types that this swap is applicable to.
-	 * 
+	 *
 	 * <p>
 	 * This method can be overridden to programmatically specify what media types it applies to.
-	 * 
+	 *
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap.mediaTypes()} annotation.
-	 * 
+	 *
 	 * <h5 class='topic'>Documentation</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; juneau-marshall &gt; Per-media-type PojoSwaps</a>
@@ -160,21 +160,21 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns additional context information for this swap.
-	 * 
+	 *
 	 * <p>
 	 * Typically this is going to be used to specify a template name, such as a FreeMarker template file name.
-	 * 
+	 *
 	 * <p>
 	 * This method can be overridden to programmatically specify a template value.
-	 * 
+	 *
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap.template()} annotation.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; juneau-marshall &gt; Templated Swaps</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return Additional context information, or <jk>null</jk> if not specified.
 	 */
 	public String withTemplate() {
@@ -183,12 +183,12 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Sets the media types that this swap is associated with.
-	 * 
+	 *
 	 * <h5 class='topic'>Documentation</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; juneau-marshall &gt; Per-media-type PojoSwaps</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param mediaTypes The media types that this swap is associated with.
 	 * @return This object (for method chaining).
 	 */
@@ -199,12 +199,12 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Sets the template string on this swap.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; juneau-marshall &gt; Templated Swaps</a>
 	 * </ul>
-	 * 
+	 *
 	 * @param template The template string on this swap.
 	 * @return This object (for method chaining).
 	 */
@@ -215,15 +215,15 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns a number indicating how well this swap matches the specified session.
-	 * 
+	 *
 	 * <p>
 	 * Uses the {@link MediaType#match(MediaType, boolean)} method algorithm to produce a number whereby a
 	 * larger value indicates a "better match".
 	 * The idea being that if multiple swaps are associated with a given POJO, we want to pick the best one.
-	 * 
+	 *
 	 * <p>
 	 * For example, if the session media type is <js>"text/json"</js>, then the match values are shown below:
-	 * 
+	 *
 	 * <ul>
 	 * 	<li><js>"text/json"</js> = <code>100,000</code>
 	 * 	<li><js>"&#42;/json"</js> = <code>5,100</code>
@@ -231,7 +231,7 @@ public abstract class PojoSwap<T,S> {
 	 * 	<li>No media types specified on swap = <code>1</code>
 	 * 	<li><js>"text/xml"</js> = <code>0</code>
 	 * </ul>
-	 * 
+	 *
 	 * @param session The bean session.
 	 * @return Zero if swap doesn't match the session, or a positive number if it does.
 	 */
@@ -250,7 +250,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * If this transform is to be used to serialize non-serializable POJOs, it must implement this method.
-	 * 
+	 *
 	 * <p>
 	 * The object must be converted into one of the following serializable types:
 	 * <ul class='spaced-list'>
@@ -269,7 +269,7 @@ public abstract class PojoSwap<T,S> {
 	 * 	<li>
 	 * 		An array of anything on this list.
 	 * </ul>
-	 * 
+	 *
 	 * @param session
 	 * 	The bean session to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
@@ -283,7 +283,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Same as {@link #swap(BeanSession, Object)}, but can be used if your swap has a template associated with it.
-	 * 
+	 *
 	 * @param session
 	 * 	The bean session to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
@@ -299,7 +299,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * If this transform is to be used to reconstitute POJOs that aren't true Java beans, it must implement this method.
-	 * 
+	 *
 	 * @param session
 	 * 	The bean session to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
@@ -318,7 +318,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Same as {@link #unswap(BeanSession, Object, ClassMeta)}, but can be used if your swap has a template associated with it.
-	 * 
+	 *
 	 * @param session
 	 * 	The bean session to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
@@ -339,7 +339,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns the T class, the normalized form of the class.
-	 * 
+	 *
 	 * @return The normal form of this class.
 	 */
 	public Class<T> getNormalClass() {
@@ -348,11 +348,11 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns the G class, the generalized form of the class.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses must override this method if the generalized class is {@code Object}, meaning it can produce multiple
 	 * generalized forms.
-	 * 
+	 *
 	 * @return The transformed form of this class.
 	 */
 	public Class<?> getSwapClass() {
@@ -361,10 +361,10 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns the {@link ClassMeta} of the transformed class type.
-	 * 
+	 *
 	 * <p>
 	 * This value is cached for quick lookup.
-	 * 
+	 *
 	 * @param session
 	 * 	The bean context to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
@@ -378,7 +378,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Checks if the specified object is an instance of the normal class defined on this swap.
-	 * 
+	 *
 	 * @param o The object to check.
 	 * @return
 	 * 	<jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
@@ -392,7 +392,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Checks if the specified object is an instance of the swap class defined on this swap.
-	 * 
+	 *
 	 * @param o The object to check.
 	 * @return
 	 * 	<jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.

@@ -17,18 +17,18 @@ import org.apache.juneau.json.*;
 
 /**
  * Extended annotation for {@link RestResource#swagger() @RestResource.swagger()}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages</a>
  * </ul>
  */
 public @interface ResourceSwagger {
-	
-	
+
+
 	/**
 	 * Defines the swagger field <code>/info/title</code>.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -37,7 +37,7 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -53,15 +53,15 @@ public @interface ResourceSwagger {
 	 * 			<li>
 	 * 		</ol>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] title() default {};
-	
+
 	/**
 	 * Defines the swagger field <code>/info/description</code>.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -73,7 +73,7 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -89,7 +89,7 @@ public @interface ResourceSwagger {
 	 * 			<li>
 	 * 		</ol>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -97,7 +97,7 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Defines the swagger field <code>/info/contact</code>.
-	 * 
+	 *
 	 * <p>
 	 * A {@link JsonSerializer#DEFAULT_LAX Simple-JSON} string with the following fields:
 	 * <p class='bcode'>
@@ -107,12 +107,12 @@ public @interface ResourceSwagger {
 	 * 		email: string
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>contact</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or
 	 * <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -138,14 +138,14 @@ public @interface ResourceSwagger {
 		externalDocs="description:'Apache Juneau',url:'http://juneau.apache.org'}"
 	)
 	swagger=@ResourceSwagger("$F{PetStoreResource.json}"),
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -153,15 +153,15 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Defines the swagger field <code>/externalDocs</code>.
-	 * 
+	 *
 	 * <p>
 	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
-	 * 	 * 
+	 * 	 *
 	 * <p>
 	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
 	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -175,10 +175,10 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Defines the swagger field <code>/info/license</code>.
-	 * 
+	 *
 	 * <p>
 	 * It is used to populate the Swagger license field and to display on HTML pages.
-	 * 
+	 *
 	 * <p>
 	 * A {@link JsonSerializer#DEFAULT_LAX Simple-JSON} string with the following fields:
 	 * <p class='bcode'>
@@ -187,12 +187,12 @@ public @interface ResourceSwagger {
 	 * 		url: string
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>license</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or
 	 * <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -201,14 +201,14 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -216,13 +216,13 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Defines the swagger field <code>/tags</code>.
-	 * 
-	 * 
+	 *
+	 *
 	 * Optional tagging information for the exposed API.
-	 * 
+	 *
 	 * <p>
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
-	 * 
+	 *
 	 * <p>
 	 * A {@link JsonSerializer#DEFAULT_LAX Simple-JSON} string with the following fields:
 	 * <p class='bcode'>
@@ -237,12 +237,12 @@ public @interface ResourceSwagger {
 	 * 		}
 	 * 	]
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>tags</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or
 	 * <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -251,39 +251,39 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	Tag[] tags() default {};
-	
+
 	/**
 	 * Defines the swagger field <code>/info/termsOfService</code>.
-	 * 
-	 * 
+	 *
+	 *
 	 * Optional servlet terms-of-service for this API.
-	 * 
+	 *
 	 * <p>
 	 * It is used to populate the Swagger terms-of-service field.
-	 * 
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -291,35 +291,35 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Defines the swagger field <code>/info/version</code>.
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * Provides the version of the application API (not to be confused with the specification version).
-	 * 
+	 *
 	 * <p>
 	 * It is used to populate the Swagger version field and to display on HTML pages.
-	 * 
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String version() default "";
-	
+
 	/**
 	 * Free-form value for the swagger of a resource.
-	 * 
+	 *
 	 * <p>
 	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this resource.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
 	 * <p class='bcode w800'>
@@ -397,14 +397,14 @@ public @interface ResourceSwagger {
 	 * 		swagger=@ResourceSwagger(<js>"$F{MyResourceSwagger.json}"</js>)
 	 * 	)
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * 	The reasons why you may want to use this field include:
 	 * <ul>
 	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -421,7 +421,7 @@ public @interface ResourceSwagger {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

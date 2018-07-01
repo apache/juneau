@@ -27,7 +27,7 @@ import org.apache.juneau.rest.exception.*;
 
 /**
  * Servlet implementation of a REST resource.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestServlet">Overview &gt; juneau-rest-server &gt; RestServlet</a>
@@ -100,18 +100,18 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Returns the read-only context object that contains all the configuration information about this resource.
-	 * 
+	 *
 	 * <p>
 	 * This object is <jk>null</jk> during the call to {@link #init(ServletConfig)} but is populated by the time
 	 * {@link #init()} is called.
-	 * 
+	 *
 	 * <p>
 	 * Resource classes that don't extend from {@link RestServlet} can add the following method to their class to get
 	 * access to this context object:
 	 * <p class='bcode'>
 	 * 	<jk>public void</jk> init(RestServletContext context) <jk>throws</jk> Exception;
 	 * </p>
-	 * 
+	 *
 	 * @return The context information on this servlet.
 	 */
 	protected synchronized RestContext getContext() {
@@ -125,7 +125,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * The main service method.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
 	 */
@@ -150,7 +150,7 @@ public abstract class RestServlet extends HttpServlet {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@Override /* GenericServlet */
 	public void log(String msg) {
 		if (context != null)
@@ -165,7 +165,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getLogger().log(level, msg, args);</code>
-	 * 
+	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -177,7 +177,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getLogger().logObjects(level, msg, args);</code>
-	 * 
+	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -189,7 +189,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getLogger().log(level, cause, msg, args);</code>
-	 * 
+	 *
 	 * @param level The log level.
 	 * @param cause The cause.
 	 * @param msg The message to log.
@@ -215,7 +215,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getProperties();</code>
-	 * 
+	 *
 	 * @return The resource properties as an {@link RestContextProperties}.
 	 * @see RestContext#getProperties()
 	 */

@@ -23,11 +23,11 @@ import org.apache.http.util.*;
 
 /**
  * Specialized interceptor for logging calls to a log file.
- * 
+ *
  * <p>
  * Causes a log entry to be created that shows all the request and response headers and content at the end of the
  * request.
- * 
+ *
  * <p>
  * Use the {@link RestClientBuilder#logTo(Level, Logger)} and {@link RestCall#logTo(Level, Logger)} methods to create
  * instances of this class.
@@ -46,7 +46,7 @@ public class RestCallLogger extends RestCallInterceptor {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param level The log level to log messages at.
 	 * @param log The logger to log to.
 	 */

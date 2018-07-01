@@ -19,10 +19,10 @@ import org.apache.juneau.*;
 
 /**
  * Generic exception thrown from the {@link PojoRest} class.
- * 
+ *
  * <p>
  * Typically, this is a user-error, such as trying to address a non-existent node in the tree.
- * 
+ *
  * <p>
  * The status code is an HTTP-equivalent code.  It will be one of the following:
  * <ul class='spaced-list'>
@@ -45,7 +45,7 @@ public final class PojoRestException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cause The cause of this exception.
 	 * @param status HTTP status code.
 	 * @param message The {@link MessageFormat}-style message.
@@ -58,7 +58,7 @@ public final class PojoRestException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param status The HTTP-equivalent status code.
 	 * @param message The detailed message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -69,10 +69,10 @@ public final class PojoRestException extends FormattedRuntimeException {
 
 	/**
 	 * The HTTP-equivalent status code.
-	 * 
+	 *
 	 * <p>
 	 * See above for details.
-	 * 
+	 *
 	 * @return The HTTP-equivalent status code.
 	 */
 	public int getStatus() {

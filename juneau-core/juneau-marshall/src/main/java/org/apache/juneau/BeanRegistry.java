@@ -23,13 +23,13 @@ import org.apache.juneau.annotation.*;
 
 /**
  * A lookup table for resolving bean types by name.
- * 
+ *
  * <p>
  * In a nutshell, provides a simple mapping of bean class objects to identifying names.
- * 
+ *
  * <p>
  * Class names are defined through the {@link Bean#typeName() @Bean.typeName()} annotation.
- * 
+ *
  * <p>
  * The dictionary is used by the framework in the following ways:
  * <ul>
@@ -118,7 +118,7 @@ public class BeanRegistry {
 
 	/**
 	 * Gets the class metadata for the specified bean type name.
-	 * 
+	 *
 	 * @param typeName
 	 * 	The bean type name as defined by {@link Bean#typeName() @Bean.typeName()}.
 	 * 	Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).
@@ -145,7 +145,7 @@ public class BeanRegistry {
 
 	/**
 	 * Given the specified class, return the dictionary name for it.
-	 * 
+	 *
 	 * @param c The class to lookup in this registry.
 	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
 	 */
@@ -157,7 +157,7 @@ public class BeanRegistry {
 
 	/**
 	 * Returns <jk>true</jk> if this dictionary has an entry for the specified type name.
-	 * 
+	 *
 	 * @param typeName The bean type name.
 	 * @return <jk>true</jk> if this dictionary has an entry for the specified type name.
 	 */

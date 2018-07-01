@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomGenerator</code> construct in the RFC4287 specification.
- * 
+ *
  * <h5 class='figure'>Schema</h5>
  * <p class='bcode'>
  * 	atomGenerator = element atom:generator {
@@ -34,7 +34,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		text
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Atom'>Overview &gt; juneau-dto &gt; Atom</a>
@@ -51,7 +51,7 @@ public class Generator extends Common {
 
 	/**
 	 * Normal constructor.
-	 * 
+	 *
 	 * @param text The generator statement content.
 	 */
 	public Generator(String text) {
@@ -68,7 +68,7 @@ public class Generator extends Common {
 
 	/**
 	 * Returns the URI of this generator statement.
-	 * 
+	 *
 	 * @return The URI of this generator statement.
 	 */
 	@Xml(format=ATTR)
@@ -78,14 +78,14 @@ public class Generator extends Common {
 
 	/**
 	 * Sets the URI of this generator statement.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param uri The URI of this generator statement.
 	 * @return This object (for method chaining).
 	 */
@@ -97,7 +97,7 @@ public class Generator extends Common {
 
 	/**
 	 * Returns the version of this generator statement.
-	 * 
+	 *
 	 * @return The version of this generator statement.
 	 */
 	@Xml(format=ATTR)
@@ -107,7 +107,7 @@ public class Generator extends Common {
 
 	/**
 	 * Sets the version of this generator statement.
-	 * 
+	 *
 	 * @param version The version of this generator statement.
 	 * @return This object (for method chaining).
 	 */
@@ -119,7 +119,7 @@ public class Generator extends Common {
 
 	/**
 	 * Returns the content of this generator statement.
-	 * 
+	 *
 	 * @return The content of this generator statement.
 	 */
 	@Xml(format=TEXT)
@@ -129,7 +129,7 @@ public class Generator extends Common {
 
 	/**
 	 * Sets the content of this generator statement.
-	 * 
+	 *
 	 * @param text The content of this generator statement.
 	 * @return This object (for method chaining).
 	 */

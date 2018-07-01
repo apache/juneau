@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-th-element">&lt;th&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -28,10 +28,10 @@ public class Th extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-abbr">abbr</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Alternative label to use for the header cell when referencing the cell in other contexts.
-	 * 
+	 *
 	 * @param abbr The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -42,10 +42,10 @@ public class Th extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Number of columns that the cell is to span.
-	 * 
+	 *
 	 * @param colspan
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -58,10 +58,10 @@ public class Th extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * The headers for this cell.
-	 * 
+	 *
 	 * @param headers The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -72,10 +72,10 @@ public class Th extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Number of rows that the cell is to span.
-	 * 
+	 *
 	 * @param rowspan
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -88,10 +88,10 @@ public class Th extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-scope">scope</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Specifies which cells the header cell applies to.
-	 * 
+	 *
 	 * @param scope The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -102,10 +102,10 @@ public class Th extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="-">sorted</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Column sort direction and ordinality.
-	 * 
+	 *
 	 * @param sorted The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

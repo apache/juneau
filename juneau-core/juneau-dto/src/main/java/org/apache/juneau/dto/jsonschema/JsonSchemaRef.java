@@ -18,14 +18,14 @@ import org.apache.juneau.*;
 
 /**
  * Convenience class for representing a schema reference such as <js>"{'$ref':'/url/to/ref'}"</js>.
- * 
+ *
  * <p>
  * An instance of this object is equivalent to calling...
- * 
+ *
  * <p class='bcode'>
  * 	JsonSchema s = <jk>new</jk> JsonSchema().setRef(uri);
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
@@ -35,14 +35,14 @@ public class JsonSchemaRef extends JsonSchema {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param uri The URI of the target reference.  Can be <jk>null</jk>.
 	 */
 	public JsonSchemaRef(Object uri) {

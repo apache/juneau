@@ -49,7 +49,7 @@ import org.apache.juneau.rest.remoteable.*;
 public class SampleRemoteableServlet extends RemoteableServlet {
 
 	private final AddressBook addressBook;
-	
+
 	public SampleRemoteableServlet() {
 		addressBook = new AddressBook();
 		addressBook.init();

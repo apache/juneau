@@ -32,7 +32,7 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public PlainTextSerializerBuilder(PropertyStore ps) {
@@ -545,7 +545,7 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public PlainTextSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

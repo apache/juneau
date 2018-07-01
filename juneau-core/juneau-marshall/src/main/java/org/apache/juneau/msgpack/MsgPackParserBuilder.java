@@ -32,7 +32,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public MsgPackParserBuilder(PropertyStore ps) {
@@ -72,7 +72,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 		super.debugOutputLines(value);
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public MsgPackParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
@@ -426,7 +426,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -444,7 +444,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public MsgPackParserBuilder set(String name, Object value) {
 		super.set(name, value);

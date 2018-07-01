@@ -23,7 +23,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link YamlSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -35,7 +35,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -222,7 +222,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns the {@link #YAML_addBeanTypes} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link #YAML_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
@@ -232,7 +232,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Converts the specified output target object to an {@link YamlWriter}.
-	 * 
+	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link YamlWriter}.
 	 * @throws Exception

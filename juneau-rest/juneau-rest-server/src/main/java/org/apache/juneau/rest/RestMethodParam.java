@@ -29,13 +29,13 @@ import org.apache.juneau.utils.*;
 
 /**
  * REST java method parameter resolver.
- * 
+ *
  * <p>
  * Used to resolve instances of classes being passed to Java REST methods.
- * 
+ *
  * <p>
  * By default, the following parameter types can be passed into Java methods in any order:
- * 
+ *
  * <h5 class='topic'>Standard top-level objects</h5>
  * <ul>
  * 	<li><b>Standard top-level objects</b>
@@ -104,7 +104,7 @@ import org.apache.juneau.utils.*;
  * 		<li class='jc'>{@link Writer}
  *  	</ul>
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
@@ -122,7 +122,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param paramType The Swagger parameter type.
 	 * @param method The method on which the parameter resides.
 	 * @param name
@@ -142,7 +142,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param paramType The Swagger parameter type.
 	 * @param type The object type to convert the parameter to.
 	 */
@@ -152,7 +152,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param paramType The Swagger parameter type.
 	 * @param name
 	 * 	The parameter name.
@@ -165,7 +165,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param paramType The Swagger parameter type.
 	 * @param method The method on which the parameter resides.
 	 * @param name
@@ -179,7 +179,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Resolves the parameter object.
-	 * 
+	 *
 	 * @param req The rest request.
 	 * @param res The rest response.
 	 * @return The resolved object.
@@ -189,7 +189,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Returns the Swagger metadata associated with this parameter.
-	 * 
+	 *
 	 * @return A map of parameter metadata, never <jk>null</jk>.
 	 */
 	protected ObjectMap getApi() {
@@ -198,7 +198,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Returns the parameter class type that this parameter resolver is meant for.
-	 * 
+	 *
 	 * @return The parameter class type, or <jk>null</jk> if the type passed in isn't an instance of {@link Class}.
 	 */
 	protected Class<?> forClass() {
@@ -209,7 +209,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Returns the swagger parameter type for this parameter as shown in the Swagger doc.
-	 * 
+	 *
 	 * @return the swagger parameter type for this parameter.
 	 */
 	protected RestParamType getParamType() {
@@ -218,7 +218,7 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Returns the parameter name for this parameter as shown in the Swagger doc.
-	 * 
+	 *
 	 * @return the parameter name for this parameter.
 	 */
 	protected String getName() {
@@ -227,16 +227,16 @@ public abstract class RestMethodParam {
 
 	/**
 	 * Returns the parameter class type.
-	 * 
+	 *
 	 * @return the parameter class type.
 	 */
 	public Type getType() {
 		return type;
 	}
-	
+
 	/**
 	 * Returns the parameter class type.
-	 * 
+	 *
 	 * @return the parameter class type.
 	 */
 	public Class<?> getTypeClass() {

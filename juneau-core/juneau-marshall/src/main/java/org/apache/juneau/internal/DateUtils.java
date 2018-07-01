@@ -22,10 +22,10 @@ import javax.xml.bind.*;
 
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and other headers.
- * 
+ *
  * <p>
  * This class handles dates as defined by RFC 2616 section 3.3.1 as well as some other common non-standard formats.
- * 
+ *
  * <p>
  * This class was copied from HttpClient 4.3.
  */
@@ -58,7 +58,7 @@ public final class DateUtils {
 
 	/**
 	 * Parses a date value. The formats used for parsing the date value are retrieved from the default http params.
-	 * 
+	 *
 	 * @param dateValue the date value to parse
 	 * @return the parsed date or null if input could not be parsed
 	 */
@@ -68,7 +68,7 @@ public final class DateUtils {
 
 	/**
 	 * Parses the date value using the given date formats.
-	 * 
+	 *
 	 * @param dateValue the date value to parse
 	 * @param dateFormats the date formats to use
 	 * @return the parsed date or null if input could not be parsed
@@ -79,7 +79,7 @@ public final class DateUtils {
 
 	/**
 	 * Parses the date value using the given date formats.
-	 * 
+	 *
 	 * @param dateValue the date value to parse
 	 * @param dateFormats the date formats to use
 	 * @param startDate
@@ -111,7 +111,7 @@ public final class DateUtils {
 
 	/**
 	 * Parses an ISO8601 string and converts it to a {@link Calendar}.
-	 * 
+	 *
 	 * @param s The string to parse.
 	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
 	 */
@@ -123,7 +123,7 @@ public final class DateUtils {
 
 	/**
 	 * Formats the given date according to the RFC 1123 pattern.
-	 * 
+	 *
 	 * @param date The date to format.
 	 * @return An RFC 1123 formatted date string.
 	 * @see #PATTERN_RFC1123
@@ -134,10 +134,10 @@ public final class DateUtils {
 
 	/**
 	 * Formats the given date according to the specified pattern.
-	 * 
+	 *
 	 * <p>
 	 * The pattern must conform to that used by the {@link SimpleDateFormat simple date format} class.
-	 * 
+	 *
 	 * @param date The date to format.
 	 * @param pattern The pattern to use for formatting the date.
 	 * @return A formatted date string.
@@ -158,7 +158,7 @@ public final class DateUtils {
 
 	/**
 	 * A factory for {@link SimpleDateFormat}s.
-	 * 
+	 *
 	 * <p>
 	 * The instances are stored in a thread-local way because SimpleDateFormat is not thread-safe as noted in
 	 * {@link SimpleDateFormat its javadoc}.
@@ -174,7 +174,7 @@ public final class DateUtils {
 
 		/**
 		 * Creates a {@link SimpleDateFormat} for the requested format string.
-		 * 
+		 *
 		 * @param pattern
 		 * 	A non-<code>null</code> format String according to {@link SimpleDateFormat}.
 		 * 	The format is not checked against <code>null</code> since all paths go through {@link DateUtils}.
@@ -206,7 +206,7 @@ public final class DateUtils {
 
 	/**
 	 * Pads out an ISO8601 string so that it can be parsed using {@link DatatypeConverter#parseDateTime(String)}.
-	 * 
+	 *
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js> --&gt; <js>"2001-07-04T15:30:45-05:00"</js>
 	 * 	<li><js>"2001-07-04T15:30:45Z"</js> --&gt; <js>"2001-07-04T15:30:45Z"</js>
@@ -217,7 +217,7 @@ public final class DateUtils {
 	 * 	<li><js>"2001-07"</js> --&gt; <js>"2001-07-01T00:00:00"</js>
 	 * 	<li><js>"2001"</js> --&gt; <js>"2001-01-01T00:00:00"</js>
 	 * </ul>
-	 * 
+	 *
 	 * @param in The string to pad.
 	 * @return The padded string.
 	 */

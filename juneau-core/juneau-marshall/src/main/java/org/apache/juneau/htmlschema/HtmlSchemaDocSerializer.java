@@ -18,20 +18,20 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO metamodels to HTML.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>text/html+schema</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/html</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Essentially the same as {@link HtmlSerializer}, except serializes the POJO metamodel instead of the model itself.
- * 
+ *
  * <p>
  * Produces output that describes the POJO metamodel similar to an XML schema document.
- * 
+ *
  * <p>
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
@@ -40,7 +40,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store to use for creating the context for this serializer.
 	 */
@@ -50,7 +50,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -80,8 +80,8 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			ps.builder()
 				.set(SERIALIZER_detectRecursions, true)
 				.set(SERIALIZER_ignoreRecursions, true)
-				.build(), 
-			produces, 
+				.build(),
+			produces,
 			accept
 		);
 	}

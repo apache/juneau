@@ -38,7 +38,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public RdfSerializerBuilder(PropertyStore ps) {
@@ -57,13 +57,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addLiteralTypes}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -74,10 +74,10 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>addLiteralTypes(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder addLiteralTypes() {
@@ -86,22 +86,22 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
-	 * 
+	 *
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * to identify the root node in the graph.
 	 * This helps locate the root node during parsing.
-	 * 
+	 *
 	 * <p>
-	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
+	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 	 * identify root notes, which can introduce a considerable performance degradation.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -112,15 +112,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>addRootProperty(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder addRootProperty() {
@@ -129,16 +129,16 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
-	 * 
+	 *
 	 * <p>
 	 * Detect namespace usage before serialization.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
@@ -149,22 +149,22 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
-	 * 
+	 *
 	 * <p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
+	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_collectionFormat}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Possible values:
 	 * 	<ul>
@@ -182,13 +182,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauBpNs}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
 	 * @return This object (for method chaining).
@@ -199,13 +199,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauNs}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
 	 * @return This object (for method chaining).
@@ -216,7 +216,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
@@ -228,13 +228,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 		<js>"N-TRIPLE"</js>
 	 * 	<li>
 	 * 		<js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when 
+	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when
 	 * 		created.
-	 * 		Default is the pretty writer but can be overridden with system property	
+	 * 		Default is the pretty writer but can be overridden with system property
 	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
 	 * 	<li>
 	 * 		<js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding 
+	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding
 	 * 		one-referenced bNodes.
 	 * 	<li>
 	 * 		<js>"N3-PLAIN"</js> - Name of the N3 plain writer.
@@ -246,13 +246,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 		<js>"TURTLE"</js> -  Turtle writer.
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -262,17 +262,17 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
-	 * 
+	 *
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -283,15 +283,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for <code>looseCollections(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder looseCollections() {
@@ -300,15 +300,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder n3() {
@@ -317,15 +317,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Default namespaces.
-	 * 
+	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
 	 * </ul>
-	 * 
+	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -335,15 +335,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder ntriple() {
@@ -352,15 +352,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder turtle() {
@@ -369,18 +369,18 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 * 
+	 *
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will be 
+	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will be
 	 * inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
@@ -391,15 +391,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder xml() {
@@ -408,15 +408,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder xmlabbrev() {
@@ -919,7 +919,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

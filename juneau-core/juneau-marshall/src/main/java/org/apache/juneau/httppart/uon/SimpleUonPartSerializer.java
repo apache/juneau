@@ -17,11 +17,11 @@ import org.apache.juneau.uon.*;
 
 /**
  * An extension of {@link UonPartSerializer} with plain-text string handling.
- * 
+ *
  * <p>
  * Uses UON notation for beans and maps (serialized as UON objects), and plain text for everything else.
  * <br>Collections/arrays are also serialized as comma-delimited lists.
- * 
+ *
  * <p>
  * The downside to this class vs. {@link UonPartSerializer} is that you may lose type information on the parse side.
  * For example, it's not possible to distinguish between the boolean <jk>false</jk> and the string <js>"false"</js>.
@@ -44,7 +44,7 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -52,10 +52,10 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 		super(
 			ps.builder()
 				.set(UON_paramFormat, ParamFormat.PLAINTEXT)
-				.build() 
+				.build()
 		);
 	}
-	
+
 	@Override /* Context */
 	public SimpleUonPartSerializerBuilder builder() {
 		return new SimpleUonPartSerializerBuilder(getPropertyStore());
@@ -63,11 +63,11 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 
 	/**
 	 * Instantiates a new clean-slate {@link SimpleUonPartSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link UonPartSerializerBuilder} object.
 	 */
 	public static SimpleUonPartSerializerBuilder create() {

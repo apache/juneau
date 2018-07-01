@@ -35,7 +35,7 @@ public final class RestUtils {
 
 	/**
 	 * Returns readable text for an HTTP response code.
-	 * 
+	 *
 	 * @param rc The HTTP response code.
 	 * @return Readable text for an HTTP response code, or <jk>null</jk> if it's an invalid code.
 	 */
@@ -88,7 +88,7 @@ public final class RestUtils {
 
 	/**
 	 * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.
-	 * 
+	 *
 	 * @param req The HTTP request
 	 * @return The un-decoded path info.
 	 */
@@ -104,10 +104,10 @@ public final class RestUtils {
 
 	/**
 	 * Efficiently trims the path info part from a request URI.
-	 * 
+	 *
 	 * <p>
 	 * The result is the URI of the servlet itself.
-	 * 
+	 *
 	 * @param requestURI The value returned by {@link HttpServletRequest#getRequestURL()}
 	 * @param contextPath The value returned by {@link HttpServletRequest#getContextPath()}
 	 * @param servletPath The value returned by {@link HttpServletRequest#getServletPath()}
@@ -172,7 +172,7 @@ public final class RestUtils {
 
 	/**
 	 * Parses HTTP header.
-	 * 
+	 *
 	 * @param s The string to parse.
 	 * @return The parsed string.
 	 */
@@ -187,7 +187,7 @@ public final class RestUtils {
 
 	/**
 	 * Parses key/value pairs separated by either : or =
-	 * 
+	 *
 	 * @param s The string to parse.
 	 * @return The parsed string.
 	 */
@@ -262,7 +262,7 @@ public final class RestUtils {
 
 	/**
 	 * Parses a URL query string or form-data body.
-	 * 
+	 *
 	 * @param qs A reader or string containing the query string to parse.
 	 * @return A new map containing the parsed query.
 	 * @throws Exception
@@ -273,7 +273,7 @@ public final class RestUtils {
 
 	/**
 	 * Same as {@link #parseQuery(Object)} but allows you to specify the map to insert values into.
-	 * 
+	 *
 	 * @param qs A reader containing the query string to parse.
 	 * @param map The map to pass the values into.
 	 * @return The same map passed in, or a new map if it was <jk>null</jk>.
@@ -287,7 +287,7 @@ public final class RestUtils {
 			return m;
 
 		try (ParserPipe p = new ParserPipe(qs)) {
-			
+
 			final int S1=1; // Looking for attrName start.
 			final int S2=2; // Found attrName start, looking for = or & or end.
 			final int S3=3; // Found =, looking for valStart or &.
@@ -357,10 +357,10 @@ public final class RestUtils {
 			m.put(key, new String[]{val});
 		}
 	}
-	
+
 	/**
 	 * Parses a string that can consist of a simple string or JSON object/array.
-	 * 
+	 *
 	 * @param s The string to parse.
 	 * @return The parsed value, or <jk>null</jk> if the input is null.
 	 * @throws ParseException
@@ -370,13 +370,13 @@ public final class RestUtils {
 			return JsonParser.DEFAULT.parse(s, Object.class);
 		return s;
 	}
-	
+
 	/**
 	 * Merges the specified parent and child arrays.
-	 * 
+	 *
 	 * <p>
 	 * The general concept is to allow child values to override parent values.
-	 * 
+	 *
 	 * <p>
 	 * The rules are:
 	 * <ul>
@@ -385,22 +385,22 @@ public final class RestUtils {
 	 * 	<li>If the child array contains {@link None}, then an empty array is always returned.
 	 * 	<li>If the child array contains {@link Inherit}, then the contents of the parent array are inserted into the position of the {@link Inherit} entry.
 	 * </ul>
-	 * 
+	 *
 	 * @param fromParent The parent array.
 	 * @param fromChild The child array.
 	 * @return A new merged array.
 	 */
 	public static Object[] merge(Object[] fromParent, Object[] fromChild) {
-		
-		if (ArrayUtils.contains(None.class, fromChild)) 
+
+		if (ArrayUtils.contains(None.class, fromChild))
 			return new Object[0];
-		
+
 		if (fromChild.length == 0)
 			return fromParent;
-		
+
 		if (! ArrayUtils.contains(Inherit.class, fromChild))
 			return fromChild;
-		
+
 		List<Object> l = new ArrayList<>(fromParent.length + fromChild.length);
 		for (Object o : fromChild) {
 			if (o == Inherit.class)

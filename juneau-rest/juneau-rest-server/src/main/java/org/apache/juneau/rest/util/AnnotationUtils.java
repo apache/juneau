@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -18,17 +18,17 @@ import org.apache.juneau.rest.annotation.*;
  * Various reusable utility methods when working with annotations.
  */
 public class AnnotationUtils extends org.apache.juneau.http.annotation.AnnotationUtils {
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(ResourceSwagger a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.version())
 			&& allEmpty(a.title(), a.description(), a.value())
 			&& empty(a.contact())

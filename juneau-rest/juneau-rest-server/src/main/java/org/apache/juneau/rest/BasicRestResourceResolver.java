@@ -16,21 +16,21 @@ import org.apache.juneau.internal.*;
 
 /**
  * Denotes the default resolver for child resources.
- * 
+ *
  * The default implementation simply instantiates the class using one of the following constructors:
  * <ul>
  * 	<li><code><jk>public</jk> T(RestContextBuilder)</code>
  * 	<li><code><jk>public</jk> T()</code>
  * </ul>
- * 
+ *
  * <p>
  * The former constructor can be used to get access to the {@link RestContextBuilder} object to get access to the
  * config file and initialization information or make programmatic modifications to the resource before
  * full initialization.
- * 
+ *
  * <p>
  * Child classes can also be defined as inner-classes of the parent resource class.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; juneau-rest-server &gt; Resource Resolvers</a>

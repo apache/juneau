@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -32,10 +32,10 @@ public class Script extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-async">async</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Execute script asynchronously.
-	 * 
+	 *
 	 * @param async
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -48,10 +48,10 @@ public class Script extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-charset">charset</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Character encoding of the external script resource.
-	 * 
+	 *
 	 * @param charset The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -63,10 +63,10 @@ public class Script extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-crossorigin">crossorigin</a>
 	 * attribute.
-	 * 
+	 *
 	 * <p>
 	 * How the element handles cross-origin requests.
-	 * 
+	 *
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -77,10 +77,10 @@ public class Script extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-defer">defer</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Defer script execution.
-	 * 
+	 *
 	 * @param defer
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -93,17 +93,17 @@ public class Script extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-src">src</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Address of the resource.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -116,10 +116,10 @@ public class Script extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-type">type</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Type of embedded resource.
-	 * 
+	 *
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

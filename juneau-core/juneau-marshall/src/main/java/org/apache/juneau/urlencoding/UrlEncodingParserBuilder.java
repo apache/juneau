@@ -35,7 +35,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public UrlEncodingParserBuilder(PropertyStore ps) {
@@ -54,16 +54,16 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
-	 * 
+	 *
 	 * <p>
 	 * This is the parser-side equivalent of the {@link UrlEncodingParser#URLENC_expandedParams} setting.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -74,15 +74,15 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public UrlEncodingParserBuilder expandedParams() {
@@ -454,7 +454,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -472,7 +472,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public UrlEncodingParserBuilder set(String name, Object value) {
 		super.set(name, value);

@@ -28,7 +28,7 @@ public final class CharSequenceReader extends BufferedReader {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cs The char sequence to read from.  Can be <jk>null</jk>.
 	 */
 	public CharSequenceReader(CharSequence cs) {

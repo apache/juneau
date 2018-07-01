@@ -20,7 +20,7 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Metadata on classes specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the 
+ * Metadata on classes specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the
  * class.
  */
 public class RdfClassMeta extends ClassMetaExtended {
@@ -31,7 +31,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public RdfClassMeta(ClassMeta<?> cm) {
@@ -50,7 +50,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Rdf @Rdf} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if annotation is not specified.
 	 */
 	protected Rdf getAnnotation() {
@@ -59,8 +59,8 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Rdf#collectionFormat() @Rdf.collectionFormat()} annotation defined on the class.
-	 * 
-	 * @return The value of the annotation, or <jk>null</jk> if annotation is not 
+	 *
+	 * @return The value of the annotation, or <jk>null</jk> if annotation is not
 	 * specified.
 	 */
 	protected RdfCollectionFormat getCollectionFormat() {
@@ -69,7 +69,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the RDF namespace associated with this class.
-	 * 
+	 *
 	 * <p>
 	 * Namespace is determined in the following order of {@link Rdf#prefix() @Rdf.prefix()} annotation:
 	 * <ol>
@@ -80,7 +80,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 	 * 	<li>Interfaces.
 	 * 	<li>Interface packages.
 	 * </ol>
-	 * 
+	 *
 	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	protected Namespace getNamespace() {

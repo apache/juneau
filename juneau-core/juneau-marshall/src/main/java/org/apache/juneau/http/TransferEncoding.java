@@ -14,42 +14,42 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Transfer-Encoding</l> HTTP response header.
- * 
+ *
  * <p>
  * The form of encoding used to safely transfer the entity to the user.
  * Currently defined methods are: chunked, compress, deflate, gzip, identity.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Transfer-Encoding: chunked
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The Transfer-Encoding general-header field indicates what (if any) type of transformation has been applied to the
  * message body in order to safely transfer it between the sender and the recipient.
  * This differs from the content-coding in that the transfer-coding is a property of the message, not of the entity.
- * 
+ *
  * <p class='bcode'>
  * 	Transfer-Encoding       = "Transfer-Encoding" ":" 1#transfer-coding
  * </p>
- * 
+ *
  * <p>
  * Transfer-codings are defined in section 3.6. An example is:
- * 
+ *
  * <p class='bcode'>
  * 	Transfer-Encoding: chunked
  * </p>
- * 
+ *
  * <p>
  * If multiple encodings have been applied to an entity, the transfer-codings MUST be listed in the order in which
  * they were applied.
  * Additional information about the encoding parameters MAY be provided by other entity-header fields not defined by
  * this specification.
- * 
+ *
  * <p>
  * Many older HTTP/1.0 applications do not understand the Transfer-Encoding header.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -59,7 +59,7 @@ public final class TransferEncoding extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>Transfer-Encoding</code> header.
-	 * 
+	 *
 	 * @param value The <code>Transfer-Encoding</code> header string.
 	 * @return The parsed <code>Transfer-Encoding</code> header, or <jk>null</jk> if the string was null.
 	 */

@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 /**
  * Converts property names to dashed-lower-case format.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <ul>
  * 	<li><js>"fooBar"</js> -&gt; <js>"foo-bar"</js>

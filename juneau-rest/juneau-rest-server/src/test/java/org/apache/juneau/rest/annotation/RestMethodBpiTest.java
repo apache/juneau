@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -30,7 +30,7 @@ public class RestMethodBpiTest {
 	//=================================================================================================================
 	// BPI on normal bean
 	//=================================================================================================================
-	
+
 	public static class A extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ public class RestMethodBpiTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01() throws Exception {
 		a.get("/a01").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
@@ -73,11 +73,11 @@ public class RestMethodBpiTest {
 		a.get("/a03").uon().execute().assertBody("(_b=foo)");
 		a.get("/a03").urlEnc().execute().assertBody("_b=foo");
 	}
-	
+
 	//=================================================================================================================
 	// BPX on normal bean
 	//=================================================================================================================
-	
+
 	public static class B extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
@@ -142,7 +142,7 @@ public class RestMethodBpiTest {
 		}
 	}
 	static MockRest c = MockRest.create(C.class);
-		
+
 	@Test
 	public void c01() throws Exception {
 		c.get("/c01").json().execute().assertBody("{\"_b\":\"foo\",\"a\":1}");
@@ -171,7 +171,7 @@ public class RestMethodBpiTest {
 	//=================================================================================================================
 	// BPX on bean using @Bean(properties)
 	//=================================================================================================================
-	
+
 	public static class D extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
@@ -264,7 +264,7 @@ public class RestMethodBpiTest {
 	//=================================================================================================================
 	// Negative matching
 	//=================================================================================================================
-	
+
 	public static class G extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 

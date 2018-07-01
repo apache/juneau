@@ -22,19 +22,19 @@ import org.apache.juneau.internal.*;
 
 /**
  * Simple bean filter that simply identifies a class to be used as an interface class for all child classes.
- * 
+ *
  * <p>
  * These objects are created when you pass in non-<code>BeanFilterBuilder</code> classes to
  * {@link BeanContextBuilder#beanFilters(Class...)}, and are equivalent to adding a
  * <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
- * 
+ *
  * @param <T> The interface class.
  */
 public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * <p>
 	 * Interface class is determined through reflection.
 	 */
@@ -44,14 +44,14 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param interfaceClass The class to use as an interface on all child classes.
 	 */
 	public InterfaceBeanFilterBuilder(Class<T> interfaceClass) {
 		super(interfaceClass);
 		init(interfaceClass);
 	}
-	
+
 	private void init(Class<?> interfaceClass) {
 		interfaceClass(interfaceClass);
 		Map<Class<?>,Bean> annotations = ReflectionUtils.findAnnotationsMap(Bean.class, interfaceClass);

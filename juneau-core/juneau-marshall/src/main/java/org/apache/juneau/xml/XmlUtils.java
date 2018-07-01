@@ -34,7 +34,7 @@ public final class XmlUtils {
 
 	/**
 	 * Encodes any invalid XML element name characters to <code>_x####_</code> sequences.
-	 * 
+	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
 	 * @return The same writer passed in.
@@ -56,7 +56,7 @@ public final class XmlUtils {
 
 	/**
 	 * Encodes any invalid XML element name characters to <code>_x####_</code> sequences.
-	 * 
+	 *
 	 * @param o The object being encoded.
 	 * @return The encoded element name string.
 	 */
@@ -130,7 +130,7 @@ public final class XmlUtils {
 
 	/**
 	 * Escapes invalid XML text characters to <code>_x####_</code> sequences.
-	 * 
+	 *
 	 * @param o The object being encoded.
 	 * @return The encoded string.
 	 */
@@ -165,13 +165,13 @@ public final class XmlUtils {
 
 	/**
 	 * Encodes the specified element text and sends the results to the specified writer.
-	 * 
+	 *
 	 * <p>
 	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response to the specified
 	 * writer.
 	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.
 	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
-	 * 
+	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
 	 * @param trim Trim the text before serializing it.
@@ -244,7 +244,7 @@ public final class XmlUtils {
 
 	/**
 	 * Serializes and encodes the specified object as valid XML attribute name.
-	 * 
+	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being serialized.
 	 * @return This object (for method chaining).
@@ -301,13 +301,13 @@ public final class XmlUtils {
 
 	/**
 	 * Encodes the specified attribute value and sends the results to the specified writer.
-	 * 
+	 *
 	 * <p>
 	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response to the specified
 	 * writer.
 	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, <js>'&gt;'</js>, <js>'"'</js>, and <js>'\''</js> as XML entities.
 	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
-	 * 
+	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
 	 * @param trim
@@ -379,7 +379,7 @@ public final class XmlUtils {
 
 	/**
 	 * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.
-	 * 
+	 *
 	 * @param s The string being decoded.
 	 * @param sb The string builder to use as a scratch pad.
 	 * @return The decoded string.
@@ -417,7 +417,7 @@ public final class XmlUtils {
 
 	/**
 	 * Given a list of Strings and other Objects, combines Strings that are next to each other in the list.
-	 * 
+	 *
 	 * @param l The list of text nodes to collapse.
 	 * @return The same list.
 	 */
@@ -480,10 +480,10 @@ public final class XmlUtils {
 
 	/**
 	 * Find the namespace given a list of <ja>@Xml</ja> and <ja>@XmlSchema</ja> annotations.
-	 * 
+	 *
 	 * <p>
 	 * The annotations should be a child-to-parent ordering of annotations found on a class or method.
-	 * 
+	 *
 	 * @param xmls The list of <ja>@Xml</ja> annotations.
 	 * @param schemas The list of <ja>@XmlSchema</ja> annotations.
 	 * @return The namespace, or <jk>null</jk> if it couldn't be found.
@@ -547,7 +547,7 @@ public final class XmlUtils {
 
 	/**
 	 * Utility method that converts the current event on the XML stream to something human-readable for debug purposes.
-	 * 
+	 *
 	 * @param r The XML stream reader whose current event is to be converted to a readable string.
 	 * @return The event in human-readable form.
 	 */

@@ -21,10 +21,10 @@ import org.apache.juneau.*;
 
 /**
  * Used tailor how bean properties get interpreted by the framework.
- * 
+ *
  * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanPropertyAnnotation">Overview &gt; juneau-marshall &gt; @BeanProperty Annotation</a>
@@ -38,16 +38,16 @@ public @interface BeanProperty {
 
 	/**
 	 * Identifies the name of the property.
-	 * 
+	 *
 	 * <p>
 	 * Normally, this is automatically inferred from the field name or getter method name of the property.
 	 * However, this property can be used to assign a different property name from the automatically inferred value.
-	 * 
+	 *
 	 * <p>
 	 * If the {@link BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field (e.g. the
 	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
 	 * identified as a property.
-	 * 
+	 *
 	 * <h5 class='topic'>Dynamic beans</h5>
 	 * <p>
 	 * The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
@@ -55,89 +55,89 @@ public @interface BeanProperty {
 	 * This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> annotations.
 	 * The primary purpose is for backwards compatibility in parsing newer streams with addition information into older
 	 * beans.
-	 * 
+	 *
 	 * <p>
 	 * The following examples show how to define dynamic bean properties.
 	 * <p class='bcode'>
 	 * 	<jc>// Option #1 - A simple public Map field.
 	 * 	// The field name can be anything.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaField {
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; extraStuff = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Option #2 - Getters and setters.
 	 * 	// Method names can be anything.
 	 * 	// Getter must return a Map with String keys.
 	 * 	// Setter must take in two arguments.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaMethods {
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public void</jk> setAnExtraField(String name, Object value) {
 	 * 			...
 	 * 		}
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Option #3 - Getter only.
 	 * 	// Properties will be added through the getter.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaGetterOnly {
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Option #4 - Getter, setter, and extra-keys method .
 	 * 	// Define a method that returns a Collection&lt;String&gt; with currently-set property names.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaExtraKeys {
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Object get(String name) {
 	 * 			...
 	 * 		}
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public void</jk> set(String name, Object value) {
 	 * 			...
 	 * 		}
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Collection&lt;String&gt; extraKeys() {
 	 * 			...
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 *<p>
 	 * Similar rules apply for value types and swaps.
 	 * The property values optionally can be any serializable type or use swaps.
 	 * <p class='bcode'>
 	 * 	<jc>// A serializable type other than Object.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,List&lt;String&gt;&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// A swapped value.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithSwappedValues {
-	 * 
+	 *
 	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>, swap=CalendarSwap.<jsf>ISO8601DTZ</jsf>.<jk>class</jk>)
 	 * 		<jk>public</jk> Map&lt;String,Calendar&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <ul class='doctree'>
 	 * 	<li class='info'>
 	 * 		Note that if you're not interested in these additional properties, you can also use the
@@ -149,13 +149,13 @@ public @interface BeanProperty {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 * 
+	 *
 	 * <p>
 	 * The following annotations are equivalent:
-	 * 
+	 *
 	 * <p class='bcode'>
 	 * 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
-	 * 
+	 *
 	 * 	<ja>@BeanProperty</ja>(<js>"foo"</js>)
 	 * </p>
 	 */
@@ -163,20 +163,20 @@ public @interface BeanProperty {
 
 	/**
 	 * Identifies a specialized class type for the property.
-	 * 
+	 *
 	 * <p>
 	 * Normally this can be inferred through reflection of the field type or getter return type.
 	 * However, you'll want to specify this value if you're parsing beans where the bean property class is an interface
 	 * or abstract class to identify the bean type to instantiate.
 	 * Otherwise, you may cause an {@link InstantiationException} when trying to set these fields.
-	 * 
+	 *
 	 * <p>
 	 * This property must denote a concrete bean class with a no-arg constructor.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
-	 * 
+	 *
 	 * 		<jc>// Identify concrete map type.</jc>
 	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>)
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
@@ -188,11 +188,11 @@ public @interface BeanProperty {
 	/**
 	 * For bean properties of maps and collections, this annotation can be used to identify the class types of the
 	 * contents of the bean property object when the generic parameter types are interfaces or abstract classes.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
-	 * 
+	 *
 	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
 	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
@@ -203,7 +203,7 @@ public @interface BeanProperty {
 
 	/**
 	 * Used to limit which child properties are rendered by the serializers.
-	 * 
+	 *
 	 * <p>
 	 * Can be used on any of the following bean property types:
 	 * <ul class='spaced-list'>
@@ -212,21 +212,21 @@ public @interface BeanProperty {
 	 * 	<li>Bean/Map arrays - Same, but applied to each element in the array.
 	 * 	<li>Bean/Map collections - Same, but applied to each element in the collection.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyClass {
-	 * 
+	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
 	 * 		<ja>@BeanProperty</ja>(properties=<js>"f1"</js>)
 	 * 		<jk>public</jk> MyChildClass x1 = <jk>new</jk> MyChildClass();
 	 * 	}
-	 * 
+	 *
 	 * 	<jk>public class</jk> MyChildClass {
 	 * 		<jk>public int</jk> f1 = 1;
 	 * 		<jk>public int</jk> f2 = 2;
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Renders "{x1:{f1:1}}"</jc>
 	 * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
 	 * </p>
@@ -235,10 +235,10 @@ public @interface BeanProperty {
 
 	/**
 	 * Bean dictionary.
-	 * 
+	 *
 	 * <p>
 	 * The list of classes that make up the bean dictionary this bean property.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
@@ -248,14 +248,14 @@ public @interface BeanProperty {
 
 	/**
 	 * Specifies a String format for converting the bean property value to a formatted string.
-	 * 
+	 *
 	 * <p>
 	 * Note that this is usually a one-way conversion during serialization.
-	 * 
+	 *
 	 * <p>
 	 * During parsing, we will attempt to convert the value to the original form by using the
 	 * {@link BeanSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)

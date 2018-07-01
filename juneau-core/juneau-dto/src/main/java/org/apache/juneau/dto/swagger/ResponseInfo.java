@@ -21,7 +21,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Describes a single response from an API Operation.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
@@ -34,10 +34,10 @@ import org.apache.juneau.utils.*;
  * 						.set(<js>"$ref"</js>, <js>"#/definitions/VeryComplexType"</js>)
  * 				)
  * 		);
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -53,7 +53,7 @@ import org.apache.juneau.utils.*;
  * 		}
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -72,43 +72,43 @@ public class ResponseInfo extends SwaggerElement {
 	 * Default constructor.
 	 */
 	public ResponseInfo() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public ResponseInfo(ResponseInfo copyFrom) {
 		super(copyFrom);
-		
+
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
-		
+
 		this.headers = copyFrom.headers == null ? null : new LinkedHashMap<String,HeaderInfo>();
-		if (copyFrom.headers != null) 
+		if (copyFrom.headers != null)
 			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
 				this.headers.put(e.getKey(),	e.getValue().copy());
-		
+
 		this.example = copyFrom.example;
 
 		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,Object>();
 		if (copyFrom.examples != null)
 			this.examples.putAll(copyFrom.examples);
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public ResponseInfo copy() {
 		return new ResponseInfo(this);
 	}
-	
+
 	/**
 	 * Copies any non-null fields from the specified object to this object.
-	 * 
-	 * @param r 
+	 *
+	 * @param r
 	 * 	The object to copy fields from.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -128,13 +128,13 @@ public class ResponseInfo extends SwaggerElement {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short description of the response.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -143,11 +143,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short description of the response.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Property value is required.
@@ -160,7 +160,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -173,10 +173,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
-	 * 
+	 *
 	 * <p>
 	 * A definition of the response structure.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -187,7 +187,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		This SHOULD be accompanied by a relevant produces mime-type.
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public SchemaInfo getSchema() {
@@ -196,10 +196,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schema</property>.
-	 * 
+	 *
 	 * <p>
 	 * A definition of the response structure.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -210,8 +210,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		This SHOULD be accompanied by a relevant produces mime-type.
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>It can be a primitive, an array or an object.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -224,8 +224,8 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setSchema(SchemaInfo)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -245,10 +245,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>headers</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of headers that are sent with the response.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,HeaderInfo> getHeaders() {
@@ -257,11 +257,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>headers</property>.
-	 * 
+	 *
 	 * <p>
 	 * A list of headers that are sent with the response.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -273,7 +273,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>headers</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -286,7 +286,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>headers</property> property.
-	 * 
+	 *
 	 * @param name The header name.
 	 * @param header The header descriptions
 	 * @return This object (for method chaining).
@@ -298,7 +298,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>headers</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -320,7 +320,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Returns the header information with the specified name.
-	 * 
+	 *
 	 * @param name The header name.
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
@@ -330,7 +330,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>x-example</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("x-example")
@@ -340,8 +340,8 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>x-example</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -354,7 +354,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>x-example</property>.
-	 * 
+	 *
 	 * @param value The property value.
 	 * @return This object (for method chaining).
 	 */
@@ -365,10 +365,10 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
-	 * 
+	 *
 	 * <p>
 	 * An example of the response message.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,Object> getExamples() {
@@ -377,11 +377,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>examples</property>.
-	 * 
+	 *
 	 * <p>
 	 * An example of the response message.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Keys must be MIME-type strings.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -394,7 +394,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>examples</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -407,7 +407,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Adds a single value to the <property>examples</property> property.
-	 * 
+	 *
 	 * @param mimeType The mime-type string.
 	 * @param example The example.
 	 * @return This object (for method chaining).
@@ -419,7 +419,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>examples</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -463,7 +463,7 @@ public class ResponseInfo extends SwaggerElement {
 			case "headers": return setHeaders(null).headers(value);
 			case "example": return setExample(value);
 			case "examples": return setExamples(null).examples(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
@@ -482,7 +482,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if this response info has headers associated with it.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this response info has headers associated with it.
 	 */
 	public boolean hasHeaders() {
@@ -491,14 +491,14 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Resolves any <js>"$ref"</js> attributes in this element.
-	 * 
+	 *
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
-	 * @param maxDepth 
-	 * 	The maximum depth to resolve references. 
+	 * @param maxDepth
+	 * 	The maximum depth to resolve references.
 	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
 	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
-	 * @return 
+	 * @return
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
@@ -506,9 +506,9 @@ public class ResponseInfo extends SwaggerElement {
 
 		if (schema != null)
 			schema = schema.resolveRefs(swagger, refStack, maxDepth);
-		
+
 		if (headers != null)
-			for (Map.Entry<String,HeaderInfo> e : headers.entrySet()) 
+			for (Map.Entry<String,HeaderInfo> e : headers.entrySet())
 				e.setValue(e.getValue().resolveRefs(swagger, refStack, maxDepth));
 
 		return this;

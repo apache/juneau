@@ -16,9 +16,9 @@ import org.apache.juneau.*;
 
 /**
  * Subclass of {@link Parser} for byte-based parsers.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * This class is typically the parent class of all byte-based parsers.
  * It has 1 abstract method to implement...
  * <ul>
@@ -36,25 +36,25 @@ public abstract class InputStreamParser extends Parser {
 
 	/**
 	 * Configuration property:  Binary input format.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"InputStreamParser.binaryFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
 	 * 	<li><b>Default:</b>  {@link BinaryFormat#HEX}
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link InputStreamParserBuilder#binaryFormat(BinaryFormat)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When using the {@link #parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
-	 * 
-	 * 
+	 *
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that parses from BASE64.</jc>
@@ -62,7 +62,7 @@ public abstract class InputStreamParser extends Parser {
 	 * 		.<jsm>create</jsm>()
 	 * 		.binaryFormat(<jsf>BASE64</jsf>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	InputStreamParser p = MsgPackParser
 	 * 		.<jsm>create</jsm>()
@@ -71,7 +71,7 @@ public abstract class InputStreamParser extends Parser {
 	 * </p>
 	 */
 	public static final String ISPARSER_binaryFormat = PREFIX + "binaryFormat.s";
-	
+
 	static final InputStreamParser DEFAULT = new InputStreamParser(PropertyStore.create().build(), "") {
 		@Override
 		public InputStreamParserSession createSession(ParserSessionArgs args) {
@@ -84,10 +84,10 @@ public abstract class InputStreamParser extends Parser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final BinaryFormat binaryFormat;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */

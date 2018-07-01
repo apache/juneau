@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * REST resource that allows access to a file system directory.
- * 
+ *
  * <p>
  * The root directory is specified in one of two ways:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		Overriding the {@link #getRootDir()} method.
  * </ul>
- * 
+ *
  * <p>
  * Read/write access control is handled through the following properties:
  * <ul class='spaced-list'>
@@ -77,22 +77,22 @@ public class DirectoryResource extends BasicRestServlet {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private static final String PREFIX = "DirectoryResource.";
-	
+
 	/**
 	 * Configuration property:  Root directory.
 	 */
 	public static final String DIRECTORY_RESOURCE_rootDir = PREFIX + "rootDir.s";
-	
+
 	/**
 	 * Configuration property:  Allow view and downloads on files.
 	 */
 	public static final String DIRECTORY_RESOURCE_allowViews = PREFIX + "allowViews.b";
-	
+
 	/**
 	 * Configuration property:  Allow deletes on files.
 	 */
 	public static final String DIRECTORY_RESOURCE_allowDeletes = PREFIX + "allowDeletes.b";
-	
+
 	/**
 	 * Configuration property:  Allow uploads on files.
 	 */
@@ -102,14 +102,14 @@ public class DirectoryResource extends BasicRestServlet {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	private File rootDir;     // The root directory
 
 	// Settings enabled through servlet init parameters
 	boolean allowDeletes, allowUploads, allowViews;
 
 	@RestHook(INIT)
-	public void init(RestContextBuilder b) throws Exception { 
+	public void init(RestContextBuilder b) throws Exception {
 		RestContextProperties p = b.getProperties();
 		rootDir = new File(p.getString(DIRECTORY_RESOURCE_rootDir));
 		allowViews = p.getBoolean(DIRECTORY_RESOURCE_allowViews, false);
@@ -118,7 +118,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, 
+		name=GET,
 		path="/*",
 		summary="View information on file or directory",
 		description="Returns information about the specified file or directory.",
@@ -133,9 +133,9 @@ public class DirectoryResource extends BasicRestServlet {
 
 		return new FileResource(dir, path, true);
 	}
-	
+
 	@RestMethod(
-		name="VIEW", 
+		name="VIEW",
 		path="/*",
 		summary="View contents of file",
 		description="View the contents of a file.\nContent-Type is set to 'text/plain'."
@@ -151,9 +151,9 @@ public class DirectoryResource extends BasicRestServlet {
 			throw new NotFound("File not found");
 		}
 	}
-	
+
 	@RestMethod(
-		name="DOWNLOAD", 
+		name="DOWNLOAD",
 		path="/*",
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
@@ -171,7 +171,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=DELETE, 
+		name=DELETE,
 		path="/*",
 		summary="Delete file",
 		description="Delete a file on the file system."
@@ -182,27 +182,27 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=PUT, 
+		name=PUT,
 		path="/*",
 		summary="Add or replace file",
 		description="Add or overwrite a file on the file system."
 	)
 	public RedirectToRoot updateFile(
-		@Body(schema=@Schema(type="string",format="binary")) InputStream is, 
+		@Body(schema=@Schema(type="string",format="binary")) InputStream is,
 		@PathRemainder String path
 	) throws InternalServerError {
-		
+
 		if (! allowUploads)
 			throw new MethodNotAllowed("PUT not enabled");
 
 		File f = getFile(path);
-		
+
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
 			IOPipe.create(is, os).run();
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}
-		
+
 		return new RedirectToRoot();
 	}
 
@@ -216,7 +216,7 @@ public class DirectoryResource extends BasicRestServlet {
 			super(file);
 		}
 	}
-	
+
 	@Response(description="Redirect to root page on success")
 	static class RedirectToRoot extends RedirectToServletRoot {}
 
@@ -249,7 +249,7 @@ public class DirectoryResource extends BasicRestServlet {
 		public LinkString getName() {
 			return new LinkString(f.getName(), uri);
 		}
-		
+
 		public long getSize() {
 			return f.isDirectory() ? f.listFiles().length : f.length();
 		}
@@ -270,17 +270,17 @@ public class DirectoryResource extends BasicRestServlet {
 				l.add(new Action("delete", uri + "?method=DELETE"));
 			return l;
 		}
-		
+
 		public Set<FileResource> getFiles() {
 			if (f.isFile() || ! includeChildren)
 				return null;
 			Set<FileResource> s = new TreeSet<>(new FileResourceComparator());
-			for (File fc : f.listFiles()) 
+			for (File fc : f.listFiles())
 				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), false));
 			return s;
 		}
 	}
-	
+
 	static final class FileResourceComparator implements Comparator<FileResource>, Serializable {
 		private static final long serialVersionUID = 1L;
 		@Override /* Comparator */
@@ -296,7 +296,7 @@ public class DirectoryResource extends BasicRestServlet {
 
 	/**
 	 * Returns the root directory.
-	 * 
+	 *
 	 * @return The root directory.
 	 */
 	protected File getRootDir() {

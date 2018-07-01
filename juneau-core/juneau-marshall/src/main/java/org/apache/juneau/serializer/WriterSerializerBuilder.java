@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -23,7 +23,7 @@ import org.apache.juneau.http.*;
  * Base class for all writer-based serializer builders.
  */
 public class WriterSerializerBuilder extends SerializerBuilder {
-	
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -33,7 +33,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public WriterSerializerBuilder(PropertyStore ps) {
@@ -47,16 +47,16 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Maximum indentation.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
@@ -67,16 +67,16 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Quote character.
-	 * 
+	 *
 	 * <p>
 	 * This is the character used for quoting attributes and values.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
@@ -87,15 +87,15 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Quote character.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public WriterSerializerBuilder sq() {
@@ -104,16 +104,16 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Use whitespace.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -124,10 +124,10 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Configuration property:  Use whitespace.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
@@ -137,18 +137,18 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	public WriterSerializerBuilder useWhitespace() {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
-	
+
 	/**
 	 * Configuration property:  Use whitespace.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public WriterSerializerBuilder ws() {
@@ -466,7 +466,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public WriterSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -532,7 +532,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override /* Context */
 	public WriterSerializer build() {
 		return null;

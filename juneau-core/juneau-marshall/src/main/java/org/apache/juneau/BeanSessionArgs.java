@@ -34,10 +34,10 @@ public class BeanSessionArgs extends SessionArgs {
 	 * Constructor
 	 */
 	public BeanSessionArgs() {}
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param properties
 	 * 	Session-level properties.
 	 * 	<br>These override context-level properties.
@@ -58,10 +58,10 @@ public class BeanSessionArgs extends SessionArgs {
 		this.timeZone = timeZone;
 		this.mediaType = mediaType;
 	}
-	
+
 	/**
 	 * The session locale.
-	 * 
+	 *
 	 * @param locale
 	 * 	The session locale.
 	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
@@ -71,10 +71,10 @@ public class BeanSessionArgs extends SessionArgs {
 		this.locale = locale;
 		return this;
 	}
-	
+
 	/**
 	 * The session timezone.
-	 * 
+	 *
 	 * @param timeZone
 	 * 	The session timezone.
 	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
@@ -84,10 +84,10 @@ public class BeanSessionArgs extends SessionArgs {
 		this.timeZone = timeZone;
 		return this;
 	}
-	
+
 	/**
 	 * The session media type.
-	 * 
+	 *
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
 	 * 	<br>Can be <jk>null</jk>.
@@ -97,7 +97,7 @@ public class BeanSessionArgs extends SessionArgs {
 		this.mediaType = mediaType;
 		return this;
 	}
-	
+
 	@Override /* SessionArgs */
 	public BeanSessionArgs properties(ObjectMap properties) {
 		super.properties(properties);

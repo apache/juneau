@@ -20,17 +20,17 @@ import org.apache.juneau.*;
 
 /**
  * Subclass of parser session objects for byte-based parsers.
- * 
+ *
  * <p>
  * This class is NOT thread safe.  It is typically discarded after one-time use.
  */
 public abstract class InputStreamParserSession extends ParserSession {
 
 	private final BinaryFormat binaryFormat;
-	
+
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -39,13 +39,13 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 */
 	protected InputStreamParserSession(InputStreamParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		
+
 		binaryFormat = getProperty(ISPARSER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 	/**
 	 * Constructor for sessions that don't require context.
-	 * 
+	 *
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
@@ -57,11 +57,11 @@ public abstract class InputStreamParserSession extends ParserSession {
 	public final boolean isReaderParser() {
 		return false;
 	}
-	
+
 	/**
 	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
 	 * a stream or reader.
-	 * 
+	 *
 	 * @param input
 	 * 	The input.
 	 * 	</ul>

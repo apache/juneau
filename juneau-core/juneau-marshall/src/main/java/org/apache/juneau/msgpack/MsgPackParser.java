@@ -17,9 +17,9 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses a MessagePack stream into a POJO model.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Content-Type</code> types:  <code><b>octal/msgpack</b></code>
  */
 public class MsgPackParser extends InputStreamParser {
@@ -36,7 +36,7 @@ public class MsgPackParser extends InputStreamParser {
 
 	/** Default parser, all default settings, string input encoded as BASE64.*/
 	public static final MsgPackParser DEFAULT_BASE64 = new Base64(PropertyStore.DEFAULT);
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
 	//-------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ public class MsgPackParser extends InputStreamParser {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public SpacedHex(PropertyStore ps) {
@@ -61,7 +61,7 @@ public class MsgPackParser extends InputStreamParser {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Base64(PropertyStore ps) {
@@ -77,7 +77,7 @@ public class MsgPackParser extends InputStreamParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public MsgPackParser(PropertyStore ps) {
@@ -91,14 +91,14 @@ public class MsgPackParser extends InputStreamParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link MsgPackParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> MsgPackParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link MsgPackParserBuilder} object.
 	 */
 	public static MsgPackParserBuilder create() {

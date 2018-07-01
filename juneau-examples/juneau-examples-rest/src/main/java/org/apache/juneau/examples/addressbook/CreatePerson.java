@@ -29,10 +29,10 @@ public class CreatePerson {
 
 	// Bean properties
 	public String name;
-	
-	@Swap(CalendarSwap.DateMedium.class) 
+
+	@Swap(CalendarSwap.DateMedium.class)
 	public Calendar birthDate;
-	
+
 	public LinkedList<CreateAddress> addresses = new LinkedList<>();
 
 	/** Bean constructor - Needed for instantiating on server side */

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -19,17 +19,17 @@ import javax.servlet.http.*;
 
 /**
  * An implementation of {@link HttpSession} for mocking purposes.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
  * </ul>
  */
 public class MockHttpSession implements HttpSession {
-	
+
 	/**
 	 * Creates a new HTTP session.
-	 * 
+	 *
 	 * @return A new HTTP session.
 	 */
 	public static MockHttpSession create() {

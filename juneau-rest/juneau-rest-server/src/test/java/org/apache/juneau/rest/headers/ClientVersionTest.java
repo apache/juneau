@@ -54,7 +54,7 @@ public class ClientVersionTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_defaultHeader() throws Exception {
 		a.get("/").execute().assertBody("no-version");
@@ -97,7 +97,7 @@ public class ClientVersionTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01_testCustomHeader() throws Exception {
 		b.get("/").execute().assertBody("no-version");

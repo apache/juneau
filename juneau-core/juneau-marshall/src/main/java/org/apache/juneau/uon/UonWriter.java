@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Specialized writer for serializing UON-encoded text.
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -48,7 +48,7 @@ public final class UonWriter extends SerializerWriter {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param session The session that created this writer.
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
@@ -68,7 +68,7 @@ public final class UonWriter extends SerializerWriter {
 
 	/**
 	 * Serializes the specified simple object as a UON string value.
-	 * 
+	 *
 	 * @param o The object being serialized.
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
 	 * @return This object (for method chaining).
@@ -127,7 +127,7 @@ public final class UonWriter extends SerializerWriter {
 
 	/**
 	 * Appends a boolean value to the output.
-	 * 
+	 *
 	 * @param o The boolean value to append to the output.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -139,7 +139,7 @@ public final class UonWriter extends SerializerWriter {
 
 	/**
 	 * Appends a numeric value to the output.
-	 * 
+	 *
 	 * @param o The numeric value to append to the output.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -161,7 +161,7 @@ public final class UonWriter extends SerializerWriter {
 
 	/**
 	 * Appends a URI to the output.
-	 * 
+	 *
 	 * @param uri The URI to append to the output.
 	 * @return This object (for method chaining).
 	 * @throws IOException

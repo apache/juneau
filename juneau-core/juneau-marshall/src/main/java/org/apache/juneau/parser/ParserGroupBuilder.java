@@ -38,7 +38,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Clone an existing parser group builder.
-	 * 
+	 *
 	 * @param copyFrom The parser group that we're copying settings and parsers from.
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
@@ -49,7 +49,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Registers the specified parsers with this group.
-	 * 
+	 *
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -60,11 +60,11 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Registers the specified parsers with this group.
-	 * 
+	 *
 	 * <p>
 	 * When passing in pre-instantiated parsers to this group, applying properties and transforms to the group
 	 * do not affect them.
-	 * 
+	 *
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -75,10 +75,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Registers the specified parsers with this group.
-	 * 
+	 *
 	 * <p>
 	 * Objects can either be instances of parsers or parser classes.
-	 * 
+	 *
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -89,10 +89,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Registers the specified parsers with this group.
-	 * 
+	 *
 	 * <p>
 	 * Objects can either be instances of parsers or parser classes.
-	 * 
+	 *
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
@@ -103,10 +103,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Creates a new {@link ParserGroup} object using a snapshot of the settings defined in this builder.
-	 * 
+	 *
 	 * <p>
 	 * This method can be called multiple times to produce multiple parser groups.
-	 * 
+	 *
 	 * @return A new {@link ParserGroup} object.
 	 */
 	@Override /* Context */
@@ -133,17 +133,17 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Auto-close streams.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -156,12 +156,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * Configuration property:  Auto-close streams.
 	 * <p>
 	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder autoCloseStreams() {
@@ -170,16 +170,16 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Debug output lines.
-	 * 
+	 *
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <code>5</code>.
 	 * @return This object (for method chaining).
@@ -191,15 +191,15 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Parser listener.
-	 * 
+	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -209,16 +209,16 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parsers are enabled.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -229,15 +229,15 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder strict() {
@@ -246,17 +246,17 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -264,18 +264,18 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	public ParserGroupBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder trimStrings() {
@@ -284,16 +284,16 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Unbuffered.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -304,15 +304,15 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Unbuffered.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder unbuffered() {
@@ -321,16 +321,16 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  File charset.
-	 * 
+	 *
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
@@ -341,16 +341,16 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Input stream charset.
-	 * 
+	 *
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
@@ -361,17 +361,17 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Binary input format.
-	 * 
+	 *
 	 * <p>
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
@@ -691,7 +691,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -709,7 +709,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public ParserGroupBuilder set(String name, Object value) {
 		super.set(name, value);

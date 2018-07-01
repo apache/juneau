@@ -22,11 +22,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parent class for all Juneau serializers.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Base serializer class that serves as the parent class for all serializers.
- * 
+ *
  * <p>
  * The purpose of this class is:
  * <ul>
@@ -34,7 +34,7 @@ import org.apache.juneau.parser.*;
  * 	<li>Create session objects used for serializing POJOs (i.e. {@link SerializerSession}).
  * 	<li>Provide convenience methods for serializing POJOs without having to construct session objects.
  * </ul>
- * 
+ *
  * <p>
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
@@ -49,37 +49,37 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypes()}
 	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 * 
+	 *
 	 * <p>
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
 	 * <br>For example, when serializing a <code>Map&lt;String,Object&gt;</code> field where the bean class cannot be determined from
 	 * the type of the values.
-	 * 
+	 *
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
 	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
 	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
@@ -87,20 +87,20 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addBeanTypes()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// A map of objects we want to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
-	 * 
+	 *
 	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
 	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
-	 * 
+	 *
 	 * 	<jc>// Will contain '_type' attribute.</jc>
 	 * 	String json = s.serialize(m);
 	 * </p>
@@ -109,36 +109,36 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Add type attribute to root nodes.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.addRootType.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#addRootType(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#addRootType()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
-	 * 
+	 *
 	 * <p>
-	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean.typeName()} value, a 
+	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean.typeName()} value, a
 	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
-	 * 
+	 *
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
 	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
 	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
@@ -146,17 +146,17 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addRootType()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_addRootType</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// The bean we want to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
-	 * 
+	 *
 	 * 	<jc>// Will contain '_type' attribute.</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
@@ -165,46 +165,46 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.detectRecursions.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies that recursions should be checked for during serialization.
-	 * 
+	 *
 	 * <p>
 	 * Recursions can occur when serializing models that aren't true trees but rather contain loops.
 	 * <br>In general, unchecked recursions cause stack-overflow-errors.
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
-	 * 
+	 *
 	 * <p>
 	 * The behavior when recursions are detected depends on the value for {@link #SERIALIZER_ignoreRecursions}.
-	 * 
+	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
-	 * 
+	 *
 	 * <p class='bcode'>
 	 * 	{A:{B:{C:<jk>null</jk>}}}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
@@ -213,21 +213,21 @@ public abstract class Serializer extends BeanContext {
 	 * 		.detectRecursions()
 	 * 		.ignoreRecursions()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>)
 	 * 		.set(<jsf>SERIALIZER_ignoreRecursions</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> Object <jf>f</jf>;
 	 * 	}
 	 * 	A a = <jk>new</jk> A();
 	 * 	a.<jf>f</jf> = a;
-	 * 
+	 *
 	 * 	<jc>// Produces "{f:null}"</jc>
 	 * 	String json = s.serialize(a);
 	 * </p>
@@ -236,25 +236,25 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Ignore recursion errors.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.ignoreRecursions.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Used in conjunction with {@link #SERIALIZER_detectRecursions}.
 	 * <br>Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * <br>Otherwise, a {@link SerializeException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
@@ -263,24 +263,24 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Initial depth.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.initialDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>0</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#initialDepth(int)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The initial indentation level at the root.
 	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
@@ -289,14 +289,14 @@ public abstract class Serializer extends BeanContext {
 	 * 		.ws()
 	 * 		.initialDepth(2)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
 	 * 		.set(<jsf>SERIALIZER_initialDepth</jsf>, 2)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Produces "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
@@ -305,60 +305,60 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Serializer listener.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends SerializerListener&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#listener(Class)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Define our serializer listener.</jc>
 	 * 	<jc>// Simply captures all errors.</jc>
 	 * 	<jk>public class</jk> MySerializerListener <jk>extends</jk> SerializerListener {
-	 * 
+	 *
 	 * 		<jc>// A simple property to store our events.</jc>
 	 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
-	 * 
-	 * 		<ja>@Override</ja> 
+	 *
+	 * 		<ja>@Override</ja>
 	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onError(SerializerSession session, Throwable t, String msg) {
 	 * 			<jf>events</jf>.add(session.getLastLocation() + <js>","</js> + msg + <js>","</js> + t);
 	 * 		}
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Create a serializer using our listener.</jc>
 	 * 	WriterSerializer s = JsonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.listener(MySerializerListener.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_listener</jsf>, MySerializerListener.<jk>class</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Create a session object.</jc>
 	 * 	<jc>// Needed because listeners are created per-session.</jc>
 	 * 	<jk>try</jk> (WriterSerializerSession ss = s.createSession()) {
-	 * 		
+	 *
 	 * 		<jc>// Serialize a bean.</jc>
 	 * 		String json = ss.serialize(<jk>new</jk> MyBean());
-	 * 
+	 *
 	 * 		<jc>// Get the listener.</jc>
 	 * 		MySerializerListener l = ss.getListener(MySerializerListener.<jk>class</jk>);
-	 * 
+	 *
 	 * 		<jc>// Dump the results to the console.</jc>
 	 * 		JsonSerializer.<jsf>DEFAULT_LAX</jsf>.println(l.<jf>events</jf>);
 	 * 	}
@@ -368,24 +368,24 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Max serialization depth.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.maxDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>100</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#maxDepth(int)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Abort serialization if specified depth is reached in the POJO tree.
 	 * <br>If this depth is exceeded, an exception is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that throws an exception if the depth is greater than 20.</jc>
@@ -393,7 +393,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.maxDepth(20)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -405,28 +405,28 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
-	 * 
+	 *
 	 * <p>
 	 * Copies and sorts the contents of arrays and collections before serializing them.
-	 * 
+	 *
 	 * <p>
 	 * Note that this introduces a performance penalty.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
@@ -434,7 +434,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.sortCollections()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -446,28 +446,28 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Sort maps alphabetically.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
-	 * 
+	 *
 	 * <p>
 	 * Copies and sorts the contents of maps by their keys before serializing them.
-	 * 
+	 *
 	 * <p>
 	 * Note that this introduces a performance penalty.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
@@ -475,7 +475,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.sortMaps()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -487,25 +487,25 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, empty lists and arrays will not be serialized.
-	 * 
+	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
@@ -514,7 +514,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li>
 	 * 		Bean properties with empty list values will not be set.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
@@ -522,7 +522,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimEmptyCollections()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -534,31 +534,31 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Trim empty maps.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyMaps.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
-	 * 
+	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Bean properties with empty map values will not be set.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that skips empty maps.</jc>
@@ -566,7 +566,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimEmptyMaps()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -578,30 +578,30 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Trim null bean property values.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimNullProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-	 * 
+	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Map entries with <jk>null</jk> values will be lost.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that serializes null properties.</jc>
@@ -609,7 +609,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimNullProperties(<jk>false</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -621,24 +621,24 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  Trim strings.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings(boolean)}
 	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
@@ -646,16 +646,16 @@ public abstract class Serializer extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimStrings()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_trimStrings</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	Map&lt;String,String&gt; m = <jk>new</jk> HashMap&lt;&gt;();
 	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
-	 * 
+	 *
 	 * 	<jc>// Produces "{foo:'bar'}"</jc>
 	 * 	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.toString(m);
 	 * </p>
@@ -664,24 +664,24 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  URI context bean.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriContext.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> (JSON object representing a {@link UriContext})
 	 * 	<li><b>Default:</b>  <js>"{}"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#uriContext(UriContext)}
 	 * 			<li class='jm'>{@link SerializerBuilder#uriContext(String)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Our URI contextual information.</jc>
@@ -689,35 +689,35 @@ public abstract class Serializer extends BeanContext {
 	 * 	String contextRoot = <js>"/myContext"</js>;
 	 * 	String servletPath = <js>"/myServlet"</js>;
 	 * 	String pathInfo = <js>"/foo"</js>;
-	 * 
+	 *
 	 * 	<jc>// Create a UriContext object.</jc>
 	 * 	UriContext uriContext = <jk>new</jk> UriContext(authority, contextRoot, servletPath, pathInfo);
-	 * 
+	 *
 	 * 	<jc>// Associate it with our serializer.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriContext(uriContext)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but specify as a JSON string.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_uriContext</jsf>, uriContext)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but define it on the session args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().uriContext(uriContext);
 	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
 	 * 		...
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; juneau-marshall &gt; URIs</a>
@@ -727,20 +727,20 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  URI relativity.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriRelativity})
 	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#uriRelativity(UriRelativity)}
 	 * 			<li class='jm'>{@link SerializerBuilder#uriRelativity(String)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
@@ -749,7 +749,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li>{@link java.net.URL}
 	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
@@ -758,7 +758,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li class='jf'>{@link UriRelativity#PATH_INFO}
 	 * 		- Relative URIs should be considered relative to the request URI.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
@@ -769,7 +769,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)
 	 * 		.build();
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; juneau-marshall &gt; URIs</a>
@@ -779,20 +779,20 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Configuration property:  URI resolution.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriResolution.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriResolution})
 	 * 	<li><b>Default:</b>  <js>"NONE"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#uriResolution(UriResolution)}
 	 * 			<li class='jm'>{@link SerializerBuilder#uriResolution(String)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
@@ -801,7 +801,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li>{@link java.net.URL}
 	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
@@ -812,7 +812,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li class='jf'>{@link UriResolution#NONE}
 	 * 		- Don't do any URL resolution.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
@@ -823,7 +823,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)
 	 * 		.build();
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; juneau-marshall &gt; URIs</a>
@@ -831,14 +831,14 @@ public abstract class Serializer extends BeanContext {
 	 */
 	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";
 
-	
+
 	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "", "") {
 		@Override
 		public SerializerSession createSession(SerializerSessionArgs args) {
 			throw new NoSuchMethodError();
 		}
 	};
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -863,10 +863,10 @@ public abstract class Serializer extends BeanContext {
 	private final MediaTypeRange[] accept;
 	private final MediaType[] accepts;
 	private final MediaType produces;
-	
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -893,7 +893,7 @@ public abstract class Serializer extends BeanContext {
 	 */
 	protected Serializer(PropertyStore ps, String produces, String accept) {
 		super(ps);
-		
+
 		maxDepth = getIntegerProperty(SERIALIZER_maxDepth, 100);
 		initialDepth = getIntegerProperty(SERIALIZER_initialDepth, 0);
 		detectRecursions = getBooleanProperty(SERIALIZER_detectRecursions, false);
@@ -913,7 +913,7 @@ public abstract class Serializer extends BeanContext {
 
 		this.produces = MediaType.forString(produces);
 		this.accept = accept == null ? MediaTypeRange.parse(produces) : MediaTypeRange.parse(accept);
-		this.accepts = accept == null ? new MediaType[] {this.produces} : MediaType.forStrings(StringUtils.split(accept, ',')); 
+		this.accepts = accept == null ? new MediaType[] {this.produces} : MediaType.forStrings(StringUtils.split(accept, ','));
 	}
 
 	@Override /* Context */
@@ -927,7 +927,7 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 */
 	public boolean isWriterSerializer() {
@@ -936,7 +936,7 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Create the session object used for actual serialization of objects.
-	 * 
+	 *
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -964,10 +964,10 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling <code>serializer.createSession().serialize(o, output);</code>
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @param output
 	 * 	The output object.
@@ -992,7 +992,7 @@ public abstract class Serializer extends BeanContext {
 	/**
 	 * Shortcut method for serializing objects directly to either a <code>String</code> or <code><jk>byte</jk>[]</code>
 	 * depending on the serializer type.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
@@ -1006,12 +1006,12 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Convenience method for serializing an object to a String.
-	 * 
+	 *
 	 * <p>
 	 * For writer-based serializers, this is identical to calling {@link #serialize(Object)}.
-	 * <br>For stream-based serializers, this converts the returned byte array to a string based on 
+	 * <br>For stream-based serializers, this converts the returned byte array to a string based on
 	 * the {@link OutputStreamSerializer#OSSERIALIZER_binaryFormat} setting.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -1026,22 +1026,22 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
-	 * 
+	 *
 	 * <p>
 	 * Note that the order of these ranges are from high to low q-value.
-	 * 
+	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaTypeRange[] getMediaTypeRanges() {
 		return accept;
 	}
-	
+
 	/**
 	 * Returns the first entry in the <code>accept</code> parameter passed into the constructor.
-	 * 
+	 *
 	 * <p>
 	 * This signifies the 'primary' media type for this serializer.
-	 * 
+	 *
 	 * @return The media type.  Never <jk>null</jk>.
 	 */
 	public final MediaType getPrimaryMediaType() {
@@ -1050,10 +1050,10 @@ public abstract class Serializer extends BeanContext {
 
 	/**
 	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
-	 * 
+	 *
 	 * <p>
 	 * The order of the media types are the same as those in the <code>accept</code> parameter.
-	 * 
+	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaType[] getAcceptMediaTypes() {
@@ -1063,23 +1063,23 @@ public abstract class Serializer extends BeanContext {
 	/**
 	 * Optional method that returns the response <code>Content-Type</code> for this serializer if it is different from
 	 * the matched media type.
-	 * 
+	 *
 	 * <p>
 	 * This method is specified to override the content type for this serializer.
 	 * For example, the {@link org.apache.juneau.json.JsonSerializer.Simple} class returns that it handles media type
 	 * <js>"text/json+simple"</js>, but returns <js>"text/json"</js> as the actual content type.
 	 * This allows clients to request specific 'flavors' of content using specialized <code>Accept</code> header values.
-	 * 
+	 *
 	 * <p>
 	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
 	 * or client).
-	 * 
+	 *
 	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
 	 */
 	public final MediaType getResponseContentType() {
 		return produces;
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

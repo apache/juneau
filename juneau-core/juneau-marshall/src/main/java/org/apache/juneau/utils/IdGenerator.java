@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -14,21 +14,21 @@ package org.apache.juneau.utils;
 
 /**
  * Simple interface for defining atomic ID generators.
- * 
+ *
  * @param <K> The ID type.
  */
 public interface IdGenerator<K> {
-	
+
 	/**
 	 * Returns the next available ID.
-	 * 
+	 *
 	 * @return The next available ID.
 	 */
 	K next();
-	
+
 	/**
 	 * Sets a lower bound for this generator.
-	 * 
+	 *
 	 * @param k The lower bound.
 	 */
 	void lb(K k);

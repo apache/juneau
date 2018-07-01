@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -27,7 +27,7 @@ public final class BoundedServletInputStream extends ServletInputStream {
 
 	/**
 	 * Wraps the specified input stream.
-	 * 
+	 *
 	 * @param is The input stream to wrap.
 	 * @param max The maximum number of bytes to read from the stream.
 	 */
@@ -39,7 +39,7 @@ public final class BoundedServletInputStream extends ServletInputStream {
 
 	/**
 	 * Wraps the specified input stream.
-	 * 
+	 *
 	 * @param sis The input stream to wrap.
 	 * @param max The maximum number of bytes to read from the stream.
 	 */
@@ -51,7 +51,7 @@ public final class BoundedServletInputStream extends ServletInputStream {
 
 	/**
 	 * Wraps the specified byte array.
-	 * 
+	 *
 	 * @param b The byte contents of the stream.
 	 */
 	public BoundedServletInputStream(byte[] b) {
@@ -73,7 +73,7 @@ public final class BoundedServletInputStream extends ServletInputStream {
 	public int read(final byte[] b, final int off, final int len) throws IOException {
 		long numBytes = Math.min(len, remain);
 		int r = is.read(b, off, (int) numBytes);
-		if (r == -1) 
+		if (r == -1)
 			return -1;
 		decrement(numBytes);
 		return r;
@@ -129,7 +129,7 @@ public final class BoundedServletInputStream extends ServletInputStream {
 		if (sis != null)
 			sis.setReadListener(arg0);
 	}
-	
+
 	private void decrement() throws IOException {
 		remain--;
 		if (remain < 0)

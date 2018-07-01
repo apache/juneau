@@ -14,46 +14,46 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>If-Unmodified-Since</l> HTTP request header.
- * 
+ *
  * <p>
  * Only send the response if the entity has not been modified since a specific time.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The If-Unmodified-Since request-header field is used with a method to make it conditional.
  * If the requested resource has not been modified since the time specified in this field, the server SHOULD perform the
  * requested operation as if the If-Unmodified-Since header were not present.
- * 
+ *
  * <p>
  * If the requested variant has been modified since the specified time, the server MUST NOT perform the requested
  * operation, and MUST return a 412 (Precondition Failed).
- * 
+ *
  * <p class='bcode'>
  * 	If-Unmodified-Since = "If-Unmodified-Since" ":" HTTP-date
  * </p>
- * 
+ *
  * <p>
  * An example of the field is:
  * <p class='bcode'>
  * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
- * 
+ *
  * <p>
  * If the request normally (i.e., without the If-Unmodified-Since header) would result in anything other than a 2xx or
  * 412 status, the If-Unmodified-Since header SHOULD be ignored.
- * 
+ *
  * <p>
  * If the specified date is invalid, the header is ignored.
- * 
+ *
  * <p>
  * The result of a request having both an If-Unmodified-Since header field and either an If-None-Match or an
  * If-Modified-Since header fields is undefined by this specification.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -63,7 +63,7 @@ public final class IfUnmodifiedSince extends HeaderDate {
 
 	/**
 	 * Returns a parsed <code>If-Unmodified-Since</code> header.
-	 * 
+	 *
 	 * @param value The <code>If-Unmodified-Since</code> header string.
 	 * @return The parsed <code>If-Unmodified-Since</code> header, or <jk>null</jk> if the string was null.
 	 */

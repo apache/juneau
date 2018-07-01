@@ -26,15 +26,15 @@ import org.apache.juneau.utils.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ExternalDocumentation x = <jsm>externalDocumentation</jsm>(<js>"https://swagger.io"</js>, <js>"Find more info here"</js>);
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * 		<js>"url"</js>: <js>"https://swagger.io"</js>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -61,34 +61,34 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * Default constructor.
 	 */
 	public ExternalDocumentation() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public ExternalDocumentation(ExternalDocumentation copyFrom) {
 		super(copyFrom);
-		
+
 		this.description = copyFrom.description;
 		this.url = copyFrom.url;
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public ExternalDocumentation copy() {
 		return new ExternalDocumentation(this);
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
-	 * A short description of the target documentation. 
-	 * 
+	 * A short description of the target documentation.
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -97,11 +97,11 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
-	 * A short description of the target documentation. 
-	 * 
-	 * @param value 
+	 * A short description of the target documentation.
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -114,7 +114,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -127,10 +127,10 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>url</property>.
-	 * 
+	 *
 	 * <p>
 	 * The URL for the target documentation.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public URI getUrl() {
@@ -139,11 +139,11 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>url</property>.
-	 * 
+	 *
 	 * <p>
 	 * The URL for the target documentation.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
@@ -156,7 +156,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setUrl(URI)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
@@ -164,7 +164,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link URI}
 	 * 		<li>{@link URL}
-	 * 		<li>{@link String} 
+	 * 		<li>{@link String}
 	 * 			<br>Converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
 	 * 		<li>
 	 * 	</ul>
@@ -177,7 +177,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the url property is not null.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the url property is not null.
 	 */
 	public boolean hasUrl() {
@@ -186,7 +186,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the description property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the description property is not null or empty.
 	 */
 	public boolean hasDescription() {
@@ -211,12 +211,12 @@ public class ExternalDocumentation extends SwaggerElement {
 		switch (property) {
 			case "description": return description(value);
 			case "url": return url(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
 	}
-	
+
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = new ASet<String>()

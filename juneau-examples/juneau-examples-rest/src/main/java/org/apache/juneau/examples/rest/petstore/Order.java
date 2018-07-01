@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -24,41 +24,41 @@ public class Order {
 	private long id, petId;
 	private Date shipDate;
 	private OrderStatus status;
-	
+
 	public long getId() {
 		return id;
 	}
-	
-	@Html(link="servlet:/store/order/{id}") 
+
+	@Html(link="servlet:/store/order/{id}")
 	public Order id(long id) {
 		this.id = id;
 		return this;
 	}
-	
+
 	@Html(link="servlet:/pet/{id}")
 	public long getPetId() {
 		return petId;
 	}
-	
+
 	public Order petId(long petId) {
 		this.petId = petId;
 		return this;
 	}
-	
+
 	@Swap(DateSwap.ISO8601D.class)
 	public Date getShipDate() {
 		return shipDate;
 	}
-	
+
 	public Order shipDate(Date shipDate) {
 		this.shipDate = shipDate;
 		return this;
 	}
-	
+
 	public OrderStatus getStatus() {
 		return status;
 	}
-	
+
 	public Order status(OrderStatus status) {
 		this.status = status;
 		return this;

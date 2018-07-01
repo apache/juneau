@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
 /**
  * Identifies servlet and REST call lifecycle events which cause {@link RestHook @RestHook}-annotated Java methods
  * to be called.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.LifecycleHooks">Overview &gt; juneau-rest-server &gt; Lifecycle Hooks</a>
@@ -41,10 +41,10 @@ public enum HookEvent {
 	/**
 	 * Identifies a method that should be called immediately after the <code>HttpServlet.service(HttpServletRequest, HttpServletResponse)</code>
 	 * method is called.
-	 * 
+	 *
 	 * <p>
 	 * Note that you only have access to the raw request and response objects at this point.
-	 * 
+	 *
 	 * <p>
 	 * The list of valid parameter types are as follows:
 	 * <ul>
@@ -54,12 +54,12 @@ public enum HookEvent {
 	 * 			<li>{@link HttpServletResponse}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-	 * 
+	 *
 	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>START_CALL</jsf>)
 	 * 		<jk>public void</jk> onStartCall(HttpServletRequest req) {
@@ -67,7 +67,7 @@ public enum HookEvent {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -94,11 +94,11 @@ public enum HookEvent {
 
 	/**
 	 * Identifies a method that gets called immediately before the <ja>@RestMethod</ja> annotated method gets called.
-	 * 
+	 *
 	 * <p>
 	 * At this point, the {@link RestRequest} object has been fully initialized, and all {@link RestGuard} and
 	 * {@link RestMatcher} objects have been called.
-	 * 
+	 *
 	 * <p>
 	 * The list of valid parameter types are as follows:
 	 * <ul>
@@ -171,12 +171,12 @@ public enum HookEvent {
 	 * 			<li>{@link UriResolver}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-	 * 
+	 *
 	 * 		<jc>// Log the incoming request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
 	 * 		<jk>public void</jk> onPreCall(Accept accept, Logger logger) {
@@ -184,7 +184,7 @@ public enum HookEvent {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -197,7 +197,7 @@ public enum HookEvent {
 	 * 		Multiple PRE_CALL methods can be defined on a class.
 	 * 		<br>PRE_CALL methods on parent classes are invoked before PRE_CALL methods on child classes.
 	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>	
+	 * 	<li>
 	 * 		The method can throw any exception.
 	 * 		<br>{@link RestException RestExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
@@ -214,19 +214,19 @@ public enum HookEvent {
 
 	/**
 	 * Identifies a method that gets called immediately after the <ja>@RestMethod</ja> annotated method gets called.
-	 * 
+	 *
 	 * <p>
 	 * At this point, the output object returned by the method call has been set on the response, but
 	 * {@link RestConverter RestConverters} have not yet been executed and the response has not yet been written.
-	 * 
+	 *
 	 * <p>
 	 * The list of valid parameter types are the same as {@link #PRE_CALL}.
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-	 * 
+	 *
 	 * 		<jc>// Log the result of the request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>POST_CALL</jsf>)
 	 * 		<jk>public void</jk> onPostCall(RestResponse res, Logger logger) {
@@ -234,7 +234,7 @@ public enum HookEvent {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -259,10 +259,10 @@ public enum HookEvent {
 
 	/**
 	 * Identifies a method that gets called right before we exit the servlet service method.
-	 * 
+	 *
 	 * <p>
 	 * At this point, the output has been written and flushed.
-	 * 
+	 *
 	 * <p>
 	 * The list of valid parameter types are as follows:
 	 * <ul>
@@ -272,19 +272,19 @@ public enum HookEvent {
 	 * 			<li>{@link HttpServletResponse}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * The following attributes are set on the {@link HttpServletRequest} object that can be useful for logging purposes:
 	 * <ul>
 	 * 	<li><js>"Exception"</js> - Any exceptions thrown during the request.
 	 * 	<li><js>"ExecTime"</js> - Execution time of the request.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-	 * 
+	 *
 	 * 		<jc>// Log the time it took to execute the request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>END_CALL</jsf>)
 	 * 		<jk>public void</jk> onEndCall(HttpServletRequest req, Logger logger) {
@@ -297,7 +297,7 @@ public enum HookEvent {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -322,27 +322,27 @@ public enum HookEvent {
 
 	/**
 	 * Identifies a method that gets called during servlet initialization.
-	 * 
+	 *
 	 * <p>
 	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContextBuilder}
 	 * object has been created and initialized with the annotations defined on the class, but before the
 	 * {@link RestContext} object has been created.
-	 * 
+	 *
 	 * <p>
 	 * The only valid parameter type for this method is {@link RestContextBuilder} which can be used to configure the servlet.
-	 * 
+	 *
 	 * <p>
 	 * An example of this is the <code>PetStoreResource</code> class that uses an init method to perform initialization
 	 * of an internal data structure.
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
-	 * 
+	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
-	 * 
+	 *
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> onInit(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			<jc>// Load our database from a local JSON file.</jc>
@@ -350,7 +350,7 @@ public enum HookEvent {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -375,18 +375,18 @@ public enum HookEvent {
 
 	/**
 	 * Identifies a method that gets called immediately after servlet initialization.
-	 * 
+	 *
 	 * <p>
 	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
 	 * object has been created.
-	 * 
+	 *
 	 * <p>
 	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
 	 * about the servlet.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>	
+	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
 	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
@@ -408,18 +408,18 @@ public enum HookEvent {
 
 	/**
 	 * Identical to {@link #POST_INIT} except the order of execution is child-resources first.
-	 * 
+	 *
 	 * <p>
 	 * Use this annotation if you need to perform any kind of initialization on child resources before the parent resource.
-	 * 
+	 *
 	 * <p>
 	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
 	 * object has been created and after the {@link #POST_INIT} methods have been called.
-	 * 
+	 *
 	 * <p>
 	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
 	 * about the servlet.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -440,32 +440,32 @@ public enum HookEvent {
 
 	/**
 	 * Identifies a method that gets called during servlet destroy.
-	 * 
+	 *
 	 * <p>
 	 * This method is called from within the {@link Servlet#destroy()}.
-	 * 
+	 *
 	 * <p>
 	 * The only valid parameter type for this method is {@link RestContext}, although typically no arguments will
 	 * be specified.
-	 * 
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
-	 * 
+	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
-	 * 
+	 *
 	 * 		<ja>@RestHook</ja>(<jsf>DESTROY</jsf>)
 	 * 		<jk>public void</jk> onDestroy() {
 	 * 			<jf>petDB</jf> = <jk>null</jk>;
 	 * 		}
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>	
+	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
 	 * 		The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.

@@ -29,9 +29,9 @@ import com.hp.hpl.jena.util.iterator.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfParser}.
- * 
+ *
  * <p>
- * This class is NOT thread safe.  
+ * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
@@ -48,7 +48,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -107,14 +107,14 @@ public class RdfParserSession extends ReaderParserSession {
 				c = new ArrayList();
 			else
 				c = (
-					type.canCreateNewInstance(getOuter()) 
-					? (Collection<?>)type.newInstance(getOuter()) 
+					type.canCreateNewInstance(getOuter())
+					? (Collection<?>)type.newInstance(getOuter())
 					: new ObjectList(this)
 				);
 
 			int argIndex = 0;
 			for (Resource resource : roots)
-				c.add(parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), resource, 
+				c.add(parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), resource,
 					getOuter(), null));
 
 			if (type.isArray() || type.isArgs())
@@ -153,7 +153,7 @@ public class RdfParserSession extends ReaderParserSession {
 			s = s.trim();
 		return s;
 	}
-	
+
 	/*
 	 * Finds the roots in the model using either the "root" property to identify it,
 	 * 	or by resorting to scanning the model for all nodes with no incoming predicates.
@@ -222,10 +222,10 @@ public class RdfParserSession extends ReaderParserSession {
 
 	private boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
 		RdfBeanPropertyMeta bpRdf = (pMeta == null ? RdfBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(RdfBeanPropertyMeta.class));
-		
+
 		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
-		
+
 		return collectionFormat == RdfCollectionFormat.MULTI_VALUED;
 	}
 
@@ -401,7 +401,7 @@ public class RdfParserSession extends ReaderParserSession {
 		throw new ParseException(this, "Unknown value type for node ''{0}''", n);
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, 
+	private <K,V> Map<K,V> parseIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType,
 			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 		// Add URI as "uri" to generic maps.
 		if (r.getURI() != null) {
@@ -426,7 +426,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l, 
+	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l,
 			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
@@ -436,7 +436,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return l;
 	}
 
-	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l, 
+	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l,
 			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {

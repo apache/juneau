@@ -25,7 +25,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -39,7 +39,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -73,10 +73,10 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Method that can be called from subclasses to serialize an object to JSON.
-	 * 
+	 *
 	 * <p>
 	 * Used by {@link JsonSchemaSerializerSession} for serializing examples to JSON.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return The serialized object.
 	 * @throws Exception
@@ -86,18 +86,18 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		serializeAnything(getJsonWriter(createPipe(sw)), o, getExpectedRootType(o), "root", null);
 		return sw.toString();
 	}
-	
+
 	/**
 	 * Workhorse method.
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
-	 * 
+	 *
 	 * @param out The output writer.
 	 * @param o The object to serialize.
 	 * @param eType The expected type.
 	 * @param attrName The attribute name.
 	 * @param pMeta The bean property currently being parsed.
 	 * @return The same writer passed in.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
@@ -166,7 +166,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		} else {
 			out.stringValue(toString(o));
 		}
-		
+
 		if (wrapperAttr != null) {
 			indent--;
 			out.cre(indent-1).append('}');
@@ -263,7 +263,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns the {@link JsonSerializer#JSON_addBeanTypes} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link JsonSerializer#JSON_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
@@ -273,7 +273,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Converts the specified output target object to an {@link JsonWriter}.
-	 * 
+	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link JsonWriter}.
 	 * @throws Exception

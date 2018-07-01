@@ -107,7 +107,7 @@ public class DTOs {
 			t.setF20(new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create())));
 			return t;
 		}
-		
+
 		public static B INSTANCE = create();
 	}
 
@@ -137,7 +137,7 @@ public class DTOs {
 			t.setF20(new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create())));
 			return t;
 		}
-		
+
 		public static C INSTANCE = create();
 	}
 }

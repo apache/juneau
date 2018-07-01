@@ -16,13 +16,13 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.
- * 
+ *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Allow: GET, PUT
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -34,7 +34,7 @@ public class HeaderStringArray {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param value The raw header value.
 	 */
 	protected HeaderStringArray(String value) {
@@ -43,10 +43,10 @@ public class HeaderStringArray {
 
 	/**
 	 * Returns this header as a simple string value.
-	 * 
+	 *
 	 * <p>
 	 * Functionally equivalent to calling {@link #toString()}.
-	 * 
+	 *
 	 * @return This header as a simple string.
 	 */
 	public String asString() {
@@ -55,7 +55,7 @@ public class HeaderStringArray {
 
 	/**
 	 * Returns <jk>true</jk> if this header contains the specified value.
-	 * 
+	 *
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
@@ -69,7 +69,7 @@ public class HeaderStringArray {
 
 	/**
 	 * Returns <jk>true</jk> if this header contains the specified value using {@link String#equalsIgnoreCase(String)}.
-	 * 
+	 *
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */

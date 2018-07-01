@@ -24,15 +24,15 @@ import org.apache.juneau.utils.*;
 
 /**
  * Describes a single HTTP header.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	HeaderInfo x = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -43,7 +43,7 @@ import org.apache.juneau.utils.*;
  * 		<js>"type"</js>: <js>"integer"</js>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -56,23 +56,23 @@ public class HeaderInfo extends SwaggerElement {
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
 	private static final String[] VALID_COLLECTION_FORMATS = {"csv","ssv","tsv","pipes","multi"};
 
-	private String 
+	private String
 		description,
 		type,
 		format,
 		collectionFormat,
 		pattern,
 		ref;
-	private Number 
+	private Number
 		maximum,
 		minimum,
 		multipleOf;
-	private Integer 
+	private Integer
 		maxLength,
 		minLength,
 		maxItems,
 		minItems;
-	private Boolean 
+	private Boolean
 		exclusiveMaximum,
 		exclusiveMinimum,
 		uniqueItems;
@@ -80,20 +80,20 @@ public class HeaderInfo extends SwaggerElement {
 	private Object _default;
 	private List<Object> _enum;
 	private Object example;
-	
+
 	/**
 	 * Default constructor.
 	 */
 	public HeaderInfo() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public HeaderInfo(HeaderInfo copyFrom) {
 		super(copyFrom);
-		
+
 		this.description = copyFrom.description;
 		this.type = copyFrom.type;
 		this.format = copyFrom.format;
@@ -114,11 +114,11 @@ public class HeaderInfo extends SwaggerElement {
 		this._enum = newList(copyFrom._enum);
 		this.example = copyFrom.example;
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public HeaderInfo copy() {
 		return new HeaderInfo(this);
@@ -132,10 +132,10 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short description of the header.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -144,11 +144,11 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short description of the header.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -160,7 +160,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -173,10 +173,10 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
-	 * 
+	 *
 	 * <p>
 	 * The type of the object.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getType() {
@@ -185,16 +185,16 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
-	 * 
+	 *
 	 * <p>
 	 * The type of the object.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>Valid values:
@@ -219,7 +219,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setType(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -232,15 +232,15 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>format</property>.
-	 * 
+	 *
 	 * <p>
 	 * The extending format for the previously mentioned <code>type</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getFormat() {
@@ -249,16 +249,16 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>format</property>.
-	 * 
+	 *
 	 * <p>
 	 * The extending format for the previously mentioned <code>type</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -270,7 +270,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setFormat(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -283,10 +283,10 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>items</property>.
-	 * 
+	 *
 	 * <p>
 	 * Describes the type of items in the array.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Items getItems() {
@@ -295,11 +295,11 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>items</property>.
-	 * 
+	 *
 	 * <p>
 	 * Describes the type of items in the array.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -312,8 +312,8 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setItems(Items)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -333,10 +333,10 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
-	 * 
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getCollectionFormat() {
@@ -345,11 +345,11 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>collectionFormat</property>.
-	 * 
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -372,7 +372,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setCollectionFormat(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -385,10 +385,10 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>default</property>.
-	 * 
+	 *
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -396,12 +396,12 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the header.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getDefault() {
@@ -410,10 +410,10 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>default</property>.
-	 * 
+	 *
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -421,13 +421,13 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the header.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -439,7 +439,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDefault(Object)}.
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -449,12 +449,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMaximum() {
@@ -463,13 +463,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -481,7 +481,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaximum(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -494,12 +494,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMaximum() {
@@ -508,13 +508,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -526,7 +526,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExclusiveMaximum(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -539,12 +539,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMinimum() {
@@ -553,13 +553,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -571,7 +571,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinimum(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -584,12 +584,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMinimum() {
@@ -598,13 +598,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -616,7 +616,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExclusiveMinimum(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -629,12 +629,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxLength() {
@@ -643,13 +643,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -661,7 +661,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaxLength(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -674,12 +674,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinLength() {
@@ -688,13 +688,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -706,7 +706,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinLength(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -719,12 +719,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getPattern() {
@@ -733,16 +733,16 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
-	 * 
+	 *
 	 * <p>
 	 * This string SHOULD be a valid regular expression.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -754,7 +754,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setPattern(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -767,12 +767,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxItems() {
@@ -781,13 +781,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -799,7 +799,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaxItems(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -812,12 +812,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinItems() {
@@ -826,13 +826,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -844,7 +844,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinItems(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -857,12 +857,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() {
@@ -871,13 +871,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -889,7 +889,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setUniqueItems(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -902,12 +902,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Object> getEnum() {
@@ -916,13 +916,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -934,7 +934,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>enum</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -944,10 +944,10 @@ public class HeaderInfo extends SwaggerElement {
 		_enum = addToList(_enum, values);
 		return this;
 	}
-	
+
 	/**
 	 * Adds one or more values to the <property>enum</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -972,15 +972,15 @@ public class HeaderInfo extends SwaggerElement {
 		_enum = addToList(_enum, values, Object.class);
 		return this;
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMultipleOf() {
@@ -989,13 +989,13 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1007,7 +1007,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMultipleOf(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -1020,7 +1020,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>$ref</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("$ref")
@@ -1030,7 +1030,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
 	 */
 	public boolean hasRef() {
@@ -1039,8 +1039,8 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>$ref</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1053,8 +1053,8 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setRef(Object)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1065,7 +1065,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>x-example</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("x-example")
@@ -1075,8 +1075,8 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>examples</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1089,8 +1089,8 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>examples</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1154,12 +1154,12 @@ public class HeaderInfo extends SwaggerElement {
 			case "enum": return setEnum(null)._enum(value);
 			case "multipleOf": return multipleOf(value);
 			case "x-example": return example(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
 	}
-	
+
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = new ASet<String>()
@@ -1184,24 +1184,24 @@ public class HeaderInfo extends SwaggerElement {
 			.appendIf(multipleOf != null, "multipleOf")
 			.appendIf(example != null, "example");
 		return new MultiSet<>(s, super.keySet());
-		
+
 	}
 
 	/**
 	 * Resolves any <js>"$ref"</js> attributes in this element.
-	 * 
+	 *
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
-	 * @param maxDepth 
-	 * 	The maximum depth to resolve references. 
+	 * @param maxDepth
+	 * 	The maximum depth to resolve references.
 	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
 	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
-	 * @return 
+	 * @return
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
 	public HeaderInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
-		
+
 		if (ref != null) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
@@ -1213,7 +1213,7 @@ public class HeaderInfo extends SwaggerElement {
 
 		if (items != null)
 			items = items.resolveRefs(swagger, refStack, maxDepth);
-		
+
 		return this;
 	}
 }

@@ -18,14 +18,14 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Same as {@link BeanMeta}, except the list of bean properties are limited by a  {@link BeanProperty#properties() @BeanProperty.properties()} annotation.
- * 
+ *
  * @param <T> The class type that this metadata applies to.
  */
 public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 
 	/**
 	 * Wrapper constructor.
-	 * 
+	 *
 	 * @param innerMeta The untransformed bean meta of the bean property.
 	 * @param pNames The list of transformed property names.
 	 */
@@ -35,7 +35,7 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 
 	/**
 	 * Wrapper constructor.
-	 * 
+	 *
 	 * @param innerMeta The untransformed bean meta of the bean property.
 	 * @param pNames The list of transformed property names.
 	 */

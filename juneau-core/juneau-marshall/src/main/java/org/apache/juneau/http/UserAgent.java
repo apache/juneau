@@ -14,17 +14,17 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>User-Agent</l> HTTP request header.
- * 
+ *
  * <p>
  * The user agent string of the user agent.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The User-Agent request-header field contains information about the user agent originating the request.
  * This is for statistical purposes, the tracing of protocol violations, and automated recognition of user agents for
  * the sake of tailoring responses to avoid particular user agent limitations.
@@ -32,17 +32,17 @@ package org.apache.juneau.http;
  * The field can contain multiple product tokens (section 3.8) and comments identifying the agent and any sub-products
  * which form a significant part of the user agent.
  * By convention, the product tokens are listed in order of their significance for identifying the application.
- * 
+ *
  * <p class='bcode'>
  * 	User-Agent     = "User-Agent" ":" 1*( product | comment )
  * </p>
- * 
+ *
  * <p>
  * Example:
  * <p class='bcode'>
  * 	User-Agent: CERN-LineMode/2.15 libwww/2.17b3
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -52,7 +52,7 @@ public final class UserAgent extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>User-Agent</code> header.
-	 * 
+	 *
 	 * @param value The <code>User-Agent</code> header string.
 	 * @return The parsed <code>User-Agent</code> header, or <jk>null</jk> if the string was null.
 	 */

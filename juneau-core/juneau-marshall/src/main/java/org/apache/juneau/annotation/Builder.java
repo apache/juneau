@@ -19,38 +19,38 @@ import java.lang.annotation.*;
 
 /**
  * Identifies a class as a builder for a POJO class.
- * 
+ *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// POJO class.</jc>
  * 	<ja>@Builder</ja>(MyBeanBuilder.<jk>class</jk>)
  * 	<jk>public class</jk> MyBean {
- * 
+ *
  * 		<jc>// Read-only properties.</jc>
  * 		<jk>public final</jk> String <jf>foo</jf>;
  * 		<jk>public final int</jk> <jf>bar</jf>;
- * 
+ *
  * 		<jc>// Constructor that takes in a builder.</jc>
  * 		<jk>public</jk> MyBean(MyBeanBuilder b) {
  * 			<jk>this</jk>.<jf>foo</jf> = b.foo;
  * 			<jk>this</jk>.<jf>bar</jf> = b.bar;
  * 		}
  * 	}
- * 	
+ *
  * 	<jc>// Builder class.</jc>
  * 	<jk>public class</jk> MyBeanBuilder {
  * 		<jk>public</jk> String <jf>foo</jf>;
  * 		<jk>public int</jk> <jf>bar</jf>;
- * 			
+ *
  * 		<jc>// Method that creates the bean.</jc>
  * 		<jk>public</jk> MyBean build() {
  * 			<jk>return new</jk> MyBean(<jk>this</jk>);
  * 		}
- * 		
+ *
  * 		<jc>// Bean property setters.</jc>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; juneau-marshall &gt; POJO Builders</a>

@@ -57,11 +57,11 @@ public class DockerRegistryResource extends BasicRestServlet {
 
 	/**
 	 * Initializes the registry URL and rest client.
-	 * 
+	 *
 	 * @param builder The resource config.
 	 * @throws Exception
 	 */
-	@RestHook(INIT) 
+	@RestHook(INIT)
 	public void initRegistry(RestContextBuilder builder) throws Exception {
 		Config cf = builder.getConfig();
 		registryUrl = cf.getString("DockerRegistry/url");

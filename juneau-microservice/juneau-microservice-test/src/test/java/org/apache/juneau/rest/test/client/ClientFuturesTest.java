@@ -41,7 +41,7 @@ public class ClientFuturesTest {
 		}
 	}
 	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
-	
+
 	@Test
 	public void a01() throws Exception {
 		Future<Integer> f = a.doGet("").runFuture();

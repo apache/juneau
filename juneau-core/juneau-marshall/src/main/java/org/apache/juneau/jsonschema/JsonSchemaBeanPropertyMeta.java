@@ -33,7 +33,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
 	 */
 	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -46,7 +46,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 		if (bpm.getSetter() != null)
 			findInfo(bpm.getSetter().getAnnotation(JsonSchema.class));
 	}
-	
+
 	private JsonSchemaBeanPropertyMeta() {
 		super(null);
 		this.type = null;
@@ -72,10 +72,10 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the {@link JsonSchema#type() @JsonSchema.type()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getType() {
@@ -84,7 +84,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema#format() @JsonSchema.format()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getFormat() {
@@ -93,7 +93,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema#description() @JsonSchema.description()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getDescription() {
@@ -102,7 +102,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema#example() @JsonSchema.example()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Object getExample() {

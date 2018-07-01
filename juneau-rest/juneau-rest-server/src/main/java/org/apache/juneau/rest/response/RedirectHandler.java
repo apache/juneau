@@ -19,7 +19,7 @@ import org.apache.juneau.rest.helper.*;
 
 /**
  * Response handler for {@link Redirect} objects.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="juneau-rest-server &gt; " href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; Method Return Types</a>

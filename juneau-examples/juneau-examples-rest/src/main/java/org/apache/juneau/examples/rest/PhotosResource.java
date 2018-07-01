@@ -145,11 +145,11 @@ public class PhotosResource extends BasicRestServlet {
 			super(ps, null, "image/png,image/jpeg");
 		}
 
-		@Override /* Serializer */ 
+		@Override /* Serializer */
 		public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
 			return new OutputStreamSerializerSession(args) {
-				
-				@Override /* SerializerSession */ 
+
+				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 					RenderedImage image = (RenderedImage)o;
 					String mediaType = getProperty("mediaType", String.class, (String)null);
@@ -173,7 +173,7 @@ public class PhotosResource extends BasicRestServlet {
 		@Override /* Parser */
 		public InputStreamParserSession createSession(final ParserSessionArgs args) {
 			return new InputStreamParserSession(args) {
-				
+
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
 				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {

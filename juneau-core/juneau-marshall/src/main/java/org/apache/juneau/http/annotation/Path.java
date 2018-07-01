@@ -26,22 +26,22 @@ import org.apache.juneau.urlencoding.*;
 
 /**
   * REST request path annotation.
- * 
+ *
  * <p>
  * Identifies a POJO to be used as a patn entry on an HTTP request.
- * 
+ *
  * <p>
  * Can be used in the following locations:
  * <ul>
  * 	<li>Java method arguments of client-side REST interface proxies.
  * 	<li>Java method arguments of server-side REST Java methods and/or their class types.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Server-side REST</h5>
- * 
+ *
  * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a variable
  * in a URL path pattern converted to a POJO.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
@@ -50,101 +50,101 @@ import org.apache.juneau.urlencoding.*;
  * 		...
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; juneau-rest-server &gt; Method Parameters</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
- * 
+ *
  * <h5 class='topic'>Client-side REST</h5>
- * 
+ *
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
- * 
+ *
  * 		<jc>// Explicit names specified for path parameters.</jc>
  * 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1/{foo}/{bar}"</js>)
  * 		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String foo, <ja>@Path</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
- * 
+ *
  * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
  * 		<jc>// Same as @Path("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2/{foo}/{bar}/{baz}"</js>)
  * 		String myProxyMethod2(<ja>@Path</ja> NameValuePairs nameValuePairs);
- * 
+ *
  * 		<jc>// Multiple values pulled from a Map.</jc>
  * 		<jc>// Same as @Path("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3/{foo}/{bar}/{baz}"</js>)
  * 		String myProxyMethod3(<ja>@Path</ja> Map&lt;String,Object&gt; map);
- * 
+ *
  * 		<jc>// Multiple values pulled from a bean.</jc>
  * 		<jc>// Same as @Path("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4/{foo}/{bar}/{baz}"</js>)
  * 		String myProxyMethod4(<ja>@Path</ja> MyBean myBean);
  * 	}
  * </p>
- * 
+ *
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
  * {@link RequestBean @RequestBean}:
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
- * 
+ *
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}/{baz}"</js>)
  * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
  * 	}
- * 
+ *
  * 	<jk>public interface</jk> MyRequestBean {
- * 
+ *
  * 		<jc>// Name explicitly specified.</jc>
  * 		<ja>@Path</ja>(<js>"foo"</js>)
  * 		String getX();
- * 
+ *
  * 		<jc>// Name inherited from bean property.</jc>
  * 		<jc>// Same as @Path("bar")</jc>
  * 		<ja>@Path</ja>
  * 		String getBar();
- * 
+ *
  * 		<jc>// Name inherited from bean property.</jc>
  * 		<jc>// Same as @Path("baz")</jc>
  * 		<ja>@Path</ja>
  * 		<ja>@BeanProperty</ja>(<js>"baz"</js>)
  * 		String getY();
- * 
+ *
  * 		<jc>// Multiple values pulled from NameValuePairs object.</jc>
  * 		<jc>// Same as @Path("*")</jc>
  * 		<ja>@Path</ja>
  * 		NameValuePairs getNameValuePairs();
- * 
+ *
  * 		<jc>// Multiple values pulled from Map.</jc>
  * 		<jc>// Same as @Path("*")</jc>
  * 		<ja>@Path</ja>
  * 	 	Map&lt;String,Object&gt; getMap();
- * 
+ *
  * 		<jc>// Multiple values pulled from bean.</jc>
  * 		<jc>// Same as @Path("*")</jc>
  * 		<ja>@Path</ja>
  * 	 	MyBean getMyBean();
  * 	}
  * </p>
- * 
+ *
  * <p>
  * The {@link #name()} and {@link #value()} elements are synonyms for specifying the path variable name.
  * Only one should be used.
  * <br>The following annotations are fully equivalent:
  * <p class='bcode'>
  * 	<ja>@Path</ja>(name=<js>"foo"</js>)
- * 
+ *
  * 	<ja>@Path</ja>(<js>"foo"</js>)
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces</a>
@@ -158,35 +158,35 @@ public @interface Path {
 
 	/**
 	 * The path parameter name.
-	 * 
+	 *
 	 * <p>
 	 * Note that {@link #name()} and {@link #value()} are synonyms.
-	 * 
+	 *
 	 * <p>
 	 * The value should be either <js>"*"</js> to represent multiple name/value pairs, or a label that defines the
 	 * path variable name.
-	 * 
+	 *
 	 * <p>
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If the data type is <code>NameValuePairs</code>, <code>Map</code>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be treated as name/value pairs.
-	 * 
+	 *
 	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
-	 * 
+	 *
 	 * 		<jc>// Equivalent to @Path("*")</jc>
 	 * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}"</js>)
 	 * 		String myProxyMethod1(<ja>@FormData</ja> Map&lt;String,Object&gt; pathVars);
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// When used on a request bean method</jc>
 	 * 	<jk>public interface</jk> MyRequestBean {
-	 * 
+	 *
 	 * 		<jc>// Equivalent to @Path("*")</jc>
 	 * 		<ja>@Path</ja>
 	 * 		Map&lt;String,Object&gt; getPathVars();
@@ -195,11 +195,11 @@ public @interface Path {
 	 * 	</li>
 	 * 	<li>
 	 * 		If used on a request bean method, uses the bean property name.
-	 * 
+	 *
 	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode'>
 	 * 	<jk>public interface</jk> MyRequestBean {
-	 * 
+	 *
 	 * 		<jc>// Equivalent to @Path("foo")</jc>
 	 * 		<ja>@Path</ja>
 	 * 		String getFoo();
@@ -210,7 +210,7 @@ public @interface Path {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 * 
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */
@@ -218,19 +218,19 @@ public @interface Path {
 
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 * 
+	 *
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
 	 * then on the client which by default is {@link UrlEncodingSerializer}.
-	 * 
+	 *
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
-	
+
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
-	 * 
+	 *
 	 * <p>
 	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OapiPartParser}.
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
@@ -243,11 +243,11 @@ public @interface Path {
 
 	/**
 	 * URL path variable name.
-	 * 
+	 *
 	 * <p>
-	 * The name field MUST correspond to the associated <a href='https://swagger.io/specification/v2/#pathsPath'>path</a> segment from the path field in the <a href='https://swagger.io/specification/v2/#pathsObject'>Paths Object</a>. 
+	 * The name field MUST correspond to the associated <a href='https://swagger.io/specification/v2/#pathsPath'>path</a> segment from the path field in the <a href='https://swagger.io/specification/v2/#pathsObject'>Paths Object</a>.
 	 * See <a href='https://swagger.io/specification/v2/#pathTemplating'>Path Templating</a> for further information.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -258,35 +258,35 @@ public @interface Path {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 * 
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining a path entry:
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"GET"</js>, 
+	 * 		name=<js>"GET"</js>,
 	 * 		path=<js>"/pet/{petId}"</js>
 	 * 	)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) { ... }
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"GET"</js>, 
+	 * 		name=<js>"GET"</js>,
 	 * 		path=<js>"/pet/{petId}"</js>
 	 * 	)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> petId) { ... }
 	 * </p>
 	 */
 	String value() default "";
-	
+
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
-	 * A brief description of the parameter. This could contain examples of use. 
-	 * 
+	 * A brief description of the parameter. This could contain examples of use.
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -294,23 +294,23 @@ public @interface Path {
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 		<br>TODO - Future support for <a href='https://guides.github.com/features/mastering-markdown/#GitHub-flavored-markdown'>MarkDown</a>.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] description() default {};
-	
+
 	//=================================================================================================================
 	// Attributes specific to parameters other than body
 	//=================================================================================================================
 
 	/**
 	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
-	 * The type of the parameter. 
-	 * 
-	 * <p> 
+	 * The type of the parameter.
+	 *
+	 * <p>
 	 * The possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -341,21 +341,21 @@ public @interface Path {
 	 * 		<js>"file"</js>
 	 * 		<br>This type is currently not supported.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
 	 */
 	String type() default "";
-	
+
 	/**
 	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
-	 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>. 
-	 * 
-	 * <p> 
+	 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>.
+	 *
+	 * <p>
 	 * The possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -388,36 +388,36 @@ public @interface Path {
 	 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
 	 * 		<br>This format does not affect the serialization or parsing of the parameter.
 	 * 	<li>
-	 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>). 
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
 	 * 		<br>Only valid with type <js>"object"</js>.
 	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
 	 * </ul>
 	 */
 	String format() default "";
-	
+
 	/**
 	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * Describes the type of items in the array.
 	 * <p>
-	 * Required if <code>type</code> is <js>"array"</js>. 
+	 * Required if <code>type</code> is <js>"array"</js>.
 	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
 	 */
-	Items items() default @Items;	
-	
+	Items items() default @Items;
+
 	/**
 	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
-	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used. 
+	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
 	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
-	 * 
+	 *
 	 * <br>Possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -429,43 +429,43 @@ public @interface Path {
 	 * 	<li>
 	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
 	 * 	<li>
-	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>). 
+	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
 	 * 	<li>
-	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>). 
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
 	 * 	<li>
 	 * </ul>
-	 * 
+	 *
 	 * <p>
-	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements. 
+	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 	 */
 	String collectionFormat() default "";
 
 	/**
 	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * Defines the maximum value for a parameter of numeric types.
 	 * <br>The value must be a valid JSON number.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 */
 	String maximum() default "";
-	
+
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * Defines whether the maximum is matched exclusively.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 * <br>If <jk>true</jk>, must be accompanied with <code>maximum</code>.
@@ -474,30 +474,30 @@ public @interface Path {
 
 	/**
 	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * Defines the minimum value for a parameter of numeric types.
 	 * <br>The value must be a valid JSON number.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 */
 	String minimum() default "";
-	
+
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * Defines whether the minimum is matched exclusively.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 * <br>If <jk>true</jk>, Must be accompanied with <code>minimum</code>.
@@ -506,73 +506,73 @@ public @interface Path {
 
 	/**
 	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
 	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
 	 * <br>The value <code>-1</code> is always ignored.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
 	 */
 	long maxLength() default -1;
-	
+
 	/**
 	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
 	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
 	 * <br>The value <code>-1</code> is always ignored.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
 	 */
 	long minLength() default -1;
-	
+
 	/**
 	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * A string input is valid if it matches the specified regular expression pattern.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
 	 */
 	String pattern() default "";
-	
+
 	/**
 	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array or comma-delimited list.
 	 * <br>Multiple lines are concatenated with newlines.
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
-	 * 			name=<js>"status"</js>, 
+	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
 	 * 		) PetStatus status
 	 * 	) {...}
@@ -581,7 +581,7 @@ public @interface Path {
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
-	 * 			name=<js>"status"</js>, 
+	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>,
 	 * 		) PetStatus status
 	 * 	) {...}
@@ -591,58 +591,58 @@ public @interface Path {
 
 	/**
 	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
 	 * <br>The value must be a valid JSON number.
-	 * 
+	 *
 	 * <p>
 	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
 	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
-	 * 
+	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 */
 	String multipleOf() default "";
-	
+
 	//=================================================================================================================
 	// Other
 	//=================================================================================================================
 
 	/**
 	 * A serialized example of the parameter.
-	 * 
+	 *
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
 	 * an example of the path.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] example() default {};
-	
+
 	/**
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-	 * 
+	 *
 	 * <p>
 	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this field.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the Path object:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@Path</ja>(
-	 * 		name=<js>"orderId"</js>, 
-	 * 		description=<js>"ID of order to fetch"</js>, 
-	 * 		maximum=<js>"1000"</js>, 
-	 * 		minimum=<js>"101"</js>, 
+	 * 		name=<js>"orderId"</js>,
+	 * 		description=<js>"ID of order to fetch"</js>,
+	 * 		maximum=<js>"1000"</js>,
+	 * 		minimum=<js>"101"</js>,
 	 * 		example=<js>"123"</js>
 	 * 	)
 	 * </p>
@@ -650,10 +650,10 @@ public @interface Path {
 	 * 	<jc>// Free-form</jc>
 	 * 	<ja>@Path</ja>({
 	 * 		name=<js>"orderId"</js>,
-	 * 		api={ 
-	 * 			<js>"description: 'ID of order to fetch',"</js>, 
-	 * 			<js>"maximum: 1000,"</js>, 
-	 * 			<js>"minimum: 101,"</js>, 
+	 * 		api={
+	 * 			<js>"description: 'ID of order to fetch',"</js>,
+	 * 			<js>"maximum: 1000,"</js>,
+	 * 			<js>"minimum: 101,"</js>,
 	 * 			<js>"example: 123"</js>
 	 * 		}
 	 * 	)
@@ -669,14 +669,14 @@ public @interface Path {
 	 * 	<mc>// Contents of MyResource.properties</mc>
 	 * 	<mk>orderIdSwagger</mk> = <mv>{ description: "ID of order to fetch", maximum: 1000, minimum: 101, example: 123 }</mv>
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * 	The reasons why you may want to use this field include:
 	 * <ul>
 	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -697,7 +697,7 @@ public @interface Path {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

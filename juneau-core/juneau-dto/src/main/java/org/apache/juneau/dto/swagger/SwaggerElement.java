@@ -22,7 +22,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Root class for all Swagger beans.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -34,15 +34,15 @@ public abstract class SwaggerElement {
 	private Map<String,Object> extra;
 
 	SwaggerElement() {}
-	
+
 	SwaggerElement(SwaggerElement copyFrom) {
 		this.strict = copyFrom.strict;
 		this.extra = copyFrom.extra == null ? null : new LinkedHashMap<>(copyFrom.extra);
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if contents should be validated per the Swagger spec.
-	 * 
+	 *
 	 * @return <jk>true</jk> if contents should be validated per the Swagger spec.
 	 */
 	protected boolean isStrict() {
@@ -51,17 +51,17 @@ public abstract class SwaggerElement {
 
 	/**
 	 * Sets strict mode on this bean.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	protected SwaggerElement strict() {
 		strict = true;
 		return this;
 	}
-	
+
 	/**
 	 * Sets strict mode on this bean.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -75,10 +75,10 @@ public abstract class SwaggerElement {
 
 	/**
 	 * Generic property getter.
-	 * 
+	 *
 	 * <p>
 	 * Can be used to retrieve non-standard Swagger fields such as <js>"$ref"</js>.
-	 * 
+	 *
 	 * @param property The property name to retrieve.
 	 * @param type The datatype to cast the value to.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
@@ -91,13 +91,13 @@ public abstract class SwaggerElement {
 			default: return toType(get(property), type);
 		}
 	};
-	
+
 	/**
 	 * Generic property getter.
-	 * 
+	 *
 	 * <p>
 	 * Can be used to retrieve non-standard Swagger fields such as <js>"$ref"</js>.
-	 * 
+	 *
 	 * @param property The property name to retrieve.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
@@ -110,10 +110,10 @@ public abstract class SwaggerElement {
 
 	/**
 	 * Generic property setter.
-	 * 
+	 *
 	 * <p>
 	 * Can be used to set non-standard Swagger fields such as <js>"$ref"</js>.
-	 * 
+	 *
 	 * @param property The property name to set.
 	 * @param value The new value for the property.
 	 * @return This object (for method chaining).
@@ -124,18 +124,18 @@ public abstract class SwaggerElement {
 			return this;
 		switch (property) {
 			case "strict": return strict(value);
-			default: 
+			default:
 				if (extra == null)
 					extra = new LinkedHashMap<>();
 				extra.put(property, value);
 				return this;
 		}
 	}
-	
+
 	/**
 	 * Generic property keyset.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	All the non-standard keys on this element.
 	 * 	<br>Never <jk>null</jk>.
 	 */
@@ -143,11 +143,11 @@ public abstract class SwaggerElement {
 	public Set<String> extraKeys() {
 		return extra == null ? Collections.EMPTY_SET : extra.keySet();
 	}
-	
+
 	/**
 	 * Returns all the keys on this element.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	All the keys on this element.
 	 * 	<br>Never <jk>null</jk>.
 	 */
@@ -157,7 +157,7 @@ public abstract class SwaggerElement {
 		s.addAll(extraKeys());
 		return s;
 	}
-	
+
 	@Override /* Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);

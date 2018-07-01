@@ -16,7 +16,7 @@ import org.apache.http.impl.client.*;
 
 /**
  * Redirect strategy that allows for redirects on any request type, not just <code>GET</code> or <code>HEAD</code>.
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>

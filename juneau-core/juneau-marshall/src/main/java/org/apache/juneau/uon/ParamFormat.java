@@ -19,10 +19,10 @@ public enum ParamFormat {
 
 	/**
 	 * Use UON notation for values.
-	 * 
+	 *
 	 * <p>
 	 * String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
-	 * 
+	 *
 	 * <p>
 	 * Boolean strings (<js>"true"</js>/<js>"false"</js>) and numeric values (<js>"123"</js>) will also end up quoted
 	 * (<js>"'true'"</js>, <js>"'false'"</js>, <js>"'123'"</js>.
@@ -31,11 +31,11 @@ public enum ParamFormat {
 
 	/**
 	 * Serialize as plain text.
-	 * 
+	 *
 	 * <p>
 	 * Strings will never be quoted or escaped.
 	 * <br>Maps and array constructs (<js>"(...)"</js>, <js>"@(...)"</js>) will never be used.
-	 * 
+	 *
 	 * <p>
 	 * Note that this can cause errors during parsing if you're using the URL-encoding parser to parse the results since
 	 * UON constructs won't be differentiable.

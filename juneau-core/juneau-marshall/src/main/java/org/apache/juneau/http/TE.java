@@ -18,35 +18,35 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>TE</l> HTTP request header.
- * 
+ *
  * <p>
  * The transfer encodings the user agent is willing to accept: the same values as for the response header field
  * Transfer-Encoding can be used, plus the "trailers" value (related to the "chunked" transfer method) to notify the
  * server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	TE: trailers, deflate
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The TE request-header field indicates what extension transfer-codings it is willing to accept in the response and
  * whether or not it is willing to accept trailer fields in a chunked transfer-coding.
  * Its value may consist of the keyword "trailers" and/or a comma-separated list of extension transfer-coding names
  * with optional accept parameters (as described in section 3.6).
- * 
+ *
  * <p class='bcode'>
  * 	TE        = "TE" ":" #( t-codings )
  * 	t-codings = "trailers" | ( transfer-extension [ accept-params ] )
  * </p>
- * 
+ *
  * <p>
  * The presence of the keyword "trailers" indicates that the client is willing to accept trailer fields in a chunked
  * transfer-coding, as defined in section 3.6.1.
  * This keyword is reserved for use with transfer-coding values even though it does not itself represent a
  * transfer-coding.
- * 
+ *
  * <p>
  * Examples of its use are:
  * <p class='bcode'>
@@ -54,12 +54,12 @@ import org.apache.juneau.internal.*;
  * 	TE:
  * 	TE: trailers, deflate;q=0.5
  * </p>
- * 
+ *
  * <p>
  * The TE header field only applies to the immediate connection.
  * Therefore, the keyword MUST be supplied within a Connection header field (section 14.10) whenever TE is present in
  * an HTTP/1.1 message.
- * 
+ *
  * <p>
  * A server tests whether a transfer-coding is acceptable, according to a TE field, using these rules:
  * <ol>
@@ -77,11 +77,11 @@ import org.apache.juneau.internal.*;
  * 		qvalue is preferred.
  * 		The "chunked" transfer-coding always has a qvalue of 1.
  * </ol>
- * 
+ *
  * <p>
  * If the TE field-value is empty or if no TE field is present, the only transfer-coding is "chunked".
  * A message with no transfer-coding is always acceptable.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -93,7 +93,7 @@ public final class TE extends HeaderRangeArray {
 
 	/**
 	 * Returns a parsed <code>Accept</code> header.
-	 * 
+	 *
 	 * @param value The <code>Accept</code> header string.
 	 * @return The parsed <code>Accept</code> header, or <jk>null</jk> if the string was null.
 	 */

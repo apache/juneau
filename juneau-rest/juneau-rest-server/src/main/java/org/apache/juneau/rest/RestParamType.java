@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 /**
  * Represents the possible parameter types as defined by the Swagger 2.0 specification.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages</a>
@@ -39,13 +39,13 @@ public enum RestParamType {
 
 	/** Response value */
 	RESPONSE("response"),
-	
+
 	/** Response header value */
 	RESPONSE_HEADER("responseHeader"),
-	
+
 	/** Response status value */
 	RESPONSE_STATUS("responseStatus"),
-	
+
 	/** Not a standard Swagger-defined field */
 	OTHER("other");
 

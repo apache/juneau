@@ -21,10 +21,10 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSerializer} and its subclasses.
- * 
+ *
  * <p>
  * See {@link Serializer} for details.
- * 
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -38,7 +38,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -52,12 +52,12 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		aside = getProperty(HTMLDOC_aside, String[].class, ctx.aside);
 		footer = getProperty(HTMLDOC_footer, String[].class, ctx.footer);
 		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.navlinks);
-		
-		// These can contain dups after variable resolution, so de-dup them with hashsets. 
+
+		// These can contain dups after variable resolution, so de-dup them with hashsets.
 		style = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_style, String[].class, ctx.style)));
 		stylesheet = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_stylesheet, String[].class, ctx.stylesheet)));
 		script = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_script, String[].class, ctx.script)));
-		
+
 		head = getProperty(HTMLDOC_head, String[].class, ctx.head);
 		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.nowrap);
 		noResultsMessage = getProperty(HTMLDOC_noResultsMessage, String.class, ctx.noResultsMessage);
@@ -85,7 +85,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_style} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_style} setting value in this context.
 	 * 	An empty array if not specified.
@@ -97,7 +97,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_stylesheet} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_stylesheet} setting value in this context.
 	 * 	An empty array if not specified.
@@ -109,7 +109,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_script} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_script} setting value in this context.
 	 * 	An empty array if not specified.
@@ -121,7 +121,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_head} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_head} setting value in this context.
 	 * 	An empty array if not specified.
@@ -133,7 +133,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_nowrap} setting value in this context.
-	 * 
+	 *
 	 * @return The {@link HtmlDocSerializer#HTMLDOC_nowrap} setting value in this context.
 	 */
 	public final boolean isNoWrap() {
@@ -142,7 +142,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_header} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_header} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
@@ -154,7 +154,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
@@ -166,7 +166,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the template to use for generating the HTML page.
-	 * 
+	 *
 	 * @return
 	 * 	The HTML page generator.
 	 * 	Never <jk>null</jk>.
@@ -177,7 +177,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_nav} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_nav} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
@@ -189,7 +189,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_aside} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_aside} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
@@ -201,7 +201,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_footer} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_footer} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
@@ -213,7 +213,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_noResultsMessage} setting value in this context.
-	 * 
+	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_noResultsMessage} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
@@ -242,7 +242,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Calls the parent {@link #doSerialize(SerializerPipe, Object)} method which invokes just the HTML serializer.
-	 * 
+	 *
 	 * @param out
 	 * 	Where to send the output from the serializer.
 	 * @param o The object being serialized.

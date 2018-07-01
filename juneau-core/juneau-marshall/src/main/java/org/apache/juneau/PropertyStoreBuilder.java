@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -27,7 +27,7 @@ import org.apache.juneau.json.*;
  * A builder for {@link PropertyStore} objects.
  */
 public class PropertyStoreBuilder {
-	
+
 	// Contains a cache of all created PropertyStore objects keyed by hashcode.
 	// Used to minimize memory consumption by reusing identical PropertyStores.
 	private static final Map<Integer,PropertyStore> CACHE = new ConcurrentHashMap<>();
@@ -40,10 +40,10 @@ public class PropertyStoreBuilder {
 	}
 
 	private final Map<String,PropertyGroupBuilder> groups = new ConcurrentSkipListMap<>();
-	
+
 	// Previously-created property store.
 	private volatile PropertyStore propertyStore;
-	
+
 	// Called by PropertyStore.builder()
 	PropertyStoreBuilder(PropertyStore ps) {
 		apply(ps);
@@ -51,38 +51,38 @@ public class PropertyStoreBuilder {
 
 	// Called by PropertyStore.create()
 	PropertyStoreBuilder() {}
-	
+
 	/**
 	 * Creates a new {@link PropertyStore} based on the values in this builder.
-	 * 
+	 *
 	 * @return A new {@link PropertyStore} based on the values in this builder.
 	 */
 	public synchronized PropertyStore build() {
-		
+
 		// Reused the last one if we haven't change this builder.
 		if (propertyStore == null)
 			propertyStore = new PropertyStore(groups);
-		
+
 		PropertyStore ps = CACHE.get(propertyStore.hashCode());
 		if (ps == null)
 			CACHE.put(propertyStore.hashCode(), propertyStore);
-		else if (! ps.equals(propertyStore)) 
+		else if (! ps.equals(propertyStore))
 			throw new RuntimeException("Property store mismatch!  This shouldn't happen.");
 		else
 			propertyStore = ps;
-		
+
 		return propertyStore;
 	}
-	
+
 	/**
 	 * Copies all the values in the specified property store into this builder.
-	 * 
-	 * @param copyFrom The property store to copy the values from. 
+	 *
+	 * @param copyFrom The property store to copy the values from.
 	 * @return This object (for method chaining).
 	 */
 	public synchronized PropertyStoreBuilder apply(PropertyStore copyFrom) {
 		propertyStore = null;
-		
+
 		if (copyFrom != null)
 			for (Map.Entry<String,PropertyGroup> e : copyFrom.groups.entrySet()) {
 				String gName = e.getKey();
@@ -95,10 +95,10 @@ public class PropertyStoreBuilder {
 			}
 		return this;
 	}
-	
+
 	/**
 	 * Sets a configuration property value on this object.
-	 * 
+	 *
 	 * @param key
 	 * 	The configuration property key.
 	 * 	<br>(e.g <js>"BeanContext.foo.ss/add.1"</js>)
@@ -118,11 +118,11 @@ public class PropertyStoreBuilder {
 		propertyStore = null;
 
 		String g = group(key);
-		
+
 		int i = key.indexOf('/');
 		if (i != -1) {
 			String command = key.substring(i+1), arg = null;
-			String key2 = key.substring(0, i); 
+			String key2 = key.substring(0, i);
 			int j = command.indexOf('.');
 			if (j != -1) {
 				arg = command.substring(j+1);
@@ -149,19 +149,19 @@ public class PropertyStoreBuilder {
 		}
 
 		gb.set(n, value);
-		
+
 		if (gb.isEmpty())
 			groups.remove(g);
 
 		return this;
 	}
-	
+
 	/**
 	 * Removes the property with the specified key.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to calling <code>set(key, <jk>null</jk>);</code>
-	 * 
+	 *
 	 * @param key The property key.
 	 * @return This object (for method chaining).
 	 */
@@ -172,10 +172,10 @@ public class PropertyStoreBuilder {
 
 	/**
 	 * Convenience method for setting multiple properties in one call.
-	 * 
+	 *
 	 * <p>
 	 * This replaces any previous configuration properties set on this store.
-	 * 
+	 *
 	 * @param newProperties The new properties to set.
 	 * @return This object (for method chaining).
 	 */
@@ -185,39 +185,39 @@ public class PropertyStoreBuilder {
 		add(newProperties);
 		return this;
 	}
-	
+
 	/**
 	 * Convenience method for setting multiple properties in one call.
-	 * 
+	 *
 	 * <p>
 	 * This appends to any previous configuration properties set on this store.
-	 * 
+	 *
 	 * @param newProperties The new properties to set.
 	 * @return This object (for method chaining).
 	 */
 	public synchronized PropertyStoreBuilder add(Map<String,Object> newProperties) {
 		propertyStore = null;
-		
+
 		if (newProperties != null)
-			for (Map.Entry<String,Object> e : newProperties.entrySet()) 
+			for (Map.Entry<String,Object> e : newProperties.entrySet())
 				set(e.getKey(), e.getValue());
-		
+
 		return this;
 	}
 
 	/**
 	 * Adds one or more values to a SET, LIST, or MAP property.
-	 * 
+	 *
 	 * @param key The property key.
-	 * @param arg 
-	 * 	The argument.  
+	 * @param arg
+	 * 	The argument.
 	 * 	<br>For SETs, this must always be <jk>null</jk>.
-	 * 	<br>For LISTs, this can be <jk>null</jk> or a numeric index.  
+	 * 	<br>For LISTs, this can be <jk>null</jk> or a numeric index.
 	 * 		Out-of-range indexes are simply 'adjusted' to the beginning or the end of the list.
 	 * 		So, for example, a value of <js>"-100"</js> will always just cause the entry to be added to the beginning
 	 * 		of the list.
 	 * 	<br>For MAPs, this can be <jk>null</jk> if we're adding a map, or a string key if we're adding an entry.
-	 * @param value 
+	 * @param value
 	 * 	The new value to add to the property.
 	 * 	<br>For SETs and LISTs, this can be a single value, Collection, array, or JSON array string.
 	 * 	<br>For MAPs, this can be a single value, Map, or JSON object string.
@@ -229,15 +229,15 @@ public class PropertyStoreBuilder {
 		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
-		
+
 		PropertyGroupBuilder gb = groups.get(g);
 		if (gb == null) {
 			gb = new PropertyGroupBuilder();
 			groups.put(g, gb);
 		}
-		
+
 		gb.addTo(n, arg, value);
-		
+
 		if (gb.isEmpty())
 			groups.remove(g);
 
@@ -246,12 +246,12 @@ public class PropertyStoreBuilder {
 
 	/**
 	 * Adds a value to a SET, LIST, or MAP property.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>addTo(key, <jk>null</jk>, value);</code>.
-	 * 
+	 *
 	 * @param key The property key.
-	 * @param value 
+	 * @param value
 	 * 	The new value to add to the property.
 	 * 	<br>For SETs and LISTs, this can be a single value, Collection, array, or JSON array string.
 	 * 	<br>for MAPs, this can be a single value, Map, or JSON object string.
@@ -266,7 +266,7 @@ public class PropertyStoreBuilder {
 
 	/**
 	 * Removes a value from a SET or LIST property.
-	 * 
+	 *
 	 * @param key The property key.
 	 * @param value The property value in the property.
 	 * @return This object (for method chaining).
@@ -276,44 +276,44 @@ public class PropertyStoreBuilder {
 		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
-		
+
 		PropertyGroupBuilder gb = groups.get(g);
 
 		// Create property group anyway to generate a good error message.
-		if (gb == null) 
+		if (gb == null)
 			gb = new PropertyGroupBuilder();
 
 		gb.removeFrom(n, value);
-		
+
 		if (gb.isEmpty())
 			groups.remove(g);
 
 		return this;
 	}
-	
+
 	/**
 	 * Peeks at a property value.
-	 * 
+	 *
 	 * <p>
 	 * Used for debugging purposes.
-	 * 
+	 *
 	 * @param key The property key.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
 	public Object peek(String key) {
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
-		
+
 		PropertyGroupBuilder gb = groups.get(g);
 
 		// Create property group anyway to generate a good error message.
-		if (gb == null) 
+		if (gb == null)
 			return null;
-		
+
 		MutableProperty bp = gb.properties.get(n);
 		if (bp == null)
 			return null;
-		
+
 		return bp.peek();
 	}
 
@@ -328,14 +328,14 @@ public class PropertyStoreBuilder {
 	//-------------------------------------------------------------------------------------------------------------------
 	// PropertyGroupBuilder
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	static class PropertyGroupBuilder {
 		final Map<String,MutableProperty> properties = new ConcurrentSkipListMap<>();
-		
+
 		PropertyGroupBuilder() {
 			this(EMPTY_MAP);
 		}
-		
+
 		synchronized void apply(PropertyGroup copyFrom) {
 			for (Map.Entry<String,Property> e : copyFrom.properties.entrySet()) {
 				String pName = e.getKey();
@@ -343,7 +343,7 @@ public class PropertyStoreBuilder {
 				Property p2 = e.getValue();
 				if (p1 == null)
 					properties.put(pName, p2.mutable());
-				else 
+				else
 					p1.apply(p2.value);
 			}
 		}
@@ -361,8 +361,8 @@ public class PropertyStoreBuilder {
 					properties.put(key, p);
 			} else {
 				p.set(value);
-				if (p.isEmpty()) 
-					properties.remove(key); 
+				if (p.isEmpty())
+					properties.remove(key);
 				else
 					properties.put(key, p);
 			}
@@ -398,16 +398,16 @@ public class PropertyStoreBuilder {
 					properties.put(key, p);
 			}
 		}
-		
+
 		synchronized boolean isEmpty() {
 			return properties.isEmpty();
 		}
-		
+
 		synchronized PropertyGroup build() {
 			return new PropertyGroup(properties);
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// MutableProperty
 	//-------------------------------------------------------------------------------------------------------------------
@@ -415,7 +415,7 @@ public class PropertyStoreBuilder {
 	static abstract class MutableProperty {
 		final String name;
 		final PropertyType type;
-		
+
 		MutableProperty(String name, PropertyType type) {
 			this.name = name;
 			this.type = type;
@@ -425,15 +425,15 @@ public class PropertyStoreBuilder {
 			int i = name.lastIndexOf('.');
 			String type = i == -1 ? "s" : name.substring(i+1);
 			PropertyType pt = SUFFIX_MAP.get(type);
-			
+
 			if (pt == null)
 				throw new ConfigException("Invalid type specified on property ''{0}''", name);
-			
+
 			switch (pt) {
 				case STRING:
 				case BOOLEAN:
 				case INTEGER:
-				case CLASS: 
+				case CLASS:
 				case OBJECT:  return new MutableSimpleProperty(name, pt, value);
 				case SET_STRING:
 				case SET_INTEGER:
@@ -455,13 +455,13 @@ public class PropertyStoreBuilder {
 		}
 
 		abstract Property build();
-		
+
 		abstract boolean isEmpty();
-		
+
 		abstract void set(Object value);
 
 		abstract void apply(Object value);
-		
+
 		abstract Object peek();
 
 		void add(String arg, Object value) {
@@ -476,11 +476,11 @@ public class PropertyStoreBuilder {
 			return value == null ? null : type.converter.convert(value);
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// MutableSimpleProperty
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	static class MutableSimpleProperty extends MutableProperty {
 		private Object value;
 
@@ -488,7 +488,7 @@ public class PropertyStoreBuilder {
 			super(name, type);
 			set(value);
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized Property build() {
 			return new Property(name, value, type);
@@ -498,12 +498,12 @@ public class PropertyStoreBuilder {
 		synchronized void set(Object value) {
 			this.value = convert(value);
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized void apply(Object value) {
 			this.value = convert(value);
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
 			return this.value == null;
@@ -514,11 +514,11 @@ public class PropertyStoreBuilder {
 			return value;
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// MutableSetProperty
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	static class MutableSetProperty extends MutableProperty {
 		private final Set<Object> set;
 
@@ -527,7 +527,7 @@ public class PropertyStoreBuilder {
 			set = new ConcurrentSkipListSet<>(type.comparator());
 			set(value);
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized Property build() {
 			return new Property(name, unmodifiableSet(new LinkedHashSet<>(set)), type);
@@ -543,12 +543,12 @@ public class PropertyStoreBuilder {
 				throw new ConfigException(e, "Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type);
 			}
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized void apply(Object values) {
 			set.addAll((Set<?>)values);
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized void add(String arg, Object o) {
 			if (arg != null)
@@ -559,7 +559,7 @@ public class PropertyStoreBuilder {
 				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized void remove(Object o) {
 			try {
@@ -568,7 +568,7 @@ public class PropertyStoreBuilder {
 				throw new ConfigException(e, "Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
 			return set.isEmpty();
@@ -579,11 +579,11 @@ public class PropertyStoreBuilder {
 			return set;
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// MutableListProperty
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	static class MutableListProperty extends MutableProperty {
 		private final List<Object> list = synchronizedList(new LinkedList<>());
 
@@ -591,7 +591,7 @@ public class PropertyStoreBuilder {
 			super(name, type);
 			set(value);
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized Property build() {
 			return new Property(name, unmodifiableList(new ArrayList<>(list)), type);
@@ -607,7 +607,7 @@ public class PropertyStoreBuilder {
 				throw new ConfigException(e, "Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type);
 			}
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized void apply(Object values) {
 			list.addAll((List<?>)values);
@@ -617,13 +617,13 @@ public class PropertyStoreBuilder {
 		synchronized void add(String arg, Object o) {
 			if (arg != null && ! StringUtils.isNumeric(arg))
 				throw new ConfigException("Invalid argument ''{0}'' on add command for property ''{1}'' ({2})", arg, name, type);
-			
+
 			int index = arg == null ? 0 : Integer.parseInt(arg);
 			if (index < 0)
 				index = 0;
 			else if (index > list.size())
 				index = list.size();
-			
+
 			try {
 				List<Object> l = normalize(type.converter, o);
 				list.removeAll(l);
@@ -632,14 +632,14 @@ public class PropertyStoreBuilder {
 				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized void remove(Object o) {
 			try {
 				list.removeAll(normalize(type.converter, o));
 			} catch (Exception e) {
 				throw new ConfigException(e, "Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", string(o), className(o), name, type);
-			}					
+			}
 		}
 
 		@Override /* MutableProperty */
@@ -652,7 +652,7 @@ public class PropertyStoreBuilder {
 			return list;
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// MutableMapProperty
 	//-------------------------------------------------------------------------------------------------------------------
@@ -660,17 +660,17 @@ public class PropertyStoreBuilder {
 	@SuppressWarnings("rawtypes")
 	static class MutableMapProperty extends MutableProperty {
 		protected Map<String,Object> map;
-		
+
 		MutableMapProperty(String name, PropertyType type, Object value) {
 			super(name, type);
 			this.map = createMap();
 			set(value);
 		}
-		
+
 		protected Map<String,Object> createMap() {
 			return new ConcurrentHashMap<>();
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized Property build() {
 			return new Property(name, unmodifiableMap(new TreeMap<>(map)), type);
@@ -685,7 +685,7 @@ public class PropertyStoreBuilder {
 		@SuppressWarnings("unchecked")
 		@Override /* MutableProperty */
 		synchronized void apply(Object values) {
-			for (Map.Entry<String,Object> e : ((Map<String,Object>)values).entrySet()) 
+			for (Map.Entry<String,Object> e : ((Map<String,Object>)values).entrySet())
 				add(e.getKey(), e.getValue());
 		}
 
@@ -697,7 +697,7 @@ public class PropertyStoreBuilder {
 					this.map.remove(arg);
 				else
 					this.map.put(arg, o);
-				
+
 			} else if (o != null) {
 				if (o instanceof Map) {
 					Map m = (Map)o;
@@ -726,34 +726,34 @@ public class PropertyStoreBuilder {
 			return map;
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// MutableLinkedMapProperty
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	static class MutableLinkedMapProperty extends MutableMapProperty {
-		
+
 		MutableLinkedMapProperty(String name, PropertyType type, Object value) {
 			super(name, type, value);
 			set(value);
 		}
-		
+
 		@Override
 		protected Map<String,Object> createMap() {
 			return synchronizedMap(new LinkedHashMap<String,Object>());
 		}
-		
+
 		@Override /* MutableProperty */
 		synchronized Property build() {
 			return new Property(name, unmodifiableMap(new LinkedHashMap<>(map)), type);
 		}
 	}
-	
+
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	static Set<Object> merge(Set<Object> oldSet, PropertyConverter<?> pc, Object o) throws Exception {
 		return merge(oldSet, new LinkedHashSet<>(), normalize(pc, o));
 	}
@@ -794,10 +794,10 @@ public class PropertyStoreBuilder {
 				newList.add(o);
 			}
 		}
-		
+
 		return newList;
 	}
-	
+
 	static List<Object> normalize(PropertyConverter<?> pc, Object o) throws Exception {
 		return normalize(new ArrayList<>(), pc, o);
 	}
@@ -809,7 +809,7 @@ public class PropertyStoreBuilder {
 				for (int i = 0; i < Array.getLength(o); i++)
 					normalize(l, pc, Array.get(o, i));
 			} else if (o instanceof Collection) {
-				for (Object o2 : (Collection<Object>)o) 
+				for (Object o2 : (Collection<Object>)o)
 					normalize(l, pc, o2);
 			} else if (isObjectList(o)) {
 				normalize(l, pc, new ObjectList(o.toString()));
@@ -819,15 +819,15 @@ public class PropertyStoreBuilder {
 		}
 		return l;
 	}
-	
+
 	static String string(Object value) {
 		return JsonSerializer.DEFAULT_LAX.toString(value);
 	}
-	
+
 	static String className(Object value) {
 		return value.getClass().getSimpleName();
 	}
-	
+
 	static boolean isObjectMap(Object o) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
@@ -835,7 +835,7 @@ public class PropertyStoreBuilder {
 		}
 		return false;
 	}
-	
+
 	private static String group(String key) {
 		if (key == null || key.indexOf('.') == -1)
 			return "";
@@ -867,7 +867,7 @@ public class PropertyStoreBuilder {
 	}
 
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
-	
+
 	private static boolean isInherit(Object o) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();

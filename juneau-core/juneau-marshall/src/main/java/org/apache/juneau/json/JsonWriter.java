@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Specialized writer for serializing JSON.
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -56,7 +56,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs and spaces will be used in output.
 	 * @param maxIndent The maximum indentation level.
@@ -76,7 +76,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Serializes the specified object as a JSON string value.
-	 * 
+	 *
 	 * @param s The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
@@ -123,7 +123,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Serializes the specified object as a JSON attribute name.
-	 * 
+	 *
 	 * @param s The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
@@ -171,7 +171,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Appends a URI to the output.
-	 * 
+	 *
 	 * @param uri The URI to append to the output.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -198,7 +198,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Performs an indentation only if we're currently past max indentation.
-	 * 
+	 *
 	 * @param depth The current indentation depth.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -241,7 +241,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Adds a space only if the current indentation level is below maxIndent.
-	 * 
+	 *
 	 * @param indent
 	 * @return This object (for method chaining).
 	 * @throws IOException

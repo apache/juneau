@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * A wrapper around an object that a serializer sends its output to.
- * 
+ *
  * <p>
  * For character-based serializers, the output object can be any of the following:
  * <ul>
@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link File} - Output will be written as system-default encoded stream.
  * 	<li>{@link StringBuilder}
  * </ul>
- * 
+ *
  * <p>
  * For stream-based serializers, the output object can be any of the following:
  * <ul>
@@ -42,13 +42,13 @@ public final class SerializerPipe implements Closeable {
 
 	private final Object output;
 	private final boolean autoClose;
-	
+
 	private OutputStream outputStream;
 	private Writer writer;
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param output The object to pipe the serializer output to.
 	 */
 	SerializerPipe(Object output) {
@@ -58,18 +58,18 @@ public final class SerializerPipe implements Closeable {
 
 	/**
 	 * Wraps the specified output object inside an output stream.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to implement their own specialized output streams.
-	 * 
+	 *
 	 * <p>
 	 * This method can be used if the output object is any of the following class types:
 	 * <ul>
 	 * 	<li>{@link OutputStream}
 	 * 	<li>{@link File}
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The output object wrapped in an output stream.
 	 * 	Calling {@link OutputStream#close()} on the returned object simply flushes the response and does not close
 	 * 	the underlying stream.
@@ -92,10 +92,10 @@ public final class SerializerPipe implements Closeable {
 
 	/**
 	 * Wraps the specified output object inside a writer.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to implement their own specialized writers.
-	 * 
+	 *
 	 * <p>
 	 * This method can be used if the output object is any of the following class types:
 	 * <ul>
@@ -103,8 +103,8 @@ public final class SerializerPipe implements Closeable {
 	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
 	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
 	 * </ul>
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The output object wrapped in a writer.
 	 * 	Calling {@link Writer#close()} on the returned object simply flushes the response and does not close
 	 * 	the underlying writer.
@@ -130,11 +130,11 @@ public final class SerializerPipe implements Closeable {
 
 	/**
 	 * Overwrites the writer in this pipe.
-	 * 
+	 *
 	 * <p>
 	 * Used when wrapping the writer returned by {@link #getWriter()} so that the wrapped writer will be flushed
 	 * and closed when {@link #close()} is called.
-	 * 
+	 *
 	 * @param writer The wrapped writer.
 	 */
 	public void setWriter(Writer writer) {
@@ -143,11 +143,11 @@ public final class SerializerPipe implements Closeable {
 
 	/**
 	 * Overwrites the output stream in this pipe.
-	 * 
+	 *
 	 * <p>
 	 * Used when wrapping the stream returned by {@link #getOutputStream()} so that the wrapped stream will be flushed
 	 * when {@link #close()} is called.
-	 * 
+	 *
 	 * @param outputStream The wrapped stream.
 	 */
 	public void setOutputStream(OutputStream outputStream) {
@@ -156,7 +156,7 @@ public final class SerializerPipe implements Closeable {
 
 	/**
 	 * Returns the raw output object passed into this session.
-	 * 
+	 *
 	 * @return The raw output object passed into this session.
 	 */
 	public Object getRawOutput() {

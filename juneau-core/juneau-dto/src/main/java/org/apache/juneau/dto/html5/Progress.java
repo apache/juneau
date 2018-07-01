@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-progress-element">&lt;progress&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -28,10 +28,10 @@ public class Progress extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-max">max</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Upper bound of range.
-	 * 
+	 *
 	 * @param max
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -44,10 +44,10 @@ public class Progress extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-value">value</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Current value of the element.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

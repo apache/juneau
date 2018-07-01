@@ -45,7 +45,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
 public class InterfaceProxyTest {
-	
+
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
@@ -229,7 +229,7 @@ public class InterfaceProxyTest {
 		public static class InterfaceProxyException2 extends Throwable {
 		}
 	}
-	
+
 	@RestResource(
 		flags={Serializer.SERIALIZER_addRootType, Serializer.SERIALIZER_addBeanTypes},
 		logger=NoOpRestLogger.class
@@ -937,11 +937,11 @@ public class InterfaceProxyTest {
 		}
 	}
 	static MockRest interfaceProxyResource = MockRest.create(InterfaceProxyResource.class);
-	
-	private static Map<String,InterfaceProxy> cache = new LinkedHashMap<String,InterfaceProxy>();
-	
+
+	private static Map<String,InterfaceProxy> cache = new LinkedHashMap<>();
+
 	private InterfaceProxy proxy;
-	
+
 	public InterfaceProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
@@ -953,9 +953,9 @@ public class InterfaceProxyTest {
 //			cache(label, proxy);
 //		}
 	}
-	
-	
-	
+
+
+
 
 	//--------------------------------------------------------------------------------
 	// Test return types.

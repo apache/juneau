@@ -36,7 +36,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
 	 */
 	public XmlBeanMeta(BeanMeta<?> beanMeta) {
@@ -139,7 +139,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The list of properties that should be rendered as XML attributes.
-	 * 
+	 *
 	 * @return Map of property names to property metadata.
 	 */
 	public Map<String,BeanPropertyMeta> getAttrProperties() {
@@ -148,7 +148,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The list of names of properties that should be rendered as XML attributes.
-	 * 
+	 *
 	 * @return Set of property names.
 	 */
 	protected Set<String> getAttrPropertyNames() {
@@ -157,7 +157,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The list of properties that should be rendered as child elements.
-	 * 
+	 *
 	 * @return Map of property names to property metadata.
 	 */
 	protected Map<String,BeanPropertyMeta> getElementProperties() {
@@ -166,7 +166,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The list of names of properties that should be rendered as child elements.
-	 * 
+	 *
 	 * @return Set of property names.
 	 */
 	protected Set<String> getElementPropertyNames() {
@@ -176,7 +176,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	/**
 	 * The list of properties that should be rendered as collapsed child elements.
 	 * <br>See {@link Xml#childName() @Xml.childName()}
-	 * 
+	 *
 	 * @return Map of property names to property metadata.
 	 */
 	protected Map<String,BeanPropertyMeta> getCollapsedProperties() {
@@ -185,7 +185,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The list of names of properties that should be rendered as collapsed child elements.
-	 * 
+	 *
 	 * @return Set of property names.
 	 */
 	protected Set<String> getCollapsedPropertyNames() {
@@ -194,7 +194,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The property that returns a map of XML attributes as key/value pairs.
-	 * 
+	 *
 	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
 	 */
 	protected BeanPropertyMeta getAttrsProperty() {
@@ -203,7 +203,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The name of the property that returns a map of XML attributes as key/value pairs.
-	 * 
+	 *
 	 * @return The bean property name, or <jk>null</jk> if there is no such method.
 	 */
 	protected String getAttrsPropertyName() {
@@ -212,7 +212,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The property that represents the inner XML content of this bean.
-	 * 
+	 *
 	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
 	 */
 	public BeanPropertyMeta getContentProperty() {
@@ -221,7 +221,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The name of the property that represents the inner XML content of this bean.
-	 * 
+	 *
 	 * @return The bean property name, or <jk>null</jk> if there is no such method.
 	 */
 	protected String getContentPropertyName() {
@@ -230,7 +230,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * Returns the format of the inner XML content of this bean.
-	 * 
+	 *
 	 * <p>
 	 * Can be one of the following:
 	 * <ul>
@@ -243,7 +243,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * 	<li>{@link XmlFormat#VOID}
 	 * 	<li><jk>null</jk>
 	 * </ul>
-	 * 
+	 *
 	 * @return The format of the inner XML content of this bean.
 	 */
 	public XmlFormat getContentFormat() {
@@ -252,11 +252,11 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * Returns bean property meta with the specified name.
-	 * 
+	 *
 	 * <p>
 	 * This is identical to calling {@link BeanMeta#getPropertyMeta(String)} except it first retrieves the bean property
 	 * meta based on the child name (e.g. a property whose name is "people", but whose child name is "person").
-	 * 
+	 *
 	 * @param fieldName The bean property name.
 	 * @return The property metadata.
 	 */

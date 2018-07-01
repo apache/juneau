@@ -16,13 +16,13 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a single HTTP-date.
- * 
+ *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -35,7 +35,7 @@ public class HeaderDate {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param raw The raw header value.
 	 */
 	protected HeaderDate(String raw) {
@@ -45,7 +45,7 @@ public class HeaderDate {
 
 	/**
 	 * Returns this header value as a {@link java.util.Date}.
-	 * 
+	 *
 	 * @return This header value as a {@link java.util.Date}, or <jk>null</jk> if the header could not be parsed.
 	 */
 	public java.util.Date asDate() {

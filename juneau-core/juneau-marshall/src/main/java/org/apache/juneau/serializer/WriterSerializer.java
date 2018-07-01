@@ -28,26 +28,26 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Configuration property:  Maximum indentation.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.maxIndent.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>100</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#maxIndent(int)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
-	 * 
+	 *
 	 * <p>
 	 * This setting does not apply to the RDF serializers.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
@@ -55,7 +55,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		.<jsm>create</jsm>()
 	 * 		.maxIndent(20)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -67,27 +67,27 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Configuration property:  Quote character.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.quoteChar.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"\""</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#sq()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is the character used for quoting attributes and values.
-	 * 
+	 *
 	 * <p>
 	 * This setting does not apply to the RDF serializers.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses single quotes.</jc>
@@ -95,7 +95,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		.<jsm>create</jsm>()
 	 * 		.sq()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -107,25 +107,25 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Configuration property:  Use whitespace.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace(boolean)}
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#ws()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
@@ -133,13 +133,13 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		.<jsm>create</jsm>()
 	 * 		.ws()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Produces "\{\n\t'foo': 'bar'\n\}\n"</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
@@ -156,14 +156,14 @@ public abstract class WriterSerializer extends Serializer {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-	
+
 	final int maxIndent;
 	final boolean useWhitespace;
 	final char quoteChar;
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -190,7 +190,7 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	protected WriterSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		
+
 		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace, false);
 		maxIndent = getIntegerProperty(WSERIALIZER_maxIndent, 100);
 		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "\"").charAt(0);
@@ -216,7 +216,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Convenience method for serializing an object to a <code>String</code>.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -228,10 +228,10 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Identical to {@link #serialize(Object)} except throws a {@link RuntimeException} instead of a {@link SerializeException}.
-	 * 
+	 *
 	 * <p>
 	 * This is typically good enough for debugging purposes.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return The serialized object.
 	 */
@@ -245,7 +245,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Wraps the specified object inside a {@link StringObject}.
-	 * 
+	 *
 	 * @param o The object to wrap.
 	 * @return The wrapped object.
 	 */
@@ -255,7 +255,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Convenience method for serializing an object and sending it to STDOUT.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return This object (for method chaining).
 	 */
@@ -263,7 +263,7 @@ public abstract class WriterSerializer extends Serializer {
 		System.out.println(toString(o));  // NOT DEBUG
 		return this;
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

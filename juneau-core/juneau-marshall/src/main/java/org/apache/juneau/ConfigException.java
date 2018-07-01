@@ -22,7 +22,7 @@ public class ConfigException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cause The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -33,7 +33,7 @@ public class ConfigException extends FormattedRuntimeException {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param message The error message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

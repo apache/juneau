@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -16,23 +16,23 @@ import java.util.concurrent.*;
 
 /**
  * Map consisting of auto-generated atomic keys.
- * 
+ *
  * <p>
  * Useful for creating in-memory 'databases' of POJOs.
- * 
+ *
  * @param <K> The key type.
  * @param <V> The value type.
  */
 public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private final IdGenerator<K> idGen;
-	
-	
+
+
 	/**
 	 * Creates a new ID map with integer keys with generator initialized to <code>1</code>.
-	 * 
+	 *
 	 * @param c The value type.
 	 * @return A new map.
 	 */
@@ -42,7 +42,7 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 
 	/**
 	 * Creates a new ID map with integer keys with generator initialized to the specified value.
-	 * 
+	 *
 	 * @param c The value type.
 	 * @param initValue The initial value of the generator.
 	 * @return A new map.
@@ -53,7 +53,7 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 
 	/**
 	 * Creates a new ID map with long keys with generator initialized to <code>1</code>.
-	 * 
+	 *
 	 * @param c The value type.
 	 * @return A new map.
 	 */
@@ -63,7 +63,7 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 
 	/**
 	 * Creates a new ID map with long keys with generator initialized to the specified value.
-	 * 
+	 *
 	 * @param c The value type.
 	 * @param initValue The initial value of the generator.
 	 * @return A new map.
@@ -74,7 +74,7 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 
 	/**
 	 * Creates a new map.
-	 * 
+	 *
 	 * @param c The value type.
 	 * @param idGen An ID generator.
 	 * @return A new instance.
@@ -82,19 +82,19 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 	public static <K,T> IdMap<K,T> create(Class<T> c, IdGenerator<K> idGen) {
 		return new IdMap<>(c, idGen);
 	}
-	
+
 	private IdMap(Class<V> c, IdGenerator<K> idGen) {
 		this.idGen = idGen;
 	}
 
 	/**
 	 * Returns the next available ID.
-	 * 
+	 *
 	 * @return The next available ID.
 	 */
 	public K nextId() {
 		return idGen.next();
-	}	
+	}
 
 	/**
 	 * Sets a lower bound on the specified ID.
@@ -102,5 +102,5 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 	 */
 	public void lbId(K k) {
 		idGen.lb(k);
-	}	
+	}
 }

@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * A wrapper around an object that a parser reads its input from.
- * 
+ *
  * <p>
  * For character-based parsers, the input object can be any of the following:
  * <ul>
@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link File}
  * 	<li><code><jk>null</jk></code>
  * </ul>
- * 
+ *
  * <p>
  * For stream-based parsers, the input object can be any of the following:
  * <ul>
@@ -44,7 +44,7 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link String} - Hex-encoded bytes.  (not BASE-64!)
  * 	<li><code><jk>null</jk></code>
  * </ul>
- * 
+ *
  * <p>
  * Note that Readers and InputStreams will NOT be automatically closed when {@link #close()} is called, but
  * streams and readers created from other types (e.g. Files) WILL be automatically closed.
@@ -65,7 +65,7 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Constructor for reader-based parsers.
-	 * 
+	 *
 	 * @param input The parser input object.
 	 * @param debug
 	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
@@ -75,9 +75,9 @@ public final class ParserPipe implements Closeable {
 	 * 	If <jk>true</jk>, sets {@link CodingErrorAction#REPORT} on {@link CharsetDecoder#onMalformedInput(CodingErrorAction)}
 	 * 	and {@link CharsetDecoder#onUnmappableCharacter(CodingErrorAction)}.
 	 * 	Otherwise, sets them to {@link CodingErrorAction#REPLACE}.
-	 * @param autoCloseStreams 
+	 * @param autoCloseStreams
 	 * 	Automatically close {@link InputStream InputStreams} and {@link Reader Readers} when passed in as input.
-	 * @param unbuffered 
+	 * @param unbuffered
 	 * 	If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
 	 * 	multiple times.
 	 * 	<br>Otherwise, we read character data into a reusable buffer.
@@ -103,15 +103,15 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Constructor for stream-based parsers.
-	 * 
+	 *
 	 * @param input The parser input object.
 	 * @param debug
 	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
 	 * 	method.
 	 * 	This allows the contents of the pipe to be accessed when a problem occurs.
-	 * @param autoCloseStreams 
+	 * @param autoCloseStreams
 	 * 	Automatically close {@link InputStream InputStreams} and {@link Reader Readers} when passed in as input.
-	 * @param unbuffered 
+	 * @param unbuffered
 	 * 	If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
 	 * 	multiple times.
 	 * 	<br>Otherwise, we read character data into a reusable buffer.
@@ -132,10 +132,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Shortcut constructor, typically for straight string input.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>);</code>
-	 * 
+	 *
 	 * @param input The input object.
 	 */
 	public ParserPipe(Object input) {
@@ -144,10 +144,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Wraps the specified input object inside an input stream.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to implement their own input streams.
-	 * 
+	 *
 	 * @return The input object wrapped in an input stream, or <jk>null</jk> if the object is null.
 	 * @throws IOException If object could not be converted to an input stream.
 	 */
@@ -188,7 +188,7 @@ public final class ParserPipe implements Closeable {
 
 		return inputStream;
 	}
-	
+
 	private byte[] convertFromString(String in) {
 		switch(binaryFormat) {
 			case BASE64: return base64Decode(in);
@@ -200,10 +200,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Wraps the specified input object inside a reader.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to implement their own readers.
-	 * 
+	 *
 	 * @return The input object wrapped in a Reader, or <jk>null</jk> if the object is null.
 	 * @throws IOException If object could not be converted to a reader.
 	 */
@@ -275,10 +275,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Returns the contents of this pipe as a buffered reader.
-	 * 
+	 *
 	 * <p>
 	 * If the reader passed into this pipe is already a buffered reader, that reader will be returned.
-	 * 
+	 *
 	 * @return The contents of this pipe as a buffered reader.
 	 * @throws Exception
 	 */
@@ -288,10 +288,10 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Returns the input to this parser as a plain string.
-	 * 
+	 *
 	 * <p>
 	 * This method only returns a value if {@link BeanContext#BEAN_debug} is enabled.
-	 * 
+	 *
 	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
 	 */
 	public String getInputAsString() {
@@ -300,7 +300,7 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Converts this pipe into a {@link ParserReader}.
-	 * 
+	 *
 	 * @return The converted pipe.
 	 * @throws Exception
 	 */
@@ -316,19 +316,19 @@ public final class ParserPipe implements Closeable {
 
 	/**
 	 * Returns <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
 	 */
 	public boolean isString() {
 		return inputString != null;
 	}
-	
+
 	/**
 	 * Sets the ParserReader/ParserInputStream/XmlReader constructed from this pipe.
-	 * 
+	 *
 	 * <p>
 	 * Used for gathering the failure position when {@link ParseException} is thrown.
-	 * 
+	 *
 	 * @param positionable The ParserReader/ParserInputStream/XmlReader constructed from this pipe.
 	 */
 	public void setPositionable(Positionable positionable) {
@@ -343,7 +343,7 @@ public final class ParserPipe implements Closeable {
 			return Position.UNKNOWN;
 		return p;
 	}
-	
+
 	@Override /* Closeable */
 	public void close() {
 		try {

@@ -23,7 +23,7 @@ public class ThrowableUtils {
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified object is <jk>null</jk>.
-	 * 
+	 *
 	 * @param o The object to check.
 	 * @param msg The message of the IllegalArgumentException.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -36,7 +36,7 @@ public class ThrowableUtils {
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified field is <jk>null</jk>.
-	 * 
+	 *
 	 * @param fieldValue The object to check.
 	 * @param fieldName The name of the field.
 	 * @throws IllegalArgumentException
@@ -48,7 +48,7 @@ public class ThrowableUtils {
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified field is <code>&lt;=0</code>.
-	 * 
+	 *
 	 * @param fieldValue The object to check.
 	 * @param fieldName The name of the field.
 	 * @throws IllegalArgumentException
@@ -60,7 +60,7 @@ public class ThrowableUtils {
 
 	/**
 	 * Shortcut for calling <code><jk>new</jk> IllegalArgumentException(MessageFormat.<jsm>format</jsm>(msg, args));</code>
-	 * 
+	 *
 	 * @param msg The message of the IllegalArgumentException.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @throws IllegalArgumentException
@@ -71,7 +71,7 @@ public class ThrowableUtils {
 
 	/**
 	 * Throws an exception if the specified thread ID is not the same as the current thread.
-	 * 
+	 *
 	 * @param threadId The ID of the thread to compare against.
 	 * @param msg The message of the IllegalStateException.
 	 * @param args Optional {@link MessageFormat}-style arguments.

@@ -41,7 +41,7 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Utility class for interfacing with remote REST interfaces.
- * 
+ *
  * <h5 class='topic'>Features</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -55,8 +55,8 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>
  * 		API for interacting with remoteable services.
  * </ul>
- * 
- * 
+ *
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">Overview &gt; juneau-rest-client</a>
@@ -73,42 +73,42 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Configuration property:  Debug.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#debug()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Enable debug mode.
 	 */
 	public static final String RESTCLIENT_debug = PREFIX + "debug.b";
-	
+
 	/**
 	 * Configuration property:  Executor service.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
 	 * 	<li><b>Default:</b>  <jk>null</jk>.
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#executorService(ExecutorService, boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
-	 * 
+	 *
 	 * <p>
 	 * This executor service is used to create {@link Future} objects on the following methods:
 	 * <ul>
@@ -117,7 +117,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
 	 * 	<li>{@link RestCall#getResponseAsString()}
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
 	 * and a queue size of 10.
@@ -126,39 +126,39 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Configuration property:  Shut down executor service on close.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorServiceShutdownOnClose.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#executorService(ExecutorService, boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 	 */
 	public static final String RESTCLIENT_executorServiceShutdownOnClose = PREFIX + "executorServiceShutdownOnClose.b";
-	
+
 	/**
 	 * Configuration property:  Request headers.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeader.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#defaultHeaders(Collection)}
 	 * 			<li class='jm'>{@link RestClientBuilder#header(String, Object)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Headers to add to every request.
@@ -167,18 +167,18 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Configuration property:  Call interceptors.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor&gt; | RestCallInterceptor&gt;</code>
 	 * 	<li><b>Default:</b>  empty list.
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Interceptors that get called immediately after a connection is made.
@@ -192,39 +192,39 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Configuration property:  Keep HttpClient open.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#keepHttpClientOpen(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
 	 */
 	public static final String RESTCLIENT_keepHttpClientOpen = PREFIX + "keepHttpClientOpen.b";
-	
+
 	/**
 	 * Configuration property:  Parser.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
 	 * 	<li><b>Default:</b>  {@link JsonParser};
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#parser(Class)}
 	 * 			<li class='jm'>{@link RestClientBuilder#parser(Parser)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The parser to use for parsing POJOs in response bodies.
@@ -233,39 +233,39 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Configuration property:  Part serializer.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.urlEncodingSerializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
 	 * 	<li><b>Default:</b>  {@link SimpleUonPartSerializer};
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#partSerializer(Class)}
 	 * 			<li class='jm'>{@link RestClientBuilder#partSerializer(HttpPartSerializer)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
 	 */
 	public static final String RESTCLIENT_partSerializer = PREFIX + "partSerializer.o";
-	
+
 	/**
 	 * Configuration property:  Request query parameters.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#query(String, Object)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Query parameters to add to every request.
@@ -274,79 +274,79 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Configuration property:  Number of retries to attempt.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retries.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>1</code>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The number of retries to attempt when the connection cannot be made or a <code>&gt;400</code> response is received.
 	 */
 	public static final String RESTCLIENT_retries = PREFIX + "retries.i";
-	
+
 	/**
 	 * Configuration property:  The time in milliseconds between retry attempts.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryInterval.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>-1</code>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The time in milliseconds between retry attempts.
 	 * <code>-1</code> means retry immediately.
 	 */
 	public static final String RESTCLIENT_retryInterval = PREFIX + "retryInterval.i";
-	
+
 	/**
 	 * Configuration property:  Retry-on determination object.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryOn.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends {@link RetryOn}</code> or {@link RetryOn}
 	 * 	<li><b>Default:</b>  {@link RetryOn#DEFAULT}
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Object used for determining whether a retry should be attempted.
 	 */
 	public static final String RESTCLIENT_retryOn = PREFIX + "retryOn.o";
-	
+
 	/**
 	 * Configuration property:  Root URI.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.rootUri.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#rootUrl(Object)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
@@ -355,22 +355,22 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <br>Trailing slashes are trimmed.
 	 */
 	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
-	
+
 	/**
 	 * Configuration property:  Serializer.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.serializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Serializer&gt;</code> or {@link Serializer}.
 	 * 	<li><b>Default:</b>  {@link JsonSerializer};
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#serializer(Class)}
 	 * 			<li class='jm'>{@link RestClientBuilder#serializer(Serializer)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The serializer to use for serializing POJOs in request bodies.
@@ -379,7 +379,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 
 	private static final ConcurrentHashMap<Class,HttpPartSerializer> partSerializerCache = new ConcurrentHashMap<>();
-	
+
 	private final Map<String,String> headers, query;
 	private final HttpClientBuilder httpClientBuilder;
 	private final CloseableHttpClient httpClient;
@@ -405,19 +405,19 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Instantiates a new clean-slate {@link RestClientBuilder} object.
-	 * 
+	 *
 	 * @return A new {@link RestClientBuilder} object.
 	 */
 	public static RestClientBuilder create() {
 		return new RestClientBuilder(PropertyStore.DEFAULT, null);
 	}
-	
+
 	/**
 	 * Instantiates a new {@link RestClientBuilder} object using the specified serializer and parser.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>RestClient.<jsm>create</jsm>().serializer(s).parser(p);</code>
-	 * 
+	 *
 	 * @param s The serializer to use for output.
 	 * @param p The parser to use for input.
 	 * @return A new {@link RestClientBuilder} object.
@@ -428,17 +428,17 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Instantiates a new {@link RestClientBuilder} object using the specified serializer and parser.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>RestClient.<jsm>create</jsm>().serializer(s).parser(p);</code>
-	 * 
+	 *
 	 * @param s The serializer class to use for output.
 	 * @param p The parser class to use for input.
 	 * @return A new {@link RestClientBuilder} object.
 	 */
 	public static RestClientBuilder create(Class<? extends Serializer> s, Class<? extends Parser> p) {
 		return create().serializer(s).parser(p);
-	}	
+	}
 
 	@Override /* Context */
 	public RestClientBuilder builder() {
@@ -462,7 +462,7 @@ public class RestClient extends BeanContext implements Closeable {
 		this.debug = getBooleanProperty(RESTCLIENT_debug, false);
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
 		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
-		
+
 		Object o = getProperty(RESTCLIENT_serializer, Object.class, null);
 		if (o instanceof Serializer) {
 			this.serializer = ((Serializer)o).builder().apply(ps).build();
@@ -471,7 +471,7 @@ public class RestClient extends BeanContext implements Closeable {
 		} else {
 			this.serializer = null;
 		}
-		
+
 		o = getProperty(RESTCLIENT_parser, Object.class, null);
 		if (o instanceof Parser) {
 			this.parser = ((Parser)o).builder().apply(ps).build();
@@ -484,7 +484,7 @@ public class RestClient extends BeanContext implements Closeable {
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
 		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, SimpleUonPartSerializer.class, true, ps);
 		this.executorService = getInstanceProperty(RESTCLIENT_executorService, ExecutorService.class, null);
-		
+
 		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
 		if (debug)
 			rci = ArrayUtils.append(rci, RestCallLogger.DEFAULT);
@@ -498,10 +498,10 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Calls {@link CloseableHttpClient#close()} on the underlying {@link CloseableHttpClient}.
-	 * 
+	 *
 	 * <p>
 	 * It's good practice to call this method after the client is no longer used.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Override
@@ -532,10 +532,10 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Execute the specified request.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling.
-	 * 
+	 *
 	 * @param req The HTTP request.
 	 * @return The HTTP response.
 	 * @throws Exception
@@ -546,7 +546,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Perform a <code>GET</code> request against the specified URL.
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -561,7 +561,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Perform a <code>PUT</code> request against the specified URL.
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -590,11 +590,11 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Same as {@link #doPut(Object, Object)} but don't specify the input yet.
-	 * 
+	 *
 	 * <p>
 	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)}
 	 * to set the contents on the result object.
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -609,12 +609,12 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Perform a <code>POST</code> request against the specified URL.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
 	 * </ul>
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -642,16 +642,16 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Same as {@link #doPost(Object, Object)} but don't specify the input yet.
-	 * 
+	 *
 	 * <p>
 	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)} to set the
 	 * contents on the result object.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
 	 * </ul>
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -666,7 +666,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Perform a <code>DELETE</code> request against the specified URL.
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -681,7 +681,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Perform an <code>OPTIONS</code> request against the specified URL.
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -697,7 +697,7 @@ public class RestClient extends BeanContext implements Closeable {
 	/**
 	 * Perform a <code>POST</code> request with a content type of <code>application/x-www-form-urlencoded</code>
 	 * against the specified URL.
-	 * 
+	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
 	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -716,11 +716,11 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Performs a REST call where the entire call is specified in a simple string.
-	 * 
+	 *
 	 * <p>
 	 * This method is useful for performing callbacks when the target of a callback is passed in
 	 * on an initial request, for example to signal when a long-running process has completed.
-	 * 
+	 *
 	 * <p>
 	 * The call string can be any of the following formats:
 	 * <ul class='spaced-list'>
@@ -733,7 +733,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * </ul>
 	 * <p>
 	 * The payload will always be sent using a simple {@link StringEntity}.
-	 * 
+	 *
 	 * @param callString The call string.
 	 * @return
 	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
@@ -789,7 +789,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Perform a generic REST call.
-	 * 
+	 *
 	 * @param method The HTTP method.
 	 * @param url
 	 * 	The URL of the remote REST resource.
@@ -825,7 +825,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Perform a generic REST call.
-	 * 
+	 *
 	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).
 	 * @param url
 	 * 	The URL of the remote REST resource.
@@ -871,13 +871,13 @@ public class RestClient extends BeanContext implements Closeable {
 		} catch (URISyntaxException e1) {
 			throw new RestCallException(e1);
 		}
-		
+
 		for (Map.Entry<String,String> e : query.entrySet())
 			restCall.query(e.getKey(), e.getValue());
 
 		for (Map.Entry<String,String> e : headers.entrySet())
 			restCall.header(e.getKey(), e.getValue());
-		
+
 		if (parser != null && ! req.containsHeader("Accept"))
 			req.setHeader("Accept", parser.getPrimaryMediaType().toString());
 
@@ -886,7 +886,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Create a new proxy interface against a REST interface.
-	 * 
+	 *
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
 	 * <ul>
@@ -894,7 +894,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<code>root-url</code>).
 	 * 	<li>The fully-qualified class name of the interface (<code>class-name</code>).
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * The URL calculation is as follows:
 	 * <ul>
@@ -902,36 +902,36 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	<li><code>root-url/remoteable-path</code> - If remoteable path is relative and root-url has been specified.
 	 * 	<li><code>root-url/class-name</code> - If remoteable path is not specified.
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * If the information is not available to resolve to an absolute URL, a {@link RemoteableMetadataException} is thrown.
-	 * 
+	 *
 	 * <p>
 	 * Examples:
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> org.apache.foo;
-	 * 
+	 *
 	 * 	<ja>@Remoteable</ja>(path=<js>"http://hostname/resturl/myinterface1"</js>)
 	 * 	<jk>public interface</jk> MyInterface1 { ... }
-	 * 
+	 *
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myinterface2"</js>)
 	 * 	<jk>public interface</jk> MyInterface2 { ... }
-	 * 
+	 *
 	 * 	<jk>public interface</jk> MyInterface3 { ... }
-	 * 
+	 *
 	 * 	<jc>// Resolves to "http://localhost/resturl/myinterface1"</jc>
 	 * 	MyInterface1 i1 = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface1.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Resolves to "http://hostname/resturl/myinterface2"</jc>
 	 * 	MyInterface2 i2 = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface2.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Resolves to "http://hostname/resturl/org.apache.foo.MyInterface3"</jc>
 	 * 	MyInterface3 i3 = RestClient
 	 * 		.<jsm>create</jsm>()
@@ -939,7 +939,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface3.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -948,7 +948,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 		The easiest way to do this is to use the {@link RestClientBuilder#pooled()} method.
 	 * 		If you don't do this, you may end up seeing "Connection still allocated" exceptions.
 	 * </ul>
-	 * 
+	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @return The new proxy interface.
 	 * @throws RemoteableMetadataException If the REST URI cannot be determined based on the information given.
@@ -959,7 +959,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Same as {@link #getRemoteableProxy(Class)} except explicitly specifies the URL of the REST interface.
-	 * 
+	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
 	 * @return The new proxy interface.
@@ -970,7 +970,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 	/**
 	 * Same as {@link #getRemoteableProxy(Class, Object)} but allows you to override the serializer and parser used.
-	 * 
+	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
@@ -1033,7 +1033,7 @@ public class RestClient extends BeanContext implements Closeable {
 							if (rmm.getRequestBeanArgs().length > 0) {
 								BeanSession bs = createBeanSession();
 								for (RemoteMethodArg rma : rmm.getRequestBeanArgs()) {
-									BeanMap<?> bm = bs.toBeanMap(args[rma.index]); 
+									BeanMap<?> bm = bs.toBeanMap(args[rma.index]);
 
 									for (BeanPropertyValue bpv : bm.getValues(false)) {
 										BeanPropertyMeta pMeta = bpv.getMeta();

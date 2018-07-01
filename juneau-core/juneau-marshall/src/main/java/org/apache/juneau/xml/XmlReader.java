@@ -22,7 +22,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Wrapper class around a {@link XMLStreamReader}.
- * 
+ *
  * <p>
  * The purpose is to encapsulate the reader with the {@link ParserPipe} object so that it can be retrieved for
  * debugging purposes.
@@ -34,7 +34,7 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param pipe The parser input.
 	 * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.
 	 * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.
@@ -70,7 +70,7 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 
 	/**
 	 * Returns the pipe passed into the constructor.
-	 * 
+	 *
 	 * @return The pipe passed into the constructor.
 	 */
 	public ParserPipe getPipe() {

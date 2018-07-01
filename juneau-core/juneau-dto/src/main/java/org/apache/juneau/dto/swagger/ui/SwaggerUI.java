@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -29,16 +29,16 @@ import org.apache.juneau.utils.*;
  * Generates a Swagger-UI interface from a Swagger document.
  */
 public class SwaggerUI extends PojoSwap<Swagger,Div> {
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private static final String PREFIX = "SwaggerUI.";
-	
+
 	/**
 	 * Configuration property:  Resolve <code>$ref</code> references in schema up to the specified depth.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"SwaggerUI.resolveRefsMaxDepth.i"</js>
@@ -46,13 +46,13 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 * 	<li><b>Default:</b>  <code>1</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines the maximum recursive depth to resolve <code>$ref</code> variables in schema infos.
 	 * <br>The default <code>1</code> means only resolve the first reference encountered.
 	 * <br>A value of <code>0</code> disables reference resolution altogether.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Resolve schema references up to 5 levels deep.
@@ -65,41 +65,41 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 */
 	public static final String SWAGGERUI_resolveRefsMaxDepth = PREFIX + "resolveRefsMaxDepth.i";
 
-	
+
 	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class, ClasspathResourceFinderBasic.INSTANCE, Boolean.getBoolean("RestContext.useClasspathResourceCaching.b"));
-	
+
 	private static final Set<String> STANDARD_METHODS = new ASet<String>().appendAll("get", "put", "post", "delete", "options");
-	
+
 	@Override
 	public MediaType[] forMediaTypes() {
 		return new MediaType[] {MediaType.HTML};
 	}
-	
+
 	private static final class Session {
 		final int resolveRefsMaxDepth;
 		final Swagger swagger;
-		
+
 		Session(BeanSession bs, Swagger swagger) {
 			this.swagger = swagger.copy();
 			this.resolveRefsMaxDepth = bs.getProperty(SWAGGERUI_resolveRefsMaxDepth, Integer.class, 1);
 		}
 	}
-	
+
 	@Override
 	public Div swap(BeanSession beanSession, Swagger swagger) throws Exception {
-		
+
 		Session s = new Session(beanSession, swagger);
-		
+
 		String css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css");
 		if (css == null)
 			css = RESOURCES.getString("SwaggerUI.css");
-		
+
 		Div outer = div(
 			style(css),
 			script("text/javascript", RESOURCES.getString("SwaggerUI.js")),
 			header(s)
 		)._class("swagger-ui");
-		
+
 		// Operations without tags are rendered first.
 		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
 
@@ -112,7 +112,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				outer.child(tagBlock);
 			}
 		}
-		
+
 		if (s.swagger.hasDefinitions()) {
 			Div modelBlock = div()._class("tag-block").children(
 				modelsBlockSummary(),
@@ -120,17 +120,17 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			);
 			outer.child(modelBlock);
 		}
-		
+
 		return outer;
 	}
-	
+
 	// Creates the informational summary before the ops.
 	private Table header(Session s) {
 		Table table = table()._class("header");
-		
+
 		Info info = s.swagger.getInfo();
 		if (info != null) {
-			
+
 			if (info.hasVersion())
 				table.child(tr(th("Version:"),td(info.getVersion())));
 
@@ -144,16 +144,16 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 					t2.child(tr(th("URL:"),td(a(c.getUrl(), c.getUrl()))));
 				if (c.hasEmail())
 					t2.child(tr(th("Email:"),td(a("mailto:"+ c.getEmail(), c.getEmail()))));
-					
+
 				table.child(tr(th("Contact:"),td(t2)));
 			}
-			
+
 			License l = info.getLicense();
 			if (l != null) {
 				Object child = l.hasUrl() ? a(l.getUrl(), l.hasName() ? l.getName() : l.getUrl()) : l.getName();
 				table.child(tr(th("License:"),td(child)));
 			}
-			
+
 			ExternalDocumentation ed = s.swagger.getExternalDocs();
 			if (ed != null) {
 				Object child = ed.hasUrl() ? a(ed.getUrl(), ed.hasDescription() ? ed.getDescription() : ed.getUrl()) : ed.getDescription();
@@ -166,25 +166,25 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				table.child(tr(th("Terms of Service:"),td(child)));
 			}
 		}
-		
+
 		return table;
 	}
-	
+
 	// Creates the "pet  Everything about your Pets  ext-link" header.
 	private HtmlElement tagBlockSummary(Tag t) {
 		ExternalDocumentation ed = t.getExternalDocs();
-		
+
 		return div()._class("tag-block-summary").children(
 			span(t.getName())._class("name"),
 			span(t.getDescription())._class("description"),
 			ed == null ? null : span(a(ed.getUrl(), ed.hasDescription() ? ed.getDescription() : ed.getUrl()))._class("extdocs")
 		).onclick("toggleTagBlock(this)");
 	}
-	
+
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
 	private Div tagBlockContents(Session s, Tag t) {
 		Div tagBlockContents = div()._class("tag-block-contents");
-		
+
 		for (Map.Entry<String,OperationMap> e : s.swagger.getPaths().entrySet()) {
 			String path = e.getKey();
 			for (Map.Entry<String,Operation> e2 : e.getValue().entrySet()) {
@@ -194,16 +194,16 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 					tagBlockContents.child(opBlock(s, path, opName, op));
 			}
 		}
-		
+
 		return tagBlockContents;
 	}
-	
+
 	private Div opBlock(Session s, String path, String opName, Operation op) {
-		
+
 		String opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
 		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass))
 			opClass = "other";
-		
+
 		return div()._class("op-block op-block-closed " + opClass).children(
 			opBlockSummary(path, opName, op),
 			div(tableContainer(s, op))._class("op-block-contents")
@@ -220,46 +220,46 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 	private Div tableContainer(Session s, Operation op) {
 		Div tableContainer = div()._class("table-container");
-		
-		if (op.hasDescription()) 
+
+		if (op.hasDescription())
 			tableContainer.child(div(op.getDescription())._class("op-block-description"));
-			
+
 		if (op.hasParameters()) {
 			tableContainer.child(div(h4("Parameters")._class("title"))._class("op-block-section-header"));
-			
+
 			Table parameters = table(tr(th("Name")._class("parameter-key"), th("Description")._class("parameter-key")))._class("parameters");
-			
+
 			for (ParameterInfo pi : op.getParameters()) {
 				String piName = "body".equals(pi.getIn()) ? "body" : pi.getName();
 				boolean required = pi.getRequired() == null ? false : pi.getRequired();
-				
+
 				Td parameterKey = td(
 					div(piName)._class("name" + (required ? " required" : "")),
 					required ? div("required")._class("requiredlabel") : null,
 					div(pi.getType())._class("type"),
 					div('(' + pi.getIn() + ')')._class("in")
 				)._class("parameter-key");
-				
+
 				Td parameterValue = td(
 					div(pi.getDescription())._class("description"),
 					examples(s, pi.getSchema(), pi.getExamples())
 				)._class("parameter-value");
-				
+
 				parameters.child(tr(parameterKey, parameterValue));
 			}
-			
+
 			tableContainer.child(parameters);
 		}
-		
+
 		if (op.hasResponses()) {
 			tableContainer.child(div(h4("Responses")._class("title"))._class("op-block-section-header"));
-			
+
 			Table responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
 			tableContainer.child(responses);
-			
+
 			for (Map.Entry<String,ResponseInfo> e3 : op.getResponses().entrySet()) {
 				ResponseInfo ri = e3.getValue();
-				
+
 				Td code = td(e3.getKey())._class("response-key");
 
 				Td codeValue = td(
@@ -267,25 +267,25 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 					examples(s, ri.getSchema(), ri.getExamples()),
 					headers(s, ri)
 				)._class("response-value");
-				
+
 				responses.child(tr(code, codeValue));
 			}
 		}
-		
+
 		return tableContainer;
 	}
-	
+
 	private Div headers(Session s, ResponseInfo ri) {
 		if (! ri.hasHeaders())
 			return null;
-		
+
 		Table sectionTable = table(tr(th("Name"),th("Description"),th("Type")))._class("section-table");
-		
+
 		Div headers = div(
 			div("Headers:")._class("section-name"),
 			sectionTable
 		)._class("headers");
-		
+
 		for (Map.Entry<String,HeaderInfo> e : ri.getHeaders().entrySet()) {
 			String name = e.getKey();
 			HeaderInfo hi = e.getValue();
@@ -297,20 +297,20 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				)
 			);
 		}
-		
+
 		return headers;
 	}
 
 	private Div examples(Session s, SchemaInfo si, Map<String,?> examples) {
 		if (si == null && examples == null)
 			return null;
-		
+
 		int count = (si == null ? 0 : 1) + (examples == null ? 0 : examples.entrySet().size());
 		Select select = (Select)select().onchange("selectExample(this)")._class("example-select");
 		if (count < 2)
 			select.disabled(true);
 		Div div = div(select)._class("examples");
-		
+
 		if (si != null) {
 			select.child(option("model","model"));
 			div.child(div(si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth))._class("model active").attr("data-name", "model"));
@@ -324,19 +324,19 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				div.child(div(value.replaceAll("\\n", "\n"))._class("example" + (si == null ? " active" : "")).attr("data-name", name));
 			}
 		}
-		
+
 		return div;
 	}
-	
+
 	// Creates the "Model" header.
 	private HtmlElement modelsBlockSummary() {
 		return div()._class("tag-block-summary").children(span("Models")._class("name")).onclick("toggleTagBlock(this)");
 	}
-	
+
 	// Creates the contents under the "Model" header.
 	private Div modelsBlockContents(Session s) {
 		Div modelBlockContents = div()._class("tag-block-contents");
-		for (Map.Entry<String,ObjectMap> e : s.swagger.getDefinitions().entrySet()) 
+		for (Map.Entry<String,ObjectMap> e : s.swagger.getDefinitions().entrySet())
 			modelBlockContents.child(modelBlock(e.getKey(), e.getValue()));
 		return modelBlockContents;
 	}

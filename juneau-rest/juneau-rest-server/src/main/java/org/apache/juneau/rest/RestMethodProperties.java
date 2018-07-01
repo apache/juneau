@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -17,7 +17,7 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Encapsulates java-method-level properties.
- * 
+ *
  * <p>
  * These are properties specified on a REST resource method that extends the properties defined on {@link RestContextProperties}
  * and adds the following:
@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='ja'>{@link RestMethod#properties()}
  * 	<li class='ja'>{@link HtmlDoc}
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; juneau-rest-server &gt; Properties</a>
@@ -36,7 +36,7 @@ public class RestMethodProperties extends ObjectMap {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param inner The inner properties.
 	 */
 	public RestMethodProperties(RestContextProperties inner) {
@@ -45,7 +45,7 @@ public class RestMethodProperties extends ObjectMap {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param inner The inner properties.
 	 */
 	public RestMethodProperties(RestMethodProperties inner) {

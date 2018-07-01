@@ -26,13 +26,13 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder for creating instances of {@link Config Configs}.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  * 	String setting = cf.getString(<js>"MySection/mysetting"</js>);
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
@@ -49,7 +49,7 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public ConfigBuilder(PropertyStore ps) {
@@ -68,13 +68,13 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Configuration name.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the configuration name.
 	 * <br>This is typically the configuration file name, although
 	 * the name can be anything identifiable by the {@link ConfigStore} used for retrieving and storing the configuration.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <js>"Configuration"</js>.
 	 * @return This object (for method chaining).
@@ -85,11 +85,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Configuration store.
-	 * 
+	 *
 	 * <p>
 	 * The configuration store used for retrieving and storing configurations.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link ConfigFileStore#DEFAULT}.
 	 * @return This object (for method chaining).
@@ -100,10 +100,10 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Configuration store.
-	 * 
+	 *
 	 * <p>
 	 * Convenience method for calling <code>store(ConfigMemoryStore.<jsf>DEFAULT</jsf>)</code>.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder memStore() {
@@ -112,11 +112,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO serializer.
-	 * 
+	 *
 	 * <p>
 	 * The serializer to use for serializing POJO values.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link JsonSerializer#DEFAULT_LAX}.
 	 * @return This object (for method chaining).
@@ -127,11 +127,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO serializer.
-	 * 
+	 *
 	 * <p>
 	 * The serializer to use for serializing POJO values.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link JsonSerializer#DEFAULT_LAX}.
 	 * @return This object (for method chaining).
@@ -142,11 +142,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO parser.
-	 * 
+	 *
 	 * <p>
 	 * The parser to use for parsing values to POJOs.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link JsonParser#DEFAULT}.
 	 * @return This object (for method chaining).
@@ -157,11 +157,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO parser.
-	 * 
+	 *
 	 * <p>
 	 * The parser to use for parsing values to POJOs.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link JsonParser#DEFAULT}.
 	 * @return This object (for method chaining).
@@ -172,11 +172,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Value encoder.
-	 * 
+	 *
 	 * <p>
 	 * The encoder to use for encoding encoded configuration values.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
 	 * @return This object (for method chaining).
@@ -187,11 +187,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Value encoder.
-	 * 
+	 *
 	 * <p>
 	 * The encoder to use for encoding encoded configuration values.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
 	 * @return This object (for method chaining).
@@ -199,14 +199,14 @@ public class ConfigBuilder extends ContextBuilder {
 	public ConfigBuilder encoder(Class<? extends ConfigEncoder> value) {
 		return set(CONFIG_encoder, value);
 	}
-	
+
 	/**
 	 * Configuration property:  SVL variable resolver.
-	 * 
+	 *
 	 * <p>
 	 * The resolver to use for resolving SVL variables.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link VarResolver#DEFAULT}.
 	 * @return This object (for method chaining).
@@ -217,11 +217,11 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  SVL variable resolver.
-	 * 
+	 *
 	 * <p>
 	 * The resolver to use for resolving SVL variables.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link VarResolver#DEFAULT}.
 	 * @return This object (for method chaining).
@@ -229,15 +229,15 @@ public class ConfigBuilder extends ContextBuilder {
 	public ConfigBuilder varResolver(Class<? extends VarResolver> value) {
 		return set(CONFIG_varResolver, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Binary value line length.
-	 * 
+	 *
 	 * <p>
 	 * When serializing binary values, lines will be split after this many characters.
 	 * <br>Use <code>-1</code> to represent no line splitting.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <code>-1</code>.
 	 * @return This object (for method chaining).
@@ -245,13 +245,13 @@ public class ConfigBuilder extends ContextBuilder {
 	public ConfigBuilder binaryLineLength(int value) {
 		return set(CONFIG_binaryLineLength, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Binary value format.
-	 * 
+	 *
 	 * <p>
 	 * The format to use when persisting byte arrays.
-	 * 
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul>
@@ -259,8 +259,8 @@ public class ConfigBuilder extends ContextBuilder {
 	 * 	<li>{@link BinaryFormat#HEX} - Hexadecimal.
 	 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link BinaryFormat#BASE64}.
 	 * @return This object (for method chaining).
@@ -271,28 +271,28 @@ public class ConfigBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Multi-line values on separate lines.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, multi-line values will always be placed on a separate line from the key.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder multiLineValuesOnSeparateLines() {
 		return set(CONFIG_multiLineValuesOnSeparateLines, true);
 	}
-	
+
 	/**
 	 * Configuration property:  Beans on separate lines.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder readOnly() {
 		return set(CONFIG_readOnly, true);
 	}
-	
+
 	@Override /* ContextBuilder */
 	public ConfigBuilder set(String name, Object value) {
 		super.set(name, value);

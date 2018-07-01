@@ -19,7 +19,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms {@link Enumeration Enumerations} to {@code List<Object>} objects.
- * 
+ *
  * <p>
  * This is a one-way transform, since {@code Enumerations} cannot be reconstituted.
  */

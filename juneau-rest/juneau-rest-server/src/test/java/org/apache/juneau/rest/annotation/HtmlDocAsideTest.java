@@ -52,7 +52,7 @@ public class HtmlDocAsideTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01() throws Exception {
 		a.get("/a01").accept("text/html").execute().assertBodyContains("<aside>a01a a01b</aside>");
@@ -73,11 +73,11 @@ public class HtmlDocAsideTest {
 	public void a05() throws Exception {
 		a.get("/a05").accept("text/html").execute().assertBodyContains("<aside>a05a a05b a01a a01b</aside>");
 	}
-	
+
 	//=================================================================================================================
 	// Inheritance
 	//=================================================================================================================
-	
+
 	@RestResource(htmldoc=@HtmlDoc(aside={"INHERIT","b01a","b01b"}))
 	public static class B extends A {
 		@RestMethod(path="/b01")

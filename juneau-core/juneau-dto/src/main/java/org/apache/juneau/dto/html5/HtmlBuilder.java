@@ -14,7 +14,7 @@ package org.apache.juneau.dto.html5;
 
 /**
  * Various useful static methods for creating HTML elements.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -24,7 +24,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link A} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final A a() {
@@ -34,7 +34,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link A} element with the specified {@link A#href(Object)} attribute and {@link A#children(Object[])}
 	 * nodes.
-	 * 
+	 *
 	 * @param href The {@link A#href(Object)} attribute.
 	 * @param children The {@link A#children(Object[])} nodes.
 	 * @return The new element.
@@ -45,7 +45,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Abbr} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Abbr abbr() {
@@ -55,7 +55,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Abbr} element with the specified {@link Abbr#title(String)} attribute and
 	 * {@link Abbr#children(Object[])} nodes.
-	 * 
+	 *
 	 * @param title The {@link Abbr#title(String)} attribute.
 	 * @param children The {@link Abbr#children(Object[])} nodes.
 	 * @return The new element.
@@ -66,7 +66,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Address} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Address address() {
@@ -75,7 +75,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Address} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -85,7 +85,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Area} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Area area() {
@@ -95,7 +95,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Area} element with the specified {@link Area#shape(String)}, {@link Area#coords(String)},
 	 * and {@link Area#href(Object)} attributes.
-	 * 
+	 *
 	 * @param shape The {@link Area#shape(String)} attribute.
 	 * @param coords The {@link Area#coords(String)} attribute.
 	 * @param href The {@link Area#href(Object)} attribute.
@@ -107,7 +107,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Article} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Article article() {
@@ -116,7 +116,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Article} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -126,7 +126,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Aside} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Aside aside() {
@@ -135,7 +135,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Aside} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -145,7 +145,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Audio} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Audio audio() {
@@ -154,7 +154,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Audio} element with the specified {@link Audio#src(Object)} attribute.
-	 * 
+	 *
 	 * @param src The {@link Audio#src(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -164,7 +164,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link B} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final B b() {
@@ -173,7 +173,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link B} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -183,7 +183,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Base} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Base base() {
@@ -192,7 +192,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Base} element with the specified {@link Base#href(Object)} attribute.
-	 * 
+	 *
 	 * @param href The {@link Base#href(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -202,7 +202,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Bdi} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Bdi bdi() {
@@ -211,7 +211,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Bdi} element with the specified {@link Bdi#text(Object)} node.
-	 * 
+	 *
 	 * @param text The {@link Bdi#text(Object)} node.
 	 * @return The new element.
 	 */
@@ -221,7 +221,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Bdo} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Bdo bdo() {
@@ -230,7 +230,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Bdo} element with the specified {@link Bdo#dir(String)} attribute and child nodes.
-	 * 
+	 *
 	 * @param dir The {@link Bdo#dir(String)} attribute.
 	 * @param children The child nodes.
 	 * @return The new element.
@@ -241,7 +241,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Blockquote} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Blockquote blockquote() {
@@ -250,7 +250,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Blockquote} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -260,7 +260,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Body} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Body body() {
@@ -269,7 +269,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Body} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -279,7 +279,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Br} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Br br() {
@@ -288,7 +288,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Button} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Button button() {
@@ -297,7 +297,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute.
-	 * 
+	 *
 	 * @param type The {@link Button#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -308,7 +308,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute and
 	 * {@link Button#children(Object[])} nodes.
-	 * 
+	 *
 	 * @param type The {@link Button#type(String)} attribute.
 	 * @param children The {@link Button#children(Object[])} nodes.
 	 * @return The new element.
@@ -328,7 +328,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Canvas} element with the specified {@link Canvas#width(Object)} and
 	 * {@link Canvas#height(Object)} attributes.
-	 * 
+	 *
 	 * @param width The {@link Canvas#width(Object)} attribute.
 	 * @param height The {@link Canvas#height(Object)} attribute.
 	 * @return The new element.
@@ -339,7 +339,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Caption} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Caption caption() {
@@ -348,7 +348,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Caption} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -358,7 +358,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Cite} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Cite cite() {
@@ -367,7 +367,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Cite} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -377,7 +377,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Code} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Code code() {
@@ -386,7 +386,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Code} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -396,9 +396,9 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Col} element.
-	 * 
+	 *
 	 * @return The new element.
-	 * 
+	 *
 	 */
 	public static final Col col() {
 		return new Col();
@@ -406,7 +406,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Col} element with the specified {@link Col#span(Object)} attribute.
-	 * 
+	 *
 	 * @param span The {@link Col#span(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -416,7 +416,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Colgroup} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Colgroup colgroup() {
@@ -425,7 +425,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Colgroup} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -435,7 +435,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Data} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Data data() {
@@ -444,7 +444,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Data} element with the specified {@link Data#value(Object)} attribute and child node.
-	 * 
+	 *
 	 * @param value The {@link Data#value(Object)} attribute.
 	 * @param child The child node.
 	 * @return The new element.
@@ -455,7 +455,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Datalist} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Datalist datalist() {
@@ -464,7 +464,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Datalist} element with the specified {@link Datalist#id(String)} attribute and child nodes.
-	 * 
+	 *
 	 * @param id The {@link Datalist#id(String)} attribute.
 	 * @param children The child nodes.
 	 * @return The new element.
@@ -475,7 +475,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Dd} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Dd dd() {
@@ -484,7 +484,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Dd} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -494,7 +494,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Del} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Del del() {
@@ -503,7 +503,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Del} element with the specified {@link Del#children(Object[])} node.
-	 * 
+	 *
 	 * @param children The {@link Del#children(Object[])} node.
 	 * @return The new element.
 	 */
@@ -513,7 +513,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Dfn} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Dfn dfn() {
@@ -522,7 +522,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Dfn} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -532,7 +532,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Div} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Div div() {
@@ -541,7 +541,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Div} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -551,7 +551,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Dl} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Dl dl() {
@@ -560,7 +560,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Dl} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -570,7 +570,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Dt} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Dt dt() {
@@ -579,7 +579,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Dt} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -589,7 +589,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Em} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Em em() {
@@ -598,7 +598,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Em} element with the specified {@link Em#children(Object[])} nodes.
-	 * 
+	 *
 	 * @param children The {@link Em#children(Object[])} nodes.
 	 * @return The new element.
 	 */
@@ -608,7 +608,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Embed} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Embed embed() {
@@ -617,7 +617,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Embed} element with the specified {@link Embed#src(Object)} attribute.
-	 * 
+	 *
 	 * @param src The {@link Embed#src(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -627,7 +627,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Fieldset} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Fieldset fieldset() {
@@ -636,7 +636,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Fieldset} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -646,7 +646,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Figcaption} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Figcaption figcaption() {
@@ -655,7 +655,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Figcaption} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -665,7 +665,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Figure} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Figure figure() {
@@ -674,7 +674,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Figure} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -684,7 +684,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Footer} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Footer footer() {
@@ -693,7 +693,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Footer} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -703,7 +703,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Form} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Form form() {
@@ -712,7 +712,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Form} element with the specified {@link Form#action(String)} attribute.
-	 * 
+	 *
 	 * @param action The {@link Form#action(String)} attribute.
 	 * @return The new element.
 	 */
@@ -722,7 +722,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Form} element with the specified {@link Form#action(String)} attribute and child nodes.
-	 * 
+	 *
 	 * @param action The {@link Form#action(String)} attribute.
 	 * @param children The child nodes.
 	 * @return The new element.
@@ -733,7 +733,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link H1} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final H1 h1() {
@@ -742,7 +742,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link H1} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -752,7 +752,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link H2} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final H2 h2() {
@@ -761,7 +761,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link H2} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -771,7 +771,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link H3} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final H3 h3() {
@@ -780,7 +780,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link H3} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -790,7 +790,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link H4} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final H4 h4() {
@@ -799,7 +799,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link H4} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -809,7 +809,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link H5} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final H5 h5() {
@@ -818,7 +818,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link H5} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -836,7 +836,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link H6} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -846,7 +846,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Head} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Head head() {
@@ -855,7 +855,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Head} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -865,7 +865,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Header} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Header header() {
@@ -874,7 +874,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Header} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -884,7 +884,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Hr} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Hr hr() {
@@ -893,7 +893,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Html} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Html html() {
@@ -902,7 +902,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Html} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -912,7 +912,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link I} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final I i() {
@@ -921,7 +921,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link I} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -931,7 +931,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Iframe} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Iframe iframe() {
@@ -940,7 +940,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Iframe} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -950,7 +950,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Img} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Img img() {
@@ -959,7 +959,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Img} element with the specified {@link Img#src(Object)} attribute.
-	 * 
+	 *
 	 * @param src The {@link Img#src(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -969,7 +969,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Input} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Input input() {
@@ -978,7 +978,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Input} element with the specified {@link Input#type(String)} attribute.
-	 * 
+	 *
 	 * @param type The {@link Input#type(String)} attribute.
 	 * @return The new element.
 	 */
@@ -988,7 +988,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Ins} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Ins ins() {
@@ -997,7 +997,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Ins} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1007,7 +1007,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Kbd} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Kbd kbd() {
@@ -1016,7 +1016,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Kbd} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1026,7 +1026,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Keygen} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Keygen keygen() {
@@ -1035,7 +1035,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Label} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Label label() {
@@ -1044,7 +1044,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Label} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1054,7 +1054,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Legend} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Legend legend() {
@@ -1063,7 +1063,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Legend} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1073,7 +1073,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Li} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Li li() {
@@ -1082,7 +1082,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Li} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1092,7 +1092,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Link} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Link link() {
@@ -1101,7 +1101,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.
-	 * 
+	 *
 	 * @param href The {@link Link#href(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -1111,7 +1111,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Main} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Main main() {
@@ -1120,7 +1120,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Main} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1130,7 +1130,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Map} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Map map() {
@@ -1139,7 +1139,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Map} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1149,7 +1149,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Mark} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Mark mark() {
@@ -1158,7 +1158,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Mark} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1168,7 +1168,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Meta} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Meta meta() {
@@ -1177,7 +1177,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Meter} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Meter meter() {
@@ -1186,7 +1186,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Meter} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1196,7 +1196,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Nav} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Nav nav() {
@@ -1205,7 +1205,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Nav} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1215,7 +1215,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Noscript} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Noscript noscript() {
@@ -1224,7 +1224,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Noscript} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1234,7 +1234,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Object2} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Object2 object() {
@@ -1243,7 +1243,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Object2} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1253,7 +1253,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Ol} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Ol ol() {
@@ -1262,7 +1262,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Ol} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1272,7 +1272,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Optgroup} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Optgroup optgroup() {
@@ -1281,7 +1281,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Optgroup} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1291,7 +1291,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Option} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Option option() {
@@ -1300,7 +1300,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Option} element with the specified {@link Option#text(Object)} attribute.
-	 * 
+	 *
 	 * @param text The {@link Option#text(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -1311,7 +1311,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute and
 	 * {@link Option#text(Object)} node.
-	 * 
+	 *
 	 * @param value The {@link Option#value(Object)} attribute.
 	 * @param text The {@link Option#text(Object)} node.
 	 * @return The new element.
@@ -1322,7 +1322,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Output} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Output output() {
@@ -1331,7 +1331,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Output} element with the specified {@link Output#name(String)} attribute.
-	 * 
+	 *
 	 * @param name The {@link Output#name(String)} attribute.
 	 * @return The new element.
 	 */
@@ -1341,7 +1341,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link P} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final P p() {
@@ -1350,7 +1350,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link P} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1360,7 +1360,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Param} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Param param() {
@@ -1370,7 +1370,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Param} element with the specified {@link Param#name(String)} and {@link Param#value(Object)}
 	 * attributes.
-	 * 
+	 *
 	 * @param name The {@link Param#name(String)} attribute.
 	 * @param value The {@link Param#value(Object)} attribute.
 	 * @return The new element.
@@ -1381,7 +1381,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Pre} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Pre pre() {
@@ -1390,7 +1390,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Pre} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1400,7 +1400,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Progress} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Progress progress() {
@@ -1409,7 +1409,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Progress} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1419,7 +1419,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Q} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Q q() {
@@ -1428,7 +1428,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Q} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1438,7 +1438,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Rb} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Rb rb() {
@@ -1447,7 +1447,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Rb} element with the specified {@link Rb#children(Object[])} nodes.
-	 * 
+	 *
 	 * @param children The {@link Rb#children(Object[])} nodes.
 	 * @return The new element.
 	 */
@@ -1457,7 +1457,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Rp} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Rp rp() {
@@ -1466,7 +1466,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Rp} element with the specified {@link Rp#children(Object[])} nodes.
-	 * 
+	 *
 	 * @param children The {@link Rp#children(Object[])} nodes.
 	 * @return The new element.
 	 */
@@ -1476,7 +1476,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Rt} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Rt rt() {
@@ -1485,7 +1485,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Rt} element with the specified {@link Rt#children(Object[])} nodes.
-	 * 
+	 *
 	 * @param children The {@link Rt#children(Object[])} nodes.
 	 * @return The new element.
 	 */
@@ -1495,7 +1495,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Rtc} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Rtc rtc() {
@@ -1504,7 +1504,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link Rtc} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1514,7 +1514,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Ruby} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Ruby ruby() {
@@ -1523,7 +1523,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Ruby} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1533,7 +1533,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link S} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final S s() {
@@ -1542,7 +1542,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an {@link S} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1552,7 +1552,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Samp} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Samp samp() {
@@ -1561,7 +1561,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Samp} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1571,7 +1571,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Script} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Script script() {
@@ -1581,7 +1581,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Script} element with the specified {@link Script#type(String)} attribute and
 	 * {@link Script#text(Object)} node.
-	 * 
+	 *
 	 * @param type The {@link Script#type(String)} attribute.
 	 * @param text The child text node.
 	 * @return The new element.
@@ -1592,7 +1592,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Section} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Section section() {
@@ -1601,7 +1601,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Section} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1611,7 +1611,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Select} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Select select() {
@@ -1620,7 +1620,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Select} element with the specified {@link Select#name(String)} attribute and child nodes.
-	 * 
+	 *
 	 * @param name The {@link Select#name(String)} attribute.
 	 * @param children The child nodes.
 	 * @return The new element.
@@ -1631,7 +1631,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Small} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Small small() {
@@ -1640,7 +1640,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Small} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1650,7 +1650,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Source} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Source source() {
@@ -1660,7 +1660,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Source} element with the specified {@link Source#src(Object)} and {@link Source#type(String)}
 	 * attributes.
-	 * 
+	 *
 	 * @param src The {@link Source#src(Object)} attribute.
 	 * @param type The {@link Source#type(String)} attribute.
 	 * @return The new element.
@@ -1671,7 +1671,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Span} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Span span() {
@@ -1680,7 +1680,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Span} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1690,7 +1690,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Strong} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Strong strong() {
@@ -1699,7 +1699,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Strong} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1709,7 +1709,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Style} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Style style() {
@@ -1718,7 +1718,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Style} element with the specified {@link Style#text(Object)} node.
-	 * 
+	 *
 	 * @param text The {@link Style#text(Object)} node.
 	 * @return The new element.
 	 */
@@ -1728,7 +1728,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Sub} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Sub sub() {
@@ -1737,7 +1737,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Sub} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1747,7 +1747,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Sup} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Sup sup() {
@@ -1756,7 +1756,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Sup} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1766,7 +1766,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Table} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Table table() {
@@ -1775,7 +1775,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Table} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1785,7 +1785,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Tbody} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Tbody tbody() {
@@ -1794,7 +1794,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Tbody} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1804,7 +1804,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Td} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Td td() {
@@ -1813,7 +1813,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Td} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1823,7 +1823,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Template} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Template template() {
@@ -1832,7 +1832,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Template} element with the specified {@link Template#id(String)} attribute and child nodes.
-	 * 
+	 *
 	 * @param id The {@link Template#id(String)} attribute.
 	 * @param children The child nodes.
 	 * @return The new element.
@@ -1843,7 +1843,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Textarea} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Textarea textarea() {
@@ -1853,7 +1853,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Textarea} element with the specified {@link Textarea#name(String)} attribute and
 	 * {@link Textarea#text(Object)} node.
-	 * 
+	 *
 	 * @param name The {@link Textarea#name(String)} attribute.
 	 * @param text The {@link Textarea#text(Object)} node.
 	 * @return The new element.
@@ -1864,7 +1864,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Tfoot} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Tfoot tfoot() {
@@ -1873,7 +1873,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Tfoot} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1883,7 +1883,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Th} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Th th() {
@@ -1892,7 +1892,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Th} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1902,7 +1902,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Thead} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Thead thead() {
@@ -1911,7 +1911,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Thead} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1921,7 +1921,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Time} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Time time() {
@@ -1930,7 +1930,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Time} element with the specified {@link Time#children(Object[])} nodes.
-	 * 
+	 *
 	 * @param children The {@link Time#children(Object[])} nodes.
 	 * @return The new element.
 	 */
@@ -1940,7 +1940,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Title} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Title title() {
@@ -1949,7 +1949,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Title} element with the specified {@link Title#text(Object)} node.
-	 * 
+	 *
 	 * @param text The {@link Title#text(Object)} node.
 	 * @return The new element.
 	 */
@@ -1959,7 +1959,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Tr} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Tr tr() {
@@ -1968,7 +1968,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Tr} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -1978,7 +1978,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Track} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Track track() {
@@ -1988,7 +1988,7 @@ public class HtmlBuilder {
 	/**
 	 * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}
 	 * attributes.
-	 * 
+	 *
 	 * @param src The {@link Track#src(Object)} attribute.
 	 * @param kind The {@link Track#kind(String)} attribute.
 	 * @return The new element.
@@ -1999,7 +1999,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link U} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final U u() {
@@ -2008,7 +2008,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link U} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -2018,7 +2018,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Ul} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Ul ul() {
@@ -2027,7 +2027,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Ul} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -2037,7 +2037,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Var} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Var var() {
@@ -2046,7 +2046,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Var} element with the specified child nodes.
-	 * 
+	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
@@ -2056,7 +2056,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Video} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Video video() {
@@ -2065,7 +2065,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates a {@link Video} element with the specified {@link Video#src(Object)} attribute.
-	 * 
+	 *
 	 * @param src The {@link Video#src(Object)} attribute.
 	 * @return The new element.
 	 */
@@ -2075,7 +2075,7 @@ public class HtmlBuilder {
 
 	/**
 	 * Creates an empty {@link Wbr} element.
-	 * 
+	 *
 	 * @return The new element.
 	 */
 	public static final Wbr wbr() {

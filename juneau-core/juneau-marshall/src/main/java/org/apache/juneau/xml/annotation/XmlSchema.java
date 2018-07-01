@@ -28,7 +28,7 @@ public @interface XmlSchema {
 
 	/**
 	 * Sets the default XML namespace URL for all classes in this and child packages.
-	 * 
+	 *
 	 * <p>
 	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #xmlNs()} mapping with the same
 	 * {@link XmlNs#namespaceURI() @XmlNs.namespaceURI()} value.
@@ -37,7 +37,7 @@ public @interface XmlSchema {
 
 	/**
 	 * Sets the default XML prefix for all classes in this and child packages.
-	 * 
+	 *
 	 * <p>
 	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #xmlNs()} mapping with the same
 	 * {@link XmlNs#prefix} value.
@@ -46,14 +46,14 @@ public @interface XmlSchema {
 
 	/**
 	 * Lists all namespace mappings to be used on all classes within this package.
-	 * 
+	 *
 	 * <p>
 	 * The purpose of this annotation is to allow namespace mappings to be defined in a single location and referred
 	 * to by name through just the {@link Xml#prefix() @Xml.prefix()} annotation.
-	 * 
+	 *
 	 * <p>
 	 * Inherited by child packages.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * Contents of <code>package-info.java</code>...
@@ -70,19 +70,19 @@ public @interface XmlSchema {
 	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 	 * 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Class in package using defined namespaces...
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> corg.apache.juneau.examples.addressbook;
-	 * 
+	 *
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>
 	 * 	<ja>@Xml</ja>(prefix=<js>"addr"</js>)
 	 * 	<jk>public class</jk> Address {
-	 * 
+	 *
 	 * 		<jc>// Bean property, use "addr" namespace on class.</jc>
 	 * 		<jk>public int</jk> <jf>id</jf>;
-	 * 
+	 *
 	 * 		<jc>// Bean property, override with "mail" namespace.</jc>
 	 * 		<ja>@Xml</ja>(prefix=<js>"mail"</js>)
 	 * 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;

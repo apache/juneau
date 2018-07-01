@@ -19,17 +19,17 @@ import org.apache.juneau.xmlschema.*;
 
 /**
  * Serializes POJO models to XML.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>text/xml</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/xml</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * See the {@link JsonSerializer} class for details on how Java models map to JSON.
- * 
+ *
  * <p>
  * For example, the following JSON...
  * <p class='bcode'>
@@ -70,7 +70,7 @@ import org.apache.juneau.xmlschema.*;
  * 		<xt>&lt;height&gt;</xt>62.4<xt>&lt;/height&gt;</xt>
  * 		<xt>&lt;fico_x0020_score&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
- * 
+ *
  * <p>
  * An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
  * <p class='bcode'>
@@ -91,18 +91,18 @@ import org.apache.juneau.xmlschema.*;
  * 		<xt>&lt;fico_x0020_score</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
  * </p>
- * 
+ *
  * <p>
  * This serializer provides several serialization options.
  * Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
- * 
+ *
  * <p>
  * If an attribute name contains any non-valid XML element characters, they will be escaped using standard
  * {@code _x####_} notation.
- * 
+ *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- * 
+ *
  * The following direct subclasses are provided for convenience:
  * <ul>
  * 	<li>{@link Sq} - Default serializer, single quotes.
@@ -119,24 +119,24 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 * 
+	 *
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -145,27 +145,27 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot(boolean)}
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
-	 * 
+	 *
 	 * <p>
 	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
@@ -175,34 +175,34 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.autoDetectNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#autoDetectNamespaces(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Detect namespace usage before serialization.
-	 * 
+	 *
 	 * <p>
 	 * Used in conjunction with {@link #XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
 	 * root element to only those that will be used in the resulting document.
-	 * 
+	 *
 	 * <p>
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
-	 * 
+	 *
 	 * <p>
 	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -210,7 +210,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
 	 * 		disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
@@ -220,23 +220,23 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Default namespace.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.defaultNamespace.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Namespace})
 	 * 	<li><b>Default:</b>  <js>"juneau: http://www.apache.org/2013/Juneau"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the default namespace URI for this document.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
@@ -246,23 +246,23 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.enableNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#enableNamespaces(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
@@ -272,23 +272,23 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  Default namespaces.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.namespaces.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code> ({@link Namespace})
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
@@ -298,24 +298,24 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Configuration property:  XMLSchema namespace.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.xsNamespace.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Namespace})
 	 * 	<li><b>Default:</b>  <js>"xs: http://www.w3.org/2001/XMLSchema"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#xsNamespace(Namespace)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the namespace for the <code>XMLSchema</code> namespace, used by the schema generated by the
 	 * {@link XmlSchemaSerializer} class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
@@ -356,7 +356,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Sq(PropertyStore ps) {
@@ -373,7 +373,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public SqReadable(PropertyStore ps) {
@@ -391,7 +391,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Ns(PropertyStore ps) {
@@ -399,7 +399,7 @@ public class XmlSerializer extends WriterSerializer {
 				ps.builder()
 					.set(XML_enableNamespaces, true)
 					.build(),
-				"text/xml", 
+				"text/xml",
 				"text/xml+simple"
 			);
 		}
@@ -410,7 +410,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public NsSq(PropertyStore ps) {
@@ -428,7 +428,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public NsSqReadable(PropertyStore ps) {
@@ -442,10 +442,10 @@ public class XmlSerializer extends WriterSerializer {
 		}
 	}
 
-	private static final Namespace 
+	private static final Namespace
 		DEFAULT_JUNEAU_NAMESPACE = Namespace.create("juneau", "http://www.apache.org/2013/Juneau"),
 		DEFAULT_XS_NAMESPACE = Namespace.create("xs", "http://www.w3.org/2001/XMLSchema");
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -455,19 +455,19 @@ public class XmlSerializer extends WriterSerializer {
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
 		addBeanTypes;
-	
+
 	final Namespace defaultNamespace;
-	
+
 	final Namespace
 		xsNamespace;
-	
+
 	final Namespace[] namespaces;
 
 	private volatile XmlSchemaSerializer schemaSerializer;
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
@@ -477,7 +477,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -520,14 +520,14 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Instantiates a new clean-slate {@link XmlSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> XmlSerializerBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link XmlSerializerBuilder} object.
 	 */
 	public static XmlSerializerBuilder create() {
@@ -548,7 +548,7 @@ public class XmlSerializer extends WriterSerializer {
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new XmlSerializerSession(this, args);
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-meter-element">&lt;meter&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -28,10 +28,10 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Low limit of high range.
-	 * 
+	 *
 	 * @param high
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -44,10 +44,10 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-low">low</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * High limit of low range.
-	 * 
+	 *
 	 * @param low
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -60,10 +60,10 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-max">max</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Upper bound of range.
-	 * 
+	 *
 	 * @param max
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -76,10 +76,10 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-min">min</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Lower bound of range.
-	 * 
+	 *
 	 * @param min
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -92,10 +92,10 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-optimum">optimum</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Optimum value in gauge.
-	 * 
+	 *
 	 * @param optimum
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -108,10 +108,10 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-value">value</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Current value of the element.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

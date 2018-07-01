@@ -38,7 +38,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public RdfParserBuilder(PropertyStore ps) {
@@ -57,7 +57,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
-	 * 
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -72,12 +72,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	<li>
 	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_collectionFormat}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -87,13 +87,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauBpNs}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
 	 * @return This object (for method chaining).
@@ -104,13 +104,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
 	 * @return This object (for method chaining).
@@ -121,7 +121,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
@@ -133,30 +133,30 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 		<js>"N-TRIPLE"</js>
 	 * 	<li>
 	 * 		<js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when 
+	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when
 	 * 		created.
-	 * 		Default is the pretty writer but can be overridden with system property	
+	 * 		Default is the pretty writer but can be overridden with system property
 	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
 	 * 	<li>
 	 * 		<js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding 
+	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding
 	 * 		one-referenced bNodes.
 	 * 	<li>
 	 * 		<js>"N3-PLAIN"</js> - Name of the N3 plain writer.
 	 * 		The plain writer writes records by subject.
-	 * 	<li>	
+	 * 	<li>
 	 * 		<js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
 	 * 		This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
 	 * 	<li>
 	 * 		<js>"TURTLE"</js> -  Turtle writer.
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -166,17 +166,17 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
-	 * 
+	 *
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -187,15 +187,15 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>looseCollection(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder looseCollections() {
@@ -204,15 +204,15 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder n3() {
@@ -221,15 +221,15 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  RDF language.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder ntriple() {
@@ -238,16 +238,16 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Trim whitespace from text elements.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -258,15 +258,15 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Trim whitespace from text elements.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>trimWhitespace(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder trimWhitespace() {
@@ -275,12 +275,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder turtle() {
@@ -289,18 +289,18 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 * 
+	 *
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be 
+	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be
 	 * inherited by the RDF parsers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_useXmlNamespaces}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
@@ -311,12 +311,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder xml() {
@@ -325,12 +325,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder xmlabbrev() {
@@ -366,7 +366,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		super.debugOutputLines(value);
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public RdfParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
@@ -720,7 +720,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -738,7 +738,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public RdfParserBuilder set(String name, Object value) {
 		super.set(name, value);

@@ -36,7 +36,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public JsonSchemaSerializerBuilder(PropertyStore ps) {
@@ -55,18 +55,18 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**
 	 * Configuration property:  Add descriptions.
-	 * 
+	 *
 	 * <p>
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
 	 * <p>
 	 * The description is the result of calling {@link ClassMeta#getReadableName()}.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -74,10 +74,10 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	public JsonSchemaSerializerBuilder addDescriptionsTo(String value) {
 		return set(JSONSCHEMA_addDescriptionsTo, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Add examples.
-	 * 
+	 *
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
 	 * <p>
@@ -87,13 +87,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -101,18 +101,18 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	public JsonSchemaSerializerBuilder addExamplesTo(String value) {
 		return set(JSONSCHEMA_addExamplesTo, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Allow nested descriptions.
-	 * 
+	 *
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_allowNestedDescriptions}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder allowNestedDescriptions() {
@@ -121,15 +121,15 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**
 	 * Configuration property:  Allow nested examples.
-	 * 
+	 *
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_allowNestedExamples}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder allowNestedExamples() {
@@ -138,20 +138,20 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**
 	 * Configuration property:  Schema definition mapper.
-	 * 
+	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 * <p>
 	 * This setting is ignored if {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} is not enabled.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_beanDefMapper}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -162,20 +162,20 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**
 	 * Configuration property:  Bean schema definition mapper.
-	 * 
+	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 * <p>
 	 * This setting is ignored if {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} is not enabled.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_beanDefMapper}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -186,18 +186,18 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**
 	 * Configuration property:  Default schemas.
-	 * 
+	 *
 	 * <p>
 	 * Allows you to override or provide custom schema information for particular class types.
 	 * <p>
 	 * Keys are full class names.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_defaultSchemas}
 	 * </ul>
-	 * 
-	 * @param c 
+	 *
+	 * @param c
 	 * 	The class to define a default schema for.
 	 * @param schema
 	 * 	The schema.
@@ -206,10 +206,10 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, ObjectMap schema) {
 		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
-	
+
 	/**
 	 * Configuration property:  Use bean definitions.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, schemas on beans will be serialized as the following:
 	 * <p class='bcode'>
@@ -218,18 +218,18 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
 	 * 	}
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * The definitions can then be retrieved from the session using {@link JsonSchemaSerializerSession#getBeanDefs()}.
 	 * <p>
 	 * Definitions can also be added programmatically using {@link JsonSchemaSerializerSession#addBeanDef(String, ObjectMap)}.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder useBeanDefs() {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
-	
+
 	@Override /* JsonSerializerBuilder */
 	public JsonSchemaSerializerBuilder escapeSolidus(boolean value) {
 		super.escapeSolidus(value);
@@ -756,7 +756,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public JsonSchemaSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

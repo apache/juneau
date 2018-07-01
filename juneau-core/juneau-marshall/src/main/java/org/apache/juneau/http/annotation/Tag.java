@@ -21,13 +21,13 @@ import org.apache.juneau.json.*;
 
 /**
  * Swagger schema annotation.
- * 
+ *
  * <p>
- * The Schema Object allows the definition of input and output data types. 
- * These types can be objects, but also primitives and arrays. 
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it. 
+ * The Schema Object allows the definition of input and output data types.
+ * These types can be objects, but also primitives and arrays.
+ * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
  * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Swagger Specification &gt; Tag Object</a>
@@ -38,10 +38,10 @@ import org.apache.juneau.json.*;
 @Retention(RUNTIME)
 @Inherited
 public @interface Tag {
-	
+
 	/**
 	 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -49,13 +49,13 @@ public @interface Tag {
 	 * </ul>
 	 */
 	String name() default "";
-	
+
 	/**
 	 * A synonym for {@link #name()}.
-	 * 
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining a simple tag:
 	 * <p class='bcode w800'>
@@ -78,43 +78,43 @@ public @interface Tag {
 	 * </p>
 	 */
 	String value() default "";
-	
+
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] description() default {};
-	
+
 	/**
 	 * <mk>externalDocs</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
-	
+
 	/**
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
-	 * 
+	 *
 	 * <p>
 	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this Tag object.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the resource tags:
 	 * <p class='bcode w800'>
@@ -165,14 +165,14 @@ public @interface Tag {
 	 * 	<mc>// Contents of MyResource.properties</mc>
 	 * 	<mk>petTagSwagger</mk> = <mv>{ name: "pet", description: "Everything about your Pets", externalDocs: { description: "Find out more", url: "http://juneau.apache.org" } }</mv>
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * 	The reasons why you may want to use this field include:
 	 * <ul>
 	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -189,7 +189,7 @@ public @interface Tag {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

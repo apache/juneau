@@ -27,20 +27,20 @@ import org.apache.juneau.xml.*;
 
 /**
  * Transforms the contents of a {@link Reader} into an {@code Object}.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * The {@code Reader} must contain JSON, Juneau-generated XML (output from {@link XmlSerializer}), or Juneau-generated
  * HTML (output from {@link JsonSerializer}) in order to be parsed correctly.
- * 
+ *
  * <p>
  * Useful for serializing models that contain {@code Readers} created by {@code RestCall} instances.
- * 
+ *
  * <p>
  * This is a one-way transform, since {@code Readers} cannot be reconstituted.
- * 
+ *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- * 
+ *
  * The following direct subclasses are provided for convenience:
  * <ul>
  * 	<li>{@link Json} - Parses JSON text.
@@ -98,7 +98,7 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 			super(UrlEncodingParser.DEFAULT);
 		}
 	}
-	
+
 	/** The parser to use to parse the contents of the Reader. */
 	private ReaderParser parser;
 

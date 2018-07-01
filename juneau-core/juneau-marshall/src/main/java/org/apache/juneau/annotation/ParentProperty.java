@@ -19,16 +19,16 @@ import java.lang.annotation.*;
 
 /**
  * Identifies a setter as a method for adding a parent reference to a child object.
- * 
+ *
  * <p>
  * Used by the parsers to add references to parent objects in child objects.
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		The annotated field or method does not need to be public.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.NamePropertyAnnotation">Overview &gt; juneau-marshall &gt; @NameProperty Annotation</a>

@@ -25,13 +25,13 @@ import org.apache.juneau.transform.*;
 
 /**
  * Builder class for building instances of serializers, parsers, and bean contexts.
- * 
+ *
  * <p>
  * All serializers and parsers extend from this class.
- * 
+ *
  * <p>
  * Provides a base set of common config property setters that allow you to build up serializers and parsers.
- * 
+ *
  * <p class='bcode'>
  * 	WriterSerializer s = JsonSerializer
  * 		.<jsm>create</jsm>()
@@ -40,10 +40,10 @@ import org.apache.juneau.transform.*;
  * 		.set(<jsf>SERIALIZER_quoteChar</jsf>, <js>"'"</js>)
  * 		.build();
  * </p>
- * 
+ *
  * <p>
  * Additional convenience methods are provided for setting properties using reduced syntax.
- * 
+ *
  * <p class='bcode'>
  * 	WriterSerializer s = JsonSerializer
  * 		.<jsm>create</jsm>()  <jc>// Create a JsonSerializerBuilder</jc>
@@ -52,7 +52,7 @@ import org.apache.juneau.transform.*;
  * 		.sq()  <jc>// Use single quotes </jc>
  * 		.build();  <jc>// Create a JsonSerializer</jc>
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.ConfigurableProperties">Overview &gt; juneau-marshall &gt; Configurable Properties</a>
@@ -62,7 +62,7 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * All default settings.
 	 */
 	public BeanContextBuilder() {
@@ -71,7 +71,7 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public BeanContextBuilder(PropertyStore ps) {
@@ -89,20 +89,20 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.
-	 * 
+	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
-	 * 
+	 *
 	 * <p>
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class and will be treated as a string.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
@@ -113,16 +113,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Minimum bean constructor visibility.
-	 * 
+	 *
 	 * <p>
 	 * Only look for constructors with the specified minimum visibility.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
@@ -133,16 +133,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean dictionary.
-	 * 
+	 *
 	 * <p>
 	 * Adds to the list of classes that make up the bean dictionary in this bean context.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -152,16 +152,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean dictionary.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but takes in an array of classes.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -171,18 +171,18 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean dictionary.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but allows you to optionally overwrite the previous value.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
-	 * 
+	 *
 	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values 
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced.
+	 * @param values
 	 * 	The new values for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -192,16 +192,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean dictionary.
-	 * 
+	 *
 	 * <p>
 	 * Removes from the list of classes that make up the bean dictionary in this bean context.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to remove from this property.
 	 * @return This object (for method chaining).
 	 */
@@ -211,16 +211,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Minimum bean field visibility.
-	 * 
+	 *
 	 * <p>
 	 * Only look for bean fields with the specified minimum visibility.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
@@ -231,18 +231,18 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean filters.
-	 * 
+	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * <br>It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter 
+	 * <br>It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -259,15 +259,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean filters.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #beanFilters(Object...)} but takes in an array of classes.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
@@ -278,18 +278,18 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean filters.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #beanFilters(Object...)} but allows you to optionally overwrite the previous value.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
-	 * 
+	 *
 	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values 
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced.
+	 * @param values
 	 * 	The new values for this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -306,16 +306,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean filters.
-	 * 
+	 *
 	 * <p>
 	 * Removes from the list of classes that make up the bean filters in this bean context.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to remove from this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -332,18 +332,18 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * values.
 	 * <br>Otherwise, it returns <jk>null</jk>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -354,15 +354,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>beanMapPutReturnsOldValue(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beanMapPutReturnsOldValue() {
@@ -371,16 +371,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Minimum bean method visibility.
-	 * 
+	 *
 	 * <p>
 	 * Only look for bean methods with the specified minimum visibility.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMethodVisibility}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link Visibility#PUBLIC}
 	 * @return This object (for method chaining).
@@ -391,17 +391,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -412,15 +412,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>beansRequireDefaultConstructor(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beansRequireDefaultConstructor() {
@@ -429,17 +429,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Beans require Serializable interface.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -450,15 +450,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Beans require Serializable interface.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>beansRequireSerializable(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beansRequireSerializable() {
@@ -467,17 +467,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Beans require setters for getters.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * <br>Otherwise, they will be ignored.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -488,15 +488,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Beans require setters for getters.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>beansRequireSettersForGetters(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beansRequireSettersForGetters() {
@@ -505,17 +505,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Beans require at least one property.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSomeProperties}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
@@ -526,17 +526,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean type property name.
-	 * 
+	 *
 	 * <p>
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
 	 * parser knows the data type to reconstruct.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <js>"_type"</js>.
 	 * @return This object (for method chaining).
@@ -547,7 +547,7 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Debug mode.
-	 * 
+	 *
 	 * <p>
 	 * Enables the following additional information during serialization:
 	 * <ul class='spaced-list'>
@@ -557,13 +557,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li>
 	 * 		Enables {@link Serializer#SERIALIZER_detectRecursions}.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -574,15 +574,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Debug mode.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>debug(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder debug() {
@@ -591,15 +591,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO example.
-	 * 
+	 *
 	 * <p>
 	 * Specifies an example of the specified class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
-	 * 
+	 *
 	 * @param pojoClass The POJO class.
 	 * @param o An instance of the POJO class used for examples.
 	 * @return This object (for method chaining).
@@ -610,15 +610,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean property excludes.
-	 * 
+	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
-	 * 
+	 *
 	 * @param beanClass The bean class.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
@@ -629,16 +629,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean property excludes.
-	 * 
+	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -648,14 +648,14 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean property excludes.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
-	 * 
-	 * @param beanClassName 
-	 * 	The bean class name.  
+	 *
+	 * @param beanClassName
+	 * 	The bean class name.
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
 	 * @param value Comma-delimited list of property names.
 	 * @return This object (for method chaining).
@@ -666,10 +666,10 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Find fluent setters.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, fluent setters are detected on beans.
-	 * 
+	 *
 	 * <p>
 	 * Fluent setters must have the following attributes:
 	 * <ul>
@@ -678,13 +678,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li>Take in one parameter.
 	 * 	<li>Return the bean itself.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -695,15 +695,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Find fluent setters.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>fluentSetters(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder fluentSetters() {
@@ -712,17 +712,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -733,15 +733,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>ignoreInvocationExceptionsOnGetters(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder ignoreInvocationExceptionsOnGetters() {
@@ -750,17 +750,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -771,15 +771,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>ignoreInvocationExceptionsOnSetters(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters() {
@@ -788,17 +788,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore properties without setters.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignorePropertiesWithoutSetters}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
@@ -809,17 +809,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -830,15 +830,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>ignoreUnknownBeanProperties(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder ignoreUnknownBeanProperties() {
@@ -847,17 +847,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Ignore unknown properties with null values.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownNullBeanProperties}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
@@ -868,12 +868,12 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Implementation classes.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
 	 * </ul>
-	 * 
+	 *
 	 * @param interfaceClass The interface class.
 	 * @param implClass The implementation class.
 	 * @param <I> The class type of the interface.
@@ -885,17 +885,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Implementation classes.
-	 * 
+	 *
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 	 * parse).
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
 	 * </ul>
-	 * 
+	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -905,15 +905,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean property includes.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
-	 * 
+	 *
 	 * @param beanClass The bean class.
 	 * @param value Comma-delimited list of property names.
 	 * @return This object (for method chaining).
@@ -924,15 +924,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean property includes.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
-	 * 
+	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -942,17 +942,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean property includes.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
-	 * 
-	 * @param beanClassName 
-	 * 	The bean class name.  
+	 *
+	 * @param beanClassName
+	 * 	The bean class name.
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 	 * @param value Comma-delimited list of property names.
 	 * @return This object (for method chaining).
@@ -963,15 +963,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Locale.
-	 * 
+	 *
 	 * <p>
 	 * Specifies a default locale for serializer and parser sessions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -981,15 +981,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Media type.
-	 * 
+	 *
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -999,20 +999,20 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean class exclusions.
-	 * 
+	 *
 	 * <p>
 	 * Not-bean classes are converted to <code>Strings</code> during serialization even if they appear to be
 	 * bean-like.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
-	 * 
+	 *
 	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  
-	 * 	<br>Otherwise, the previous value is replaced. 
-	 * @param values 
+	 * 	If <jk>true</jk>, the previous value is appended to.
+	 * 	<br>Otherwise, the previous value is replaced.
+	 * @param values
 	 * 	The new value for this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1027,16 +1027,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean class exclusions.
-	 * 
+	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
 	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
-	 * 
+	 *
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1046,17 +1046,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean class exclusions.
-	 * 
+	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
 	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1071,13 +1071,13 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean class exclusions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to remove from this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1092,19 +1092,19 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean package exclusions.
-	 * 
+	 *
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
-	 * 
+	 *
 	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  
-	 * 	<br>Otherwise, the previous value is replaced. 
-	 * @param values 
+	 * 	If <jk>true</jk>, the previous value is appended to.
+	 * 	<br>Otherwise, the previous value is replaced.
+	 * @param values
 	 * 	The new values for this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1119,13 +1119,13 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean package exclusions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1140,13 +1140,13 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean package exclusions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1156,13 +1156,13 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean package exclusions.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<br>Possible values are:
 	 * 	<ul>
@@ -1177,23 +1177,23 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO swaps.
-	 * 
+	 *
 	 * <p>
 	 * POJO swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
 	 * and "swap in" the non-serializable class during parsing.
-	 * 
+	 *
 	 * <p>
 	 * An example of a POJO swap would be a <code>Calendar</code> object that gets swapped out for an ISO8601 string.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 * 
+	 *
 	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  
-	 * 	<br>Otherwise, the previous value is replaced. 
-	 * @param values 
+	 * 	If <jk>true</jk>, the previous value is appended to.
+	 * 	<br>Otherwise, the previous value is replaced.
+	 * @param values
 	 * 	The new value for this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1208,12 +1208,12 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO swaps.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 * 
+	 *
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -1223,13 +1223,13 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO swaps.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1245,13 +1245,13 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  POJO swaps.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The values to remove from this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
@@ -1267,16 +1267,16 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean property namer
-	 * 
+	 *
 	 * <p>
 	 * The class to use for calculating bean property names.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is {@link PropertyNamerDefault}.
 	 * @return This object (for method chaining).
@@ -1287,17 +1287,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Sort bean properties.
-	 * 
+	 *
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
 	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -1308,15 +1308,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Sort bean properties.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder sortProperties() {
@@ -1325,30 +1325,30 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  TimeZone.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder timeZone(TimeZone value) {
 		return set(BEAN_timeZone, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Use enum names.
-	 * 
+	 *
 	 * <p>
 	 * When enabled, enums are always serialized by name instead of using {@link Object#toString()}.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder useEnumNames() {
@@ -1357,17 +1357,17 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Use interface proxies.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_useInterfaceProxies}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
@@ -1378,21 +1378,21 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Use Java Introspector.
-	 * 
+	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Most {@link Bean @Bean} annotations will be ignored if you enable this setting.
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_useJavaBeanIntrospector}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -1403,15 +1403,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Use Java Introspector.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>useJavaBeanIntrospector(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_useJavaBeanIntrospector}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder useJavaBeanIntrospector() {

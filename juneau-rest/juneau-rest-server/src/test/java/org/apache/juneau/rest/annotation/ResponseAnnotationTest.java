@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -31,7 +31,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc","serial"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResponseAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -78,7 +78,7 @@ public class ResponseAnnotationTest {
 		public static class SA02 {}
 		@RestMethod(name=GET,path="/api")
 		public void sa02(SA02 r) {}
-		
+
 		@Response(
 			api={
 				"description:'b',",
@@ -226,7 +226,7 @@ public class ResponseAnnotationTest {
 		@RestMethod(name=GET,path="/examples")
 		public void sc02(SC02 r) {}
 	}
-	
+
 	@Test
 	public void sc01_Response_onPojo_example() throws Exception {
 		ResponseInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getResponse(200);
@@ -237,7 +237,7 @@ public class ResponseAnnotationTest {
 		ResponseInfo x = getSwagger(new SC()).getPaths().get("/examples").get("get").getResponse(200);
 		assertObjectEquals("{foo:'b'}", x.getExamples());
 	}
-	
+
 	//=================================================================================================================
 	// @Response on parameter
 	//=================================================================================================================
@@ -414,7 +414,7 @@ public class ResponseAnnotationTest {
 		@RestMethod(name=GET,path="/examples")
 		public void tc02(@Response(examples={" foo:'b' "}) TC02 r) {}
 	}
-	
+
 	@Test
 	public void tc01_Response_onParameter_example() throws Exception {
 		ResponseInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getResponse(200);
@@ -436,8 +436,8 @@ public class ResponseAnnotationTest {
 
 	@RestResource
 	@SuppressWarnings({"unused"})
-	public static class UA {		
-		
+	public static class UA {
+
 		@Response(
 			description= {"a","b"},
 			schema=@Schema(type="string"),
@@ -495,7 +495,7 @@ public class ResponseAnnotationTest {
 		@RestMethod(name=GET,path="/headers")
 		public void ua06() throws UA06 {}
 	}
-	
+
 	@Test
 	public void ua01_Response_onThrowable_basic() throws Exception {
 		ResponseInfo x = getSwagger(new UA()).getPaths().get("/basic").get("get").getResponse(500);
@@ -545,8 +545,8 @@ public class ResponseAnnotationTest {
 
 	@RestResource
 	@SuppressWarnings({"unused"})
-	public static class UB {		
-		
+	public static class UB {
+
 		@Response(schema=@Schema(" type:'number' "))
 		public static class UB01 extends Throwable {}
 		@RestMethod(name=GET,path="/schemaValue")
@@ -565,8 +565,8 @@ public class ResponseAnnotationTest {
 
 	@RestResource
 	@SuppressWarnings({"unused"})
-	public static class UC {		
-		
+	public static class UC {
+
 		@Response(example={" {f1:'b'} "})
 		public static class UC01 extends Throwable {}
 		@RestMethod(name=GET,path="/example")
@@ -577,7 +577,7 @@ public class ResponseAnnotationTest {
 		@RestMethod(name=GET,path="/examples")
 		public void uc02() throws UC02 {}
 	}
-	
+
 	@Test
 	public void uc01_Response_onThrowable_example() throws Exception {
 		ResponseInfo x = getSwagger(new UC()).getPaths().get("/example").get("get").getResponse(500);

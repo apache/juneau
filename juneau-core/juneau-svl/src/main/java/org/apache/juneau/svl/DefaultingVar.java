@@ -16,17 +16,17 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Interface for the resolution of vars with a default value if the <code>resolve()</code> method returns <jk>null</jk>.
- * 
+ *
  * <p>
  * For example, to resolve the system property <js>"myProperty"</js> but resolve to <js>"not found"</js> if the
  * property doesn't exist: <js>"$S{myProperty,not found}"</js>
- * 
+ *
  * <p>
  * Subclasses must implement the following method:
  * <ul>
- * 	<li class='jm'>{@link #resolve(VarResolverSession, String)} 
+ * 	<li class='jm'>{@link #resolve(VarResolverSession, String)}
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
@@ -36,7 +36,7 @@ public abstract class DefaultingVar extends SimpleVar {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param name The name of this variable.
 	 */
 	public DefaultingVar(String name) {

@@ -26,7 +26,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonParser}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -35,12 +35,12 @@ import org.apache.juneau.transform.*;
 public final class JsonParserSession extends ReaderParserSession {
 
 	private static final AsciiSet decChars = AsciiSet.create().ranges("0-9").build();
-	
-	private final boolean validateEnd; 
+
+	private final boolean validateEnd;
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -54,12 +54,12 @@ public final class JsonParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is whitespace.
-	 * 
+	 *
 	 * <p>
 	 * The definition of whitespace is different for strict vs lax mode.
 	 * Strict mode only interprets 0x20 (space), 0x09 (tab), 0x0A (line feed) and 0x0D (carriage return) as whitespace.
 	 * Lax mode uses {@link Character#isWhitespace(int)} to make the determination.
-	 * 
+	 *
 	 * @param cp The codepoint.
 	 * @return <jk>true</jk> if the specified character is whitespace.
 	 */
@@ -71,7 +71,7 @@ public final class JsonParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is whitespace or '/'.
-	 * 
+	 *
 	 * @param cp The codepoint.
 	 * @return <jk>true</jk> if the specified character is whitespace or '/'.
 	 */
@@ -400,7 +400,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		}
 		throw new ParseException(this, "Could not find the end of the field name.");
 	}
-	
+
 	private static final AsciiSet VALID_BARE_CHARS = AsciiSet.create().range('A','Z').range('a','z').range('0','9').chars("$_-.").build();
 
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l,
@@ -422,7 +422,7 @@ public final class JsonParserSession extends ReaderParserSession {
 					state = S1;
 				else if (isCommentOrWhitespace(c))
 					skipCommentsAndSpace(r.unread());
-				else 
+				else
 					break;  // Invalid character found.
 			} else if (state == S1) {
 				if (c == ']') {

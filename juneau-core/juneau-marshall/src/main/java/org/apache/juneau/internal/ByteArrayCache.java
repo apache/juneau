@@ -23,7 +23,7 @@ public class ByteArrayCache {
 
 	/**
 	 * Default global byte array cache.
-	 * 
+	 *
 	 * <p>
 	 * Note that this can't ever get garbage collected so don't add really large arrays!
 	 */
@@ -33,7 +33,7 @@ public class ByteArrayCache {
 
 	/**
 	 * Add the specified byte array to this cache.
-	 * 
+	 *
 	 * @param contents The byte array to add to this cache.
 	 * @return
 	 * 	Either the same byte array or a previously cached byte array depending on whether the byte array already
@@ -49,7 +49,7 @@ public class ByteArrayCache {
 
 	/**
 	 * Add the specified input stream to this cache.
-	 * 
+	 *
 	 * @param contents The input stream whose contents are to be added to this cache.
 	 * @return
 	 * 	Either the same byte array or a previously cached byte array depending on whether the byte array already
@@ -66,7 +66,7 @@ public class ByteArrayCache {
 
 	/**
 	 * Returns the number of byte arrays in this cache.
-	 * 
+	 *
 	 * @return The number of byte arrays in this cache.
 	 */
 	public int size() {

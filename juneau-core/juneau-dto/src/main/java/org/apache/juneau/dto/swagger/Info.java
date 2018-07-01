@@ -24,7 +24,7 @@ import org.apache.juneau.utils.*;
 /**
  * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented
  * in the Swagger-UI for convenience.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
@@ -37,10 +37,10 @@ import org.apache.juneau.utils.*;
  * 		.license(
  * 			<jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
  * 		);
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -62,7 +62,7 @@ import org.apache.juneau.utils.*;
  * 		<js>"version"</js>: <js>"1.0.1"</js>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -71,7 +71,7 @@ import org.apache.juneau.utils.*;
 @Bean(properties="title,description,version,contact,license,termsOfService,*")
 public class Info extends SwaggerElement {
 
-	private String 
+	private String
 		title,
 		description,
 		termsOfService,
@@ -83,15 +83,15 @@ public class Info extends SwaggerElement {
 	 * Default constructor.
 	 */
 	public Info() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public Info(Info copyFrom) {
 		super(copyFrom);
-		
+
 		this.title = copyFrom.title;
 		this.description = copyFrom.description;
 		this.termsOfService = copyFrom.termsOfService;
@@ -99,22 +99,22 @@ public class Info extends SwaggerElement {
 		this.contact = copyFrom.contact == null ? null : copyFrom.contact.copy();
 		this.license = copyFrom.license == null ? null : copyFrom.license.copy();
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public Info copy() {
 		return new Info(this);
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>title</property>.
-	 * 
+	 *
 	 * <p>
 	 * The title of the application.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getTitle() {
@@ -123,11 +123,11 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>title</property>.
-	 * 
+	 *
 	 * <p>
 	 * The title of the application.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -139,7 +139,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setTitle(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -152,10 +152,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
-	 * A short description of the application. 
-	 * 
+	 * A short description of the application.
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -164,11 +164,11 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
-	 * A short description of the application. 
-	 * 
-	 * @param value 
+	 * A short description of the application.
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -181,7 +181,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -195,10 +195,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>termsOfService</property>.
-	 * 
+	 *
 	 * <p>
 	 * The Terms of Service for the API.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getTermsOfService() {
@@ -207,11 +207,11 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>termsOfService</property>.
-	 * 
+	 *
 	 * <p>
 	 * The Terms of Service for the API.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -223,7 +223,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setTermsOfService(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -236,10 +236,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>contact</property>.
-	 * 
+	 *
 	 * <p>
 	 * The contact information for the exposed API.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Contact getContact() {
@@ -248,11 +248,11 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>contact</property>.
-	 * 
+	 *
 	 * <p>
 	 * The contact information for the exposed API.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -264,8 +264,8 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setContact(Contact)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -285,10 +285,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>license</property>.
-	 * 
+	 *
 	 * <p>
 	 * The license information for the exposed API.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public License getLicense() {
@@ -297,11 +297,11 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>license</property>.
-	 * 
+	 *
 	 * <p>
 	 * The license information for the exposed API.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -313,8 +313,8 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setLicense(License)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -334,10 +334,10 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>version</property>.
-	 * 
+	 *
 	 * <p>
 	 * Provides the version of the application API (not to be confused with the specification version).
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getVersion() {
@@ -346,11 +346,11 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>version</property>.
-	 * 
+	 *
 	 * <p>
 	 * Provides the version of the application API (not to be confused with the specification version).
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -362,7 +362,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setVersion(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -376,7 +376,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the title property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the title property is not null or empty.
 	 */
 	public boolean hasTitle() {
@@ -385,7 +385,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the description property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the description property is not null or empty.
 	 */
 	public boolean hasDescription() {
@@ -394,7 +394,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the version property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the version property is not null or empty.
 	 */
 	public boolean hasVersion() {
@@ -403,7 +403,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if the termsOfService property is not null or empty.
-	 * 
+	 *
 	 * @return <jk>true</jk> if the termsOfService property is not null or empty.
 	 */
 	public boolean hasTermsOfService() {
@@ -436,12 +436,12 @@ public class Info extends SwaggerElement {
 			case "contact": return contact(value);
 			case "license": return license(value);
 			case "version": return version(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
 	}
-	
+
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = new ASet<String>()

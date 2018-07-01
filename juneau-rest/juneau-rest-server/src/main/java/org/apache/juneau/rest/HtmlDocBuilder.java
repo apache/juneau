@@ -25,18 +25,18 @@ import org.apache.juneau.utils.*;
 
 /**
  * Programmatic interface for setting properties used by the HtmlDoc serializer.
- * 
+ *
  * <p>
  * Basically just a convenience wrapper around the servlet or method level properties for setting properties defined
  * by the {@link HtmlDocSerializer} class.
- * 
+ *
  * <p>
  * This class is instantiated through the following methods:
  * <ul>
  * 	<li class='jm'>{@link RestContextBuilder#getHtmlDocBuilder()} - Set values programmatically during servlet initialization.
  * 	<li class='jm'>{@link RestResponse#getHtmlDocBuilder()} - Set values programmatically during a REST request.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
@@ -79,11 +79,11 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the HTML header section contents.
-	 * 
+	 *
 	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
 	 * to be whatever you want.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -91,7 +91,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		When a value is specified, the {@link #navlinks(Object...)} value will be ignored.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -100,7 +100,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#header() @HtmlDoc.header()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML header section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
@@ -118,17 +118,17 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the links in the HTML nav section.
-	 * 
+	 *
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
 	 * 		relative (to the servlet) or absolute URLs.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">URI resolution</a> (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
@@ -139,7 +139,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#navlinks() @HtmlDoc.navlinks()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML nav section links links.
 	 * 	<p>
@@ -156,17 +156,17 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the HTML nav section contents.
-	 * 
+	 *
 	 * <p>
 	 * The nav section of the page contains the links.
-	 * 
-	 * 
+	 *
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		When a value is specified, the {@link #navlinks(Object[])} value will be ignored.
@@ -177,7 +177,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#nav() @HtmlDoc.nav()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML nav section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
@@ -195,16 +195,16 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the HTML aside section contents.
-	 * 
+	 *
 	 * <p>
 	 * The aside section typically floats on the right side of the page.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -213,7 +213,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#aside() @HtmlDoc.aside()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML aside section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
@@ -231,16 +231,16 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the HTML footer section contents.
-	 * 
+	 *
 	 * <p>
 	 * The footer section typically floats on the bottom of the page.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -249,7 +249,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#footer() @HtmlDoc.footer()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML footer section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
@@ -267,13 +267,13 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the HTML CSS style section contents.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is CSS.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -282,7 +282,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#style() @HtmlDoc.style()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML CSS style section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
@@ -300,21 +300,21 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the CSS URL in the HTML CSS style section.
-	 * 
+	 *
 	 * <p>
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is a comma-delimited list of URLs.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The CSS URL in the HTML CSS style section.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
@@ -332,13 +332,13 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the HTML script section contents.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is Javascript.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -347,7 +347,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#script() @HtmlDoc.script()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML script section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
@@ -365,13 +365,13 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Sets the HTML head section contents.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -380,7 +380,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#head() @HtmlDoc.head()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The HTML head section contents.
 	 * 	<p>
@@ -397,16 +397,16 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#nowrap() @HtmlDoc.nowrap()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new nowrap setting.
 	 * @return This object (for method chaining).
 	 */
@@ -416,16 +416,16 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Specifies the text to display when serializing an empty array or collection.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc.noResultsMessage()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value The text to display when serializing an empty array or collection.
 	 * @return This object (for method chaining).
 	 */
@@ -435,20 +435,20 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
-	 * 
+	 *
 	 * <p>
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value The HTML page template to use to render the HTML page.
 	 * @return This object (for method chaining).
 	 */
@@ -458,20 +458,20 @@ public class HtmlDocBuilder {
 
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
-	 * 
+	 *
 	 * <p>
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a> 
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
 	 * </ul>
-	 * 
+	 *
 	 * @param value The HTML page template to use to render the HTML page.
 	 * @return This object (for method chaining).
 	 */

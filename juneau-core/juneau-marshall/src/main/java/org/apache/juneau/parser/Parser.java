@@ -29,12 +29,12 @@ import org.apache.juneau.xml.*;
 
 /**
  * Parent class for all Juneau parsers.
- * 
+ *
  * <h5 class='topic'>Valid data conversions</h5>
- * 
+ *
  * Parsers can parse any parsable POJO types, as specified in the <a class="doclink"
  * href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a>.
- * 
+ *
  * <p>
  * Some examples of conversions are shown below...
  * </p>
@@ -89,11 +89,11 @@ import org.apache.juneau.xml.*;
  * 		<td class='code'>String, StringBuilder</td>
  * 	</tr>
  * </table>
- * 
+ *
  * <p>
  * In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
  * bean context can also be passed in.
- * 
+ *
  * <p>
  * For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String}
  * objects.
@@ -102,7 +102,7 @@ import org.apache.juneau.xml.*;
  * <p class='bcode'>
  * 	Calendar c = parser.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
  * </p>
- * 
+ *
  * <p>
  * If <code>Object.<jk>class</jk></code> is specified as the target type, then the parser automatically determines the
  * data types and generates the following object types...
@@ -126,25 +126,25 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Auto-close streams.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams(boolean)}
 	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
@@ -152,16 +152,16 @@ public abstract class Parser extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.autoCloseStreams()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_autoCloseStreams</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
 	 * 	MyBean myBean = p.parse(r, MyBean.<jk>class</jk>);
-	 * 	
+	 *
 	 * 	<jsm>assertTrue</jsm>(r.isClosed());
 	 * </p>
 	 */
@@ -169,24 +169,24 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Debug output lines.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>5</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#debugOutputLines(int)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
@@ -195,14 +195,14 @@ public abstract class Parser extends BeanContext {
 	 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
 	 * 		.debugOuputLines(100)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
 	 * 		.set(<jsf>PARSER_debugOutputLines</jsf>, 100)
 	 * 		.build();
-	 * 
+	 *
 	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
 	 * 	<jk>try</jk> {
 	 * 		p.parse(r, Object.<jk>class</jk>);
@@ -215,60 +215,60 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Parser listener.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#listener(Class)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Define our parser listener.</jc>
 	 * 	<jc>// Simply captures all unknown bean property events.</jc>
 	 * 	<jk>public class</jk> MyParserListener <jk>extends</jk> ParserListener {
-	 * 
+	 *
 	 * 		<jc>// A simple property to store our events.</jc>
 	 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
-	 * 
-	 * 		<ja>@Override</ja> 
+	 *
+	 * 		<ja>@Override</ja>
 	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class&lt;T&gt; beanClass, T bean, <jk>int</jk> line, <jk>int</jk> col) {
 	 * 			<jf>events</jf>.add(propertyName + <js>","</js> + line + <js>","</js> + col);
 	 * 		}
 	 * 	}
-	 * 
+	 *
 	 * 	<jc>// Create a parser using our listener.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.listener(MyParserListener.<jk>class</jk>)
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_listener</jsf>, MyParserListener.<jk>class</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Create a session object.</jc>
 	 * 	<jc>// Needed because listeners are created per-session.</jc>
 	 * 	<jk>try</jk> (ReaderParserSession s = p.createSession()) {
-	 * 		
+	 *
 	 * 		<jc>// Parse some JSON object.</jc>
 	 * 		MyBean myBean = s.parse(<js>"{...}"</js>, MyBean.<jk>class</jk>);
-	 * 
+	 *
 	 * 		<jc>// Get the listener.</jc>
 	 * 		MyParserListener l = s.getListener(MyParserListener.<jk>class</jk>);
-	 * 
+	 *
 	 * 		<jc>// Dump the results to the console.</jc>
 	 * 		JsonSerializer.<jsf>DEFAULT_LAX</jsf>.println(l.<jf>events</jf>);
 	 * 	}
@@ -278,27 +278,27 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#strict(boolean)}
 	 * 			<li class='jm'>{@link ParserBuilder#strict()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
-	 * 
+	 *
 	 * <p>
 	 * Strict mode can mean different things for different parsers.
-	 * 
+	 *
 	 * <table class='styled'>
 	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
 	 * 	<tr>
@@ -323,7 +323,7 @@ public abstract class Parser extends BeanContext {
 	 * 		</td>
 	 * 	</tr>
 	 * </table>
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
@@ -331,13 +331,13 @@ public abstract class Parser extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.strict()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_strict</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Use it.</jc>
 	 *  	<jk>try</jk> {
 	 *  		String json = <js>"{unquotedAttr:'value'}"</js>;
@@ -351,25 +351,25 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#trimStrings(boolean)}
 	 * 			<li class='jm'>{@link ParserBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
@@ -377,13 +377,13 @@ public abstract class Parser extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimStrings()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_trimStrings</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// Use it.</jc>
 	 *  	String json = <js>"{foo:' bar '}"</js>;
 	 * 	Map&lt;String,String&gt; m = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
@@ -391,32 +391,32 @@ public abstract class Parser extends BeanContext {
 	 * </p>
 	 */
 	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
-	
+
 	/**
 	 * Configuration property:  Unbuffered.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#unbuffered(boolean)}
 	 * 			<li class='jm'>{@link ParserBuilder#unbuffered()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
-	 * 
+	 *
 	 * <p>
 	 * This is useful in cases when you want to parse the same input stream or reader multiple times
 	 * because it may contain multiple independent POJOs to parse.
 	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
@@ -424,26 +424,26 @@ public abstract class Parser extends BeanContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.unbuffered()
 	 * 		.build();
-	 * 	
+	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_unbuffered</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 * 
+	 *
 	 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
 	 * 	<jc>// It's more efficient because we don't need to recalc the session settings again. </jc>
 	 * 	ReaderParserSession s = p.createSession();
-	 * 	
+	 *
 	 * 	<jc>// Read input with multiple POJOs</jc>
 	 * 	Reader json = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
 	 * 	MyBean myBean1 = s.parse(json, MyBean.<jk>class</jk>);
 	 * 	MyBean myBean2 = s.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>	
+	 * 	<li>
 	 * 		This only allows for multi-input streams for the following parsers:
 	 * 		<ul>
 	 * 			<li class='jc'>{@link JsonParser}
@@ -456,7 +456,7 @@ public abstract class Parser extends BeanContext {
 	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
 	 */
 	public static final String PARSER_unbuffered = PREFIX + "unbuffered.b";
@@ -481,7 +481,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
@@ -507,14 +507,14 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Instantiates a new clean-slate {@link ParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> ParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link ParserBuilder} object.
 	 */
 	public static ParserBuilder create() {
@@ -528,7 +528,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 */
 	public boolean isReaderParser() {
@@ -537,11 +537,11 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Create the session object that will be passed in to the parse method.
-	 * 
+	 *
 	 * <p>
 	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
 	 * subclass of {@link ParserSession}.
-	 * 
+	 *
 	 * @param args
 	 * 	Runtime arguments.
 	 * @return The new session.
@@ -555,45 +555,45 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Parses input into the specified object type.
-	 * 
+	 *
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
-	 * 
+	 *
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
-	 * 
+	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
-	 * 
+	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input
 	 * 	The input.
@@ -635,30 +635,30 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
-	 * 
+	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 
+	 *
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = p.parse(json, String.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a bean array.</jc>
 	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
-	 * 
+	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
@@ -675,10 +675,10 @@ public abstract class Parser extends BeanContext {
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
 	 * object.
-	 * 
+	 *
 	 * <p>
 	 * This is mostly an internal method used by the framework.
-	 * 
+	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
@@ -708,10 +708,10 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified map.
-	 * 
+	 *
 	 * <p>
 	 * Reader must contain something that serializes to a map (such as text containing a JSON object).
-	 * 
+	 *
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
@@ -719,7 +719,7 @@ public abstract class Parser extends BeanContext {
 	 * 		The various character-based constructors in {@link ObjectMap} (e.g.
 	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
 	 * </ul>
-	 * 
+	 *
 	 * @param <K> The key class type.
 	 * @param <V> The value class type.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
@@ -736,7 +736,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified collection.
-	 * 
+	 *
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
@@ -744,7 +744,7 @@ public abstract class Parser extends BeanContext {
 	 * 		The various character-based constructors in {@link ObjectList} (e.g.
 	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
 	 * </ul>
-	 * 
+	 *
 	 * @param <E> The element class type.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @param c The collection being loaded.
@@ -761,18 +761,18 @@ public abstract class Parser extends BeanContext {
 	/**
 	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
 	 * argument.
-	 * 
+	 *
 	 * <p>
 	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
 	 * to the {@code Method.invoke(target, args)} method.
-	 * 
+	 *
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
 	 * </ul>
-	 * 
+	 *
 	 * @param input The input.  Subclasses can support different input types.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 * @return An array of parsed objects.
@@ -792,7 +792,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Returns the media types handled based on the values passed to the <code>consumes</code> constructor parameter.
-	 * 
+	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaType[] getMediaTypes() {
@@ -801,7 +801,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Returns the first media type handled based on the values passed to the <code>consumes</code> constructor parameter.
-	 * 
+	 *
 	 * @return The media type.
 	 */
 	public final MediaType getPrimaryMediaType() {
@@ -820,7 +820,7 @@ public abstract class Parser extends BeanContext {
 
 	/**
 	 * Returns <jk>true</jk> if this parser can handle the specified content type.
-	 * 
+	 *
 	 * @param contentType The content type to test.
 	 * @return <jk>true</jk> if this parser can handle the specified content type.
 	 */

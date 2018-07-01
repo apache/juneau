@@ -16,43 +16,43 @@ import java.io.*;
 
 /**
  * Wraps an existing {@link OutputStream} where the {@link #close()} method is a no-op.
- * 
+ *
  * <p>
  * Useful in cases where you're working with streams that should not be implicitly closed.
  */
 public final class NoCloseOutputStream extends OutputStream {
 
 	private final OutputStream os;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param os The output stream to wrap.
 	 */
 	public NoCloseOutputStream(OutputStream os) {
 		this.os = os;
 	}
-	
+
 	@Override /* OutputStream */
 	public void write(int b) throws IOException {
 		os.write(b);
 	}
-	
+
 	@Override /* OutputStream */
 	public void write(byte[] b) throws IOException {
 		os.write(b);
 	}
-	
+
 	@Override /* OutputStream */
 	public void write(byte[] b, int off, int len) throws IOException {
 		os.write(b, off, len);
 	}
-	
+
 	@Override /* OutputStream */
 	public void flush() throws IOException {
 		os.flush();
 	}
-	
+
 	@Override /* OutputStream */
 	public void close() throws IOException {
 		os.flush();

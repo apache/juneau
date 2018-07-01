@@ -29,7 +29,7 @@ public enum AnchorText {
 
 	/**
 	 * Set to the URI value.
-	 * 
+	 *
 	 * <p>
 	 * This is the same as {@link #TO_STRING} but strips off the anchor tag if present.
 	 */
@@ -42,7 +42,7 @@ public enum AnchorText {
 
 	/**
 	 * Set to the anchor of the URL.
-	 * 
+	 *
 	 * <p>
 	 * (e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
 	 */

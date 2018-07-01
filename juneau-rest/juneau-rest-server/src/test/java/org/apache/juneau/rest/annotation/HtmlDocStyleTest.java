@@ -77,7 +77,7 @@ public class HtmlDocStyleTest {
 	//=================================================================================================================
 	// Inheritance
 	//=================================================================================================================
-	
+
 	@RestResource(htmldoc=@HtmlDoc(style={"b01a","b01b"},stylesheet="b01s"))
 	public static class B extends A {
 		@RestMethod(path="/b01")

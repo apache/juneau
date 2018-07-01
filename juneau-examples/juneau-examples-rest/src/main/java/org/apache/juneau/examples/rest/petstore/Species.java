@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -23,25 +23,25 @@ import org.apache.juneau.serializer.*;
 public class Species {
 	private long id;
 	private String name;
-	
+
 	public long getId() {
 		return id;
 	}
-	
+
 	public Species id(long id) {
 		this.id = id;
 		return this;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public Species name(String name) {
 		this.name = name;
 		return this;
 	}
-	
+
 	@Example
 	public static Species example() {
 		return new Species()
@@ -59,7 +59,7 @@ public class Species {
 			return "background-color:#FDF2E9";
 		}
 	}
-	
+
 	@Override /* Object */
 	public String toString() {
 		return name;

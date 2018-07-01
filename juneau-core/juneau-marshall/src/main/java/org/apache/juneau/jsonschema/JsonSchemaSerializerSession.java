@@ -28,7 +28,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -43,7 +43,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -73,7 +73,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Returns the JSON-schema for the specified type.
-	 * 
+	 *
 	 * @param type The object type.
 	 * @return The schema for the type.
 	 * @throws Exception
@@ -81,10 +81,10 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	public ObjectMap getSchema(Type type) throws Exception {
 		return getSchema(getClassMeta(type), "root", null, false, false, null);
 	}
-	
+
 	/**
 	 * Returns the JSON-schema for the specified type.
-	 * 
+	 *
 	 * @param cm The object type.
 	 * @return The schema for the type.
 	 * @throws Exception
@@ -95,7 +95,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private ObjectMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm) throws Exception {
-		
+
 		ObjectMap out = new ObjectMap();
 
 		if (eType == null)
@@ -104,7 +104,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		ClassMeta<?> aType;			// The actual type (will be null if recursion occurs)
 		ClassMeta<?> sType;			// The serialized type
 		PojoSwap pojoSwap = eType.getPojoSwap(this);
-		
+
 		aType = push(attrName, eType, null);
 
 		sType = eType.getSerializedClassMeta(this);
@@ -113,17 +113,17 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		Object example = null, description = null;
 
 		boolean useDef = useBeanDefs && sType.isBean() && pNames == null;
-		
+
 		if (useDef) {
 			exampleAdded = false;
 			descriptionAdded = false;
 		}
-		
-		if (useDef && defs.containsKey(getBeanDefId(sType))) 
+
+		if (useDef && defs.containsKey(getBeanDefId(sType)))
 			return new ObjectMap().append("$ref", getBeanDefUri(sType));
-		
+
 		ObjectMap ds = defaultSchemas.get(sType.getInnerClass().getName());
-		if (ds != null && ds.containsKey("type")) 
+		if (ds != null && ds.containsKey("type"))
 			return out.appendAll(ds);
 
 		JsonSchemaClassMeta jscm = null;
@@ -131,7 +131,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			jscm = getClassMeta(pojoSwap.getClass()).getExtendedMeta(JsonSchemaClassMeta.class);
 		if (jscm == null)
 			jscm = sType.getExtendedMeta(JsonSchemaClassMeta.class);
-			
+
 		TypeCategory tc = null;
 
 		if (sType.isNumber()) {
@@ -188,20 +188,20 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			out.appendIf(false, true, true, "type", jsbpm.getType());
 			out.appendIf(false, true, true, "format", jsbpm.getFormat());
 		}
-		
+
 		out.appendIf(false, true, true, "type", jscm.getType());
 		out.appendIf(false, true, true, "format", jscm.getFormat());
-		
+
 		out.appendIf(false, true, true, "type", type);
 		out.appendIf(false, true, true, "format", format);
-		
+
 		if (aType != null) {
 
 			example = getExample(sType, tc, exampleAdded);
 			description = getDescription(sType, tc, descriptionAdded);
 			exampleAdded |= example != null;
 			descriptionAdded |= description != null;
-			
+
 			if (tc == BEAN) {
 				ObjectMap properties = new ObjectMap();
 				BeanMeta bm = getBeanMeta(sType.getInnerClass());
@@ -209,11 +209,11 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 					bm = new BeanMetaFiltered(bm, pNames);
 				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();
-					if (p.canRead()) 
+					if (p.canRead())
 						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), p.getProperties(), exampleAdded, descriptionAdded, p.getExtendedMeta(JsonSchemaBeanPropertyMeta.class)));
 				}
 				out.put("properties", properties);
-				
+
 			} else if (tc == COLLECTION) {
 				ClassMeta et = sType.getElementType();
 				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
@@ -225,10 +225,10 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
 					out.put("uniqueItems", true);
 				out.put("items", getSchema(et, "items", pNames, exampleAdded, descriptionAdded, null));
-				
+
 			} else if (tc == ENUM) {
 				out.put("enum", getEnums(sType));
-				
+
 			} else if (tc == MAP) {
 				ObjectMap om = getSchema(sType.getValueType(), "additionalProperties", null, exampleAdded, descriptionAdded, null);
 				if (! om.isEmpty())
@@ -251,24 +251,24 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 		if (ds != null)
 			out.appendAll(ds);
-		
+
 		if (useDef) {
 			defs.put(getBeanDefId(sType), out);
 			out = new ObjectMap().append("$ref", getBeanDefUri(sType));
 		}
-		
+
 		pop();
-		
+
 		return out;
 	}
-	
+
 	private List<String> getEnums(ClassMeta<?> cm) {
 		List<String> l = new ArrayList<>();
-		for (Enum<?> e : getEnumConstants(cm.getInnerClass())) 
+		for (Enum<?> e : getEnumConstants(cm.getInnerClass()))
 			l.add(cm.toString(e));
 		return l;
 	}
-	
+
 	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws Exception {
 		boolean canAdd = allowNestedExamples || ! exampleAdded;
 		if (canAdd && (addExamplesTo.contains(t) || addExamplesTo.contains(ANY))) {
@@ -278,17 +278,17 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		}
 		return null;
 	}
-	
+
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
 		boolean canAdd = allowNestedDescriptions || ! descriptionAdded;
 		if (canAdd && (addDescriptionsTo.contains(t) || addDescriptionsTo.contains(ANY)))
 			return sType.toString();
 		return null;
 	}
-	
+
 	/**
 	 * Returns the definition ID for the specified class.
-	 * 
+	 *
 	 * @param cm The class to get the definition ID of.
 	 * @return The definition ID for the specified class.
 	 */
@@ -298,7 +298,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Returns the definition URI for the specified class.
-	 * 
+	 *
 	 * @param cm The class to get the definition URI of.
 	 * @return The definition URI for the specified class.
 	 */
@@ -308,30 +308,30 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Returns the definition URI for the specified class.
-	 * 
+	 *
 	 * @param id The definition ID to get the definition URI of.
 	 * @return The definition URI for the specified class.
 	 */
 	public java.net.URI getBeanDefUri(String id) {
 		return beanDefMapper.getURI(id);
 	}
-	
+
 	/**
 	 * Returns the definitions that were gathered during this session.
-	 * 
+	 *
 	 * <p>
 	 * This map is modifiable and affects the map in the session.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} was not enabled.
 	 */
 	public Map<String,ObjectMap> getBeanDefs() {
 		return defs;
 	}
-	
+
 	/**
 	 * Adds a schema definition to this session.
-	 * 
+	 *
 	 * @param id The definition ID.
 	 * @param def The definition schema.
 	 * @return This object (for method chaining).
@@ -344,7 +344,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Returns the value of the {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} setting.
-	 * 
+	 *
 	 * @return The value of the {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} setting.
 	 */
 	public boolean isUseBeanDefs() {

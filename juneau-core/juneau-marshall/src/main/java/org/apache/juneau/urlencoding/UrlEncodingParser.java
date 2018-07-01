@@ -19,18 +19,18 @@ import org.apache.juneau.urlencoding.annotation.*;
 
 /**
  * Parses URL-encoded text into POJO models.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Content-Type</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
- * 
+ *
  * <p>
  * Expects parameter values to be in UON notation.
- * 
+ *
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  */
@@ -44,47 +44,47 @@ public class UrlEncodingParser extends UonParser {
 
 	/**
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams(boolean)}
 	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams()}
 	 * 			<li class='ja'>{@link UrlEncoding#expandedParams()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> String[] f1;
 	 * 		<jk>public</jk> List&lt;String&gt; f2;
 	 * 	}
-	 * 
+	 *
 	 * 	UrlEncodingParser p1 = UrlEncodingParser.<jsf>DEFAULT</jsf>;
 	 * 	UrlEncodingParser p2 = UrlEncodingParser.<jsm>create</jsm>().expandedParams().build();
-	 * 	
-	 * 	A a1 = p1.parse(<js>"f1=@(a,b)&amp;f2=@(c,d)"</js>, A.<jk>class</jk>); 
-	 * 	
-	 * 	A a2 = p2.parse(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>); 
+	 *
+	 * 	A a1 = p1.parse(<js>"f1=@(a,b)&amp;f2=@(c,d)"</js>, A.<jk>class</jk>);
+	 *
+	 * 	A a2 = p2.parse(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>);
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * This option only applies to beans.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -113,14 +113,14 @@ public class UrlEncodingParser extends UonParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public UrlEncodingParser(PropertyStore ps) {
 		super(
 			ps.builder()
 				.set(UON_decoding, true)
-				.build(), 
+				.build(),
 			"application/x-www-form-urlencoded"
 		);
 		expandedParams = getBooleanProperty(URLENC_expandedParams, false);
@@ -133,21 +133,21 @@ public class UrlEncodingParser extends UonParser {
 
 	/**
 	 * Instantiates a new clean-slate {@link UrlEncodingParserBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> UrlEncodingParserBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link UrlEncodingParserBuilder} object.
 	 */
 	public static UrlEncodingParserBuilder create() {
 		return new UrlEncodingParserBuilder();
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ public class UrlEncodingParser extends UonParser {
 	public UrlEncodingParserSession createSession(ParserSessionArgs args) {
 		return new UrlEncodingParserSession(this, args);
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

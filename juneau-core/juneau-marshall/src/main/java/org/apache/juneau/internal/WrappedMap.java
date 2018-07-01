@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Wraps an existing map inside an extensible interface so that convenience methods can be added to the subclass.
- * 
+ *
  * @param <K> The key type.
  * @param <V> The value type.
  */
@@ -26,7 +26,7 @@ public class WrappedMap<K,V> implements Map<K,V> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param inner The inner map.
 	 */
 	protected WrappedMap(Map<K,V> inner) {

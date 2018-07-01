@@ -20,16 +20,16 @@ import org.apache.juneau.*;
 
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * This class is typically the parent class of all character-based serializers.
  * <br>It has 1 abstract method to implement...
  * <ul class='spaced-list'>
  * 	<li>
  * 		{@link #doSerialize(SerializerPipe, Object)}
  * </ul>
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -42,7 +42,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -54,7 +54,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 */
 	protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		
+
 		useWhitespace = getProperty(WSERIALIZER_useWhitespace, boolean.class, ctx.useWhitespace);
 		maxIndent = getProperty(WSERIALIZER_maxIndent, int.class, ctx.maxIndent);
 		quoteChar = getProperty(WSERIALIZER_quoteChar, String.class, ""+ctx.quoteChar).charAt(0);
@@ -62,7 +62,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 
 	/**
 	 * Constructor for sessions that don't require context.
-	 * 
+	 *
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
@@ -77,7 +77,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 
 	/**
 	 * Convenience method for serializing an object to a <code>String</code>.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -88,15 +88,15 @@ public abstract class WriterSerializerSession extends SerializerSession {
 		serialize(o, w);
 		return w.toString();
 	}
-	
+
 	@Override /* SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		return serialize(o);
 	}
-	
+
 	/**
 	 * Returns the {@link WriterSerializer#WSERIALIZER_useWhitespace} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link WriterSerializer#WSERIALIZER_useWhitespace} setting value for this session.
 	 */
 	protected boolean isUseWhitespace() {
@@ -105,7 +105,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 
 	/**
 	 * Returns the {@link WriterSerializer#WSERIALIZER_maxIndent} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link WriterSerializer#WSERIALIZER_maxIndent} setting value for this session.
 	 */
 	protected int getMaxIndent() {
@@ -114,7 +114,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 
 	/**
 	 * Returns the {@link WriterSerializer#WSERIALIZER_quoteChar} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link WriterSerializer#WSERIALIZER_quoteChar} setting value for this session.
 	 */
 	protected char getQuoteChar() {

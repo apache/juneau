@@ -15,7 +15,7 @@ package org.apache.juneau.html;
 /**
  * Defines the interface for rendering the contents of an HTML page produced by the {@link HtmlDocSerializer}
  * serializer.
- * 
+ *
  * <p>
  * The HTML doc serializer produces the following document structure with the typical contents:
  * <p class='bcode'>
@@ -49,7 +49,7 @@ package org.apache.juneau.html;
  * 		&lt;/body&gt;
  * 	&lt;/html&gt;</xt>
  * </p>
- * 
+ *
  * <p>
  * This interface allows you to control how these sections get rendered.
  */
@@ -57,7 +57,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -67,7 +67,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -77,7 +77,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -87,7 +87,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -97,7 +97,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -107,7 +107,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -117,7 +117,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;article&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -127,7 +127,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -137,7 +137,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
@@ -147,7 +147,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
@@ -155,7 +155,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
@@ -164,7 +164,7 @@ public interface HtmlDocTemplate {
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code>
 	 * element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
@@ -173,7 +173,7 @@ public interface HtmlDocTemplate {
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code>
 	 * element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
@@ -182,7 +182,7 @@ public interface HtmlDocTemplate {
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code>
 	 * element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
@@ -191,7 +191,7 @@ public interface HtmlDocTemplate {
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code>
 	 * element.
-	 * 
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */

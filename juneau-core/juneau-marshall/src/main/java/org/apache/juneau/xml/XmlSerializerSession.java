@@ -29,7 +29,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -52,7 +52,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -90,7 +90,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 		return n;
 	}
-	
+
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
@@ -107,7 +107,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	/*
 	 * Add a namespace to this session.
-	 * 
+	 *
 	 * @param ns The namespace being added.
 	 */
 	private void addNamespace(Namespace ns) {
@@ -126,7 +126,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns the {@link XmlSerializer#XML_addBeanTypes} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link XmlSerializer#XML_addBeanTypes} setting value for this session.
 	 */
 	@Override /* SerializerSession */
@@ -136,11 +136,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Returns <jk>true</jk> if we're serializing HTML.
-	 * 
+	 *
 	 * <p>
 	 * The difference in behavior is how empty non-void elements are handled.
 	 * The XML serializer will produce a collapsed tag, whereas the HTML serializer will produce a start and end tag.
-	 * 
+	 *
 	 * @return <jk>true</jk> if we're generating HTML.
 	 */
 	protected boolean isHtmlMode() {
@@ -149,7 +149,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Converts the specified output target object to an {@link XmlWriter}.
-	 * 
+	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link XmlWriter}.
 	 * @throws Exception
@@ -172,7 +172,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Recursively searches for the XML namespaces on the specified POJO and adds them to the serializer context object.
-	 * 
+	 *
 	 * @param o The POJO to check.
 	 * @throws SerializeException
 	 */
@@ -256,7 +256,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Workhorse method.
-	 * 
+	 *
 	 * @param out The writer to send the output to.
 	 * @param o The object to serialize.
 	 * @param eType The expected type if this is a bean property value being serialized.
@@ -753,7 +753,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		CR_MIXED,     // Mixed content...don't add whitespace.
 		CR_ELEMENTS   // Elements...use normal whitespace rules.
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>defaultNamespace</property>.
 	 *

@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Represents an OSGi-style version range like <js>"1.2"</js> or <js>"[1.0,2.0)"</js>.
- * 
+ *
  * <p>
  * The range can be any of the following formats:
  * <ul>
@@ -32,7 +32,7 @@ public class VersionRange {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param range The range string to parse.
 	 */
 	public VersionRange(String range) {
@@ -59,7 +59,7 @@ public class VersionRange {
 
 	/**
 	 * Returns <jk>true</jk> if the specified version string matches this version range.
-	 * 
+	 *
 	 * @param v The version string (e.g. <js>"1.2.3"</js>)
 	 * @return <jk>true</jk> if the specified version string matches this version range.
 	 */

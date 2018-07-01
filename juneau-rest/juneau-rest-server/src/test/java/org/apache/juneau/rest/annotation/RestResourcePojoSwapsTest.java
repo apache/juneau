@@ -83,7 +83,7 @@ public class RestResourcePojoSwapsTest {
 			return a;
 		}
 	}
-	
+
 	@RestResource(pojoSwaps={SwapA1.class}, serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
 	public static class A01_Parent {}
 
@@ -109,7 +109,7 @@ public class RestResourcePojoSwapsTest {
 		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
 		public A a02b(@Body A a) {
 			return a; // Should return "A3-1".
-		} 
+		}
 		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
 		public A a02c(@Path("a") A a) {
 			return a; // Should return "A3-1".

@@ -20,10 +20,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in the various default styles.
- * 
+ *
  * <p>
  * The variable it resolves is <js>"$W{ThemeMenuItem}"</js>.
- * 
+ *
  * <p>
  * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
  * a drop-down menu item for rendering all other supported content types in plain text:
@@ -47,7 +47,7 @@ import org.apache.juneau.utils.*;
  * 	)
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>

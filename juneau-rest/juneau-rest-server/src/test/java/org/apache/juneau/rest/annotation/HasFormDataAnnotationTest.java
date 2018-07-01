@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -26,7 +26,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings("javadoc")
 public class HasFormDataAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Simple tests
 	//=================================================================================================================
@@ -41,7 +41,7 @@ public class HasFormDataAnnotationTest {
 
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_post() throws Exception {
 		a.post("", "p1=p1&p2=2").execute().assertBody("p1=[true,true],p2=[true,true]");

@@ -22,18 +22,18 @@ import org.apache.juneau.xml.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link SoapXmlSerializer}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
 public class SoapXmlSerializerSession extends XmlSerializerSession {
-	
-	private final String soapAction; 
+
+	private final String soapAction;
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -45,7 +45,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	 */
 	public SoapXmlSerializerSession(SoapXmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		
+
 		soapAction = getProperty(SOAPXML_SOAPAction, String.class, ctx.soapAction);
 	}
 

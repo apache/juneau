@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -16,37 +16,37 @@ import java.util.*;
 
 /**
  * Represent the basic interface for an HTTP response.
- * 
+ *
  * <p>
  * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
  * class to send and receive mocked requests using the <code>MockRest</code> interface.
  */
 public interface MockHttpResponse {
-	
+
 	/**
 	 * Returns the status code of the response.
-	 * 
+	 *
 	 * @return The status code of the response.
 	 */
 	int getStatus();
-	
+
 	/**
 	 * Returns the status message of the response.
-	 *  
+	 *
 	 * @return The status message of the response.
 	 */
 	String getMessage();
-	
+
 	/**
 	 * Returns the headers of the response.
-	 *  
+	 *
 	 * @return The headers of the response.
 	 */
 	Map<String,String[]> getHeaders();
-	
+
 	/**
 	 * Returns the body of the response.
-	 * 
+	 *
 	 * @return The body of the response.
 	 */
 	byte[] getBody();

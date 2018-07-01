@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -29,7 +29,7 @@ import org.junit.runners.*;
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResponseHeaderAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -44,7 +44,7 @@ public class ResponseHeaderAnnotationTest {
 	//=================================================================================================================
 	// @ResponseHeader on POJO
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class SA {
 
@@ -101,7 +101,7 @@ public class ResponseHeaderAnnotationTest {
 		@RestMethod(name=GET,path="/value")
 		public void sa08(SA08 h) {}
 	}
-	
+
 	@Test
 	public void sa01_ResponseHeader_onPojo_basic() throws Exception {
 		HeaderInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getResponse(200).getHeader("H");
@@ -145,7 +145,7 @@ public class ResponseHeaderAnnotationTest {
 	//=================================================================================================================
 	// @ResponseHeader on parameter
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class SB {
 
@@ -157,7 +157,7 @@ public class ResponseHeaderAnnotationTest {
 				description="a",
 				type="string"
 			) SB01 h) {}
-		
+
 		public static class SB02 {}
 		@RestMethod(name=GET,path="/api")
 		public void sb02(
@@ -198,7 +198,7 @@ public class ResponseHeaderAnnotationTest {
 		@RestMethod(name=GET,path="/value")
 		public void sb08(@ResponseHeader("H") SB08 h) {}
 	}
-	
+
 	@Test
 	public void sb01_ResponseHeader_onPojo_basic() throws Exception {
 		HeaderInfo x = getSwagger(new SB()).getPaths().get("/basic").get("get").getResponse(200).getHeader("H");

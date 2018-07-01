@@ -29,7 +29,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Serializer session that lives for the duration of a single use of {@link Serializer}.
- * 
+ *
  * <p>
  * Used by serializers for the following purposes:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.transform.*;
  * 	<li>
  * 		Allowing serializer properties to be overridden on method calls.
  * </ul>
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
@@ -79,7 +79,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -96,7 +96,7 @@ public abstract class SerializerSession extends BeanSession {
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
-		
+
 		maxDepth = getProperty(SERIALIZER_maxDepth, int.class, ctx.maxDepth);
 		initialDepth = getProperty(SERIALIZER_initialDepth, int.class, ctx.initialDepth);
 		detectRecursions = getProperty(SERIALIZER_detectRecursions, boolean.class, ctx.detectRecursions);
@@ -127,7 +127,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -137,7 +137,7 @@ public abstract class SerializerSession extends BeanSession {
 	protected SerializerSession(SerializerSessionArgs args) {
 		this(Serializer.DEFAULT, args);
 	}
-	
+
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
@@ -161,7 +161,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
 	 * a stream or reader.
-	 * 
+	 *
 	 * @param output
 	 * 	The output location.
 	 * 	<br>For character-based serializers, this can be any of the following types:
@@ -190,10 +190,10 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
-	 * 
+	 *
 	 * <p>
 	 * This method should NOT close the context object.
-	 * 
+	 *
 	 * @param pipe Where to send the output from the serializer.
 	 * @param o The object to serialize.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
@@ -203,7 +203,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Shortcut method for serializing objects directly to either a <code>String</code> or <code><jk>byte</jk>[]</code>
 	 * depending on the serializer type.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
@@ -215,7 +215,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Shortcut method for serializing an object to a String.
-	 * 
+	 *
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
@@ -227,7 +227,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 */
 	public abstract boolean isWriterSerializer();
@@ -239,7 +239,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Serialize the specified object using the specified session.
-	 * 
+	 *
 	 * @param out Where to send the output from the serializer.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -261,7 +261,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Sets the current bean property being serialized for proper error messages.
-	 * 
+	 *
 	 * @param currentProperty The current property being serialized.
 	 */
 	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
@@ -270,7 +270,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Sets the current class being serialized for proper error messages.
-	 * 
+	 *
 	 * @param currentClass The current class being serialized.
 	 */
 	protected final void setCurrentClass(ClassMeta<?> currentClass) {
@@ -279,11 +279,11 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the Java method that invoked this serializer.
-	 * 
+	 *
 	 * <p>
 	 * When using the REST API, this is the Java method invoked by the REST call.
 	 * Can be used to access annotations defined on the method or class.
-	 * 
+	 *
 	 * @return The Java method that invoked this serializer.
 	*/
 	protected final Method getJavaMethod() {
@@ -292,7 +292,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the URI resolver.
-	 * 
+	 *
 	 * @return The URI resolver.
 	 */
 	protected final UriResolver getUriResolver() {
@@ -301,7 +301,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
 	 */
 	protected final int getMaxDepth() {
@@ -310,7 +310,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
 	 */
 	protected final int getInitialDepth() {
@@ -319,7 +319,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
 	 */
 	protected final boolean isDetectRecursions() {
@@ -328,7 +328,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
 	 */
 	protected final boolean isIgnoreRecursions() {
@@ -337,7 +337,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
 	 */
 	protected boolean isAddBeanTypes() {
@@ -346,7 +346,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_addRootType} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_addRootType} setting value for this session.
 	 */
 	protected boolean isAddRootType() {
@@ -355,7 +355,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
 	 */
 	protected final boolean isTrimNulls() {
@@ -364,7 +364,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
 	 */
 	protected final boolean isTrimEmptyCollections() {
@@ -373,7 +373,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
 	 */
 	protected final boolean isTrimEmptyMaps() {
@@ -382,7 +382,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
 	 */
 	protected boolean isTrimStrings() {
@@ -391,7 +391,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
 	 */
 	protected final boolean isSortCollections() {
@@ -400,7 +400,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
-	 * 
+	 *
 	 * @return The {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
 	 */
 	protected final boolean isSortMaps() {
@@ -409,7 +409,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Push the specified object onto the stack.
-	 * 
+	 *
 	 * @param attrName The attribute name.
 	 * @param o The current object being serialized.
 	 * @param eType The expected class type.
@@ -444,7 +444,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Returns <jk>true</jk> if {@link Serializer#SERIALIZER_detectRecursions} is enabled, and the specified
 	 * object is already higher up in the serialization chain.
-	 * 
+	 *
 	 * @param attrName The bean property attribute name, or some other identifier.
 	 * @param o The object to check for recursion.
 	 * @param cm The metadata on the object class.
@@ -480,7 +480,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Specialized warning when an exception is thrown while executing a bean getter.
-	 * 
+	 *
 	 * @param p The bean map entry representing the bean property.
 	 * @param t The throwable that the bean getter threw.
 	 */
@@ -494,7 +494,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Logs a warning message.
-	 * 
+	 *
 	 * @param t The throwable that was thrown (if there was one).
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
@@ -507,7 +507,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Trims the specified string if {@link SerializerSession#isTrimStrings()} returns <jk>true</jk>.
-	 * 
+	 *
 	 * @param o The input string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
@@ -522,7 +522,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Generalize the specified object if a POJO swap is associated with it.
-	 * 
+	 *
 	 * @param o The object to generalize.
 	 * @param type The type of object.
 	 * @return The generalized object, or <jk>null</jk> if the object is <jk>null</jk>.
@@ -546,7 +546,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns <jk>true</jk> if the specified value should not be serialized.
-	 * 
+	 *
 	 * @param cm The class type of the object being serialized.
 	 * @param attrName The bean attribute name, or <jk>null</jk> if this isn't a bean attribute.
 	 * @param value The object being serialized.
@@ -590,7 +590,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Sorts the specified map if {@link SerializerSession#isSortMaps()} returns <jk>true</jk>.
-	 * 
+	 *
 	 * @param m The map being sorted.
 	 * @return A new sorted {@link TreeMap}.
 	 */
@@ -602,7 +602,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Sorts the specified collection if {@link SerializerSession#isSortCollections()} returns <jk>true</jk>.
-	 * 
+	 *
 	 * @param c The collection being sorted.
 	 * @return A new sorted {@link TreeSet}.
 	 */
@@ -614,15 +614,15 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Converts the contents of the specified object array to a list.
-	 * 
+	 *
 	 * <p>
 	 * Works on both object and primitive arrays.
-	 * 
+	 *
 	 * <p>
 	 * In the case of multi-dimensional arrays, the outgoing list will contain elements of type n-1 dimension.
 	 * i.e. if {@code type} is <code><jk>int</jk>[][]</code> then {@code list} will have entries of type
 	 * <code><jk>int</jk>[]</code>.
-	 * 
+	 *
 	 * @param type The type of array.
 	 * @param array The array being converted.
 	 * @return The array as a list.
@@ -641,7 +641,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Converts a String to an absolute URI based on the {@link UriContext} on this session.
-	 * 
+	 *
 	 * @param uri
 	 * 	The input URI.
 	 * 	Can be any of the following:
@@ -672,10 +672,10 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Opposite of {@link #resolveUri(Object)}.
-	 * 
+	 *
 	 * <p>
 	 * Converts the URI to a value relative to the specified <code>relativeTo</code> parameter.
-	 * 
+	 *
 	 * <p>
 	 * Both parameters can be any of the following:
 	 * <ul>
@@ -683,7 +683,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * 	<li>{@link java.net.URL}
 	 * 	<li>{@link CharSequence}
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * Both URIs can be any of the following forms:
 	 * <ul>
@@ -699,7 +699,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * 	<li><js>"foo"</js> - Path-info-relative URI.
 	 * 	<li><js>""</js> - Path-info URI.
 	 * </ul>
-	 * 
+	 *
 	 * @param relativeTo The URI to relativize against.
 	 * @param uri The URI to relativize.
 	 * @return The relativized URI.
@@ -710,14 +710,14 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Converts the specified object to a <code>String</code>.
-	 * 
+	 *
 	 * <p>
 	 * Also has the following effects:
 	 * <ul>
 	 * 	<li><code>Class</code> object is converted to a readable name.  See {@link ClassUtils#getReadableClassName(Class)}.
 	 * 	<li>Whitespace is trimmed if the trim-strings setting is enabled.
 	 * </ul>
-	 * 
+	 *
 	 * @param o The object to convert to a <code>String</code>.
 	 * @return The object converted to a String, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
@@ -726,7 +726,7 @@ public abstract class SerializerSession extends BeanSession {
 			return null;
 		if (o.getClass() == Class.class)
 			return getReadableClassName((Class<?>)o);
-		if (o.getClass().isEnum()) 
+		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
 		String s = o.toString();
 		if (trimStrings)
@@ -776,7 +776,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.
-	 * 
+	 *
 	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
 	 */
 	protected final ObjectMap getLastLocation() {
@@ -792,7 +792,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Create a "_type" property that contains the dictionary name of the bean.
-	 * 
+	 *
 	 * @param m The bean map to create a class property on.
 	 * @param typeName The type name of the bean.
 	 * @return A new bean property value.
@@ -804,7 +804,7 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Resolves the dictionary name for the actual type.
-	 * 
+	 *
 	 * @param eType The expected type of the bean property.
 	 * @param aType The actual type of the bean property.
 	 * @param pMeta The current bean property being serialized.
@@ -855,12 +855,12 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the parser-side expected type for the object.
-	 * 
+	 *
 	 * <p>
 	 * The return value depends on the {@link Serializer#SERIALIZER_addRootType} setting.
 	 * When disabled, the parser already knows the Java POJO type being parsed, so there is
 	 * no reason to add <js>"_type"</js> attributes to the root-level object.
-	 * 
+	 *
 	 * @param o The object to get the expected type on.
 	 * @return The expected type.
 	 */
@@ -870,14 +870,14 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Optional method that specifies HTTP request headers for this serializer.
-	 * 
+	 *
 	 * <p>
 	 * For example, {@link SoapXmlSerializer} needs to set a <code>SOAPAction</code> header.
-	 * 
+	 *
 	 * <p>
 	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
 	 * or client).
-	 * 
+	 *
 	 * @return
 	 * 	The HTTP headers to set on HTTP requests.
 	 * 	Never <jk>null</jk>.
@@ -885,11 +885,11 @@ public abstract class SerializerSession extends BeanSession {
 	public Map<String,String> getResponseHeaders() {
 		return Collections.emptyMap();
 	}
-	
-	
+
+
 	/**
 	 * Returns the listener associated with this session.
-	 * 
+	 *
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
 	public SerializerListener getListener() {
@@ -898,8 +898,8 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the listener associated with this session.
-	 * 
-	 * @param c The listener class to cast to. 
+	 *
+	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
 	@SuppressWarnings("unchecked")

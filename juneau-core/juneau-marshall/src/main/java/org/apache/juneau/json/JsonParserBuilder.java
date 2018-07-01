@@ -34,7 +34,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public JsonParserBuilder(PropertyStore ps) {
@@ -53,17 +53,17 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Configuration property:  Validate end.
-	 * 
+	 *
 	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in 
+	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -71,18 +71,18 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	public JsonParserBuilder validateEnd(boolean value) {
 		return set(JSON_validateEnd, value);
 	}
-	
+
 	/**
 	 * Configuration property:  Validate end.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonParserBuilder validateEnd() {
@@ -472,7 +472,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public JsonParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -490,7 +490,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public JsonParserBuilder set(String name, Object value) {
 		super.set(name, value);

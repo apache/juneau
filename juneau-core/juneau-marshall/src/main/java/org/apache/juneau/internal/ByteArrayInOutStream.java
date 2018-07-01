@@ -21,7 +21,7 @@ public class ByteArrayInOutStream extends ByteArrayOutputStream {
 
 	/**
 	 * Creates a new input stream from this object.
-	 * 
+	 *
 	 * @return A new input stream from this object.
 	 */
 	public ByteArrayInputStream getInputStream() {

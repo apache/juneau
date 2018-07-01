@@ -24,7 +24,7 @@ public final class ParserMatch {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param mediaType The media type of the match.
 	 * @param parser The parser that matched.
 	 */
@@ -35,7 +35,7 @@ public final class ParserMatch {
 
 	/**
 	 * Returns the media type of the parser that matched the HTTP <code>Content-Type</code> header value.
-	 * 
+	 *
 	 * @return The media type of the match.
 	 */
 	public MediaType getMediaType() {
@@ -44,7 +44,7 @@ public final class ParserMatch {
 
 	/**
 	 * Returns the parser that matched the HTTP <code>Content-Type</code> header value.
-	 * 
+	 *
 	 * @return The parser of the match.
 	 */
 	public Parser getParser() {

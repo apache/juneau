@@ -32,7 +32,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public CsvSerializerBuilder(PropertyStore ps) {
@@ -545,7 +545,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

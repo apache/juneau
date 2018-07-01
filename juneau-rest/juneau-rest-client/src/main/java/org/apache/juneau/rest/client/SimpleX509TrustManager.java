@@ -26,7 +26,7 @@ public final class SimpleX509TrustManager implements X509TrustManager {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param lax If <jk>true</jk>, allow self-signed and expired certificates.
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException

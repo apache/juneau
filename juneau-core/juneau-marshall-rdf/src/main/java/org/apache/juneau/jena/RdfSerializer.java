@@ -24,9 +24,9 @@ import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJOs to RDF.
- * 
+ *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- * 
+ *
  * The following direct subclasses are provided for language-specific serializers:
  * <ul>
  * 	<li>{@link RdfSerializer.Xml} - RDF/XML.
@@ -35,7 +35,7 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link RdfSerializer.Turtle} - TURTLE.
  * 	<li>{@link RdfSerializer.N3} - N3.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.jena &gt; RDF Overview</a>
@@ -43,7 +43,7 @@ import org.apache.juneau.xml.*;
  */
 public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
-	private static final Namespace 
+	private static final Namespace
 		DEFAULT_JUNEAU_NS = Namespace.create("j", "http://www.apache.org/juneau/"),
 		DEFAULT_JUNEAUBP_NS = Namespace.create("jp", "http://www.apache.org/juneaubp/");
 
@@ -55,24 +55,24 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred 
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 * 
+	 *
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -81,14 +81,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addLiteralTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#addLiteralTypes(boolean)}
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#addLiteralTypes()}
@@ -99,76 +99,76 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addRootProperty.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#addRootProperty(boolean)}
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#addRootProperty()}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * to identify the root node in the graph.
 	 * <br>This helps locate the root node during parsing.
-	 * 
+	 *
 	 * <p>
-	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
+	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 */
 	public static final String RDF_addRootProperty = PREFIX + "addRootProperty.b";
 
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.autoDetectNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#autoDetectNamespaces(boolean)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Detect namespace usage before serialization.
-	 * 
+	 *
 	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
+	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
 	 */
 	public static final String RDF_autoDetectNamespaces = PREFIX + "autoDetectNamespaces.b";
 
 	/**
 	 * Configuration property:  Default namespaces.
-	 * 
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.namespaces.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code> (serialized {@link Namespace} objects)
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b> 
+	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Rdf#namespace()}
 	 * 		</ul>
-	 * 	<li><b>Methods:</b> 
+	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#namespaces(Namespace...)}
 	 * 		</ul>
 	 * </ul>
-	 * 
+	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -205,14 +205,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Xml(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_RDF_XML)
-					.build(), 
+					.build(),
 				"text/xml+rdf", "text/xml+rdf,text/xml+rdf+abbrev;q=0.9"
 			);
 		}
@@ -223,14 +223,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public XmlAbbrev(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_RDF_XML_ABBREV)
-					.build(), 
+					.build(),
 				"text/xml+rdf", "text/xml+rdf+abbrev,text/xml+rdf;q=0.9"
 			);
 		}
@@ -241,14 +241,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public NTriple(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_NTRIPLE)
-					.build(), 
+					.build(),
 				"text/n-triple", null
 			);
 		}
@@ -259,14 +259,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Turtle(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_TURTLE)
-					.build(), 
+					.build(),
 				"text/turtle", null
 			);
 		}
@@ -277,14 +277,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public N3(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_N3)
-					.build(), 
+					.build(),
 				"text/n3", null
 			);
 		}
@@ -311,7 +311,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
@@ -349,24 +349,24 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
 		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
-		
+
 		Map<String,Object> m = new LinkedHashMap<>();
-		for (String k : getPropertyKeys("RdfCommon")) 
+		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
 				m.put(k.substring(5), getProperty(k));
 		jenaSettings = unmodifiableMap(m);
 	}
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
 	public RdfSerializer(PropertyStore ps) {
 		this(ps, "text/xml+rdf", null);
 	}
-	
+
 
 	@Override /* Context */
 	public RdfSerializerBuilder builder() {
@@ -375,14 +375,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 	/**
 	 * Instantiates a new clean-slate {@link RdfSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> RdfSerializerBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link RdfSerializerBuilder} object.
 	 */
 	public static RdfSerializerBuilder create() {
@@ -393,7 +393,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new RdfSerializerSession(this, args);
 	}
-	
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

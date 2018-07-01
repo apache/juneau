@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
 	messages="nls/AddressBookResource",
 
 	htmldoc=@HtmlDoc(
-		
+
 		// Widgets for $W variables.
 		widgets={
 			PoweredByJuneau.class,
@@ -66,7 +66,7 @@ import org.apache.juneau.utils.*;
 			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/$R{servletClassSimple}.java"
 		},
-		
+
 		// Arbitrary HTML message on the left side of the page.
 		aside={
 			"<div style='max-width:400px;min-width:200px'>",
@@ -79,14 +79,14 @@ import org.apache.juneau.utils.*;
 			"	</ul>",
 			"</div>"
 		},
-		
+
 		// Juneau icon added to footer.
 		footer="$W{PoweredByJuneau}"
 	),
 
 	// Allow INIT as a method parameter.
 	allowedMethodParams="*",
-	
+
 	// Properties that get applied to all serializers and parsers.
 	properties={
 
@@ -98,7 +98,7 @@ import org.apache.juneau.utils.*;
 
 		// Add namespace URIs to root node.
 		@Property(name=XML_addNamespaceUrisToRoot, value="true"),
-		
+
 		// Make RDF/XML readable.
 		@Property(name=RDF_rdfxml_tab, value="5"),
 

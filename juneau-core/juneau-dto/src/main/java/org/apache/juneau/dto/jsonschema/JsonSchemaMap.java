@@ -22,7 +22,7 @@ import org.apache.juneau.json.*;
 
 /**
  * A container for retrieving JSON {@link JsonSchema} objects by URI.
- * 
+ *
  * <p>
  * Subclasses must implement one of the following methods to load schemas from external sources:
  * <ul class='spaced-list'>
@@ -31,7 +31,7 @@ import org.apache.juneau.json.*;
  * 	<li>
  * 		{@link #load(URI)} - If you want control over construction of {@link JsonSchema} objects.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
@@ -43,17 +43,17 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 
 	/**
 	 * Return the {@link JsonSchema} object at the specified URI.
-	 * 
+	 *
 	 * <p>
 	 * If this schema object has not been loaded yet, calls {@link #load(URI)}.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param uri The URI of the schema to retrieve.
 	 * @return The JsonSchema, or <jk>null</jk> if schema was not located and could not be loaded.
 	 */
@@ -76,10 +76,10 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 
 	/**
 	 * Convenience method for pre-populating this map with the specified schemas.
-	 * 
+	 *
 	 * <p>
 	 * The schemas passed in through this method MUST have their ID properties set.
-	 * 
+	 *
 	 * @param schemas The set of schemas to add to this map.
 	 * @return This object (for method chaining).
 	 * @throws RuntimeException If one or more schema objects did not have their ID property set.
@@ -96,15 +96,15 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 
 	/**
 	 * Subclasses must implement either this method or {@link #getReader(URI)} to load the schema with the specified URI.
-	 * 
+	 *
 	 * <p>
 	 * It's up to the implementer to decide where these come from.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation calls {@link #getReader(URI)} and parses the schema document.
 	 * If {@link #getReader(URI)} returns <jk>null</jk>, this method returns <jk>null</jk> indicating this is an
 	 * unreachable document.
-	 * 
+	 *
 	 * @param uri The URI to load the schema from.
 	 * @return The parsed schema.
 	 */
@@ -120,13 +120,13 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 
 	/**
 	 * Subclasses must implement either this method or {@link #load(URI)} to load the schema with the specified URI.
-	 * 
+	 *
 	 * <p>
 	 * It's up to the implementer to decide where these come from.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation returns <jk>null</jk>.
-	 * 
+	 *
 	 * @param uri The URI to connect to and retrieve the contents.
 	 * @return The reader from reading the specified URI.
 	 */

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -33,7 +33,7 @@ import org.junit.runners.*;
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FormDataAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -58,7 +58,7 @@ public class FormDataAnnotationTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01() throws Exception {
 		a.post("", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1],p2=[2,2,2]");
@@ -74,7 +74,7 @@ public class FormDataAnnotationTest {
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
 		a.post("", "p1="+x+"&p2=1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
-	
+
 	//=================================================================================================================
 	// UON parameters
 	//=================================================================================================================
@@ -93,7 +93,7 @@ public class FormDataAnnotationTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01() throws Exception {
 		b.post("/post1", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
@@ -104,7 +104,7 @@ public class FormDataAnnotationTest {
 		b.post("/post2", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
 		b.post("/post2", "p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,'p1','p1']");
 	}
-	
+
 	//=================================================================================================================
 	// Default values.
 	//=================================================================================================================
@@ -165,11 +165,11 @@ public class FormDataAnnotationTest {
 		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
 		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
 	}
-	
+
 	//=================================================================================================================
 	// @FormData on POJO
 	//=================================================================================================================
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ public class FormDataAnnotationTest {
 		}
 		@RestMethod(name=GET,path="/api")
 		public void sa02(SA02 f) {}
-		
+
 		@FormData(
 			name="F",
 			api={
@@ -215,13 +215,13 @@ public class FormDataAnnotationTest {
 		}
 		@RestMethod(name=GET,path="/mixed")
 		public void sa03(SA03 f) {}
-		
+
 		@FormData("F")
 		public static class SA04 {}
 		@RestMethod(name=GET,path="/value")
 		public void sa04(SA04 f) {}
 	}
-	
+
 	@Test
 	public void sa01_FormData_onPojo_basic() throws Exception {
 		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("formData", "F");
@@ -280,7 +280,7 @@ public class FormDataAnnotationTest {
 		@RestMethod(name=GET,path="/autoDetectStringObject")
 		public void sb04(SB04 f) {}
 	}
-	
+
 	@Test
 	public void sb01_FormData_onPojo_value() throws Exception {
 		ParameterInfo x = getSwagger(new SB()).getPaths().get("/value").get("get").getParameter("formData", "F");
@@ -301,7 +301,7 @@ public class FormDataAnnotationTest {
 		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("formData", "F");
 		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
@@ -316,13 +316,13 @@ public class FormDataAnnotationTest {
 		@RestMethod(name=GET,path="/example")
 		public void sc01(SC01 f) {}
 	}
-	
+
 	@Test
 	public void sc01_FormData_onPojo_example() throws Exception {
 		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("formData", "F");
 		assertObjectEquals("{f1:'a'}", x.getExample());
 	}
-	
+
 	//=================================================================================================================
 	// @FormData on parameter
 	//=================================================================================================================
@@ -351,7 +351,7 @@ public class FormDataAnnotationTest {
 					"type:'string'",
 				}
 			) String f) {}
-		
+
 		@RestMethod(name=GET,path="/mixed")
 		public void ta03(
 			@FormData(
@@ -398,7 +398,7 @@ public class FormDataAnnotationTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@RestResource
 	public static class TB {
 
@@ -469,7 +469,7 @@ public class FormDataAnnotationTest {
 		@RestMethod(name=GET,path="/example")
 		public void tc01(@FormData(name="F", example="{f1:'a'}") String f) {}
 	}
-	
+
 	@Test
 	public void tc01_FormData_onParameter_example() throws Exception {
 		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("formData", "F");

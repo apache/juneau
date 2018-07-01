@@ -18,10 +18,10 @@ import java.util.logging.*;
 
 /**
  * Logging utility class.
- * 
+ *
  * <p>
  * Disables logging entirely.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; juneau-rest-server &gt; Logging and Error Handling</a>
@@ -31,11 +31,11 @@ public class NoOpRestLogger extends BasicRestLogger {
 
 	/**
 	 * Log a message to the logger.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method if they wish to log messages using a library other than Java Logging
 	 * (e.g. Apache Commons Logging).
-	 * 
+	 *
 	 * @param level The log level.
 	 * @param cause The cause.
 	 * @param msg The message to log.

@@ -20,13 +20,13 @@ import java.lang.annotation.*;
 /**
  * Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
  * URL-encoded form posts.
- * 
+ *
  * <p>
  * Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
  * of URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
  * <code>RestRequest.getBody()</code> method for <code>application/x-www-form-urlencoded POST</code> calls.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
@@ -34,7 +34,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- * 
+ *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -44,7 +44,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Query">Overview &gt; juneau-rest-server &gt; @Query</a>
@@ -58,9 +58,9 @@ public @interface HasQuery {
 
 	/**
 	 * URL query parameter name.
-	 * 
+	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -71,10 +71,10 @@ public @interface HasQuery {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 * 
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a query entry:
 	 * <p class='bcode w800'>

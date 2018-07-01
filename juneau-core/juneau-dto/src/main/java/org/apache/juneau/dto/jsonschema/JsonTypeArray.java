@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Represents a list of {@link JsonType} objects.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
@@ -33,7 +33,7 @@ public final class JsonTypeArray extends LinkedList<JsonType> {
 
 	/**
 	 * Constructor with predefined types to add to this list.
-	 * 
+	 *
 	 * @param types The list of types to add to the list.
 	 */
 	public JsonTypeArray(JsonType...types) {
@@ -42,7 +42,7 @@ public final class JsonTypeArray extends LinkedList<JsonType> {
 
 	/**
 	 * Convenience method for adding one or more {@link JsonType} objects to this array.
-	 * 
+	 *
 	 * @param types The {@link JsonType} objects to add to this array.
 	 * @return This object (for method chaining).
 	 */

@@ -33,7 +33,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param properties
 	 * 	Session-level properties.
 	 * 	<br>These override context-level properties.
@@ -58,11 +58,11 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 		this.javaMethod = javaMethod;
 		this.outer = outer;
 	}
-	
-	
+
+
 	/**
 	 * The java method that called this serializer, usually the method in a REST servlet.
-	 * 
+	 *
 	 * @param javaMethod
 	 * 	The java method that called this serializer, usually the method in a REST servlet.
 	 * 	<br>Can be <jk>null</jk>.
@@ -75,7 +75,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 
 	/**
 	 * 	The outer object for instantiating top-level non-static inner classes.
-	 * 
+	 *
 	 * @param outer
 	 * 	The outer object for instantiating top-level non-static inner classes.
 	 * @return This object (for method chaining).
@@ -90,19 +90,19 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 		super.locale(locale);
 		return this;
 	}
-	
+
 	@Override /* BeanSessionArgs */
 	public ParserSessionArgs timeZone(TimeZone timeZone) {
 		super.timeZone(timeZone);
 		return this;
 	}
-	
+
 	@Override /* BeanSessionArgs */
 	public ParserSessionArgs mediaType(MediaType mediaType) {
 		super.mediaType(mediaType);
 		return this;
 	}
-	
+
 	@Override /* SessionArgs */
 	public ParserSessionArgs properties(ObjectMap properties) {
 		super.properties(properties);

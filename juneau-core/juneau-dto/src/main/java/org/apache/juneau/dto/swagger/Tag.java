@@ -22,20 +22,20 @@ import org.apache.juneau.utils.*;
 
 /**
  * Allows adding meta data to a single tag that is used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a>.
- * 
+ *
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Tag x = <jsm>tag</jsm>()
  * 		.name(<js>"pet"</js>)
  * 		.description(<js>"Pets operations"</js>)
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
  * 		<js>"description"</js>: <js>"Pets operations"</js>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -55,33 +55,33 @@ import org.apache.juneau.utils.*;
 @Bean(properties="name,description,externalDocs,*")
 public class Tag extends SwaggerElement {
 
-	private String 
+	private String
 		name,
 		description;
 	private ExternalDocumentation externalDocs;
-	
+
 	/**
 	 * Default constructor.
 	 */
 	public Tag() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public Tag(Tag copyFrom) {
 		super(copyFrom);
-		
+
 		this.name = copyFrom.name;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public Tag copy() {
 		return new Tag(this);
@@ -89,10 +89,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
-	 * 
+	 *
 	 * <p>
 	 * The name of the tag.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
@@ -101,11 +101,11 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
-	 * 
+	 *
 	 * <p>
 	 * The name of the tag.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
@@ -117,7 +117,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setName(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -130,10 +130,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short description for the tag.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -142,10 +142,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
+	 *
 	 * <p>
 	 * A short description for the tag.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
@@ -159,7 +159,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -172,10 +172,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
-	 * 
+	 *
 	 * <p>
 	 * Additional external documentation for this tag.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
@@ -184,10 +184,10 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
-	 * 
+	 *
 	 * <p>
 	 * Additional external documentation for this tag.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -200,8 +200,8 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -239,12 +239,12 @@ public class Tag extends SwaggerElement {
 			case "name": return name(value);
 			case "description": return description(value);
 			case "externalDocs": return externalDocs(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
 	}
-	
+
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = new ASet<String>()

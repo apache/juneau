@@ -22,10 +22,10 @@ import org.apache.juneau.utils.ZipFileList.*;
 
 /**
  * Response handler for ZipFileList objects.
- * 
+ *
  * <p>
  * Can be associated with a REST resource using the {@link RestResource#responseHandlers} annotation.
- * 
+ *
  * <p>
  * Sets the following headers:
  * <ul class='spaced-list'>
@@ -35,7 +35,7 @@ import org.apache.juneau.utils.ZipFileList.*;
  * 		<code>Content-Disposition=attachment;filename=X</code> - Sets X to the file name passed in through the
  * 		constructor {@link ZipFileList#ZipFileList(String)}.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>

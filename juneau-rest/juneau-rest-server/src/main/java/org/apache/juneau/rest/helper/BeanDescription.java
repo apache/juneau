@@ -17,14 +17,14 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Simple serializable bean description.
- * 
+ *
  * <p>
  * Given a particular class type, this serializes the class into the fully-qualified class name and the properties
  * associated with the class.
- * 
+ *
  * <p>
  * Useful for rendering simple information about a bean during REST OPTIONS requests.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; juneau-rest-server &gt; Predefined Label Beans</a>
@@ -41,7 +41,7 @@ public final class BeanDescription {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param c The bean class type.
 	 */
 	public BeanDescription(Class<?> c) {
@@ -68,7 +68,7 @@ public final class BeanDescription {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param name The bean property name.
 		 * @param type The bean property class type.
 		 */

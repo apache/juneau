@@ -20,7 +20,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents a Cognos dataset.
- * 
+ *
  * <p>
  * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
  * <p class='bcode'>
@@ -46,12 +46,12 @@ import org.apache.juneau.xml.annotation.*;
  * 		<xt>&lt;/c:data&gt;</xt>
  * 	<xt>&lt;/c:dataset&gt;</xt>
  * </p>
- * 
+ *
  * <p>
  * Only 2-dimensional POJOs (arrays or collections of maps or beans) can be serialized to Cognos.
- * 
+ *
  * <h5 class='section'>Example:</h5>
- * 
+ *
  * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of
  * <code>LinkedList&lt;Person&gt;</code>.
  * The code for generating the XML is as follows...
@@ -69,9 +69,9 @@ import org.apache.juneau.xml.annotation.*;
  * 				}
  * 			)
  * 	};
- * 
+ *
  * 	DataSet ds = <jk>new</jk> DataSet(items, <jsf>addressBook</jsf>, BeanContext.<jsf>DEFAULT</jsf>);
- * 
+ *
  * 	String xml = XmlSerializer.<jsf>DEFAULT_SQ</jsf>.serialize(ds);
  * </p>
  */
@@ -87,7 +87,7 @@ public class DataSet {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param columns The meta-data that represents the columns in the dataset.
 	 * @param o
 	 * 	The POJO being serialized to Cognos.
@@ -126,7 +126,7 @@ public class DataSet {
 
 	/**
 	 * Represents a row of data.
-	 * 
+	 *
 	 * <p>
 	 * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
 	 * <p class='bcode'>
@@ -147,7 +147,7 @@ public class DataSet {
 
 		/**
 		 * Returns the values in this row.
-		 * 
+		 *
 		 * @return The values in this row.
 		 */
 		@Xml(format=XmlFormat.COLLAPSED, childName="value")
@@ -163,7 +163,7 @@ public class DataSet {
 
 	/**
 	 * Bean property getter:  <property>metadata</property>.
-	 * 
+	 *
 	 * @return The value of the <property>metadata</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("metadata")
@@ -173,7 +173,7 @@ public class DataSet {
 
 	/**
 	 * Bean property setter:  <property>metadata</property>.
-	 * 
+	 *
 	 * @param metaData The new value for the <property>metadata</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -185,7 +185,7 @@ public class DataSet {
 
 	/**
 	 * Bean property getter:  <property>data</property>.
-	 * 
+	 *
 	 * @return The value of the <property>data</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("data")
@@ -195,7 +195,7 @@ public class DataSet {
 
 	/**
 	 * Bean property setter:  <property>data</property>.
-	 * 
+	 *
 	 * @param data The new value for the <property>data</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */

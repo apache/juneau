@@ -17,18 +17,18 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJOs to HTTP responses as XML.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>text/xml</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>text/xml</b></code>
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Same as {@link XmlSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs>
  * <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response to make it a valid XML document.
- * 
+ *
  */
 public class XmlDocSerializer extends XmlSerializer {
 
@@ -41,7 +41,7 @@ public class XmlDocSerializer extends XmlSerializer {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Ns(PropertyStore ps) {
@@ -56,7 +56,7 @@ public class XmlDocSerializer extends XmlSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public XmlDocSerializer(PropertyStore ps) {

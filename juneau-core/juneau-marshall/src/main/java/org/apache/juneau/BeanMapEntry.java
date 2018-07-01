@@ -19,24 +19,24 @@ import org.apache.juneau.transform.*;
 
 /**
  * Represents a single entry in a bean map.
- * 
+ *
  * <p>
  * This class can be used to get and set property values on a bean, or to get metadata on a property.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new bean</jc>
  * 	Person p = <jk>new</jk> Person();
- * 
+ *
  * 	<jc>// Wrap it in a bean map</jc>
  * 	BeanMap&lt;Person&gt; b = BeanContext.<jsf>DEFAULT</jsf>.forBean(p);
- * 
+ *
  * 	<jc>// Get a reference to the birthDate property</jc>
  * 	BeanMapEntry birthDate = b.getProperty(<js>"birthDate"</js>);
- * 
+ *
  * 	<jc>// Set the property value</jc>
  * 	birthDate.setValue(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
- * 
+ *
  * 	<jc>// Or if the DateSwap.DEFAULT_ISO8601DT is registered with the bean context, set a transformed value</jc>
  * 	birthDate.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
@@ -48,7 +48,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param beanMap The bean map that this entry belongs to.
 	 * @param property The bean property.
 	 * @param pName The bean property name.
@@ -66,7 +66,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 
 	/**
 	 * Returns the value of this property.
-	 * 
+	 *
 	 * <p>
 	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then this method
 	 * will return the transformed value.
@@ -82,14 +82,14 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 
 	/**
 	 * Sets the value of this property.
-	 * 
+	 *
 	 * <p>
 	 * If the property is an array of type {@code X}, then the value can be a {@code Collection<X>} or {@code X[]} or
 	 * {@code Object[]}.
-	 * 
+	 *
 	 * <p>
 	 * If the property is a bean type {@code X}, then the value can either be an {@code X} or a {@code Map}.
-	 * 
+	 *
 	 * <p>
 	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then you must pass
 	 * in a transformed value.
@@ -97,7 +97,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
 	 * {@link Swap#value() @Swap.value()} annotation, the value being passed in must be a String
 	 * containing an ISO8601 date-time string value.
-	 * 
+	 *
 	 * @return  The set value after it's been converted.
 	 */
 	@Override /* Map.Entry */
@@ -107,7 +107,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 
 	/**
 	 * Returns the bean map that contains this property.
-	 * 
+	 *
 	 * @return The bean map that contains this property.
 	 */
 	public BeanMap<?> getBeanMap() {
@@ -116,7 +116,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 
 	/**
 	 * Returns the metadata about this bean property.
-	 * 
+	 *
 	 * @return Metadata about this bean property.
 	 */
 	public BeanPropertyMeta getMeta() {

@@ -18,7 +18,7 @@ import javax.xml.bind.*;
 
 /**
  * Static utility methods for ATOM marshalling code.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Atom'>Overview &gt; juneau-dto &gt; Atom</a>
@@ -29,7 +29,7 @@ class Utils {
 
 	/**
 	 * Converts an ISO8601 date-time string to a {@link Calendar}.
-	 * 
+	 *
 	 * @param lexicalXSDDateTime The ISO8601 date-time string.
 	 * @return A new {@link Calendar} object.
 	 */

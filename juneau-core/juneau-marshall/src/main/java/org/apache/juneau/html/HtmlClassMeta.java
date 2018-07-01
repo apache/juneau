@@ -29,7 +29,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm) {
@@ -50,7 +50,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html @Html} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Html getAnnotation() {
@@ -59,7 +59,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#format() @Html.format()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation.
 	 */
 	protected HtmlFormat getFormat() {
@@ -68,16 +68,16 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 */
 	protected boolean isXml() {
 		return format == HtmlFormat.XML;
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 */
 	protected boolean isPlainText() {
@@ -86,7 +86,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
 	 */
 	protected boolean isHtml() {
@@ -95,7 +95,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
 	 */
 	protected boolean isHtmlCdc() {
@@ -104,7 +104,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
-	 * 
+	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
 	 */
 	protected boolean isHtmlSdc() {
@@ -113,7 +113,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#noTables() @Html.noTables()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation.
 	 */
 	protected boolean isNoTables() {
@@ -122,7 +122,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#noTableHeaders() @Html.noTableHeaders()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation.
 	 */
 	public boolean isNoTableHeaders() {
@@ -131,7 +131,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Html#render() @Html.render()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation.
 	 */
 	public HtmlRender<?> getRender() {

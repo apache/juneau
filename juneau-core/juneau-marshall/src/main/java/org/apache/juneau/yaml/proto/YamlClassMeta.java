@@ -26,7 +26,7 @@ public class YamlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public YamlClassMeta(ClassMeta<?> cm) {
@@ -36,7 +36,7 @@ public class YamlClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link Json @Json} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Json getAnnotation() {

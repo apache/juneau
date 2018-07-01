@@ -16,18 +16,18 @@ import java.io.*;
 
 /**
  * Abstract superclass of all Simple Var Language variables that resolve to simple returned string values.
- * 
+ *
  * <p>
  * Note the difference between this class and {@link StreamedVar} that streams values to writers.
  * <br>Unlike the {@link StreamedVar} class, the returned value from this class can contain nested variables that will be
  * recursively resolved by {@link VarResolver}.
- * 
+ *
  * <p>
  * Subclasses must implement the following method:
  * <ul>
  * 	<li class='jm'>{@link #resolve(VarResolverSession, String)}
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
@@ -37,7 +37,7 @@ public abstract class SimpleVar extends Var {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>)
 	 */
 	protected SimpleVar(String name) {

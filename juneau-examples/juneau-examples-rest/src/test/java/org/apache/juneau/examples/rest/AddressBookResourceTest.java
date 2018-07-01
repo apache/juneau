@@ -198,40 +198,40 @@ public class AddressBookResourceTest extends RestTestcase {
 				assertEquals("Barack Obama", people.get(0).name);
 			}
 
-			try (RestCall r = client.doGet("/addressBook/people?s=name='Barack%20Obama'")) { 
+			try (RestCall r = client.doGet("/addressBook/people?s=name='Barack%20Obama'")) {
 				people = r.getResponse(PersonList.class);
 				assertEquals(1, people.size());
 				assertEquals("Barack Obama", people.get(0).name);
 			}
 
-			try (RestCall r = client.doGet("/addressBook/people?v=name,birthDate")) { 
+			try (RestCall r = client.doGet("/addressBook/people?v=name,birthDate")) {
 				people = r.getResponse(PersonList.class);
 				assertEquals("Barack Obama", people.get(0).name);
 				assertTrue(people.get(0).getAge() > 10);
 				assertEquals(0, people.get(0).addresses.size());
 			}
 
-			try (RestCall r = client.doGet("/addressBook/people?v=addresses,birthDate")) { 
+			try (RestCall r = client.doGet("/addressBook/people?v=addresses,birthDate")) {
 				people = r.getResponse(PersonList.class);
 				assertNull(people.get(0).name);
 				assertTrue(people.get(0).getAge() > 10);
 				assertEquals(2, people.get(0).addresses.size());
 			}
 
-			try (RestCall r = client.doGet("/addressBook/people?o=age-")) { 
+			try (RestCall r = client.doGet("/addressBook/people?o=age-")) {
 				people = r.getResponse(PersonList.class);
 				assertTrue(people.get(0).getAge() > 10);
 			}
-			try (RestCall r = client.doGet("/addressBook/people?o=age")) { 
+			try (RestCall r = client.doGet("/addressBook/people?o=age")) {
 				people = r.getResponse(PersonList.class);
 				assertTrue(people.get(0).getAge() > 10);
 			}
-			try (RestCall r = client.doGet("/addressBook/people?o=age+")) { 
+			try (RestCall r = client.doGet("/addressBook/people?o=age+")) {
 				people = r.getResponse(PersonList.class);
 				assertTrue(people.get(0).getAge() > 10);
 			}
 
-			try (RestCall r = client.doGet("/addressBook/people?p=1&l=1")) { 
+			try (RestCall r = client.doGet("/addressBook/people?p=1&l=1")) {
 				people = r.getResponse(PersonList.class);
 				assertEquals(1, people.size());
 				assertTrue(people.get(0).getAge() > 10);

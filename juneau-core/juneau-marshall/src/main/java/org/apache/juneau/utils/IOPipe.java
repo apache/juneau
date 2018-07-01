@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * A utility class for piping input streams and readers to output streams and writers.
- * 
+ *
  * <p>
  * A typical usage is as follows...
  * <p class='bcode'>
@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
  * 	Writer out = getWriter();
  * 	IOPipe.create(in, out).closeOut().run();
  * </p>
- * 
+ *
  * <p>
  * By default, the input stream is closed and the output stream is not.
  * This can be changed by calling {@link #closeOut()} and {@link #close(boolean, boolean)}.
@@ -62,7 +62,7 @@ public class IOPipe {
 
 	/**
 	 * Creates a new pipe with the specified input and output.
-	 * 
+	 *
 	 * @param input The input.  Must be one of the following types:  Reader, InputStream, CharSequence.
 	 * @param output The output.  Must be one of the following types:  Writer, OutputStream.
 	 * @return This object (for method chaining).
@@ -73,7 +73,7 @@ public class IOPipe {
 
 	/**
 	 * Close output after piping.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public IOPipe closeOut() {
@@ -83,7 +83,7 @@ public class IOPipe {
 
 	/**
 	 * Specifies whether to close the input and output after piping.
-	 * 
+	 *
 	 * @param in Close input stream.  Default is <jk>true</jk>.
 	 * @param out Close output stream.  Default is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -96,7 +96,7 @@ public class IOPipe {
 
 	/**
 	 * Specifies the temporary buffer size.
-	 * 
+	 *
 	 * @param buffSize The buffer size.  Default is <code>1024</code>.
 	 * @return This object (for method chaining).
 	 */
@@ -108,10 +108,10 @@ public class IOPipe {
 
 	/**
 	 * Specifies whether the content should be piped line-by-line.
-	 * 
+	 *
 	 * <p>
 	 * This can be useful if you're trying to pipe console-based input.
-	 * 
+	 *
 	 * @param byLines Pipe content line-by-line.  Default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
@@ -122,7 +122,7 @@ public class IOPipe {
 
 	/**
 	 * Same as calling {@link #byLines()} with <jk>true</jk>.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public IOPipe byLines() {
@@ -132,7 +132,7 @@ public class IOPipe {
 
 	/**
 	 * Specifies a line processor that can be used to process lines before they're piped to the output.
-	 * 
+	 *
 	 * @param lineProcessor The line processor.
 	 * @return This object (for method chaining).
 	 */
@@ -147,7 +147,7 @@ public class IOPipe {
 	public interface LineProcessor {
 		/**
 		 * Process the specified line.
-		 * 
+		 *
 		 * @param line The line to process.
 		 * @return The processed line.
 		 */
@@ -156,7 +156,7 @@ public class IOPipe {
 
 	/**
 	 * Performs the piping of the input to the output.
-	 * 
+	 *
 	 * @return The number of bytes (if streams) or characters (if readers/writers) piped.
 	 * @throws IOException
 	 */

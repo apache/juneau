@@ -33,7 +33,7 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public SimpleUonPartSerializerBuilder(PropertyStore ps) {
@@ -570,7 +570,7 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);

@@ -61,22 +61,22 @@ public class MethodExampleResource extends BasicRestServlet {
 	public ResourceDescriptions doExample() throws Exception {
 		return new ResourceDescriptions()
 			.append(
-				"example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
+				"example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar",
 				"Example 1 - Annotated method attributes."
 			)
 			.append(
-				"example2/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
+				"example2/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar",
 				"Example 2 - Low-level RestRequest/RestResponse objects."
 			)
 			.append(
-				"example3/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", 
+				"example3/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar",
 				"Example 3 - Intermediate-level APIs."
 			)
 		;
 	}
 
 	@RestMethod(
-		name=GET, path="/example1/{p1}/{p2}/{p3}/*", 
+		name=GET, path="/example1/{p1}/{p2}/{p3}/*",
 		summary="GET request using annotated attributes",
 		description="This approach uses annotated parameters for retrieving input."
 	)
@@ -110,7 +110,7 @@ public class MethodExampleResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, path="/example2/{p1}/{p2}/{p3}/*", 
+		name=GET, path="/example2/{p1}/{p2}/{p3}/*",
 		summary="GET request using methods on RestRequest and RestResponse",
 		description="This approach uses low-level request/response objects to perform the same as above."
 	)
@@ -159,7 +159,7 @@ public class MethodExampleResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, path="/example3/{p1}/{p2}/{p3}/*", 
+		name=GET, path="/example3/{p1}/{p2}/{p3}/*",
 		summary="GET request using special objects",
 		description={
 			"This approach uses intermediate-level APIs.\n",

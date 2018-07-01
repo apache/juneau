@@ -33,21 +33,21 @@ import org.eclipse.jetty.xml.*;
 
 /**
  * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.
- * 
+ *
  * <h5 class='topic'>Jetty Server Details</h5>
- * 
+ *
  * The Jetty server is created by the {@link #createServer()} method and started with the {@link #startServer()} method.
  * These methods can be overridden to provided customized behavior.
- * 
+ *
  * <h5 class='topic'>Defining REST Resources</h5>
- * 
+ *
  * Top-level REST resources are defined in the <code>jetty.xml</code> file as normal servlets.
- * 
+ *
  * <h5 class='topic'>Logging</h5>
- * 
+ *
  * Logging is initialized by the {@link #initLogging()} method.
  * This method can be overridden to provide customized logging behavior.
- * 
+ *
  * <h5 class='topic'>Lifecycle Listener Methods</h5>
  * Subclasses can optionally implement the following event listener methods:
  * <ul class='spaced-list'>
@@ -68,19 +68,19 @@ import org.eclipse.jetty.xml.*;
  * </ul>
  */
 public class RestMicroservice extends Microservice {
-	
+
 	Server server;
 	private Object jettyXml;
 	private final MessageBundle mb = MessageBundle.create(RestMicroservice.class, "Messages");
-	
+
 	private static volatile RestMicroservice INSTANCE;
-	
+
 	/**
-	 * Returns the Microservice instance.  
+	 * Returns the Microservice instance.
 	 * <p>
-	 * This method only works if there's only one Microservice instance in a JVM.  
+	 * This method only works if there's only one Microservice instance in a JVM.
 	 * Otherwise, it's just overwritten by the last call to {@link #RestMicroservice(String...)}.
-	 * 
+	 *
 	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
 	 */
 	public static RestMicroservice getInstance() {
@@ -88,13 +88,13 @@ public class RestMicroservice extends Microservice {
 			return INSTANCE;
 		}
 	}
-	
+
 	/**
 	 * Main method.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses must also implement this method!
-	 * 
+	 *
 	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
@@ -104,7 +104,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
@@ -112,7 +112,7 @@ public class RestMicroservice extends Microservice {
 		super(args);
 		setInstance(this);
 	}
-	
+
 	private static void setInstance(RestMicroservice rm) {
 		synchronized(RestMicroservice.class) {
 			INSTANCE = rm;
@@ -176,51 +176,51 @@ public class RestMicroservice extends Microservice {
 	/**
 	 * Returns the port that this microservice started up on.
 	 * <p>
-	 * The value is determined by looking at the <code>Server/Connectors[ServerConnector]/port</code> value in the 
+	 * The value is determined by looking at the <code>Server/Connectors[ServerConnector]/port</code> value in the
 	 * Jetty configuration.
-	 * 
+	 *
 	 * @return The port that this microservice started up on.
 	 */
 	public int getPort() {
-		for (Connector c : getServer().getConnectors()) 
+		for (Connector c : getServer().getConnectors())
 			if (c instanceof ServerConnector)
 				return ((ServerConnector)c).getPort();
 		throw new RuntimeException("Could not locate ServerConnector in Jetty server.");
 	}
-	
+
 	/**
 	 * Returns the context path that this microservice is using.
 	 * <p>
-	 * The value is determined by looking at the <code>Server/Handlers[ServletContextHandler]/contextPath</code> value 
+	 * The value is determined by looking at the <code>Server/Handlers[ServletContextHandler]/contextPath</code> value
 	 * in the Jetty configuration.
-	 * 
+	 *
 	 * @return The context path that this microservice is using.
 	 */
 	public String getContextPath() {
 		for (Handler h : getServer().getHandlers()) {
 			if (h instanceof HandlerCollection) {
 				for (Handler h2 : ((HandlerCollection)h).getChildHandlers())
-					if (h2 instanceof ServletContextHandler) 
+					if (h2 instanceof ServletContextHandler)
 						return ((ServletContextHandler)h2).getContextPath();
 			}
-			if (h instanceof ServletContextHandler) 
+			if (h instanceof ServletContextHandler)
 				return ((ServletContextHandler)h).getContextPath();
 		}
 		throw new RuntimeException("Could not locate ServletContextHandler in Jetty server.");
 	}
-	
+
 	/**
 	 * Returns whether this microservice is using <js>"http"</js> or <js>"https"</js>.
 	 * <p>
 	 * The value is determined by looking for the existence of an SSL Connection Factorie by looking for the
 	 * <code>Server/Connectors[ServerConnector]/ConnectionFactories[SslConnectionFactory]</code> value in the Jetty
 	 * configuration.
-	 * 
+	 *
 	 * @return Whether this microservice is using <js>"http"</js> or <js>"https"</js>.
 	 */
 	public String getProtocol() {
 		for (Connector c : getServer().getConnectors())
-			if (c instanceof ServerConnector) 
+			if (c instanceof ServerConnector)
 				for (ConnectionFactory cf : ((ServerConnector)c).getConnectionFactories())
 					if (cf instanceof SslConnectionFactory)
 						return "https";
@@ -231,7 +231,7 @@ public class RestMicroservice extends Microservice {
 	 * Returns the hostname of this microservice.
 	 * <p>
 	 * Simply uses <code>InetAddress.getLocalHost().getHostName()</code>.
-	 * 
+	 *
 	 * @return The hostname of this microservice.
 	 */
 	public String getHostName() {
@@ -241,14 +241,14 @@ public class RestMicroservice extends Microservice {
 		} catch (UnknownHostException e) {}
 		return hostname;
 	}
-	
+
 	/**
 	 * Returns the URI where this microservice is listening on.
-	 * 
+	 *
 	 * @return The URI where this microservice is listening on.
 	 */
 	public URI getURI() {
-		String cp = getContextPath(); 
+		String cp = getContextPath();
 		try {
 			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {
@@ -258,32 +258,32 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Method used to create (but not start) an instance of a Jetty server.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to customize the Jetty server before it is started.
-	 * 
+	 *
 	 * <p>
-	 * The default implementation is configured by the following values in the config file 
+	 * The default implementation is configured by the following values in the config file
 	 * if a jetty.xml is not specified via a <code>REST/jettyXml</code> setting:
 	 * <p class='bcode'>
 	 * 	<cc>#================================================================================
 	 * 	# Jetty settings
 	 * 	#================================================================================</cc>
 	 * 	<cs>[Jetty]</cs>
-	 * 	
+	 *
 	 * 	<cc># Path of the jetty.xml file used to configure the Jetty server.</cc>
 	 * 	<ck>config</ck> = jetty.xml
-	 * 	
+	 *
 	 * 	<cc># Resolve Juneau variables in the jetty.xml file.</cc>
 	 * 	<ck>resolveVars</ck> = true
-	 * 	
+	 *
 	 * 	<cc># Port to use for the jetty server.
 	 * 	# You can specify multiple ports.  The first available will be used.  '0' indicates to try a random port.
-	 * 	# The resulting available port gets set as the system property "availablePort" which can be referenced in the 
+	 * 	# The resulting available port gets set as the system property "availablePort" which can be referenced in the
 	 * 	# jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).</cc>
 	 * 	<ck>port</ck> = 10000,0,0,0
 	 * </p>
-	 * 
+	 *
 	 * @return The newly-created server.
 	 * @throws Exception
 	 */
@@ -293,46 +293,46 @@ public class RestMicroservice extends Microservice {
 		Config cf = getConfig();
 		ObjectMap mf = getManifest();
 		VarResolver vr = getVarResolver();
-		
+
 		int[] ports = cf.getObjectWithDefault("Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class), int[].class);
 		int availablePort = findOpenPort(ports);
 		System.setProperty("availablePort", String.valueOf(availablePort));
-		
+
 		if (jettyXml == null)
 			jettyXml = cf.getString("Jetty/config", mf.getString("Jetty-Config", null));
-		
+
 		if (jettyXml == null)
 			throw new FormattedRuntimeException("Jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config).");
-		
+
 		String xmlConfig = null;
-		
-		if (jettyXml instanceof String) 
+
+		if (jettyXml instanceof String)
 			jettyXml = new File(jettyXml.toString());
-		
+
 		if (jettyXml instanceof File) {
 			File f = (File)jettyXml;
 			if (f.exists())
 				xmlConfig = IOUtils.read((File)jettyXml);
-			else 
+			else
 				throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", f.getName());
 		} else {
 			xmlConfig = IOUtils.read(jettyXml);
 		}
-		
+
 		if (cf.getBoolean("Jetty/resolveVars", false))
 			xmlConfig = vr.resolve(xmlConfig);
-		
+
 		getLogger().info(xmlConfig);
-		
+
 		XmlConfiguration config = new XmlConfiguration(new ByteArrayInputStream(xmlConfig.getBytes()));
 		server = (Server)config.configure();
-		
+
 		return server;
 	}
-	
+
 	/**
 	 * Adds an arbitrary servlet to this microservice.
-	 * 
+	 *
 	 * @param servlet The servlet instance.
 	 * @param pathSpec The context path of the servlet.
 	 * @return This object (for method chaining).
@@ -348,10 +348,10 @@ public class RestMicroservice extends Microservice {
 		}
 		throw new RuntimeException("Servlet context handler not found in jetty server.");
 	}
-	
+
 	/**
 	 * Adds a servlet attribute to the Jetty server.
-	 * 
+	 *
 	 * @param name The server attribute name.
 	 * @param value The context path of the servlet.
 	 * @return This object (for method chaining).
@@ -361,10 +361,10 @@ public class RestMicroservice extends Microservice {
 		getServer().setAttribute(name, value);
 		return this;
 	}
-	
+
 	/**
 	 * Returns the underlying Jetty server.
-	 * 
+	 *
 	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
 	 */
 	public Server getServer() {
@@ -372,7 +372,7 @@ public class RestMicroservice extends Microservice {
 			throw new RuntimeException("Server not found.  createServer() must be called first.");
 		return server;
 	}
-	
+
 	private static int findOpenPort(int[] ports) {
 		for (int port : ports) {
 			// If port is 0, try a random port between ports[0] and 32767.
@@ -387,10 +387,10 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Method used to start the Jetty server created by {@link #createServer()}.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to customize server startup.
-	 * 
+	 *
 	 * @return The port that this server started on.
 	 * @throws Exception
 	 */
@@ -404,7 +404,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called when {@link Config#commit()} is called on the config file.
-	 * 
+	 *
 	 * <p>
 	 * The default behavior is configured by the following value in the config file:
 	 * <p class='bcode'>
@@ -443,10 +443,10 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Sets the <code>jetty.xml</code> used to configure the Jetty server.
-	 * 
+	 *
 	 * <p>
-	 * 
-	 * @param jettyXml 
+	 *
+	 * @param jettyXml
 	 * 	The <code>jetty.xml</code>.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
@@ -464,14 +464,14 @@ public class RestMicroservice extends Microservice {
 		return this;
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Lifecycle listener methods.
 	//--------------------------------------------------------------------------------
 
 	/**
 	 * Called before {@link #createServer()} is called.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -479,7 +479,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called before {@link #startServer()} is called.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -487,7 +487,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called after the Jetty server is started.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -495,7 +495,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called before the Jetty server is stopped.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -503,7 +503,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called after the Jetty server is stopped.
-	 * 
+	 *
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */

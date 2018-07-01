@@ -20,10 +20,10 @@ import java.lang.annotation.*;
 /**
  * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja> annotated method to identify whether or not
  * the request has the specified multipart form POST parameter.
- * 
+ *
  * <p>
  * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- * 
+ *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -41,7 +41,7 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- * 
+ *
  * <p>
  * The following table shows the behavioral differences between <code>@HasFormData</code> and <code>@FormData</code>...
  * <table class='styled'>
@@ -71,17 +71,17 @@ import java.lang.annotation.*;
  * 		<td><jk>null</jk></td>
  * 	</tr>
  * </table>
- * 
+ *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
- * 
+ *
  * This annotation should not be combined with the {@link Body @Body} annotation or <code>RestRequest.getBody()</code> method
  * for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet API to
  * parse the body content as key-value pairs, resulting in empty content.
- * 
+ *
  * <p>
  * The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
  * without triggering the servlet to drain the body content.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.FormData">Overview &gt; juneau-rest-server &gt; @FormData</a>
@@ -95,9 +95,9 @@ public @interface HasFormData {
 
 	/**
 	 * FORM parameter name.
-	 * 
+	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.
-	 * 
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -108,10 +108,10 @@ public @interface HasFormData {
 
 	/**
 	 * A synonym for {@link #name()}.
-	 * 
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
-	 * 
+	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a form post entry:
 	 * <p class='bcode w800'>

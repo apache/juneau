@@ -14,13 +14,13 @@ package org.apache.juneau.http;
 
 /**
  * Category of headers that consist of a single entity validator value.
- * 
+ *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	ETag: "xyzzy"
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -32,7 +32,7 @@ public class HeaderEntityValidator {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param value The raw header value.
 	 */
 	protected HeaderEntityValidator(String value) {
@@ -41,7 +41,7 @@ public class HeaderEntityValidator {
 
 	/**
 	 * Returns this header value as a {@link EntityValidator} object.
-	 * 
+	 *
 	 * @return this header value as a {@link EntityValidator} object.
 	 */
 	public EntityValidator asValidator() {

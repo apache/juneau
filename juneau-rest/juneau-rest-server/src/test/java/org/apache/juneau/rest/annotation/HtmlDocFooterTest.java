@@ -77,7 +77,7 @@ public class HtmlDocFooterTest {
 	//=================================================================================================================
 	// Inheritance
 	//=================================================================================================================
-	
+
 	@RestResource(htmldoc=@HtmlDoc(footer={"b01a","INHERIT","b01b"}))
 	public static class B extends A {
 		@RestMethod(path="/b01")

@@ -14,28 +14,28 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Pragma</l> HTTP request/response header.
- * 
+ *
  * <p>
  * Implementation-specific fields that may have various effects anywhere along the request-response chain.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Pragma: no-cache
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The Pragma general-header field is used to include implementation- specific directives that might apply to any
  * recipient along the request/response chain.
  * All pragma directives specify optional behavior from the viewpoint of the protocol; however, some systems MAY
  * require that behavior be consistent with the directives.
- * 
+ *
  * <p class='bcode'>
  * 	Pragma            = "Pragma" ":" 1#pragma-directive
  * 	pragma-directive  = "no-cache" | extension-pragma
  * 	extension-pragma  = token [ "=" ( token | quoted-string ) ]
  * </p>
- * 
+ *
  * <p>
  * When the no-cache directive is present in a request message, an application SHOULD forward the request toward the
  * origin server even if it has a cached copy of what is being requested.
@@ -43,21 +43,21 @@ package org.apache.juneau.http;
  * for backward compatibility with HTTP/1.0.
  * Clients SHOULD include both header fields when a no-cache request is sent to a server not known to be HTTP/1.1
  * compliant.
- * 
+ *
  * <p>
  * Pragma directives MUST be passed through by a proxy or gateway application, regardless of their significance to that
  * application, since the directives might be applicable to all recipients along the request/response chain.
  * It is not possible to specify a pragma for a specific recipient; however, any pragma directive not relevant to a
  * recipient SHOULD be ignored by that recipient.
- * 
+ *
  * <p>
  * HTTP/1.1 caches SHOULD treat "Pragma: no-cache" as if the client had sent "Cache-Control: no-cache".
  * No new Pragma directives will be defined in HTTP.
- * 
+ *
  * <p>
  * Note: because the meaning of "Pragma: no-cache as a response header field is not actually specified, it does not
  * provide a reliable replacement for "Cache-Control: no-cache" in a response.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -67,7 +67,7 @@ public final class Pragma extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>Pragma</code> header.
-	 * 
+	 *
 	 * @param value The <code>Pragma</code> header string.
 	 * @return The parsed <code>Pragma</code> header, or <jk>null</jk> if the string was null.
 	 */

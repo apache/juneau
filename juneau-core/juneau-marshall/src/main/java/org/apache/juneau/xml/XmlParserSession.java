@@ -30,7 +30,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlParser}.
- * 
+ *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
@@ -50,7 +50,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 * 
+	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
@@ -80,7 +80,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Wrap the specified reader in a STAX reader based on settings in this context.
-	 * 
+	 *
 	 * @param pipe The parser input.
 	 * @return The new STAX reader.
 	 * @throws Exception If problem occurred trying to create reader.
@@ -91,10 +91,10 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Decodes and trims the specified string.
-	 * 
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
-	 * 
+	 *
 	 * @param s The string to be decoded.
 	 * @return The decoded string.
 	 */
@@ -134,13 +134,13 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns the text content of the current XML element.
-	 * 
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
-	 * 
+	 *
 	 * <p>
 	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
-	 * 
+	 *
 	 * @param r The reader to read the element text from.
 	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
 	 * @throws Exception
@@ -189,7 +189,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Parses the current element as text.
-	 * 
+	 *
 	 * @param r
 	 * @return The parsed text.
 	 * @throws Exception
@@ -223,11 +223,11 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns <jk>true</jk> if the current element is a whitespace element.
-	 * 
+	 *
 	 * <p>
 	 * For the XML parser, this always returns <jk>false</jk>.
 	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.
-	 * 
+	 *
 	 * @param r The XML stream reader to read the current event from.
 	 * @return <jk>true</jk> if the current element is a whitespace element.
 	 */
@@ -237,11 +237,11 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Parses the current whitespace element.
-	 * 
+	 *
 	 * <p>
 	 * For the XML parser, this always returns <jk>null</jk> since there is no concept of a whitespace element.
 	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.
-	 * 
+	 *
 	 * @param r The XML stream reader to read the current event from.
 	 * @return The whitespace character or characters.
 	 * @throws XMLStreamException
@@ -270,7 +270,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 	/**
 	 * Workhorse method.
-	 * 
+	 *
 	 * @param eType The expected type of object.
 	 * @param currAttr The current bean property name.
 	 * @param r The reader.

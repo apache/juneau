@@ -14,25 +14,25 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>ETag</l> HTTP response header.
- * 
+ *
  * <p>
  * An identifier for a specific version of a resource, often a message digest.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	ETag: "737060cd8c284d8af7ad3082f209582d"
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The ETag response-header field provides the current value of the entity tag for the requested variant.
  * The headers used with entity tags are described in sections 14.24, 14.26 and 14.44.
  * The entity tag MAY be used for comparison with other entities from the same resource (see section 13.3.3).
- * 
+ *
  * <p class='bcode'>
  * 	ETag = "ETag" ":" entity-tag
  * </p>
- * 
+ *
  * <p>
  * Examples:
  * <p class='bcode'>
@@ -40,7 +40,7 @@ package org.apache.juneau.http;
  * 	ETag: W/"xyzzy"
  * 	ETag: ""
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -50,7 +50,7 @@ public final class ETag extends HeaderString {
 
 	/**
 	 * Returns a parsed <code>ETag</code> header.
-	 * 
+	 *
 	 * @param value The <code>ETag</code> header string.
 	 * @return The parsed <code>ETag</code> header, or <jk>null</jk> if the string was null.
 	 */

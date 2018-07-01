@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-a-element">&lt;a&gt;</a>
  * element.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -32,10 +32,10 @@ public class A extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
-	 * 
+	 *
 	 * @param download
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -48,17 +48,17 @@ public class A extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Address of the hyperlink.
-	 * 
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
-	 * 
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
-	 * 
+	 *
 	 * @param href
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -71,10 +71,10 @@ public class A extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Language of the linked resource.
-	 * 
+	 *
 	 * @param hreflang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -85,10 +85,10 @@ public class A extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
-	 * 
+	 *
 	 * @param rel The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -99,10 +99,10 @@ public class A extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Default browsing context for hyperlink navigation and form submission.
-	 * 
+	 *
 	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -113,10 +113,10 @@ public class A extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
-	 * 
+	 *
 	 * <p>
 	 * Hint for the type of the referenced resource.
-	 * 
+	 *
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

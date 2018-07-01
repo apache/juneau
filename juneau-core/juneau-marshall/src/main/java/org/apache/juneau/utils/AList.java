@@ -16,32 +16,32 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedList} with a convenience {@link #append(Object)} method.
- * 
+ *
  * <p>
  * Primarily used for testing purposes for quickly creating populated lists.
  * <p class='bcode'>
  * 	<jc>// Example:</jc>
  * 	List&lt;String&gt; l = <jk>new</jk> AList&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
  * </p>
- * 
+ *
  * @param <T> The entry type.
  */
 @SuppressWarnings({"serial","unchecked"})
 public final class AList<T> extends LinkedList<T> {
-	
+
 	/**
 	 * Convenience method for creating a list of objects.
-	 * 
+	 *
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
 	public static <T> AList<T> create(T...t) {
 		return new AList<T>().appendAll(t);
 	}
-	
+
 	/**
 	 * Adds an entry to this list.
-	 * 
+	 *
 	 * @param t The entry to add to this list.
 	 * @return This object (for method chaining).
 	 */
@@ -52,7 +52,7 @@ public final class AList<T> extends LinkedList<T> {
 
 	/**
 	 * Adds multiple entries to this list.
-	 * 
+	 *
 	 * @param t The entries to add to this list.
 	 * @return This object (for method chaining).
 	 */
@@ -63,7 +63,7 @@ public final class AList<T> extends LinkedList<T> {
 
 	/**
 	 * Adds an entry to this list if the boolean flag is <jk>true</jk>.
-	 * 
+	 *
 	 * @param b The boolean flag.
 	 * @param val The value to add.
 	 * @return This object (for method chaining).

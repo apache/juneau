@@ -27,7 +27,7 @@ import org.apache.juneau.xmlschema.*;
 
 /**
  * JAX-RS provider for the same serialize/parse support provided by the {@link BasicRestServlet} class.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server-jaxrs">Overview &gt; juneau-rest-server-jaxrs</a>

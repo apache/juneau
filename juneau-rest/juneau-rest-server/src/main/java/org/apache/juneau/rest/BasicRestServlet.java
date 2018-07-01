@@ -32,7 +32,7 @@ import org.apache.juneau.xmlschema.*;
 
 /**
  * Subclass of {@link RestServlet} with default serializers and parsers defined.
- * 
+ *
  * <p>
  * Supports the following request <code>Accept</code> header values with the resulting response <code>Content-Type</code>:
  * <table class='styled'>
@@ -130,25 +130,25 @@ import org.apache.juneau.xmlschema.*;
  * 		<td>{@link PlainTextParser}</td>
  * 	</tr>
  * </table>
- * 
+ *
  * <p>
  * It should be noted that we do NOT add {@link JsoParser} to the list of parsers since this could cause security
  * issues.
  * Use caution when using this particular parser as it could inadvertently cause code execution security holes.
- * 
+ *
  * <p>
  * The list of serializers and parsers can be appended to using the
  * {@link RestResource#serializers() @RestResource.serializers()} and
  * {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
- * 
+ *
  * <p>
  * This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a
  * POJO consisting of beans describing the class.
  * <img class='bordered' src='doc-files/OptionsPage.png'>
- * 
+ *
  * <p>
  * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -160,7 +160,7 @@ import org.apache.juneau.xmlschema.*;
  * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL
  * 		<code>/servletPath/htdocs</code>.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.BasicRestServlet">Overview &gt; juneau-rest-server &gt; BasicRestServlet</a>
@@ -180,14 +180,14 @@ import org.apache.juneau.xmlschema.*;
 	properties={
 		// Add descriptions to the following types when not specified:
 		@Property(name=JSONSCHEMA_addDescriptionsTo, value="bean,collection,array,map,enum"),
-		
+
 		// Add x-example to the following types:
 		@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
-		
+
 		// Don't generate schema information on the Swagger bean itself.
 		@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger,org.apache.juneau.dto.html5.*")
 	},
-	flags={ 
+	flags={
 		JSONSCHEMA_useBeanDefs
 	}
 )
@@ -196,7 +196,7 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 
 	/**
 	 * [OPTIONS /*] - Show resource options.
-	 * 
+	 *
 	 * @param req The HTTP request.
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */

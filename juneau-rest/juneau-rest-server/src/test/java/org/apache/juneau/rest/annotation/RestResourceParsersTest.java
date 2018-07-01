@@ -29,7 +29,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestResourceParsersTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -49,7 +49,7 @@ public class RestResourceParsersTest {
 			};
 		}
 	}
-	
+
 	public static class PB extends ReaderParser {
 		public PB(PropertyStore ps) {
 			super(ps, "text/b");
@@ -65,7 +65,7 @@ public class RestResourceParsersTest {
 			};
 		}
 	}
-	
+
 	public static class PC extends ReaderParser {
 		public PC(PropertyStore ps) {
 			super(ps, "text/c");
@@ -81,7 +81,7 @@ public class RestResourceParsersTest {
 			};
 		}
 	}
-	
+
 	public static class PD extends ReaderParser {
 		public PD(PropertyStore ps) {
 			super(ps, "text/d");
@@ -97,11 +97,11 @@ public class RestResourceParsersTest {
 			};
 		}
 	}
-	
+
 	//=================================================================================================================
 	// Basic tests
 	//=================================================================================================================
-	
+
 	@RestResource(parsers=PA.class)
 	public static class A {
 		@RestMethod(name=PUT, path="/parserOnClass")

@@ -21,22 +21,22 @@ import org.apache.juneau.dto.html5.*;
 
 /**
  * Simple template for adding tooltips to HTML5 bean constructs, typically in menu item widgets.
- * 
+ *
  * <p>
  * Tooltips depend on the existence of the <code>tooltip</code> and <code>tooltiptext</code> styles that should be
  * present in the stylesheet for the document.
- * 
+ *
  * <p>
  * The following examples shows how tooltips can be added to a menu item widget.
- * 
+ *
  * <p class='bcode'>
  * <jk>public class</jk> MyFormMenuItem <jk>extends</jk> MenuItemWidget {
- * 
+ *
  * 	<ja>@Override</ja>
  * 	<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
  * 		<jk>return</jk> <js>"myform"</js>;
  * 	}
- * 
+ *
  * 	<ja>@Override</ja>
  * 	<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
  * 		<jk>return</jk> div(
@@ -58,7 +58,7 @@ import org.apache.juneau.dto.html5.*;
  * 	}
  * }
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>

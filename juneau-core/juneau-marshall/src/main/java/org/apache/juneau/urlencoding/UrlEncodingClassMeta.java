@@ -26,7 +26,7 @@ public class UrlEncodingClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public UrlEncodingClassMeta(ClassMeta<?> cm) {
@@ -41,7 +41,7 @@ public class UrlEncodingClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link UrlEncoding} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the {@link UrlEncoding} annotation, or <jk>null</jk> if annotation is not specified.
 	 */
 	protected UrlEncoding getAnnotation() {
@@ -50,7 +50,7 @@ public class UrlEncodingClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link UrlEncoding#expandedParams()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the {@link UrlEncoding#expandedParams()} annotation.
 	 */
 	protected boolean isExpandedParams() {

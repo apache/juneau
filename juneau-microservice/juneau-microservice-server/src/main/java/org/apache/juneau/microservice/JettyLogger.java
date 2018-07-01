@@ -20,21 +20,21 @@ import org.eclipse.jetty.util.log.AbstractLogger;
 
 /**
  * Implementation of Jetty {@link Logger} based on {@link java.util.logging.Logger}.
- * 
+ *
  * <p>
- * Allows Jetty to log to the Java Util logging framework (and thus to the main log file defined in the 
+ * Allows Jetty to log to the Java Util logging framework (and thus to the main log file defined in the
  * <cc>[Logging]</cc> section).
- * 
+ *
  * <p>
  * Can be used by setting the following system property in the microservice config file.
- * 
+ *
  * <p class='bcode'>
  * 	<cs>[SystemProperties]</cs>
- * 	
+ *
  * 	<cc># Configure Jetty to log using java-util logging</cc>
  * 	<ck>org.eclipse.jetty.util.log.class</ck> = org.apache.juneau.microservice.JettyLogger
  * </p>
- * 
+ *
  */
 public class JettyLogger extends AbstractLogger {
 	private static final boolean SHOW_SOURCE = SystemUtils.getFirstBoolean(true, "org.eclipse.jetty.util.log.SOURCE", "org.eclipse.jetty.util.log.javautil.SOURCE");
@@ -44,7 +44,7 @@ public class JettyLogger extends AbstractLogger {
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * <p>
 	 * Returns the logger with name <js>"org.eclipse.jetty.util.log.javautil"</js>.
 	 */
@@ -54,7 +54,7 @@ public class JettyLogger extends AbstractLogger {
 
 	/**
 	 * Normal constructor.
-	 * 
+	 *
 	 * @param name The logger name.
 	 */
 	public JettyLogger(String name) {
@@ -154,7 +154,7 @@ public class JettyLogger extends AbstractLogger {
 	}
 
 	private static String format(String msg, Object... args) {
-		msg = String.valueOf(msg); 
+		msg = String.valueOf(msg);
 		if (args.length == 0)
 			return msg;
 		StringBuilder sb = new StringBuilder();
@@ -191,7 +191,7 @@ public class JettyLogger extends AbstractLogger {
 		}
 		logger.log(r);
 	}
-	
+
 	private boolean isLoggable(Level level) {
 		return logger.isLoggable(level);
 	}

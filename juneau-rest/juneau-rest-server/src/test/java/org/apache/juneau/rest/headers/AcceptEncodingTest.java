@@ -46,7 +46,7 @@ public class AcceptEncodingTest {
 	//=================================================================================================================
 	// Test with no compression enabled.
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class A {
 		@RestMethod(name=GET)
@@ -55,7 +55,7 @@ public class AcceptEncodingTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01_noCompression() throws Exception {
 		a.get("/").execute().assertBody("foo");
@@ -73,7 +73,7 @@ public class AcceptEncodingTest {
 		a.get("/").acceptEncoding("mycoding;q=0.8,*;q=0.6").execute().assertBody("foo");
 		a.get("/").acceptEncoding("*;q=0.8,myencoding;q=0.6").execute().assertBody("foo");
 	}
-	
+
 	@Test
 	public void a03_noCompression_nomatch() throws Exception {
 		a.get("?noTrace=true").acceptEncoding("mycoding,identity;q=0").execute()
@@ -117,7 +117,7 @@ public class AcceptEncodingTest {
 	//=================================================================================================================
 	// Test with compression enabled.
 	//=================================================================================================================
-	
+
 	@RestResource(encoders=MyEncoder.class)
 	public static class B {
 		@RestMethod(name=GET)
@@ -126,7 +126,7 @@ public class AcceptEncodingTest {
 		}
 	}
 	static MockRest b = MockRest.create(B.class);
-	
+
 	@Test
 	public void b01_withCompression_identity() throws Exception {
 		b.get("/").execute().assertBody("foo");
@@ -219,7 +219,7 @@ public class AcceptEncodingTest {
 		}
 	}
 	static MockRest c = MockRest.create(C.class);
-	
+
 	@Test
 	public void c01_direct1() throws Exception {
 		c.get("/direct1").acceptEncoding("mycoding").execute()
@@ -230,7 +230,7 @@ public class AcceptEncodingTest {
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertHeader("Content-Type", "text/direct")
 			.assertBody("foo");
-	}	
+	}
 	@Test
 	public void c02_direct2() throws Exception {
 		c.get("/direct2").acceptEncoding("mycoding").execute()
@@ -239,7 +239,7 @@ public class AcceptEncodingTest {
 		c.get("/direct2").acceptEncoding("*").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertBody("foo");
-	}	
+	}
 	@Test
 	public void c03_direct3() throws Exception {
 		byte[] body;
@@ -251,7 +251,7 @@ public class AcceptEncodingTest {
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.getBody();
 		assertEquals("foo", decompress(body));
-	}	
+	}
 	@Test
 	public void c04_direct4() throws Exception {
 		c.get("/direct4").acceptEncoding("mycoding").execute()
@@ -260,5 +260,5 @@ public class AcceptEncodingTest {
 		c.get("/direct4").acceptEncoding("*").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertBody("foo");
-	}	
+	}
 }

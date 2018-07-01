@@ -16,7 +16,7 @@ import org.apache.juneau.config.*;
 
 /**
  * API for defining a string encoding/decoding mechanism for entries in {@link Config}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-config.EncodedEntries'>Overview &gt; juneau-config &gt; Encoded Entries</a>
@@ -26,7 +26,7 @@ public interface ConfigEncoder {
 
 	/**
 	 * Encode a string.
-	 * 
+	 *
 	 * @param fieldName The field name being encoded.
 	 * @param in The unencoded input string.
 	 * @return The encoded output string.
@@ -35,18 +35,18 @@ public interface ConfigEncoder {
 
 	/**
 	 * Decode a string.
-	 * 
+	 *
 	 * @param fieldName The field name being decoded.
 	 * @param in The encoded input string.
 	 * @return The decoded output string.
 	 */
 	public String decode(String fieldName, String in);
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified string is encoded.
-	 * 
+	 *
 	 * @param in The input string.
-	 * @return 
+	 * @return
 	 * 	<jk>true</jk> if the specified string is encoded.
 	 * 	<br>Returns <jk>false</jk> if the string is <jk>null</jk>.
 	 */

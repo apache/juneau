@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -22,7 +22,7 @@ import org.apache.juneau.utils.*;
  * Implements the 'exit' console command to gracefully shut down the microservice and JVM.
  */
 public class ExitCommand extends ConsoleCommand {
-	
+
 	private final MessageBundle mb = MessageBundle.create(ExitCommand.class, "Messages");
 
 	@Override /* ConsoleCommand */
@@ -39,7 +39,7 @@ public class ExitCommand extends ConsoleCommand {
 	public String getDescription() {
 		return mb.getString("description");
 	}
-	
+
 	@Override /* ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
 		Microservice.getInstance().stop();

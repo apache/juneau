@@ -117,7 +117,7 @@ public class RestClientTest extends RestTestcase {
 		RestClient c = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
-		final List<String> l = new ArrayList<String>();
+		final List<String> l = new ArrayList<>();
 		ResponsePattern p = new ResponsePattern("x=(\\d+),y=(\\S+)") {
 			@Override
 			public void onMatch(RestCall restCall, Matcher m) throws RestCallException {

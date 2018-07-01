@@ -40,10 +40,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Default REST method parameter resolvers.
- * 
+ *
  * <p>
  * Contains the default set of parameter resolvers for REST resource methods (i.e methods annotated with {@link RestResource @RestResource}).
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; juneau-rest-server &gt; Java Method Parameters</a>
@@ -569,7 +569,7 @@ class RestParamDefaults {
 	static final class BodyObject extends RestMethodParam {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
-		
+
 		protected BodyObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(BODY, m, null, t, s.getApi());
 			this.partParser = ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps);
@@ -581,7 +581,7 @@ class RestParamDefaults {
 			return req.getBody().asType(partParser, schema, type);
 		}
 	}
-	
+
 	static final class HeaderObject extends RestMethodParam {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
@@ -614,7 +614,7 @@ class RestParamDefaults {
 
 			if (isEmpty(name))
 				throw new InternalServerError("@ResponseHeader used without name or value on method ''{0}''.", method);
-			if (getTypeClass() == null) 
+			if (getTypeClass() == null)
 				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must be a subclass of Value.", type);
 			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
 				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must have a public no-arg constructor.", type);
@@ -640,7 +640,7 @@ class RestParamDefaults {
 			}
 			return v;
 		}
-		
+
 		public HttpPartSerializer getPartSerializer() {
 			return partSerializer;
 		}
@@ -649,7 +649,7 @@ class RestParamDefaults {
 	static final class ResponseObject extends RestMethodParam {
 
 		private String _default;
-		
+
 		protected ResponseObject(Method m, HttpPartSchema s, Type t) {
 			this(m, t, HttpPartSchema.getApiCodeMap(s, 200));
 			this._default = s.getDefault();
@@ -661,8 +661,8 @@ class RestParamDefaults {
 
 		protected ResponseObject(Method m, Type t, ObjectMap api) {
 			super(RESPONSE, m, "body", t, api);
-			
-			if (getTypeClass() == null) 
+
+			if (getTypeClass() == null)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be a subclass of Value.", type);
 			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must have a public no-arg constructor.", type);
@@ -687,9 +687,9 @@ class RestParamDefaults {
 	}
 
 	static class ResponseStatusObject extends RestMethodParam {
-		
+
 		private String _default;
-		
+
 		protected ResponseStatusObject(Method m, HttpPartSchema s, Type t) {
 			this(m, t, HttpPartSchema.getApiCodeMap(s, 200));
 			this._default = s.getDefault();
@@ -702,7 +702,7 @@ class RestParamDefaults {
 		protected ResponseStatusObject(Method m, Type t, ObjectMap api) {
 			super(RESPONSE_STATUS, m, null, t, api);
 
-			if (getTypeClass() == null) 
+			if (getTypeClass() == null)
 				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must be a subclass of Value.", type);
 			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
 				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must have a public no-arg constructor.", type);
@@ -821,11 +821,11 @@ class RestParamDefaults {
 	}
 
 	static final class PathRemainderObject extends RestMethodParam {
-		
+
 		protected PathRemainderObject(Method method, Type type) {
 			super(OTHER, method, null, type);
 		}
-		
+
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return ClassUtils.fromString(getTypeClass(), req.getPathMatch().getRemainder());

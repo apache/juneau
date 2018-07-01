@@ -28,11 +28,11 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestResourcePropertiesTest {
-	
+
 	//=================================================================================================================
 	// Basic tests
 	//=================================================================================================================
-	
+
 	@RestResource(
 		path="/p1",
 		properties={
@@ -83,7 +83,7 @@ public class RestResourcePropertiesTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01() throws Exception {
 		a.get("/p2").accept("text/plain").execute().assertBody("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=/p2,R1b=/,R2=bar,R3=,R4=a1,R5=c,R6=c");

@@ -20,20 +20,20 @@ import java.util.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
- * 
+ *
  * <p>
  * Instances of this class are considered light-weight and fast to construct, use, and discard.
- * 
+ *
  * <p>
  * This class contains the workhorse code for var resolution.
- * 
+ *
  * <p>
  * Instances of this class are created through the {@link VarResolver#createSession()} and
  * {@link VarResolver#createSession(Map)} methods.
- * 
+ *
  * <p>
  * Instances of this class are NOT guaranteed to be thread safe.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
@@ -46,12 +46,12 @@ public class VarResolverSession {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param context
 	 * 	The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with
 	 * 	that resolver.
 	 * @param sessionObjects The session objects.
-	 * 
+	 *
 	 */
 	public VarResolverSession(VarResolverContext context, Map<String,Object> sessionObjects) {
 		this.context = context;
@@ -60,7 +60,7 @@ public class VarResolverSession {
 
 	/**
 	 * Adds a session object to this session.
-	 * 
+	 *
 	 * @param name The name of the session object.
 	 * @param o The session object.
 	 * @return This method (for method chaining).
@@ -72,7 +72,7 @@ public class VarResolverSession {
 
 	/**
 	 * Resolve all variables in the specified string.
-	 * 
+	 *
 	 * @param s
 	 * 	The string to resolve variables in.
 	 * @return
@@ -107,7 +107,7 @@ public class VarResolverSession {
 				} catch (VarResolverException e) {
 					throw e;
 				} catch (Exception e) {
-					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", var); 
+					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", var);
 				}
 			}
 			return s;
@@ -122,7 +122,7 @@ public class VarResolverSession {
 
 	/**
 	 * Convenience method for resolving variables in arbitrary objects.
-	 * 
+	 *
 	 * <p>
 	 * Supports resolving variables in the following object types:
 	 * <ul>
@@ -133,7 +133,7 @@ public class VarResolverSession {
 	 * 	<li>Maps containing values of type {@link CharSequence}.
 	 * 		<br>Map class must have a no-arg constructor.
 	 * </ul>
-	 * 
+	 *
 	 * @param o The object.
 	 * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was
 	 * needed.
@@ -164,7 +164,7 @@ public class VarResolverSession {
 			} catch (VarResolverException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new VarResolverException(e, "Problem occurred resolving collection."); 
+				throw new VarResolverException(e, "Problem occurred resolving collection.");
 			}
 		}
 		if (o instanceof Map) {
@@ -179,7 +179,7 @@ public class VarResolverSession {
 			} catch (VarResolverException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new VarResolverException(e, "Problem occurred resolving map."); 
+				throw new VarResolverException(e, "Problem occurred resolving map.");
 			}
 		}
 		return o;
@@ -250,11 +250,11 @@ public class VarResolverSession {
 
 	/**
 	 * Resolves variables in the specified string and sends the output to the specified writer.
-	 * 
+	 *
 	 * <p>
 	 * More efficient than first parsing to a string and then serializing to the writer since this method doesn't need
 	 * to construct a large string.
-	 * 
+	 *
 	 * @param s The string to resolve variables in.
 	 * @param out The writer to write to.
 	 * @return The same writer.
@@ -351,7 +351,7 @@ public class VarResolverSession {
 							} catch (VarResolverException e) {
 								throw e;
 							} catch (Exception e) {
-								throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", varType); 
+								throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", varType);
 							}
 							x = i+1;
 						}
@@ -373,15 +373,15 @@ public class VarResolverSession {
 
 	/**
 	 * Returns the session object with the specified name.
-	 * 
+	 *
 	 * <p>
 	 * Casts it to the specified class type for you.
-	 * 
+	 *
 	 * @param c The class type to cast to.
 	 * @param name The name of the session object.
 	 * @param throwNotSetException Throw a {@link VarResolverException} if the session object is not set.
-	 * @return 
-	 * 	The session object.  
+	 * @return
+	 * 	The session object.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws VarResolverException If session object with specified name does not exist.
 	 */
@@ -406,7 +406,7 @@ public class VarResolverSession {
 
 	/**
 	 * Returns the {@link Var} with the specified name.
-	 * 
+	 *
 	 * @param name The var name (e.g. <js>"S"</js>).
 	 * @return The {@link Var} instance, or <jk>null</jk> if no <code>Var</code> is associated with the specified name.
 	 */

@@ -33,7 +33,7 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public ParserBuilder(PropertyStore ps) {
@@ -46,17 +46,17 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Auto-close streams.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -67,15 +67,15 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Auto-close streams.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder autoCloseStreams() {
@@ -84,17 +84,17 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Debug output lines.
-	 * 
+	 *
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <code>5</code>.
 	 * @return This object (for method chaining).
@@ -105,15 +105,15 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Parser listener.
-	 * 
+	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -123,16 +123,16 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -143,15 +143,15 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Strict mode.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder strict() {
@@ -160,17 +160,17 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -181,15 +181,15 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Trim parsed strings.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder trimStrings() {
@@ -198,16 +198,16 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Unbuffered.
-	 * 
+	 *
 	 * <p>
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
@@ -218,15 +218,15 @@ public class ParserBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Unbuffered.
-	 * 
+	 *
 	 * <p>
 	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder unbuffered() {
@@ -544,7 +544,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public ParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -610,7 +610,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override /* Context */
 	public Parser build() {
 		return null;

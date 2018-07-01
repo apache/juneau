@@ -32,7 +32,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public CsvParserBuilder(PropertyStore ps) {
@@ -431,7 +431,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public CsvParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -449,7 +449,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public CsvParserBuilder set(String name, Object value) {
 		super.set(name, value);

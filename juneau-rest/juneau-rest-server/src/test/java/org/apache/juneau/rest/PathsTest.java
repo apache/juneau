@@ -44,11 +44,11 @@ public class PathsTest {
 			.append("servletURI", req.getUriContext().getRootRelativeServletPath())
 			.append("servletParentURI", req.getUriContext().getRootRelativeServletPathParent());
 	}
-	
+
 	//=================================================================================================================
 	// No subpath
 	//=================================================================================================================
-	
+
 	@RestResource
 	public static class A {
 		@RestMethod(name=GET)
@@ -197,7 +197,7 @@ public class PathsTest {
 	//=================================================================================================================
 	// Subpath in method
 	//=================================================================================================================
-	
+
 	public static class B {
 		@RestMethod(name=GET, path="/subpath/*")
 		public ObjectMap get(RestRequest req, @PathRemainder String r) {
@@ -345,7 +345,7 @@ public class PathsTest {
 	//=================================================================================================================
 	// Child resource
 	//=================================================================================================================
-	
+
 	@RestResource(children={C01.class})
 	public static class C {}
 
@@ -357,7 +357,7 @@ public class PathsTest {
 		}
 	}
 	static MockRest c = MockRest.create(C.class);
-	
+
 	@Test
 	public void c01() throws Exception {
 		c.get("http://localhost/cp/sp/a").contextPath("/cp").servletPath("/sp").execute()
@@ -497,7 +497,7 @@ public class PathsTest {
 	//=================================================================================================================
 	// Child resource and subpath in method
 	//=================================================================================================================
-	
+
 	@RestResource(children={D01.class})
 	public static class D {}
 
@@ -509,7 +509,7 @@ public class PathsTest {
 		}
 	}
 	static MockRest d = MockRest.create(D.class);
-	
+
 	@Test
 	public void d01() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath").contextPath("/cp").servletPath("/sp").execute()

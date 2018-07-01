@@ -21,10 +21,10 @@ import org.apache.juneau.transform.*;
 
 /**
  * Utility class for efficiently converting objects between types.
- * 
+ *
  * <p>
  * If the value isn't an instance of the specified type, then converts the value if possible.
- * 
+ *
  * <p>
  * The following conversions are valid:
  * <table class='styled'>
@@ -156,7 +156,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Converts the specified object to the specified type.
-	 * 
+	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
 	 * @param type The class type to convert the value to.
@@ -170,7 +170,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Converts the specified object to the specified type.
-	 * 
+	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
 	 * @param type The class type to convert the value to.
@@ -184,7 +184,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Converts the specified object to the specified type.
-	 * 
+	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param outer
 	 * 	If class is a member class, this is the instance of the containing class.
@@ -200,10 +200,10 @@ public final class ObjectUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified objects are equal.
-	 * 
+	 *
 	 * <p>
 	 * Gracefully handles <jk>null</jk>s.
-	 * 
+	 *
 	 * @param o1 Object #1
 	 * @param o2 Object #2
 	 * @return <jk>true</jk> if the objects are equal or both <jk>null</jk>.
@@ -218,7 +218,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is empty.
-	 * 
+	 *
 	 * <p>
 	 * Return <jk>true</jk> if the value is any of the following:
 	 * <ul>
@@ -229,7 +229,7 @@ public final class ObjectUtils {
 	 * 	<li>An empty CharSequence
 	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
 	 * </ul>
-	 * 
+	 *
 	 * @param o The object to test.
 	 * @return <jk>true</jk> if the specified object is empty.
 	 */
@@ -245,10 +245,10 @@ public final class ObjectUtils {
 			return (Array.getLength(o) == 0);
 		return o.toString().isEmpty();
 	}
-	
+
 	/**
 	 * Returns the first non-null value in the specified array
-	 * 
+	 *
 	 * @param t
 	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
 	 */
@@ -260,10 +260,10 @@ public final class ObjectUtils {
 					return tt;
 		return null;
 	}
-	
+
 	/**
 	 * Converts an object to a Boolean.
-	 * 
+	 *
 	 * @param o The object to convert.
 	 * @return The converted object.
 	 */
@@ -273,7 +273,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Converts an object to an Integer.
-	 * 
+	 *
 	 * @param o The object to convert.
 	 * @return The converted object.
 	 */
@@ -283,7 +283,7 @@ public final class ObjectUtils {
 
 	/**
 	 * Converts an object to a Number.
-	 * 
+	 *
 	 * @param o The object to convert.
 	 * @return The converted object.
 	 */
@@ -298,10 +298,10 @@ public final class ObjectUtils {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Returns the enum names for the specified enum class.
-	 * 
+	 *
 	 * @param c The enum class.
 	 * @return A modifiable list of all names for that class.
 	 */
@@ -309,10 +309,10 @@ public final class ObjectUtils {
 	public static Enum<?>[] getEnumConstants(Class<?> c) {
 		return ((Class<Enum<?>>)c).getEnumConstants();
 	}
-	
+
 	/**
 	 * If the specified object is an instance of the specified class, casts it to that type.
-	 * 
+	 *
 	 * @param o The object to cast.
 	 * @param c The class to cast to.
 	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
@@ -323,10 +323,10 @@ public final class ObjectUtils {
 			return (T)o;
 		return null;
 	}
-	
+
 	/**
 	 * Returns the first non-zero value in the list of ints.
-	 * 
+	 *
 	 * @param ints The ints to check.
 	 * @return The first non-zero value, or <code>0</code> if they were all zero.
 	 */
@@ -336,10 +336,10 @@ public final class ObjectUtils {
 				return i;
 		return 0;
 	}
-	
+
 	/**
 	 * Returns the first non-empty value in the list of objects.
-	 * 
+	 *
 	 * @param o The objects to check.
 	 * @return The first object whose call to {@link #isEmpty(Object)} returns <jk>false</jk>, otherwise <jk>null</jk>.
 	 */

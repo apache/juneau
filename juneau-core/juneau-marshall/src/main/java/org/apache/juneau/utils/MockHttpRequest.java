@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -14,16 +14,16 @@ package org.apache.juneau.utils;
 
 /**
  * Represent the basic interface for an HTTP rquest.
- * 
+ *
  * <p>
  * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
  * class to send and receive mocked requests using the <code>MockRest</code> interface.
  */
 public interface MockHttpRequest {
-	
+
 	/**
 	 * Sets the URI of the request.
-	 * 
+	 *
 	 * @param uri The URI of the request.
 	 * @return This object (for method chaining).
 	 */
@@ -31,15 +31,15 @@ public interface MockHttpRequest {
 
 	/**
 	 * Sets the URI of the request.
-	 * 
+	 *
 	 * @param method The URI of the request.
 	 * @return This object (for method chaining).
 	 */
 	MockHttpRequest method(String method);
-	
+
 	/**
 	 * Sets a header on the request.
-	 * 
+	 *
 	 * @param name The header name.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
@@ -48,18 +48,18 @@ public interface MockHttpRequest {
 
 	/**
 	 * Sets the body of the request.
-	 * 
+	 *
 	 * @param body The body of the request.
 	 * @return This object (for method chaining).
 	 */
 	MockHttpRequest body(Object body);
-	
+
 	/**
 	 * Executes the request and returns the response.
-	 * 
+	 *
 	 * @return The response for the request.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	MockHttpResponse execute() throws Exception;
-	
+
 }

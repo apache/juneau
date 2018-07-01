@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -32,7 +32,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 public class ContentComboTestBase extends RestTestcase {
-	
+
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.
 	private static Map<String,RestClient> clients = new LinkedHashMap<>();
 
@@ -54,7 +54,7 @@ public class ContentComboTestBase extends RestTestcase {
 			default: throw new FormattedRuntimeException("Client for mediaType ''{0}'' not found", mt);
 		}
 	}
-	
+
 	protected RestClient getClient(String label, Serializer serializer, Parser parser) {
 		if (! clients.containsKey(label))
 			clients.put(label, SamplesMicroservice.client(serializer, parser).pooled().build());
@@ -77,7 +77,7 @@ public class ContentComboTestBase extends RestTestcase {
 		public final String name, url;
 		public final MediaType mediaType;
 		public final String[] expectedResults;
-		
+
 		public ComboInput(String name, String url, MediaType mediaType, String...expectedResults) {
 			this.name = name;
 			this.url = url;
@@ -86,9 +86,9 @@ public class ContentComboTestBase extends RestTestcase {
 		}
 	}
 
-	
+
 	private final ComboInput comboInput;
-	
+
 	public ContentComboTestBase(ComboInput comboInput) {
 		this.comboInput = comboInput;
 	}

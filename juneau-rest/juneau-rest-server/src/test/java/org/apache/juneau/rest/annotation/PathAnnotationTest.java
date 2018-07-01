@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -31,7 +31,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PathAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -71,7 +71,7 @@ public class PathAnnotationTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a00_nonExistentPath() throws Exception {
 		a.get("/bad?noTrace=true").execute().assertStatus(404);
@@ -145,7 +145,7 @@ public class PathAnnotationTest {
 		public String b08(@Path(name="x") boolean x) {
 			return String.valueOf(x);
 		}
-	}	
+	}
 	static MockRest b = MockRest.create(B.class);
 
 	@Test
@@ -188,7 +188,7 @@ public class PathAnnotationTest {
 		b.get("/boolean/true/foo").execute().assertBody("true");
 		b.get("/boolean/bad/foo?noTrace=true").execute().assertStatus(400);
 	}
-	
+
 	//=================================================================================================================
 	// Primitive objects
 	//=================================================================================================================
@@ -227,7 +227,7 @@ public class PathAnnotationTest {
 		public String c08(@Path(name="x") Boolean x) {
 			return String.valueOf(x);
 		}
-	}	
+	}
 	static MockRest c = MockRest.create(C.class);
 
 	@Test
@@ -290,7 +290,7 @@ public class PathAnnotationTest {
 		UUID uuid = UUID.randomUUID();
 		d.get("/uuid/" + uuid).execute().assertBody(uuid.toString());
 	}
-	
+
 	//=================================================================================================================
 	// @Path on POJO
 	//=================================================================================================================
@@ -349,7 +349,7 @@ public class PathAnnotationTest {
 		@RestMethod(name=GET,path="/mixed/{P}")
 		public void sa03(SA03 f) {}
 
-		
+
 		@Path("P")
 		public static class SA04 {}
 		@RestMethod(name=GET,path="/value/{P}")
@@ -625,7 +625,7 @@ public class PathAnnotationTest {
 		@RestMethod(name=GET,path="/example/{P}")
 		public void ta21(@Path(name="P", example="{f1:'b'}") String h) {}
 	}
-	
+
 	@Test
 	public void tc01_Path_onParameter_example2() throws Exception {
 		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example/{P}").get("get").getParameter("path", "P");

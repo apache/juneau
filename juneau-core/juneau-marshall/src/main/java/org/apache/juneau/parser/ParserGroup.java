@@ -22,9 +22,9 @@ import org.apache.juneau.http.*;
 
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
@@ -36,36 +36,36 @@ import org.apache.juneau.http.*;
  * 	<li>
  * 		Clones existing groups and all parsers within the group in a single method call.
  * </ul>
- * 
+ *
  * <h5 class='topic'>Match ordering</h5>
- * 
+ *
  * Parsers are matched against <code>Content-Type</code> strings in the order they exist in this group.
- * 
+ *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous parsers to be overridden through subsequent calls.
- * 
+ *
  * <p>
  * For example, calling <code>g.append(P1.<jk>class</jk>,P2.<jk>class</jk>).append(P3.<jk>class</jk>,P4.<jk>class</jk>)</code>
  * will result in the order <code>P3, P4, P1, P2</code>.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new parser group builder</jc>
  * 	ParserGroupBuilder b = ParserGroup.<jsm>create</jsm>();
- * 
+ *
  * 	<jc>// Add some parsers to it</jc>
  * 	b.append(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
- * 
+ *
  * 	<jc>// Change settings on parsers simultaneously</jc>
  * 	b.set(BeanContext.<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
  * 		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>);
- * 
+ *
  * 	ParserGroup g = b.build();
- * 
+ *
  * 	<jc>// Find the appropriate parser by Content-Type</jc>
  * 	ReaderParser p = (ReaderParser)g.getParser(<js>"text/json"</js>);
- * 
+ *
  * 	<jc>// Parse a bean from JSON</jc>
  * 	String json = <js>"{...}"</js>;
  * 	AddressBook addressBook = p.parse(json, AddressBook.<jk>class</jk>);
@@ -83,29 +83,29 @@ public final class ParserGroup extends BeanContext {
 
 	/**
 	 * Instantiates a new clean-slate {@link ParserGroupBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> ParserGroupBuilder()</code>.
-	 * 
+	 *
 	 * @return A new {@link ParserGroupBuilder} object.
 	 */
 	public static ParserGroupBuilder create() {
 		return new ParserGroupBuilder();
 	}
-	
+
 	/**
 	 * Returns a builder that's a copy of the settings on this parser group.
-	 * 
+	 *
 	 * @return A new {@link ParserGroupBuilder} initialized to this group.
 	 */
 	@Override /* Context */
 	public ParserGroupBuilder builder() {
 		return new ParserGroupBuilder(this);
 	}
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps
 	 * 	The modifiable properties that were used to initialize the parsers.
 	 * 	A snapshot of these will be made so that we can clone and modify this group.
@@ -134,10 +134,10 @@ public final class ParserGroup extends BeanContext {
 
 	/**
 	 * Searches the group for a parser that can handle the specified <l>Content-Type</l> header value.
-	 * 
+	 *
 	 * <p>
 	 * The returned object includes both the parser and media type that matched.
-	 * 
+	 *
 	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header value.
 	 * @return The parser and media type that matched the content type header, or <jk>null</jk> if no match was made.
 	 */
@@ -159,7 +159,7 @@ public final class ParserGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getParserMatch(String)} but matches using a {@link MediaType} instance.
-	 * 
+	 *
 	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.
 	 * @return The parser and media type that matched the media type, or <jk>null</jk> if no match was made.
 	 */
@@ -169,7 +169,7 @@ public final class ParserGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getParserMatch(String)} but returns just the matched parser.
-	 * 
+	 *
 	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.
 	 * @return The parser that matched the content type header, or <jk>null</jk> if no match was made.
 	 */
@@ -180,7 +180,7 @@ public final class ParserGroup extends BeanContext {
 
 	/**
 	 * Same as {@link #getParserMatch(MediaType)} but returns just the matched parser.
-	 * 
+	 *
 	 * @param mediaType The HTTP media type.
 	 * @return The parser that matched the media type, or <jk>null</jk> if no match was made.
 	 */
@@ -191,10 +191,10 @@ public final class ParserGroup extends BeanContext {
 
 	/**
 	 * Returns the media types that all parsers in this group can handle
-	 * 
+	 *
 	 * <p>
 	 * Entries are ordered in the same order as the parsers in the group.
-	 * 
+	 *
 	 * @return An unmodifiable list of media types.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
@@ -203,7 +203,7 @@ public final class ParserGroup extends BeanContext {
 
 	/**
 	 * Returns the parsers in this group.
-	 * 
+	 *
 	 * @return An unmodifiable list of parsers in this group.
 	 */
 	public List<Parser> getParsers() {

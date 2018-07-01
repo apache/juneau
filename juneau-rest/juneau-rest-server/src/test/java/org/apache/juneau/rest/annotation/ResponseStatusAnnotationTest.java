@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -28,7 +28,7 @@ import org.junit.runners.*;
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResponseStatusAnnotationTest {
-	
+
 	//=================================================================================================================
 	// Setup
 	//=================================================================================================================
@@ -51,7 +51,7 @@ public class ResponseStatusAnnotationTest {
 			@ResponseStatus(code=101)
 		})
 		public static class SA01 {}
-		
+
 		@RestMethod(name=GET,path="/code")
 		public void sa01(SA01 r) {}
 
@@ -60,7 +60,7 @@ public class ResponseStatusAnnotationTest {
 			@ResponseStatus(101)
 		})
 		public static class SA02 {}
-		
+
 		@RestMethod(name=GET,path="/salue")
 		public void sa02(SA02 r) {}
 
@@ -69,7 +69,7 @@ public class ResponseStatusAnnotationTest {
 			@ResponseStatus(code=101, description="a\nb")
 		})
 		public static class SA03 {}
-		
+
 		@RestMethod(name=GET,path="/description")
 		public void sa03(SA03 r) {}
 	}
@@ -92,7 +92,7 @@ public class ResponseStatusAnnotationTest {
 		assertEquals("a", x.getResponse(100).getDescription());
 		assertEquals("a\nb", x.getResponse(101).getDescription());
 	}
-	
+
 	//=================================================================================================================
 	// @ResponseStatuses on parameter
 	//=================================================================================================================
@@ -100,7 +100,7 @@ public class ResponseStatusAnnotationTest {
 	@RestResource
 	public static class SB {
 		public static class SB01 {}
-		
+
 		@RestMethod(name=GET,path="/code")
 		public void sb01(
 				@ResponseStatuses({
@@ -111,7 +111,7 @@ public class ResponseStatusAnnotationTest {
 			) {}
 
 		public static class SB02 {}
-		
+
 		@RestMethod(name=GET,path="/salue")
 		public void sb02(
 				@ResponseStatuses({
@@ -122,7 +122,7 @@ public class ResponseStatusAnnotationTest {
 			) {}
 
 		public static class SB03 {}
-		
+
 		@RestMethod(name=GET,path="/description")
 		public void sb03(
 				@ResponseStatuses({
@@ -132,7 +132,7 @@ public class ResponseStatusAnnotationTest {
 				SB03 r
 			) {}
 	}
-	
+
 	@Test
 	public void sb01_ResponseStatus_onParameter_code() throws Exception {
 		Operation x = getSwagger(new SB()).getPaths().get("/code").get("get");

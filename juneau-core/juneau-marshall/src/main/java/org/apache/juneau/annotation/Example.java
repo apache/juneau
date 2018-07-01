@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 
 /**
  * Identifies examples for POJOs.
- * 
+ *
  * <p>
  * Can be used in the following locations:
  * <ul>
@@ -27,34 +27,34 @@ import java.lang.annotation.*;
  * 	<li>Static field that contains an example of the POJO.
  * 	<li>On a class.
  * </ul>
- * 
+ *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bcode'>
  * 	<jc>// On a static method.</jc>
  * 	<jk>public class</jk> A {
- * 
+ *
  * 		<ja>@Example</ja>
  * 		<jk>public static</jk> A example() {
  * 			<jk>return new</jk> A().foo(<js>"bar"</js>).baz(123);
  * 		}
- * 		
+ *
  * 		...
  * 	}
- * 
+ *
  * 	<jc>// On a static field.</jc>
  * 	<jk>public class</jk> B {
- * 
+ *
  * 		<ja>@Example</ja>
  * 		<jk>public static</jk> B EXAMPLE = <jk>new</jk> B().foo(<js>"bar"</js>).baz(123);
- * 		
+ *
  * 		...
  * 	}
- * 
+ *
  * 	<jc>// On a class.</jc>
  * 	<ja>@Example</js>(<js>"{foo:'bar',baz:123}"</js>)
  * 	<jk>public class</jk> C {...}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li>TODO
@@ -65,13 +65,13 @@ import java.lang.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 public @interface Example {
-	
+
 	/**
 	 * An example of a POJO class.
-	 * 
+	 *
 	 * <p>
 	 * Format is Lax-JSON.
-	 * 
+	 *
 	 * <p>
 	 * This value is only used when the annotation is used on a type.
 	 */

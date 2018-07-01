@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class TransformCache {
 	private static final ConcurrentHashMap<Class<?>,Map<Class<?>,Transform<?,?>>> CACHE = new ConcurrentHashMap<>();
-	
+
 	/**
 	 * Represents a non-existent transform.
 	 */
@@ -34,10 +34,10 @@ public class TransformCache {
 			return null;
 		}
 	};
-	
+
 	// Special cases.
 	static {
-		
+
 		// TimeZone doesn't follow any standard conventions.
 		add(String.class, TimeZone.class,
 			new Transform<String,TimeZone>() {
@@ -46,14 +46,14 @@ public class TransformCache {
 				}
 			}
 		);
-		add(TimeZone.class, String.class, 
+		add(TimeZone.class, String.class,
 			new Transform<TimeZone,String>() {
 				@Override public String transform(Object outer, TimeZone in) {
 					return in.getID();
 				}
 			}
 		);
-		
+
 		// Locale(String) doesn't work on strings like "ja_JP".
 		add(String.class, Locale.class,
 			new Transform<String,Locale>() {
@@ -64,10 +64,10 @@ public class TransformCache {
 			}
 		);
 	}
-	
+
 	/**
 	 * Adds a transform for the specified input/output types.
-	 * 
+	 *
 	 * @param ic The input type.
 	 * @param oc The output type.
 	 * @param t The transform for converting the input to the output.
@@ -80,27 +80,27 @@ public class TransformCache {
 		}
 		m.put(ic, t);
 	}
-	
+
 	/**
 	 * Returns the transform for converting the specified input type to the specified output type.
-	 * 
+	 *
 	 * @param ic The input type.
 	 * @param oc The output type.
 	 * @return The transform for performing the conversion, or <jk>null</jk> if the conversion cannot be made.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <I,O> Transform<I,O> get(final Class<I> ic, final Class<O> oc) {
-		
+
 		if (ic == null || oc == null)
 			return null;
-		
+
 		Map<Class<?>,Transform<?,?>> m = CACHE.get(oc);
 		if (m == null) {
 			m = new ConcurrentHashMap<>();
 			CACHE.putIfAbsent(oc, m);
 			m = CACHE.get(oc);
 		}
-		
+
 		Transform t = m.get(ic);
 		if (t != null)
 			return t == NULL ? null : t;
@@ -113,7 +113,7 @@ public class TransformCache {
 				return t == NULL ? null : t;
 			}
 		}
-		
+
 		if (ic == oc) {
 			t = new Transform<I,O>() {
 				@Override public O transform(Object outer, I in) {
@@ -144,7 +144,7 @@ public class TransformCache {
 				}
 			}
 		}
-		
+
 		if (t == null) {
 			Method createMethod = ClassUtils.findPublicStaticCreateMethod(oc, ic, "create");
 			if (createMethod == null)
@@ -178,15 +178,15 @@ public class TransformCache {
 						}
 					};
 				}
-				
+
 			}
 		}
-		
+
 		if (t == null)
 			t = NULL;
-		
+
 		m.put(ic, t);
-		
+
 		return t == NULL ? null : t;
 	}
 }

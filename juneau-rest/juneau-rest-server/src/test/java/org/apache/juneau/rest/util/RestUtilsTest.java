@@ -201,7 +201,7 @@ public class RestUtilsTest {
 		assertEquals("/foo/bar", trimTrailingSlashes(new StringBuffer("/foo/bar//")).toString());
 		assertEquals("//foo/bar", trimTrailingSlashes(new StringBuffer("//foo/bar//")).toString());
 	}
-	
+
 	//=================================================================================================================
 	// Test URL-encoded strings parsed into plain-text values using UrlEncodingParser.parseIntoSimpleMap().
 	//=================================================================================================================

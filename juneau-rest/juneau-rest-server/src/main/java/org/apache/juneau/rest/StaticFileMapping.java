@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -24,34 +24,34 @@ import org.apache.juneau.utils.*;
 
 /**
  * Static file mapping.
- * 
+ *
  * <p>
  * Used to define paths and locations of statically-served files such as images or HTML documents.
- * 
+ *
  * <p>
  * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
  * <p class='bcode'>
  * <jk>package</jk> com.foo.mypackage;
- * 
+ *
  * <ja>@RestResource</ja>(
  * 	path=<js>"/myresource"</js>,
  * 	staticFiles={<js>"htdocs:docs"</js>}
  * )
  * <jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
  * </p>
- * 
+ *
  * <p>
  * Static files are found by using the {@link ClasspathResourceFinder} defined on the resource.
- * 
+ *
  * <p>
- * In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find 
+ * In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find
  * the <l>foobar.html</l> file in the following ordered locations:
  * <ol>
  * 	<li><l>com.foo.mypackage.docs</l> package.
  * 	<li><l>org.apache.juneau.rest.docs</l> package (since <l>BasicRestServlet</l> is in <l>org.apache.juneau.rest</l>).
  * 	<li><l>[working-dir]/docs</l> directory.
  * </ol>
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
@@ -59,32 +59,32 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.StaticFiles">Overview &gt; juneau-rest-server &gt; Static Files</a>
  * </ul>
  */
 public class StaticFileMapping {
-	
+
 	final Class<?> resourceClass;
 	final String path, location;
 	final Map<String,Object> responseHeaders;
-	
+
 	/**
 	 * Constructor.
-	 * 
-	 * @param resourceClass 
+	 *
+	 * @param resourceClass
 	 * 	The resource/servlet class which serves as the base location of the location below.
-	 * @param path 
+	 * @param path
 	 * 	The mapped URI path.
 	 * 	<br>Leading and trailing slashes are trimmed.
-	 * @param location 
+	 * @param location
 	 * 	The location relative to the resource class.
 	 * 	<br>Leading and trailing slashes are trimmed.
-	 * @param responseHeaders 
+	 * @param responseHeaders
 	 * 	The response headers.
-	 * 	Can be <jk>null</jk>. 
+	 * 	Can be <jk>null</jk>.
 	 */
 	public StaticFileMapping(Class<?> resourceClass, String path, String location, Map<String,Object> responseHeaders) {
 		this.resourceClass = resourceClass;
@@ -92,20 +92,20 @@ public class StaticFileMapping {
 		this.location = StringUtils.trimSlashes(location);
 		this.responseHeaders = immutableMap(responseHeaders);
 	}
-	
+
 	/**
 	 * Constructor using a mapping string to represent a path/location pairing.
-	 * 
+	 *
 	 * <p>
 	 * Mapping string must be one of these formats:
 	 * <ul>
 	 * 	<li><js>"path:location"</js> (e.g. <js>"foodocs:docs/foo"</js>)
 	 * 	<li><js>"path:location:headers-json"</js> (e.g. <js>"foodocs:docs/foo:{'Cache-Control':'max-age=86400, public'}"</js>)
 	 * </ul>
-	 * 
-	 * @param resourceClass 
+	 *
+	 * @param resourceClass
 	 * 	The resource/servlet class which serves as the base location of the location below.
-	 * @param mappingString 
+	 * @param mappingString
 	 * 	The mapping string that represents the path/location mapping.
 	 * 	<br>Leading and trailing slashes and whitespace are trimmed from path and location.
 	 */
@@ -114,8 +114,8 @@ public class StaticFileMapping {
 		String[] parts = StringUtils.split(mappingString, ':', 3);
 		if (parts == null || parts.length <= 1)
 			throw new FormattedRuntimeException("Invalid mapping string format: ''{0}'' on resource class ''{1}''", mappingString, resourceClass.getName());
-		this.path = StringUtils.trimSlashes(parts[0]); 
-		this.location = StringUtils.trimSlashes(parts[1]); 
+		this.path = StringUtils.trimSlashes(parts[0]);
+		this.location = StringUtils.trimSlashes(parts[1]);
 		if (parts.length == 3) {
 			try {
 				responseHeaders = unmodifiableMap(new ObjectMap(parts[2]));

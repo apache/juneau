@@ -36,7 +36,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public HtmlParserBuilder(PropertyStore ps) {
@@ -112,7 +112,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 		super.debugOutputLines(value);
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public HtmlParserBuilder listener(Class<? extends ParserListener> value) {
 		super.listener(value);
@@ -454,7 +454,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -472,7 +472,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
-	
+
 	@Override /* ContextBuilder */
 	public HtmlParserBuilder set(String name, Object value) {
 		super.set(name, value);

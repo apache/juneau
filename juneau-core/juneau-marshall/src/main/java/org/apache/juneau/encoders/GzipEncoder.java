@@ -37,7 +37,7 @@ public class GzipEncoder extends Encoder {
 	public String[] getCodings() {
 		return new String[]{"gzip"};
 	}
-	
+
 	private static class FinishableGZIPOutputStream extends GZIPOutputStream implements Finishable {
 		FinishableGZIPOutputStream(OutputStream out) throws IOException {
 			super(out);

@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Interface used to convert POJOs to simple strings in HTTP headers, query parameters, form-data parameters, and URI
  * path variables.
- * 
+ *
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  * 		strings are treated as plain-text and arrays/collections are serialized as comma-delimited lists.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Parts encoded in plain text.
  * </ul>
- * 
+ *
  * <p>
  * This class is used in the following locations:
  * <ul>
@@ -41,7 +41,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='ja'>{@link RequestBean#serializer()}
  * 	<li class='jc'><code>RestClientBuilder.partSerializer(Class)</code>
  * </ul>
- * 
+ *
  * <p>
  * Implementations must include either a public no-args constructor or a public constructor that takes in a single
  * {@link PropertyStore} object.
@@ -50,7 +50,7 @@ public interface HttpPartSerializer {
 
 	/**
 	 * Represent "no" part part serializer.
-	 * 
+	 *
 	 * <p>
 	 * Used to represent the absence of a part serializer in annotations.
 	 */
@@ -59,16 +59,16 @@ public interface HttpPartSerializer {
 	/**
 	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
 	 * form-data parameter, or URI path variable.
-	 * 
+	 *
 	 * <p>
 	 * Returned values should NOT be URL-encoded.
-	 * 
+	 *
 	 * @param type The category of value being serialized.
-	 * @param schema 
+	 * @param schema
 	 * 	Schema information about the part.
 	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part serializer use the schema information.  
-	 * @param value The value being serialized.	
+	 * 	<br>Not all part serializer use the schema information.
+	 * @param value The value being serialized.
 	 * @return The serialized value.
 	 * @throws SerializeException If a problem occurred while trying to parse the input.
 	 * @throws SchemaValidationSerializeException If the input or resulting HTTP part object fails schema validation.

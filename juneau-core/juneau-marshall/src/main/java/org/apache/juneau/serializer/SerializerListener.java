@@ -20,7 +20,7 @@ import org.apache.juneau.*;
  * Class for listening for serialize events during a serialization.
  */
 public class SerializerListener {
-	
+
 	/**
 	 * Represents no serializer listener.
 	 */
@@ -28,7 +28,7 @@ public class SerializerListener {
 
 	/**
 	 * Called when an exception is thrown when trying to call a bean getter method.
-	 * 
+	 *
 	 * @param session The serializer session.
 	 * @param t The throwable that was thrown by the getter method.
 	 * @param p The bean property we had an issue on.
@@ -40,7 +40,7 @@ public class SerializerListener {
 
 	/**
 	 * Called when an error occurs during serialization but is ignored.
-	 * 
+	 *
 	 * @param session The serializer session.
 	 * @param t The throwable that was thrown by the getter method.
 	 * @param msg The error message.

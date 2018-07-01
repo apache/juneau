@@ -25,7 +25,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestMethodMatchersTest {
-	
+
 	//=================================================================================================================
 	// Overlapping matchers
 	//=================================================================================================================
@@ -67,7 +67,7 @@ public class RestMethodMatchersTest {
 		}
 	}
 	static MockRest a = MockRest.create(A.class);
-	
+
 	@Test
 	public void a01() throws Exception {
 		a.get("/one?t1=1").execute().assertBody("OK-1a");

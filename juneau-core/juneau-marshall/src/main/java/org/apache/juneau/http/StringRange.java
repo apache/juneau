@@ -23,14 +23,14 @@ import org.apache.juneau.internal.*;
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
  * comparison and extension parameters.
- * 
+ *
  * <p>
  * Similar in concept to {@link MediaTypeRange} except instead of media types (e.g. <js>"text/json"</js>),
  * it's a simple type (e.g. <js>"iso-8601"</js>).
- * 
+ *
  * <p>
  * An example of a type range is a value in an <code>Accept-Encoding</code> header.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -47,7 +47,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Parses a header such as an <code>Accept-Encoding</code> header value into an array of type ranges.
-	 * 
+	 *
 	 * <p>
 	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
@@ -56,7 +56,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * 	                   1#( codings [ ";" "q" "=" qvalue ] )
 	 * 	codings          = ( content-coding | "*" )
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Examples of its use are:
 	 * <p class='bcode'>
@@ -66,7 +66,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
 	 * 	Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
 	 * </p>
-	 * 
+	 *
 	 * @param value
 	 * 	The value to parse.
 	 * 	If <jk>null</jk> or empty, returns a single <code>TypeRange</code> is returned that represents all types.
@@ -149,14 +149,14 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Returns the type enclosed by this type range.
-	 * 
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
 	 * 	<li><js>"compress"</js>
 	 * 	<li><js>"gzip"</js>
 	 * 	<li><js>"*"</js>
 	 * </ul>
-	 * 
+	 *
 	 * @return The type of this type range, lowercased, never <jk>null</jk>.
 	 */
 	public String getType() {
@@ -165,14 +165,14 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
-	 * 
+	 *
 	 * <p>
 	 * The quality value is a float between <code>0.0</code> (unacceptable) and <code>1.0</code> (most acceptable).
-	 * 
+	 *
 	 * <p>
 	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
 	 * header, as opposed to <js>"accept-*"</js> header, its value will always be <js>"1"</js>.
-	 * 
+	 *
 	 * @return The 'q' value for this type, never <jk>null</jk>.
 	 */
 	public Float getQValue() {
@@ -181,10 +181,10 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Returns the optional set of custom extensions defined for this type.
-	 * 
+	 *
 	 * <p>
 	 * Values are lowercase and never <jk>null</jk>.
-	 * 
+	 *
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public Map<String,Set<String>> getExtensions() {
@@ -193,10 +193,10 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Provides a string representation of this media range, suitable for use as an <code>Accept</code> header value.
-	 * 
+	 *
 	 * <p>
 	 * The literal text generated will be all lowercase.
-	 * 
+	 *
 	 * @return A media range suitable for use as an Accept header value, never <code>null</code>.
 	 */
 	@Override /* Object */
@@ -227,7 +227,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	/**
 	 * Returns <jk>true</jk> if the specified object is also a <code>MediaType</code>, and has the same qValue, type,
 	 * parameters, and extensions.
-	 * 
+	 *
 	 * @return <jk>true</jk> if object is equivalent.
 	 */
 	@Override /* Object */
@@ -247,7 +247,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Returns a hash based on this instance's <code>media-type</code>.
-	 * 
+	 *
 	 * @return A hash based on this instance's <code>media-type</code>.
 	 */
 	@Override /* Object */
@@ -257,14 +257,14 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Compares two MediaRanges for equality.
-	 * 
+	 *
 	 * <p>
 	 * The values are first compared according to <code>qValue</code> values.
 	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in
 	 * ascending order, with the <js>"*"</js> type demoted last in that order.
 	 * <code>TypeRanges</code> with the same types but with extensions are promoted over those same types with no
 	 * extensions.
-	 * 
+	 *
 	 * @param o The range to compare to.  Never <jk>null</jk>.
 	 */
 	@Override /* Comparable */
@@ -283,10 +283,10 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Checks if the specified type matches this range.
-	 * 
+	 *
 	 * <p>
 	 * The type will match this range if the range type string is the same or <js>"*"</js>.
-	 * 
+	 *
 	 * @param type The type to match against this range.
 	 * @return <jk>true</jk> if the specified type matches this range.
 	 */

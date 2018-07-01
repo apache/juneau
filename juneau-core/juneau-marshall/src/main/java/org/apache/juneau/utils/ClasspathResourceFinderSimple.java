@@ -20,10 +20,10 @@ import java.util.ResourceBundle.*;
 
 /**
  * Utility class for finding resources for a class.
- * 
+ *
  * <p>
  * Same as {@link Class#getResourceAsStream(String)} except looks for resources with localized file names.
- * 
+ *
  * <p>
  * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
  * For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
@@ -44,28 +44,28 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 	private static final List<Locale> ROOT_LOCALE = Arrays.asList(Locale.ROOT);
 
-	
+
 	@Override /* ClasspathResourceFinder */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 		return findClasspathResource(baseClass, name, locale);
 	}
-	
+
 	/**
 	 * Workhorse method for retrieving a resource from the classpath.
-	 * 
+	 *
 	 * <p>
 	 * This method can be overridden by subclasses to provide customized handling of resource retrieval from the classpath.
-	 * 
+	 *
 	 * @param baseClass The base class providing the classloader.
 	 * @param name The resource name.
-	 * @param locale 
+	 * @param locale
 	 * 	The resource locale.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
 	 * @throws IOException
 	 */
 	protected InputStream findClasspathResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		if (locale == null) 
+		if (locale == null)
 			return baseClass.getResourceAsStream(name);
 		for (String n : getCandidateFileNames(name, locale)) {
 			InputStream is = baseClass.getResourceAsStream(n);
@@ -74,10 +74,10 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns the candidate file names for the specified file name in the specified locale.
-	 * 
+	 *
 	 * <p>
 	 * For example, if looking for the <js>"MyResource.txt"</js> file in the Japanese locale, the iterator will return
 	 * names in the following order:
@@ -86,12 +86,12 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	 * 	<li><js>"MyResource_ja.txt"</js>
 	 * 	<li><js>"MyResource.txt"</js>
 	 * </ol>
-	 * 
+	 *
 	 * <p>
 	 * If the locale is <jk>null</jk>, then it will only return <js>"MyResource.txt"</js>.
-	 * 
+	 *
 	 * @param fileName The name of the file to get candidate file names on.
-	 * @param l 
+	 * @param l
 	 * 	The locale.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return An iterator of file names to look at.
@@ -131,7 +131,7 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 
 	/**
 	 * Returns the candidate locales for the specified locale.
-	 * 
+	 *
 	 * <p>
 	 * For example, if <code>locale</code> is <js>"ja_JP"</js>, then this method will return:
 	 * <ol>
@@ -139,7 +139,7 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	 * 	<li><js>"ja"</js>
 	 * 	<li><js>""</js>
 	 * </ol>
-	 * 
+	 *
 	 * @param locale The locale to get the list of candidate locales for.
 	 * @return The list of candidate locales.
 	 */

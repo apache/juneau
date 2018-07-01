@@ -64,7 +64,7 @@ public final class StringUtils {
 
 	/**
 	 * Parses a number from the specified reader stream.
-	 * 
+	 *
 	 * @param r The reader to parse the string from.
 	 * @param type
 	 * 	The number type to created.
@@ -90,7 +90,7 @@ public final class StringUtils {
 
 	/**
 	 * Reads a numeric string from the specified reader.
-	 * 
+	 *
 	 * @param r The reader to read form.
 	 * @return The parsed number string.
 	 * @throws Exception
@@ -112,7 +112,7 @@ public final class StringUtils {
 
 	/**
 	 * Parses a number from the specified string.
-	 * 
+	 *
 	 * @param s The string to parse the number from.
 	 * @param type
 	 * 	The number type to created.
@@ -211,10 +211,10 @@ public final class StringUtils {
 	private static final Pattern fpRegex = Pattern.compile(
 		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"
 	);
-	
+
 	/**
 	 * Converts a <code>String</code> to a <code>Character</code>
-	 * 
+	 *
 	 * @param o The string to convert.
 	 * @return The first character of the string if the string is of length 0, or <jk>null</jk> if the string is <jk>null</jk> or empty.
 	 * @throws ParseException If string has a length greater than 1.
@@ -229,10 +229,10 @@ public final class StringUtils {
 			return s.charAt(0);
 		throw new ParseException("Invalid character: ''{0}''", s);
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if this string can be parsed by {@link #parseNumber(String, Class)}.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if this string can be parsed without causing an exception.
 	 */
@@ -246,7 +246,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is a valid first character for a number.
-	 * 
+	 *
 	 * @param c The character to test.
 	 * @return <jk>true</jk> if the specified character is a valid first character for a number.
 	 */
@@ -256,7 +256,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string is a floating point number.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if the specified string is a floating point number.
 	 */
@@ -281,7 +281,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string is numeric.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if the specified string is numeric.
 	 */
@@ -332,7 +332,7 @@ public final class StringUtils {
 
 	/**
 	 * Convenience method for getting a stack trace as a string.
-	 * 
+	 *
 	 * @param t The throwable to get the stack trace from.
 	 * @return The same content that would normally be rendered via <code>t.printStackTrace()</code>
 	 */
@@ -346,7 +346,7 @@ public final class StringUtils {
 
 	/**
 	 * Join the specified tokens into a delimited string.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param separator The delimiter.
 	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
@@ -365,7 +365,7 @@ public final class StringUtils {
 
 	/**
 	 * Join the specified tokens into a delimited string.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
@@ -384,7 +384,7 @@ public final class StringUtils {
 
 	/**
 	 * Join the specified tokens into a delimited string.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
@@ -397,7 +397,7 @@ public final class StringUtils {
 
 	/**
 	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @param sb The string builder to append the response to.
@@ -416,7 +416,7 @@ public final class StringUtils {
 
 	/**
 	 * Joins the specified tokens into a delimited string.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
@@ -429,7 +429,7 @@ public final class StringUtils {
 
 	/**
 	 * Join the specified tokens into a delimited string and writes the output to the specified string builder.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @param sb The string builder to append the response to.
@@ -448,7 +448,7 @@ public final class StringUtils {
 
 	/**
 	 * Join the specified tokens into a delimited string.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
@@ -467,7 +467,7 @@ public final class StringUtils {
 
 	/**
 	 * Join the specified tokens into a delimited string.
-	 * 
+	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
@@ -483,10 +483,10 @@ public final class StringUtils {
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Joins tokens with newlines.
-	 * 
+	 *
 	 * @param tokens The tokens to concatenate.
 	 * @return A string with the specified tokens contatenated with newlines.
 	 */
@@ -496,7 +496,7 @@ public final class StringUtils {
 
 	/**
 	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
-	 * 
+	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
@@ -506,11 +506,11 @@ public final class StringUtils {
 
 	/**
 	 * Splits a character-delimited string into a string array.
-	 * 
+	 *
 	 * <p>
 	 * Does not split on escaped-delimiters (e.g. "\,");
 	 * Resulting tokens are trimmed of whitespace.
-	 * 
+	 *
 	 * <p>
 	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
 	 * split("a,b,c",',') -> {"a","b","c"}
@@ -522,7 +522,7 @@ public final class StringUtils {
 	 * split("a,b\,c,d", ',', false) -> {"a","b\,c","d"}
 	 * split("a,b\\,c,d", ',', false) -> {"a","b\","c","d"}
 	 * split("a,b\,c,d", ',', true) -> {"a","b,c","d"}
-	 * 
+	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
@@ -530,10 +530,10 @@ public final class StringUtils {
 	public static String[] split(String s, char c) {
 		return split(s, c, Integer.MAX_VALUE);
 	}
-	
+
 	/**
 	 * Same as {@link #split(String, char)} but limits the number of tokens returned.
-	 * 
+	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
 	 * @param limit The maximum number of tokens to return.
@@ -574,7 +574,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #split(String, char)} except splits all strings in the input and returns a single result.
-	 * 
+	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
 	 * @return The tokens.
@@ -594,14 +594,14 @@ public final class StringUtils {
 
 	/**
 	 * Splits a list of key-value pairs into an ordered map.
-	 * 
+	 *
 	 * <p>
 	 * Example:
 	 * <p class='bcode'>
 	 * 	String in = <js>"foo=1;bar=2"</js>;
 	 * 	Map m = StringUtils.<jsm>splitMap</jsm>(in, <js>';'</js>, <js>'='</js>, <jk>true</jk>);
 	 * </p>
-	 * 
+	 *
 	 * @param s The string to split.
 	 * @param delim The delimiter between the key-value pairs.
 	 * @param eq The delimiter between the key and value.
@@ -668,13 +668,13 @@ public final class StringUtils {
 
 		return m;
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified string contains any of the specified characters.
-	 * 
+	 *
 	 * @param s The string to test.
 	 * @param chars The characters to look for.
-	 * @return 
+	 * @return
 	 * 	<jk>true</jk> if the specified string contains any of the specified characters.
 	 * 	<br><jk>false</jk> if the string is <jk>null</jk>.
 	 */
@@ -683,16 +683,16 @@ public final class StringUtils {
 			return false;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
-			for (char c2 : chars) 
+			for (char c2 : chars)
 				if (c == c2)
 					return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Splits a space-delimited string with optionally quoted arguments.
-	 * 
+	 *
 	 * <p>
 	 * Examples:
 	 * <ul>
@@ -703,9 +703,9 @@ public final class StringUtils {
 	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <code>["foo","bar baz"]</code>
 	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <code>["foo","bar'baz"]</code>
 	 * </ul>
-	 * 
+	 *
 	 * @param s The input string.
-	 * @return 
+	 * @return
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
@@ -714,30 +714,30 @@ public final class StringUtils {
 
 		if (s == null)
 			return null;
-		
+
 		s = s.trim();
-		
+
 		if (isEmpty(s))
 			return new String[0];
-		
+
 		if (! containsAny(s, ' ', '\t', '\'', '"'))
 			return new String[]{s};
 
-		int 
+		int
 			S1 = 1,  // Looking for start of token.
 			S2 = 2,  // Found ', looking for end '
 			S3 = 3,  // Found ", looking for end "
 			S4 = 4;  // Found non-whitespace, looking for end whitespace.
-		
+
 		int state = S1;
-		
+
 		boolean isInEscape = false, needsUnescape = false;
 		int mark = 0;
-			
+
 		List<String> l = new ArrayList<>();
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
-			
+
 			if (state == S1) {
 				if (c == '\'') {
 					state = S2;
@@ -781,7 +781,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty.
 	 */
@@ -792,7 +792,7 @@ public final class StringUtils {
 	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty
 	 * string.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return
 	 * 	<jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty string.
@@ -803,7 +803,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
 	 */
@@ -814,7 +814,7 @@ public final class StringUtils {
 	/**
 	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or it's {@link #toString()} method doesn't return an empty
 	 * string.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return
 	 * 	<jk>true</jk> if specified string is not <jk>null</jk> or it's {@link #toString()} method doesn't return an empty string.
@@ -825,7 +825,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>null</jk> if the specified string is <jk>null</jk> or empty.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return <jk>null</jk> if the specified string is <jk>null</jk> or empty, or the same string if not.
 	 */
@@ -837,7 +837,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns an empty string if the specified string is <jk>null</jk>.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return An empty string if the specified string is <jk>null</jk>, or the same string otherwise.
 	 */
@@ -849,7 +849,7 @@ public final class StringUtils {
 
 	/**
 	 * Removes escape characters (\) from the specified characters.
-	 * 
+	 *
 	 * @param s The string to remove escape characters from.
 	 * @param toEscape The characters escaped.
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
@@ -860,7 +860,7 @@ public final class StringUtils {
 
 	/**
 	 * Removes escape characters (specified by escapeChar) from the specified characters.
-	 * 
+	 *
 	 * @param s The string to remove escape characters from.
 	 * @param toEscape The characters escaped.
 	 * @param escapeChar The escape character.
@@ -895,7 +895,7 @@ public final class StringUtils {
 
 	/**
 	 * Debug method for rendering non-ASCII character sequences.
-	 * 
+	 *
 	 * @param s The string to decode.
 	 * @return A string with non-ASCII characters converted to <js>"[hex]"</js> sequences.
 	 */
@@ -914,7 +914,7 @@ public final class StringUtils {
 
 	/**
 	 * An efficient method for checking if a string starts with a character.
-	 * 
+	 *
 	 * @param s The string to check.  Can be <jk>null</jk>.
 	 * @param c The character to check for.
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and starts with the specified character.
@@ -930,7 +930,7 @@ public final class StringUtils {
 
 	/**
 	 * An efficient method for checking if a string ends with a character.
-	 * 
+	 *
 	 * @param s The string to check.  Can be <jk>null</jk>.
 	 * @param c The character to check for.
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
@@ -946,7 +946,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #endsWith(String, char)} except check for multiple characters.
-	 * 
+	 *
 	 * @param s The string to check.  Can be <jk>null</jk>.
 	 * @param c The characters to check for.
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
@@ -966,7 +966,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts the specified number into a 2 hexadecimal characters.
-	 * 
+	 *
 	 * @param num The number to convert to hex.
 	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
 	 */
@@ -983,7 +983,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts the specified number into a 4 hexadecimal characters.
-	 * 
+	 *
 	 * @param num The number to convert to hex.
 	 * @return A <code><jk>char</jk>[4]</code> containing the specified characters.
 	 */
@@ -1002,7 +1002,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts the specified number into a 8 hexadecimal characters.
-	 * 
+	 *
 	 * @param num The number to convert to hex.
 	 * @return A <code><jk>char</jk>[8]</code> containing the specified characters.
 	 */
@@ -1021,7 +1021,7 @@ public final class StringUtils {
 
 	/**
 	 * Tests two strings for equality, but gracefully handles nulls.
-	 * 
+	 *
 	 * @param s1 String 1.
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are equal.
@@ -1036,7 +1036,7 @@ public final class StringUtils {
 
 	/**
 	 * Shortcut for calling <code>base64Encode(in.getBytes(<js>"UTF-8"</js>))</code>
-	 * 
+	 *
 	 * @param in The input string to convert.
 	 * @return The string converted to BASE-64 encoding.
 	 */
@@ -1048,7 +1048,7 @@ public final class StringUtils {
 
 	/**
 	 * BASE64-encodes the specified byte array.
-	 * 
+	 *
 	 * @param in The input byte array to convert.
 	 * @return The byte array converted to a BASE-64 encoded string.
 	 */
@@ -1077,7 +1077,7 @@ public final class StringUtils {
 
 	/**
 	 * Shortcut for calling <code>base64Decode(String)</code> and converting the result to a UTF-8 encoded string.
-	 * 
+	 *
 	 * @param in The BASE-64 encoded string to decode.
 	 * @return The decoded string.
 	 */
@@ -1090,7 +1090,7 @@ public final class StringUtils {
 
 	/**
 	 * BASE64-decodes the specified string.
-	 * 
+	 *
 	 * @param in The BASE-64 encoded string.
 	 * @return The decoded byte array.
 	 */
@@ -1135,10 +1135,10 @@ public final class StringUtils {
 
 	/**
 	 * Generated a random UUID with the specified number of characters.
-	 * 
+	 *
 	 * <p>
 	 * Characters are composed of lower-case ASCII letters and numbers only.
-	 * 
+	 *
 	 * <p>
 	 * This method conforms to the restrictions for hostnames as specified in <a class="doclink" href="https://tools.ietf.org/html/rfc952">RFC 952</a>
 	 * Since each character has 36 possible values, the square approximation formula for the number of generated IDs
@@ -1146,12 +1146,12 @@ public final class StringUtils {
 	 * <code>sqrt(36^N)</code>.
 	 * Dividing this number by 10 gives you an approximation of the number of generated IDs needed to produce a
 	 * &lt;1% chance of collision.
-	 * 
+	 *
 	 * <p>
 	 * For example, given 5 characters, the number of generated IDs need to produce a &lt;1% chance of collision would
 	 * be:
 	 * <code>sqrt(36^5)/10=777</code>
-	 * 
+	 *
 	 * @param numchars The number of characters in the generated UUID.
 	 * @return A new random UUID.
 	 */
@@ -1169,7 +1169,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link String#trim()} but prevents <code>NullPointerExceptions</code>.
-	 * 
+	 *
 	 * @param s The string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
@@ -1181,11 +1181,11 @@ public final class StringUtils {
 
 	/**
 	 * Parses an ISO8601 string into a date.
-	 * 
+	 *
 	 * <p>
 	 * Supports any of the following formats:
 	 * <br><code>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</code>
-	 * 
+	 *
 	 * @param date The date string.
 	 * @return The parsed date.
 	 * @throws IllegalArgumentException
@@ -1211,16 +1211,16 @@ public final class StringUtils {
 
 	/**
 	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values in the specified map.
-	 * 
+	 *
 	 * <p>
 	 * Nested variables are supported in both the input string and map values.
-	 * 
+	 *
 	 * <p>
 	 * If the map does not contain the specified value, the variable is not replaced.
-	 * 
+	 *
 	 * <p>
 	 * <jk>null</jk> values in the map are treated as blank strings.
-	 * 
+	 *
 	 * @param s The string containing variables to replace.
 	 * @param m The map containing the variable values.
 	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
@@ -1284,7 +1284,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified path string is prefixed with the specified prefix.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	pathStartsWith(<js>"foo"</js>, <js>"foo"</js>);  <jc>// true</jc>
@@ -1292,7 +1292,7 @@ public final class StringUtils {
 	 * 	pathStartsWith(<js>"foo2"</js>, <js>"foo"</js>);  <jc>// false</jc>
 	 * 	pathStartsWith(<js>"foo2"</js>, <js>""</js>);  <jc>// false</jc>
 	 * </p>
-	 * 
+	 *
 	 * @param path The path to check.
 	 * @param pathPrefix The prefix.
 	 * @return <jk>true</jk> if the specified path string is prefixed with the specified prefix.
@@ -1307,7 +1307,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #pathStartsWith(String, String)} but returns <jk>true</jk> if at least one prefix matches.
-	 * 
+	 *
 	 * @param path The path to check.
 	 * @param pathPrefixes The prefixes.
 	 * @return <jk>true</jk> if the specified path string is prefixed with any of the specified prefixes.
@@ -1321,7 +1321,7 @@ public final class StringUtils {
 
 	/**
 	 * Replaces <js>"\\uXXXX"</js> character sequences with their unicode characters.
-	 * 
+	 *
 	 * @param s The string to replace unicode sequences in.
 	 * @return A string with unicode sequences replaced.
 	 */
@@ -1341,7 +1341,7 @@ public final class StringUtils {
 
 	/**
 	 * Creates an escaped-unicode sequence (e.g. <js>"\\u1234"</js>) for the specified character.
-	 * 
+	 *
 	 * @param c The character to create a sequence for.
 	 * @return An escaped-unicode sequence.
 	 */
@@ -1352,10 +1352,10 @@ public final class StringUtils {
 			sb.append(cc);
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Returns the specified field in a delimited string without splitting the string.
-	 * 
+	 *
 	 * <p>
 	 * Equivalent to the following:
 	 * <p class='bcode'>
@@ -1363,7 +1363,7 @@ public final class StringUtils {
 	 * 	String[] parts = in.split(<js>","</js>);
 	 * 	String p1 = (parts.<jk>length</jk> > 1 ? parts[1] : <js>""</js>);
 	 * </p>
-	 * 
+	 *
 	 * @param fieldNum The field number.  Zero-indexed.
 	 * @param s The input string.
 	 * @param delim The delimiter character.
@@ -1375,7 +1375,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #getField(int, String, char)} except allows you to specify the default value.
-	 * 
+	 *
 	 * @param fieldNum The field number.  Zero-indexed.
 	 * @param s The input string.
 	 * @param delim The delimiter character.
@@ -1403,17 +1403,17 @@ public final class StringUtils {
 
 	/**
 	 * Calls {@link #toString()} on the specified object if it's not null.
-	 * 
+	 *
 	 * @param o The object to convert to a string.
 	 * @return The object converted to a string, or <jk>null</jk> if the object was null.
 	 */
 	public static String asString(Object o) {
 		return (o == null ? null : o.toString());
 	}
-	
+
 	/**
 	 * Converts an array of objects to an array of strings.
-	 * 
+	 *
 	 * @param o The array of objects to convert to strings.
 	 * @return A new array of objects converted to strings.
 	 */
@@ -1430,7 +1430,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts a hexadecimal byte stream (e.g. "34A5BC") into a UTF-8 encoded string.
-	 * 
+	 *
 	 * @param hex The hexadecimal string.
 	 * @return The UTF-8 string.
 	 */
@@ -1445,7 +1445,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts a space-deliminted hexadecimal byte stream (e.g. "34 A5 BC") into a UTF-8 encoded string.
-	 * 
+	 *
 	 * @param hex The hexadecimal string.
 	 * @return The UTF-8 string.
 	 */
@@ -1462,7 +1462,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts a byte array into a simple hexadecimal character string.
-	 * 
+	 *
 	 * @param bytes The bytes to convert to hexadecimal.
 	 * @return A new string consisting of hexadecimal characters.
 	 */
@@ -1477,7 +1477,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #toHex(byte[])} but puts spaces between the byte strings.
-	 * 
+	 *
 	 * @param bytes The bytes to convert to hexadecimal.
 	 * @return A new string consisting of hexadecimal characters.
 	 */
@@ -1494,7 +1494,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts a hexadecimal character string to a byte array.
-	 * 
+	 *
 	 * @param hex The string to convert to a byte array.
 	 * @return A new byte array.
 	 */
@@ -1508,7 +1508,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #fromHex(String)} except expects spaces between the byte strings.
-	 * 
+	 *
 	 * @param hex The string to convert to a byte array.
 	 * @return A new byte array.
 	 */
@@ -1522,7 +1522,7 @@ public final class StringUtils {
 
 	/**
 	 * Creates a repeated pattern.
-	 * 
+	 *
 	 * @param count The number of times to repeat the pattern.
 	 * @param pattern The pattern to repeat.
 	 * @return A new string consisting of the repeated pattern.
@@ -1536,7 +1536,7 @@ public final class StringUtils {
 
 	/**
 	 * Trims whitespace characters from the beginning of the specified string.
-	 * 
+	 *
 	 * @param s The string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
@@ -1549,7 +1549,7 @@ public final class StringUtils {
 
 	/**
 	 * Trims whitespace characters from the end of the specified string.
-	 * 
+	 *
 	 * @param s The string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
@@ -1562,7 +1562,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified string is one of the specified values.
-	 * 
+	 *
 	 * @param s
 	 * 	The string to test.
 	 * 	Can be <jk>null</jk>.
@@ -1580,7 +1580,7 @@ public final class StringUtils {
 
 	/**
 	 * Trims <js>'/'</js> characters from both the start and end of the specified string.
-	 * 
+	 *
 	 * @param s The string to trim.
 	 * @return A new trimmed string, or the same string if no trimming was necessary.
 	 */
@@ -1596,7 +1596,7 @@ public final class StringUtils {
 
 	/**
 	 * Trims <js>'/'</js> characters from the end of the specified string.
-	 * 
+	 *
 	 * @param s The string to trim.
 	 * @return A new trimmed string, or the same string if no trimming was necessary.
 	 */
@@ -1610,7 +1610,7 @@ public final class StringUtils {
 
 	/**
 	 * Trims <js>'/'</js> characters from the end of the specified string.
-	 * 
+	 *
 	 * @param s The string to trim.
 	 * @return The same string buffer.
 	 */
@@ -1624,7 +1624,7 @@ public final class StringUtils {
 
 	/**
 	 * Shortcut for calling <code>URLEncoder.<jsm>encode</jsm>(o.toString(), <js>"UTF-8"</js>)</code>.
-	 * 
+	 *
 	 * @param o The object to encode.
 	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
 	 */
@@ -1636,12 +1636,12 @@ public final class StringUtils {
 		return null;
 	}
 
-	private static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS = 
+	private static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS =
 		AsciiSet.create().ranges("a-z","A-Z","0-9").chars("-_.*/()").build();
-	
+
 	/**
 	 * Similar to {@link #urlEncode(Object)} but doesn't encode <js>"/"</js> characters.
-	 * 
+	 *
 	 * @param o The object to encode.
 	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
 	 */
@@ -1651,15 +1651,15 @@ public final class StringUtils {
 		String s = asString(o);
 
 		boolean needsEncode = false;
-		for (int i = 0; i < s.length() && ! needsEncode; i++) 
+		for (int i = 0; i < s.length() && ! needsEncode; i++)
 			needsEncode = URL_ENCODE_PATHINFO_VALIDCHARS.contains(s.charAt(i));
 		if (! needsEncode)
 			return s;
-		
+
 		StringBuilder sb = new StringBuilder();
 		CharArrayWriter caw = new CharArrayWriter();
 		int caseDiff = ('a' - 'A');
-		
+
 		for (int i = 0; i < s.length();) {
 			char c = s.charAt(i);
 			if (URL_ENCODE_PATHINFO_VALIDCHARS.contains(c)) {
@@ -1683,7 +1683,7 @@ public final class StringUtils {
 						}
 						i++;
 					} while (i < s.length() && !URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));
-					
+
 					caw.flush();
 					String s2 = new String(caw.toCharArray());
 					byte[] ba = s2.getBytes(IOUtils.UTF8);
@@ -1706,10 +1706,10 @@ public final class StringUtils {
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
-	 * 
+	 *
 	 * @param s The string to decode.
 	 * @return The decoded string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
@@ -1732,7 +1732,7 @@ public final class StringUtils {
 
 	/**
 	 * Encodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
-	 * 
+	 *
 	 * @param s The string to encode.
 	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
@@ -1749,10 +1749,10 @@ public final class StringUtils {
 		}
 		return s;
 	}
-	
+
 	/**
 	 * Same as {@link #urlEncode(String)} except only excapes characters that absolutely need to be escaped.
-	 * 
+	 *
 	 * @param s The string to escape.
 	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
@@ -1777,7 +1777,7 @@ public final class StringUtils {
 						sb.append(URLEncoder.encode(""+c, "UTF-8"));  // Yuck.
 					} catch (UnsupportedEncodingException e) {
 						// Not possible.
-					} 
+					}
 			}
 			s = sb.toString();
 		}
@@ -1786,7 +1786,7 @@ public final class StringUtils {
 
 	/**
 	 * Splits a string into equally-sized parts.
-	 * 
+	 *
 	 * @param s The string to split.
 	 * @param size The token sizes.
 	 * @return The tokens, or <jk>null</jk> if the input was <jk>null</jk>.
@@ -1794,12 +1794,12 @@ public final class StringUtils {
 	public static List<String> splitEqually(String s, int size) {
 		if (s == null)
 			return null;
-		if (size <= 0) 
+		if (size <= 0)
 			return Collections.singletonList(s);
-		
+
 		List<String> l = new ArrayList<>((s.length() + size - 1) / size);
 
-		for (int i = 0; i < s.length(); i += size) 
+		for (int i = 0; i < s.length(); i += size)
 			l.add(s.substring(i, Math.min(s.length(), i + size)));
 
 		return l;
@@ -1807,7 +1807,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns the first non-whitespace character in the string.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return
 	 * 	The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
@@ -1823,7 +1823,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns the last non-whitespace character in the string.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return
 	 * 	The last non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
@@ -1839,7 +1839,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns the character at the specified index in the string without throwing exceptions.
-	 * 
+	 *
 	 * @param s The string.
 	 * @param i The index position.
 	 * @return
@@ -1856,7 +1856,7 @@ public final class StringUtils {
 
 	/**
 	 * Efficiently determines whether a URL is of the pattern "xxx://xxx"
-	 * 
+	 *
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
@@ -1905,13 +1905,13 @@ public final class StringUtils {
 
 	/**
 	 * Efficiently determines whether a URL is of the pattern "xxx:/xxx".
-	 * 
+	 *
 	 * <p>
 	 * The pattern matched is: <code>[a-z]{2,}\:\/.*</code>
-	 * 
+	 *
 	 * <p>
 	 * Note that this excludes filesystem paths such as <js>"C:/temp"</js>.
-	 * 
+	 *
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
@@ -1957,7 +1957,7 @@ public final class StringUtils {
 
 	/**
 	 * Given an absolute URI, returns just the authority portion (e.g. <js>"http://hostname:port"</js>)
-	 * 
+	 *
 	 * @param s The URI string.
 	 * @return Just the authority portion of the URI.
 	 */
@@ -2010,7 +2010,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts the specified object to a URI.
-	 * 
+	 *
 	 * @param o The object to convert to a URI.
 	 * @return A new URI, or the same object if the object was already a URI, or
 	 */
@@ -2026,7 +2026,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns the first non-null, non-empty string in the list.
-	 * 
+	 *
 	 * @param s The strings to test.
 	 * @return The first non-empty string in the list, or <jk>null</jk> if they were all <jk>null</jk> or empty.
 	 */
@@ -2039,7 +2039,7 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link String#indexOf(int)} except allows you to check for multiple characters.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @param c The characters to check for.
 	 * @return The index into the string that is one of the specified characters.
@@ -2058,7 +2058,7 @@ public final class StringUtils {
 
 	/**
 	 * Similar to {@link MessageFormat#format(String, Object...)} except allows you to specify POJO arguments.
-	 * 
+	 *
 	 * @param pattern The string pattern.
 	 * @param args The arguments.
 	 * @return The formatted string.
@@ -2087,10 +2087,10 @@ public final class StringUtils {
 			return ClassUtils.toString((Method)o);
 		return o.toString();
 	}
-	
+
 	/**
 	 * Converts a string containing a possible multiplier suffix to an integer.
-	 * 
+	 *
 	 * <p>
 	 * The string can contain any of the following multiplier suffixes:
 	 * <ul>
@@ -2098,7 +2098,7 @@ public final class StringUtils {
 	 * 	<li><js>"M"</js> - x 1024*1024
 	 * 	<li><js>"G"</js> - x 1024*1024*1024
 	 * </ul>
-	 * 
+	 *
 	 * @param s The string to parse.
 	 * @return The parsed value.
 	 */
@@ -2117,10 +2117,10 @@ public final class StringUtils {
 		}
 		return Integer.decode(s) * m;
 	}
-	
+
 	/**
 	 * Converts a string containing a possible multiplier suffix to a long.
-	 * 
+	 *
 	 * <p>
 	 * The string can contain any of the following multiplier suffixes:
 	 * <ul>
@@ -2128,7 +2128,7 @@ public final class StringUtils {
 	 * 	<li><js>"M"</js> - x 1024*1024
 	 * 	<li><js>"G"</js> - x 1024*1024*1024
 	 * </ul>
-	 * 
+	 *
 	 * @param s The string to parse.
 	 * @return The parsed value.
 	 */
@@ -2147,10 +2147,10 @@ public final class StringUtils {
 		}
 		return Long.decode(s) * m;
 	}
-	
+
 	/**
 	 * Same as {@link String#contains(CharSequence)} except returns <jk>null</jk> if the value is null.
-	 * 
+	 *
 	 * @param value The string to check.
 	 * @param substring The value to check for.
 	 * @return <jk>true</jk> if the value contains the specified substring.
@@ -2158,10 +2158,10 @@ public final class StringUtils {
 	public static boolean contains(String value, CharSequence substring) {
 		return value == null ? false : value.contains(substring);
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified string appears to be an JSON array.
-	 * 
+	 *
 	 * @param o The object to test.
 	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON array.
@@ -2186,10 +2186,10 @@ public final class StringUtils {
 
 	/**
 	 * Parses a string that can consist of either a JSON array or comma-delimited list.
-	 * 
+	 *
 	 * <p>
 	 * The type of string is auto-detected.
-	 * 
+	 *
 	 * @param s The string to parse.
 	 * @return The parsed string.
 	 * @throws ParseException
@@ -2201,14 +2201,14 @@ public final class StringUtils {
 			return new ObjectList(Arrays.asList(StringUtils.split(s.trim(), ',')));
 		return new ObjectList(s);
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified string is valid JSON.
-	 * 
+	 *
 	 * <p>
 	 * Leading and trailing spaces are ignored.
 	 * <br>Leading and trailing comments are not allowed.
-	 * 
+	 *
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if the specified string is valid JSON.
 	 */
@@ -2224,10 +2224,10 @@ public final class StringUtils {
 			return true;
 		return false;
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified string appears to be a JSON object.
-	 * 
+	 *
 	 * @param o The object to test.
 	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON object.
@@ -2249,7 +2249,7 @@ public final class StringUtils {
 		}
 		return false;
 	}
-	
+
 	private static int firstRealCharacter(String s) {
 		try (StringReader r = new StringReader(s)) {
 			int c = 0;
@@ -2287,7 +2287,7 @@ public final class StringUtils {
 
 	/**
 	 * Takes in a string, splits it by lines, and then prepends each line with line numbers.
-	 * 
+	 *
 	 * @param s The string.
 	 * @return The string with line numbers added.
 	 */
@@ -2297,10 +2297,10 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #getNumberedLines(String)} except only returns the specified lines.
-	 * 
+	 *
 	 * <p>
 	 * Out-of-bounds values are allowed and fixed.
-	 * 
+	 *
 	 * @param s The string.
 	 * @param start The starting line (1-indexed).
 	 * @param end The ending line (1-indexed).
@@ -2316,14 +2316,14 @@ public final class StringUtils {
 		if (end > lines.length)
 			end = lines.length;
 		StringBuilder sb = new StringBuilder();
-		for (String l :  Arrays.asList(lines).subList(start-1, end)) 
+		for (String l :  Arrays.asList(lines).subList(start-1, end))
 			sb.append(String.format("%0"+digits+"d", start++)).append(": ").append(l).append("\n");
 		return sb.toString();
 	}
 
 	/**
 	 * Compares two strings, but gracefully handles <jk>nulls</jk>.
-	 * 
+	 *
 	 * @param s1 The first string.
 	 * @param s2 The second string.
 	 * @return The same as {@link String#compareTo(String)}.
@@ -2340,7 +2340,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns the first character in the specified string.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @return The first character in the string, or <code>0</code> if the string is <jk>null</jk> or empty.
 	 */
@@ -2349,10 +2349,10 @@ public final class StringUtils {
 			return 0;
 		return s.charAt(0);
 	}
-	
+
 	/**
 	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
-	 * 
+	 *
 	 * @param s The string to create a pattern from.
 	 * @return A regular expression pattern.
 	 */

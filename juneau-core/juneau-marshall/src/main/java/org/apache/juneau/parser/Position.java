@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -20,14 +20,14 @@ import org.apache.juneau.internal.*;
  * Identifies a position in a reader or input stream.
  */
 public class Position {
-	
+
 	static final Position UNKNOWN = new Position(-1);
-	
+
 	int line, column, position;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param line The current line number.
 	 * @param column The current column number.
 	 */
@@ -39,7 +39,7 @@ public class Position {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param position The current byte position.
 	 */
 	public Position(int position) {
@@ -47,7 +47,7 @@ public class Position {
 		this.column = -1;
 		this.position = position;
 	}
-	
+
 	@Override /* Object */
 	public String toString() {
 		List<String> l = new ArrayList<>();
@@ -64,16 +64,16 @@ public class Position {
 
 	/**
 	 * Returns the current line.
-	 * 
+	 *
 	 * @return The current line, or <code>-1</code> if not specified.
 	 */
 	public int getLine() {
 		return line;
 	}
-	
+
 	/**
 	 * Returns the current column.
-	 * 
+	 *
 	 * @return The current column, or <code>-1</code> if not specified.
 	 */
 	public int getColumn() {
@@ -82,7 +82,7 @@ public class Position {
 
 	/**
 	 * Returns the current byte position.
-	 * 
+	 *
 	 * @return The current byte position, or <code>-1</code> if not specified.
 	 */
 	public int getPosition() {

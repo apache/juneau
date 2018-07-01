@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -29,9 +29,9 @@ import org.apache.juneau.xmlschema.*;
 
 /**
  * Basic configuration for a REST resource.
- * 
+ *
  * <p>
- * Classes that don't extend from {@link BasicRestServlet} can implement this interface to 
+ * Classes that don't extend from {@link BasicRestServlet} can implement this interface to
  * be configured with the same serializers/parsers/etc... as {@link BasicRestServlet}.
  */
 @RestResource(
@@ -80,7 +80,7 @@ import org.apache.juneau.xmlschema.*;
 		footer="$C{REST/footer}",
 		nowrap="true"
 	),
-	
+
 	// Optional external configuration file.
 	config="$S{juneau.configFile}",
 

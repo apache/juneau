@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Base class for defining JAX-RS providers based on Juneau serializers and parsers.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server-jaxrs">Overview &gt; juneau-rest-server-jaxrs</a>
@@ -79,9 +79,9 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 	/**
 	 * Returns properties defined on the specified method through the {@link RestMethod#properties() @RestMethod.properties()}
-	 * annotation specified on the method and the {@link JuneauProvider#properties()} annotation specified on the 
+	 * annotation specified on the method and the {@link JuneauProvider#properties()} annotation specified on the
 	 * provider class.
-	 * 
+	 *
 	 * @param a All annotations defined on the method.
 	 * @return A map of all properties define on the method.
 	 */
@@ -120,9 +120,9 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			mp.append("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
-			
+
 			SerializerSession session = s.createSession(new SerializerSessionArgs(mp, null, locale, timeZone, sm.getMediaType(), null));
-			
+
 			// Leave this open in case an error occurs.
 			Closeable c = s.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os;
 			session.serialize(o, c);

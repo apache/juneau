@@ -19,7 +19,7 @@ import java.util.*;
 
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
@@ -32,7 +32,7 @@ public abstract class MapVar extends DefaultingVar {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param name The name of this variable.
 	 * @param m The map to pull values from.
 	 */

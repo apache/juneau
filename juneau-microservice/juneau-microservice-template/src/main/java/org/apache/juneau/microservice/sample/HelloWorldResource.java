@@ -29,9 +29,9 @@ import org.apache.juneau.rest.annotation.RestResource;
 public class HelloWorldResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	/** 
+	/**
 	 * GET request handler.
-	 * @return The string "Hello world!" 
+	 * @return The string "Hello world!"
 	 */
 	@RestMethod(name=GET, path="/*")
 	public String sayHello() {

@@ -19,24 +19,24 @@ import org.apache.juneau.svl.*;
 
 /**
  * URL variable resolver.
- * 
+ *
  * <p>
  * The format for this var is <js>"$U{uri}"</js>.
- * 
+ *
  * <p>
  * The advantage of using this variable is that you can resolve URLs with special protocols such as
  * <js>"servlet:/xxx"</js>.
- * 
+ *
  * <p>
  * See {@link UriResolver} for the kinds of URIs that can be resolved.
  * <ul>
  * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
  * </ul>
- * 
+ *
  * <p>
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver(UriResolution, UriRelativity)} with resolution
  * {@link UriResolution#ROOT_RELATIVE} and relativity {@link UriRelativity#RESOURCE}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>

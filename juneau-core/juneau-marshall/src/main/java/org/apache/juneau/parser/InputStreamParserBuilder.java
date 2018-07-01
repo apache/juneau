@@ -33,7 +33,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public InputStreamParserBuilder(PropertyStore ps) {
@@ -46,17 +46,17 @@ public class InputStreamParserBuilder extends ParserBuilder {
 
 	/**
 	 * Configuration property:  Binary input format.
-	 * 
+	 *
 	 * <p>
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
@@ -436,7 +436,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		super.useEnumNames();
 		return this;
 	}
-	
+
 	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
@@ -502,7 +502,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override /* Context */
 	public InputStreamParser build() {
 		return null;

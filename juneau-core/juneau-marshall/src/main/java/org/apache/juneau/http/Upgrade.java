@@ -14,32 +14,32 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Upgrade</l> HTTP request header.
- * 
+ *
  * <p>
  * Ask the client to upgrade to another protocol.
- * 
+ *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
  * </p>
- * 
+ *
  * <h5 class='topic'>RFC2616 Specification</h5>
- * 
+ *
  * The Upgrade general-header allows the client to specify what additional communication protocols it supports and
  * would like to use if the server finds it appropriate to switch protocols.
  * The server MUST use the Upgrade header field within a 101 (Switching Protocols) response to indicate which
  * protocol(s) are being switched.
- * 
+ *
  * <p class='bcode'>
  * 	Upgrade        = "Upgrade" ":" 1#product
  * </p>
- * 
+ *
  * <p>
  * For example,
  * <p class='bcode'>
  * 	Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11
  * </p>
- * 
+ *
  * <p>
  * The Upgrade header field is intended to provide a simple mechanism for transition from HTTP/1.1 to some other,
  * incompatible protocol.
@@ -49,7 +49,7 @@ package org.apache.juneau.http;
  * the more commonly supported protocol while indicating to the server that it would like to use a "better" protocol if
  * available (where "better" is determined by the server, possibly according to the nature of the method and/or resource
  * being requested).
- * 
+ *
  * <p>
  * The Upgrade header field only applies to switching application-layer protocols upon the existing transport-layer
  * connection.
@@ -57,22 +57,22 @@ package org.apache.juneau.http;
  * The capabilities and nature of the application-layer communication after the protocol change is entirely dependent
  * upon the new protocol chosen, although the first action after changing the protocol MUST be a response to the initial
  * HTTP request containing the Upgrade header field.
- * 
+ *
  * <p>
  * The Upgrade header field only applies to the immediate connection.
  * Therefore, the upgrade keyword MUST be supplied within a Connection header field (section 14.10) whenever Upgrade is
  * present in an HTTP/1.1 message.
- * 
+ *
  * <p>
  * The Upgrade header field cannot be used to indicate a switch to a protocol on a different connection.
  * For that purpose, it is more appropriate to use a 301, 302, 303, or 305 redirection response.
- * 
+ *
  * <p>
  * This specification only defines the protocol name "HTTP" for use by the family of Hypertext Transfer Protocols, as
  * defined by the HTTP version rules of section 3.1 and future updates to this specification.
  * Any token can be used as a protocol name; however, it will only be useful if both the client and server associate
  * the name with the same protocol.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
@@ -82,7 +82,7 @@ public final class Upgrade extends HeaderStringArray {
 
 	/**
 	 * Returns a parsed <code>Upgrade</code> header.
-	 * 
+	 *
 	 * @param value The <code>Upgrade</code> header string.
 	 * @return The parsed <code>Upgrade</code> header, or <jk>null</jk> if the string was null.
 	 */

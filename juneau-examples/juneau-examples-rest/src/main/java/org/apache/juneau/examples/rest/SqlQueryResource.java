@@ -39,8 +39,8 @@ import org.apache.juneau.rest.widget.*;
 	title="SQL query service",
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
 	htmldoc=@HtmlDoc(
-		widgets={ 
-			ThemeMenuItem.class 
+		widgets={
+			ThemeMenuItem.class
 		},
 		navlinks={
 			"up: request:/..",
@@ -71,11 +71,11 @@ public class SqlQueryResource extends BasicRestServlet {
 
 	/**
 	 * Initializes the registry URL and rest client.
-	 * 
+	 *
 	 * @param builder The resource config.
 	 * @throws Exception
 	 */
-	@RestHook(INIT) 
+	@RestHook(INIT)
 	public void initConnection(RestContextBuilder builder) throws Exception {
 		Config cf = builder.getConfig();
 
@@ -93,14 +93,14 @@ public class SqlQueryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, 
-		path="/", 
+		name=GET,
+		path="/",
 		summary="Display the query entry page"
 	)
 	public Div doGet(
 			@Query(name="sql", description="Text to prepopulate the SQL query field with.", example="select * from sys.systables") String sql
 		) {
-		
+
 		return div(
 			script("text/javascript",
 				"\n	// Quick and dirty function to allow tabs in textarea."
@@ -142,8 +142,8 @@ public class SqlQueryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=POST, 
-		path="/", 
+		name=POST,
+		path="/",
 		summary="Execute one or more queries",
 		swagger=@MethodSwagger(
 			responses={

@@ -20,13 +20,13 @@ import org.apache.juneau.utils.*;
 
 /**
  * Response handler for {@link InputStream} objects.
- * 
+ *
  * <p>
  * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
- * 
+ *
  * <p>
  * Sets the <code>Content-Type</code> response header to whatever was set via {@link RestResponse#setContentType(String)}.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>

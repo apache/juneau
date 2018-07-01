@@ -25,14 +25,14 @@ import org.apache.juneau.svl.*;
 
 /**
  * Rest info variable resolver.
- * 
+ *
  * <p>
  * The format for this var is <js>"$RI{key1[,key2...]}"</js>.
- * 
+ *
  * <p>
  * Used to resolve values returned by {@link RestRequest#getInfoProvider()}..
  * <br>When multiple keys are used, returns the first non-null/empty value.
- * 
+ *
  * <p>
  * The possible values are:
  * <ul>
@@ -48,22 +48,22 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"title"</js> - See {@link RestInfoProvider#getTitle(RestRequest)}
  * 	<li><js>"version"</js> - See {@link Info#getVersion()}
  * </ul>
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	String title = restRequest.resolveVars(<js>"$RI{title}"</js>); 
- * 	String titleOrDescription = restRequest.resolveVars(<js>"$RI{title,description}"</js>); 
+ * 	String title = restRequest.resolveVars(<js>"$RI{title}"</js>);
+ * 	String titleOrDescription = restRequest.resolveVars(<js>"$RI{title,description}"</js>);
  * </p>
- * 
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
- * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
+ * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver
  * 		or a session object on the resolver session.
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
@@ -86,7 +86,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 	public RestInfoVar() {
 		super(NAME);
 	}
-	
+
 	@Override /* Var */
 	protected boolean allowNested() {
 		return false;
@@ -111,7 +111,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 					return x == null ? null : s.toString(x);
 				}
 			} else if (c == 'd') {
-				if ("description".equals(key)) 
+				if ("description".equals(key))
 					return rip.getDescription(req);
 			} else if (c == 'e') {
 				if ("externalDocs".equals(key)) {
@@ -124,12 +124,12 @@ public class RestInfoVar extends MultipartResolvingVar {
 					return x == null ? null : s.toString(x);
 				}
 			} else if (c == 'm') {
-				if ("methodDescription".equals(key)) 
+				if ("methodDescription".equals(key))
 					return rip.getMethodDescription(req.getJavaMethod(), req);
-				if ("methodSummary".equals(key)) 
+				if ("methodSummary".equals(key))
 					return rip.getMethodSummary(req.getJavaMethod(), req);
 			} else if (c == 's') {
-				if ("siteName".equals(key)) 
+				if ("siteName".equals(key))
 					return rip.getSiteName(req);
 			} else if (c == 't') {
 				if ("tags".equals(key)) {
@@ -141,7 +141,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 					return swagger.getInfo().getTitle();
 				}
 			} else if (c == 'v') {
-				if ("version".equals(key)) 
+				if ("version".equals(key))
 					return swagger.getInfo().getVersion();
 			}
 			return null;

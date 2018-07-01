@@ -21,7 +21,7 @@ import org.apache.juneau.config.internal.*;
 
 /**
  * Represents a storage location for configuration files.
- * 
+ *
  * <p>
  * Content stores require two methods to be implemented:
  * <ul>
@@ -30,13 +30,13 @@ import org.apache.juneau.config.internal.*;
  * </ul>
  */
 public abstract class ConfigStore extends Context implements Closeable {
-	
+
 	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The settings for this content store.
 	 */
 	protected ConfigStore(PropertyStore ps) {
@@ -45,9 +45,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 
 	/**
 	 * Returns the contents of the configuration file.
-	 * 
+	 *
 	 * @param name The config file name.
-	 * @return 
+	 * @return
 	 * 	The contents of the configuration file.
 	 * 	<br>A blank string if the config does not exist.
 	 * 	<br>Never <jk>null</jk>.
@@ -57,11 +57,11 @@ public abstract class ConfigStore extends Context implements Closeable {
 
 	/**
 	 * Saves the contents of the configuration file if the underlying storage hasn't been modified.
-	 * 
+	 *
 	 * @param name The config file name.
 	 * @param expectedContents The expected contents of the file.
 	 * @param newContents The new contents.
-	 * @return 
+	 * @return
 	 * 	If <jk>null</jk>, then we successfully stored the contents of the file.
 	 * 	<br>Otherwise the contents of the file have changed and we return the new contents of the file.
 	 * @throws IOException
@@ -70,7 +70,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 
 	/**
 	 * Registers a new listener on this store.
-	 * 
+	 *
 	 * @param name The configuration name to listen for.
 	 * @param l The new listener.
 	 * @return This object (for method chaining).
@@ -84,26 +84,26 @@ public abstract class ConfigStore extends Context implements Closeable {
 		s.add(l);
 		return this;
 	}
-	
+
 	/**
 	 * Unregisters a listener from this store.
-	 * 
+	 *
 	 * @param name The configuration name to listen for.
 	 * @param l The listener to unregister.
 	 * @return This object (for method chaining).
 	 */
 	public synchronized ConfigStore unregister(String name, ConfigStoreListener l) {
 		Set<ConfigStoreListener> s = listeners.get(name);
-		if (s != null) 
+		if (s != null)
 			s.remove(l);
 		return this;
 	}
 
 	/**
 	 * Returns a map file containing the parsed contents of a configuration.
-	 * 
+	 *
 	 * @param name The configuration name.
-	 * @return 
+	 * @return
 	 * 	The parsed configuration.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws IOException
@@ -119,13 +119,13 @@ public abstract class ConfigStore extends Context implements Closeable {
 		register(name, cm);
 		return cm;
 	}
-	
+
 	/**
 	 * Called when the physical contents of a config file have changed.
-	 * 
+	 *
 	 * <p>
 	 * Triggers calls to {@link ConfigStoreListener#onChange(String)} on all registered listeners.
-	 * 
+	 *
 	 * @param name The config name (e.g. the filename without the extension).
 	 * @param contents The new contents.
 	 * @return This object (for method chaining).
@@ -140,7 +140,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 
 	/**
 	 * Convenience method for updating the contents of a file with lines.
-	 * 
+	 *
 	 * @param name The config name (e.g. the filename without the extension).
 	 * @param contentLines The new contents.
 	 * @return This object (for method chaining).
@@ -151,7 +151,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 			sb.append(l).append('\n');
 		return update(name, sb.toString());
 	}
-	
+
 	/**
 	 * Unused.
 	 */

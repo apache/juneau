@@ -21,35 +21,35 @@ import org.apache.juneau.http.*;
 
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
- * 
+ *
  * <h5 class='topic'>Description</h5>
- * 
+ *
  * Maintains a set of encoders and the codings that they can handle.
- * 
+ *
  * <p>
  * The {@link #getEncoderMatch(String)} and {@link #getEncoder(String)} methods are then used to find appropriate
  * encoders for specific <code>Accept-Encoding</code> and <code>Content-Encoding</code> header values.
- * 
+ *
  * <h5 class='topic'>Match ordering</h5>
- * 
+ *
  * Encoders are matched against <code>Accept-Encoding</code> strings in the order they exist in this group.
- * 
+ *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous encoders to be overridden through subsequent calls.
- * 
+ *
  * <p>
  * For example, calling <code>groupBuilder.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,
  * E4.<jk>class</jk>)</code> will result in the order <code>E3, E4, E1, E2</code>.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create an encoder group with support for gzip compression.</jc>
  * 	EncoderGroup g = EncoderGroup.<jsm>create</jsm>().append(GzipEncoder.<jk>class</jk>).build();
- * 
+ *
  * 	<jc>// Should return "gzip"</jc>
  * 	String matchedCoding = g.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
- * 
+ *
  * 	<jc>// Get the encoder</jc>
  * 	IEncoder encoder = g.getEncoder(matchedCoding);
  * </p>
@@ -66,10 +66,10 @@ public final class EncoderGroup {
 
 	/**
 	 * Instantiates a new clean-slate {@link EncoderGroupBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> EncoderGroupBuilder()</code>.
-	 * 
+	 *
 	 * @return A new {@link EncoderGroupBuilder} object.
 	 */
 	public static EncoderGroupBuilder create() {
@@ -78,16 +78,16 @@ public final class EncoderGroup {
 
 	/**
 	 * Returns a builder that's a copy of the settings on this encoder group.
-	 * 
+	 *
 	 * @return A new {@link EncoderGroupBuilder} initialized to this group.
 	 */
 	public EncoderGroupBuilder builder() {
 		return new EncoderGroupBuilder(this);
 	}
-	
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param encoders The encoders to add to this group.
 	 */
 	public EncoderGroup(Encoder[] encoders) {
@@ -110,13 +110,13 @@ public final class EncoderGroup {
 	/**
 	 * Returns the coding string for the matching encoder that can handle the specified <code>Accept-Encoding</code>
 	 * or <code>Content-Encoding</code> header value.
-	 * 
+	 *
 	 * <p>
 	 * Returns <jk>null</jk> if no encoders can handle it.
-	 * 
+	 *
 	 * <p>
 	 * This method is fully compliant with the RFC2616/14.3 and 14.11 specifications.
-	 * 
+	 *
 	 * @param acceptEncoding The <code>Accept-Encoding</code> or <code>Content-Encoding</code> value.
 	 * @return The coding value (e.g. <js>"gzip"</js>).
 	 */
@@ -138,7 +138,7 @@ public final class EncoderGroup {
 
 	/**
 	 * Returns the encoder registered with the specified coding (e.g. <js>"gzip"</js>).
-	 * 
+	 *
 	 * @param encoding The coding string.
 	 * @return The encoder, or <jk>null</jk> if encoder isn't registered with that coding.
 	 */
@@ -149,7 +149,7 @@ public final class EncoderGroup {
 
 	/**
 	 * Returns the set of codings supported by all encoders in this group.
-	 * 
+	 *
 	 * @return An unmodifiable list of codings supported by all encoders in this group.  Never <jk>null</jk>.
 	 */
 	public List<String> getSupportedEncodings() {
@@ -158,7 +158,7 @@ public final class EncoderGroup {
 
 	/**
 	 * Returns the encoders in this group.
-	 * 
+	 *
 	 * @return An unmodifiable list of encoders in this group.
 	 */
 	public List<Encoder> getEncoders() {

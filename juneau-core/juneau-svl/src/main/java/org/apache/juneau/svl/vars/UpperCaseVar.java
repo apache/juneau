@@ -16,17 +16,17 @@ import org.apache.juneau.svl.*;
 
 /**
  * Upper-case variable resolver.
- * 
+ *
  * <p>
  * The format for this var is <js>"$UC{stringValue}"</js>.
- * 
+ *
  * <p>
  * This variable simply converts to value to upper-case.
- * 
+ *
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>

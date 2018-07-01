@@ -18,7 +18,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * A subclass of HTML elements that contain <a href="https://www.w3.org/TR/html51/syntax.html#raw-text">raw text</a>
  * only.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
@@ -30,7 +30,7 @@ public class HtmlElementRawText extends HtmlElement {
 
 	/**
 	 * Returns the inner text of this element.
-	 * 
+	 *
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
 	@Xml(format=XmlFormat.TEXT_PWS)
@@ -41,7 +41,7 @@ public class HtmlElementRawText extends HtmlElement {
 
 	/**
 	 * Sets the inner text of this element.
-	 * 
+	 *
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object (for method chaining).
 	 */
@@ -53,7 +53,7 @@ public class HtmlElementRawText extends HtmlElement {
 
 	/**
 	 * Sets the text node on this element.
-	 * 
+	 *
 	 * @param text The text node to add to this element.
 	 * @return This object (for method chaining).
 	 */

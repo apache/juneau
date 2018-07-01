@@ -21,7 +21,7 @@ import org.apache.juneau.http.annotation.*;
 
 /**
  * REST methods can return this object as a shortcut for performing <code>HTTP 302</code> redirects.
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; juneau-rest-server &gt; Redirect</a>
@@ -35,10 +35,10 @@ public class Redirect {
 
 	/**
 	 * Redirect to the specified URL.
-	 * 
+	 *
 	 * <p>
 	 * Relative paths are interpreted as relative to the servlet path.
-	 * 
+	 *
 	 * @param uri
 	 * 	The URL to redirect to.
 	 * 	<br>Can be any of the following:
@@ -55,10 +55,10 @@ public class Redirect {
 
 	/**
 	 * Convenience method for redirecting to instance of {@link URL} and {@link URI}.
-	 * 
+	 *
 	 * <p>
 	 * Same as calling <code>toString()</code> on the object and using the other constructor.
-	 * 
+	 *
 	 * @param uri
 	 * 	The URL to redirect to.
 	 * 	<br>Can be any of the following:
@@ -74,10 +74,10 @@ public class Redirect {
 
 	/**
 	 * Redirect to the specified URL.
-	 * 
+	 *
 	 * <p>
 	 * Relative paths are interpreted as relative to the servlet path.
-	 * 
+	 *
 	 * @param httpResponseCode The HTTP response code.
 	 * @param url
 	 * 	The URL to redirect to.
@@ -105,7 +105,7 @@ public class Redirect {
 
 	/**
 	 * Returns the response code passed in through the constructor.
-	 * 
+	 *
 	 * @return The response code passed in through the constructor, or <code>0</code> if response code wasn't specified.
 	 */
 	public int getHttpResponseCode() {
@@ -114,7 +114,7 @@ public class Redirect {
 
 	/**
 	 * Returns the URI to redirect to.
-	 * 
+	 *
 	 * @return The URI to redirect to.
 	 */
 	public URI getURI() {

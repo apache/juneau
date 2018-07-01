@@ -16,11 +16,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * A basic variable resolver that returns the first non-null value.
- * 
+ *
  * <p>
  * The format for this var is <js>"$CO{arg1[,arg2...]}"</js>.
- * 
- * 
+ *
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>

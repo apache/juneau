@@ -21,26 +21,26 @@ import org.apache.juneau.utils.*;
 
 /**
  * The Schema Object allows the definition of input and output data types.
- * 
+ *
  * <p>
  * These types can be objects, but also primitives and arrays.
  * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
  * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
- * 
+ *
  * <p>
  * Further information about the properties can be found in JSON Schema Core and JSON Schema Validation.
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
- * 
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	SchemaInfo x = <jsm>schemaInfo</jsm>()
  * 		.type("string")
  * 		.title("foo")
- * 
+ *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- * 
+ *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
@@ -51,7 +51,7 @@ import org.apache.juneau.utils.*;
  * 		<js>"title"</js>: <js>"foo"</js>
  * 	}
  * </p>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
@@ -60,57 +60,57 @@ import org.apache.juneau.utils.*;
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
 public class SchemaInfo extends SwaggerElement {
 
-	private String 
+	private String
 		format,
 		title,
 		description,
 		pattern,
 		type,
-		discriminator, 
+		discriminator,
 		ref;
-	private Number 
+	private Number
 		multipleOf,
 		maximum,
 		minimum;
-	private Integer 
+	private Integer
 		maxLength,
 		minLength,
 		maxItems,
 		minItems,
 		maxProperties,
 		minProperties;
-	private Boolean 
+	private Boolean
 		exclusiveMaximum,
 		exclusiveMinimum,
 		uniqueItems,
 		readOnly;
-	private Object 
+	private Object
 		_default,
 		example;
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private List<Object> 
+	private List<Object>
 		_enum,
 		allOf;
 	private List<String>
 		required;
 	private Map<String,SchemaInfo> properties;
 	private SchemaInfo additionalProperties;
-	
+
 	/**
 	 * Default constructor.
 	 */
 	public SchemaInfo() {}
-	
+
 	/**
 	 * Copy constructor.
-	 * 
-	 * @param copyFrom The object to copy. 
+	 *
+	 * @param copyFrom The object to copy.
 	 */
 	public SchemaInfo(SchemaInfo copyFrom) {
 		super(copyFrom);
-		
+
 		this.format = copyFrom.format;
 		this.title = copyFrom.title;
 		this.description = copyFrom.description;
@@ -139,32 +139,32 @@ public class SchemaInfo extends SwaggerElement {
 		this._enum = newList(copyFrom._enum);
 		this.allOf = newList(copyFrom.allOf);
 		this.required = newList(copyFrom.required);
-		
+
 		this.properties = copyFrom.properties == null ? null : new LinkedHashMap<String,SchemaInfo>();
 		if (copyFrom.properties != null)
 			for (Map.Entry<String,SchemaInfo> e : copyFrom.properties.entrySet())
 				this.properties.put(e.getKey(), e.getValue().copy());
-		
+
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
 	}
-	
+
 	/**
 	 * Make a deep copy of this object.
-	 * 
-	 * @return A deep copy of this object. 
+	 *
+	 * @return A deep copy of this object.
 	 */
 	public SchemaInfo copy() {
 		return new SchemaInfo(this);
 	}
-	
+
 	/**
 	 * Bean property getter:  <property>format</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
 	 * </ul>
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getFormat() {
@@ -173,13 +173,13 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>format</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Formats defined by the OAS include:
@@ -203,7 +203,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setFormat(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -216,7 +216,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>title</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getTitle() {
@@ -225,8 +225,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>title</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -238,7 +238,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setTitle(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -251,7 +251,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -260,8 +260,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -274,7 +274,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDescription(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -287,10 +287,10 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>default</property>.
-	 * 
+	 *
 	 * <p>
 	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getDefault() {
@@ -299,11 +299,11 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>default</property>.
-	 * 
+	 *
 	 * <p>
 	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -315,7 +315,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDefault(Object)}.
-	 * 
+	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -325,7 +325,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMultipleOf() {
@@ -334,8 +334,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -347,7 +347,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMultipleOf(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -360,7 +360,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMaximum() {
@@ -369,8 +369,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maximum</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -382,7 +382,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaximum(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -395,7 +395,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMaximum() {
@@ -404,8 +404,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -417,7 +417,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExclusiveMaximum(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -430,7 +430,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMinimum() {
@@ -439,8 +439,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -452,7 +452,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinimum(Number)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
@@ -465,7 +465,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMinimum() {
@@ -474,8 +474,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -487,7 +487,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExclusiveMinimum(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -500,7 +500,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxLength() {
@@ -509,8 +509,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -522,7 +522,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaxLength(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -535,7 +535,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinLength() {
@@ -544,8 +544,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -557,7 +557,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinLength(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -570,7 +570,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getPattern() {
@@ -579,11 +579,11 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
-	 * 
+	 *
 	 * <p>
 	 * This string SHOULD be a valid regular expression.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -595,7 +595,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setPattern(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -608,7 +608,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxItems() {
@@ -617,8 +617,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -630,7 +630,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaxItems(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -643,7 +643,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinItems() {
@@ -652,8 +652,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -665,7 +665,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinItems(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -678,7 +678,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() {
@@ -686,8 +686,8 @@ public class SchemaInfo extends SwaggerElement {
 	}
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -699,7 +699,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setUniqueItems(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -712,7 +712,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxProperties</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxProperties() {
@@ -721,8 +721,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxProperties</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -734,7 +734,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMaxProperties(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -747,7 +747,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minProperties</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinProperties() {
@@ -756,8 +756,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minProperties</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -769,7 +769,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setMinProperties(Integer)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -782,10 +782,10 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>required</property>.
-	 * 
+	 *
 	 * <p>
 	 * The list of required properties.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<String> getRequired() {
@@ -794,11 +794,11 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>required</property>.
-	 * 
+	 *
 	 * <p>
 	 * The list of required properties.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -817,11 +817,11 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>required</property> property.
-	 * 
+	 *
 	 * <p>
 	 * The list of required properties.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
@@ -833,8 +833,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #addRequired(Collection)}.
-	 * 
-	 * @param values 
+	 *
+	 * @param values
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -859,7 +859,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Object> getEnum() {
@@ -868,13 +868,13 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -886,7 +886,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>enum</property> property.
-	 * 
+	 *
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -896,10 +896,10 @@ public class SchemaInfo extends SwaggerElement {
 		_enum = addToList(_enum, value);
 		return this;
 	}
-	
+
 	/**
 	 * Adds one or more values to the <property>enum</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -927,7 +927,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getType() {
@@ -936,13 +936,13 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
-	 * 
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 	 * </ul>
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Possible values include:
@@ -964,7 +964,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setType(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -977,7 +977,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>items</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Items getItems() {
@@ -986,8 +986,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>items</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -999,8 +999,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setItems(Items)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -1020,7 +1020,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>allOf</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Object> getAllOf() {
@@ -1029,8 +1029,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>allOf</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1042,7 +1042,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>allOf</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -1055,7 +1055,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>allOf</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -1083,7 +1083,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>properties</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,SchemaInfo> getProperties() {
@@ -1092,8 +1092,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>properties</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1105,7 +1105,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>properties</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -1118,7 +1118,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Adds one or more values to the <property>properties</property> property.
-	 * 
+	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
@@ -1140,7 +1140,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public SchemaInfo getAdditionalProperties() {
@@ -1149,8 +1149,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>additionalProperties</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1162,8 +1162,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>additionalProperties</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1175,7 +1175,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>discriminator</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDiscriminator() {
@@ -1184,8 +1184,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>discriminator</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1197,7 +1197,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setDiscriminator(String)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
@@ -1210,7 +1210,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>readOnly</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getReadOnly() {
@@ -1219,8 +1219,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>readOnly</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1232,7 +1232,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setReadOnly(Boolean)}.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
@@ -1245,7 +1245,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>xml</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Xml getXml() {
@@ -1254,8 +1254,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>xml</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1267,8 +1267,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setXml(Xml)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -1288,7 +1288,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
@@ -1297,8 +1297,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1310,8 +1310,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
@@ -1331,7 +1331,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>example</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getExample() {
@@ -1340,8 +1340,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>example</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1353,8 +1353,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setExample(Object)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1365,7 +1365,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>$ref</property>.
-	 * 
+	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("$ref")
@@ -1375,7 +1375,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
 	 */
 	public boolean hasRef() {
@@ -1384,8 +1384,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>$ref</property>.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1398,8 +1398,8 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Same as {@link #setRef(Object)}.
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -1482,12 +1482,12 @@ public class SchemaInfo extends SwaggerElement {
 			case "externalDocs": return externalDocs(value);
 			case "example": return example(value);
 			case "$ref": return ref(value);
-			default: 
+			default:
 				super.set(property, value);
 				return this;
 		}
 	}
-	
+
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = new ASet<String>()
@@ -1524,11 +1524,11 @@ public class SchemaInfo extends SwaggerElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
-	
-	
+
+
 	/**
 	 * Returns <jk>true</jk> if this schema info has one or more properties defined on it.
-	 * 
+	 *
 	 * @return <jk>true</jk> if this schema info has one or more properties defined on it.
 	 */
 	public boolean hasProperties() {
@@ -1537,19 +1537,19 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Resolves any <js>"$ref"</js> attributes in this element.
-	 * 
+	 *
 	 * @param swagger The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
-	 * @param maxDepth 
-	 * 	The maximum depth to resolve references. 
+	 * @param maxDepth
+	 * 	The maximum depth to resolve references.
 	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
 	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
-	 * @return 
+	 * @return
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
 	public SchemaInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
-		
+
 		if (ref != null) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
@@ -1561,14 +1561,14 @@ public class SchemaInfo extends SwaggerElement {
 
 		if (items != null)
 			items = items.resolveRefs(swagger, refStack, maxDepth);
-		
-		if (properties != null) 
+
+		if (properties != null)
 			for (Map.Entry<String,SchemaInfo> e : properties.entrySet())
 				e.setValue(e.getValue().resolveRefs(swagger, refStack, maxDepth));
-			
-		if (additionalProperties != null) 
+
+		if (additionalProperties != null)
 			additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);
-		
+
 		this.example = null;
 
 		return this;

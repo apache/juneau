@@ -19,7 +19,7 @@ public class Utils {
 
 	/**
 	 * Compare two integers numerically.
-	 * 
+	 *
 	 * @param i1 Integer #1
 	 * @param i2 Integer #2
 	 * @return

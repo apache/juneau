@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -30,10 +30,10 @@ public final class ClasspathResourceManager {
 	private final Class<?> baseClass;
 	private final ClasspathResourceFinder resourceFinder;
 	private final boolean useCache;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param baseClass The default class to use for retrieving resources from the classpath.
 	 * @param resourceFinder The resource finder implementation.
 	 * @param useCache If <jk>true</jk>, retrieved resources are stored in an in-memory cache for fast lookup.
@@ -48,10 +48,10 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * <p>
 	 * Uses default {@link ClasspathResourceFinderBasic} for finding resources.
-	 * 
+	 *
 	 * @param baseClass The default class to use for retrieving resources from the classpath.
 	 */
 	public ClasspathResourceManager(Class<?> baseClass) {
@@ -60,7 +60,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name.
-	 * 
+	 *
 	 * @param name Name of the desired resource.
 	 * @return An input stream to the object, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
@@ -71,7 +71,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name for the specified locale and returns it as an input stream.
-	 * 
+	 *
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return An input stream to the object, or <jk>null</jk> if the resource could not be found.
@@ -83,9 +83,9 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name for the specified locale and returns it as an input stream.
-	 * 
-	 * @param baseClass 
-	 * 	Overrides the default class to use for retrieving the classpath resource. 
+	 *
+	 * @param baseClass
+	 * 	Overrides the default class to use for retrieving the classpath resource.
 	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
@@ -96,27 +96,27 @@ public final class ClasspathResourceManager {
 
 		if (baseClass == null)
 			baseClass = this.baseClass;
-		
+
 		if (! useCache)
 			return resourceFinder.findResource(baseClass, name, locale);
 
 		ResourceKey key = new ResourceKey(name, locale);
-		
+
 		byte[] r = byteCache.get(key);
 		if (r == null) {
-			try (InputStream is = resourceFinder.findResource(baseClass, name, locale)) { 
+			try (InputStream is = resourceFinder.findResource(baseClass, name, locale)) {
 				if (is != null)
 					byteCache.putIfAbsent(key, IOUtils.readBytes(is, 1024));
 			}
 		}
-		
+
 		r = byteCache.get(key);
 		return r == null ? null : new ByteArrayInputStream(r);
 	}
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 * 
+	 *
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
@@ -127,9 +127,9 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 * 
-	 * @param baseClass 
-	 * 	Overrides the default class to use for retrieving the classpath resource. 
+	 *
+	 * @param baseClass
+	 * 	Overrides the default class to use for retrieving the classpath resource.
 	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
@@ -141,7 +141,7 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 * 
+	 *
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
@@ -153,9 +153,9 @@ public final class ClasspathResourceManager {
 
 	/**
 	 * Finds the resource with the given name and converts it to a simple string.
-	 * 
-	 * @param baseClass 
-	 * 	Overrides the default class to use for retrieving the classpath resource. 
+	 *
+	 * @param baseClass
+	 * 	Overrides the default class to use for retrieving the classpath resource.
 	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
@@ -166,7 +166,7 @@ public final class ClasspathResourceManager {
 
 		if (baseClass == null)
 			baseClass = this.baseClass;
-		
+
 		if (! useCache) {
 			try (InputStream is = resourceFinder.findResource(baseClass, name, locale)) {
 				return IOUtils.read(is, IOUtils.UTF8);
@@ -174,18 +174,18 @@ public final class ClasspathResourceManager {
 		}
 
 		ResourceKey key = new ResourceKey(name, locale);
-		
+
 		String r = stringCache.get(key);
 		if (r == null) {
-			try (InputStream is = resourceFinder.findResource(baseClass, name, locale)) { 
+			try (InputStream is = resourceFinder.findResource(baseClass, name, locale)) {
 				if (is != null)
 					stringCache.putIfAbsent(key, IOUtils.read(is, IOUtils.UTF8));
 			}
 		}
-		
+
 		return stringCache.get(key);
 	}
-	
+
 	private class ResourceKey {
 		final String name;
 		final Locale locale;
@@ -207,5 +207,5 @@ public final class ClasspathResourceManager {
 			ResourceKey ok = (ResourceKey)o;
 			return ObjectUtils.equals(name, ok.name) && ObjectUtils.equals(locale, ok.locale);
 		}
-	}	
+	}
 }

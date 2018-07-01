@@ -24,7 +24,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestMethodPathTest {
-	
+
 	//=================================================================================================================
 	// Overlapping URL patterns
 	//=================================================================================================================

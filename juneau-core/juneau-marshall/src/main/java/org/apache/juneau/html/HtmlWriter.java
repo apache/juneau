@@ -26,7 +26,7 @@ public class HtmlWriter extends XmlWriter {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
 	 * @param maxIndent The maximum indentation level.

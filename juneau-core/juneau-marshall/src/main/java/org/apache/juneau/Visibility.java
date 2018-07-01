@@ -18,10 +18,10 @@ import java.lang.reflect.*;
 
 /**
  * Defines class/field/method visibilities.
- * 
+ *
  * <p>
  * Used to specify minimum levels of visibility when detecting bean classes, methods, and fields.
- * 
+ *
  * <p>
  * Used in conjunction with the following bean context properties:
  * <ul>
@@ -50,7 +50,7 @@ public enum Visibility {
 
 	/**
 	 * Identifies if the specified mod matches this visibility.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
@@ -58,7 +58,7 @@ public enum Visibility {
 	 * 	<jsf>PRIVATE</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
 	 * 	<jsf>NONE</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//false</jc>
 	 * </p>
-	 * 
+	 *
 	 * @param mod The modifier from the object being tested (e.g. results from {@link Class#getModifiers()}.
 	 * @return <jk>true</jk> if this visibility matches the specified modifier attribute.
 	 */
@@ -74,7 +74,7 @@ public enum Visibility {
 
 	/**
 	 * Shortcut for <code>isVisible(x.getModifiers());</code>
-	 * 
+	 *
 	 * @param x The constructor to check.
 	 * @return <jk>true</jk> if the constructor is at least as visible as this object.
 	 */
@@ -84,7 +84,7 @@ public enum Visibility {
 
 	/**
 	 * Shortcut for <code>isVisible(x.getModifiers());</code>
-	 * 
+	 *
 	 * @param x The method to check.
 	 * @return <jk>true</jk> if the method is at least as visible as this object.
 	 */
@@ -94,7 +94,7 @@ public enum Visibility {
 
 	/**
 	 * Shortcut for <code>isVisible(x.getModifiers());</code>
-	 * 
+	 *
 	 * @param x The field to check.
 	 * @return <jk>true</jk> if the field is at least as visible as this object.
 	 */
@@ -104,10 +104,10 @@ public enum Visibility {
 
 	/**
 	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
-	 * 
+	 *
 	 * <p>
 	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
-	 * 
+	 *
 	 * @param x The constructor.
 	 * @return
 	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
@@ -124,10 +124,10 @@ public enum Visibility {
 
 	/**
 	 * Makes method accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
-	 * 
+	 *
 	 * <p>
 	 * Security exceptions thrown on the call to {@link Method#setAccessible(boolean)} are quietly ignored.
-	 * 
+	 *
 	 * @param x The method.
 	 * @return
 	 * 	The same method if visibility requirements met, or <jk>null</jk> if visibility requirement not
@@ -144,10 +144,10 @@ public enum Visibility {
 
 	/**
 	 * Makes field accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
-	 * 
+	 *
 	 * <p>
 	 * Security exceptions thrown on the call to {@link Field#setAccessible(boolean)} are quietly ignored.
-	 * 
+	 *
 	 * @param x The field.
 	 * @return
 	 * 	The same field if visibility requirements met, or <jk>null</jk> if visibility requirement not

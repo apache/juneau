@@ -32,7 +32,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param cm The class that this annotation is defined on.
 	 */
 	public JsonSchemaClassMeta(ClassMeta<?> cm) {
@@ -56,7 +56,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema @JsonSchema} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected JsonSchema getAnnotation() {
@@ -65,7 +65,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema#type() @JsonSchema.type()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getType() {
@@ -74,7 +74,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema#format() @JsonSchema.format()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getFormat() {
@@ -83,7 +83,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema#description() @JsonSchema.description()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getDescription() {
@@ -92,7 +92,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the {@link JsonSchema#example() @JsonSchema.example()} annotation defined on the class.
-	 * 
+	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Object getExample() {

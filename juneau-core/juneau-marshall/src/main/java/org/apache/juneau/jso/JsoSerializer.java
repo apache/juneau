@@ -19,9 +19,9 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJOs to HTTP responses as Java Serialized Object {@link ObjectOutputStream ObjectOutputStreams}.
- * 
+ *
  * <h5 class='topic'>Media types</h5>
- * 
+ *
  * Handles <code>Accept</code> types:  <code><b>application/x-java-serialized-object</b></code>
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>
@@ -42,7 +42,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public JsoSerializer(PropertyStore ps) {
@@ -56,14 +56,14 @@ public class JsoSerializer extends OutputStreamSerializer {
 
 	/**
 	 * Instantiates a new clean-slate {@link JsoSerializerBuilder} object.
-	 * 
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> JsoSerializerBuilder()</code>.
-	 * 
+	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
-	 * 
+	 *
 	 * @return A new {@link JsoSerializerBuilder} object.
 	 */
 	public static JsoSerializerBuilder create() {
