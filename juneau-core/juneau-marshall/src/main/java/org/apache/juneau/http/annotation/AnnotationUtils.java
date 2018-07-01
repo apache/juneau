@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -25,20 +25,20 @@ import org.apache.juneau.utils.*;
  * Various reusable utility methods when working with annotations.
  */
 public class AnnotationUtils {
-	
+
 	//=================================================================================================================
 	// Methods for merging annotation values.
 	//=================================================================================================================
-	
+
 	private static ObjectMap newMap(ObjectMap om) {
 		if (om == null)
 			return new ObjectMap();
 		return om.modifiable();
 	}
-	
+
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -60,7 +60,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -78,7 +78,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -126,7 +126,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -143,11 +143,11 @@ public class AnnotationUtils {
 			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
 			.appendSkipEmpty("_value", joinnl(a.api()))
 		;
-	}	
-	
+	}
+
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -167,7 +167,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -197,11 +197,11 @@ public class AnnotationUtils {
 			.appendSkipEmpty("$ref", a.$ref())
 			.appendSkipEmpty("_value", joinnl(a.value()))
 		;
-	}	
+	}
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -231,11 +231,11 @@ public class AnnotationUtils {
 			.appendSkipEmpty("$ref", a.$ref())
 			.appendSkipEmpty("_value", joinnl(a.value()))
 		;
-	}	
+	}
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -244,7 +244,7 @@ public class AnnotationUtils {
 		if (empty(a))
 			return om;
 		om = newMap(om);
-		return om 
+		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("description", joinnl(a.description()))
@@ -255,22 +255,24 @@ public class AnnotationUtils {
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
 			.appendSkipMinusOne("maxLength", a.maxLength())
 			.appendSkipMinusOne("maxItems", a.maxItems())
 			.appendSkipEmpty("minimum", a.minimum())
-			.appendSkipMinusOne("minLength", a.minLength())
 			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipFalse("uniqueItems", a.uniqueItems())
+			.appendSkipEmpty("pattern", a.pattern())
 			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("$ref", a.$ref())
 			.appendSkipEmpty("_value", joinnl(a.api()))
 		;
 	}
-	
+
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -279,14 +281,14 @@ public class AnnotationUtils {
 		if (empty(a))
 			return om;
 		om = newMap(om);
-		return om 
+		return om
 			.appendSkipEmpty("_value", joinnl(a.api()))
 			.appendSkipEmpty("description", joinnl(a.description()));
 	}
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -314,10 +316,10 @@ public class AnnotationUtils {
 			.appendSkipEmpty("_value", joinnl(a.api()))
 		;
 	}
-	
+
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -354,7 +356,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -390,7 +392,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Merges the contents of the specified annotation into the specified map.
-	 * 
+	 *
 	 * @param om The map to add the annotation values to.
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
@@ -424,21 +426,21 @@ public class AnnotationUtils {
 			.appendSkipEmpty("_value", joinnl(a.api()))
 		;
 	}
-	
+
 	//=================================================================================================================
 	// Methods for checking if annotations are empty.
 	//=================================================================================================================
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Query a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.description(), a._default(), a.example(), a.api())
 			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
 			&& allFalse(a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
@@ -448,14 +450,14 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Header a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.description(), a._default(), a._enum(), a.example(), a.api())
 			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
 			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
@@ -465,31 +467,31 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(FormData a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.description(), a._default(), a._enum(), a.example(), a.api())
 			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
 			&& allFalse(a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
 			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
 			&& empty(a.items());
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Response a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.description(), a.example(), a.examples(), a.api())
 			&& a.headers().length == 0
 			&& empty(a.schema())
@@ -498,7 +500,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
@@ -515,7 +517,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
@@ -528,14 +530,14 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Schema a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.value(), a.description(), a._default(), a._enum(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.examples())
 			&& allEmpty(a.$ref(), a.format(), a.title(), a.multipleOf(), a.maximum(), a.minimum(), a.pattern(), a.type(), a.discriminator())
 			&& allMinusOne(a.maxProperties(), a.minProperties())
@@ -544,67 +546,67 @@ public class AnnotationUtils {
 			&& empty(a.items())
 			&& empty(a.externalDocs());
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(ExternalDocs a) {
 		if (a == null)
 			return true;
-		return 
-			allEmpty(a.value(), a.description()) 
+		return
+			allEmpty(a.value(), a.description())
 			&& allEmpty(a.url());
 	}
-	
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Body a) {
 		if (a == null)
 			return true;
-		return 
-			allEmpty(a.description(), a.example(), a.examples(), a.api(), a.value()) 
+		return
+			allEmpty(a.description(), a.example(), a.examples(), a.api(), a.value())
 			&& allFalse(a.required())
 			&& empty(a.schema());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Contact a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.value())
 			&& allEmpty(a.name(), a.url(), a.email());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(License a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.value())
 			&& allEmpty(a.name(), a.url());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
@@ -621,7 +623,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
@@ -637,14 +639,14 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 * 
+	 *
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
 	public static boolean empty(Path a) {
 		if (a == null)
 			return true;
-		return 
+		return
 			allEmpty(a.description(), a._enum(), a.example(), a.api())
 			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.maximum(), a.minimum(), a.multipleOf())
 			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum())
@@ -654,7 +656,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if all the specified strings are empty or null.
-	 * 
+	 *
 	 * @param strings The strings to test.
 	 * @return <jk>true</jk> if all the specified strings are empty or null.
 	 */
@@ -667,7 +669,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if all the specified strings are empty or null.
-	 * 
+	 *
 	 * @param strings The strings to test.
 	 * @return <jk>true</jk> if all the specified strings are empty or null.
 	 */
@@ -680,7 +682,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if all the specified booleans are false.
-	 * 
+	 *
 	 * @param booleans The booleans to test.
 	 * @return <jk>true</jk> if all the specified booleans are false.
 	 */
@@ -693,7 +695,7 @@ public class AnnotationUtils {
 
 	/**
 	 * Returns <jk>true</jk> if all the specified longs are -1.
-	 * 
+	 *
 	 * @param longs The booleans to test.
 	 * @return <jk>true</jk> if all the specified longs are -1.
 	 */
@@ -703,11 +705,11 @@ public class AnnotationUtils {
 				return false;
 		return true;
 	}
-	
+
 	private static Set<String> toSet(String[] s) {
 		return toSet(joinnl(s));
 	}
-	
+
 	private static Set<String> toSet(String s) {
 		if (isEmpty(s))
 			return null;
@@ -720,7 +722,7 @@ public class AnnotationUtils {
 		}
 		return set;
 	}
-	
+
 	final static ObjectMap toObjectMap(String[] ss) {
 		String s = joinnl(ss);
 		if (s.isEmpty())

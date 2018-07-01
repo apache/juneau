@@ -1,0 +1,1281 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.httppart;
+
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.utils.*;
+import org.junit.*;
+
+public class HttpPartSchemaTest_Response {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic test
+	//-----------------------------------------------------------------------------------------------------------------
+	@Test
+	public void testBasic() throws Exception {
+		HttpPartSchema.create().build();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Response
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Response(
+		description={"b1","b2"},
+		schema=@Schema($ref="c1"),
+		example="f1",
+		api="{g1:true}"
+	)
+	public static class A02 {}
+
+	@Test
+	public void a02_basic_onClass() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, A02.class).noValidate(true).build();
+		assertObjectEquals("{description:'b1\\nb2',example:'f1',schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
+	}
+
+	public static class A03 {
+		public void a(
+				@Response(
+					description={"b1","b2"},
+					schema=@Schema($ref="c1"),
+					example="f1",
+					api="{g1:true}"
+				) String x
+			) {
+
+		}
+	}
+
+	@Test
+	public void a03_basic_onParameter() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, A03.class.getMethod("a", String.class), 0).noValidate(true).build();
+		assertObjectEquals("{description:'b1\\nb2',example:'f1',schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
+	}
+
+	public static class A04 {
+		public void a(
+				@Response(
+					description={"b3","b3"},
+					schema=@Schema($ref="c3"),
+					example="f2",
+					api="{g2:true}"
+				) A02 x
+			) {
+
+		}
+	}
+
+	@Test
+	public void a04_basic_onParameterAndClass() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, A04.class.getMethod("a", A02.class), 0).noValidate(true).build();
+		assertObjectEquals("{description:'b3\\nb3',example:'f2',schema:{'$ref':'c3'},_value:'{g2:true}'}", s.getApi());
+	}
+
+	@Response(
+		schema=@Schema(
+			type="number",
+			format="int32",
+			maximum="1",
+			minimum="2",
+			multipleOf="3",
+			pattern="4",
+			maxLength=1,
+			minLength=2,
+			maxItems=3,
+			minItems=4,
+			maxProperties=5,
+			minProperties=6,
+			exclusiveMaximum=true,
+			exclusiveMinimum=true,
+			uniqueItems=true,
+			_default={"c1","c2"},
+			_enum="e1,e2",
+			items=@Items(
+				type="integer",
+				format="int64",
+				collectionFormat="ssv",
+				maximum="5",
+				minimum="6",
+				multipleOf="7",
+				pattern="8",
+				maxLength=5,
+				minLength=6,
+				maxItems=7,
+				minItems=8,
+				exclusiveMaximum=false,
+				exclusiveMinimum=false,
+				uniqueItems=false,
+				_default={"c3","c4"},
+				_enum="e3,e4",
+				items=@SubItems(
+					type="string",
+					format="float",
+					collectionFormat="tsv",
+					maximum="9",
+					minimum="10",
+					multipleOf="11",
+					pattern="12",
+					maxLength=9,
+					minLength=10,
+					maxItems=11,
+					minItems=12,
+					exclusiveMaximum=true,
+					exclusiveMinimum=true,
+					uniqueItems=true,
+					_default={"c5","c6"},
+					_enum="e5,e6",
+					items={
+						"type:'array',",
+						"format:'double',",
+						"collectionFormat:'pipes',",
+						"maximum:'13',",
+						"minimum:'14',",
+						"multipleOf:'15',",
+						"pattern:'16',",
+						"maxLength:13,",
+						"minLength:14,",
+						"maxItems:15,",
+						"minItems:16,",
+						"exclusiveMaximum:false,",
+						"exclusiveMinimum:false,",
+						"uniqueItems:false,",
+						"default:'c7\\nc8',",
+						"enum:['e7','e8']",
+					}
+				)
+			)
+		)
+	)
+	public static class A05 {}
+
+	@Test
+	public void a05_basic_nestedItems_onClass() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, A05.class).noValidate(true).build();
+
+		assertEquals(HttpPartSchema.Type.NUMBER, s.getType());
+		assertEquals(HttpPartSchema.Format.INT32, s.getFormat());
+		assertEquals(1, s.getMaximum());
+		assertEquals(2, s.getMinimum());
+		assertEquals(3, s.getMultipleOf());
+		assertEquals("4", s.getPattern().pattern());
+		assertEquals(1, s.getMaxLength().longValue());
+		assertEquals(2, s.getMinLength().longValue());
+		assertEquals(3, s.getMaxItems().longValue());
+		assertEquals(4, s.getMinItems().longValue());
+		assertEquals(5, s.getMaxProperties().longValue());
+		assertEquals(6, s.getMinProperties().longValue());
+		assertTrue(s.getExclusiveMaximum());
+		assertTrue(s.getExclusiveMinimum());
+		assertTrue(s.getUniqueItems());
+		assertObjectEquals("['e1','e2']", s.getEnum());
+		assertEquals("c1\nc2", s.getDefault());
+
+		HttpPartSchema items = s.getItems();
+		assertEquals(HttpPartSchema.Type.INTEGER, items.getType());
+		assertEquals(HttpPartSchema.Format.INT64, items.getFormat());
+		assertEquals(HttpPartSchema.CollectionFormat.SSV, items.getCollectionFormat());
+		assertEquals(5, items.getMaximum());
+		assertEquals(6, items.getMinimum());
+		assertEquals(7, items.getMultipleOf());
+		assertEquals("8", items.getPattern().pattern());
+		assertEquals(5, items.getMaxLength().longValue());
+		assertEquals(6, items.getMinLength().longValue());
+		assertEquals(7, items.getMaxItems().longValue());
+		assertEquals(8, items.getMinItems().longValue());
+		assertNull(items.getExclusiveMaximum());
+		assertNull(items.getExclusiveMinimum());
+		assertNull(items.getUniqueItems());
+		assertObjectEquals("['e3','e4']", items.getEnum());
+		assertEquals("c3\nc4", items.getDefault());
+
+		items = items.getItems();
+		assertEquals(HttpPartSchema.Type.STRING, items.getType());
+		assertEquals(HttpPartSchema.Format.FLOAT, items.getFormat());
+		assertEquals(HttpPartSchema.CollectionFormat.TSV, items.getCollectionFormat());
+		assertEquals(9, items.getMaximum());
+		assertEquals(10, items.getMinimum());
+		assertEquals(11, items.getMultipleOf());
+		assertEquals("12", items.getPattern().pattern());
+		assertEquals(9, items.getMaxLength().longValue());
+		assertEquals(10, items.getMinLength().longValue());
+		assertEquals(11, items.getMaxItems().longValue());
+		assertEquals(12, items.getMinItems().longValue());
+		assertTrue(items.getExclusiveMaximum());
+		assertTrue(items.getExclusiveMinimum());
+		assertTrue(items.getUniqueItems());
+		assertObjectEquals("['e5','e6']", items.getEnum());
+		assertEquals("c5\nc6", items.getDefault());
+
+		items = items.getItems();
+		assertEquals(HttpPartSchema.Type.ARRAY, items.getType());
+		assertEquals(HttpPartSchema.Format.DOUBLE, items.getFormat());
+		assertEquals(HttpPartSchema.CollectionFormat.PIPES, items.getCollectionFormat());
+		assertEquals(13, items.getMaximum());
+		assertEquals(14, items.getMinimum());
+		assertEquals(15, items.getMultipleOf());
+		assertEquals("16", items.getPattern().pattern());
+		assertEquals(13, items.getMaxLength().longValue());
+		assertEquals(14, items.getMinLength().longValue());
+		assertEquals(15, items.getMaxItems().longValue());
+		assertEquals(16, items.getMinItems().longValue());
+		assertFalse(items.getExclusiveMaximum());
+		assertFalse(items.getExclusiveMinimum());
+		assertFalse(items.getUniqueItems());
+		assertObjectEquals("['e7','e8']", items.getEnum());
+		assertEquals("c7\nc8", items.getDefault());
+
+		assertObjectEquals(
+			"{schema:{'default':'c1\\nc2','enum':['e1','e2'],exclusiveMaximum:true,exclusiveMinimum:true,format:'int32',items:{collectionFormat:'ssv','default':'c3\\nc4','enum':['e3','e4'],format:'int64',items:{collectionFormat:'tsv','default':'c5\\nc6','enum':['e5','e6'],exclusiveMaximum:true,exclusiveMinimum:true,format:'float',items:{type:'array',format:'double',collectionFormat:'pipes',maximum:'13',minimum:'14',multipleOf:'15',pattern:'16',maxLength:13,minLength:14,maxItems:15,minItems:16,exclusiveMaximum:false,exclusiveMinimum:false,uniqueItems:false,'default':'c7\\nc8','enum':['e7','e8']},maximum:'9',maxItems:11,maxLength:9,minimum:'10',minItems:12,minLength:10,multipleOf:'11',pattern:'12',type:'string',uniqueItems:true},maximum:'5',maxItems:7,maxLength:5,minimum:'6',minItems:8,minLength:6,multipleOf:'7',pattern:'8',type:'integer'},maximum:'1',maxItems:3,maxLength:1,maxProperties:5,minimum:'2',minItems:4,minLength:2,minProperties:6,multipleOf:'3',pattern:'4',type:'number',uniqueItems:true},items:{collectionFormat:'ssv','default':'c3\\nc4','enum':['e3','e4'],format:'int64',items:{collectionFormat:'tsv','default':'c5\\nc6','enum':['e5','e6'],exclusiveMaximum:true,exclusiveMinimum:true,format:'float',items:{type:'array',format:'double',collectionFormat:'pipes',maximum:'13',minimum:'14',multipleOf:'15',pattern:'16',maxLength:13,minLength:14,maxItems:15,minItems:16,exclusiveMaximum:false,exclusiveMinimum:false,uniqueItems:false,'default':'c7\\nc8','enum':['e7','e8']},maximum:'9',maxItems:11,maxLength:9,minimum:'10',minItems:12,minLength:10,multipleOf:'11',pattern:'12',type:'string',uniqueItems:true},maximum:'5',maxItems:7,maxLength:5,minimum:'6',minItems:8,minLength:6,multipleOf:'7',pattern:'8',type:'integer'}}",
+			s.getApi()
+		);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String input validations.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Response(
+		schema=@Schema(
+			pattern="x.*"
+		)
+	)
+	public static class B02a {}
+
+	@Test
+	public void b02a_pattern() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, B02a.class).build();
+
+		s.validateInput("x");
+		s.validateInput("xx");
+
+		try {
+			s.validateInput("");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getLocalizedMessage());
+		}
+		try {
+			s.validateInput("y");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				pattern="w.*",
+				items=@SubItems(
+					pattern="x.*",
+					items={
+						"pattern:'y.*',",
+						"items:{pattern:'z.*'}"
+					}
+				)
+			)
+		)
+	)
+	public static class B02b {}
+
+	@Response(
+		schema=@Schema(
+			minLength=2, maxLength=3
+		)
+	)
+	public static class B03a {}
+
+	@Test
+	public void b03a_length() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, B03a.class).build();
+		s.validateInput("12");
+		s.validateInput("123");
+		s.validateInput(null);
+		try {
+			s.validateInput("1");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.validateInput("1234");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				minLength=2, maxLength=3,
+				items=@SubItems(
+					minLength=3, maxLength=4,
+					items={
+						"minLength:4,maxLength:5,",
+						"items:{minLength:5,maxLength:6}"
+					}
+				)
+			)
+		)
+	)
+	public static class B03b {}
+
+	@Test
+	public void b03b_length_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, B03b.class).build();
+
+		s.getItems().validateInput("12");
+		s.getItems().getItems().validateInput("123");
+		s.getItems().getItems().getItems().validateInput("1234");
+		s.getItems().getItems().getItems().getItems().validateInput("12345");
+
+		s.getItems().validateInput("123");
+		s.getItems().getItems().validateInput("1234");
+		s.getItems().getItems().getItems().validateInput("12345");
+		s.getItems().getItems().getItems().getItems().validateInput("123456");
+
+		s.getItems().validateInput(null);
+		s.getItems().getItems().validateInput(null);
+		s.getItems().getItems().getItems().validateInput(null);
+		s.getItems().getItems().getItems().getItems().validateInput(null);
+
+		try {
+			s.getItems().validateInput("1");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateInput("12");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateInput("123");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateInput("1234");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
+		}
+
+		try {
+			s.getItems().validateInput("1234");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateInput("12345");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateInput("123456");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateInput("1234567");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(_enum="X,Y"))
+	public static class B04a {}
+
+	@Test
+	public void b04a_enum() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, B04a.class).build();
+		s.validateInput("X");
+		s.validateInput("Y");
+		s.validateInput(null);
+		try {
+			s.validateInput("Z");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X','Y']", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(_enum=" X , Y "))
+	public static class B04b {}
+
+	@Test
+	public void b04b_enum() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, B04b.class).build();
+		s.validateInput("X");
+		s.validateInput("Y");
+		s.validateInput(null);
+		try {
+			s.validateInput("Z");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X','Y']", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(_enum="['X','Y']"))
+	public static class B04c {}
+
+	@Test
+	public void b04c_enum_json() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, B04c.class).build();
+		s.validateInput("X");
+		s.validateInput("Y");
+		s.validateInput(null);
+		try {
+			s.validateInput("Z");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X','Y']", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				_enum="['W']",
+				items=@SubItems(
+					_enum="['X']",
+					items={
+						"enum:['Y'],",
+						"items:{enum:['Z']}"
+					}
+				)
+			)
+		)
+	)
+	public static class B04d {}
+
+	@Test
+	public void b04d_enum_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, B04d.class).build();
+
+		s.getItems().validateInput("W");
+		s.getItems().getItems().validateInput("X");
+		s.getItems().getItems().getItems().validateInput("Y");
+		s.getItems().getItems().getItems().getItems().validateInput("Z");
+
+		try {
+			s.getItems().validateInput("V");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['W']", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateInput("V");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X']", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateInput("V");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['Y']", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateInput("V");
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['Z']", e.getLocalizedMessage());
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Numeric validations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Response(schema=@Schema(minimum="10", maximum="100"))
+	public static class C01a {}
+
+	@Test
+	public void c01a_minmax_ints() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C01a.class).build();
+		s.validateOutput(10, BeanContext.DEFAULT);
+		s.validateOutput(100, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(9, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.validateOutput(101, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				minimum="10", maximum="100",
+				items=@SubItems(
+					minimum="100", maximum="1000",
+					items={
+						"minimum:1000,maximum:10000,",
+						"items:{minimum:10000,maximum:100000}"
+					}
+				)
+			)
+		)
+	)
+	public static class C01b {}
+
+	@Test
+	public void c01b_minmax_ints_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C01b.class).build();
+
+		s.getItems().validateOutput(10, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(100, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(9, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(99, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(999, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+
+		try {
+			s.getItems().validateOutput(101, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(minimum="10", maximum="100", exclusiveMinimum=true, exclusiveMaximum=true))
+	public static class C02a {}
+
+	@Test
+	public void c02a_minmax_exclusive() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C02a.class).build();
+		s.validateOutput(11, BeanContext.DEFAULT);
+		s.validateOutput(99, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(10, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.validateOutput(100, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				minimum="10", maximum="100", exclusiveMinimum=true, exclusiveMaximum=true,
+				items=@SubItems(
+					minimum="100", maximum="1000", exclusiveMinimum=true, exclusiveMaximum=true,
+					items={
+						"minimum:1000,maximum:10000,exclusiveMinimum:true,exclusiveMaximum:true,",
+						"items:{minimum:10000,maximum:100000,exclusiveMinimum:true,exclusiveMaximum:true}"
+					}
+				)
+			)
+		)
+	)
+	public static class C02b {}
+
+	@Test
+	public void c02b_minmax_exclusive_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C02b.class).build();
+
+		s.getItems().validateOutput(11, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(99, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(999, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(99999, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(10, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+
+		try {
+			s.getItems().validateOutput(100, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(minimum="10.1", maximum="100.1"))
+	public static class C03a {}
+
+	@Test
+	public void c03_minmax_floats() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C03a.class).build();
+		s.validateOutput(10.1f, BeanContext.DEFAULT);
+		s.validateOutput(100.1f, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(10f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.validateOutput(100.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				minimum="10.1", maximum="100.1",
+				items=@SubItems(
+					minimum="100.1", maximum="1000.1",
+					items={
+						"minimum:1000.1,maximum:10000.1,",
+						"items:{minimum:10000.1,maximum:100000.1}"
+					}
+				)
+			)
+		)
+	)
+	public static class C03b {}
+
+	@Test
+	public void c03b_minmax_floats_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C03b.class).build();
+
+		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(100.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(10f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+
+		try {
+			s.getItems().validateOutput(100.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(minimum="10.1", maximum="100.1", exclusiveMinimum=true, exclusiveMaximum=true))
+	public static class C04a {}
+
+	@Test
+	public void c04a_minmax_floats_exclusive() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C04a.class).build();
+		s.validateOutput(10.2f, BeanContext.DEFAULT);
+		s.validateOutput(100f, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(10.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.validateOutput(100.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				minimum="10.1", maximum="100.1", exclusiveMinimum=true, exclusiveMaximum=true,
+				items=@SubItems(
+					minimum="100.1", maximum="1000.1", exclusiveMinimum=true, exclusiveMaximum=true,
+					items={
+						"minimum:1000.1,maximum:10000.1,exclusiveMinimum:true,exclusiveMaximum:true,",
+						"items:{minimum:10000.1,maximum:100000.1,exclusiveMinimum:true,exclusiveMaximum:true}"
+					}
+				)
+			)
+		)
+	)
+	public static class C04b {}
+
+	@Test
+	public void c04b_minmax_floats_exclusive_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C04b.class).build();
+
+		s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(100f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(100000f, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum value not met.", e.getLocalizedMessage());
+		}
+
+		try {
+			s.getItems().validateOutput(100.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(multipleOf="10"))
+	public static class C05a {}
+
+	@Test
+	public void c05a_multipleOf() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C05a.class).build();
+		s.validateOutput(0, BeanContext.DEFAULT);
+		s.validateOutput(10, BeanContext.DEFAULT);
+		s.validateOutput(20, BeanContext.DEFAULT);
+		s.validateOutput(10f, BeanContext.DEFAULT);
+		s.validateOutput(20f, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(11, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				multipleOf="10",
+				items=@SubItems(
+					multipleOf="100",
+					items={
+						"multipleOf:1000,",
+						"items:{multipleOf:10000}"
+					}
+				)
+			)
+		)
+	)
+	public static class C05b {}
+
+	@Test
+	public void c05b_multipleOf_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C05b.class).build();
+
+		s.getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(10, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(20, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(200, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(2000, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(20000, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(10f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(20f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(200f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(2000f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(20000f, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(11, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(schema=@Schema(multipleOf="10.1"))
+	public static class C06a {}
+
+	@Test
+	public void c06a_multipleOf_floats() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C06a.class).build();
+		s.validateOutput(0, BeanContext.DEFAULT);
+		s.validateOutput(10.1f, BeanContext.DEFAULT);
+		s.validateOutput(20.2f, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(10.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				multipleOf="10.1",
+				items=@SubItems(
+					multipleOf="100.1",
+					items={
+						"multipleOf:1000.1,",
+						"items:{multipleOf:10000.1}"
+					}
+				)
+			)
+		)
+	)
+	public static class C06b {}
+
+	@Test
+	public void c06b_multipleOf_floats_items() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, C06b.class).build();
+
+		s.getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(20.2f, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(200.2f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(2000.2f, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(20000.2f, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Collections/Array validations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				uniqueItems=true,
+				items=@SubItems(
+					uniqueItems=true,
+					items={
+						"uniqueItems:true,",
+						"items:{uniqueItems:true}"
+					}
+				)
+			)
+		)
+	)
+	public static class D01 {}
+
+	@Test
+	public void d01a_uniqueItems_arrays() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, D01.class).build();
+
+		String[] good = split("a,b"), bad = split("a,a");
+
+		s.getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().validateOutput(null, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+	}
+
+	@Test
+	public void d01b_uniqueItems_collections() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, D01.class).build();
+
+		AList<String>
+			good = new AList<String>().appendAll(split("a,b")),
+			bad = new AList<String>().appendAll(split("a,a"));
+
+		s.getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
+		s.getItems().validateOutput(null, BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
+		}
+	}
+
+	@Response(
+		schema=@Schema(
+			items=@Items(
+				minItems=1, maxItems=2,
+				items=@SubItems(
+					minItems=2, maxItems=3,
+					items={
+						"minItems:3,maxItems:4,",
+						"items:{minItems:4,maxItems:5}"
+					}
+				)
+			)
+		)
+	)
+	public static class D02 {}
+
+	@Test
+	public void d02a_minMaxItems_arrays() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, D02.class).build();
+
+		s.getItems().validateOutput(split("1"), BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
+
+		s.getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);
+
+		try {
+			s.getItems().validateOutput(new String[0], BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
+		}
+
+		try {
+			s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
+		}
+		try {
+			s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationParseException e) {
+			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
+		}
+	}
+}

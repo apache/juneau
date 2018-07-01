@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -29,19 +29,19 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents an OpenAPI schema definition.
- * 
+ *
  * <p>
  * The schema definition can be applied to any HTTP parts such as bodies, headers, query/form parameters, and URL path parts.
  * <br>The API is generic enough to apply to any path part although some attributes may only applicable for certain parts.
- * 
+ *
  * <p>
  * Schema objects are created via builders instantiated through the {@link #create()} method.
- * 
+ *
  * <p>
  * This class is thread safe and reusable.
  */
 public class HttpPartSchema {
-	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
@@ -64,12 +64,12 @@ public class HttpPartSchema {
 	final Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
 	final Class<? extends HttpPartParser> parser;
 	final Class<? extends HttpPartSerializer> serializer;
-	
+
 	final ObjectMap api;
-	
+
 	/**
 	 * Instantiates a new builder for this object.
-	 * 
+	 *
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
@@ -78,7 +78,7 @@ public class HttpPartSchema {
 
 	/**
 	 * Finds the schema information for the specified method parameter.
-	 * 
+	 *
 	 * <p>
 	 * This method will gather all the schema information from the annotations at the following locations:
 	 * <ul>
@@ -86,8 +86,8 @@ public class HttpPartSchema {
 	 * 	<li>The method parameter class.
 	 * 	<li>The method parameter parent classes and interfaces.
 	 * </ul>
-	 * 
-	 * @param c 
+	 *
+	 * @param c
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -101,7 +101,7 @@ public class HttpPartSchema {
 	 * 		<li>{@link ResponseStatus}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
-	 * 	</ul> 
+	 * 	</ul>
 	 * @param m
 	 * 	The Java method containing the parameter.
 	 * @param mi
@@ -111,14 +111,14 @@ public class HttpPartSchema {
 	public static HttpPartSchema create(Class<? extends Annotation> c, Method m, int mi) {
 		return create().apply(c, m, mi).build();
 	}
-	
+
 	/**
 	 * Finds the schema information for the specified class.
-	 * 
+	 *
 	 * <p>
 	 * This method will gather all the schema information from the annotations on the class and all parent classes/interfaces.
-	 * 
-	 * @param c 
+	 *
+	 * @param c
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -132,7 +132,7 @@ public class HttpPartSchema {
 	 * 		<li>{@link ResponseStatus}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
-	 * 	</ul> 
+	 * 	</ul>
 	 * @param t
 	 * 	The class containing the parameter.
 	 * @return The schema information about the parameter.
@@ -143,71 +143,71 @@ public class HttpPartSchema {
 
 	/**
 	 * Utility method for creating response maps from a schema.
-	 * 
+	 *
 	 * <p>
 	 * Given the valid response codes for this particular schema (from the {@link #getCodes()} method, this will
 	 * return a map with response-code keys and values that are the api of the passed-in schema.
 	 * <br>
 	 * The purpose of this method is to easily construct response sections in generated Swagger JSON documents.
-	 * 
+	 *
 	 * <p>
 	 * Only valid for the following types of
 	 * <ul>
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
 	 * 		<li>{@link ResponseStatus}
-	 * </ul> 
-	 * For 
-	 * 
-	 * @param s 
+	 * </ul>
+	 * For
+	 *
+	 * @param s
 	 * 	The schema to create a map from.
 	 * 	<br>Only valid for the following types of schemas:
 	 * 	<ul>
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
 	 * 		<li>{@link ResponseStatus}
-	 * 	</ul> 
+	 * 	</ul>
 	 * @param def
 	 * 	The default response code if no codes were specified in the schema.
 	 * @return The schema response map.
 	 */
 	public static ObjectMap getApiCodeMap(HttpPartSchema s, Integer def) {
 		ObjectMap om = new ObjectMap();
-		for (Integer c : s.getCodes(def)) 
+		for (Integer c : s.getCodes(def))
 			om.getObjectMap(String.valueOf(c), true).appendAll(s.getApi());
 		return om;
 	}
 
 	/**
 	 * Utility method for creating response maps from multiple schemas.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #getApiCodeMap(HttpPartSchema, Integer)} except combines the maps from multiple schemas.
-	 * 
-	 * @param ss 
+	 *
+	 * @param ss
 	 * 	The schemas to create a map from.
 	 * 	<br>Only valid for the following types of schemas:
 	 * 	<ul>
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
 	 * 		<li>{@link ResponseStatus}
-	 * 	</ul> 
+	 * 	</ul>
 	 * @param def
 	 * 	The default response code if no codes were specified in the schema.
 	 * @return The schema response map.
 	 */
 	public static ObjectMap getApiCodeMap(HttpPartSchema[] ss, Integer def) {
 		ObjectMap om = new ObjectMap();
-		for (HttpPartSchema s : ss) 
-			for (Integer c : s.getCodes(def)) 
+		for (HttpPartSchema s : ss)
+			for (Integer c : s.getCodes(def))
 				om.getObjectMap(String.valueOf(c), true).appendAll(s.getApi());
 		return om;
 	}
-	
-	
+
+
 	/**
 	 * Finds the schema information on the specified annotation.
-	 * 
+	 *
 	 * @param a
 	 * 	The annotation to find the schema information on..
 	 * @return The schema information found on the annotation.
@@ -219,7 +219,7 @@ public class HttpPartSchema {
 	HttpPartSchema(Builder b) {
 		this.name = b.name;
 		this.codes = copy(b.codes);
-		this._default = b._default; 
+		this._default = b._default;
 		this._enum = copy(b._enum);
 		this.properties = build(b.properties, b.noValidate);
 		this.allowEmptyValue = b.allowEmptyValue;
@@ -246,10 +246,10 @@ public class HttpPartSchema {
 		this.api = b.api.unmodifiable();
 		this.parser = b.parser;
 		this.serializer = b.serializer;
-		
+
 		if (b.noValidate)
 			return;
-		
+
 		// Validation.
 		List<String> errors = new ArrayList<>();
 		AList<String> notAllowed = new AList<>();
@@ -376,14 +376,14 @@ public class HttpPartSchema {
 			errors.add("Cannot specify exclusiveMinimum with minimum.");
 		if (required != null && required && _default != null)
 			errors.add("Cannot specify a default value on a required value.");
-		
+
 		if (! errors.isEmpty())
-			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t")); 
+			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t"));
 	}
 
 	/**
 	 * The builder class for creating {@link HttpPartSchema} objects.
-	 * 
+	 *
 	 */
 	public static class Builder {
 		String name, _default;
@@ -402,14 +402,14 @@ public class HttpPartSchema {
 		ObjectMap api = new ObjectMap();
 		Class<? extends HttpPartParser> parser;
 		Class<? extends HttpPartSerializer> serializer;
-		
+
 		/**
 		 * Instantiates a new {@link HttpPartSchema} object based on the configuration of this builder.
-		 * 
+		 *
 		 * <p>
 		 * This method can be called multiple times to produce new schema objects.
-		 * 
-		 * @return 
+		 *
+		 * @return
 		 * 	A new {@link HttpPartSchema} object.
 		 * 	<br>Never <jk>null</jk>.
 		 */
@@ -426,8 +426,8 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
-			if (t instanceof Class<?>) 
-				for (Annotation a : ReflectionUtils.findAnnotationsParentFirst(c, (Class<?>)t)) 
+			if (t instanceof Class<?>)
+				for (Annotation a : ReflectionUtils.findAnnotationsParentFirst(c, (Class<?>)t))
 					apply(a);
 			return this;
 		}
@@ -455,7 +455,7 @@ public class HttpPartSchema {
 				apply((HasFormData)a);
 			return this;
 		}
-		
+
 		Builder apply(Body a) {
 			api = AnnotationUtils.merge(api, a);
 			required(toBoolean(a.required()));
@@ -464,7 +464,7 @@ public class HttpPartSchema {
 			apply(a.schema());
 			return this;
 		}
-		
+
 		Builder apply(Header a) {
 			api = AnnotationUtils.merge(api, a);
 			name(a.value());
@@ -493,7 +493,7 @@ public class HttpPartSchema {
 			serializer(a.serializer());
 			return this;
 		}
-		
+
 		Builder apply(ResponseHeader a) {
 			api = AnnotationUtils.merge(api, a);
 			name(a.value());
@@ -510,6 +510,7 @@ public class HttpPartSchema {
 			exclusiveMinimum(toBoolean(a.exclusiveMinimum()));
 			maxLength(toLong(a.maxLength()));
 			minLength(toLong(a.minLength()));
+			pattern(a.pattern());
 			maxItems(toLong(a.maxItems()));
 			minItems(toLong(a.minItems()));
 			uniqueItems(toBoolean(a.uniqueItems()));
@@ -526,7 +527,7 @@ public class HttpPartSchema {
 			code(a.code());
 			return this;
 		}
-		
+
 		Builder apply(FormData a) {
 			api = AnnotationUtils.merge(api, a);
 			name(a.value());
@@ -555,7 +556,7 @@ public class HttpPartSchema {
 			serializer(a.serializer());
 			return this;
 		}
-		
+
 		Builder apply(Query a) {
 			api = AnnotationUtils.merge(api, a);
 			name(a.value());
@@ -584,7 +585,7 @@ public class HttpPartSchema {
 			serializer(a.serializer());
 			return this;
 		}
-		
+
 		Builder apply(Path a) {
 			api = AnnotationUtils.merge(api, a);
 			name(a.value());
@@ -606,11 +607,14 @@ public class HttpPartSchema {
 			serializer(a.serializer());
 			return this;
 		}
-		
+
 		Builder apply(Response a) {
 			api = AnnotationUtils.merge(api, a);
 			codes(a.value());
 			codes(a.code());
+			required(false);
+			allowEmptyValue(true);
+			serializer(a.serializer());
 			apply(a.schema());
 			return this;
 		}
@@ -636,7 +640,7 @@ public class HttpPartSchema {
 			multipleOf(toNumber(a.multipleOf()));
 			return this;
 		}
-		
+
 		Builder apply(SubItems a) {
 			api = AnnotationUtils.merge(api, a);
 			type(a.type());
@@ -682,7 +686,7 @@ public class HttpPartSchema {
 			additionalProperties(toObjectMap(a.additionalProperties()));
 			return this;
 		}
-		
+
 		Builder apply(HasQuery a) {
 			name(a.value());
 			name(a.name());
@@ -717,20 +721,20 @@ public class HttpPartSchema {
 				minItems(m.get("minItems", Long.class));
 				minLength(m.get("minLength", Long.class));
 				minProperties(m.get("minProperties", Long.class));
-				
+
 				items(m.getObjectMap("items"));
 				properties(m.getObjectMap("properties"));
 				additionalProperties(m.getObjectMap("additionalProperties"));
-				
+
 				apply(m.getObjectMap("schema", null));
 			}
 			return this;
-		}		
-		
+		}
+
 		/**
 		 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * @return This object (for method chaining).
 		 */
@@ -742,23 +746,23 @@ public class HttpPartSchema {
 
 		/**
 		 * <mk>httpStatusCode</mk> key of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a> object.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if <jk>null</jk> or an empty array.
 		 * @return This object (for method chaining).
 		 */
 		public Builder codes(int[] value) {
-			if (value != null && value.length != 0) 
+			if (value != null && value.length != 0)
 				for (int v : value)
 					code(v);
 			return this;
 		}
-		
+
 		/**
 		 * <mk>httpStatusCode</mk> key of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a> object.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <code>0</code>.
 		 * @return This object (for method chaining).
@@ -771,31 +775,31 @@ public class HttpPartSchema {
 			}
 			return this;
 		}
-		
+
 		/**
 		 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * Determines whether the parameter is mandatory.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder required(Boolean value) {
-			if (value != null) 
+			if (value != null)
 				required = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
-		 * The type of the parameter. 
-		 * 
-		 * <p> 
+		 * The type of the parameter.
+		 *
+		 * <p>
 		 * The possible values are:
 		 * <ul class='spaced-list'>
 		 * 	<li>
@@ -826,37 +830,37 @@ public class HttpPartSchema {
 		 * 		<js>"file"</js>
 		 * 		<br>This type is currently not supported.
 		 * </ul>
-		 * 
+		 *
 		 * <p>
 		 * If the type is not specified, it will be auto-detected based on the parameter class type.
-		 * 
+		 *
 		 * <h5 class='section'>See Also:</h5>
 		 * <ul class='doctree'>
 		 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
 		 * </ul>
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
 		public Builder type(String value) {
 			try {
-				if (isNotEmpty(value)) 
+				if (isNotEmpty(value))
 					type = Type.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, Type.values()); 
+				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, Type.values());
 			}
 			return this;
 		}
-	
+
 		/**
 		 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
-		 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>. 
-		 * 
-		 * <p> 
+		 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>.
+		 *
+		 * <p>
 		 * The possible values are:
 		 * <ul class='spaced-list'>
 		 * 	<li>
@@ -889,60 +893,60 @@ public class HttpPartSchema {
 		 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
 		 * 		<br>This format does not affect the serialization or parsing of the parameter.
 		 * 	<li>
-		 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>). 
+		 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
 		 * 		<br>Only valid with type <js>"object"</js>.
 		 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 		 * </ul>
-		 * 
+		 *
 		 * <h5 class='section'>See Also:</h5>
 		 * <ul class='doctree'>
 		 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
 		 * </ul>
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
 		 */
 		public Builder format(String value) {
 			try {
-				if (isNotEmpty(value)) 
+				if (isNotEmpty(value))
 					format = Format.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, Format.values()); 
+				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, Format.values());
 			}
 			return this;
 		}
-	
+
 		/**
 		 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
-		 * Sets the ability to pass empty-valued parameters. 
-		 * <br>This is valid only for either query or formData parameters and allows you to send a parameter with a name only or an empty value. 
+		 * Sets the ability to pass empty-valued parameters.
+		 * <br>This is valid only for either query or formData parameters and allows you to send a parameter with a name only or an empty value.
 		 * <br>The default value is <jk>false</jk>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder allowEmptyValue(Boolean value) {
-			if (value != null) 
+			if (value != null)
 				allowEmptyValue = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * Describes the type of items in the array.
 		 * <p>
-		 * Required if <code>type</code> is <js>"array"</js>. 
+		 * Required if <code>type</code> is <js>"array"</js>.
 		 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
@@ -970,14 +974,14 @@ public class HttpPartSchema {
 			}
 			return this;
 		}
-		
+
 		/**
 		 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
-		 * Determines the format of the array if <code>type</code> <js>"array"</js> is used. 
+		 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
 		 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
-		 * 
+		 *
 		 * <br>Possible values are:
 		 * <ul class='spaced-list'>
 		 * 	<li>
@@ -989,16 +993,16 @@ public class HttpPartSchema {
 		 * 	<li>
 		 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
 		 * 	<li>
-		 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>). 
+		 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
 		 * 	<li>
-		 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>). 
+		 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
 		 * 	<li>
 		 * </ul>
-		 * 
+		 *
 		 * <p>
-		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements. 
-		 * 
-		 * @param value 
+		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
@@ -1008,19 +1012,19 @@ public class HttpPartSchema {
 				if (isNotEmpty(value))
 					this.collectionFormat = CollectionFormat.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, CollectionFormat.values()); 
+				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, CollectionFormat.values());
 			}
 			return this;
 		}
-	
+
 		/**
 		 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
-		 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request. 
-		 * <br>(Note: "default" has no meaning for required parameters.) 
-		 * 
-		 * @param value 
+		 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
+		 * <br>(Note: "default" has no meaning for required parameters.)
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
@@ -1030,17 +1034,17 @@ public class HttpPartSchema {
 				this._default = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * Defines the maximum value for a parameter of numeric types.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1050,18 +1054,18 @@ public class HttpPartSchema {
 				this.maximum = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * Defines whether the maximum is matched exclusively.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 		 * <br>If <jk>true</jk>, must be accompanied with <code>maximum</code>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1071,17 +1075,17 @@ public class HttpPartSchema {
 				this.exclusiveMaximum = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * Defines the minimum value for a parameter of numeric types.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1091,18 +1095,18 @@ public class HttpPartSchema {
 				this.minimum = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * Defines whether the minimum is matched exclusively.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 		 * <br>If <jk>true</jk>, must be accompanied with <code>minimum</code>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1112,18 +1116,18 @@ public class HttpPartSchema {
 				this.exclusiveMinimum = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
 		 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"string"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1133,18 +1137,18 @@ public class HttpPartSchema {
 				this.maxLength = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
 		 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"string"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1154,17 +1158,17 @@ public class HttpPartSchema {
 				this.minLength = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * A string input is valid if it matches the specified regular expression pattern.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"string"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
@@ -1174,21 +1178,21 @@ public class HttpPartSchema {
 				if (isNotEmpty(value))
 					this.pattern = Pattern.compile(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value); 
+				throw new ContextRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
 			}
 			return this;
 		}
 
 		/**
 		 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"array"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1198,17 +1202,17 @@ public class HttpPartSchema {
 				this.maxItems = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"array"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1218,21 +1222,21 @@ public class HttpPartSchema {
 				this.minItems = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * If <jk>true</jk>, the input validates successfully if all of its elements are unique.
-		 * 
+		 *
 		 * <p>
 		 * <br>If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
 		 * <br>Otherwise, the collection or array is checked for duplicate items.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"array"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1242,11 +1246,11 @@ public class HttpPartSchema {
 				this.uniqueItems = value;
 			return this;
 		}
-	
+
 		/**
 		 * Identifies whether an item should be skipped if it's empty.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1259,11 +1263,11 @@ public class HttpPartSchema {
 
 		/**
 		 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * If specified, the input validates successfully if it is equal to one of the elements in this array.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1273,17 +1277,17 @@ public class HttpPartSchema {
 				this._enum = value;
 			return this;
 		}
-	
+
 		/**
 		 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
-		 * 
+		 *
 		 * <p>
 		 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
-		 * 
+		 *
 		 * <p>
 		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1293,11 +1297,11 @@ public class HttpPartSchema {
 				this.multipleOf = value;
 			return this;
 		}
-	
+
 		/**
 		 * TODO
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1307,11 +1311,11 @@ public class HttpPartSchema {
 				this.maxProperties = value;
 			return this;
 		}
-	
+
 		/**
 		 * TODO
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
@@ -1321,26 +1325,26 @@ public class HttpPartSchema {
 				this.minProperties = value;
 			return this;
 		}
-	
+
 		/**
 		 * TODO
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder properties(ObjectMap value) {
-			if (value != null && ! value.isEmpty()) 
-				for (Map.Entry<String,Object> e : value.entrySet()) 
+			if (value != null && ! value.isEmpty())
+				for (Map.Entry<String,Object> e : value.entrySet())
 					properties.put(e.getKey(), HttpPartSchema.create().apply((ObjectMap)e.getValue()));
 			return this;
 		}
-	
+
 		/**
 		 * TODO
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
 		 * @return This object (for method chaining).
@@ -1350,38 +1354,38 @@ public class HttpPartSchema {
 				additionalProperties = HttpPartSchema.create().apply(value);
 			return this;
 		}
-		
+
 		/**
 		 * Identifies the part serializer to use for serializing this part.
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartSerializer.Null}.
 		 * @return This object (for method chaining).
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
-			if (serializer != null && serializer != HttpPartSerializer.Null.class) 
+			if (serializer != null && serializer != HttpPartSerializer.Null.class)
 				serializer = value;
 			return this;
 		}
 
 		/**
 		 * TODO
-		 * 
-		 * @param value 
+		 *
+		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartParser.Null}.
 		 * @return This object (for method chaining).
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
-			if (parser != null && parser != HttpPartParser.Null.class) 
+			if (parser != null && parser != HttpPartParser.Null.class)
 				parser = value;
 			return this;
 		}
 
 		/**
 		 * TODO
-		 * @param noValidate 
+		 * @param noValidate
 		 * @return This object (for method chaining).
 		 */
 		public Builder noValidate(boolean noValidate) {
@@ -1389,39 +1393,39 @@ public class HttpPartSchema {
 			return this;
 		}
 	}
-	
+
 	/**
 	 * Valid values for the <code>collectionFormat</code> field.
 	 */
 	public static enum CollectionFormat {
-		
+
 		/**
 		 * Comma-separated values (e.g. <js>"foo,bar"</js>).
 		 */
-		CSV, 
-		
+		CSV,
+
 		/**
 		 * Space-separated values (e.g. <js>"foo bar"</js>).
 		 */
-		SSV, 
-		
+		SSV,
+
 		/**
 		 * Tab-separated values (e.g. <js>"foo\tbar"</js>).
 		 */
-		TSV, 
-		
+		TSV,
+
 		/**
 		 * Pipe-separated values (e.g. <js>"foo|bar"</js>).
 		 */
-		PIPES, 
-		
+		PIPES,
+
 		/**
-		 * Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>). 
+		 * Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
 		 */
-		MULTI, 
-		
+		MULTI,
+
 		/**
-		 * UON notation (e.g. <js>"@(foo,bar)"</js>). 
+		 * UON notation (e.g. <js>"@(foo,bar)"</js>).
 		 */
 		UON,
 
@@ -1429,67 +1433,67 @@ public class HttpPartSchema {
 		 * Not specified.
 		 */
 		NONE;
-		
+
 		static CollectionFormat fromString(String value) {
-			
+
 			return valueOf(value.toUpperCase());
 		}
-		
+
 		@Override
 		public String toString() {
 			return name().toLowerCase();
 		}
 	}
-	
+
 	/**
 	 * Valid values for the <code>type</code> field.
 	 */
 	public static enum Type {
-		
+
 		/**
 		 * String.
 		 */
-		STRING, 
-		
+		STRING,
+
 		/**
 		 * Floating point number.
 		 */
-		NUMBER, 
-		
+		NUMBER,
+
 		/**
 		 * Decimal number.
 		 */
-		INTEGER, 
-		
+		INTEGER,
+
 		/**
 		 * Boolean.
 		 */
-		BOOLEAN, 
-		
+		BOOLEAN,
+
 		/**
 		 * Array or collection.
 		 */
-		ARRAY, 
-		
+		ARRAY,
+
 		/**
 		 * Map or bean.
 		 */
-		OBJECT, 
-		
+		OBJECT,
+
 		/**
 		 * File.
 		 */
 		FILE,
-		
+
 		/**
 		 * Not specified.
 		 */
 		NONE;
-		
+
 		static Type fromString(String value) {
 			return valueOf(value.toUpperCase());
 		}
-		
+
 		@Override
 		public String toString() {
 			return name().toLowerCase();
@@ -1500,76 +1504,76 @@ public class HttpPartSchema {
 	 * Valid values for the <code>format</code> field.
 	 */
 	public static enum Format {
-		
+
 		/**
 		 * Signed 32 bits.
 		 */
-		INT32, 
-		
+		INT32,
+
 		/**
 		 * Signed 64 bits.
 		 */
-		INT64, 
-		
+		INT64,
+
 		/**
 		 * 32-bit floating point number.
 		 */
-		FLOAT, 
-		
+		FLOAT,
+
 		/**
 		 * 64-bit floating point number.
 		 */
-		DOUBLE, 
-		
+		DOUBLE,
+
 		/**
 		 * BASE-64 encoded characters.
 		 */
-		BYTE, 
-		
+		BYTE,
+
 		/**
 		 * Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
 		 */
-		BINARY, 
-		
+		BINARY,
+
 		/**
 		 * An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
 		 */
-		DATE, 
-		
+		DATE,
+
 		/**
 		 *  An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
 		 */
-		DATE_TIME, 
-		
+		DATE_TIME,
+
 		/**
 		 * Used to hint UIs the input needs to be obscured.
 		 */
-		PASSWORD, 
-		
+		PASSWORD,
+
 		/**
-		 * UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>). 
+		 * UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
 		 */
-		UON, 
+		UON,
 
 		/**
 		 * Not specified.
 		 */
 		NONE;
-		
+
 		static Format fromString(String value) {
 			value = value.toUpperCase().replace('-','_');
 			return valueOf(value);
 		}
-		
+
 		@Override
 		public String toString() {
 			String s = name().toLowerCase().replace('_','-');
 			return s;
 		}
-		
+
 		/**
 		 * Returns <jk>true</jk> if this format is in the provided list.
-		 * 
+		 *
 		 * @param list The list of formats to check against.
 		 * @return <jk>true</jk> if this format is in the provided list.
 		 */
@@ -1583,8 +1587,8 @@ public class HttpPartSchema {
 
 	/**
 	 * Returns the name of the object described by this schema, for example the query or form parameter name.
-	 * 
-	 * @return The name, or <jk>null</jk> if not specified. 
+	 *
+	 * @return The name, or <jk>null</jk> if not specified.
 	 */
 	public String getName() {
 		return name;
@@ -1592,8 +1596,8 @@ public class HttpPartSchema {
 
 	/**
 	 * Returns the HTTP status code or codes defined on a schema.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 	The list of HTTP status codes.
 	 * 	<br>Never <jk>null</jk>.
 	 */
@@ -1603,9 +1607,9 @@ public class HttpPartSchema {
 
 	/**
 	 * Returns the HTTP status code or codes defined on a schema.
-	 * 
+	 *
 	 * @param def The default value if there are no codes defined.
-	 * @return 
+	 * @return
 	 * 	The list of HTTP status codes.
 	 * 	<br>A singleton set containing the default value if the set is empty.
 	 * 	<br>Never <jk>null</jk>.
@@ -1616,9 +1620,9 @@ public class HttpPartSchema {
 
 	/**
 	 * Returns the first HTTP status code on a schema.
-	 * 
+	 *
 	 * @param def The default value if there are no codes defined.
-	 * @return 
+	 * @return
 	 * 	The list of HTTP status codes.
 	 * 	<br>A singleton set containing the default value if the set is empty.
 	 * 	<br>Never <jk>null</jk>.
@@ -1629,7 +1633,7 @@ public class HttpPartSchema {
 
 	/**
 	 * TODO
-	 * 
+	 *
 	 * @return TODO
 	 */
 	public Type getType() {
@@ -1638,8 +1642,8 @@ public class HttpPartSchema {
 
 	/**
 	 * Returns the default value for this schema.
-	 * 
-	 * @return The default value for this schema, or <jk>null</jk> if not specified. 
+	 *
+	 * @return The default value for this schema, or <jk>null</jk> if not specified.
 	 */
 	public String getDefault() {
 		return _default;
@@ -1647,19 +1651,19 @@ public class HttpPartSchema {
 
 	/**
 	 * Returns the <code>collectionFormat</code> field of this schema.
-	 * 
+	 *
 	 * @return The <code>collectionFormat</code> field of this schema.
 	 */
 	public CollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
-	
+
 	/**
 	 * Returns the type field of this schema.
-	 * 
-	 * @param cm 
+	 *
+	 * @param cm
 	 * 	The class meta of the object.
-	 * 	<br>Used to auto-detect the type if the type was not specified. 
+	 * 	<br>Used to auto-detect the type if the type was not specified.
 	 * @return The format field of this schema.
 	 */
 	public Type getType(ClassMeta<?> cm) {
@@ -1680,22 +1684,22 @@ public class HttpPartSchema {
 
 	/**
 	 * Returns the <code>format</code> field of this schema.
-	 * 
+	 *
 	 * @return The <code>format</code> field of this schema.
 	 */
 	public Format getFormat() {
 		return format;
 	}
-	
+
 	/**
 	 * Returns the schema for child items of the object represented by this schema.
-	 * 
+	 *
 	 * @return The schema for child items of the object represented by this schema, or <jk>null</jk> if not defined.
 	 */
 	public HttpPartSchema getItems() {
 		return items;
 	}
-	
+
 	/**
 	 * TODO
 	 * @return TODO
@@ -1706,7 +1710,7 @@ public class HttpPartSchema {
 
 	/**
 	 * Throws a {@link ParseException} if the specified pre-parsed input does not validate against this schema.
-	 * 
+	 *
 	 * @param in The input.
 	 * @return The same object passed in.
 	 * @throws SchemaValidationParseException if the specified pre-parsed input does not validate against this schema.
@@ -1731,7 +1735,7 @@ public class HttpPartSchema {
 
 	/**
 	 * Throws a {@link ParseException} if the specified parsed output does not validate against this schema.
-	 * 
+	 *
 	 * @param o The parsed output.
 	 * @param bc The bean context used to detect POJO types.
 	 * @return The same object passed in.
@@ -1752,10 +1756,10 @@ public class HttpPartSchema {
 						throw new SchemaValidationParseException("Minimum number of items not met.");
 					if (! isValidMaxItems(o))
 						throw new SchemaValidationParseException("Maximum number of items exceeded.");
-					if (! isValidUniqueItems(o)) 
+					if (! isValidUniqueItems(o))
 						throw new SchemaValidationParseException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
-					if (items != null) 
+					if (items != null)
 						for (int i = 0; i < Array.getLength(o); i++)
 							items.validateOutput(Array.get(o, i), bc);
 				} else if (cm.isCollection()) {
@@ -1767,7 +1771,7 @@ public class HttpPartSchema {
 					if (! isValidUniqueItems(c))
 						throw new SchemaValidationParseException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
-					if (items != null) 
+					if (items != null)
 						for (Object o2 : c)
 							items.validateOutput(o2, bc);
 				}
@@ -1807,27 +1811,27 @@ public class HttpPartSchema {
 					for (Map.Entry e : m.entrySet()) {
 						String key = e.getKey().toString();
 						HttpPartSchema s2 = getProperty(key);
-						if (s2 != null) 
+						if (s2 != null)
 							s2.validateOutput(e.getValue(), bc);
 					}
 				} else if (cm.isBean()) {
-					
+
 				}
 				break;
 			}
-			case BOOLEAN: 
-			case FILE: 
+			case BOOLEAN:
+			case FILE:
 			case STRING:
-			case NONE: 
+			case NONE:
 				break;
-		}		
+		}
 		return o;
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	private boolean isValidRequired(Object x) {
 		return x != null || required == null || ! required;
 	}
@@ -1839,9 +1843,9 @@ public class HttpPartSchema {
 	private boolean isValidMaxProperties(Map<?,?> x) {
 		return maxProperties == null || x.size() <= maxProperties;
 	}
-	
+
 	private boolean isValidMinimum(Number x) {
-		if (x instanceof Integer) 
+		if (x instanceof Integer)
 			return minimum == null || x.intValue() > minimum.intValue() || (x.intValue() == minimum.intValue() && (exclusiveMinimum == null || ! exclusiveMinimum));
 		if (x instanceof Short)
 			return minimum == null || x.shortValue() > minimum.shortValue() || (x.intValue() == minimum.shortValue() && (exclusiveMinimum == null || ! exclusiveMinimum));
@@ -1853,9 +1857,9 @@ public class HttpPartSchema {
 			return minimum == null || x.doubleValue() > minimum.doubleValue() || (x.doubleValue() == minimum.doubleValue() && (exclusiveMinimum == null || ! exclusiveMinimum));
 		return true;
 	}
-	
+
 	private boolean isValidMaximum(Number x) {
-		if (x instanceof Integer) 
+		if (x instanceof Integer)
 			return maximum == null || x.intValue() < maximum.intValue() || (x.intValue() == maximum.intValue() && (exclusiveMaximum == null || ! exclusiveMaximum));
 		if (x instanceof Short)
 			return maximum == null || x.shortValue() < maximum.shortValue() || (x.intValue() == maximum.shortValue() && (exclusiveMaximum == null || ! exclusiveMaximum));
@@ -1867,9 +1871,9 @@ public class HttpPartSchema {
 			return maximum == null || x.doubleValue() < maximum.doubleValue() || (x.doubleValue() == maximum.doubleValue() && (exclusiveMaximum == null || ! exclusiveMaximum));
 		return true;
 	}
-	
+
 	private boolean isValidMultipleOf(Number x) {
-		if (x instanceof Integer) 
+		if (x instanceof Integer)
 			return multipleOf == null || x.intValue() % multipleOf.intValue() == 0;
 		if (x instanceof Short)
 			return multipleOf == null || x.shortValue() % multipleOf.shortValue() == 0;
@@ -1885,15 +1889,15 @@ public class HttpPartSchema {
 	private boolean isValidAllowEmpty(String x) {
 		return (allowEmptyValue != null && allowEmptyValue) || isNotEmpty(x);
 	}
-	
+
 	private boolean isValidPattern(String x) {
 		return pattern == null || pattern.matcher(x).matches();
 	}
-	
+
 	private boolean isValidEnum(String x) {
 		return _enum.isEmpty() || _enum.contains(x);
 	}
-	
+
 	private boolean isValidMinLength(String x) {
 		return minLength == null || x.length() >= minLength;
 	}
@@ -1933,13 +1937,13 @@ public class HttpPartSchema {
 	private boolean isValidUniqueItems(Collection<?> x) {
 		if (uniqueItems != null && uniqueItems && ! (x instanceof Set)) {
 			Set<Object> s = new HashSet<>();
-			for (Object o : x) 
+			for (Object o : x)
 				if (! s.add(o))
 					return false;
 		}
 		return true;
 	}
-	
+
 	private HttpPartSchema getProperty(String name) {
 		if (properties != null) {
 			HttpPartSchema schema = properties.get(name);
@@ -1949,16 +1953,16 @@ public class HttpPartSchema {
 		return additionalProperties;
 	}
 
-	
+
 	private static <T> Set<T> copy(Set<T> in) {
 		return in == null ? Collections.EMPTY_SET : unmodifiableSet(new LinkedHashSet<>(in));
 	}
-	
+
 	private static Map<String,HttpPartSchema> build(Map<String,Builder> in, boolean noValidate) {
 		if (in == null)
 			return null;
 		Map<String,HttpPartSchema> m = new LinkedHashMap<>();
-		for (Map.Entry<String,Builder> e : in.entrySet()) 
+		for (Map.Entry<String,Builder> e : in.entrySet())
 			m.put(e.getKey(), e.getValue().noValidate(noValidate).build());
 		return unmodifiableMap(m);
 	}
@@ -1967,15 +1971,15 @@ public class HttpPartSchema {
 		return in == null ? null : in.noValidate(noValidate).build();
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	final static Set<String> toSet(String[] s) {
 		return toSet(joinnl(s));
 	}
-	
+
 	final static Set<String> toSet(String s) {
 		if (isEmpty(s))
 			return null;
@@ -2010,7 +2014,7 @@ public class HttpPartSchema {
 	final static Boolean toBoolean(boolean b) {
 		return b == false ? null : b;
 	}
-	
+
 	final static ObjectMap toObjectMap(String[] ss) {
 		String s = joinnl(ss);
 		if (s.isEmpty())
