@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -25,26 +25,26 @@ import org.apache.juneau.config.store.*;
 import org.junit.*;
 
 public class ConfigMapListenerTest {
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Sanity tests.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Test
 	public void testBasicDefaultSection() throws Exception {
-		ConfigStore s = initStore("Foo.cfg", 
+		ConfigStore s = initStore("Foo.cfg",
 			"foo=bar"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(1);
-		
+
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(foo = baz)']", events);
 			}
 		};
-		
+
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("", "foo", "baz", null, null, null);
@@ -52,26 +52,26 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("foo = baz|", cm.toString());
 	}
-	
+
 	@Test
 	public void testBasicNormalSection() throws Exception {
-		ConfigStore s = initStore("Foo.cfg", 
+		ConfigStore s = initStore("Foo.cfg",
 			"[S1]",
 			"foo=bar"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(1);
-		
+
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals("['SET(foo = baz)']", events);
 			}
 		};
-		
+
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("S1", "foo", "baz", null, null, null);
@@ -79,19 +79,19 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("[S1]|foo = baz|", cm.toString());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Add new entries.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Test
 	public void testAddNewEntries() throws Exception {
 		ConfigStore s = initStore("Foo.cfg"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(2);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -109,15 +109,15 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("k = vb|[S1]|k1 = v1b|", cm.toString());
 	}
-	
+
 	@Test
 	public void testAddNewEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("Foo.cfg"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(2);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -135,7 +135,7 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("#k|k^* = kb # C|[S1]|#k1|k1^* = k1b # C1|", cm.toString());
 	}
 
@@ -148,8 +148,8 @@ public class ConfigMapListenerTest {
 			"[S1]",
 			"#k1a",
 			"k1=v1a # Cb"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(2);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -167,7 +167,7 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("#kb|k^* = kb # Cb|#S1|[S1]|#k1b|k1^* = k1b # Cb1|", cm.toString());
 	}
 
@@ -181,8 +181,8 @@ public class ConfigMapListenerTest {
 			"k=v",
 			"[S1]",
 			"k1=v1"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(2);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -200,10 +200,10 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("[S1]|", cm.toString());
 	}
-	
+
 	@Test
 	public void testRemoveExistingEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("Foo.cfg",
@@ -213,8 +213,8 @@ public class ConfigMapListenerTest {
 			"[S1]",
 			"#k1a",
 			"k1=v1a # Cb"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(2);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -232,19 +232,19 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("#S1|[S1]|", cm.toString());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Add new sections.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Test
 	public void testAddNewSections() throws Exception {
 		ConfigStore s = initStore("Foo.cfg"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -265,7 +265,7 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|", cm.toString());
 	}
 
@@ -278,8 +278,8 @@ public class ConfigMapListenerTest {
 			"[S1]",
 			"[S2]",
 			"[S3]"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -300,14 +300,14 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("#Db||#S1b|[S1]|[S2]|[S3]|k3 = v3|", cm.toString());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Remove sections.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Test
 	public void testRemoveSections() throws Exception {
 		ConfigStore s = initStore("Foo.cfg",
@@ -323,8 +323,8 @@ public class ConfigMapListenerTest {
 			"#k2",
 			"k2 = v2",
 			"[S3]"
-		);		
-		
+		);
+
 		final CountDownLatch latch = new CountDownLatch(3);
 
 		LatchedListener l = new LatchedListener(latch) {
@@ -344,14 +344,14 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("", cm.toString());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Update from store.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Test
 	public void testUpdateFromStore() throws Exception {
 		ConfigStore s = initStore("Foo.cfg");
@@ -364,7 +364,7 @@ public class ConfigMapListenerTest {
 				assertObjectEquals("['SET(k = v # cv)','SET(k1 = v1 # cv1)','SET(k2 = v2 # cv2)']", events);
 			}
 		};
-		
+
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		s.update("Foo.cfg",
@@ -384,10 +384,10 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("#Da||k = v # cv||#S1|[S1]|#k1|k1 = v1 # cv1|[S2]|#k2|k2 = v2 # cv2|[S3]|", cm.toString());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Merges.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -400,17 +400,17 @@ public class ConfigMapListenerTest {
 		);
 
 		final CountDownLatch latch = new CountDownLatch(2);
-		final Queue<String> eventList = new ConcurrentLinkedQueue<String>();
+		final Queue<String> eventList = new ConcurrentLinkedQueue<>();
 		eventList.add("['SET(k1 = v1b)']");
 		eventList.add("['SET(k2 = v2b)']");
-		
+
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals(eventList.poll(), events);
 			}
 		};
-		
+
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("S2", "k2", "v2b", null, null, null);
@@ -422,10 +422,10 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("[S1]|k1 = v1b|[S2]|k2 = v2b|", cm.toString());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// If we're modifying an entry and it changes on the file system, we should overwrite the change on save().
 	//-----------------------------------------------------------------------------------------------------------------
@@ -438,17 +438,17 @@ public class ConfigMapListenerTest {
 		);
 
 		final CountDownLatch latch = new CountDownLatch(2);
-		final Queue<String> eventList = new ConcurrentLinkedQueue<String>();
+		final Queue<String> eventList = new ConcurrentLinkedQueue<>();
 		eventList.add("['SET(k1 = v1b)']");
 		eventList.add("['SET(k1 = v1c)']");
-		
+
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(List<ConfigEvent> events) throws Exception {
 				assertObjectEquals(eventList.poll(), events);
 			}
 		};
-		
+
 		ConfigMap cm = s.getMap("Foo.cfg");
 		cm.register(l);
 		cm.setEntry("S1", "k1", "v1c", null, null, null);
@@ -460,41 +460,42 @@ public class ConfigMapListenerTest {
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
-		
+
 		assertTextEquals("[S1]|k1 = v1c|", cm.toString());
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// If the contents of a file have been modified on the file system before a signal has been received.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
 	public void testMergeWithOverwriteNoSignal() throws Exception {
-		
-		final Queue<String> contents = new ConcurrentLinkedQueue<String>();
+
+		final Queue<String> contents = new ConcurrentLinkedQueue<>();
 		contents.add("[S1]\nk1 = v1a");
 		contents.add("[S1]\nk1 = v1b");
 		contents.add("[S1]\nk1 = v1c");
 		contents.add("[S1]\nk1 = v1c");
-		
+
 		ConfigMemoryStore s = new ConfigMemoryStore(null) {
+			@Override
 			public synchronized String read(String name) {
 				return contents.poll();
 			}
 		};
 		try {
 			final CountDownLatch latch = new CountDownLatch(2);
-			final Queue<String> eventList = new ConcurrentLinkedQueue<String>();
+			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
 			eventList.add("['SET(k1 = v1b)']");
 			eventList.add("['SET(k1 = v1c)']");
-			
+
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(List<ConfigEvent> events) throws Exception {
 					assertObjectEquals(eventList.poll(), events);
 				}
 			};
-			
+
 			ConfigMap cm = s.getMap("Foo.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
@@ -502,26 +503,27 @@ public class ConfigMapListenerTest {
 			wait(latch);
 			assertNull(l.error);
 			cm.unregister(l);
-			
+
 			assertTextEquals("[S1]|k1 = v1c|", cm.toString());
-			
+
 		} finally {
 			s.close();
 		}
 	}
-	
+
 	@Test
 	public void testMergeWithConstantlyUpdatingFile() throws Exception {
-		
+
 		ConfigMemoryStore s = new ConfigMemoryStore(null) {
 			char c = 'a';
+			@Override
 			public synchronized String read(String name) {
 				return "[S1]\nk1 = v1" + (c++);
 			}
 		};
 		try {
 			final CountDownLatch latch = new CountDownLatch(10);
-			final Queue<String> eventList = new ConcurrentLinkedQueue<String>();
+			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
 			eventList.add("['SET(k1 = v1b)']");
 			eventList.add("['SET(k1 = v1c)']");
 			eventList.add("['SET(k1 = v1d)']");
@@ -532,14 +534,14 @@ public class ConfigMapListenerTest {
 			eventList.add("['SET(k1 = v1i)']");
 			eventList.add("['SET(k1 = v1j)']");
 			eventList.add("['SET(k1 = v1k)']");
-			
+
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(List<ConfigEvent> events) throws Exception {
 					assertObjectEquals(eventList.poll(), events);
 				}
 			};
-			
+
 			ConfigMap cm = s.getMap("Foo.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
@@ -552,14 +554,14 @@ public class ConfigMapListenerTest {
 			wait(latch);
 			assertNull(l.error);
 			cm.unregister(l);
-			
+
 			assertTextEquals("[S1]|k1 = v1c|", cm.toString());
-			
+
 		} finally {
 			s.close();
 		}
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utilities.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -567,14 +569,14 @@ public class ConfigMapListenerTest {
 	private static ConfigStore initStore(String name, String...contents) {
 		return ConfigMemoryStore.create().build().update(name, contents);
 	}
-	
+
 	public static class LatchedListener implements ConfigEventListener {
 		private final CountDownLatch latch;
 		private volatile String error = null;
 		public LatchedListener(CountDownLatch latch) {
 			this.latch = latch;
 		}
-		
+
 		@Override
 		public void onConfigChange(List<ConfigEvent> events) {
 			try {
@@ -585,11 +587,11 @@ public class ConfigMapListenerTest {
 			for (int i = 0; i < events.size(); i++)
 				latch.countDown();
 		}
-		
+
 		public void check(List<ConfigEvent> events) throws Exception {
 		}
 	}
-	
+
 	private static void wait(CountDownLatch latch) throws InterruptedException {
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new RuntimeException("Latch failed.");

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -30,14 +30,14 @@ public class TagTest {
 	@Test
 	public void testName() {
 		Tag t = new Tag();
-		
+
 		t.name("foo");
 		assertEquals("foo", t.getName());
-		
+
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
 		assertInstanceOf(String.class, t.getName());
-		
+
 		t.name(null);
 		assertNull(t.getName());
 	}
@@ -48,14 +48,14 @@ public class TagTest {
 	@Test
 	public void testDescription() {
 		Tag t = new Tag();
-		
+
 		t.description("foo");
 		assertEquals("foo", t.getDescription());
-		
+
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
 		assertInstanceOf(String.class, t.getDescription());
-		
+
 		t.description(null);
 		assertNull(t.getDescription());
 	}
@@ -66,10 +66,10 @@ public class TagTest {
 	@Test
 	public void testExternalDocs() {
 		Tag t = new Tag();
-		
+
 		t.externalDocs(externalDocumentation("foo"));
 		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
-		
+
 		t.externalDocs("{url:'foo'}");
 		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
 		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
@@ -84,46 +84,46 @@ public class TagTest {
 	@Test
 	public void testSet() throws Exception {
 		Tag t = new Tag();
-		
+
 		t
 			.set("description", "a")
 			.set("externalDocs", externalDocumentation("b"))
 			.set("name", "c")
 			.set("$ref", "ref");
-	
+
 		assertObjectEquals("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}", t);
-		
+
 		t
 			.set("description", "a")
 			.set("externalDocs", "{url:'b'}")
 			.set("name", "c")
 			.set("$ref", "ref");
-		
+
 		assertObjectEquals("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}", t);
-		
+
 		t
 			.set("description", new StringBuilder("a"))
 			.set("externalDocs", new StringBuilder("{url:'b'}"))
 			.set("name", new StringBuilder("c"))
 			.set("$ref", new StringBuilder("ref"));
-		
+
 		assertObjectEquals("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}", t);
-	
+
 		assertEquals("a", t.get("description", String.class));
 		assertEquals("{url:'b'}", t.get("externalDocs", String.class));
 		assertEquals("c", t.get("name", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
-	
+
 		assertInstanceOf(String.class, t.get("description", Object.class));
 		assertInstanceOf(ExternalDocumentation.class, t.get("externalDocs", Object.class));
 		assertInstanceOf(String.class, t.get("name", Object.class));
 		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
-	
+
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
-		
+
 		String s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
 		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, Tag.class));
 	}

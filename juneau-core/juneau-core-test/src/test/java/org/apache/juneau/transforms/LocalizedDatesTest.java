@@ -32,20 +32,20 @@ public class LocalizedDatesTest {
 		testDate.setTimeInMillis(0);
 		testDate.set(2001, 2, 3, 10, 11, 12);
 	}
-	
+
 	private static TimeZone prevTimeZone;
-	
+
 	@BeforeClass
 	public static void before() {
 		prevTimeZone = TimeZone.getDefault();
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 	}
-	
+
 	@AfterClass
 	public static void after() {
 		TimeZone.setDefault(prevTimeZone);
 	}
-	
+
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {

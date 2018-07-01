@@ -231,10 +231,10 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 
 	@Bean(typeName="C")
 	public static class C {
-		public Map<String,A> f3a = new HashMap<String,A>();
-		public Map<String,A> f3b = new HashMap<String,A>();
-		public Map<String,A> f3c = new HashMap<String,A>();
-		public Map<String,A> f3d = new HashMap<String,A>();
+		public Map<String,A> f3a = new HashMap<>();
+		public Map<String,A> f3b = new HashMap<>();
+		public Map<String,A> f3c = new HashMap<>();
+		public Map<String,A> f3d = new HashMap<>();
 
 		public C(){}
 		public C(String f1) {
@@ -303,10 +303,10 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 
 	@Bean(typeName="E")
 	public static class E {
-		public List<A> f5a = new LinkedList<A>();
-		public List<AA> f5b = new LinkedList<AA>();
-		public List<IA> f5c = new LinkedList<IA>();
-		public List<Object> f5d = new LinkedList<Object>();
+		public List<A> f5a = new LinkedList<>();
+		public List<AA> f5b = new LinkedList<>();
+		public List<IA> f5c = new LinkedList<>();
+		public List<Object> f5d = new LinkedList<>();
 
 		public E(){}
 		public E(String f1) {
@@ -339,10 +339,10 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 
 	@Bean(typeName="F")
 	public static class F {
-		public List<A[]> f6a = new LinkedList<A[]>();
-		public List<AA[]> f6b = new LinkedList<AA[]>();
-		public List<IA[]> f6c = new LinkedList<IA[]>();
-		public List<Object[]> f6d = new LinkedList<Object[]>();
+		public List<A[]> f6a = new LinkedList<>();
+		public List<AA[]> f6b = new LinkedList<>();
+		public List<IA[]> f6c = new LinkedList<>();
+		public List<Object[]> f6d = new LinkedList<>();
 
 		public F(){}
 		public F(String f1) {

@@ -258,7 +258,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
-		return (Parser) p.builder().build();
+		return p.builder().build();
 	}
 
 	//--------------------------------------------------------------------------------
@@ -268,7 +268,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 	public static class A {
 		public int a;
 		boolean createdByBuilder;
-		
+
 		private A(ABuilder x) {
 			if (x != null)
 				this.a = x.a;
@@ -278,7 +278,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 			a = 1;
 			return this;
 		}
-		
+
 		public static ABuilder create() {
 			return new ABuilder();
 		}
@@ -286,7 +286,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 
 	public static class ABuilder {
 		public int a;
-		
+
 		public A build() {
 			A x = new A(this);
 			x.createdByBuilder = true;
@@ -300,7 +300,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 	public static class B {
 		public int a;
 		boolean createdByBuilder;
-		
+
 		public B(BBuilder x) {
 			if (x != null) {
 				this.a = x.a;
@@ -321,11 +321,11 @@ public class BuilderComboTest extends ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// Same as B, but should Builder.build() method.
 	//--------------------------------------------------------------------------------
-	
+
 	public static class C {
 		public int a;
 		boolean createdByBuilder;
-		
+
 		public C(CBuilder x) {
 			if (x != null) {
 				this.a = x.a;
@@ -340,7 +340,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 
 	public static class CBuilder implements org.apache.juneau.transform.Builder<B> {
 		public int a;
-		
+
 		public C build() {
 			C x = new C(this);
 			x.createdByBuilder = true;
@@ -351,12 +351,12 @@ public class BuilderComboTest extends ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// @Builder annotation on POJO class.
 	//--------------------------------------------------------------------------------
-	
+
 	@org.apache.juneau.annotation.Builder(DBuilder.class)
 	public static class D {
 		public int a;
 		boolean createdByBuilder;
-		
+
 		public D(DBuilder x) {
 			if (x != null) {
 				this.a = x.a;
@@ -377,12 +377,12 @@ public class BuilderComboTest extends ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// @Builder annotation on POJO class, but uses build() method on builder.
 	//--------------------------------------------------------------------------------
-	
+
 	@org.apache.juneau.annotation.Builder(EBuilder.class)
 	public static class E {
 		public int a;
 		boolean createdByBuilder;
-		
+
 		public E(EBuilder x) {
 			if (x != null) {
 				this.a = x.a;
@@ -412,7 +412,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 	public static class H {
 		public int fooBar;
 		boolean createdByBuilder;
-		
+
 		private H(HBuilder x) {
 			if (x != null)
 				this.fooBar = x.fooBar;
@@ -422,7 +422,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 			fooBar = 1;
 			return this;
 		}
-		
+
 		public static HBuilder create() {
 			return new HBuilder();
 		}
@@ -430,13 +430,13 @@ public class BuilderComboTest extends ComboRoundTripTest {
 
 	public static class HBuilder {
 		private int fooBar;
-		
+
 		public H build() {
 			H x = new H(this);
 			x.createdByBuilder = true;
 			return x;
 		}
-		
+
 		@BeanProperty
 		public HBuilder fooBar(int fooBar) {
 			this.fooBar = fooBar;

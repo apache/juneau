@@ -43,7 +43,7 @@ public class ConfigBuilderTest {
 		File f;
 		ConfigFileStore cfs = ConfigFileStore.create().directory(TEMP_DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 		ConfigBuilder cb = Config.create().store(cfs).name("TestGet.cfg");
-		
+
 		Config cf = cb.build();
 		cf.set("Test/A", "a");
 

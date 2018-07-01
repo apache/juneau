@@ -42,7 +42,7 @@ public class RoundTripGenericsTest extends RoundTripTest {
 
 		// Unbound type variables should be interpreted as Object.
 		// During parsing, these become ObjectMaps.
-		Pair pair = new Pair<Source,Target>(new Source().init(), new Target().init());
+		Pair pair = new Pair<>(new Source().init(), new Target().init());
 		pair = roundTrip(pair);
 		assertSortedObjectEquals("{s:{s1:'a1'},t:{t1:'b1'}}", pair);
 		assertEquals("ObjectMap", pair.getS().getClass().getSimpleName());

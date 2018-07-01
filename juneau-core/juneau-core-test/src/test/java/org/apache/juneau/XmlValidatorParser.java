@@ -41,7 +41,7 @@ public class XmlValidatorParser extends XmlParser {
 			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
 				return (T)validate(pipe.getReader());
 			}
-			
+
 			@Override /* ReaderParser */
 			protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 				return (Map<K,V>)validate(pipe.getReader());

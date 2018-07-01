@@ -528,7 +528,7 @@ public class RdfTest {
 		ReaderParser p = RdfParser.create().xml().looseCollections().build();
 		String rdfXml, expected;
 
-		List<D> l = new LinkedList<D>();
+		List<D> l = new LinkedList<>();
 		l.add(new D().init(1));
 		l.add(new D().init(2));
 

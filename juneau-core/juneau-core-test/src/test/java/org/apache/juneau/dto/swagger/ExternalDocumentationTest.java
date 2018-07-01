@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -31,14 +31,14 @@ public class ExternalDocumentationTest {
 	@Test
 	public void testDescription() {
 		ExternalDocumentation t = new ExternalDocumentation();
-			
+
 		t.description("foo");
 		assertEquals("foo", t.getDescription());
-		
+
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
 		assertInstanceOf(String.class, t.getDescription());
-		
+
 		t.description(null);
 		assertNull(t.getDescription());
 	}
@@ -49,14 +49,14 @@ public class ExternalDocumentationTest {
 	@Test
 	public void testUrl() {
 		ExternalDocumentation t = new ExternalDocumentation();
-		
+
 		t.url("foo");
 		assertEquals("foo", t.getUrl().toString());
-		
+
 		t.url(new StringBuilder("foo"));
 		assertEquals("foo", t.getUrl().toString());
 		assertInstanceOf(URI.class, t.getUrl());
-		
+
 		t.url(null);
 		assertNull(t.getUrl());
 	}
@@ -67,21 +67,21 @@ public class ExternalDocumentationTest {
 	@Test
 	public void testSet() throws Exception {
 		ExternalDocumentation t = new ExternalDocumentation();
-		
+
 		t
 			.set("description", "foo")
 			.set("url", "bar")
 			.set("$ref", "baz");
-		
+
 		assertObjectEquals("{description:'foo',url:'bar','$ref':'baz'}", t);
-		
+
 		t
 			.set("description", new StringBuilder("foo"))
 			.set("url", new StringBuilder("bar"))
 			.set("$ref", new StringBuilder("baz"));
-		
+
 		assertObjectEquals("{description:'foo',url:'bar','$ref':'baz'}", t);
-		
+
 		assertEquals("foo", t.get("description", String.class));
 		assertEquals("bar", t.get("url", URI.class).toString());
 		assertEquals("baz", t.get("$ref", String.class));
@@ -94,7 +94,7 @@ public class ExternalDocumentationTest {
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
-		
+
 		assertObjectEquals("{description:'foo',url:'bar','$ref':'baz'}", JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class));
 	}
 }

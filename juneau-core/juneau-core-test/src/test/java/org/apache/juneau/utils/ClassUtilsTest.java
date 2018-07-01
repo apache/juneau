@@ -211,28 +211,28 @@ public class ClassUtilsTest {
 	//====================================================================================================
 	@Test
 	public void getParentClassesParentFirst() throws Exception {
-		Set<String> s = new TreeSet<String>();
+		Set<String> s = new TreeSet<>();
 		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, true, true); i.hasNext();) {
 			Class<?> c = i.next();
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
 
-		s = new TreeSet<String>();
+		s = new TreeSet<>();
 		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, true, false); i.hasNext();) {
 			Class<?> c = i.next();
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CB','CC','CD']", s);
 
-		s = new TreeSet<String>();
+		s = new TreeSet<>();
 		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, false, true); i.hasNext();) {
 			Class<?> c = i.next();
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
 
-		s = new TreeSet<String>();
+		s = new TreeSet<>();
 		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, false, false); i.hasNext();) {
 			Class<?> c = i.next();
 			s.add(c.getSimpleName());
@@ -253,13 +253,13 @@ public class ClassUtilsTest {
 	//====================================================================================================
 	@Test
 	public void getParentMethodsParentFirst() throws Exception {
-		Set<String> s = new TreeSet<String>();
+		Set<String> s = new TreeSet<>();
 		for (Method m : ClassUtils.getAllMethods(DD.class, true))
 			if (! m.getName().startsWith("$"))
 				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
 		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
 
-		s = new TreeSet<String>();
+		s = new TreeSet<>();
 		for (Method m : ClassUtils.getAllMethods(DD.class, false))
 			if (! m.getName().startsWith("$"))
 				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
@@ -295,14 +295,14 @@ public class ClassUtilsTest {
 	//====================================================================================================
 	@Test
 	public void getParentFieldsParentFirst() throws Exception {
-		Set<String> s = new TreeSet<String>();
+		Set<String> s = new TreeSet<>();
 		for (Field f : ClassUtils.getAllFields(EB.class, true)) {
 			if (! f.getName().startsWith("$"))
 				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
 		}
 		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
 
-		s = new TreeSet<String>();
+		s = new TreeSet<>();
 		for (Field f : ClassUtils.getAllFields(EB.class, false)) {
 			if (! f.getName().startsWith("$"))
 				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
@@ -324,7 +324,7 @@ public class ClassUtilsTest {
 	@Test
 	public void newInstanceWithFuzzyArgs() throws Exception {
 		FA t = null;
-		
+
 		t = ClassUtils.newInstance(FA.class, FA.class, true);
 		assertEquals(1, t.c);
 
@@ -336,9 +336,9 @@ public class ClassUtilsTest {
 
 		t = ClassUtils.newInstance(FA.class, FA.class, true, "foo", 123);
 		assertEquals(3, t.c);
-	
+
 		FB t2 = null;
-		
+
 		try {
 			t2 = ClassUtils.newInstance(FB.class, FB.class, true);
 			fail();
@@ -355,14 +355,14 @@ public class ClassUtilsTest {
 		t2 = ClassUtils.newInstance(FB.class, FB.class, true, "foo", 123);
 		assertEquals(1, t2.c);
 	}
-	
+
 	public static class FA {
 		int c;
-		
+
 		public FA() {
 			c = 1;
 		}
-		
+
 		public FA(String foo) {
 			c = 2;
 		}
@@ -374,12 +374,12 @@ public class ClassUtilsTest {
 
 	public static class FB {
 		int c;
-		
+
 		public FB(String foo) {
 			c = 1;
 		}
 	}
-	
+
 	//====================================================================================================
 	// getSimpleName()
 	//====================================================================================================
@@ -388,7 +388,7 @@ public class ClassUtilsTest {
 		assertEquals("ClassUtilsTest.G1", ClassUtils.getSimpleName(G1.class));
 		assertEquals("ClassUtilsTest.G2", ClassUtils.getSimpleName(G2.class));
 	}
-	
+
 	public class G1 {}
 	public static class G2 {}
 }

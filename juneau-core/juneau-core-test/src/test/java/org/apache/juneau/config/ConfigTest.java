@@ -34,7 +34,7 @@ import org.junit.*;
 public class ConfigTest {
 
 	private ConfigBuilder cb = new ConfigBuilder().store(ConfigMemoryStore.DEFAULT).name("Test.cfg");
-	
+
 	private Config init(String...lines) {
 		ConfigMemoryStore.DEFAULT.update("Test.cfg", lines);
 		return cb.build().rollback();
@@ -46,14 +46,14 @@ public class ConfigTest {
 	@Test
 	public void get() throws Exception {
 		Config c = init("a=1", "[S]", "b=2");
-		
+
 		assertEquals("1", c.get("a"));
 		assertEquals("1", c.get("a"));
 		assertEquals("2", c.get("S/b"));
 		assertNull(c.get("b"));
 		assertNull(c.get("S/c"));
 		assertNull(c.get("T/d"));
-		
+
 		try {
 			assertNull(c.get(null));
 			fail();
@@ -69,23 +69,23 @@ public class ConfigTest {
 	@Test
 	public void set1() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
-		
+
 		c.set("a1", "2");
 		c.set("a2", "3");
 		c.set("a3", "4");
 		c.set("S/b1", "5");
 		c.set("S/b2", "6");
 		c.set("T/c1", "7");
-		
+
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
-		
+
 		c.commit();
-		
+
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
@@ -94,14 +94,14 @@ public class ConfigTest {
 		assertEquals("7", c.get("T/c1"));
 
 		c = cb.build();
-		
+
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
-		
+
 		assertTextEquals("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", c.toString());
 	}
 
@@ -111,23 +111,23 @@ public class ConfigTest {
 	@Test
 	public void set2() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
-		
+
 		c.set("a1", 2);
 		c.set("a2", 3);
 		c.set("a3", 4);
 		c.set("S/b1", 5);
 		c.set("S/b2", 6);
 		c.set("T/c1", 7);
-		
+
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
-		
+
 		c.commit();
-		
+
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
@@ -136,24 +136,24 @@ public class ConfigTest {
 		assertEquals("7", c.get("T/c1"));
 
 		c = cb.build();
-		
+
 		assertEquals("2", c.get("a1"));
 		assertEquals("3", c.get("a2"));
 		assertEquals("4", c.get("a3"));
 		assertEquals("5", c.get("S/b1"));
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
-		
+
 		assertTextEquals("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", c.toString());
 	}
-	
+
 	//====================================================================================================
 	//	public Config set(String key, Object value, Serializer serializer) throws SerializeException {
 	//====================================================================================================
 	@Test
 	public void set3() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
-		
+
 		ABean b = new ABean().init();
 		c.set("a1", b, UonSerializer.DEFAULT);
 		c.set("a2", b, UonSerializer.DEFAULT);
@@ -161,7 +161,7 @@ public class ConfigTest {
 		c.set("S/b1", b, UonSerializer.DEFAULT);
 		c.set("S/b2", b, UonSerializer.DEFAULT);
 		c.set("T/c1", b, UonSerializer.DEFAULT);
-		
+
 		assertEquals("(foo=bar)", c.get("a1"));
 		assertEquals("(foo=bar)", c.get("a2"));
 		assertEquals("(foo=bar)", c.get("a3"));
@@ -169,14 +169,14 @@ public class ConfigTest {
 		assertEquals("(foo=bar)", c.get("S/b2"));
 		assertEquals("(foo=bar)", c.get("T/c1"));
 	}
-	
+
 	//====================================================================================================
 	//	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines) throws SerializeException {
 	//====================================================================================================
 	@Test
 	public void set4() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
-		
+
 		ABean b = new ABean().init();
 		c.set("a1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("a2", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
@@ -184,7 +184,7 @@ public class ConfigTest {
 		c.set("S/b1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("S/b2", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("T/c1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
-		
+
 		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
 		c.commit();
 		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
@@ -198,20 +198,20 @@ public class ConfigTest {
 		assertEquals("(foo=bar)", c.get("S/b2"));
 		assertEquals("(foo=bar)", c.get("T/c1"));
 	}
-	
+
 	//====================================================================================================
 	//	public Config remove(String key) {
 	//====================================================================================================
 	@Test
 	public void remove() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1");
-		
+
 		c.remove("a1");
 		c.remove("a2");
 		c.remove("a3");
 		c.remove("S/b1");
 		c.remove("T/c1");
-		
+
 		assertTextEquals("[S]|", c.toString());
 		c.commit();
 		assertTextEquals("[S]|", c.toString());
@@ -225,7 +225,7 @@ public class ConfigTest {
 	@Test
 	public void xgetString1() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		
+
 		assertEquals("1", c.getString("a1"));
 		assertEquals("2", c.getString("a2"));
 		assertEquals(null, c.getString("a3"));
@@ -241,7 +241,7 @@ public class ConfigTest {
 	@Test
 	public void getString2() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		
+
 		assertEquals("1", c.getString("a1", "foo"));
 		assertEquals("2", c.getString("a2", "foo"));
 		assertEquals("foo", c.getString("a3", "foo"));
@@ -257,7 +257,7 @@ public class ConfigTest {
 	@Test
 	public void getStringArray1() throws Exception {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		
+
 		assertObjectEquals("['1','2']", c.getStringArray("a1"));
 		assertObjectEquals("['2','3']", c.getStringArray("a2"));
 		assertObjectEquals("[]", c.getStringArray("a3"));
@@ -273,7 +273,7 @@ public class ConfigTest {
 	@Test
 	public void getStringArray2() throws Exception {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		
+
 		assertObjectEquals("['1','2']", c.getStringArray("a1", new String[] {"foo"}));
 		assertObjectEquals("['2','3']", c.getStringArray("a2", new String[] {"foo"}));
 		assertObjectEquals("['foo']", c.getStringArray("a3", new String[] {"foo"}));
@@ -289,7 +289,7 @@ public class ConfigTest {
 	@Test
 	public void getInt1() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		
+
 		assertEquals(1, c.getInt("a1"));
 		assertEquals(2, c.getInt("a2"));
 		assertEquals(0, c.getInt("a3"));
@@ -302,7 +302,7 @@ public class ConfigTest {
 	@Test
 	public void getInt1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		
+
 		try {
 			c.getInt("a1");
 			fail();
@@ -327,7 +327,7 @@ public class ConfigTest {
 	@Test
 	public void getInt2() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		
+
 		assertEquals(1, c.getInt("a1", -1));
 		assertEquals(2, c.getInt("a2", -1));
 		assertEquals(-1, c.getInt("a3", -1));
@@ -340,7 +340,7 @@ public class ConfigTest {
 	@Test
 	public void getInt2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		
+
 		try {
 			c.getInt("a1", -1);
 			fail();
@@ -365,7 +365,7 @@ public class ConfigTest {
 	@Test
 	public void getBoolean1() throws Exception {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
-		
+
 		assertEquals(true, c.getBoolean("a1"));
 		assertEquals(false, c.getBoolean("a2"));
 		assertEquals(false, c.getBoolean("a3"));
@@ -378,7 +378,7 @@ public class ConfigTest {
 	@Test
 	public void getBoolean1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
-		
+
 		assertEquals(false, c.getBoolean("a1"));
 		assertEquals(false, c.getBoolean("a2"));
 		assertEquals(false, c.getBoolean("a3"));
@@ -391,7 +391,7 @@ public class ConfigTest {
 	@Test
 	public void getBoolean2() throws Exception {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
-		
+
 		assertEquals(true, c.getBoolean("a1", true));
 		assertEquals(false, c.getBoolean("a2", true));
 		assertEquals(true, c.getBoolean("a3", true));
@@ -404,7 +404,7 @@ public class ConfigTest {
 	@Test
 	public void getBoolean2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
-		
+
 		assertEquals(false, c.getBoolean("a1", true));
 		assertEquals(false, c.getBoolean("a2", true));
 		assertEquals(false, c.getBoolean("a3", true));
@@ -417,7 +417,7 @@ public class ConfigTest {
 	@Test
 	public void getLong1() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		
+
 		assertEquals(1l, c.getLong("a1"));
 		assertEquals(2l, c.getLong("a2"));
 		assertEquals(0l, c.getLong("a3"));
@@ -430,7 +430,7 @@ public class ConfigTest {
 	@Test
 	public void getLong1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		
+
 		try {
 			c.getLong("a1");
 			fail();
@@ -455,7 +455,7 @@ public class ConfigTest {
 	@Test
 	public void getLong2() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		
+
 		assertEquals(1l, c.getLong("a1", Long.MAX_VALUE));
 		assertEquals(2l, c.getLong("a2", Long.MAX_VALUE));
 		assertEquals(Long.MAX_VALUE, c.getLong("a3", Long.MAX_VALUE));
@@ -468,7 +468,7 @@ public class ConfigTest {
 	@Test
 	public void getLong2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		
+
 		try {
 			c.getLong("a1", -1l);
 			fail();
@@ -493,7 +493,7 @@ public class ConfigTest {
 	@Test
 	public void getBytes1() throws Exception {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
-		
+
 		assertObjectEquals("[102,111,111]", c.getBytes("a1"));
 		assertObjectEquals("[102,111,111]", c.getBytes("a2"));
 		assertObjectEquals("[]", c.getBytes("a3"));
@@ -506,7 +506,7 @@ public class ConfigTest {
 	@Test
 	public void getBytes2() throws Exception {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
-		
+
 		assertObjectEquals("[102,111,111]", c.getBytes("a1", new byte[] {1}));
 		assertObjectEquals("[102,111,111]", c.getBytes("a2", new byte[] {1}));
 		assertObjectEquals("[1]", c.getBytes("a3", new byte[] {1}));
@@ -519,19 +519,19 @@ public class ConfigTest {
 	@Test
 	public void getObject1() throws Exception {
 		Config c = init(
-			"a1={foo:123}", 
-			"a2=[{foo:123}]", 
+			"a1={foo:123}",
+			"a2=[{foo:123}]",
 			"a3=",
 			"a4=\t{",
 			"\t foo : 123 /* comment */",
 			"\t}"
 			);
-		
+
 		Map<String,Integer> a1 = c.getObject("a1", Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		List<Map<String,Integer>> a2a = c.getObject("a2", List.class, Map.class, String.class, Integer.class);
 		assertObjectEquals("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
@@ -540,15 +540,15 @@ public class ConfigTest {
 		List<ABean> a2b = c.getObject("a2", List.class, ABean.class);
 		assertObjectEquals("[{foo:'123'}]", a2b);
 		assertInstanceOf(ABean.class, a2b.get(0));
-		
+
 		Map<String,Integer> a3 = c.getObject("a3", Map.class, String.class, Integer.class);
 		assertNull(a3);
-		
+
 		Map<String,Integer> a4a = c.getObject("a4", Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		ABean a4b = c.getObject("a4", ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
 		assertInstanceOf(ABean.class, a4b);
@@ -560,19 +560,19 @@ public class ConfigTest {
 	@Test
 	public void getObject2() throws Exception {
 		Config c = init(
-			"a1=(foo=123)", 
-			"a2=@((foo=123))", 
+			"a1=(foo=123)",
+			"a2=@((foo=123))",
 			"a3=",
 			"a4=\t(",
 			"\t foo = 123",
 			"\t)"
 			);
-		
+
 		Map<String,Integer> a1 = c.getObject("a1", UonParser.DEFAULT, Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		List<Map<String,Integer>> a2a = c.getObject("a2", UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class);
 		assertObjectEquals("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
@@ -581,15 +581,15 @@ public class ConfigTest {
 		List<ABean> a2b = c.getObject("a2", UonParser.DEFAULT, List.class, ABean.class);
 		assertObjectEquals("[{foo:'123'}]", a2b);
 		assertInstanceOf(ABean.class, a2b.get(0));
-		
+
 		Map<String,Integer> a3 = c.getObject("a3", UonParser.DEFAULT, Map.class, String.class, Integer.class);
 		assertNull(a3);
-		
+
 		Map<String,Integer> a4a = c.getObject("a4", UonParser.DEFAULT, Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		ABean a4b = c.getObject("a4", UonParser.DEFAULT, ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
 		assertInstanceOf(ABean.class, a4b);
@@ -602,19 +602,19 @@ public class ConfigTest {
 	@Test
 	public void getObject3() throws Exception {
 		Config c = init(
-			"a1={foo:123}", 
-			"a2=[{foo:123}]", 
+			"a1={foo:123}",
+			"a2=[{foo:123}]",
 			"a3=",
 			"a4=\t{",
 			"\t foo : 123 /* comment */",
 			"\t}"
 			);
-		
+
 		Map a1 = c.getObject("a1", Map.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		List a2a = c.getObject("a2", List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
@@ -622,12 +622,12 @@ public class ConfigTest {
 
 		Map a3 = c.getObject("a3", Map.class);
 		assertNull(a3);
-		
+
 		Map a4a = c.getObject("a4", Map.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		ABean a4b = c.getObject("a4", ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
 		assertInstanceOf(ABean.class, a4b);
@@ -640,19 +640,19 @@ public class ConfigTest {
 	@Test
 	public void getObject4() throws Exception {
 		Config c = init(
-			"a1=(foo=123)", 
-			"a2=@((foo=123))", 
+			"a1=(foo=123)",
+			"a2=@((foo=123))",
 			"a3=",
 			"a4=\t(",
 			"\t foo = 123",
 			"\t)"
 		);
-		
+
 		Map a1 = c.getObject("a1", UonParser.DEFAULT, Map.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		List a2a = c.getObject("a2", UonParser.DEFAULT, List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
@@ -660,12 +660,12 @@ public class ConfigTest {
 
 		Map a3 = c.getObject("a3", UonParser.DEFAULT, Map.class);
 		assertNull(a3);
-		
+
 		Map a4a = c.getObject("a4", UonParser.DEFAULT, Map.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		ABean a4b = c.getObject("a4", UonParser.DEFAULT, ABean.class);
 		assertObjectEquals("{foo:'123'}", a4b);
 		assertInstanceOf(ABean.class, a4b);
@@ -678,19 +678,19 @@ public class ConfigTest {
 	@Test
 	public void getObjectWithDefault1() throws Exception {
 		Config c = init(
-			"a1={foo:123}", 
-			"a2=[{foo:123}]", 
+			"a1={foo:123}",
+			"a2=[{foo:123}]",
 			"a3=",
 			"a4=\t{",
 			"\t foo : 123 /* comment */",
 			"\t}"
 		);
-		
+
 		Map a1 = c.getObjectWithDefault("a1", new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		Map a1b = c.getObjectWithDefault("a1b", new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a1b);
 
@@ -704,12 +704,12 @@ public class ConfigTest {
 
 		Map a3 = c.getObjectWithDefault("a3", new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a3);
-		
+
 		Map a4a = c.getObjectWithDefault("a4", new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		Map a4b = c.getObjectWithDefault("a4b", new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a4b);
 
@@ -725,19 +725,19 @@ public class ConfigTest {
 	@Test
 	public void getObjectWithDefault2() throws Exception {
 		Config c = init(
-			"a1=(foo=123)", 
-			"a2=@((foo=123))", 
+			"a1=(foo=123)",
+			"a2=@((foo=123))",
 			"a3=",
 			"a4=\t(",
 			"\t foo = 123",
 			"\t)"
 		);
-		
+
 		Map a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		Map a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a1b);
 
@@ -751,12 +751,12 @@ public class ConfigTest {
 
 		Map a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a3);
-		
+
 		Map a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		Map a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new ObjectMap(), Map.class);
 		assertObjectEquals("{}", a4b);
 
@@ -771,19 +771,19 @@ public class ConfigTest {
 	@Test
 	public void getObjectWithDefault3() throws Exception {
 		Config c = init(
-			"a1={foo:123}", 
-			"a2=[{foo:123}]", 
+			"a1={foo:123}",
+			"a2=[{foo:123}]",
 			"a3=",
 			"a4=\t{",
 			"\t foo : 123 /* comment */",
 			"\t}"
 		);
-		
+
 		Map<String,Integer> a1 = c.getObjectWithDefault("a1", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		Map<String,Integer> a1b = c.getObjectWithDefault("a1b", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a1b);
 
@@ -797,12 +797,12 @@ public class ConfigTest {
 
 		Map<String,Object> a3 = c.getObjectWithDefault("a3", new ObjectMap(), Map.class, String.class, Object.class);
 		assertObjectEquals("{}", a3);
-		
+
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		Map<String,Integer> a4b = c.getObjectWithDefault("a4b", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a4b);
 
@@ -817,19 +817,19 @@ public class ConfigTest {
 	@Test
 	public void getObjectWithDefault4() throws Exception {
 		Config c = init(
-			"a1=(foo=123)", 
-			"a2=@((foo=123))", 
+			"a1=(foo=123)",
+			"a2=@((foo=123))",
 			"a3=",
 			"a4=\t(",
 			"\t foo = 123",
 			"\t)"
 		);
-		
+
 		Map<String,Integer> a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
-		
+
 		Map<String,Integer> a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a1b);
 
@@ -843,12 +843,12 @@ public class ConfigTest {
 
 		Map<String,Object> a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new ObjectMap(), Map.class, String.class, Object.class);
 		assertObjectEquals("{}", a3);
-		
+
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
-		
+
 		Map<String,Integer> a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
 		assertObjectEquals("{}", a4b);
 
@@ -863,12 +863,12 @@ public class ConfigTest {
 	@Test
 	public void getKeys() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		
+
 		assertObjectEquals("['a1','a2']", c.getKeys(""));
 		assertObjectEquals("['a1','a2']", c.getKeys(""));
 		assertObjectEquals("['b1','b2']", c.getKeys("S"));
 		assertTrue(c.getKeys("T").isEmpty());
-		
+
 		try {
 			c.getKeys(null);
 		} catch (IllegalArgumentException e) {
@@ -883,7 +883,7 @@ public class ConfigTest {
 	public void writeProperties() throws Exception {
 		ABean a = new ABean().init();
 		BBean b = new BBean().init();
-		
+
 		Config c = init("foo=qux", "[S]", "foo=baz", "bar=baz");
 		c.writeProperties("S", a, true);
 		assertObjectEquals("{foo:'baz'}", a);
@@ -928,17 +928,17 @@ public class ConfigTest {
 	@Test
 	public void getSectionAsBean1() throws Exception {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
-		
+
 		ABean a = null;
 		BBean b = null;
-		
+
 		a = c.getSectionAsBean("", ABean.class);
 		assertObjectEquals("{foo:'qux'}", a);
 		a = c.getSectionAsBean("", ABean.class);
 		assertObjectEquals("{foo:'qux'}", a);
 		a = c.getSectionAsBean("S", ABean.class);
 		assertObjectEquals("{foo:'baz'}", a);
-		
+
 		b = c.getSectionAsBean("", BBean.class);
 		assertObjectEquals("{foo:'qux'}", b);
 		b = c.getSectionAsBean("", BBean.class);
@@ -965,14 +965,14 @@ public class ConfigTest {
 		} catch (IllegalArgumentException e) {
 			assertEquals("Section 'U' not found in configuration.", e.getMessage());
 		}
-		
+
 		try {
 			c.getSectionAsBean(null, ABean.class);
 			fail();
 		} catch (IllegalArgumentException e) {
 			assertEquals("Field 'section' cannot be null.", e.getMessage());
 		}
-		
+
 		try {
 			c.getSectionAsBean(null, BBean.class);
 			fail();
@@ -987,10 +987,10 @@ public class ConfigTest {
 	@Test
 	public void getSectionAsBean2() throws Exception {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
-		
+
 		ABean a = null;
 		BBean b = null;
-		
+
 		a = c.getSectionAsBean("T", ABean.class, true);
 		assertObjectEquals("{foo:'qux'}", a);
 		b = c.getSectionAsBean("T", BBean.class, true);
@@ -1023,7 +1023,7 @@ public class ConfigTest {
 	@Test
 	public void getSectionAsMap() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "[T]");
-		
+
 		assertObjectEquals("{a:'1'}", c.getSectionAsMap(""));
 		assertObjectEquals("{a:'1'}", c.getSectionAsMap(""));
 		assertObjectEquals("{b:'2'}", c.getSectionAsMap("S"));
@@ -1044,10 +1044,10 @@ public class ConfigTest {
 	public void getSectionAsInterface() throws Exception {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 		AInterface a = null;
-		
+
 		a = c.getSectionAsInterface("", AInterface.class);
 		assertEquals("qux", a.getFoo());
-	
+
 		a = c.getSectionAsInterface("", AInterface.class);
 		assertEquals("qux", a.getFoo());
 
@@ -1063,14 +1063,14 @@ public class ConfigTest {
 		} catch (IllegalArgumentException e) {
 			assertEquals("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to getSectionAsInterface() is not an interface.", e.getMessage());
 		}
-		
+
 		try {
 			c.getSectionAsInterface(null, AInterface.class);
 		} catch (IllegalArgumentException e) {
 			assertEquals("Field 'section' cannot be null.", e.getLocalizedMessage());
 		}
 	}
-	
+
 	public static interface AInterface {
 		String getFoo();
 	}
@@ -1081,7 +1081,7 @@ public class ConfigTest {
 	@Test
 	public void exists() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
-		
+
 		assertTrue(c.exists("a"));
 		assertFalse(c.exists("b"));
 		assertTrue(c.exists("S/b"));
@@ -1096,19 +1096,19 @@ public class ConfigTest {
 	@Test
 	public void setSection1() throws Exception {
 		Config c = init();
-		
+
 		c.setSection("", Arrays.asList("#C1", "#C2"));
 		assertTextEquals("#C1|#C2||", c);
 
 		c.setSection("", Arrays.asList("#C3", "#C4"));
 		assertTextEquals("#C3|#C4||", c);
-		
+
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"));
 		assertTextEquals("#C3|#C4|||#C5|#C6|[S1]|", c);
-		
+
 		c.setSection("S1", null);
 		assertTextEquals("#C3|#C4|||#C5|#C6|[S1]|", c);
-		
+
 		c.setSection("S1", Collections.<String>emptyList());
 		assertTextEquals("#C3|#C4||[S1]|", c);
 
@@ -1127,19 +1127,19 @@ public class ConfigTest {
 	public void setSection2() throws Exception {
 		Config c = init();
 		ObjectMap m = new ObjectMap().append("a", "b");
-		
+
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
 		assertTextEquals("#C1|#C2||a = b|", c);
 
 		c.setSection("", Arrays.asList("#C3", "#C4"), m);
 		assertTextEquals("#C3|#C4||a = b|", c);
-		
+
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"), m);
 		assertTextEquals("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", c);
-		
+
 		c.setSection("S1", null, m);
 		assertTextEquals("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", c);
-		
+
 		c.setSection("S1", Collections.<String>emptyList(), m);
 		assertTextEquals("#C3|#C4||a = b|[S1]|a = b|", c);
 
@@ -1150,19 +1150,19 @@ public class ConfigTest {
 			assertEquals("Field 'section' cannot be null.", e.getLocalizedMessage());
 		}
 	}
-	
+
 	//====================================================================================================
 	//	public Config removeSection(String name) {
 	//====================================================================================================
 	@Test
 	public void removeSection() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
-		
+
 		c.removeSection("S");
 		c.removeSection("T");
-		
+
 		assertTextEquals("a=1|", c);
-		
+
 		c.removeSection("");
 		assertTextEquals("", c);
 	}
@@ -1173,7 +1173,7 @@ public class ConfigTest {
 	@Test
 	public void writeTo() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
-		
+
 		assertTextEquals("a=1|[S]|b=2|c=|[T]|", c.writeTo(new StringWriter()).toString());
 	}
 
@@ -1253,7 +1253,7 @@ public class ConfigTest {
 		);
 
 		cf.set("s1/foo", "mypassword");
-		
+
 		assertEquals("mypassword", cf.getString("s1/foo"));
 
 		cf.commit();
@@ -1264,7 +1264,7 @@ public class ConfigTest {
 		assertEquals("mypassword", cf.getString("s1/foo"));
 
 		cf.load(new StringReader("[s1]\nfoo* = mypassword2\n"), true);
-		
+
 		assertEquals("mypassword2", cf.getString("s1/foo"));
 
 		cf.set("s1/foo", "mypassword");
@@ -1357,7 +1357,7 @@ public class ConfigTest {
 	@Test
 	public void testHex() throws Exception {
 		Config cf = init().builder().binaryFormat(BinaryFormat.HEX).build();
-	
+
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("626172", cf.get("foo"));
 		assertObjectEquals("[98,97,114]", cf.getBytes("foo"));
@@ -1369,7 +1369,7 @@ public class ConfigTest {
 	@Test
 	public void testSpacedHex() throws Exception {
 		Config cf = init().builder().binaryFormat(BinaryFormat.SPACED_HEX).build();
-	
+
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("62 61 72", cf.get("foo"));
 		assertObjectEquals("[98,97,114]", cf.getBytes("foo"));
@@ -1418,7 +1418,7 @@ public class ConfigTest {
 	public void testListeners() throws Exception {
 		Config cf = init();
 
-		final Set<String> changes = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+		final Set<String> changes = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 
 		cf.addListener(
 			new ConfigEventListener() {
@@ -1478,7 +1478,7 @@ public class ConfigTest {
 		cf.set("B/b4", "4", null, ConfigMod.ENCODED, null, null);
 		cf.commit();
 		assertObjectEquals("['a4={Wg==}','B/b4={Wg==}']", changes);
-		
+
 		// Encoded overwrite
 		changes.clear();
 		cf.set("a4", "5");
@@ -1580,7 +1580,7 @@ public class ConfigTest {
 		assertObjectEquals("['1','2','3']", cf.getStringArray("x1", new String[]{"9"}));
 		assertObjectEquals("['4','5','6']", cf.getStringArray("x2", new String[]{"9"}));
 		assertObjectEquals("['9']", cf.getStringArray("x3", new String[]{"9"}));
-		
+
 		System.clearProperty("X");
 	}
 
@@ -1709,20 +1709,20 @@ public class ConfigTest {
 
 		assertEquals("a,#b,=c", cf.getString("a"));
 		assertEquals("a,#b,=c", cf.getString("A/a"));
-		
+
 		cf.set("a", "a,#b,=c", null, (ConfigMod)null, "comment#comment", null);
 		assertTextEquals("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|", cf);
 		assertEquals("a,#b,=c", cf.getString("a"));
 	}
-	
+
 	public static void main(String[] args) {
 		System.err.println(Integer.parseInt("1_000"));
 	}
-	
-	
+
+
 	public static class ABean {
 		public String foo;
-		
+
 		public ABean init() {
 			foo = "bar";
 			return this;
@@ -1731,7 +1731,7 @@ public class ConfigTest {
 
 	public static class BBean {
 		private String foo;
-		
+
 		public String getFoo() { return foo; }
 		public BBean setFoo(String foo) {this.foo = foo; return this;}
 		public BBean init() {

@@ -139,37 +139,37 @@ public class PrimitiveObjectsBean {
 		poalBigDecimal = new AList<BigDecimal[]>().append(new BigDecimal[]{new BigDecimal("1")}).append(null);
 
 		// Regular list of primitives
-		polBoolean = new ArrayList<Boolean[]>();
+		polBoolean = new ArrayList<>();
 		polBoolean.add(new Boolean[]{Boolean.TRUE});
 		polBoolean.add(null);
-		polByte = new ArrayList<Byte[]>();
+		polByte = new ArrayList<>();
 		polByte.add(new Byte[]{1});
 		polByte.add(null);
-		polChar = new ArrayList<Character[]>();
+		polChar = new ArrayList<>();
 		polChar.add(new Character[]{'a'});
 		polChar.add(null);
-		polShort = new ArrayList<Short[]>();
+		polShort = new ArrayList<>();
 		polShort.add(new Short[]{1});
 		polShort.add(null);
-		polInt = new ArrayList<Integer[]>();
+		polInt = new ArrayList<>();
 		polInt.add(new Integer[]{1});
 		polInt.add(null);
-		polLong = new ArrayList<Long[]>();
+		polLong = new ArrayList<>();
 		polLong.add(new Long[]{1l});
 		polLong.add(null);
-		polFloat = new ArrayList<Float[]>();
+		polFloat = new ArrayList<>();
 		polFloat.add(new Float[]{1f});
 		polFloat.add(null);
-		polDouble = new ArrayList<Double[]>();
+		polDouble = new ArrayList<>();
 		polDouble.add(new Double[]{1d});
 		polDouble.add(null);
-		polNumber = new ArrayList<Number[]>();
+		polNumber = new ArrayList<>();
 		polNumber.add(new Number[]{1});
 		polNumber.add(null);
-		polBigInteger = new ArrayList<BigInteger[]>();
+		polBigInteger = new ArrayList<>();
 		polBigInteger.add(new BigInteger[]{new BigInteger("1")});
 		polBigInteger.add(null);
-		polBigDecimal = new ArrayList<BigDecimal[]>();
+		polBigDecimal = new ArrayList<>();
 		polBigDecimal.add(new BigDecimal[]{new BigDecimal("1")});
 		polBigDecimal.add(null);
 

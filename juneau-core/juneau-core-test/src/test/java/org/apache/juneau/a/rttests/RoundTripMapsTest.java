@@ -51,14 +51,14 @@ public class RoundTripMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testMapIntegerString() throws Exception {
-		Map<Integer,String> t = new TreeMap<Integer,String>();
+		Map<Integer,String> t = new TreeMap<>();
 		t.put(1, "a");
 		t.put(2, null);
 		t = roundTrip(t, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", t.get(1));
 		assertNull(null, t.get(2));
 
-		t = new HashMap<Integer,String>();
+		t = new HashMap<>();
 		t.put(1, "a");
 		t.put(2, null);
 		t.put(null, "b");
@@ -73,14 +73,14 @@ public class RoundTripMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testMapBooleanString() throws Exception {
-		Map<Boolean,String> t = new TreeMap<Boolean,String>();
+		Map<Boolean,String> t = new TreeMap<>();
 		t.put(true, "a");
 		t.put(false, null);
 		t = roundTrip(t, TreeMap.class, Boolean.class, String.class);
 		assertEquals("a", t.get(true));
 		assertNull(null, t.get(false));
 
-		t = new HashMap<Boolean,String>();
+		t = new HashMap<>();
 		t.put(true, "a");
 		t.put(false, null);
 		t.put(null, "b");
@@ -101,7 +101,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		String e;
 		Object r;
 
-		Map<byte[],String> t = new LinkedHashMap<byte[],String>();
+		Map<byte[],String> t = new LinkedHashMap<>();
 		t.put(new byte[]{1,2,3}, "a");
 		t.put(new byte[]{4,5,6}, null);
 		t.put(null, "b");
@@ -140,14 +140,14 @@ public class RoundTripMapsTest extends RoundTripTest {
 		Date td1 = new Date(1,2,3,4,5,6);
 		Date td2 = new Date(2,3,4,5,6,7);
 
-		Map<Date,String> t = new TreeMap<Date,String>();
+		Map<Date,String> t = new TreeMap<>();
 		t.put(td1, "a");
 		t.put(td2, null);
 		t = roundTrip(t, TreeMap.class, Date.class, String.class);
 		assertEquals("a", t.get(td1));
 		assertNull(null, t.get(td2));
 
-		t = new HashMap<Date,String>();
+		t = new HashMap<>();
 		t.put(td1, "a");
 		t.put(td2, null);
 		t.put(null, "b");
@@ -167,14 +167,14 @@ public class RoundTripMapsTest extends RoundTripTest {
 		Calendar td2 = new GregorianCalendar();
 		td2.setTime(new Date(2,3,4,5,6,7));
 
-		Map<Calendar,String> t = new TreeMap<Calendar,String>();
+		Map<Calendar,String> t = new TreeMap<>();
 		t.put(td1, "a");
 		t.put(td2, null);
 		t = roundTrip(t, TreeMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", t.get(td1));
 		assertNull(null, t.get(td2));
 
-		t = new HashMap<Calendar,String>();
+		t = new HashMap<>();
 		t.put(td1, "a");
 		t.put(td2, null);
 		t.put(null, "b");
@@ -190,14 +190,14 @@ public class RoundTripMapsTest extends RoundTripTest {
 	@Test
 	public void testMapEnumString() throws Exception {
 
-		Map<TestEnum,String> t = new TreeMap<TestEnum,String>();
+		Map<TestEnum,String> t = new TreeMap<>();
 		t.put(TestEnum.FOO, "a");
 		t.put(TestEnum.BAR, null);
 		t = roundTrip(t, TreeMap.class, TestEnum.class, String.class);
 		assertEquals("a", t.get(TestEnum.FOO));
 		assertNull(null, t.get(TestEnum.BAR));
 
-		t = new HashMap<TestEnum,String>();
+		t = new HashMap<>();
 		t.put(TestEnum.FOO, "a");
 		t.put(TestEnum.BAR, null);
 		t.put(null, "b");

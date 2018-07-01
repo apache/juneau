@@ -30,8 +30,8 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		Map<String,Object> m = new LinkedHashMap<String,Object>();
-		List<Object> l = new LinkedList<Object>();
+		Map<String,Object> m = new LinkedHashMap<>();
+		List<Object> l = new LinkedList<>();
 
 		WriterSerializer s1 = JsonSerializer.create().ssq().trimNullProperties(false).build();
 		WriterSerializer s2 = JsonSerializer.create().simple().trimNullProperties(false).build();
@@ -94,7 +94,7 @@ public class JsonTest {
 
 	@Test
 	public void testReservedKeywordAttributes() throws Exception {
-		Map<String,Object> m = new LinkedHashMap<String,Object>();
+		Map<String,Object> m = new LinkedHashMap<>();
 
 		// Keys with reserved names.
 		for (String attr : new String[]{"","true","false","null","try","123","1x","-123",".123"}) {
@@ -204,7 +204,7 @@ public class JsonTest {
 		t = p.parse(r, A.class);
 		assertEquals(1, t.f1);
 
-		Map<String,A> m = new LinkedHashMap<String,A>();
+		Map<String,A> m = new LinkedHashMap<>();
 		m.put("bar", A.create());
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:{f1:1}}}", r);
@@ -239,7 +239,7 @@ public class JsonTest {
 		t = p.parse(r, B.class);
 		assertEquals(1, t.f1);
 
-		Map<String,B> m = new LinkedHashMap<String,B>();
+		Map<String,B> m = new LinkedHashMap<>();
 		m.put("bar", B.create());
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:'1'}}", r);
@@ -276,7 +276,7 @@ public class JsonTest {
 	@Test
 	public void testSubclassedList() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT;
-		Map<String,Object> o = new HashMap<String,Object>();
+		Map<String,Object> o = new HashMap<>();
 		o.put("c", new C());
 		assertEquals("{\"c\":[]}", s.serialize(o));
 	}

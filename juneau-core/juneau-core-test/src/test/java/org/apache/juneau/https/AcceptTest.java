@@ -72,17 +72,17 @@ public class AcceptTest {
 			{ "Fuzzy-1", "text/1+2", "['text/1+2']", 0, 0 },
 			// Order of subtype parts shouldn't matter.
 			{ "Fuzzy-2", "text/2+1", "['text/1+2']", 0, 0 },
-			
+
 			// Should match if Accept has 'extra' subtypes.
 			// For example, "Accept: text/json+activity" should match against the "text/json" serializer.
 			{ "Fuzzy-3", "text/json+foo", "['text/json+*']", 0, 0 },
-			
+
 			// Shouldn't match because the accept media type must be at least a subset of the real media type
 			// For example, "Accept: text/json" should not match against the "text/json+lax" serializer.
 			{ "Fuzzy-4", "text/json", "['text/json+lax']", -1, -1 },
-			
+
 			{ "Fuzzy-5", "text/1+2", "['text/1','text/1+3']", -1, -1 },
-			
+
 			// "text/1+2" should be a better match than just "text/1"
 			{ "Fuzzy-6", "text/1+2", "['text/1','text/1+2','text/1+2+3']", 1, 1 },
 			// Same as last, but mix up the order a bit.
@@ -108,21 +108,21 @@ public class AcceptTest {
 			// Test media types with parameters
 			{ "Parms-1", "text/A", "['text/A;foo=bar','text/B']", 0, 0 },
 			{ "Parms-2", "text/A;foo=bar", "['text/A','text/B']", 0, 0 },
-			
+
 			// Real-world JSON
 			{ "Json-1a", "text/json", "['text/json','text/json+*','text/*','text/json+lax','text/json+lax+*','text/foo']", 0, 0 },
 			{ "Json-1b", "text/json", "['text/json+*','text/*','text/json+lax','text/json+lax+*','text/foo','text/json']", 5, 5 },
 			{ "Json-1c", "text/json", "['text/json+*','text/*','text/json+lax','text/json+lax+*','text/foo']", 0, 0 },
 			{ "Json-1d", "text/json", "['text/*','text/json+lax','text/json+lax+*','text/foo']", 0, 0 },
 			{ "Json-1e", "text/json", "['text/json+lax','text/json+lax+*','text/foo']", -1, -1 },
-			
+
 			{ "Json-2a", "text/json+lax", "['text/json+lax','text/json+lax+*','text/json+*','text/lax+*','text/*','text/json','text/lax']", 0, 0 },
 			{ "Json-2b", "text/json+lax", "['text/json+lax+*','text/json+*','text/lax+*','text/*','text/json','text/lax']", 0, 0 },
 			{ "Json-2c", "text/json+lax", "['text/json+*','text/lax+foo+*','text/*','text/json','text/lax']", 0, 0 },
 			{ "Json-2d", "text/json+lax", "['text/lax+*','text/*','text/json','text/lax']", 0, 0 },
 			{ "Json-2e", "text/json+lax", "['text/*','text/json','text/lax']", 0, 0 },
 			{ "Json-2f", "text/json+lax", "['text/json','text/lax']", -1, -1 },
-			
+
 			{ "Json-3a", "text/json+activity", "['text/json+activity','text/activity+json','text/json+activity+*','text/json+*','text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0, 0 },
 			{ "Json-3b", "text/json+activity", "['text/activity+json','text/json+activity+*','text/json+*','text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0, 0 },
 			{ "Json-3c", "text/json+activity", "['text/json+activity+*','text/json+*','text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0, 0 },

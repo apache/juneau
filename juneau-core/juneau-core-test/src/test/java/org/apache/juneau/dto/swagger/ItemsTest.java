@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -33,14 +33,14 @@ public class ItemsTest {
 	@Test
 	public void testType() {
 		Items t = new Items();
-		
+
 		t.type("foo");
 		assertEquals("foo", t.getType());
-		
+
 		t.type(new StringBuilder("foo"));
 		assertEquals("foo", t.getType());
 		assertInstanceOf(String.class, t.getType());
-		
+
 		t.type(null);
 		assertNull(t.getType());
 	}
@@ -51,14 +51,14 @@ public class ItemsTest {
 	@Test
 	public void testFormat() {
 		Items t = new Items();
-		
+
 		t.format("foo");
 		assertEquals("foo", t.getFormat());
-		
+
 		t.format(new StringBuilder("foo"));
 		assertEquals("foo", t.getFormat());
 		assertInstanceOf(String.class, t.getFormat());
-		
+
 		t.format(null);
 		assertNull(t.getFormat());
 	}
@@ -69,10 +69,10 @@ public class ItemsTest {
 	@Test
 	public void testItems() {
 		Items t = new Items();
-		
+
 		t.items(items("foo"));
 		assertObjectEquals("{type:'foo'}", t.getItems());
-		
+
 		t.items("{type:'foo'}");
 		assertObjectEquals("{type:'foo'}", t.getItems());
 		assertInstanceOf(Items.class, t.getItems());
@@ -87,14 +87,14 @@ public class ItemsTest {
 	@Test
 	public void testCollectionFormat() {
 		Items t = new Items();
-		
+
 		t.collectionFormat("foo");
 		assertEquals("foo", t.getCollectionFormat());
-		
+
 		t.collectionFormat(new StringBuilder("foo"));
 		assertEquals("foo", t.getCollectionFormat());
 		assertInstanceOf(String.class, t.getCollectionFormat());
-		
+
 		t.collectionFormat(null);
 		assertNull(t.getCollectionFormat());
 	}
@@ -105,14 +105,14 @@ public class ItemsTest {
 	@Test
 	public void test_default() {
 		Items t = new Items();
-		
+
 		t._default("foo");
 		assertEquals("foo", t.getDefault());
-		
+
 		t._default(new StringBuilder("foo"));
 		assertEquals("foo", t.getDefault().toString());
 		assertInstanceOf(StringBuilder.class, t.getDefault());
-		
+
 		t._default(null);
 		assertNull(t.getDefault());
 	}
@@ -123,11 +123,11 @@ public class ItemsTest {
 	@Test
 	public void testMaximum() {
 		Items t = new Items();
-		
+
 		t.maximum(123);
 		assertEquals(123, t.getMaximum());
 		assertInstanceOf(Integer.class, t.getMaximum());
-		
+
 		t.maximum(123f);
 		assertEquals(123f, t.getMaximum());
 		assertInstanceOf(Float.class, t.getMaximum());
@@ -139,7 +139,7 @@ public class ItemsTest {
 		t.maximum(new StringBuilder("123"));
 		assertEquals(123, t.getMaximum());
 		assertInstanceOf(Integer.class, t.getMaximum());
-		
+
 		t.maximum(null);
 		assertNull(t.getMaximum());
 	}
@@ -150,11 +150,11 @@ public class ItemsTest {
 	@Test
 	public void testExclusiveMaximum() {
 		Items t = new Items();
-		
+
 		t.exclusiveMaximum(true);
 		assertEquals(true, t.getExclusiveMaximum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
-		
+
 		t.exclusiveMaximum("true");
 		assertEquals(true, t.getExclusiveMaximum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
@@ -162,7 +162,7 @@ public class ItemsTest {
 		t.exclusiveMaximum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMaximum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
-		
+
 		t.exclusiveMaximum(null);
 		assertNull(t.getExclusiveMaximum());
 	}
@@ -173,11 +173,11 @@ public class ItemsTest {
 	@Test
 	public void testMinimum() {
 		Items t = new Items();
-		
+
 		t.minimum(123);
 		assertEquals(123, t.getMinimum());
 		assertInstanceOf(Integer.class, t.getMinimum());
-		
+
 		t.minimum(123f);
 		assertEquals(123f, t.getMinimum());
 		assertInstanceOf(Float.class, t.getMinimum());
@@ -189,7 +189,7 @@ public class ItemsTest {
 		t.minimum(new StringBuilder("123"));
 		assertEquals(123, t.getMinimum());
 		assertInstanceOf(Integer.class, t.getMinimum());
-		
+
 		t.minimum(null);
 		assertNull(t.getMinimum());
 	}
@@ -200,11 +200,11 @@ public class ItemsTest {
 	@Test
 	public void testExclusiveMinimum() {
 		Items t = new Items();
-		
+
 		t.exclusiveMinimum(true);
 		assertEquals(true, t.getExclusiveMinimum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
-		
+
 		t.exclusiveMinimum("true");
 		assertEquals(true, t.getExclusiveMinimum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
@@ -212,7 +212,7 @@ public class ItemsTest {
 		t.exclusiveMinimum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMinimum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
-		
+
 		t.exclusiveMinimum(null);
 		assertNull(t.getExclusiveMinimum());
 	}
@@ -223,11 +223,11 @@ public class ItemsTest {
 	@Test
 	public void testMaxLength() {
 		Items t = new Items();
-		
+
 		t.maxLength(123);
 		assertEquals(123, t.getMaxLength().intValue());
 		assertInstanceOf(Integer.class, t.getMaxLength());
-		
+
 		t.maxLength(123f);
 		assertEquals(123, t.getMaxLength().intValue());
 		assertInstanceOf(Integer.class, t.getMaxLength());
@@ -239,7 +239,7 @@ public class ItemsTest {
 		t.maxLength(new StringBuilder("123"));
 		assertEquals(123, t.getMaxLength().intValue());
 		assertInstanceOf(Integer.class, t.getMaxLength());
-		
+
 		t.maxLength(null);
 		assertNull(t.getMaxLength());
 	}
@@ -250,11 +250,11 @@ public class ItemsTest {
 	@Test
 	public void testMinLength() {
 		Items t = new Items();
-		
+
 		t.minLength(123);
 		assertEquals(123, t.getMinLength().intValue());
 		assertInstanceOf(Integer.class, t.getMinLength());
-		
+
 		t.minLength(123f);
 		assertEquals(123, t.getMinLength().intValue());
 		assertInstanceOf(Integer.class, t.getMinLength());
@@ -266,7 +266,7 @@ public class ItemsTest {
 		t.minLength(new StringBuilder("123"));
 		assertEquals(123, t.getMinLength().intValue());
 		assertInstanceOf(Integer.class, t.getMinLength());
-		
+
 		t.minLength(null);
 		assertNull(t.getMinLength());
 	}
@@ -277,14 +277,14 @@ public class ItemsTest {
 	@Test
 	public void testPattern() {
 		Items t = new Items();
-		
+
 		t.pattern("foo");
 		assertEquals("foo", t.getPattern());
-		
+
 		t.pattern(new StringBuilder("foo"));
 		assertEquals("foo", t.getPattern());
 		assertInstanceOf(String.class, t.getPattern());
-		
+
 		t.pattern(null);
 		assertNull(t.getPattern());
 	}
@@ -295,11 +295,11 @@ public class ItemsTest {
 	@Test
 	public void testMaxItems() {
 		Items t = new Items();
-		
+
 		t.maxItems(123);
 		assertEquals(123, t.getMaxItems().intValue());
 		assertInstanceOf(Integer.class, t.getMaxItems());
-		
+
 		t.maxItems(123f);
 		assertEquals(123, t.getMaxItems().intValue());
 		assertInstanceOf(Integer.class, t.getMaxItems());
@@ -311,7 +311,7 @@ public class ItemsTest {
 		t.maxItems(new StringBuilder("123"));
 		assertEquals(123, t.getMaxItems().intValue());
 		assertInstanceOf(Integer.class, t.getMaxItems());
-		
+
 		t.maxItems(null);
 		assertNull(t.getMaxItems());
 	}
@@ -322,11 +322,11 @@ public class ItemsTest {
 	@Test
 	public void testMinItems() {
 		Items t = new Items();
-		
+
 		t.minItems(123);
 		assertEquals(123, t.getMinItems().intValue());
 		assertInstanceOf(Integer.class, t.getMinItems());
-		
+
 		t.minItems(123f);
 		assertEquals(123, t.getMinItems().intValue());
 		assertInstanceOf(Integer.class, t.getMinItems());
@@ -338,7 +338,7 @@ public class ItemsTest {
 		t.minItems(new StringBuilder("123"));
 		assertEquals(123, t.getMinItems().intValue());
 		assertInstanceOf(Integer.class, t.getMinItems());
-		
+
 		t.minItems(null);
 		assertNull(t.getMinItems());
 	}
@@ -349,11 +349,11 @@ public class ItemsTest {
 	@Test
 	public void testUniqueItems() {
 		Items t = new Items();
-		
+
 		t.uniqueItems(true);
 		assertEquals(true, t.getUniqueItems());
 		assertInstanceOf(Boolean.class, t.getUniqueItems());
-		
+
 		t.uniqueItems("true");
 		assertEquals(true, t.getUniqueItems());
 		assertInstanceOf(Boolean.class, t.getUniqueItems());
@@ -361,7 +361,7 @@ public class ItemsTest {
 		t.uniqueItems(new StringBuilder("true"));
 		assertEquals(true, t.getUniqueItems());
 		assertInstanceOf(Boolean.class, t.getUniqueItems());
-		
+
 		t.uniqueItems(null);
 		assertNull(t.getUniqueItems());
 	}
@@ -372,12 +372,12 @@ public class ItemsTest {
 	@Test
 	public void testSetEnum() {
 		Items t = new Items();
-		
-		t.setEnum(new ASet<Object>().appendAll("foo","bar"));
+
+		t.setEnum(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
-		t.setEnum(new ASet<Object>());
+
+		t.setEnum(new ASet<>());
 		assertObjectEquals("[]", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -391,12 +391,12 @@ public class ItemsTest {
 	@Test
 	public void testAddEnum() {
 		Items t = new Items();
-		
-		t.addEnum(new ASet<Object>().appendAll("foo","bar"));
+
+		t.addEnum(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
-		t.addEnum(new ASet<Object>().appendAll("baz"));
+
+		t.addEnum(new ASet<>().appendAll("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -411,19 +411,19 @@ public class ItemsTest {
 	@Test
 	public void test_enum() {
 		Items t = new Items();
-		
-		t._enum(new ASet<Object>().appendAll("foo","bar"));
+
+		t._enum(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
-		t._enum(new ASet<Object>().appendAll("baz"));
+
+		t._enum(new ASet<>().appendAll("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
 		t._enum((Object[])null);
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
+
 		t.setEnum(null);
 		t._enum("foo")._enum(new StringBuilder("bar"))._enum("['baz','qux']")._enum((Object)new String[]{"quux"});
 		assertObjectEquals("['foo','bar','baz','qux','quux']", t.getEnum());
@@ -436,11 +436,11 @@ public class ItemsTest {
 	@Test
 	public void testMultipleOf() {
 		Items t = new Items();
-		
+
 		t.multipleOf(123);
 		assertEquals(123, t.getMultipleOf());
 		assertInstanceOf(Integer.class, t.getMultipleOf());
-		
+
 		t.multipleOf(123f);
 		assertEquals(123f, t.getMultipleOf());
 		assertInstanceOf(Float.class, t.getMultipleOf());
@@ -452,7 +452,7 @@ public class ItemsTest {
 		t.multipleOf(new StringBuilder("123"));
 		assertEquals(123, t.getMultipleOf());
 		assertInstanceOf(Integer.class, t.getMultipleOf());
-		
+
 		t.multipleOf(null);
 		assertNull(t.getMultipleOf());
 	}
@@ -483,7 +483,7 @@ public class ItemsTest {
 			.set("type", "j")
 			.set("uniqueItems", true)
 			.set("$ref", "ref");
-	
+
 		assertObjectEquals("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}", t);
 
 		t
@@ -505,9 +505,9 @@ public class ItemsTest {
 			.set("type", "j")
 			.set("uniqueItems", "true")
 			.set("$ref", "ref");
-	
+
 		assertObjectEquals("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}", t);
-		
+
 		t
 			.set("default", new StringBuilder("a"))
 			.set("enum", new StringBuilder("['b']"))
@@ -527,9 +527,9 @@ public class ItemsTest {
 			.set("type", new StringBuilder("j"))
 			.set("uniqueItems", new StringBuilder("true"))
 			.set("$ref", new StringBuilder("ref"));
-		
+
 		assertObjectEquals("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}", t);
-		
+
 		assertEquals("a", t.get("default", String.class));
 		assertEquals("['b']", t.get("enum", String.class));
 		assertEquals("c", t.get("collectionFormat", String.class));
@@ -548,7 +548,7 @@ public class ItemsTest {
 		assertEquals("j", t.get("type", String.class));
 		assertEquals("true", t.get("uniqueItems", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
-	
+
 		assertInstanceOf(StringBuilder.class, t.get("default", Object.class));
 		assertInstanceOf(List.class, t.get("enum", Object.class));
 		assertInstanceOf(String.class, t.get("collectionFormat", Object.class));
@@ -567,12 +567,12 @@ public class ItemsTest {
 		assertInstanceOf(String.class, t.get("type", Object.class));
 		assertInstanceOf(Boolean.class, t.get("uniqueItems", Object.class));
 		assertInstanceOf(String.class, t.get("$ref", Object.class));
-		
+
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
-		
+
 		String s = "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}";
 		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, Items.class));
 	}

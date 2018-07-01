@@ -219,28 +219,28 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 			plDouble = new AList<double[]>().append(new double[]{1}).append(null);
 
 			// Anonymous list of primitives
-			palBoolean = new ArrayList<boolean[]>();
+			palBoolean = new ArrayList<>();
 			palBoolean.add(new boolean[]{true});
 			palBoolean.add(null);
-			palByte = new ArrayList<byte[]>();
+			palByte = new ArrayList<>();
 			palByte.add(new byte[]{1});
 			palByte.add(null);
-			palChar = new ArrayList<char[]>();
+			palChar = new ArrayList<>();
 			palChar.add(new char[]{'a'});
 			palChar.add(null);
-			palShort = new ArrayList<short[]>();
+			palShort = new ArrayList<>();
 			palShort.add(new short[]{1});
 			palShort.add(null);
-			palInt = new ArrayList<int[]>();
+			palInt = new ArrayList<>();
 			palInt.add(new int[]{1});
 			palInt.add(null);
-			palLong = new ArrayList<long[]>();
+			palLong = new ArrayList<>();
 			palLong.add(new long[]{1});
 			palLong.add(null);
-			palFloat = new ArrayList<float[]>();
+			palFloat = new ArrayList<>();
 			palFloat.add(new float[]{1});
 			palFloat.add(null);
-			palDouble = new ArrayList<double[]>();
+			palDouble = new ArrayList<>();
 			palDouble.add(new double[]{1});
 			palDouble.add(null);
 			return this;

@@ -81,17 +81,17 @@ public class ComboInput<T> {
 	/**
 	 * Returns the input object.
 	 * Override this method if you want it dynamically created each time.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public T getInput() throws Exception {
 		return in;
 	}
-	
+
 	/**
 	 * Override this method if you want to do a post-parse verification on the object.
 	 * <p>
 	 * Note that a Function would be preferred here, but it's not available in Java 6.
-	 * 
+	 *
 	 * @param o The object returned by the parser.
 	 */
 	public void verify(T o) {}

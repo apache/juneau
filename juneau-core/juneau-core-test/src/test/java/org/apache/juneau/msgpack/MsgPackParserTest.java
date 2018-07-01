@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -26,7 +26,7 @@ import org.junit.*;
  * Tests the {@link MsgPackParser} class.
  */
 public class MsgPackParserTest {
-	
+
 	//====================================================================================================
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
@@ -36,7 +36,7 @@ public class MsgPackParserTest {
 		InputStreamParser p = MsgPackParser.DEFAULT.builder().autoCloseStreams().build();
 		Object r;
 		InputStream is;
-		
+
 		is = is("00 01");
 		r = p.parse(is, Object.class);
 		assertObjectEquals("0", r);
@@ -47,7 +47,7 @@ public class MsgPackParserTest {
 			assertTrue(e.getMessage().contains("Stream is closed"));
 		}
 	}
-		
+
 	//====================================================================================================
 	// testMultipleObjectsInStream
 	// Validates that input streams are not closed so that we can read streams of POJOs.
@@ -57,19 +57,19 @@ public class MsgPackParserTest {
 		InputStreamParser p = MsgPackParser.DEFAULT;
 		Object r;
 		InputStream is;
-		
+
 		is = is("00 01");
 		r = p.parse(is, Object.class);
 		assertObjectEquals("0", r);
 		r = p.parse(is, Object.class);
 		assertObjectEquals("1", r);
-		
+
 		is = is("D1 00 80 D1 00 81");
 		r = p.parse(is, Object.class);
 		assertObjectEquals("128", r);
 		r = p.parse(is, Object.class);
 		assertObjectEquals("129", r);
-		
+
 		is = is("D2 00 00 80 00 D2 00 00 80 01");
 		r = p.parse(is, Object.class);
 		assertObjectEquals("32768", r);
@@ -93,7 +93,7 @@ public class MsgPackParserTest {
 		assertObjectEquals("''", r);
 		r = p.parse(is, Object.class);
 		assertObjectEquals("''", r);
-		
+
 		is = is("BF 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 BF 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62");
 		r = p.parse(is, Object.class);
 		assertObjectEquals("'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'", r);

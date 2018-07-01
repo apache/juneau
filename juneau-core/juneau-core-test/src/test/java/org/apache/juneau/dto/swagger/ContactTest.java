@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -31,14 +31,14 @@ public class ContactTest {
 	@Test
 	public void testName() {
 		Contact t = new Contact();
-		
+
 		t.name("foo");
 		assertEquals("foo", t.getName());
-		
+
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
 		assertInstanceOf(String.class, t.getName());
-		
+
 		t.name(null);
 		assertNull(t.getName());
 	}
@@ -52,11 +52,11 @@ public class ContactTest {
 
 		t.url("foo");
 		assertEquals("foo", t.getUrl().toString());
-		
+
 		t.url(new StringBuilder("foo"));
 		assertEquals("foo", t.getUrl().toString());
 		assertInstanceOf(URI.class, t.getUrl());
-		
+
 		t.url(null);
 		assertNull(t.getUrl());
 	}
@@ -67,10 +67,10 @@ public class ContactTest {
 	@Test
 	public void testEmail() {
 		Contact t = new Contact();
-		
+
 		t.email("foo");
 		assertEquals("foo", t.getEmail());
-		
+
 		t.email(new StringBuilder("foo"));
 		assertEquals("foo", t.getEmail());
 		assertInstanceOf(String.class, t.getEmail());
@@ -85,23 +85,23 @@ public class ContactTest {
 	@Test
 	public void testSet() throws Exception {
 		Contact t = new Contact();
-		
+
 		t
 			.set("name", "foo")
 			.set("url", "bar")
 			.set("email", "baz")
 			.set("$ref", "qux");
-		
+
 		assertObjectEquals("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", t);
-		
+
 		t
 			.set("name", new StringBuilder("foo"))
 			.set("url", new StringBuilder("bar"))
 			.set("email", new StringBuilder("baz"))
 			.set("$ref", new StringBuilder("qux"));
-		
+
 		assertObjectEquals("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", t);
-		
+
 		assertEquals("foo", t.get("name", String.class));
 		assertEquals("bar", t.get("url", URI.class).toString());
 		assertEquals("baz", t.get("email", String.class));
@@ -116,7 +116,7 @@ public class ContactTest {
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
-		
+
 		assertObjectEquals("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class));
 	}
 }

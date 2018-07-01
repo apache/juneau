@@ -93,7 +93,7 @@ public class CommonTest {
 
 		public static B create() {
 			B t = new B();
-			t.f1 = new TreeMap<String,A>();
+			t.f1 = new TreeMap<>();
 			t.f2 = new TreeMap<String,A>(){{put("f2a",null);put("f2b",A.create());}};
 			return t;
 		}
@@ -133,7 +133,7 @@ public class CommonTest {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = new AList<A>();
+			t.f1 = new AList<>();
 			t.f2 = new AList<A>().append(null).append(A.create());
 			return t;
 		}
@@ -214,7 +214,7 @@ public class CommonTest {
 	@Test
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
-		List<F> l = new LinkedList<F>();
+		List<F> l = new LinkedList<>();
 		F t = new F();
 		t.x1.add(new F());
 		l.add(t);
@@ -223,7 +223,7 @@ public class CommonTest {
 	}
 
 	public static class F {
-		@BeanProperty(properties="x2") public List<F> x1 = new LinkedList<F>();
+		@BeanProperty(properties="x2") public List<F> x1 = new LinkedList<>();
 		public int x2 = 2;
 	}
 

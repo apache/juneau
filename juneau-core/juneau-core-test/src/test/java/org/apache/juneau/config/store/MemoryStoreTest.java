@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -19,7 +19,7 @@ import java.util.concurrent.*;
 import org.junit.*;
 
 public class MemoryStoreTest {
-	
+
 	@Test
 	public void testNoFile() throws Exception {
 		ConfigMemoryStore fs = ConfigMemoryStore.create().build();
@@ -45,7 +45,7 @@ public class MemoryStoreTest {
 		assertNull(fs.write("X.cfg", "foo", "bar"));
 		assertEquals("bar", fs.read("X.cfg"));
 	}
-	
+
 	@Test
 	public void testUpdate() throws Exception {
 		ConfigMemoryStore fs = ConfigMemoryStore.create().build();
@@ -65,10 +65,10 @@ public class MemoryStoreTest {
 					latch.countDown();
 			}
 		});
-		
+
 		fs.update("X.cfg", "xxx");
 		fs.update("Y.cfg", "yyy");
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
-	}	
+	}
 }

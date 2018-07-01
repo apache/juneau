@@ -321,7 +321,7 @@ public class ObjectMapTest {
 	public void testFromReader() throws Exception {
 		assertObjectEquals("{foo:'bar'}", new ObjectMap(new StringReader("{foo:'bar'}")));
 	}
-	
+
 	//====================================================================================================
 	// testGetMap
 	//====================================================================================================
@@ -332,15 +332,15 @@ public class ObjectMapTest {
 		assertObjectEquals("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
-	
+
 		m2 = m.getMap("b", Integer.class, Boolean.class, null);
 		assertNull(m2);
-		
+
 		m2 = m.get("a", Map.class, Integer.class, Boolean.class);
 		assertObjectEquals("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
-		
+
 		m2 = m.get("b", Map.class, Integer.class, Boolean.class);
 		assertNull(m2);
 	}
@@ -354,14 +354,14 @@ public class ObjectMapTest {
 		List<Integer> l2 = m.getList("a", Integer.class, null);
 		assertObjectEquals("[123,456]", l2);
 		assertEquals(Integer.class, l2.iterator().next().getClass());
-	
+
 		l2 = m.getList("b", Integer.class, null);
 		assertNull(l2);
-		
+
 		l2 = m.get("a", List.class, Integer.class);
 		assertObjectEquals("[123,456]", l2);
 		assertEquals(Integer.class, l2.iterator().next().getClass());
-		
+
 		l2 = m.get("b", List.class, Integer.class);
 		assertNull(l2);
 	}

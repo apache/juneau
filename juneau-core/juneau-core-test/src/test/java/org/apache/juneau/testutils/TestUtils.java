@@ -182,7 +182,7 @@ public class TestUtils {
 		if (xmlSchema.indexOf('\u0000') != -1) {
 
 			// Break it up into a map of namespaceURI->schema document
-			final Map<String,String> schemas = new HashMap<String,String>();
+			final Map<String,String> schemas = new HashMap<>();
 			String[] ss = xmlSchema.split("\u0000");
 			xmlSchema = ss[0];
 			for (String s : ss) {
@@ -256,7 +256,7 @@ public class TestUtils {
 	}
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-	
+
 	public static final String toHex(byte b) {
 		char[] c = new char[2];
 		int v = b & 0xFF;
@@ -285,14 +285,14 @@ public class TestUtils {
 	 */
 	private static class SortedNode implements Comparable<SortedNode> {
 		public String name, text="", attrs="";
-		public List<SortedNode> children = new LinkedList<SortedNode>();
+		public List<SortedNode> children = new LinkedList<>();
 
 		SortedNode(Element e) {
 			this.name = e.getNodeName();
 			NamedNodeMap attrs = e.getAttributes();
 			if (attrs != null) {
 				StringBuilder sb = new StringBuilder();
-				Set<String> attrNames = new TreeSet<String>();
+				Set<String> attrNames = new TreeSet<>();
 				for (int i = 0; i < attrs.getLength(); i++)
 					attrNames.add(attrs.item(i).getNodeName());
 				for (String n : attrNames) {
@@ -382,7 +382,7 @@ public class TestUtils {
 	 * Assert that the object equals the specified string after running it through ws.toString().
 	 */
 	public static final void assertObjectEquals(String s, Object o, WriterSerializer ws) {
-		if ("xxx".equals(s)) 
+		if ("xxx".equals(s))
 			System.err.println(ws.toString(o).replaceAll("\\\\", "\\\\\\\\"));
 		Assert.assertEquals(s, ws.toString(o));
 	}
@@ -419,13 +419,13 @@ public class TestUtils {
 		return o.toString();
 	}
 
-	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<TimeZone>();
-	private static ThreadLocal<Locale> systemLocale = new ThreadLocal<Locale>();
+	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<>();
+	private static ThreadLocal<Locale> systemLocale = new ThreadLocal<>();
 
 	/**
 	 * Temporarily sets the default system timezone to the specified timezone ID.
 	 * Use {@link #unsetTimeZone()} to unset it.
-	 * 
+	 *
 	 * @param name
 	 */
 	public static final void setTimeZone(String name) {
@@ -440,7 +440,7 @@ public class TestUtils {
 	/**
 	 * Temporarily sets the default system locale to the specified locale.
 	 * Use {@link #unsetLocale()} to unset it.
-	 * 
+	 *
 	 * @param name
 	 */
 	public static final void setLocale(Locale locale) {
@@ -476,9 +476,9 @@ public class TestUtils {
 		if (! isEquals(expected, actual))
 			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));
 	}
-	
+
 	public static final void assertContains(Object value, String...substrings) {
-		for (String substring : substrings) 
+		for (String substring : substrings)
 			if (! contains(toString(value), substring))
 				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));
 	}

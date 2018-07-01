@@ -108,7 +108,7 @@ public class CommonTest {
 
 		public static B create() {
 			B t = new B();
-			t.f1 = new TreeMap<String,A>();
+			t.f1 = new TreeMap<>();
 			t.f2 = new TreeMap<String,A>(){{put("f2a",null);put("f2b",A.create());}};
 			return t;
 		}
@@ -150,7 +150,7 @@ public class CommonTest {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = new AList<A>();
+			t.f1 = new AList<>();
 			t.f2 = new AList<A>().append(null).append(A.create());
 			return t;
 		}
@@ -244,7 +244,7 @@ public class CommonTest {
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
-		List<F> l1 = new LinkedList<F>(), l2;
+		List<F> l1 = new LinkedList<>(), l2;
 		F t = F.create();
 		t.x1.add(F.create());
 		l1.add(t);
@@ -261,7 +261,7 @@ public class CommonTest {
 
 		public static F create() {
 			F t = new F();
-			t.x1 = new LinkedList<F>();
+			t.x1 = new LinkedList<>();
 			t.x2 = 2;
 			return t;
 		}

@@ -43,7 +43,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	@Override /* RoundTripTest */
 	public Map<Class<?>,Class<?>> getImplClasses() {
-		Map<Class<?>,Class<?>> m = new HashMap<Class<?>,Class<?>>();
+		Map<Class<?>,Class<?>> m = new HashMap<>();
 		m.put(IBean.class, CBean.class);
 		return m;
 	}
@@ -910,7 +910,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		L t = L.create();
 		t = roundTrip(t, L.class);
 
-		Map<String,L> m = new LinkedHashMap<String,L>();
+		Map<String,L> m = new LinkedHashMap<>();
 		m.put("bar", L.create());
 		roundTrip(m, LinkedHashMap.class, String.class, L.class);
 	}
@@ -934,7 +934,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		M t = M.create();
 		t = roundTrip(t, M.class);
 
-		Map<String,M> m = new LinkedHashMap<String,M>();
+		Map<String,M> m = new LinkedHashMap<>();
 		m.put("bar", M.create());
 		roundTrip(m, LinkedHashMap.class, String.class, M.class);
 	}

@@ -26,7 +26,7 @@ public class CsvTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		List<A> l = new LinkedList<A>();
+		List<A> l = new LinkedList<>();
 		l.add(new A("b1",1));
 		l.add(new A("b2",2));
 

@@ -52,7 +52,7 @@ public class RoundTripObjectsWithSpecialMethodsTest extends RoundTripTest {
 
 		A init() {
 			a2 = new A2().init();
-			m = new LinkedHashMap<String,A2>();
+			m = new LinkedHashMap<>();
 			m.put("k1", new A2().init());
 			return this;
 		}

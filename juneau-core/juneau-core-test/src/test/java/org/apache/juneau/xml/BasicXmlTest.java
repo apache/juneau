@@ -1337,9 +1337,9 @@ public class BasicXmlTest {
 		public Map<String,Object> b2;
 
 		BeanWithPropertiesWithMapTypeNames init() {
-			b1 = new HashMap<String,B>();
+			b1 = new HashMap<>();
 			b1.put("k1", new B().init());
-			b2 = new HashMap<String,Object>();
+			b2 = new HashMap<>();
 			b2.put("k2", new B().init());
 			return this;
 		}
@@ -1600,9 +1600,9 @@ public class BasicXmlTest {
 		public Map<String,Object> c;
 
 		BeanWithAbstractMapFields init() {
-			a = new HashMap<String,A>();
-			b = new HashMap<String,AA>();
-			c = new HashMap<String,Object>();
+			a = new HashMap<>();
+			b = new HashMap<>();
+			c = new HashMap<>();
 			a.put("k1", new A().init());
 			b.put("k2", new A().init());
 			c.put("k3", new A().init());
@@ -1618,10 +1618,10 @@ public class BasicXmlTest {
 		public Map<String,Object[]> o;
 
 		BeanWithAbstractMapArrayFields init() {
-			a = new LinkedHashMap<String,A[]>();
-			ia = new LinkedHashMap<String,IA[]>();
-			aa = new LinkedHashMap<String,AA[]>();
-			o = new LinkedHashMap<String,Object[]>();
+			a = new LinkedHashMap<>();
+			ia = new LinkedHashMap<>();
+			aa = new LinkedHashMap<>();
+			o = new LinkedHashMap<>();
 			a.put("a1", new A[]{new A().init()});
 			ia.put("ia1", new A[]{new A().init()});
 			ia.put("ia2", new IA[]{new A().init()});

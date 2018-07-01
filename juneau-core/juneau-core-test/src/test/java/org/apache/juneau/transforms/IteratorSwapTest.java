@@ -30,7 +30,7 @@ public class IteratorSwapTest {
 		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(IteratorSwap.class).build();
 
 		// Iterators
-		List<String> l = new ArrayList<String>(Arrays.asList(new String[]{"foo","bar","baz"}));
+		List<String> l = new ArrayList<>(Arrays.asList(new String[]{"foo","bar","baz"}));
 		Iterator<String> i = l.iterator();
 		assertEquals("['foo','bar','baz']", s.serialize(i));
 	}

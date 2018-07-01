@@ -30,7 +30,7 @@ public class MultiSetTest {
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{"3","4"});
-		ms = new MultiSet<String>(l1, l2);
+		ms = new MultiSet<>(l1, l2);
 		i = ms.iterator();
 		assertTrue(i.hasNext());
 		assertEquals("1", i.next());
@@ -49,7 +49,7 @@ public class MultiSetTest {
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{});
-		ms = new MultiSet<String>(l1, l2);
+		ms = new MultiSet<>(l1, l2);
 		i = ms.iterator();
 		assertTrue(i.hasNext());
 		assertEquals("1", i.next());
@@ -64,7 +64,7 @@ public class MultiSetTest {
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{"3","4"});
-		ms = new MultiSet<String>(l1, l2);
+		ms = new MultiSet<>(l1, l2);
 		i = ms.iterator();
 		assertTrue(i.hasNext());
 		assertEquals("3", i.next());
@@ -79,7 +79,7 @@ public class MultiSetTest {
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{});
-		ms = new MultiSet<String>(l1, l2);
+		ms = new MultiSet<>(l1, l2);
 		i = ms.iterator();
 		assertFalse(i.hasNext());
 		try {
@@ -89,7 +89,7 @@ public class MultiSetTest {
 		}
 
 		l1 = Arrays.asList(new String[]{"1","2"});
-		ms = new MultiSet<String>(l1);
+		ms = new MultiSet<>(l1);
 		i = ms.iterator();
 		assertTrue(i.hasNext());
 		assertEquals("1", i.next());
@@ -102,9 +102,9 @@ public class MultiSetTest {
 		} catch (NoSuchElementException e) {
 		}
 
-		l1 = new LinkedList<String>(Arrays.asList(new String[]{"1","2"}));
-		l2 = new LinkedList<String>(Arrays.asList(new String[]{"3","4"}));
-		ms = new MultiSet<String>(l1).append(l2);
+		l1 = new LinkedList<>(Arrays.asList(new String[]{"1","2"}));
+		l2 = new LinkedList<>(Arrays.asList(new String[]{"3","4"}));
+		ms = new MultiSet<>(l1).append(l2);
 		assertObjectEquals("['1','2','3','4']", ms);
 		assertObjectEquals("['1','2','3','4']", ms.enumerator());
 		assertEquals(4, ms.size());
@@ -130,11 +130,11 @@ public class MultiSetTest {
 		assertObjectEquals("[]", ms.enumerator());
 		assertEquals(0, ms.size());
 
-		ms = new MultiSet<String>();
+		ms = new MultiSet<>();
 		assertObjectEquals("[]", ms);
 		assertEquals(0, ms.size());
 
-		try { ms = new MultiSet<String>((Collection<String>)null); fail(); } catch (IllegalArgumentException e) {}
+		try { ms = new MultiSet<>((Collection<String>)null); fail(); } catch (IllegalArgumentException e) {}
 		try { new MultiSet<String>().iterator().next(); fail(); } catch (NoSuchElementException e) {}
 		try { new MultiSet<String>().iterator().remove(); fail(); } catch (NoSuchElementException e) {}
 

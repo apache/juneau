@@ -34,7 +34,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
-				new ComboInput<TestMediaTypeLiterals>(
+				new ComboInput<>(
 					"TestMediaTypeLiterals",
 					TestMediaTypeLiterals.class,
 					new TestMediaTypeLiterals(),
@@ -62,7 +62,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 1 */
-				new ComboInput<TestMediaTypePatterns>(
+				new ComboInput<>(
 					"TestMediaTypePatterns",
 					TestMediaTypePatterns.class,
 					new TestMediaTypePatterns(),
@@ -90,7 +90,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 2 */
-				new ComboInput<TestMediaTypePatternsReversed>(
+				new ComboInput<>(
 					"TestMediaTypePatternsReversed",
 					TestMediaTypePatternsReversed.class,
 					new TestMediaTypePatternsReversed(),
@@ -118,7 +118,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 3 */
-				new ComboInput<TestMediaTypePatternsMulti>(
+				new ComboInput<>(
 					"TestMediaTypePatternsMulti",
 					TestMediaTypePatternsMulti.class,
 					new TestMediaTypePatternsMulti(),
@@ -147,7 +147,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			},
 			{ 	/* 4 */
 				// In this case, "text/xml" should NOT match "text/xml+rdf".
-				new ComboInput<TestMediaTypePatternsPartial1>(
+				new ComboInput<>(
 					"TestMediaTypePatternsPartial1",
 					TestMediaTypePatternsPartial1.class,
 					new TestMediaTypePatternsPartial1(),
@@ -176,7 +176,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			},
 			{ 	/* 5 */
 				// In this case, "text/xml+rdf" should NOT match "text/xml".
-				new ComboInput<TestMediaTypePatternsPartial2>(
+				new ComboInput<>(
 					"TestMediaTypePatternsPartial2",
 					TestMediaTypePatternsPartial2.class,
 					new TestMediaTypePatternsPartial2(),
@@ -205,7 +205,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			},
 			{ 	/* 6 */
 				// In this case, "text/xml+*" should match both the XML and RDF serializers.
-				new ComboInput<TestMediaTypePatternsXmlPlus>(
+				new ComboInput<>(
 					"TestMediaTypePatternsXmlPlus",
 					TestMediaTypePatternsXmlPlus.class,
 					new TestMediaTypePatternsXmlPlus(),
@@ -234,7 +234,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			},
 			{ 	/* 7 */
 				// In this case, "text/*+xml" should match both the XML and RDF serializers.
-				new ComboInput<TestMediaTypePatternsXmlPlusReversed>(
+				new ComboInput<>(
 					"TestMediaTypePatternsXmlPlusReversed",
 					TestMediaTypePatternsXmlPlusReversed.class,
 					new TestMediaTypePatternsXmlPlusReversed(),
@@ -263,7 +263,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			},
 			{ 	/* 8 */
 				// In this case, "text/rdf+*" should match only the RDF serializer.
-				new ComboInput<TestMediaTypePatternsRdfPlus>(
+				new ComboInput<>(
 					"TestMediaTypePatternsRdfPlus",
 					TestMediaTypePatternsRdfPlus.class,
 					new TestMediaTypePatternsRdfPlus(),
@@ -291,7 +291,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 9 */
-				new ComboInput<TestTemplate>(
+				new ComboInput<>(
 					"TestTemplate",
 					TestTemplate.class,
 					new TestTemplate(),
@@ -319,7 +319,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 10 */
-				new ComboInput<TestTemplates>(
+				new ComboInput<>(
 					"TestTemplates",
 					TestTemplates.class,
 					new TestTemplates(),
@@ -347,7 +347,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 11 */
-				new ComboInput<TestProgrammaticTemplates>(
+				new ComboInput<>(
 					"TestProgrammaticTemplates",
 					TestProgrammaticTemplates.class,
 					new TestProgrammaticTemplates(),
@@ -375,7 +375,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 12 */
-				new ComboInput<TestContextSwap>(
+				new ComboInput<>(
 					"TestContextSwap",
 					TestContextSwap.class,
 					new TestContextSwap(),
@@ -403,7 +403,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 13 */
-				new ComboInput<TestContextSwaps>(
+				new ComboInput<>(
 					"TestContextSwaps",
 					TestContextSwaps.class,
 					new TestContextSwaps(),
@@ -431,7 +431,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 14 */
-				new ComboInput<BeanA>(
+				new ComboInput<>(
 					"BeanA",
 					BeanA.class,
 					new BeanA(),
@@ -459,7 +459,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				)
 			},
 			{ 	/* 15 */
-				new ComboInput<BeanB>(
+				new ComboInput<>(
 					"BeanB",
 					BeanB.class,
 					new BeanB(),
@@ -496,14 +496,14 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
 		return s.builder().pojoSwaps(
-				ContextSwap.class, 
-				ContextSwapJson.class, 
-				ContextSwapXml.class, 
-				ContextSwapHtml.class, 
-				ContextSwapUon.class, 
-				ContextSwapUrlEncoding.class, 
-				ContextSwapMsgPack.class, 
-				ContextSwapRdfXml.class 
+				ContextSwap.class,
+				ContextSwapJson.class,
+				ContextSwapXml.class,
+				ContextSwapHtml.class,
+				ContextSwapUon.class,
+				ContextSwapUrlEncoding.class,
+				ContextSwapMsgPack.class,
+				ContextSwapRdfXml.class
 			).build();
 	}
 
@@ -567,6 +567,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	)
 	public static class TestMediaTypePatternsPartial1 {
+		@Override
 		public String toString() {
 			return "foo";
 		}
@@ -581,17 +582,19 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	)
 	public static class TestMediaTypePatternsPartial2 {
+		@Override
 		public String toString() {
 			return "foo";
 		}
 	}
-	
+
 	@Swaps(
 		{
 			@Swap(value=SwapXml.class, mediaTypes={"text/xml+*"}),
 		}
 	)
 	public static class TestMediaTypePatternsXmlPlus {
+		@Override
 		public String toString() {
 			return "foo";
 		}
@@ -603,6 +606,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	)
 	public static class TestMediaTypePatternsXmlPlusReversed {
+		@Override
 		public String toString() {
 			return "foo";
 		}
@@ -614,47 +618,55 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	)
 	public static class TestMediaTypePatternsRdfPlus {
+		@Override
 		public String toString() {
 			return "foo";
 		}
 	}
 
 	public static class SwapJson extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "JSON";
 		}
 	}
 	public static class SwapXml extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "XML";
 		}
 	}
 	public static class SwapHtml extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "HTML";
 		}
 	}
 	public static class SwapUon extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "UON";
 		}
 	}
 	public static class SwapUrlEncoding extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "URLENCODING";
 		}
 	}
 	public static class SwapMsgPack extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "MSGPACK";
 		}
 	}
 	public static class SwapRdfXml extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "RDFXML";
 		}
 	}
-	
+
 	@Swap(impl=TemplateSwap.class,template="foo")
 	public static class TestTemplate {}
 
@@ -670,9 +682,10 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	)
 	public static class TestTemplates {}
-	
-	
+
+
 	public static class TemplateSwap extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o, String template) throws Exception {
 			return new StringReader(template);
 		}
@@ -690,156 +703,193 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	)
 	public static class TestProgrammaticTemplates {}
-	
+
 	public static class TemplateSwapJson extends TemplateSwap {
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/json");
 		}
+		@Override
 		public String withTemplate() {
 			return "JSON";
 		}
 	}
 	public static class TemplateSwapXml extends TemplateSwap {
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/xml");
 		}
+		@Override
 		public String withTemplate() {
 			return "XML";
 		}
 	}
 	public static class TemplateSwapHtml extends TemplateSwap {
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/html");
 		}
+		@Override
 		public String withTemplate() {
 			return "HTML";
 		}
 	}
 	public static class TemplateSwapUon extends TemplateSwap {
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/uon");
 		}
+		@Override
 		public String withTemplate() {
 			return "UON";
 		}
 	}
 	public static class TemplateSwapUrlEncoding extends TemplateSwap {
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/x-www-form-urlencoded");
 		}
+		@Override
 		public String withTemplate() {
 			return "URLENCODING";
 		}
 	}
 	public static class TemplateSwapMsgPack extends TemplateSwap {
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/msgpack");
 		}
+		@Override
 		public String withTemplate() {
 			return "MSGPACK";
 		}
 	}
 	public static class TemplateSwapRdfXml extends TemplateSwap {
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/xml+rdf");
 		}
+		@Override
 		public String withTemplate() {
 			return "RDFXML";
 		}
 	}
-	
-	
+
+
 	public static class TestContextSwap {}
-	
+
 	public static class ContextSwap extends PojoSwap<TestContextSwap,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwap o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public String withTemplate() {
 			return "TEMPLATE";
 		}
 	}
-	
+
 	public static class TestContextSwaps {}
-	
+
 	public static class ContextSwapJson extends PojoSwap<TestContextSwaps,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/json");
 		}
+		@Override
 		public String withTemplate() {
 			return "JSON";
 		}
 	}
 	public static class ContextSwapXml extends PojoSwap<TestContextSwaps,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/xml");
 		}
+		@Override
 		public String withTemplate() {
 			return "XML";
 		}
 	}
 	public static class ContextSwapHtml extends PojoSwap<TestContextSwaps,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/html");
 		}
+		@Override
 		public String withTemplate() {
 			return "HTML";
 		}
 	}
 	public static class ContextSwapUon extends PojoSwap<TestContextSwaps,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/uon");
 		}
+		@Override
 		public String withTemplate() {
 			return "UON";
 		}
 	}
 	public static class ContextSwapUrlEncoding extends PojoSwap<TestContextSwaps,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/x-www-form-urlencoded");
 		}
+		@Override
 		public String withTemplate() {
 			return "URLENCODING";
 		}
 	}
 	public static class ContextSwapMsgPack extends PojoSwap<TestContextSwaps,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/msgpack");
 		}
+		@Override
 		public String withTemplate() {
 			return "MSGPACK";
 		}
 	}
 	public static class ContextSwapRdfXml extends PojoSwap<TestContextSwaps,Object> {
+		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return new StringReader(template);
 		}
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/xml+rdf");
 		}
+		@Override
 		public String withTemplate() {
 			return "RDFXML";
 		}
 	}
-	
+
 	@Swaps(
 		{
 			@Swap(value=BeanSwap.class, mediaTypes={"*/json"}),
@@ -850,7 +900,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class BeanA {
 		public int f = 1;
 	}
-	
+
 	@Swaps(
 		{
 			@Swap(value=BeanSwap.class, mediaTypes={"*/uon"}),
@@ -864,6 +914,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	}
 
 	public static class BeanSwap extends PojoSwap<Object,Object> {
+		@Override
 		public Object swap(BeanSession session, Object o, String template) throws Exception {
 			return new StringReader("SWAPPED");
 		}

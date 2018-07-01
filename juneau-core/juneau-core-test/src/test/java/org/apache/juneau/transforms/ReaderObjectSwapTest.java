@@ -35,7 +35,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
-				new ComboInput<PojoToSimpleReader>(
+				new ComboInput<>(
 					"PojoToSimpleReader",
 					PojoToSimpleReader.class,
 					new PojoToSimpleReader(),
@@ -60,10 +60,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 1 */
-				new ComboInput<PojoToDynamicReader>(
+				new ComboInput<>(
 					"PojoToDynamicReader",
 					PojoToDynamicReader.class,
 					new PojoToDynamicReader("foo"),
@@ -88,10 +88,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo-xml</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo-xml</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo-xml</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 2 */
-				new ComboInput<SometimesSwappedBean1>(
+				new ComboInput<>(
 					"SometimesSwappedBean1",
 					SometimesSwappedBean1.class,
 					new SometimesSwappedBean1("foo"),
@@ -116,10 +116,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo-text/xml+rdf</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo-text/xml+rdf</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo-text/xml+rdf</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 3 */
-				new ComboInput<SometimesSwappedBean2>(
+				new ComboInput<>(
 					"SometimesSwappedBean2",
 					SometimesSwappedBean2.class,
 					new SometimesSwappedBean2("foo"),
@@ -144,10 +144,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>foo</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 4 */
-				new ComboInput<BeanWithSwappedField>(
+				new ComboInput<>(
 					"BeanWithSwappedField",
 					BeanWithSwappedField.class,
 					new BeanWithSwappedField("x"),
@@ -172,10 +172,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>x-xml</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>x-xml</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>x-xml</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 5 */
-				new ComboInput<BeanWithSwapped1dField>(
+				new ComboInput<>(
 					"BeanWithSwapped1dField",
 					BeanWithSwapped1dField.class,
 					new BeanWithSwapped1dField("x"),
@@ -200,10 +200,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>x1-xml</rdf:li>\n<rdf:li>x2-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>x1-xml</rdf:li>\n<rdf:li>x2-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>x1-xml</rdf:li>\n        <rdf:li>x2-xml</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 6 */
-				new ComboInput<BeanWithSwappedNullField>(
+				new ComboInput<>(
 					"BeanWithSwappedNullField",
 					BeanWithSwappedNullField.class,
 					new BeanWithSwappedNullField(),
@@ -228,10 +228,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 7 */
-				new ComboInput<BeanWithSwappedListField>(
+				new ComboInput<>(
 					"BeanWithSwappedListField",
 					BeanWithSwappedListField.class,
 					new BeanWithSwappedListField("x"),
@@ -256,10 +256,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>x1-xml</rdf:li>\n<rdf:li>x2-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>x1-xml</rdf:li>\n<rdf:li>x2-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>x1-xml</rdf:li>\n        <rdf:li>x2-xml</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 8 */
-				new ComboInput<BeanWithSwappedMapField>(
+				new ComboInput<>(
 					"BeanWithSwappedMapField",
 					BeanWithSwappedMapField.class,
 					new BeanWithSwappedMapField("x"),
@@ -284,10 +284,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo>x1-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x2-xml</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo>x1-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x2-xml</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo>x1-xml</jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_>x2-xml</jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 9 */
-				new ComboInput<BeanWithListBeanSwappedField>(
+				new ComboInput<>(
 					"BeanWithListBeanSwappedField",
 					BeanWithListBeanSwappedField.class,
 					new BeanWithListBeanSwappedField("x"),
@@ -312,10 +312,10 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1>x1a-xml</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>x2a-xml</rdf:li>\n<rdf:li>x2b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>x4a-xml</rdf:li>\n<rdf:li>x4b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>x5a-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x5c-xml</jp:_x0000_>\n</jp:f5>\n</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1>x1a-xml</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>x2a-xml</rdf:li>\n<rdf:li>x2b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>x4a-xml</rdf:li>\n<rdf:li>x4b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>x5a-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x5c-xml</jp:_x0000_>\n</jp:f5>\n</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f1>x1a-xml</jp:f1>\n          <jp:f2>\n            <rdf:Seq>\n              <rdf:li>x2a-xml</rdf:li>\n              <rdf:li>x2b-xml</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f2>\n          <jp:f4>\n            <rdf:Seq>\n              <rdf:li>x4a-xml</rdf:li>\n              <rdf:li>x4b-xml</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f4>\n          <jp:f5 rdf:parseType='Resource'>\n            <jp:foo>x5a-xml</jp:foo>\n            <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            <jp:_x0000_>x5c-xml</jp:_x0000_>\n          </jp:f5>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 			{ 	/* 10 */
-				new ComboInput<BeanWithMapBeanSwappedField>(
+				new ComboInput<>(
 					"BeanWithMapBeanSwappedField",
 					BeanWithMapBeanSwappedField.class,
 					new BeanWithMapBeanSwappedField("x"),
@@ -340,7 +340,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo rdf:parseType='Resource'>\n<jp:f1>x1a-xml</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>x2a-xml</rdf:li>\n<rdf:li>x2b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>x4a-xml</rdf:li>\n<rdf:li>x4b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>x5a-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x5c-xml</jp:_x0000_>\n</jp:f5>\n</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_ rdf:parseType='Resource'>\n<jp:f1>x1a-xml</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>x2a-xml</rdf:li>\n<rdf:li>x2b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>x4a-xml</rdf:li>\n<rdf:li>x4b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>x5a-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x5c-xml</jp:_x0000_>\n</jp:f5>\n</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo rdf:parseType='Resource'>\n<jp:f1>x1a-xml</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>x2a-xml</rdf:li>\n<rdf:li>x2b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>x4a-xml</rdf:li>\n<rdf:li>x4b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>x5a-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x5c-xml</jp:_x0000_>\n</jp:f5>\n</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_ rdf:parseType='Resource'>\n<jp:f1>x1a-xml</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>x2a-xml</rdf:li>\n<rdf:li>x2b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>x4a-xml</rdf:li>\n<rdf:li>x4b-xml</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>x5a-xml</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>x5c-xml</jp:_x0000_>\n</jp:f5>\n</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo rdf:parseType='Resource'>\n        <jp:f1>x1a-xml</jp:f1>\n        <jp:f2>\n          <rdf:Seq>\n            <rdf:li>x2a-xml</rdf:li>\n            <rdf:li>x2b-xml</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f2>\n        <jp:f4>\n          <rdf:Seq>\n            <rdf:li>x4a-xml</rdf:li>\n            <rdf:li>x4b-xml</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f4>\n        <jp:f5 rdf:parseType='Resource'>\n          <jp:foo>x5a-xml</jp:foo>\n          <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:_x0000_>x5c-xml</jp:_x0000_>\n        </jp:f5>\n      </jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_ rdf:parseType='Resource'>\n        <jp:f1>x1a-xml</jp:f1>\n        <jp:f2>\n          <rdf:Seq>\n            <rdf:li>x2a-xml</rdf:li>\n            <rdf:li>x2b-xml</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f2>\n        <jp:f4>\n          <rdf:Seq>\n            <rdf:li>x4a-xml</rdf:li>\n            <rdf:li>x4b-xml</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f4>\n        <jp:f5 rdf:parseType='Resource'>\n          <jp:foo>x5a-xml</jp:foo>\n          <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:_x0000_>x5c-xml</jp:_x0000_>\n        </jp:f5>\n      </jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
-				) 
+				)
 			},
 		});
 	}
@@ -351,13 +351,14 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 
 	@Swap(PojoToSimpleReaderSwap.class)
 	public static class PojoToSimpleReader {}
-	
+
 	public static class PojoToSimpleReaderSwap extends PojoSwap<PojoToSimpleReader,Reader> {
+		@Override
 		public Reader swap(BeanSession session, PojoToSimpleReader o) throws Exception {
 			return new StringReader("foo");
 		}
 	}
-	
+
 	@Swap(PojoToDynamicReaderSwap.class)
 	public static class PojoToDynamicReader {
 		private String f;
@@ -365,13 +366,14 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 			this.f = f;
 		}
 	}
-	
+
 	public static class PojoToDynamicReaderSwap extends PojoSwap<PojoToDynamicReader,Object> {
+		@Override
 		public Object swap(BeanSession session, PojoToDynamicReader o) throws Exception {
 			return new StringReader(o.f + "-" + session.getMediaType().getSubTypes().get(0));
 		}
 	}
-	
+
 	@Swap(SometimesSwappedBeanSwap1.class)
 	public static class SometimesSwappedBean1 {
 		public String f;
@@ -379,8 +381,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 			this.f = f;
 		}
 	}
-	
+
 	public static class SometimesSwappedBeanSwap1 extends PojoSwap<SometimesSwappedBean1,Object> {
+		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean1 o) throws Exception {
 			MediaType mt = session.getMediaType();
 			if (mt.hasSubType("json") || mt.hasSubType("xml"))
@@ -388,7 +391,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 			return o;
 		}
 	}
-	
+
 	@Swap(SometimesSwappedBeanSwap2.class)
 	public static class SometimesSwappedBean2 {
 		public String f;
@@ -396,8 +399,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 			this.f = f;
 		}
 	}
-	
+
 	public static class SometimesSwappedBeanSwap2 extends PojoSwap<SometimesSwappedBean2,Object> {
+		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean2 o) throws Exception {
 			MediaType mt = session.getMediaType();
 			if (mt.hasSubType("json") || mt.hasSubType("xml"))
@@ -405,8 +409,8 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 			return new StringReader(o.f + "-" + mt);
 		}
 	}
-	
-	
+
+
 	public static class BeanWithSwappedField {
 		public PojoToDynamicReader f;
 		public BeanWithSwappedField(String f) {

@@ -54,13 +54,13 @@ public class XmlCollapsedTest {
 	public static class A {
 
 		@Xml(format=COLLAPSED)
-		public List<String> f1 = new LinkedList<String>();
+		public List<String> f1 = new LinkedList<>();
 
 		@Xml(format=COLLAPSED)
 		public String[] f2 = new String[0];
 
 		@Xml(format=COLLAPSED,childName="xf3")
-		public List<String> f3 = new LinkedList<String>();
+		public List<String> f3 = new LinkedList<>();
 
 		@Xml(format=COLLAPSED,childName="xf4")
 		public String[] f4 =  new String[0];
@@ -182,7 +182,7 @@ public class XmlCollapsedTest {
 	@Bean(properties="f1,f2,f3,f4")
 	public static class D {
 
-		private List<String> f1 = new LinkedList<String>(), f3 = new LinkedList<String>();
+		private List<String> f1 = new LinkedList<>(), f3 = new LinkedList<>();
 		private String[] f2, f4;
 
 		@Xml(format=COLLAPSED)
@@ -289,7 +289,7 @@ public class XmlCollapsedTest {
 
 		public static FA newInstance() {
 			FA t = new FA();
-			t.f1 = new LinkedList<F1>();
+			t.f1 = new LinkedList<>();
 			t.f1.add(F1.newInstance("x1"));
 			t.f1.add(F1.newInstance("x2"));
 			return t;
@@ -351,7 +351,7 @@ public class XmlCollapsedTest {
 
 		public static G newInstance() {
 			G t = new G();
-			t.f1 = new LinkedList<F1>();
+			t.f1 = new LinkedList<>();
 			t.f1.add(F1.newInstance("x1"));
 			t.f1.add(F1.newInstance("x2"));
 			return t;

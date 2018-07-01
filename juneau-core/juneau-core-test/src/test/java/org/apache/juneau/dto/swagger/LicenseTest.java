@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -31,14 +31,14 @@ public class LicenseTest {
 	@Test
 	public void testName() {
 		License t = new License();
-		
+
 		t.name("foo");
 		assertEquals("foo", t.getName());
-		
+
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
 		assertInstanceOf(String.class, t.getName());
-		
+
 		t.name(null);
 		assertNull(t.getName());
 	}
@@ -49,10 +49,10 @@ public class LicenseTest {
 	@Test
 	public void testUrl() {
 		License t = new License();
-		
+
 		t.url(URI.create("foo"));
 		assertEquals("foo", t.getUrl().toString());
-		
+
 		t.url("foo");
 		assertEquals("foo", t.getUrl().toString());
 		assertInstanceOf(URI.class, t.getUrl());
@@ -67,41 +67,41 @@ public class LicenseTest {
 	@Test
 	public void testSet() throws Exception {
 		License t = new License();
-		
+
 		t
 			.set("name", "a")
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
-	
+
 		assertObjectEquals("{name:'a',url:'b','$ref':'ref'}", t);
-		
+
 		t
 			.set("name", "a")
 			.set("url", "b")
 			.set("$ref", "ref");
-		
+
 		assertObjectEquals("{name:'a',url:'b','$ref':'ref'}", t);
 
 		t
 			.set("name", new StringBuilder("a"))
 			.set("url", new StringBuilder("b"))
 			.set("$ref", new StringBuilder("ref"));
-		
+
 		assertObjectEquals("{name:'a',url:'b','$ref':'ref'}", t);
-		
+
 		assertEquals("a", t.get("name", String.class));
 		assertEquals("b", t.get("url", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
-	
+
 		assertInstanceOf(String.class, t.get("name", Object.class));
 		assertInstanceOf(URI.class, t.get("url", Object.class));
 		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
-	
+
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
-		
+
 		String s = "{name:'a',url:'b','$ref':'ref'}";
 		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, License.class));
 	}

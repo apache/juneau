@@ -513,7 +513,7 @@ public class UonParserTest {
 		public String f1;
 		public int f2;
 	}
-	
+
 	//====================================================================================================
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
@@ -523,7 +523,7 @@ public class UonParserTest {
 		ReaderParser p = UonParser.DEFAULT.builder().autoCloseStreams().build();
 		Object x;
 		Reader r;
-		
+
 		r = reader("(foo=bar)(foo=bar)");
 		x = p.parse(r, ObjectMap.class);
 		assertObjectEquals("{foo:'bar'}", x);
@@ -534,7 +534,7 @@ public class UonParserTest {
 			assertTrue(e.getMessage().contains("Reader is closed"));
 		}
 	}
-	
+
 	//====================================================================================================
 	// testMultipleObjectsInStream
 	// Validates that readers are not closed so that we can read streams of POJOs.
@@ -557,7 +557,7 @@ public class UonParserTest {
 		x = p.parse(r, ObjectList.class);
 		assertObjectEquals("[456]", x);
 	}
-	
+
 	private Reader reader(String in) {
 		return new CloseableStringReader(in);
 	}

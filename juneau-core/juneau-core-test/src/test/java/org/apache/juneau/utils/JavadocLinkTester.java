@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Javadoc link checker.
- * 
+ *
  * <p>
  * Runs against the generated javadocs folder looking for any broken internal links (missing files, invalid anchor tags, etc...).
  */
@@ -30,7 +30,7 @@ public class JavadocLinkTester {
 	private static Pattern p = Pattern.compile("(href|src)\\=['\\\"]([^'\\\"]+)['\\\"]");
 	private static Pattern p2 = Pattern.compile("(name|id)\\=['\\\"]([^'\\\"]+)['\\\"]");
 	private static int errors, files, directories, links;
-	
+
 	public static void main(String[] args) {
 		try {
 			long startTime = System.currentTimeMillis();
@@ -48,7 +48,7 @@ public class JavadocLinkTester {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void process(File dir) throws Exception {
 		if (dir.isDirectory()) {
 			for (File fc : dir.listFiles()) {
@@ -65,11 +65,11 @@ public class JavadocLinkTester {
 			}
 		}
 	}
-	
+
 	private static boolean hasAnchor(File f, String anchor) throws Exception {
 		String key = f.getCanonicalPath();
 		if (! ANCHORS.containsKey(key)) {
-			Set<String> s = new HashSet<String>();
+			Set<String> s = new HashSet<>();
 			String c2 = IOUtils.read(f);
 			Matcher m2 = p2.matcher(c2);
 			while (m2.find()) {
@@ -79,7 +79,7 @@ public class JavadocLinkTester {
 		}
 		return ANCHORS.get(key).contains(anchor);
 	}
-	
+
 	private static void resolveLinks(File f) throws Exception {
 		String contents = IOUtils.read(f);
 		Matcher m = p.matcher(contents);
@@ -91,7 +91,7 @@ public class JavadocLinkTester {
 			links++;
 			if (link.indexOf('?') != -1)
 				link = link.substring(0, link.indexOf('?'));
-			
+
 			if (link.indexOf('#') != -1) {
 				anchor = link.substring(link.lastIndexOf('#')+1);
 				link = link.substring(0, link.lastIndexOf('#'));
@@ -110,7 +110,7 @@ public class JavadocLinkTester {
 			}
 		}
 	}
-	
+
 	private static void error(File f, String msg) {
 		errors++;
 		System.out.flush();

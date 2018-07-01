@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -29,22 +29,22 @@ import org.junit.runners.*;
 @RunWith(Parameterized.class)
 @SuppressWarnings("serial")
 public class XmlIgnoreCommentsTest {
-	
+
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
-		
+
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
 				"SimpleTypes-1",
-				String.class, 
-				"foo", 
+				String.class,
+				"foo",
 				"|<string>|foo|</string>|",
 				false
 			},
 			{ 	/* 1 */
 				"SimpleTypes-2",
-				Boolean.class, 
-				true, 
+				Boolean.class,
+				true,
 				"|<boolean>|true|</boolean>|",
 				false
 			},
@@ -672,7 +672,7 @@ public class XmlIgnoreCommentsTest {
 			},
 		});
 	}
-	
+
 	private String label;
 	private Class<?> type;
 	private Object expected;
@@ -686,7 +686,7 @@ public class XmlIgnoreCommentsTest {
 		this.input = input;
 		this.skipWsTests = skipWsTests;
 	}
-	
+
 	@Test
 	public void testNoComment() throws Exception {
 		try {
@@ -710,7 +710,7 @@ public class XmlIgnoreCommentsTest {
 			throw new FormattedRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testCommentWithWhitespace() throws Exception {
 		try {
@@ -723,7 +723,7 @@ public class XmlIgnoreCommentsTest {
 			throw new FormattedRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testDoubleCommentsWithWhitespace() throws Exception {
 		try {
@@ -887,9 +887,9 @@ public class XmlIgnoreCommentsTest {
 		public Map<String,Object> b2;
 
 		BeanWithPropertiesWithMapTypeNames init() {
-			b1 = new HashMap<String,B>();
+			b1 = new HashMap<>();
 			b1.put("k1", new B().init());
-			b2 = new HashMap<String,Object>();
+			b2 = new HashMap<>();
 			b2.put("k2", new B().init());
 			return this;
 		}
@@ -1150,9 +1150,9 @@ public class XmlIgnoreCommentsTest {
 		public Map<String,Object> c;
 
 		BeanWithAbstractMapFields init() {
-			a = new HashMap<String,A>();
-			b = new HashMap<String,AA>();
-			c = new HashMap<String,Object>();
+			a = new HashMap<>();
+			b = new HashMap<>();
+			c = new HashMap<>();
 			a.put("k1", new A().init());
 			b.put("k2", new A().init());
 			c.put("k3", new A().init());
@@ -1168,10 +1168,10 @@ public class XmlIgnoreCommentsTest {
 		public Map<String,Object[]> o;
 
 		BeanWithAbstractMapArrayFields init() {
-			a = new LinkedHashMap<String,A[]>();
-			ia = new LinkedHashMap<String,IA[]>();
-			aa = new LinkedHashMap<String,AA[]>();
-			o = new LinkedHashMap<String,Object[]>();
+			a = new LinkedHashMap<>();
+			ia = new LinkedHashMap<>();
+			aa = new LinkedHashMap<>();
+			o = new LinkedHashMap<>();
 			a.put("a1", new A[]{new A().init()});
 			ia.put("ia1", new A[]{new A().init()});
 			ia.put("ia2", new IA[]{new A().init()});

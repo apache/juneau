@@ -115,12 +115,12 @@ public abstract class ComboRoundTripTest {
 		"parseRdfXmlR",
 	};
 
-	private static final Set<String> runTestsSet = new HashSet<String>(Arrays.asList(runTests));
+	private static final Set<String> runTestsSet = new HashSet<>(Arrays.asList(runTests));
 
 	private final boolean SKIP_RDF_TESTS = Boolean.getBoolean("skipRdfTests");
 
-	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<Serializer,Serializer>();
-	private Map<Parser,Parser> parserMap = new IdentityHashMap<Parser,Parser>();
+	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<>();
+	private Map<Parser,Parser> parserMap = new IdentityHashMap<>();
 
 	public ComboRoundTripTest(ComboInput<?> comboInput) {
 		this.comboInput = comboInput;
@@ -413,7 +413,7 @@ public abstract class ComboRoundTripTest {
 	public void c11_serializeHtml() throws Exception {
 		testSerialize("serializeHtml", sHtml, comboInput.html);
 	}
-	
+
 	@Test
 	public void c12_parseHtml() throws Exception {
 		testParse("parseHtml", sHtml, pHtml, comboInput.html);
@@ -423,7 +423,7 @@ public abstract class ComboRoundTripTest {
 	public void c13_verifyHtml() throws Exception {
 		testParseVerify("verifyHtml", sHtml, pHtml);
 	}
-	
+
 	//--------------------------------------------------------------------------------
 	// HTML - 't' property
 	//--------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -21,14 +21,14 @@ import org.apache.juneau.internal.*;
 import org.junit.*;
 
 public class FileStoreTest {
-	
+
 	private static final File DIR = new File("./config");
-	
+
 	@After
 	public void cleanUp() {
 		FileUtils.delete(DIR);
 	}
-	
+
 	@Test
 	public void testNoFile() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
@@ -66,14 +66,14 @@ public class FileStoreTest {
 		assertNull(fs.write("X.cfg", "foo", "bar"));
 		assertEquals("bar", fs.read("X.cfg"));
 	}
-	
+
 	@Test
 	public void testCharset() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset("UTF-8").build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
-	}		
-	
+	}
+
 	@Test
 	public void testWatcher() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
@@ -99,7 +99,7 @@ public class FileStoreTest {
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}
-	
+
 	@Test
 	public void testUpdate() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
@@ -119,17 +119,17 @@ public class FileStoreTest {
 					latch.countDown();
 			}
 		});
-		
+
 		fs.update("X.cfg", "xxx");
 		fs.update("Y.cfg", "yyy");
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
-	}	
-	
+	}
+
 	private void assertFileExists(String name) {
 		assertTrue(new File(DIR, name).exists());
 	}
-	
+
 	private void assertFileNotExists(String name) {
 		assertTrue(! new File(DIR, name).exists());
 	}

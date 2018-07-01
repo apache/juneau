@@ -325,7 +325,7 @@ public class JsonParserTest {
 			return "f="+f;
 		}
 	}
-	
+
 	//====================================================================================================
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
@@ -335,7 +335,7 @@ public class JsonParserTest {
 		ReaderParser p = JsonParser.DEFAULT.builder().autoCloseStreams().build();
 		Object x;
 		Reader r;
-		
+
 		r = reader("{foo:'bar'}{baz:'qux'}");
 		x = p.parse(r, ObjectMap.class);
 		assertObjectEquals("{foo:'bar'}", x);
@@ -346,7 +346,7 @@ public class JsonParserTest {
 			assertTrue(e.getMessage().contains("Reader is closed"));
 		}
 	}
-	
+
 	//====================================================================================================
 	// testMultipleObjectsInStream
 	// Validates that readers are not closed so that we can read streams of POJOs.
@@ -369,7 +369,7 @@ public class JsonParserTest {
 		x = p.parse(r, ObjectList.class);
 		assertObjectEquals("[456]", x);
 	}
-	
+
 	private Reader reader(String in) {
 		return new CloseableStringReader(in);
 	}

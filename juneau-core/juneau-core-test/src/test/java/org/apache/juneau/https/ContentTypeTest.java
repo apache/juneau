@@ -45,7 +45,7 @@ public class ContentTypeTest {
 
 			{ "XmlAndRdf-1", "text/xml+rdf", "['text/xml','text/xml+rdf']", 1 },
 			{ "XmlAndRdf-2", "text/xml+rdf", "['text/xml+rdf','text/xml']", 0 },
-			
+
 			// Fuzzy matches
 			{ "Fuzzy-1", "text/1+2", "['text/1+2']", 0 },
 			// Order of subtype parts shouldn't matter.

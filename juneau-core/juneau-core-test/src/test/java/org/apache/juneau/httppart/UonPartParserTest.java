@@ -268,7 +268,7 @@ public class UonPartParserTest {
 		public String f1;
 		public int f2;
 	}
-	
+
 	@Test
 	public void testParseParameterObjectMap() throws Exception {
 		String in = "(name='foo bar')";
@@ -277,5 +277,5 @@ public class UonPartParserTest {
 
 		assertEquals("{name:'foo bar'}", JsonSerializer.DEFAULT_LAX.toString(r));
 	}
-	
+
 }

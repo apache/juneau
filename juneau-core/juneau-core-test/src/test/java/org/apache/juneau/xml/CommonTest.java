@@ -97,7 +97,7 @@ public class CommonTest {
 
 		public static B create() {
 			B t = new B();
-			t.f1 = new TreeMap<String,A>();
+			t.f1 = new TreeMap<>();
 			t.f2 = new TreeMap<String,A>(){{put("f2a",null);put("f2b",A.create());}};
 			return t;
 		}
@@ -137,7 +137,7 @@ public class CommonTest {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = new AList<A>();
+			t.f1 = new AList<>();
 			t.f2 = new AList<A>().append(null).append(A.create());
 			return t;
 		}
@@ -226,7 +226,7 @@ public class CommonTest {
 	@Test
 	public void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		List<Test7b> l = new LinkedList<Test7b>();
+		List<Test7b> l = new LinkedList<>();
 		Test7b t = new Test7b();
 		t.x1.add(new Test7b());
 		l.add(t);
@@ -235,7 +235,7 @@ public class CommonTest {
 	}
 
 	public static class Test7b {
-		@BeanProperty(properties="x2") public List<Test7b> x1 = new LinkedList<Test7b>();
+		@BeanProperty(properties="x2") public List<Test7b> x1 = new LinkedList<>();
 		public int x2 = 2;
 	}
 

@@ -94,7 +94,7 @@ public class BeanFilterTest {
 		String r = s.serialize(c1);
 		assertEquals("{f0:'f0'}", r);
 
-		List<C1> l = new LinkedList<C1>();
+		List<C1> l = new LinkedList<>();
 		l.add(new C2());
 		r = s.serialize(l);
 		assertEquals("[{f0:'f0'}]", r);
@@ -119,7 +119,7 @@ public class BeanFilterTest {
 		String r = s.serialize(d1);
 		assertEquals("{f0:'f0'}", r);
 
-		List<D1> l = new LinkedList<D1>();
+		List<D1> l = new LinkedList<>();
 		l.add(new D2());
 		r = s.serialize(l);
 		assertEquals("[{f0:'f0'}]", r);

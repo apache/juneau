@@ -117,7 +117,7 @@ public class RdfParserTest {
 		@Rdf(beanUri=true) public URI f3;
 		public URI f4a, f4b;
 		@Swap(CalendarSwap.ISO8601DTZ.class) public Calendar f5;
-		public LinkedList<A1> f6 = new LinkedList<A1>();
+		public LinkedList<A1> f6 = new LinkedList<>();
 
 		public A init() throws Exception {
 			f1 = 1;
@@ -129,7 +129,7 @@ public class RdfParserTest {
 			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
 			df.setTimeZone(TimeZone.getTimeZone("GMT"));
 			f5.setTime(df.parse("Jan 1, 1999"));
-			f6 = new LinkedList<A1>();
+			f6 = new LinkedList<>();
 			f6.add(new A1().init());
 			return this;
 		}

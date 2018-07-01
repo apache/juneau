@@ -504,7 +504,7 @@ public class BeanMapTest {
 	public static class D1 {
 		public D2 b;
 		public List<D2> lb1;
-		public List<D2> lb2 = new ArrayList<D2>();
+		public List<D2> lb2 = new ArrayList<>();
 		public D2[] ab1;
 		public D2[] ab2 = new D2[0];
 	}
@@ -615,7 +615,7 @@ public class BeanMapTest {
 
 		public List<G> l1;
 
-		public List<G> l2 = new LinkedList<G>();
+		public List<G> l2 = new LinkedList<>();
 
 		@BeanProperty(type=List.class,params={G.class})
 		public List<G> l3;
@@ -627,7 +627,7 @@ public class BeanMapTest {
 		public List<G> getM1() { return m1; }
 		public void setM1(List<G> m1) { this.m1 = m1; }
 
-		private List<G> m2 = new LinkedList<G>();
+		private List<G> m2 = new LinkedList<>();
 		public List<G> getM2() { return m2; }
 		public void setM2(List<G> m2) { this.m2 = m2; }
 
@@ -1891,7 +1891,7 @@ public class BeanMapTest {
 	}
 
 	public static class Y {
-		public List<String> f1 = new LinkedList<String>();
+		public List<String> f1 = new LinkedList<>();
 	}
 
 	//====================================================================================================

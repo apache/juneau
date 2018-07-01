@@ -730,7 +730,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testVector() throws Exception {
-		Vector<Integer> t = new Vector<Integer>();
+		Vector<Integer> t = new Vector<>();
 		t.add(1);
 		t.add(2);
 		t.add(3);

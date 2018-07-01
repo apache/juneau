@@ -436,7 +436,7 @@ public class UrlEncodingSerializerTest {
 		UrlEncodingSerializer s;
 		String r;
 
-		Map<String,String[]> t = new LinkedHashMap<String,String[]>();
+		Map<String,String[]> t = new LinkedHashMap<>();
 		t.put("f1", new String[]{"bar"});
 		t.put("f2", new String[]{"bar","baz"});
 		t.put("f3", new String[]{});

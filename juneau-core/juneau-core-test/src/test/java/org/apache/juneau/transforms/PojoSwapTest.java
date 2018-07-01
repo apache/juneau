@@ -27,56 +27,62 @@ import org.junit.*;
  * Tests the example code in the PojoSwap class.
  */
 public class PojoSwapTest {
-	
+
 	public static class MyPojo {}
-	
+
 	public static class MyJsonSwap extends PojoSwap<MyPojo,String> {
-			
+
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/json");
 		}
-		
+
+		@Override
 		public String swap(BeanSession session, MyPojo o) throws Exception {
 			return "It's JSON!";
 		}
 	}
-	
+
 	public static class MyXmlSwap extends PojoSwap<MyPojo,String> {
-		
+
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/xml");
 		}
-		
+
+		@Override
 		public String swap(BeanSession session, MyPojo o) throws Exception {
 			return "It's XML!";
 		}
 	}
 
 	public static class MyOtherSwap extends PojoSwap<MyPojo,String> {
-		
+
+		@Override
 		public MediaType[] forMediaTypes() {
 			return MediaType.forStrings("*/*");
 		}
-		
+
+		@Override
 		public String swap(BeanSession session, MyPojo o) throws Exception {
 			return "It's something else!";
 		}
 	}
-	
+
 	@Test
 	public void doTest() throws Exception {
-		
+
 		SerializerGroup g = SerializerGroup.create()
 			.append(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
 			.sq()
 			.pojoSwaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class)
 			.build();
-		
+
 		MyPojo myPojo = new MyPojo();
-		
+
 		String json = g.getWriterSerializer("text/json").serialize(myPojo);
 		assertEquals("'It\\'s JSON!'", json);
-		
+
 		String xml = g.getWriterSerializer("text/xml").serialize(myPojo);
 		assertEquals("<string>It's XML!</string>", xml);
 

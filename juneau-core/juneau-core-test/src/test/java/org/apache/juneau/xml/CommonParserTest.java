@@ -143,8 +143,8 @@ public class CommonParserTest {
 	}
 
 	public static class C {
-		private Collection<Integer> ints = new LinkedList<Integer>();
-		private List<B> beans = new LinkedList<B>();
+		private Collection<Integer> ints = new LinkedList<>();
+		private List<B> beans = new LinkedList<>();
 		public Collection<Integer> getInts() {
 			return ints;
 		}
@@ -168,7 +168,7 @@ public class CommonParserTest {
 	}
 
 	public static class MyParserListener extends ParserListener {
-		static final List<String> events = new LinkedList<String>();
+		static final List<String> events = new LinkedList<>();
 
 		@Override /* ParserListener */
 		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {

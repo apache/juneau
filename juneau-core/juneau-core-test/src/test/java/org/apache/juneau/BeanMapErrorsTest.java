@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -28,7 +28,7 @@ public class BeanMapErrorsTest {
 	@Test
 	public void beanPropertyMethodNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
-		
+
 		try {
 			bc.getClassMeta(A1.class);
 			fail();
@@ -36,11 +36,11 @@ public class BeanMapErrorsTest {
 			assertEquals("org.apache.juneau.BeanMapErrorsTest$A1: Found @BeanProperty(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
 		}
 	}
-	
+
 	@Bean(properties="f1")
 	public static class A1 {
 		public int f1;
-		
+
 		@BeanProperty("f2")
 		public int f2() {
 			return -1;
@@ -53,7 +53,7 @@ public class BeanMapErrorsTest {
 	@Test
 	public void beanPropertyFieldNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
-		
+
 		try {
 			bc.getClassMeta(A2.class);
 			fail();
@@ -64,7 +64,7 @@ public class BeanMapErrorsTest {
 	@Bean(properties="f1")
 	public static class A2 {
 		public int f1;
-		
+
 		@BeanProperty("f2")
 		public int f2;
 	}

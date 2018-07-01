@@ -27,7 +27,7 @@ public class PojoMergeTest {
 	@Test
 	public void basicTests() throws Exception {
 		IA a1, a2, am;
-		
+
 		a1 = new A("1"); a2 = new A("2");
 		am = PojoMerge.merge(IA.class, a1, a2);
 		assertEquals("1", am.getA());
@@ -43,7 +43,7 @@ public class PojoMergeTest {
 		assertEquals("x", am.getA());
 		assertEquals("x", a1.getA());
 		assertEquals("x", a2.getA());
-		
+
 		a1 = new A(null); a2 = new A("2");
 		am = PojoMerge.merge(IA.class, a1, a2);
 		assertEquals("2", am.getA());
@@ -51,11 +51,11 @@ public class PojoMergeTest {
 		assertEquals("x", am.getA());
 		assertEquals("x", a1.getA());
 		assertEquals("2", a2.getA());
-		
+
 		a1 = new A(null); a2 = new A(null);
 		am = PojoMerge.merge(IA.class, a1, a2);
 		assertEquals(null, am.getA());
-		
+
 		a1 = new A(null); a2 = new A("2");
 		am = PojoMerge.merge(IA.class, null, a1, null, null, a2, null);
 		assertEquals("2", am.getA());

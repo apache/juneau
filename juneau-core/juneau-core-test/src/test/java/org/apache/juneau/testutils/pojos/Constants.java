@@ -15,7 +15,7 @@ package org.apache.juneau.testutils.pojos;
 /**
  * Description.
  * <p>
- * 
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public class Constants {

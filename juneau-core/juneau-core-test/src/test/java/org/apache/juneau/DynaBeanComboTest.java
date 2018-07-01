@@ -262,7 +262,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	public static class BeanWithDynaField {
 		public int f1;
 		@BeanProperty(name="*")
-		public Map<String,Object> f2 = new LinkedHashMap<String,Object>();
+		public Map<String,Object> f2 = new LinkedHashMap<>();
 		public int f3;
 
 		public BeanWithDynaField init() {
@@ -277,7 +277,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	public static class BeanWithDynaMethods {
 
 		private int f1, f3;
-		private Map<String,Object> f2 = new LinkedHashMap<String,Object>();
+		private Map<String,Object> f2 = new LinkedHashMap<>();
 		private boolean setterCalled = false;
 
 		public int getF1() {
@@ -316,7 +316,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	public static class BeanWithDynaMethodsAndExtraKeys {
 
 		private int f1, f3;
-		private Map<String,Object> f2 = new LinkedHashMap<String,Object>();
+		private Map<String,Object> f2 = new LinkedHashMap<>();
 		private boolean setterCalled = false;
 
 		public int getF1() {
@@ -347,7 +347,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 		public Collection<String> getExtraKeys() {
 			return f2.keySet();
 		}
-		
+
 		public BeanWithDynaMethodsAndExtraKeys init() {
 			this.f1 = 1;
 			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
@@ -360,7 +360,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	public static class BeanWithDynaGetterOnly {
 
 		private int f1, f3;
-		private Map<String,Object> f2 = new LinkedHashMap<String,Object>();
+		private Map<String,Object> f2 = new LinkedHashMap<>();
 
 		public int getF1() {
 			return f1;
@@ -398,7 +398,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	public static class BeanWithDynaFieldSwapped {
 		@BeanProperty(name="*")
 		@Swap(CalendarSwap.ISO8601DTZ.class)
-		public Map<String,Calendar> f1 = new LinkedHashMap<String,Calendar>();
+		public Map<String,Calendar> f1 = new LinkedHashMap<>();
 
 		public BeanWithDynaFieldSwapped init() {
 			this.f1.put("f1a", singleDate);
@@ -409,7 +409,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	@Bean(sort=true)
 	public static class BeanWithDynaFieldStringList {
 		@BeanProperty(name="*")
-		public Map<String,List<String>> f1 = new LinkedHashMap<String,List<String>>();
+		public Map<String,List<String>> f1 = new LinkedHashMap<>();
 
 		public BeanWithDynaFieldStringList init() {
 			this.f1.put("f1a", Arrays.asList(new String[]{"foo","bar"}));

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -24,7 +24,7 @@ public class RestrictedVarsTest {
 	@Test
 	public void testNoNest() throws Exception {
 		VarResolver vr = new VarResolverBuilder().vars(NoNestVar.class).build();
-		
+
 		test(vr, "$NoNest{foo}", "foo");
 		test(vr, "$NoNest{$NoNest{foo}}", "$NoNest{foo}");
 		test(vr, "$NoNest{foo $NoNest{foo} bar}", "foo $NoNest{foo} bar");
@@ -41,7 +41,7 @@ public class RestrictedVarsTest {
 			return 'x' + arg + 'x';
 		}
 	}
- 	
+
 	public static class NoNestVar extends SimpleVar {
 
 		public NoNestVar() {
@@ -52,8 +52,8 @@ public class RestrictedVarsTest {
 		public String resolve(VarResolverSession session, String arg) throws Exception {
 			return arg.replaceAll("\\$", "\\\\\\$");
 		}
-		
-		@Override 
+
+		@Override
 		protected boolean allowNested() {
 			return false;
 		}
@@ -62,12 +62,12 @@ public class RestrictedVarsTest {
 	@Test
 	public void testNoRecurse() throws Exception {
 		VarResolver vr = new VarResolverBuilder().vars(XVar.class, NoRecurseVar.class).build();
-		
+
 		test(vr, "$NoRecurse{foo}", "$X{foo}");
 		test(vr, "$NoRecurse{$NoRecurse{foo}}", "$X{$X{foo}}");
 		test(vr, "$NoRecurse{foo $NoRecurse{foo} bar}", "$X{foo $X{foo} bar}");
 	}
-		
+
 	public static class NoRecurseVar extends SimpleVar {
 
 		public NoRecurseVar() {
@@ -78,8 +78,8 @@ public class RestrictedVarsTest {
 		public String resolve(VarResolverSession session, String arg) throws Exception {
 			return "$X{"+arg+"}";
 		}
-		
-		@Override 
+
+		@Override
 		protected boolean allowRecurse() {
 			return false;
 		}
@@ -88,12 +88,12 @@ public class RestrictedVarsTest {
 	@Test
 	public void testNoNestOrRecurse() throws Exception {
 		VarResolver vr = new VarResolverBuilder().vars(XVar.class, NoEitherVar.class).build();
-		
+
 		test(vr, "$NoEither{foo}", "$X{foo}");
 		test(vr, "$NoEither{$NoEither{foo}}", "$X{$NoEither{foo}}");
 		test(vr, "$NoEither{foo $NoEither{foo} bar}", "$X{foo $NoEither{foo} bar}");
 	}
-	
+
 	public static class NoEitherVar extends SimpleVar {
 
 		public NoEitherVar() {
@@ -104,13 +104,13 @@ public class RestrictedVarsTest {
 		public String resolve(VarResolverSession session, String arg) throws Exception {
 			return "$X{" + arg + "}";
 		}
-		
-		@Override 
+
+		@Override
 		protected boolean allowNested() {
 			return false;
 		}
 
-		@Override 
+		@Override
 		protected boolean allowRecurse() {
 			return false;
 		}

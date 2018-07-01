@@ -173,20 +173,20 @@ public class RoundTripEnumTest extends RoundTripTest {
 		public AEnum[][] f4;
 
 		// Should not have 'uniqueSet' attribute.
-		public List<AEnum> f5 = new LinkedList<AEnum>();
+		public List<AEnum> f5 = new LinkedList<>();
 
-		private List<AEnum> f6 = new LinkedList<AEnum>();
+		private List<AEnum> f6 = new LinkedList<>();
 		public List<AEnum> getF6() {return f6;}
 		public void setF6(List<AEnum> f6) {this.f6 = f6;}
 
 		// Should have 'uniqueSet' attribute.
-		public Set<AEnum> f7 = new HashSet<AEnum>();
+		public Set<AEnum> f7 = new HashSet<>();
 
-		private Set<AEnum> f8 = new HashSet<AEnum>();
+		private Set<AEnum> f8 = new HashSet<>();
 		public Set<AEnum> getF8() {return f8;}
 		public void setF8(Set<AEnum> f8) {this.f8 = f8;}
 
-		public Map<AEnum,AEnum> f9 = new LinkedHashMap<AEnum,AEnum>();
+		public Map<AEnum,AEnum> f9 = new LinkedHashMap<>();
 
 		public A init() {
 			f1 = AEnum.FOO;
@@ -215,20 +215,20 @@ public class RoundTripEnumTest extends RoundTripTest {
 		public BEnum[][] f4;
 
 		// Should not have 'uniqueSet' attribute.
-		public List<BEnum> f5 = new LinkedList<BEnum>();
+		public List<BEnum> f5 = new LinkedList<>();
 
-		private List<BEnum> f6 = new LinkedList<BEnum>();
+		private List<BEnum> f6 = new LinkedList<>();
 		public List<BEnum> getF6() {return f6;}
 		public void setF6(List<BEnum> f6) {this.f6 = f6;}
 
 		// Should have 'uniqueSet' attribute.
-		public Set<BEnum> f7 = new HashSet<BEnum>();
+		public Set<BEnum> f7 = new HashSet<>();
 
-		private Set<BEnum> f8 = new HashSet<BEnum>();
+		private Set<BEnum> f8 = new HashSet<>();
 		public Set<BEnum> getF8() {return f8;}
 		public void setF8(Set<BEnum> f8) {this.f8 = f8;}
 
-		public Map<BEnum,BEnum> f9 = new LinkedHashMap<BEnum,BEnum>();
+		public Map<BEnum,BEnum> f9 = new LinkedHashMap<>();
 
 		public B init() {
 			f1 = BEnum.FOO;

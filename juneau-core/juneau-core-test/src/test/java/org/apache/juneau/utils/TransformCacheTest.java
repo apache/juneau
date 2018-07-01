@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 public class TransformCacheTest {
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class TransformCacheTest {
 	public void fromString_create() {
 		assertEquals("foo", get(String.class, D1.class).transform("foo").f);
 	}
-	
+
 	public static class D2 {
 		private String f;
 		public static D2 fromString(String f) {
@@ -76,7 +76,7 @@ public class TransformCacheTest {
 
 	public static class D3 {
 		private String f;
-		public static D3 fromValue(String f) { 
+		public static D3 fromValue(String f) {
 			D3 d = new D3(); d.f = f; return d;
 		}
 	}
@@ -139,13 +139,13 @@ public class TransformCacheTest {
 	public void fromString_forString() {
 		assertEquals("foo", get(String.class, D8.class).transform("foo").f);
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// fromX methods.
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	public static class X {}
-	
+
 	public static class E1 {
 		private String f;
 		public static E1 create(X x) {
@@ -156,7 +156,7 @@ public class TransformCacheTest {
 	public void fromX_create() {
 		assertEquals("ok", get(X.class, E1.class).transform(new X()).f);
 	}
-	
+
 	public static class E2 {
 		private String f;
 		public static E2 fromX(X x) {

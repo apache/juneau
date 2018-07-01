@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -33,14 +33,14 @@ public class SchemaInfoTest {
 	@Test
 	public void testFormat() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.format("foo");
 		assertEquals("foo", t.getFormat());
-		
+
 		t.format(new StringBuilder("foo"));
 		assertEquals("foo", t.getFormat());
 		assertInstanceOf(String.class, t.getFormat());
-		
+
 		t.format(null);
 		assertNull(t.getFormat());
 	}
@@ -51,14 +51,14 @@ public class SchemaInfoTest {
 	@Test
 	public void testTitle() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.title("foo");
 		assertEquals("foo", t.getTitle());
-		
+
 		t.title(new StringBuilder("foo"));
 		assertEquals("foo", t.getTitle());
 		assertInstanceOf(String.class, t.getTitle());
-		
+
 		t.title(null);
 		assertNull(t.getTitle());
 	}
@@ -69,14 +69,14 @@ public class SchemaInfoTest {
 	@Test
 	public void testDescription() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.description("foo");
 		assertEquals("foo", t.getDescription());
-		
+
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
 		assertInstanceOf(String.class, t.getDescription());
-		
+
 		t.description(null);
 		assertNull(t.getDescription());
 	}
@@ -87,14 +87,14 @@ public class SchemaInfoTest {
 	@Test
 	public void test_default() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t._default("foo");
 		assertEquals("foo", t.getDefault());
-		
+
 		t._default(new StringBuilder("foo"));
 		assertEquals("foo", t.getDefault().toString());
 		assertInstanceOf(StringBuilder.class, t.getDefault());
-		
+
 		t._default(null);
 		assertNull(t.getDefault());
 	}
@@ -105,11 +105,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMultipleOf() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.multipleOf(123);
 		assertEquals(123, t.getMultipleOf());
 		assertInstanceOf(Integer.class, t.getMultipleOf());
-		
+
 		t.multipleOf(123f);
 		assertEquals(123f, t.getMultipleOf());
 		assertInstanceOf(Float.class, t.getMultipleOf());
@@ -121,7 +121,7 @@ public class SchemaInfoTest {
 		t.multipleOf(new StringBuilder("123"));
 		assertEquals(123, t.getMultipleOf());
 		assertInstanceOf(Integer.class, t.getMultipleOf());
-		
+
 		t.multipleOf(null);
 		assertNull(t.getMultipleOf());
 	}
@@ -132,11 +132,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMaximum() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.maximum(123);
 		assertEquals(123, t.getMaximum());
 		assertInstanceOf(Integer.class, t.getMaximum());
-		
+
 		t.maximum(123f);
 		assertEquals(123f, t.getMaximum());
 		assertInstanceOf(Float.class, t.getMaximum());
@@ -148,7 +148,7 @@ public class SchemaInfoTest {
 		t.maximum(new StringBuilder("123"));
 		assertEquals(123, t.getMaximum());
 		assertInstanceOf(Integer.class, t.getMaximum());
-		
+
 		t.maximum(null);
 		assertNull(t.getMaximum());
 	}
@@ -159,11 +159,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testExclusiveMaximum() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.exclusiveMaximum(true);
 		assertEquals(true, t.getExclusiveMaximum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
-		
+
 		t.exclusiveMaximum("true");
 		assertEquals(true, t.getExclusiveMaximum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
@@ -171,7 +171,7 @@ public class SchemaInfoTest {
 		t.exclusiveMaximum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMaximum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
-		
+
 		t.exclusiveMaximum(null);
 		assertNull(t.getExclusiveMaximum());
 	}
@@ -182,11 +182,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMinimum() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.minimum(123);
 		assertEquals(123, t.getMinimum());
 		assertInstanceOf(Integer.class, t.getMinimum());
-		
+
 		t.minimum(123f);
 		assertEquals(123f, t.getMinimum());
 		assertInstanceOf(Float.class, t.getMinimum());
@@ -198,7 +198,7 @@ public class SchemaInfoTest {
 		t.minimum(new StringBuilder("123"));
 		assertEquals(123, t.getMinimum());
 		assertInstanceOf(Integer.class, t.getMinimum());
-		
+
 		t.minimum(null);
 		assertNull(t.getMinimum());
 	}
@@ -209,11 +209,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testExclusiveMinimum() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.exclusiveMinimum(true);
 		assertEquals(true, t.getExclusiveMinimum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
-		
+
 		t.exclusiveMinimum("true");
 		assertEquals(true, t.getExclusiveMinimum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
@@ -221,7 +221,7 @@ public class SchemaInfoTest {
 		t.exclusiveMinimum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMinimum());
 		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
-		
+
 		t.exclusiveMinimum(null);
 		assertNull(t.getExclusiveMinimum());
 	}
@@ -232,11 +232,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMaxLength() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.maxLength(123);
 		assertEquals(123, t.getMaxLength().intValue());
 		assertInstanceOf(Integer.class, t.getMaxLength());
-		
+
 		t.maxLength(123f);
 		assertEquals(123, t.getMaxLength().intValue());
 		assertInstanceOf(Integer.class, t.getMaxLength());
@@ -248,7 +248,7 @@ public class SchemaInfoTest {
 		t.maxLength(new StringBuilder("123"));
 		assertEquals(123, t.getMaxLength().intValue());
 		assertInstanceOf(Integer.class, t.getMaxLength());
-		
+
 		t.maxLength(null);
 		assertNull(t.getMaxLength());
 	}
@@ -259,11 +259,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMinLength() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.minLength(123);
 		assertEquals(123, t.getMinLength().intValue());
 		assertInstanceOf(Integer.class, t.getMinLength());
-		
+
 		t.minLength(123f);
 		assertEquals(123, t.getMinLength().intValue());
 		assertInstanceOf(Integer.class, t.getMinLength());
@@ -275,7 +275,7 @@ public class SchemaInfoTest {
 		t.minLength(new StringBuilder("123"));
 		assertEquals(123, t.getMinLength().intValue());
 		assertInstanceOf(Integer.class, t.getMinLength());
-		
+
 		t.minLength(null);
 		assertNull(t.getMinLength());
 	}
@@ -286,14 +286,14 @@ public class SchemaInfoTest {
 	@Test
 	public void testPattern() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.pattern("foo");
 		assertEquals("foo", t.getPattern());
-		
+
 		t.pattern(new StringBuilder("foo"));
 		assertEquals("foo", t.getPattern());
 		assertInstanceOf(String.class, t.getPattern());
-		
+
 		t.pattern(null);
 		assertNull(t.getPattern());
 	}
@@ -304,11 +304,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMaxItems() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.maxItems(123);
 		assertEquals(123, t.getMaxItems().intValue());
 		assertInstanceOf(Integer.class, t.getMaxItems());
-		
+
 		t.maxItems(123f);
 		assertEquals(123, t.getMaxItems().intValue());
 		assertInstanceOf(Integer.class, t.getMaxItems());
@@ -320,7 +320,7 @@ public class SchemaInfoTest {
 		t.maxItems(new StringBuilder("123"));
 		assertEquals(123, t.getMaxItems().intValue());
 		assertInstanceOf(Integer.class, t.getMaxItems());
-		
+
 		t.maxItems(null);
 		assertNull(t.getMaxItems());
 	}
@@ -331,11 +331,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMinItems() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.minItems(123);
 		assertEquals(123, t.getMinItems().intValue());
 		assertInstanceOf(Integer.class, t.getMinItems());
-		
+
 		t.minItems(123f);
 		assertEquals(123, t.getMinItems().intValue());
 		assertInstanceOf(Integer.class, t.getMinItems());
@@ -347,7 +347,7 @@ public class SchemaInfoTest {
 		t.minItems(new StringBuilder("123"));
 		assertEquals(123, t.getMinItems().intValue());
 		assertInstanceOf(Integer.class, t.getMinItems());
-		
+
 		t.minItems(null);
 		assertNull(t.getMinItems());
 	}
@@ -358,11 +358,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testUniqueItems() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.uniqueItems(true);
 		assertEquals(true, t.getUniqueItems());
 		assertInstanceOf(Boolean.class, t.getUniqueItems());
-		
+
 		t.uniqueItems("true");
 		assertEquals(true, t.getUniqueItems());
 		assertInstanceOf(Boolean.class, t.getUniqueItems());
@@ -370,7 +370,7 @@ public class SchemaInfoTest {
 		t.uniqueItems(new StringBuilder("true"));
 		assertEquals(true, t.getUniqueItems());
 		assertInstanceOf(Boolean.class, t.getUniqueItems());
-		
+
 		t.uniqueItems(null);
 		assertNull(t.getUniqueItems());
 	}
@@ -381,11 +381,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMaxProperties() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.maxProperties(123);
 		assertEquals(123, t.getMaxProperties().intValue());
 		assertInstanceOf(Integer.class, t.getMaxProperties());
-		
+
 		t.maxProperties(123f);
 		assertEquals(123, t.getMaxProperties().intValue());
 		assertInstanceOf(Integer.class, t.getMaxProperties());
@@ -397,7 +397,7 @@ public class SchemaInfoTest {
 		t.maxProperties(new StringBuilder("123"));
 		assertEquals(123, t.getMaxProperties().intValue());
 		assertInstanceOf(Integer.class, t.getMaxProperties());
-		
+
 		t.maxProperties(null);
 		assertNull(t.getMaxProperties());
 	}
@@ -408,11 +408,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testMinProperties() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.minProperties(123);
 		assertEquals(123, t.getMinProperties().intValue());
 		assertInstanceOf(Integer.class, t.getMinProperties());
-		
+
 		t.minProperties(123f);
 		assertEquals(123, t.getMinProperties().intValue());
 		assertInstanceOf(Integer.class, t.getMinProperties());
@@ -424,7 +424,7 @@ public class SchemaInfoTest {
 		t.minProperties(new StringBuilder("123"));
 		assertEquals(123, t.getMinProperties().intValue());
 		assertInstanceOf(Integer.class, t.getMinProperties());
-		
+
 		t.minProperties(null);
 		assertNull(t.getMinProperties());
 	}
@@ -435,11 +435,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testRequired() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.required("['x']");
 		assertEquals("[x]", t.getRequired().toString());
 		assertInstanceOf(List.class, t.getRequired());
-		
+
 		t.required("['x']");
 		assertEquals("[x, x]", t.getRequired().toString());
 		assertInstanceOf(List.class, t.getRequired());
@@ -447,7 +447,7 @@ public class SchemaInfoTest {
 		t.required(new StringBuilder("['x']"));
 		assertEquals("[x, x, x]", t.getRequired().toString());
 		assertInstanceOf(List.class, t.getRequired());
-		
+
 		t.setRequired(null);
 		assertNull(t.getRequired());
 	}
@@ -458,12 +458,12 @@ public class SchemaInfoTest {
 	@Test
 	public void testSetEnum() {
 		SchemaInfo t = new SchemaInfo();
-		
-		t.setEnum(new ASet<Object>().appendAll("foo","bar"));
+
+		t.setEnum(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
-		t.setEnum(new ASet<Object>());
+
+		t.setEnum(new ASet<>());
 		assertObjectEquals("[]", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -477,12 +477,12 @@ public class SchemaInfoTest {
 	@Test
 	public void testAddEnum() {
 		SchemaInfo t = new SchemaInfo();
-		
-		t.addEnum(new ASet<Object>().appendAll("foo","bar"));
+
+		t.addEnum(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
-		t.addEnum(new ASet<Object>().appendAll("baz"));
+
+		t.addEnum(new ASet<>().appendAll("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -497,19 +497,19 @@ public class SchemaInfoTest {
 	@Test
 	public void test_enum() {
 		SchemaInfo t = new SchemaInfo();
-		
-		t._enum(new ASet<Object>().appendAll("foo","bar"));
+
+		t._enum(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
-		t._enum(new ASet<Object>().appendAll("baz"));
+
+		t._enum(new ASet<>().appendAll("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
 		t._enum((Object[])null);
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
-		
+
 		t.setEnum(null);
 		t._enum("foo")._enum(new StringBuilder("bar"))._enum("['baz','qux']")._enum((Object)new String[]{"quux"});
 		assertObjectEquals("['foo','bar','baz','qux','quux']", t.getEnum());
@@ -522,14 +522,14 @@ public class SchemaInfoTest {
 	@Test
 	public void testType() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.type("foo");
 		assertEquals("foo", t.getType());
-		
+
 		t.type(new StringBuilder("foo"));
 		assertEquals("foo", t.getType());
 		assertInstanceOf(String.class, t.getType());
-		
+
 		t.type(null);
 		assertNull(t.getType());
 	}
@@ -540,10 +540,10 @@ public class SchemaInfoTest {
 	@Test
 	public void testItems() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.items(items("foo"));
 		assertObjectEquals("{type:'foo'}", t.getItems());
-		
+
 		t.items("{type:'foo'}");
 		assertObjectEquals("{type:'foo'}", t.getItems());
 		assertInstanceOf(Items.class, t.getItems());
@@ -558,12 +558,12 @@ public class SchemaInfoTest {
 	@Test
 	public void testSetAllOf() {
 		SchemaInfo t = new SchemaInfo();
-		
-		t.setAllOf(new ASet<Object>().appendAll("foo","bar"));
+
+		t.setAllOf(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
-		
-		t.setAllOf(new ASet<Object>());
+
+		t.setAllOf(new ASet<>());
 		assertObjectEquals("[]", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
 
@@ -577,12 +577,12 @@ public class SchemaInfoTest {
 	@Test
 	public void testAddAllOf() {
 		SchemaInfo t = new SchemaInfo();
-		
-		t.addAllOf(new ASet<Object>().appendAll("foo","bar"));
+
+		t.addAllOf(new ASet<>().appendAll("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
-		
-		t.addAllOf(new ASet<Object>());
+
+		t.addAllOf(new ASet<>());
 		assertObjectEquals("['foo','bar']", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
 
@@ -597,9 +597,9 @@ public class SchemaInfoTest {
 	@Test
 	public void testAllOf() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.allOf(new ASet<String>().appendAll("a"));
-		t.allOf(new ASet<Object>().appendAll(new StringBuilder("b")));
+		t.allOf(new ASet<>().appendAll(new StringBuilder("b")));
 		t.allOf((Object)new String[] {"c"});
 		t.allOf((Object)new Object[] {new StringBuilder("d")});
 		t.allOf("e");
@@ -615,11 +615,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testSetProperties() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.setProperties(new AMap<String,SchemaInfo>().append("foo",new SchemaInfo().type("foo")));
 		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
-		
+
 		t.setProperties(new AMap<String,SchemaInfo>());
 		assertObjectEquals("{}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
@@ -634,11 +634,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testAddProperties() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.addProperties(new AMap<String,SchemaInfo>().append("foo", new SchemaInfo().type("foo")));
 		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
-		
+
 		t.addProperties(new AMap<String,SchemaInfo>());
 		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
@@ -654,13 +654,13 @@ public class SchemaInfoTest {
 	@Test
 	public void testProperties() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.properties(new AMap<String,Map<String,Object>>().append("a", new AMap<String,Object>().append("type", "foo")));
 		t.properties(new AMap<String,String>().append("b", "{type:'bar'}"));
 		t.properties("{c:{type:'baz'}}");
 		t.properties("{}");
 		t.properties((Object[])null);
-		
+
 		assertObjectEquals("{a:{type:'foo'},b:{type:'bar'},c:{type:'baz'}}", t.getProperties());
 		assertInstanceOf(SchemaInfo.class, t.getProperties().get("a"));
 		assertInstanceOf(SchemaInfo.class, t.getProperties().get("b"));
@@ -673,11 +673,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testSetAdditionalProperties() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.setAdditionalProperties(new SchemaInfo().type("foo"));
 		assertObjectEquals("{type:'foo'}", t.getAdditionalProperties());
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
-		
+
 		t.setAdditionalProperties(new SchemaInfo());
 		assertObjectEquals("{}", t.getAdditionalProperties());
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
@@ -694,7 +694,7 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.additionalProperties(new AMap<String,Object>().append("type","foo"));
-		
+
 		assertObjectEquals("{type:'foo'}", t.getAdditionalProperties());
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
 	}
@@ -705,14 +705,14 @@ public class SchemaInfoTest {
 	@Test
 	public void testDiscriminator() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.discriminator("foo");
 		assertEquals("foo", t.getDiscriminator());
-		
+
 		t.discriminator(new StringBuilder("foo"));
 		assertEquals("foo", t.getDiscriminator());
 		assertInstanceOf(String.class, t.getDiscriminator());
-		
+
 		t.discriminator(null);
 		assertNull(t.getDiscriminator());
 	}
@@ -723,11 +723,11 @@ public class SchemaInfoTest {
 	@Test
 	public void testReadOnly() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.readOnly(true);
 		assertEquals(true, t.getReadOnly());
 		assertInstanceOf(Boolean.class, t.getReadOnly());
-		
+
 		t.readOnly("true");
 		assertEquals(true, t.getReadOnly());
 		assertInstanceOf(Boolean.class, t.getReadOnly());
@@ -735,7 +735,7 @@ public class SchemaInfoTest {
 		t.readOnly(new StringBuilder("true"));
 		assertEquals(true, t.getReadOnly());
 		assertInstanceOf(Boolean.class, t.getReadOnly());
-		
+
 		t.readOnly(null);
 		assertNull(t.getReadOnly());
 	}
@@ -746,10 +746,10 @@ public class SchemaInfoTest {
 	@Test
 	public void testXml() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.xml(xml().name("foo"));
 		assertObjectEquals("{name:'foo'}", t.getXml());
-		
+
 		t.xml("{name:'foo'}");
 		assertObjectEquals("{name:'foo'}", t.getXml());
 		assertInstanceOf(Xml.class, t.getXml());
@@ -764,10 +764,10 @@ public class SchemaInfoTest {
 	@Test
 	public void testExternalDocs() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.externalDocs(externalDocumentation("foo"));
 		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
-		
+
 		t.externalDocs("{url:'foo'}");
 		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
 		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
@@ -782,10 +782,10 @@ public class SchemaInfoTest {
 	@Test
 	public void testExample() {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t.example("foo");
 		assertEquals("foo", t.getExample());
-		
+
 		t.example(123);
 		assertEquals(123, t.getExample());
 
@@ -799,10 +799,10 @@ public class SchemaInfoTest {
 	@Test
 	public void testSet() throws Exception {
 		SchemaInfo t = new SchemaInfo();
-		
+
 		t
 			.set("default", "a")
-			.set("enum", new ASet<Object>().appendAll("b"))
+			.set("enum", new ASet<>().appendAll("b"))
 			.set("additionalProperties", new AMap<String,Object>().append("c",new AList<String>().append("c1")))
 			.set("allOf", new ASet<String>().appendAll("d"))
 			.set("description", "e")
@@ -831,9 +831,9 @@ public class SchemaInfoTest {
 			.set("uniqueItems", true)
 			.set("xml", xml().name("o"))
 			.set("$ref", "ref");
-	
+
 		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
-		
+
 		t
 			.set("default", "a")
 			.set("enum", "['b']")
@@ -865,9 +865,9 @@ public class SchemaInfoTest {
 			.set("uniqueItems", "true")
 			.set("xml", "{name:'o'}")
 			.set("$ref", "ref");
-	
+
 		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
-		
+
 		t
 			.set("default", new StringBuilder("a"))
 			.set("enum", new StringBuilder("['b']"))
@@ -899,7 +899,7 @@ public class SchemaInfoTest {
 			.set("uniqueItems", new StringBuilder("true"))
 			.set("xml", new StringBuilder("{name:'o'}"))
 			.set("$ref", new StringBuilder("ref"));
-	
+
 		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
 
 		assertEquals("a", t.get("default", String.class));
@@ -932,7 +932,7 @@ public class SchemaInfoTest {
 		assertEquals("true", t.get("uniqueItems", String.class));
 		assertEquals("{name:'o'}", t.get("xml", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
-	
+
 		assertInstanceOf(StringBuilder.class, t.get("default", Object.class));
 		assertInstanceOf(List.class, t.get("enum", Object.class));
 		assertInstanceOf(SchemaInfo.class, t.get("additionalProperties", Object.class));
@@ -963,12 +963,12 @@ public class SchemaInfoTest {
 		assertInstanceOf(Boolean.class, t.get("uniqueItems", Object.class));
 		assertInstanceOf(Xml.class, t.get("xml", Object.class));
 		assertInstanceOf(String.class, t.get("$ref", Object.class));
-	
+
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
-		
+
 		String s = "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}";
 		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, SchemaInfo.class));
 	}

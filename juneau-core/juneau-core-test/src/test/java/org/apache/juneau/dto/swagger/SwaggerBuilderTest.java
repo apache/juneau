@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -102,7 +102,7 @@ public class SwaggerBuilderTest {
 	public void testHeaderInfoStrict() {
 		HeaderInfo t = headerInfoStrict("string");
 		assertObjectEquals("{type:'string'}", t);
-		
+
 		try {
 			headerInfoStrict("foo");
 		} catch (Exception e) {
@@ -153,7 +153,7 @@ public class SwaggerBuilderTest {
 	public void testItemsStrict() {
 		Items t = itemsStrict("string");
 		assertObjectEquals("{type:'string'}", t);
-		
+
 		try {
 			itemsStrict("foo");
 		} catch (Exception e) {
@@ -213,7 +213,7 @@ public class SwaggerBuilderTest {
 	public void testParameterInfoStrict() {
 		ParameterInfo t = parameterInfoStrict("query", "bar");
 		assertObjectEquals("{'in':'query',name:'bar'}", t);
-		
+
 		try {
 			parameterInfoStrict("foo", "bar");
 		} catch (Exception e) {

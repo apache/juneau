@@ -132,7 +132,7 @@ public class BasicHtmlTest {
 				}
 			},
 			{	/* 6 */
-				new Input<String[]>(
+				new Input<>(
 					"Arrays-2",
 					String[].class,
 					new String[]{null},
@@ -2814,9 +2814,9 @@ public class BasicHtmlTest {
 		public Map<String,Object> b2;
 
 		BeanWithPropertiesWithMapTypeNames init() {
-			b1 = new HashMap<String,B>();
+			b1 = new HashMap<>();
 			b1.put("k1", new B().init());
-			b2 = new HashMap<String,Object>();
+			b2 = new HashMap<>();
 			b2.put("k2", new B().init());
 			return this;
 		}
@@ -2859,7 +2859,7 @@ public class BasicHtmlTest {
 		BeanWithLinkBeanProperties init() {
 			a = new LinkBean().init();
 			b = new ListWithLinkBeans().append(new LinkBean().init());
-			c = new LinkedHashMap<String,LinkBean>();
+			c = new LinkedHashMap<>();
 			c.put("c1", new LinkBean().init());
 			return this;
 		}
@@ -2933,9 +2933,9 @@ public class BasicHtmlTest {
 		public Map<String,Object> c;
 
 		BeanWithAbstractMapFields init() {
-			a = new HashMap<String,A>();
-			b = new HashMap<String,AA>();
-			c = new HashMap<String,Object>();
+			a = new HashMap<>();
+			b = new HashMap<>();
+			c = new HashMap<>();
 			a.put("k1", new A().init());
 			b.put("k2", new A().init());
 			c.put("k3", new A().init());

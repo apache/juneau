@@ -20,7 +20,7 @@ import org.apache.juneau.utils.*;
 import org.junit.*;
 
 public class ResolvingObjectMapTest {
-	
+
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
@@ -41,7 +41,7 @@ public class ResolvingObjectMapTest {
 		m.put("foo", new AMap<String,String>().append("k1","$X{a}"));
 		assertObjectEquals("{k1:'1'}", m.get("foo"));
 	}
-	
+
 	public static class XVar extends MapVar {
 		public XVar() {
 			super("X", new ObjectMap().append("a", 1).append("b", 2).append("c", 3));
@@ -89,11 +89,11 @@ public class ResolvingObjectMapTest {
 		m.put("foo", new AMap<FooEnum,FooEnum>().append(FooEnum.ONE,FooEnum.ONE));
 		assertObjectEquals("{ONE:'ONE'}", m.get("foo"));
 	}
-	
+
 	public static enum FooEnum {
 		ONE
 	}
-	
+
 	//====================================================================================================
 	// testInner - Test inner maps
 	//====================================================================================================

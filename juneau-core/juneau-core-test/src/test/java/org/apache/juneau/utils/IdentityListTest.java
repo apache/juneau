@@ -26,7 +26,7 @@ public class IdentityListTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		List<String> l = new IdentityList<String>();
+		List<String> l = new IdentityList<>();
 		String a = "a";
 		l.add(a);
 		l.add(a);

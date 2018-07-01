@@ -470,14 +470,14 @@ public class JsonParserEdgeCasesTest {
 		System.err.println(sb); // NOT DEBUG
 	}
 
-	public static final Map<String,String> specials = new HashMap<String,String>();
+	public static final Map<String,String> specials = new HashMap<>();
 	static {
 		specials.put("is_structure_500_nested_arrays", "StringUtils.repeat(500, \"[\") + StringUtils.repeat(500, \"]\")");
 		specials.put("ns_structure_100000_opening_arrays", "StringUtils.repeat(100000, \"[\")");
 		specials.put("ns_structure_open_array_object", "StringUtils.repeat(50000, \"[{\\\"\\\":\")");
 	}
 
-	public static final Map<String,String> errors = new HashMap<String,String>();
+	public static final Map<String,String> errors = new HashMap<>();
 	static {
 		errors.put(/*11*/ "ix_string_not_in_unicode_range", "I/O exception occurred.  exception=MalformedInputException");
 		errors.put(/*12*/ "ix_string_truncated-utf-8", "I/O exception occurred.  exception=MalformedInputException");

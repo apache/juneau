@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
 import org.junit.*;
 
 /*
- * Tests the BEAN_examples property and @Example annotation. 
+ * Tests the BEAN_examples property and @Example annotation.
  */
 public class PojoExamplesTest {
 
@@ -31,10 +31,10 @@ public class PojoExamplesTest {
 		BeanSession bs = BeanContext.create().example(A.class, new A().init()).build().createSession();
 		assertObjectEquals("{f1:'f1a'}", bs.getClassMeta(A.class).getExample(bs));
 	}
-	
+
 	public static class A {
 		public String f1;
-		
+
 		public A init() {
 			this.f1 = "f1a";
 			return this;
@@ -52,16 +52,16 @@ public class PojoExamplesTest {
 
 	public static class B1 {
 		public String f1;
-		
+
 		@Example
 		public static B1 EXAMPLE = new B1().init();
-		
+
 		public B1 init() {
 			this.f1 = "f1b";
 			return this;
 		}
 	}
-	
+
 	//====================================================================================================
 	// test @Example on private field
 	//====================================================================================================
@@ -73,16 +73,16 @@ public class PojoExamplesTest {
 
 	public static class B2 {
 		public String f1;
-		
+
 		@Example
 		private static B2 EXAMPLE = new B2().init();
-		
+
 		public B2 init() {
 			this.f1 = "f1b";
 			return this;
 		}
 	}
-	
+
 	//====================================================================================================
 	// test @Example on public no-arg method.
 	//====================================================================================================
@@ -94,12 +94,12 @@ public class PojoExamplesTest {
 
 	public static class C1 {
 		public String f1;
-		
+
 		public C1 init() {
 			this.f1 = "f1c";
 			return this;
 		}
-		
+
 		@Example
 		public static C1 x() {
 			return new C1().init();
@@ -117,12 +117,12 @@ public class PojoExamplesTest {
 
 	public static class C2 {
 		public String f1;
-		
+
 		public C2 init() {
 			this.f1 = "f1c";
 			return this;
 		}
-		
+
 		@Example
 		private static C2 x() {
 			return new C2().init();
@@ -140,18 +140,18 @@ public class PojoExamplesTest {
 
 	public static class D1 {
 		public String f1;
-		
+
 		public D1 init() {
 			this.f1 = "f1d";
 			return this;
 		}
-		
+
 		@Example
 		public static D1 x(BeanSession bs) {
 			return new D1().init();
 		}
 	}
-	
+
 	//====================================================================================================
 	// test example() method, no annotation.
 	//====================================================================================================
@@ -163,12 +163,12 @@ public class PojoExamplesTest {
 
 	public static class E1 {
 		public String f1;
-		
+
 		public E1 init() {
 			this.f1 = "f1e";
 			return this;
 		}
-		
+
 		public static E1 example() {
 			return new E1().init();
 		}
@@ -185,12 +185,12 @@ public class PojoExamplesTest {
 
 	public static class E2 {
 		public String f1;
-		
+
 		public E2 init() {
 			this.f1 = "f1e";
 			return this;
 		}
-		
+
 		public static E2 example(BeanSession bs) {
 			return new E2().init();
 		}
@@ -237,11 +237,11 @@ public class PojoExamplesTest {
 		}
 	}
 	public static class F3 {
-		@Example 
+		@Example
 		public static String F3 = "foo";
 	}
 	public static class F4 {
-		@Example 
+		@Example
 		public F4 f4 = new F4();
 	}
 }

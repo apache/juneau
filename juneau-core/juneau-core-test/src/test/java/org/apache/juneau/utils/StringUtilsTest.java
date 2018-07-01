@@ -510,14 +510,14 @@ public class StringUtilsTest {
 		assertEquals("2\\", r[1]);
 		assertEquals("", r[2]);
 	}
-	
+
 	//====================================================================================================
 	// split(String,char,int)
 	//====================================================================================================
 	@Test
 	public void testSplitWithLimit() {
 		String[] r;
-		
+
 		r = split("boo:and:foo", ':', 10);
 		assertObjectEquals("['boo','and','foo']", r);
 
@@ -529,17 +529,17 @@ public class StringUtilsTest {
 
 		r = split("boo:and:foo", ':', 0);
 		assertObjectEquals("['boo:and:foo']", r);
-		
+
 		r = split("boo:and:foo", ':', -1);
-		assertObjectEquals("['boo:and:foo']", r);		
-		
+		assertObjectEquals("['boo:and:foo']", r);
+
 		r = split("boo : and : foo", ':', 10);
 		assertObjectEquals("['boo','and','foo']", r);
 
 		r = split("boo : and : foo", ':', 2);
 		assertObjectEquals("['boo','and : foo']", r);
 	}
-	
+
 	//====================================================================================================
 	// nullIfEmpty(String)
 	//====================================================================================================
@@ -800,7 +800,7 @@ public class StringUtilsTest {
 		assertObjectEquals("['\"foo\"']", splitQuoted("'\"foo\"'"));
 		assertObjectEquals("['\\'foo\\'']", splitQuoted("\"'foo'\""));
 	}
-	
+
 	//====================================================================================================
 	// firstNonWhitespaceChar(String)
 	//====================================================================================================
@@ -841,7 +841,7 @@ public class StringUtilsTest {
 		assertEquals("abc", join(splitEqually("abc", 3), '|'));
 		assertEquals("abc|d", join(splitEqually("abcd", 3), '|'));
 	}
-	
+
 	//====================================================================================================
 	// testIsObjectMap(Object)
 	//====================================================================================================
@@ -853,7 +853,7 @@ public class StringUtilsTest {
 		assertFalse(isObjectMap("  foo:'bar' } ", true));
 		assertTrue(isObjectMap("/*foo*/ { foo:'bar' } /*foo*/", true));
 	}
-	
+
 	//====================================================================================================
 	// testIsObjectMap(Object)
 	//====================================================================================================
@@ -876,7 +876,7 @@ public class StringUtilsTest {
 		assertEquals("1: foo\n", getNumberedLines("foo"));
 		assertEquals("1: foo\n2: bar\n", getNumberedLines("foo\nbar"));
 	}
-	
+
 	//====================================================================================================
 	// compare(String,String)
 	//====================================================================================================
@@ -887,7 +887,7 @@ public class StringUtilsTest {
 		assertTrue(compare(null,"b") < 0);
 		assertTrue(compare("b",null) > 0);
 		assertTrue(compare(null,null) == 0);
-	}	
+	}
 
 	//====================================================================================================
 	// matchPattern(String)

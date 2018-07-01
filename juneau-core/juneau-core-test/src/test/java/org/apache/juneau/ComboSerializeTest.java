@@ -91,11 +91,11 @@ public abstract class ComboSerializeTest {
 		"serializeRdfXmlR",
 	};
 
-	private static final Set<String> runTestsSet = new HashSet<String>(Arrays.asList(runTests));
+	private static final Set<String> runTestsSet = new HashSet<>(Arrays.asList(runTests));
 
 	private final boolean SKIP_RDF_TESTS = Boolean.getBoolean("skipRdfTests");
 
-	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<Serializer,Serializer>();
+	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<>();
 
 	public ComboSerializeTest(ComboInput<?> comboInput) {
 		this.comboInput = comboInput;

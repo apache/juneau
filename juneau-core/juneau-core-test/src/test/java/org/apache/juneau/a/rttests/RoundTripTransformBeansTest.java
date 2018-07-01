@@ -300,7 +300,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public static class C3<T> extends C2<T> {
 
 		public static C3 create() {
-			C3 c3 = new C3<Object>();
+			C3 c3 = new C3<>();
 			CDTO cdto = new CDTO();
 			cdto.f2 = "f2";
 			cdto.f3 = 3;
@@ -370,7 +370,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			return x;
 		}
 	}
-	
+
 	@Test
 	public void testSurrogatesThroughAnnotation() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
