@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -47,7 +46,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
 	 */
 	public SerializedNameValuePair(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		this.name = name;

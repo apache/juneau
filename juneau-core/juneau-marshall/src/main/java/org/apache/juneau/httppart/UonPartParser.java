@@ -10,12 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart.uon;
+package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 

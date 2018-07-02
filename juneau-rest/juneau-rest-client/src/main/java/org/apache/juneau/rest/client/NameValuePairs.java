@@ -20,7 +20,6 @@ import org.apache.http.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -83,7 +82,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the serializer parser is not a subclass of {@link OapiPartSerializer}.
+	 * 	<br>Ignored if the serializer parser is not a subclass of {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairs append(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {

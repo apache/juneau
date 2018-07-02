@@ -22,7 +22,6 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.*;
@@ -46,7 +45,7 @@ public class HttpPartSchema {
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Reusable instance of {@link OapiPartSerializer}, all default settings. */
+	/** Reusable instance of {@link OpenApiPartSerializer}, all default settings. */
 	public static final HttpPartSchema DEFAULT = HttpPartSchema.create().allowEmptyValue(true).build();
 
 	final String name;

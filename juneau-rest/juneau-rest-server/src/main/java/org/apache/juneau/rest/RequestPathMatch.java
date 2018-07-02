@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.exception.*;
 
@@ -158,7 +157,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The attribute name.
 	 * @param type The class type to convert the attribute value to.
 	 * @param <T> The class type to convert the attribute value to.
@@ -234,7 +233,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The attribute name.
 	 * @param type
 	 * 	The type of object to create.

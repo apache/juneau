@@ -21,7 +21,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;

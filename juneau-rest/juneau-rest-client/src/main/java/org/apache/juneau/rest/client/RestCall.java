@@ -37,8 +37,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
-import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
@@ -202,7 +200,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
@@ -320,7 +318,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
@@ -434,7 +432,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If variable could not be found in path.
 	 */
@@ -579,7 +577,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OapiPartSerializer}.
+	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */

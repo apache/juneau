@@ -21,8 +21,8 @@ import org.apache.juneau.parser.*;
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.oapi.OapiPartParser} - Parts encoded in based on OpenAPI schema.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.uon.UonPartParser} - Parts encoded in UON notation.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parts encoded in based on OpenAPI schema.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parts encoded in UON notation.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parts encoded in plain text.
  * </ul>
  *

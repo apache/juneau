@@ -10,39 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart.oapi;
+package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.uon.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
  * OpenAPI part parser.
  */
-public class OapiPartParser extends UonPartParser {
+public class OpenApiPartParser extends UonPartParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "OapiPartParser.";
+	private static final String PREFIX = "OpenApiPartParser.";
 
 	/**
 	 * Configuration property:  OpenAPI schema description.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"OapiPartParser.schema"</js>
+	 * 	<li><b>Name:</b>  <js>"OpenApiPartParser.schema"</js>
 	 * 	<li><b>Data type:</b>  <code>HttpPartSchema</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link OapiPartParserBuilder#schema(HttpPartSchema)}
+	 * 			<li class='jm'>{@link OpenApiPartParserBuilder#schema(HttpPartSchema)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -57,8 +55,8 @@ public class OapiPartParser extends UonPartParser {
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Reusable instance of {@link OapiPartParser}. */
-	public static final OapiPartParser DEFAULT = new OapiPartParser(PropertyStore.DEFAULT);
+	/** Reusable instance of {@link OpenApiPartParser}. */
+	public static final OpenApiPartParser DEFAULT = new OpenApiPartParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -72,7 +70,7 @@ public class OapiPartParser extends UonPartParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public OapiPartParser(PropertyStore ps) {
+	public OpenApiPartParser(PropertyStore ps) {
 		super(
 			ps.builder().build()
 		);

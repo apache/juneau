@@ -22,7 +22,6 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.remoteable.*;
@@ -570,7 +569,7 @@ public @interface Body {
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
 	 *
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OapiPartParser}.
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OpenApiPartParser}.
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;

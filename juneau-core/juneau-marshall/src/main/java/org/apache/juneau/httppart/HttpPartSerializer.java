@@ -24,9 +24,9 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.oapi.OapiPartSerializer} - Parts encoded based on OpenAPI schema.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.uon.UonPartSerializer} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.uon.SimpleUonPartSerializer} - Parts encoded in UON notation, but
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Parts encoded based on OpenAPI schema.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer} - Parts encoded in UON notation.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer} - Parts encoded in UON notation, but
  * 		strings are treated as plain-text and arrays/collections are serialized as comma-delimited lists.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Parts encoded in plain text.
  * </ul>

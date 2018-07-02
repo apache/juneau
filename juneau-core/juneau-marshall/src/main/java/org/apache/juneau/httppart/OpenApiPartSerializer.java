@@ -10,37 +10,61 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart.uon;
+package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
-import org.apache.juneau.uon.*;
+import org.apache.juneau.internal.*;
 
 /**
- * An extension of {@link UonPartSerializer} with plain-text string handling.
+ * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
  *
  * <p>
- * Uses UON notation for beans and maps (serialized as UON objects), and plain text for everything else.
- * <br>Collections/arrays are also serialized as comma-delimited lists.
- *
- * <p>
- * The downside to this class vs. {@link UonPartSerializer} is that you may lose type information on the parse side.
- * For example, it's not possible to distinguish between the boolean <jk>false</jk> and the string <js>"false"</js>.
- * The same is true of numbers.  Also, whitespace in strings or strings containing single quotes may get lost if using
- * the {@link UonPartParser} to process them.
+ * This serializer uses UON notation for all parts by default.  This allows for arbitrary POJOs to be losslessly
+ * serialized as any of the specified HTTP types.
  */
-public class SimpleUonPartSerializer extends UonPartSerializer {
+public class OpenApiPartSerializer extends UonPartSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "OpenApiPartSerializer.";
+
+	/**
+	 * Configuration property:  OpenAPI schema description.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"OpenApiPartSerializer.schema"</js>
+	 * 	<li><b>Data type:</b>  <code>HttpPartSchema</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link OpenPartSerializerBuilder#schema(HttpPartSchema)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines the OpenAPI schema for this part serializer.
+	 */
+	public static final String OAPI_schema = PREFIX + "schema.o";
+
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Reusable instance of {@link SimpleUonPartSerializer}, all default settings. */
-	public static final SimpleUonPartSerializer DEFAULT = new SimpleUonPartSerializer(PropertyStore.DEFAULT);
+	/** Reusable instance of {@link OpenApiPartSerializer}, all default settings. */
+	public static final OpenApiPartSerializer DEFAULT = new OpenApiPartSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	final HttpPartSchema schema;
 
 	/**
 	 * Constructor.
@@ -48,21 +72,22 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public SimpleUonPartSerializer(PropertyStore ps) {
+	public OpenApiPartSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(UON_paramFormat, ParamFormat.PLAINTEXT)
+				.set(UON_encoding, false)
 				.build()
 		);
+		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, HttpPartSchema.DEFAULT);
 	}
 
 	@Override /* Context */
-	public SimpleUonPartSerializerBuilder builder() {
-		return new SimpleUonPartSerializerBuilder(getPropertyStore());
+	public UonPartSerializerBuilder builder() {
+		return new UonPartSerializerBuilder(getPropertyStore());
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link SimpleUonPartSerializerBuilder} object.
+	 * Instantiates a new clean-slate {@link UonPartSerializerBuilder} object.
 	 *
 	 * <p>
 	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
@@ -70,7 +95,17 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 	 *
 	 * @return A new {@link UonPartSerializerBuilder} object.
 	 */
-	public static SimpleUonPartSerializerBuilder create() {
-		return new SimpleUonPartSerializerBuilder();
+	public static UonPartSerializerBuilder create() {
+		return new UonPartSerializerBuilder();
+	}
+
+	//--------------------------------------------------------------------------------
+	// Entry point methods
+	//--------------------------------------------------------------------------------
+
+	@Override /* PartSerializer */
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
+		schema = ObjectUtils.firstNonNull(schema, this.schema, HttpPartSchema.DEFAULT);
+		return super.serialize(type, schema, value);
 	}
 }

@@ -23,7 +23,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -262,7 +261,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The parameter name.
 	 * @param type The class type to convert the parameter value to.
 	 * @param <T> The class type to convert the parameter value to.
@@ -299,7 +298,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The parameter name.
 	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
 	 * @param type The class type to convert the parameter value to.
@@ -342,7 +341,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The parameter name.
 	 * @param type The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
@@ -413,7 +412,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
@@ -461,7 +460,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.
@@ -513,7 +512,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OapiPartParser}.
+	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
 	 * @param name The parameter name.
 	 * @param type
 	 * 	The type of object to create.

@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
@@ -33,7 +34,6 @@ import org.apache.juneau.config.vars.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -1281,7 +1281,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OapiPartParser}.
+	 * 	<br>The default is {@link OpenApiPartParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(Class<? extends HttpPartParser> value) {
@@ -1301,7 +1301,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OapiPartParser}.
+	 * 	<br>The default is {@link OpenApiPartParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(HttpPartParser value) {
@@ -1321,7 +1321,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OapiPartSerializer}.
+	 * 	<br>The default is {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
@@ -1341,7 +1341,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OapiPartSerializer}.
+	 * 	<br>The default is {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(HttpPartSerializer value) {

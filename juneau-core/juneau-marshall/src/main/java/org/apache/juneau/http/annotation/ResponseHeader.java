@@ -18,7 +18,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.oapi.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
@@ -130,7 +129,7 @@ public @interface ResponseHeader {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values.
 	 *
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OapiPartSerializer}.
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OpenApiPartSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
