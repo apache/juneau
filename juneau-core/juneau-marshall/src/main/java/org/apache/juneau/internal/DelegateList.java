@@ -34,7 +34,7 @@ public class DelegateList<T extends Collection<?>> extends ObjectList implements
 	 */
 	public DelegateList(ClassMeta<T> classMeta) {
 		if (classMeta.isArray())
-			classMeta = classMeta.getBeanContext().getClassMeta(List.class, classMeta.getElementType());
+			classMeta = classMeta.getBeanContext().<T>getClassMeta(List.class, classMeta.getElementType());
 		this.classMeta = classMeta;
 	}
 

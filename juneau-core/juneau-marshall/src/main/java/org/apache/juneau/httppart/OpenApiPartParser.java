@@ -174,6 +174,25 @@ public class OpenApiPartParser extends UonPartParser {
 		return parse(null, schema, in, BeanContext.DEFAULT.getClassMeta(type));
 	}
 
+	/**
+	 * Convenience method for parsing a part to a map or collection.
+	 *
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * @param type The category of value being parsed.
+	 * @param args The type arguments of the map or collection.
+	 * @return The parsed value.
+	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationParseException If the input or resulting HTTP part object fails schema validation.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T parse(HttpPartSchema schema, String in, java.lang.reflect.Type type, java.lang.reflect.Type...args) throws ParseException, SchemaValidationParseException {
+		return (T)parse(null, schema, in, BeanContext.DEFAULT.getClassMeta(type, args));
+	}
+
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
 		schema = ObjectUtils.firstNonNull(schema, this.schema, HttpPartSchema.DEFAULT);

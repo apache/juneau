@@ -13,10 +13,12 @@
 package org.apache.juneau.httppart;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
@@ -320,48 +322,141 @@ public class OpenApiPartParserTest {
 	// type = array
 	//-----------------------------------------------------------------------------------------------------------------
 
-//	case ARRAY: {
-//	if (type.isObject())
-//		type = (ClassMeta<T>)getClassMeta(ObjectList.class);
-//
-//	ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
-//	if (eType == null)
-//		throw new ParseException("Value of type ARRAY cannot be converted to type {0}", type);
-//
-//	String[] ss = new String[0];
-//	switch (schema.getCollectionFormat()) {
-//		case MULTI:
-//			ss = new String[]{in};
-//			break;
-//		case CSV:
-//			ss = split(in, ',');
-//			break;
-//		case PIPES:
-//			ss = split(in, '|');
-//			break;
-//		case SSV:
-//			ss = splitQuoted(in);
-//			break;
-//		case TSV:
-//			ss = split(in, '\t');
-//			break;
-//		case UON:
-//			return super.parse(partType, null, in, type);
-//		case NONE:
-//			if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
-//				return super.parse(partType, null, in, type);
-//			ss = split(in, ',');
-//	}
-//	Object[] o = null;
-//	if (schema.getItems() != null) {
-//		o = new Object[ss.length];
-//		for (int i = 0; i < ss.length; i++)
-//			o[i] = parse(partType, schema.getItems(), ss[i], eType);
-//	} else {
-//		o = ss;
-//	}
-//	return toType(o, type);
-//}
+	public static class D {
+		private String f;
+		public D(String in) {
+			this.f = in;
+		}
+		@Override
+		public String toString() {
+			return f;
+		}
+	}
+
+	@Test
+	public void d01_arrayType_collectionFormatCsv() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("csv").build();
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", String[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", Object[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", D[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, String.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, D.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", ObjectList.class));
+	}
+
+	@Test
+	public void d02_arrayType_collectionFormatPipes() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("pipes").build();
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", String[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", Object[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", D[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", List.class, String.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", List.class, Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", List.class, D.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", ObjectList.class));
+	}
+
+	@Test
+	public void d03_arrayType_collectionFormatSsv() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("ssv").build();
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", String[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", Object[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", D[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", List.class, String.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", List.class, Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", List.class, D.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", ObjectList.class));
+	}
+
+	@Test
+	public void d04_arrayType_collectionFormatTsv() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("tsv").build();
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", String[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", Object[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", D[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", List.class, String.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", List.class, Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", List.class, D.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", ObjectList.class));
+	}
+
+	@Test
+	public void d05_arrayType_collectionFormatUon() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("uon").build();
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", String[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", Object[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", D[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", List.class, String.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", List.class, Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", List.class, D.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", ObjectList.class));
+	}
+
+	@Test
+	public void d06a_arrayType_collectionFormatNone() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").build();
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", String[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", Object[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", D[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, String.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, D.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", Object.class));
+	}
+
+	@Test
+	public void d06b_arrayType_collectionFormatNone_autoDetectUon() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").build();
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", String[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", Object[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", D[].class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", List.class, String.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", List.class, Object.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", List.class, D.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", Object.class));
+	}
+
+	@Test
+	public void d07_arrayType_collectionFormatMulti() throws Exception {
+		// collectionFormat=multi should not do any sort of splitting.
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("multi").build();
+		assertObjectEquals("['foo,bar']", p.parse(s, "foo,bar", String[].class));
+		assertObjectEquals("['foo,bar']", p.parse(s, "foo,bar", Object[].class));
+		assertObjectEquals("['foo,bar']", p.parse(s, "foo,bar", D[].class));
+		assertObjectEquals("['foo,bar']", p.parse(s, "foo,bar", List.class, String.class));
+		assertObjectEquals("['foo,bar']", p.parse(s, "foo,bar", List.class, Object.class));
+		assertObjectEquals("['foo,bar']", p.parse(s, "foo,bar", List.class, D.class));
+		assertObjectEquals("['foo,bar']", p.parse(s, "foo,bar", Object.class));
+	}
+
+	@Test
+	public void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("pipes").items(HttpPartSchema.create().type("array").collectionFormat("csv")).build();
+		assertObjectEquals("[['foo','bar'],['baz','qux']]", p.parse(s, "foo,bar|baz,qux", String[][].class));
+		assertObjectEquals("[['foo','bar'],['baz','qux']]", p.parse(s, "foo,bar|baz,qux", Object[][].class));
+		assertObjectEquals("[['foo','bar'],['baz','qux']]", p.parse(s, "foo,bar|baz,qux", D[][].class));
+		assertObjectEquals("[['foo','bar'],['baz','qux']]", p.parse(s, "foo,bar|baz,qux", List.class, List.class, String.class));
+		assertObjectEquals("[['foo','bar'],['baz','qux']]", p.parse(s, "foo,bar|baz,qux", List.class, List.class, Object.class));
+		assertObjectEquals("[['foo','bar'],['baz','qux']]", p.parse(s, "foo,bar|baz,qux", List.class, List.class, D.class));
+		assertObjectEquals("[['foo','bar'],['baz','qux']]", p.parse(s, "foo,bar|baz,qux", Object.class));
+	}
+
+	@Test
+	public void d09_arrayType_itemsInteger() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().type("array").collectionFormat("csv").items(HttpPartSchema.create().type("integer")).build();
+		assertObjectEquals("[1,2]", p.parse(s, "1,2", int[].class));
+		assertObjectEquals("[1,2]", p.parse(s, "1,2", Integer[].class));
+		assertObjectEquals("[1,2]", p.parse(s, "1,2", Object[].class));
+		assertObjectEquals("[1,2]", p.parse(s, "1,2", List.class, Integer.class));
+		assertObjectEquals("[1,2]", p.parse(s, "1,2", List.class, Object.class));
+		assertObjectEquals("[1,2]", p.parse(s, "1,2", Object.class));
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// type = boolean
