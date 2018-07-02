@@ -119,6 +119,7 @@ public final class ClassMeta<T> implements Type {
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
 	private final Object example;                          // Example object.
+	private final Map<Class<?>,Transform<?,T>> transforms = new ConcurrentHashMap<>();
 	private final Transform<Reader,T> readerTransform;
 	private final Transform<InputStream,T> inputStreamTransform;
 	private final Transform<String,T> stringTransform;
@@ -1184,6 +1185,15 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is <code><jk>byte</jk>[]</code>.
+	 *
+	 * @return <jk>true</jk> if this class is <code><jk>byte</jk>[]</code>.
+	 */
+	public boolean isByteArray() {
+		return cc == ARRAY && this.innerClass == byte[].class;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this class is {@link Class}.
 	 *
 	 * @return <jk>true</jk> if this class is {@link Class}.
@@ -1369,8 +1379,26 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
 	 */
-	public boolean isDate() {
+	public boolean isDateOrCalendar() {
 		return cc == DATE;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a {@link Date}.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link Date}.
+	 */
+	public boolean isDate() {
+		return cc == DATE && ClassUtils.isParentClass(Date.class, innerClass);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a {@link Calendar}.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link Calendar}.
+	 */
+	public boolean isCalendar() {
+		return cc == DATE && ClassUtils.isParentClass(Calendar.class, innerClass);
 	}
 
 	/**
@@ -2053,7 +2081,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
 	 */
 	public boolean hasReaderTransform() {
-		return readerTransform != null;
+		return getTransform(Reader.class) != null;
 	}
 
 	/**
@@ -2062,7 +2090,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
 	public Transform<Reader,T> getReaderTransform() {
-		return readerTransform;
+		return getTransform(Reader.class);
 	}
 
 	/**
@@ -2071,7 +2099,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
 	 */
 	public boolean hasInputStreamTransform() {
-		return inputStreamTransform != null;
+		return getTransform(InputStream.class) != null;
 	}
 
 	/**
@@ -2080,7 +2108,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
 	public Transform<InputStream,T> getInputStreamTransform() {
-		return inputStreamTransform;
+		return getTransform(InputStream.class);
 	}
 
 	/**
@@ -2099,5 +2127,25 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public Transform<String,T> getStringTransform() {
 		return stringTransform;
+	}
+
+	/**
+	 * Returns the transform for this class for creating instances from other object types.
+	 *
+	 * @param c The transform-from class.
+	 * @return The transform, or <jk>null</jk> if no such transform exists.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <I> Transform<I,T> getTransform(Class<I> c) {
+		Transform t = transforms.get(c);
+		if (t == TransformCache.NULL)
+			return null;
+		if (t == null) {
+			t = TransformCache.get(c, innerClass);
+			if (t == null)
+				t = TransformCache.NULL;
+			transforms.put(c, t);
+		}
+		return t == TransformCache.NULL ? null : t;
 	}
 }

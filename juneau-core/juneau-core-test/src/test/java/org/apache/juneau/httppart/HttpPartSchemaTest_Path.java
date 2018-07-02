@@ -69,7 +69,7 @@ public class HttpPartSchemaTest_Path {
 
 	@Test
 	public void a02_basic_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A02.class).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A02.class).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartSchema.Type.NUMBER, s.getType());
 		assertEquals(HttpPartSchema.Format.INT32, s.getFormat());
@@ -114,7 +114,7 @@ public class HttpPartSchemaTest_Path {
 
 	@Test
 	public void a03_basic_onParameter() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A03.class.getMethod("a", String.class), 0).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A03.class.getMethod("a", String.class), 0).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartSchema.Type.NUMBER, s.getType());
 		assertEquals(HttpPartSchema.Format.INT32, s.getFormat());
@@ -159,7 +159,7 @@ public class HttpPartSchemaTest_Path {
 
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A04.class.getMethod("a", A01.class), 0).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A04.class.getMethod("a", A01.class), 0).noValidate().build();
 		assertEquals("y", s.getName());
 		assertEquals(HttpPartSchema.Type.INTEGER, s.getType());
 		assertEquals(HttpPartSchema.Format.INT64, s.getFormat());
@@ -255,7 +255,7 @@ public class HttpPartSchemaTest_Path {
 
 	@Test
 	public void a05_basic_nestedItems_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A05.class).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A05.class).noValidate().build();
 		assertEquals("x", s.getName());
 
 		HttpPartSchema items = s.getItems();

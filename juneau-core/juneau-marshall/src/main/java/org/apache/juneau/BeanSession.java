@@ -17,8 +17,10 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.Date;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.*;
@@ -585,7 +587,9 @@ public class BeanSession extends Session {
 			}
 
 			if (type.isString()) {
-				if (vt.isMapOrBean() || vt.isCollectionOrArray()) {
+				if (vt.isByteArray()) {
+					return (T) new String((byte[])value);
+				} else if (vt.isMapOrBean() || vt.isCollectionOrArray()) {
 					if (JsonSerializer.DEFAULT_LAX != null)
 						return (T)JsonSerializer.DEFAULT_LAX.serialize(value);
 				} else if (vt.isClass()) {
@@ -630,11 +634,56 @@ public class BeanSession extends Session {
 				return newBeanMap(tc).load((Map<?,?>) value).getBean();
 			}
 
+			if (type.isInputStream()) {
+				if (vt.isByteArray()) {
+					byte[] b = (byte[])value;
+					return (T) new ByteArrayInputStream(b, 0, b.length);
+				}
+				byte[] b = value.toString().getBytes();
+				return (T)new ByteArrayInputStream(b, 0, b.length);
+			}
+
+			if (type.isReader()) {
+				if (vt.isByteArray()) {
+					byte[] b = (byte[])value;
+					return (T) new StringReader(new String(b));
+				}
+				return (T)new StringReader(value.toString());
+			}
+
 			if (type.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
 				return type.newInstanceFromNumber(this, outer, (Number)value);
 
 			if (type.canCreateNewInstanceFromString(outer))
 				return type.newInstanceFromString(outer, value.toString());
+
+			if (type.isCalendar()) {
+				if (vt.isCalendar()) {
+					Calendar c = (Calendar)value;
+					if (value instanceof GregorianCalendar) {
+						GregorianCalendar c2 = new GregorianCalendar(c.getTimeZone());
+						c2.setTime(c.getTime());
+						return (T)c2;
+					}
+				}
+				if (vt.isDate()) {
+					Date d = (Date)value;
+					if (value instanceof GregorianCalendar) {
+						GregorianCalendar c2 = new GregorianCalendar(TimeZone.getDefault());
+						c2.setTime(d);
+						return (T)c2;
+					}
+				}
+			}
+
+			if (type.isDate() && type.getInnerClass() == Date.class) {
+				if (vt.isCalendar())
+					return (T)((Calendar)value).getTime();
+			}
+
+			Transform t = type.getTransform(value.getClass());
+			if (t != null)
+				return (T) t.transform(value);
 
 			if (type.isBean())
 				return newBeanMap(type.getInnerClass()).load(value.toString()).getBean();

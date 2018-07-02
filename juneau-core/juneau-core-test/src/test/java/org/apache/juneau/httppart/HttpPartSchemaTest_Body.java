@@ -47,7 +47,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a02_basic_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A02.class).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A02.class).noValidate().build();
 		assertTrue(s.getRequired());
 		assertObjectEquals("{description:'b1\\nb2',example:'f1',required:true,schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
 	}
@@ -68,7 +68,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a03_basic_onParameter() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A03.class.getMethod("a", String.class), 0).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A03.class.getMethod("a", String.class), 0).noValidate().build();
 		assertTrue(s.getRequired());
 		assertObjectEquals("{description:'b1\\nb2',example:'f1',required:true,schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
 	}
@@ -89,7 +89,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A04.class.getMethod("a", A02.class), 0).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A04.class.getMethod("a", A02.class), 0).noValidate().build();
 		assertNull(s.getRequired());
 		assertObjectEquals("{description:'b3\\nb3',example:'f2',schema:{'$ref':'c3'},_value:'{g2:true}'}", s.getApi());
 	}
@@ -173,7 +173,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a05_basic_nestedItems_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A05.class).noValidate(true).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A05.class).noValidate().build();
 
 		assertEquals(HttpPartSchema.Type.NUMBER, s.getType());
 		assertEquals(HttpPartSchema.Format.INT32, s.getFormat());

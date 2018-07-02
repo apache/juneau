@@ -14,12 +14,71 @@ package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.*;
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
  * OpenAPI part parser.
+ *
+ * <table class='styled'>
+ * 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
+ * 	<tr>
+ * 		<td ><code>string</code></td>
+ * 		<td>
+ * 			<code>byte</code>
+ * 			<br><code>binary</code>
+ * 			<br><code>binary-spaced</br>
+ * 		</td>
+ * 		<td>
+ * 			<ul>
+ * 				<li><code><jk>byte</jk>[]</code>
+ * 				<li>{@link InputStream} - Returns a {@link ByteArrayInputStream}.
+ * 				<li>{@link Reader} - Returns a {@link InputStreamReader} wrapped around a {@link ByteArrayInputStream}.
+ * 				<li>{@link String} - Constructed using {@link String#String(byte[])}.
+ * 				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors or static create methods).
+ * 			</ul>
+ * 		</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td ><code>string</code></td>
+ * 		<td>
+ * 			<code>date</code>
+ * 			<code>date-time</code>
+ * 		</td>
+ * 		<td>
+ * 			<ul>
+ * 				<li>{@link Calendar}
+ * 				<li>{@link Date}
+ * 				<li>{@link GregorianCalendar}
+ * 				<li>{@link String} - Converted using {@link Calendar#toString()}.
+ * 				<li>Any POJO transformable from a {@link Calendar} (via constructors or static create methods).
+ * 			</ul>
+ * 		</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td ><code>string</code></td>
+ * 		<td><code>uon</code></td>
+ * 		<td>
+ * 			<ul>
+ * 				<li>Any <a href='../../../../overview-summary#juneau-marshall.PojoCategories'>parsable POJO</a>.
+ * 			</ul>
+ * 		</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td ><code>string</code></td>
+ * 		<td>none specified</td>
+ * 		<td>
+ * 			<ul>
+ * 				<li>{@link String}
+ * 				<li>Any POJO transformable from a {@link String} (via constructors or static create methods).
+ * 			</ul>
+ * 		</td>
+ * 	</tr>
+ * </table>
  */
 public class OpenApiPartParser extends UonPartParser {
 
@@ -98,6 +157,23 @@ public class OpenApiPartParser extends UonPartParser {
 		return new UonPartParserBuilder();
 	}
 
+	/**
+	 * Convenience method for parsing a part.
+	 *
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * @param type The category of value being parsed.
+	 * @return The parsed value.
+	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationParseException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> type) throws ParseException, SchemaValidationParseException {
+		return parse(null, schema, in, BeanContext.DEFAULT.getClassMeta(type));
+	}
+
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
 		schema = ObjectUtils.firstNonNull(schema, this.schema, HttpPartSchema.DEFAULT);
@@ -124,9 +200,11 @@ public class OpenApiPartParser extends UonPartParser {
 								return (T)StringUtils.base64Decode(in);
 							case DATE:
 							case DATE_TIME:
-								return (T)StringUtils.parseIsoDate(in);
+								return (T)StringUtils.parseIsoCalendar(in);
 							case BINARY:
 								return (T)StringUtils.fromHex(in);
+							case BINARY_SPACED:
+								return (T)StringUtils.fromSpacedHex(in);
 							case UON:
 								return super.parse(partType, schema, in, type);
 							default:
@@ -138,9 +216,11 @@ public class OpenApiPartParser extends UonPartParser {
 							return toType(StringUtils.base64Decode(in), type);
 						case DATE:
 						case DATE_TIME:
-							return toType(StringUtils.parseIsoDate(in), type);
+							return toType(StringUtils.parseIsoCalendar(in), type);
 						case BINARY:
 							return toType(StringUtils.fromHex(in), type);
+						case BINARY_SPACED:
+							return toType(StringUtils.fromSpacedHex(in), type);
 						case UON:
 							return super.parse(partType, schema, in, type);
 						default:

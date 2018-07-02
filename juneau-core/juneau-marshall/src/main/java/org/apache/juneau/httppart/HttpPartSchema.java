@@ -268,7 +268,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(maxItems != null, "maxItems");
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.BYTE, Format.BINARY, Format.DATE, Format.DATE_TIME, Format.PASSWORD, Format.UON, Format.NONE);
+				invalidFormat = ! format.isOneOf(Format.BYTE, Format.BINARY, Format.BINARY_SPACED, Format.DATE, Format.DATE_TIME, Format.PASSWORD, Format.UON, Format.NONE);
 				break;
 			}
 			case ARRAY: {
@@ -375,6 +375,26 @@ public class HttpPartSchema {
 			errors.add("Cannot specify exclusiveMinimum with minimum.");
 		if (required != null && required && _default != null)
 			errors.add("Cannot specify a default value on a required value.");
+		if (minLength != null && maxLength != null && maxLength < minLength)
+			errors.add("maxLength cannot be less than minLength.");
+		if (minimum != null && maximum != null && maximum.doubleValue() < minimum.doubleValue())
+			errors.add("maximum cannot be less than minimum.");
+		if (minItems != null && maxItems != null && maxItems < minItems)
+			errors.add("maxItems cannot be less than minItems.");
+		if (minProperties != null && maxProperties != null && maxProperties < minProperties)
+			errors.add("maxProperties cannot be less than minProperties.");
+		if (minLength != null && minLength < 0)
+			errors.add("minLength cannot be less than zero.");
+		if (maxLength != null && maxLength < 0)
+			errors.add("maxLength cannot be less than zero.");
+		if (minItems != null && minItems < 0)
+			errors.add("minItems cannot be less than zero.");
+		if (maxItems != null && maxItems < 0)
+			errors.add("maxItems cannot be less than zero.");
+		if (minProperties != null && minProperties < 0)
+			errors.add("minProperties cannot be less than zero.");
+		if (maxProperties != null && maxProperties < 0)
+			errors.add("maxProperties cannot be less than zero.");
 
 		if (! errors.isEmpty())
 			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t"));
@@ -819,6 +839,18 @@ public class HttpPartSchema {
 		}
 
 		/**
+		 * <mk>required</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>required(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder required() {
+			return required(true);
+		}
+
+		/**
 		 * <mk>type</mk> field.
 		 *
 		 * <p>
@@ -918,6 +950,10 @@ public class HttpPartSchema {
 		 * 		<br>Only valid with type <js>"string"</js>.
 		 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
 		 * 	<li>
+		 * 		<js>"binary-spaced"</js> - Hexadecimal encoded octets, spaced (e.g. <js>"00 FF"</js>).
+		 * 		<br>Only valid with type <js>"string"</js>.
+		 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+		 * 	<li>
 		 * 		<js>"date"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
 		 * 		<br>Only valid with type <js>"string"</js>.
 		 * 	<li>
@@ -984,6 +1020,18 @@ public class HttpPartSchema {
 			if (value != null)
 				allowEmptyValue = value;
 			return this;
+		}
+
+		/**
+		 * <mk>allowEmptyValue</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>allowEmptyValue(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder allowEmptyValue() {
+			return allowEmptyValue(true);
 		}
 
 		/**
@@ -1170,6 +1218,18 @@ public class HttpPartSchema {
 		}
 
 		/**
+		 * <mk>exclusiveMaximum</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>exclusiveMaximum(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMaximum() {
+			return exclusiveMaximum(true);
+		}
+
+		/**
 		 * <mk>minimum</mk> field.
 		 *
 		 * <p>
@@ -1226,6 +1286,18 @@ public class HttpPartSchema {
 			if (value != null)
 				this.exclusiveMinimum = value;
 			return this;
+		}
+
+		/**
+		 * <mk>exclusiveMinimum</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>exclusiveMinimum(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMinimum() {
+			return exclusiveMinimum(true);
 		}
 
 		/**
@@ -1413,6 +1485,18 @@ public class HttpPartSchema {
 		}
 
 		/**
+		 * <mk>uniqueItems</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>uniqueItems(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder uniqueItems() {
+			return uniqueItems(true);
+		}
+
+		/**
 		 * Identifies whether an item should be skipped if it's empty.
 		 *
 		 * @param value
@@ -1424,6 +1508,18 @@ public class HttpPartSchema {
 			if (value != null)
 				this.skipIfEmpty = value;
 			return this;
+		}
+
+		/**
+		 * Identifies whether an item should be skipped if it's empty.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>skipIfEmpty(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder skipIfEmpty() {
+			return skipIfEmpty(true);
 		}
 
 		/**
@@ -1443,13 +1539,28 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * 	<br>Ignored if value is <jk>null</jk> or an empty set.
 		 * @return This object (for method chaining).
 		 */
 		public Builder _enum(Set<String> value) {
-			if (value != null)
+			if (value != null && ! value.isEmpty())
 				this._enum = value;
 			return this;
+		}
+
+		/**
+		 * <mk>_enum</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #_enum(Set)} but takes in a var-args array.
+		 *
+		 * @param values
+		 * 	The new values for this property.
+		 * 	<br>Ignored if value is empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder _enum(String...values) {
+			return _enum(new ASet<String>().appendAll(values));
 		}
 
 		/**
@@ -1593,12 +1704,25 @@ public class HttpPartSchema {
 		/**
 		 * Disables Swagger schema usage validation checking.
 		 *
-		 * @param noValidate Specify <jk>true</jk> to prevent {@link ContextRuntimeException} from being thrown if invalid Swagger usage was detected.
+		 * @param value Specify <jk>true</jk> to prevent {@link ContextRuntimeException} from being thrown if invalid Swagger usage was detected.
 		 * @return This object (for method chaining).
 		 */
-		public Builder noValidate(boolean noValidate) {
-			this.noValidate = noValidate;
+		public Builder noValidate(Boolean value) {
+			if (value != null)
+				this.noValidate = value;
 			return this;
+		}
+
+		/**
+		 * Disables Swagger schema usage validation checking.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>noValidate(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder noValidate() {
+			return noValidate(true);
 		}
 	}
 
@@ -1742,6 +1866,11 @@ public class HttpPartSchema {
 		 * Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
 		 */
 		BINARY,
+
+		/**
+		 * Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
+		 */
+		BINARY_SPACED,
 
 		/**
 		 * An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
