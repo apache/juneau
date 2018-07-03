@@ -288,7 +288,7 @@ public class HttpPartSchema {
 				break;
 			}
 			case BOOLEAN: {
-				notAllowed.appendIf(_enum != null, "_enum");
+				notAllowed.appendIf(! _enum.isEmpty(), "_enum");
 				notAllowed.appendIf(properties != null, "properties");
 				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
 				notAllowed.appendIf(exclusiveMaximum != null, "exclusiveMaximum");

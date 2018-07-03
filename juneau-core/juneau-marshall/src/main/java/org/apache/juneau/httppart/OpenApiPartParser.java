@@ -78,6 +78,29 @@ import org.apache.juneau.parser.*;
  * 			</ul>
  * 		</td>
  * 	</tr>
+ * 	<tr>
+ * 		<td ><code>boolean</code></td>
+ * 		<td>
+ * 			&nbsp;
+ * 		</td>
+ * 		<td>
+ * 			<ul>
+ * 				<li><jk>boolean</code>
+ * 				<li>{@link Boolean}
+ * 				<li>{@link String}
+ * 				<li>{@link Object} - Returns a {@link Boolean}.
+ * 			</ul>
+ * 		</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td ><code>array</code></td>
+ * 		<td>
+ * 			&nbsp;
+ * 		</td>
+ * 		<td>
+ * 			Arrays or Collections of anything on this list.
+ * 		</td>
+ * 	</tr>
  * </table>
  */
 public class OpenApiPartParser extends UonPartParser {
@@ -291,7 +314,7 @@ public class OpenApiPartParser extends UonPartParser {
 				case BOOLEAN: {
 					if (type.isObject())
 						type = (ClassMeta<T>)getClassMeta(Boolean.class);
-					return super.parse(partType, schema, in, type);
+					return super.parse(partType, schema, toLowerCase(in), type);
 				}
 				case INTEGER: {
 					if (type.isObject()) {

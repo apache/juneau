@@ -2388,4 +2388,14 @@ public final class StringUtils {
 		sb.append("\\E");
 		return Pattern.compile(sb.toString());
 	}
+
+	/**
+	 * Null-safe {@link String#toLowerCase()}.
+	 *
+	 * @param s The string to convert to lower case.
+	 * @return The string converted to lower case, or <jk>null</jk> if the string was null.
+	 */
+	public static String toLowerCase(String s) {
+		return s == null ? null : s.toLowerCase();
+	}
 }
