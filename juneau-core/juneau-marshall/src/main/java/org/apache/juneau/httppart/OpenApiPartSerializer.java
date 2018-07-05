@@ -220,6 +220,8 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 		}
 
 		schema.validateInput(out);
+		if (out == null)
+			out = schema.getDefault();
 		return out;
 	}
 

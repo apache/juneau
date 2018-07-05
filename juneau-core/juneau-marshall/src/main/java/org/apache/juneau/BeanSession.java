@@ -511,6 +511,10 @@ public class BeanSession extends Session {
 					return (T)toArray(type, Arrays.asList((Object[])value));
 				else if (startsWith(value.toString(), '['))
 					return (T)toArray(type, new ObjectList(value.toString()).setBeanSession(this));
+				else if (type.hasTransformFrom(vt))
+					return type.transformFrom(value);
+				else if (vt.hasTransformTo(type))
+					return vt.transformTo(value, type);
 				else
 					return (T)toArray(type, new ObjectList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
 			}
@@ -681,8 +685,11 @@ public class BeanSession extends Session {
 					return (T)((Calendar)value).getTime();
 			}
 
-			if (type.hasTransformForObject(value))
-				return type.transform(value);
+			if (type.hasTransformFrom(vt))
+				return type.transformFrom(value);
+
+			if (vt.hasTransformTo(type))
+				return vt.transformTo(value, type);
 
 			if (type.isBean())
 				return newBeanMap(type.getInnerClass()).load(value.toString()).getBean();

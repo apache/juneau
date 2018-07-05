@@ -43,7 +43,7 @@ import org.apache.juneau.parser.*;
  * 				<li>{@link Reader} - Returns a {@link InputStreamReader} wrapped around a {@link ByteArrayInputStream}.
  * 				<li>{@link String} - Constructed using {@link String#String(byte[])}.
  * 				<li>{@link Object} - Returns the default <code><jk>byte</jk>[]</code>.
- * 				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors or static create methods).
+ * 				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors, static create methods, or toX() instance methods).
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -60,7 +60,7 @@ import org.apache.juneau.parser.*;
  * 				<li>{@link GregorianCalendar}
  * 				<li>{@link String} - Converted using {@link Calendar#toString()}.
  * 				<li>{@link Object} - Returns the default {@link Calendar}.
- * 				<li>Any POJO transformable from a {@link Calendar} (via constructors or static create methods).
+ * 				<li>Any POJO transformable from a {@link Calendar} (via constructors, static create methods, or toX() instance methods).
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -80,7 +80,7 @@ import org.apache.juneau.parser.*;
  * 			<ul>
  * 				<li>{@link String} (default)
  * 				<li>{@link Object} - Returns the default {@link String}.
- * 				<li>Any POJO transformable from a {@link String} (via constructors or static create methods).
+ * 				<li>Any POJO transformable from a {@link String} (via constructors, static create methods, or toX() instance methods).
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -95,7 +95,7 @@ import org.apache.juneau.parser.*;
  * 				<li><jk>boolean</code>
  * 				<li>{@link String}
  * 				<li>{@link Object} - Returns the default {@link Boolean}.
- * 				<li>Any POJO transformable from a {@link Boolean} (via constructors or static create methods).
+ * 				<li>Any POJO transformable from a {@link Boolean} (via constructors, static create methods, or toX() instance methods).
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -333,7 +333,7 @@ public class OpenApiPartParser extends UonPartParser {
 				} else {
 					o = ss;
 				}
-				if (type.hasTransform(schema.getParsedType().getInnerClass()))
+				if (type.hasTransformFrom(schema.getParsedType()) || schema.getParsedType().hasTransformTo(type))
 					return toType(toType(o, schema.getParsedType()), type);
 				return toType(o, type);
 

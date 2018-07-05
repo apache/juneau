@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -159,67 +160,64 @@ public class OpenApiPartSerializerTest {
 		}
 	}
 
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// type = string
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	public static class C1 {
-//		private String f;
-//		public C1(byte[] b) {
-//			f = "C1-" + new String(b);
-//		}
-//		@Override
-//		public String toString() {
-//			return f;
-//		}
-//	}
-//
-//	public static class C2 {
-//		private String f;
-//		public C2(String s) {
-//			f = "C2-" + s;
-//		}
-//		@Override
-//		public String toString() {
-//			return f;
-//		}
-//	}
-//
-//	public static class C3 {
-//		private String f;
-//		public C3(String[] in) {
-//			f = "C3-" + JsonSerializer.DEFAULT_LAX.toString(in);
-//		}
-//		@Override
-//		public String toString() {
-//			return f;
-//		}
-//	}
-//
-//
-//	@Test
-//	public void c01_stringType_simple() throws Exception {
-//		HttpPartSchema ps = schema("string").build();
-//		assertEquals("foo", s.serialize(ps, "foo", String.class));
-//	}
-//
-//	@Test
-//	public void c02_stringType_default() throws Exception {
-//		HttpPartSchema ps = schema("string")._default("x").build();
-//		assertEquals("foo", s.serialize(ps, "foo", String.class));
-//		assertEquals("x", s.serialize(ps, null, String.class));
-//	}
-//
-//	@Test
-//	public void c03_stringType_byteFormat() throws Exception {
-//		HttpPartSchema ps = schema("string", "byte").build();
-//		String in = base64Encode("foo".getBytes());
-//		assertEquals("foo", s.serialize(ps, in, String.class));
-//		assertEquals("foo", IOUtils.read(s.serialize(ps, in, InputStream.class)));
-//		assertEquals("foo", IOUtils.read(s.serialize(ps, in, Reader.class)));
-//		assertEquals("C1-foo", s.serialize(ps, in, C1.class).toString());
-//	}
-//
+	//-----------------------------------------------------------------------------------------------------------------
+	// type = string
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class C1 {
+		private byte[] f;
+		public C1(byte[] f) {
+			this.f = f;
+		}
+		public byte[] toByteArray() {
+			return f;
+		}
+	}
+
+	public static class C2 {
+		private String f;
+		public C2(String s) {
+			f = "C2-" + s;
+		}
+		@Override
+		public String toString() {
+			return f;
+		}
+	}
+
+	public static class C3 {
+		private String[] f;
+		public C3(String...in) {
+			f = in;
+		}
+		public String[] toStringArray() {
+			return f;
+		}
+	}
+
+
+	@Test
+	public void c01_stringType_simple() throws Exception {
+		HttpPartSchema ps = schema("string").build();
+		assertEquals("foo", s.serialize(ps, "foo"));
+	}
+
+	@Test
+	public void c02_stringType_default() throws Exception {
+		HttpPartSchema ps = schema("string")._default("x").build();
+		assertEquals("foo", s.serialize(ps, "foo"));
+		assertEquals("x", s.serialize(ps, null));
+	}
+
+	@Test
+	public void c03_stringType_byteFormat() throws Exception {
+		HttpPartSchema ps = schema("string", "byte").build();
+		byte[] foob = "foo".getBytes();
+		String expected = base64Encode(foob);
+		assertEquals(expected, s.serialize(ps, foob));
+		assertEquals(expected, s.serialize(ps, new C1(foob)).toString());
+	}
+
 //	@Test
 //	public void c04_stringType_binaryFormat() throws Exception {
 //		HttpPartSchema ps = schema("string", "binary").build();
@@ -311,7 +309,7 @@ public class OpenApiPartSerializerTest {
 //		assertObjectEquals("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']", s.serialize(ps, "foo,bar|baz", C3[].class));
 //		assertObjectEquals("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']", s.serialize(ps, "foo,bar|baz", List.class, C3.class));
 //	}
-//
+
 //	//-----------------------------------------------------------------------------------------------------------------
 //	// type = array
 //	//-----------------------------------------------------------------------------------------------------------------
@@ -1068,12 +1066,12 @@ public class OpenApiPartSerializerTest {
 	private static HttpPartSchemaBuilder schema() {
 		return HttpPartSchema.create();
 	}
-//
-//	private static HttpPartSchemaBuilder schema(String type) {
-//		return HttpPartSchema.create(type);
-//	}
-//
-//	private static HttpPartSchemaBuilder schema(String type, String format) {
-//		return HttpPartSchema.create(type, format);
-//	}
+
+	private static HttpPartSchemaBuilder schema(String type) {
+		return HttpPartSchema.create(type);
+	}
+
+	private static HttpPartSchemaBuilder schema(String type, String format) {
+		return HttpPartSchema.create(type, format);
+	}
 }

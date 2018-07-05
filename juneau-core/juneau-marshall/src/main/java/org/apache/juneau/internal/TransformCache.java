@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import java.util.concurrent.*;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ClassFlags.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -182,6 +183,24 @@ public class TransformCache {
 			}
 		}
 
+		if (t == null) {
+			for (Method m2 : getAllMethods(ic, false)) {
+				if (isAll(m2, PUBLIC, NOT_STATIC, HAS_NO_ARGS, NOT_DEPRECATED) && m2.getName().startsWith("to") && m2.getReturnType() == oc) {
+					final Method m3 = m2;
+					t = new Transform<I,O>() {
+						@Override
+						public O transform(Object outer, I in) {
+							try {
+								return (O)m3.invoke(in);
+							} catch (Exception e) {
+								throw new RuntimeException(e);
+							}
+						}
+					};
+					break;
+				}
+			}
+		}
 		if (t == null)
 			t = NULL;
 

@@ -119,7 +119,8 @@ public final class ClassMeta<T> implements Type {
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
 	private final Object example;                          // Example object.
-	private final Map<Class<?>,Transform<?,T>> transforms = new ConcurrentHashMap<>();
+	private final Map<Class<?>,Transform<?,T>> fromTransforms = new ConcurrentHashMap<>();
+	private final Map<Class<?>,Transform<T,?>> toTransforms = new ConcurrentHashMap<>();
 	private final Transform<Reader,T> readerTransform;
 	private final Transform<InputStream,T> inputStreamTransform;
 	private final Transform<String,T> stringTransform;
@@ -2081,7 +2082,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
 	 */
 	public boolean hasReaderTransform() {
-		return hasTransform(Reader.class);
+		return hasTransformFrom(Reader.class);
 	}
 
 	/**
@@ -2090,7 +2091,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
 	public Transform<Reader,T> getReaderTransform() {
-		return getTransform(Reader.class);
+		return getFromTransform(Reader.class);
 	}
 
 	/**
@@ -2099,7 +2100,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
 	 */
 	public boolean hasInputStreamTransform() {
-		return hasTransform(InputStream.class);
+		return hasTransformFrom(InputStream.class);
 	}
 
 	/**
@@ -2108,7 +2109,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
 	public Transform<InputStream,T> getInputStreamTransform() {
-		return getTransform(InputStream.class);
+		return getFromTransform(InputStream.class);
 	}
 
 	/**
@@ -2135,18 +2136,38 @@ public final class ClassMeta<T> implements Type {
 	 * @param c The class type to convert from.
 	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
 	 */
-	public boolean hasTransform(Class<?> c) {
-		return getTransform(c) != null;
+	public boolean hasTransformFrom(Class<?> c) {
+		return getFromTransform(c) != null;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class can be instantiated from the specified object.
+	 * Returns <jk>true</jk> if this class can be instantiated from the specified type.
 	 *
-	 * @param o The object to convert from.
-	 * @return <jk>true</jk> if this class can be instantiated from the specified object.
+	 * @param c The class type to convert from.
+	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
 	 */
-	public boolean hasTransformForObject(Object o) {
-		return getTransform(o.getClass()) != null;
+	public boolean hasTransformFrom(ClassMeta<?> c) {
+		return getFromTransform(c.getInnerClass()) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class can be transformed to the specified type.
+	 *
+	 * @param c The class type to convert from.
+	 * @return <jk>true</jk> if this class can be transformed to the specified type.
+	 */
+	public boolean hasTransformTo(Class<?> c) {
+		return getToTransform(c) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class can be transformed to the specified type.
+	 *
+	 * @param c The class type to convert from.
+	 * @return <jk>true</jk> if this class can be transformed to the specified type.
+	 */
+	public boolean hasTransformTo(ClassMeta<?> c) {
+		return getToTransform(c.getInnerClass()) != null;
 	}
 
 	/**
@@ -2156,9 +2177,33 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transformed object.
 	 */
 	@SuppressWarnings({"unchecked","rawtypes"})
-	public T transform(Object o) {
-		Transform t = getTransform(o.getClass());
+	public T transformFrom(Object o) {
+		Transform t = getFromTransform(o.getClass());
 		return (T)(t == null ? null : t.transform(o));
+	}
+
+	/**
+	 * Transforms the specified object into an instance of this class.
+	 *
+	 * @param o The object to transform.
+	 * @param c The class
+	 * @return The transformed object.
+	 */
+	@SuppressWarnings({"unchecked","rawtypes"})
+	public <O> O transformTo(Object o, Class<O> c) {
+		Transform t = getToTransform(c);
+		return (O)(t == null ? null : t.transform(o));
+	}
+
+	/**
+	 * Transforms the specified object into an instance of this class.
+	 *
+	 * @param o The object to transform.
+	 * @param c The class
+	 * @return The transformed object.
+	 */
+	public <O> O transformTo(Object o, ClassMeta<O> c) {
+		return transformTo(o, c.getInnerClass());
 	}
 
 	/**
@@ -2168,15 +2213,35 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <I> Transform<I,T> getTransform(Class<I> c) {
-		Transform t = transforms.get(c);
+	public <I> Transform<I,T> getFromTransform(Class<I> c) {
+		Transform t = fromTransforms.get(c);
 		if (t == TransformCache.NULL)
 			return null;
 		if (t == null) {
 			t = TransformCache.get(c, innerClass);
 			if (t == null)
 				t = TransformCache.NULL;
-			transforms.put(c, t);
+			fromTransforms.put(c, t);
+		}
+		return t == TransformCache.NULL ? null : t;
+	}
+
+	/**
+	 * Returns the transform for this class for creating instances from other object types.
+	 *
+	 * @param c The transform-from class.
+	 * @return The transform, or <jk>null</jk> if no such transform exists.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <O> Transform<T,O> getToTransform(Class<O> c) {
+		Transform t = toTransforms.get(c);
+		if (t == TransformCache.NULL)
+			return null;
+		if (t == null) {
+			t = TransformCache.get(innerClass, c);
+			if (t == null)
+				t = TransformCache.NULL;
+			toTransforms.put(c, t);
 		}
 		return t == TransformCache.NULL ? null : t;
 	}

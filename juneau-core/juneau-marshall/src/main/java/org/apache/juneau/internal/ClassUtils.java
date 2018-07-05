@@ -258,7 +258,7 @@ public final class ClassUtils {
 		for (ClassFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return false;
 					break;
 				case NOT_DEPRECATED:
@@ -266,7 +266,7 @@ public final class ClassUtils {
 						return false;
 					break;
 				case PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return false;
 					break;
 				case NOT_PUBLIC:
@@ -274,7 +274,7 @@ public final class ClassUtils {
 						return false;
 					break;
 				case STATIC:
-					if (! isStatic(x))
+					if (isNotStatic(x))
 						return false;
 					break;
 				case NOT_STATIC:
@@ -282,7 +282,7 @@ public final class ClassUtils {
 						return false;
 					break;
 				case ABSTRACT:
-					if (! isAbstract(x))
+					if (isNotAbstract(x))
 						return false;
 					break;
 				case NOT_ABSTRACT:
@@ -312,7 +312,7 @@ public final class ClassUtils {
 		for (ClassFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return false;
 					break;
 				case NOT_DEPRECATED:
@@ -320,15 +320,15 @@ public final class ClassUtils {
 						return false;
 					break;
 				case HAS_ARGS:
-					if (x.getParameterTypes().length == 0)
+					if (hasNoArgs(x))
 						return false;
 					break;
 				case HAS_NO_ARGS:
-					if (x.getParameterTypes().length != 0)
+					if (hasArgs(x))
 						return false;
 					break;
 				case PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return false;
 					break;
 				case NOT_PUBLIC:
@@ -336,7 +336,7 @@ public final class ClassUtils {
 						return false;
 					break;
 				case STATIC:
-					if (! isStatic(x))
+					if (isNotStatic(x))
 						return false;
 					break;
 				case NOT_STATIC:
@@ -344,7 +344,7 @@ public final class ClassUtils {
 						return false;
 					break;
 				case ABSTRACT:
-					if (! isAbstract(x))
+					if (isNotAbstract(x))
 						return false;
 					break;
 				case NOT_ABSTRACT:
@@ -372,7 +372,7 @@ public final class ClassUtils {
 		for (ClassFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return false;
 					break;
 				case NOT_DEPRECATED:
@@ -380,15 +380,15 @@ public final class ClassUtils {
 						return false;
 					break;
 				case HAS_ARGS:
-					if (x.getParameterTypes().length == 0)
+					if (hasNoArgs(x))
 						return false;
 					break;
 				case HAS_NO_ARGS:
-					if (x.getParameterTypes().length != 0)
+					if (hasArgs(x))
 						return false;
 					break;
 				case PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return false;
 					break;
 				case NOT_PUBLIC:
@@ -420,7 +420,7 @@ public final class ClassUtils {
 		for (ClassFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return false;
 					break;
 				case NOT_DEPRECATED:
@@ -432,7 +432,7 @@ public final class ClassUtils {
 				case HAS_NO_ARGS:
 					break;
 				case PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return false;
 					break;
 				case NOT_PUBLIC:
@@ -440,7 +440,7 @@ public final class ClassUtils {
 						return false;
 					break;
 				case STATIC:
-					if (! isStatic(x))
+					if (isNotStatic(x))
 						return false;
 					break;
 				case NOT_STATIC:
@@ -448,7 +448,7 @@ public final class ClassUtils {
 						return false;
 					break;
 				case TRANSIENT:
-					if (! isTransient(x))
+					if (isNotTransient(x))
 						return false;
 					break;
 				case NOT_TRANSIENT:
@@ -480,7 +480,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return true;
 					break;
 				case PUBLIC:
@@ -488,7 +488,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return true;
 					break;
 				case STATIC:
@@ -496,7 +496,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_STATIC:
-					if (! isStatic(x))
+					if (isNotStatic(x))
 						return true;
 					break;
 				case ABSTRACT:
@@ -504,7 +504,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_ABSTRACT:
-					if (! isAbstract(x))
+					if (isNotAbstract(x))
 						return true;
 					break;
 				case TRANSIENT:
@@ -534,15 +534,15 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return true;
 					break;
 				case HAS_ARGS:
-					if (x.getParameterTypes().length != 0)
+					if (hasArgs(x))
 						return true;
 					break;
 				case HAS_NO_ARGS:
-					if (x.getParameterTypes().length == 0)
+					if (hasNoArgs(x))
 						return true;
 					break;
 				case PUBLIC:
@@ -550,7 +550,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return true;
 					break;
 				case STATIC:
@@ -558,7 +558,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_STATIC:
-					if (! isStatic(x))
+					if (isNotStatic(x))
 						return true;
 					break;
 				case ABSTRACT:
@@ -566,7 +566,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_ABSTRACT:
-					if (! isAbstract(x))
+					if (isNotAbstract(x))
 						return true;
 					break;
 				case TRANSIENT:
@@ -594,15 +594,15 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return true;
 					break;
 				case HAS_ARGS:
-					if (x.getParameterTypes().length != 0)
+					if (hasArgs(x))
 						return true;
 					break;
 				case HAS_NO_ARGS:
-					if (x.getParameterTypes().length == 0)
+					if (hasNoArgs(x))
 						return true;
 					break;
 				case PUBLIC:
@@ -610,7 +610,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return true;
 					break;
 				case STATIC:
@@ -642,7 +642,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_DEPRECATED:
-					if (! isDeprecated(x))
+					if (isNotDeprecated(x))
 						return true;
 					break;
 				case PUBLIC:
@@ -650,7 +650,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_PUBLIC:
-					if (! isPublic(x))
+					if (isNotPublic(x))
 						return true;
 					break;
 				case STATIC:
@@ -658,7 +658,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_STATIC:
-					if (! isStatic(x))
+					if (isNotStatic(x))
 						return true;
 					break;
 				case TRANSIENT:
@@ -666,7 +666,7 @@ public final class ClassUtils {
 						return true;
 					break;
 				case NOT_TRANSIENT:
-					if (! isTransient(x))
+					if (isNotTransient(x))
 						return true;
 					break;
 				case HAS_ARGS:
@@ -718,7 +718,27 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified method has the specified number of arguments.
+	 * Returns <jk>true</jk> if the specified constructor has one or more arguments.
+	 *
+	 * @param x The method to test.
+	 * @return <jk>true</jk> if the specified constructor has one or more arguments.
+	 */
+	public static boolean hasArgs(Constructor<?> x) {
+		return x.getParameterTypes().length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified constructor has zero arguments.
+	 *
+	 * @param x The method to test.
+	 * @return <jk>true</jk> if the specified constructor has zero arguments.
+	 */
+	public static boolean hasNoArgs(Constructor<?> x) {
+		return x.getParameterTypes().length == 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified constructor has the specified number of arguments.
 	 *
 	 * @param x The method to test.
 	 * @param number The number of expected arguments.
@@ -762,54 +782,13 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Class<?> c) {
-		return c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Method m) {
-		return m.isAnnotationPresent(Deprecated.class);
-
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param c The constructor.
-	 * @return <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Constructor<?> c) {
-		return c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Field f) {
-		return f.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified class has the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @param c The class.
 	 * @return <jk>true</jk> if the specified class has the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public static boolean isNotDeprecated(Class<?> c) {
-		return ! c.isAnnotationPresent(Deprecated.class);
+	public static boolean isDeprecated(Class<?> c) {
+		return c.isAnnotationPresent(Deprecated.class);
 	}
 
 	/**
@@ -818,8 +797,8 @@ public final class ClassUtils {
 	 * @param m The method.
 	 * @return <jk>true</jk> if the specified method has the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public static boolean isNotDeprecated(Method m) {
-		return ! m.isAnnotationPresent(Deprecated.class);
+	public static boolean isDeprecated(Method m) {
+		return m.isAnnotationPresent(Deprecated.class);
 
 	}
 
@@ -829,8 +808,59 @@ public final class ClassUtils {
 	 * @param c The constructor.
 	 * @return <jk>true</jk> if the specified constructor has the {@link Deprecated @Deprecated} annotation on it.
 	 */
+	public static boolean isDeprecated(Constructor<?> c) {
+		return c.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified field has the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field has the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isDeprecated(Field f) {
+		return f.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @param c The class.
+	 * @return <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isNotDeprecated(Class<?> c) {
+		return ! c.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @param m The method.
+	 * @return <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isNotDeprecated(Method m) {
+		return ! m.isAnnotationPresent(Deprecated.class);
+
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @param c The constructor.
+	 * @return <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
 	public static boolean isNotDeprecated(Constructor<?> c) {
 		return ! c.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public static boolean isNotDeprecated(Field f) {
+		return ! f.isAnnotationPresent(Deprecated.class);
 	}
 
 	/**
@@ -844,6 +874,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified class is not public.
+	 *
+	 * @param c The class.
+	 * @return <jk>true</jk> if the specified class is not public.
+	 */
+	public static boolean isNotPublic(Class<?> c) {
+		return ! Modifier.isPublic(c.getModifiers());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified class is public.
 	 *
 	 * @param c The class.
@@ -851,6 +891,16 @@ public final class ClassUtils {
 	 */
 	public static boolean isStatic(Class<?> c) {
 		return Modifier.isStatic(c.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified class is not static.
+	 *
+	 * @param c The class.
+	 * @return <jk>true</jk> if the specified class is not static.
+	 */
+	public static boolean isNotStatic(Class<?> c) {
+		return ! Modifier.isStatic(c.getModifiers());
 	}
 
 	/**
@@ -864,6 +914,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified class is not abstract.
+	 *
+	 * @param c The class.
+	 * @return <jk>true</jk> if the specified class is not abstract.
+	 */
+	public static boolean isNotAbstract(Class<?> c) {
+		return ! Modifier.isAbstract(c.getModifiers());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified method is abstract.
 	 *
 	 * @param m The method.
@@ -871,6 +931,16 @@ public final class ClassUtils {
 	 */
 	public static boolean isAbstract(Method m) {
 		return Modifier.isAbstract(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified method is not abstract.
+	 *
+	 * @param m The method.
+	 * @return <jk>true</jk> if the specified method is not abstract.
+	 */
+	public static boolean isNotAbstract(Method m) {
+		return ! Modifier.isAbstract(m.getModifiers());
 	}
 
 	/**
@@ -884,6 +954,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified method is not public.
+	 *
+	 * @param m The method.
+	 * @return <jk>true</jk> if the specified method is not public.
+	 */
+	public static boolean isNotPublic(Method m) {
+		return ! Modifier.isPublic(m.getModifiers());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified field is public.
 	 *
 	 * @param f The field.
@@ -891,6 +971,16 @@ public final class ClassUtils {
 	 */
 	public static boolean isPublic(Field f) {
 		return Modifier.isPublic(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified field is not public.
+	 *
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field is not public.
+	 */
+	public static boolean isNotPublic(Field f) {
+		return ! Modifier.isPublic(f.getModifiers());
 	}
 
 	/**
@@ -904,6 +994,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified method is not static.
+	 *
+	 * @param m The method.
+	 * @return <jk>true</jk> if the specified method is not static.
+	 */
+	public static boolean isNotStatic(Method m) {
+		return !  Modifier.isStatic(m.getModifiers());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified field is static.
 	 *
 	 * @param f The field.
@@ -911,6 +1011,16 @@ public final class ClassUtils {
 	 */
 	public static boolean isStatic(Field f) {
 		return Modifier.isStatic(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified field is not static.
+	 *
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field is not static.
+	 */
+	public static boolean isNotStatic(Field f) {
+		return ! Modifier.isStatic(f.getModifiers());
 	}
 
 	/**
@@ -924,6 +1034,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified constructor is not public.
+	 *
+	 * @param c The constructor.
+	 * @return <jk>true</jk> if the specified constructor is not public.
+	 */
+	public static boolean isNotPublic(Constructor<?> c) {
+		return ! Modifier.isPublic(c.getModifiers());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified field is transient.
 	 *
 	 * @param f The field.
@@ -931,6 +1051,36 @@ public final class ClassUtils {
 	 */
 	public static boolean isTransient(Field f) {
 		return Modifier.isTransient(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified field is not transient.
+	 *
+	 * @param f The field.
+	 * @return <jk>true</jk> if the specified field is not transient.
+	 */
+	public static boolean isNotTransient(Field f) {
+		return ! Modifier.isTransient(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified method has one or more arguments.
+	 *
+	 * @param x The method to test.
+	 * @return <jk>true</jk> if the specified method has one or more arguments.
+	 */
+	public static boolean hasArgs(Method x) {
+		return x.getParameterTypes().length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified method has zero arguments.
+	 *
+	 * @param x The method to test.
+	 * @return <jk>true</jk> if the specified method has zero arguments.
+	 */
+	public static boolean hasNoArgs(Method x) {
+		return x.getParameterTypes().length == 0;
 	}
 
 	/**
