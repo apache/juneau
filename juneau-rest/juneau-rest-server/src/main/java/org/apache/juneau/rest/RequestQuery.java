@@ -592,7 +592,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		try {
 			T t = parse(parser, schema, getString(name), cm);
 			return (t == null ? def : t);
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			throw new BadRequest(e, "Validation failed on query parameter ''{0}''. ", name);
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse query parameter ''{0}''.", name) ;
@@ -621,7 +621,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
 				return (T)c;
 			}
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			throw new BadRequest(e, "Validation failed on query parameter ''{0}''. ", name);
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse query parameter ''{0}''.", name) ;
@@ -631,7 +631,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		throw new InternalServerError("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
 	}
 
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationParseException, ParseException {
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
 		return parser.parse(HttpPartType.QUERY, schema, val, c);

@@ -71,7 +71,7 @@ public interface HttpPartSerializer {
 	 * @param value The value being serialized.
 	 * @return The serialized value.
 	 * @throws SerializeException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationSerializeException If the input or resulting HTTP part object fails schema validation.
+	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationSerializeException;
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException;
 }

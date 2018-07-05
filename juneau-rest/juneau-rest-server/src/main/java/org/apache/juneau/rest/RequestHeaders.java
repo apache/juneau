@@ -395,7 +395,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		try {
 			T t = parse(parser, schema, getString(name), cm);
 			return (t == null ? def : t);
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			throw new BadRequest(e, "Validation failed on header ''{0}''. ", name);
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse header ''{0}''.", name) ;
@@ -405,7 +405,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationParseException, ParseException {
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
 		return parser.parse(HttpPartType.HEADER, schema, val, cm);

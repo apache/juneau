@@ -211,7 +211,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				try {
 					uriBuilder.addParameter(name, serializer.serialize(HttpPartType.QUERY, schema, value));
-				} catch (SerializeException e) {
+				} catch (SerializeException | SchemaValidationException e) {
 					throw new RestCallException(e);
 				}
 		} else if (value instanceof NameValuePairs) {
@@ -446,7 +446,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				throw new RestCallException("Path variable {"+name+"} was not found in path.");
 			try {
 				uriBuilder.setPath(path.replace(var, serializer.serialize(HttpPartType.PATH, schema, value)));
-			} catch (SerializeException e) {
+			} catch (SerializeException | SchemaValidationException e) {
 				throw new RestCallException(e);
 			}
 		} else if (value instanceof NameValuePairs) {
@@ -588,7 +588,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				try {
 					request.setHeader(name, serializer.serialize(HttpPartType.HEADER, schema, value));
-				} catch (SerializeException e) {
+				} catch (SerializeException | SchemaValidationException e) {
 					throw new RestCallException(e);
 				}
 		} else if (value instanceof NameValuePairs) {

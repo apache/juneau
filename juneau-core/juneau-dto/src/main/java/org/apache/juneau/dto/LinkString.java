@@ -20,6 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -119,7 +120,11 @@ public class LinkString implements Comparable<LinkString> {
 	 */
 	public LinkString uri(String uri, Object...args) {
 		for (int i = 0; i < args.length; i++)
-			args[i] = SimpleUonPartSerializer.DEFAULT.serialize(HttpPartType.PATH, args[i]);
+			try {
+				args[i] = SimpleUonPartSerializer.DEFAULT.serialize(HttpPartType.PATH, args[i]);
+			} catch (SchemaValidationException | SerializeException e) {
+				throw new RuntimeException(e);
+			}
 		this.uri = java.net.URI.create(format(uri, args));
 		return this;
 	}

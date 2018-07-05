@@ -282,8 +282,7 @@ public @interface Body {
 	 * Determines whether the body is mandatory.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>

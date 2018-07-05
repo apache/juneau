@@ -19,7 +19,7 @@ import org.apache.juneau.parser.ParseException;
 /**
  * Exception thrown when an HTTP part fails schema validation during parsing.
  */
-public class SchemaValidationParseException extends ParseException {
+public class SchemaValidationException extends ParseException {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,7 +28,7 @@ public class SchemaValidationParseException extends ParseException {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public SchemaValidationParseException(String message, Object...args) {
+	public SchemaValidationException(String message, Object...args) {
 		super(message, args);
 	}
 }

@@ -311,7 +311,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(exclusiveMaximum != null, "exclusiveMaximum");
 				notAllowed.appendIf(exclusiveMinimum != null, "exclusiveMinimum");
 				notAllowed.appendIf(uniqueItems != null, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NONE, "collectionFormat");
+				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.appendIf(items != null, "items");
 				notAllowed.appendIf(maximum != null, "maximum");
 				notAllowed.appendIf(minimum != null, "minimum");
@@ -319,7 +319,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(maxItems != null, "maxItems");
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.BYTE, Format.BINARY, Format.BINARY_SPACED, Format.DATE, Format.DATE_TIME, Format.PASSWORD, Format.UON, Format.NONE);
+				invalidFormat = ! format.isOneOf(Format.BYTE, Format.BINARY, Format.BINARY_SPACED, Format.DATE, Format.DATE_TIME, Format.PASSWORD, Format.UON, Format.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
@@ -335,7 +335,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(minLength != null, "minLength");
 				notAllowed.appendIf(maxProperties != null, "maxProperties");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NONE, Format.UON);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
 				break;
 			}
 			case BOOLEAN: {
@@ -345,7 +345,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(exclusiveMaximum != null, "exclusiveMaximum");
 				notAllowed.appendIf(exclusiveMinimum != null, "exclusiveMinimum");
 				notAllowed.appendIf(uniqueItems != null, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NONE, "collectionFormat");
+				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.appendIf(pattern != null, "pattern");
 				notAllowed.appendIf(items != null, "items");
 				notAllowed.appendIf(maximum != null, "maximum");
@@ -357,7 +357,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minLength != null, "minLength");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NONE);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT);
 				break;
 			}
 			case FILE: {
@@ -367,7 +367,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(properties != null, "properties");
 				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
 				notAllowed.appendIf(uniqueItems != null, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NONE, "collectionFormat");
+				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.appendIf(pattern != null, "pattern");
 				notAllowed.appendIf(items != null, "items");
 				notAllowed.appendIf(maxItems != null, "maxItems");
@@ -376,14 +376,14 @@ public class HttpPartSchema {
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minLength != null, "minLength");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NONE, Format.INT32, Format.INT64);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.INT32, Format.INT64);
 				break;
 			}
 			case NUMBER: {
 				notAllowed.appendIf(properties != null, "properties");
 				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
 				notAllowed.appendIf(uniqueItems != null, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NONE, "collectionFormat");
+				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.appendIf(pattern != null, "pattern");
 				notAllowed.appendIf(items != null, "items");
 				notAllowed.appendIf(maxItems != null, "maxItems");
@@ -392,14 +392,14 @@ public class HttpPartSchema {
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minLength != null, "minLength");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NONE, Format.FLOAT, Format.DOUBLE);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.FLOAT, Format.DOUBLE);
 				break;
 			}
 			case OBJECT: {
 				notAllowed.appendIf(exclusiveMaximum != null, "exclusiveMaximum");
 				notAllowed.appendIf(exclusiveMinimum != null, "exclusiveMinimum");
 				notAllowed.appendIf(uniqueItems != null, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NONE, "collectionFormat");
+				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.appendIf(pattern != null, "pattern");
 				notAllowed.appendIf(items != null, "items");
 				notAllowed.appendIf(maximum != null, "maximum");
@@ -409,7 +409,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(maxLength != null, "maxLength");
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minLength != null, "minLength");
-				invalidFormat = ! format.isOneOf(Format.NONE, Format.UON);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
 				break;
 			}
 			default:
@@ -446,7 +446,7 @@ public class HttpPartSchema {
 			errors.add("minProperties cannot be less than zero.");
 		if (maxProperties != null && maxProperties < 0)
 			errors.add("maxProperties cannot be less than zero.");
-		if (type == ARRAY && items != null && items.getType() == OBJECT && (format != UON && format != Format.NONE))
+		if (type == ARRAY && items != null && items.getType() == OBJECT && (format != UON && format != Format.NO_FORMAT))
 			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
@@ -491,7 +491,7 @@ public class HttpPartSchema {
 		/**
 		 * Not specified.
 		 */
-		NONE;
+		NO_COLLECTION_FORMAT;
 
 		static CollectionFormat fromString(String value) {
 
@@ -547,7 +547,7 @@ public class HttpPartSchema {
 		/**
 		 * Not specified.
 		 */
-		NONE;
+		NO_TYPE;
 
 		static Type fromString(String value) {
 			return valueOf(value.toUpperCase());
@@ -622,7 +622,7 @@ public class HttpPartSchema {
 		/**
 		 * Not specified.
 		 */
-		NONE;
+		NO_FORMAT;
 
 		static Format fromString(String value) {
 			value = value.toUpperCase().replace('-','_');
@@ -751,7 +751,7 @@ public class HttpPartSchema {
 	 * @see HttpPartSchemaBuilder#format(String)
 	 */
 	public Type getType(ClassMeta<?> cm) {
-		if (type != Type.NONE)
+		if (type != Type.NO_TYPE)
 			return type;
 		if (cm.isMapOrBean())
 			return Type.OBJECT;
@@ -981,22 +981,22 @@ public class HttpPartSchema {
 	 *
 	 * @param in The input.
 	 * @return The same object passed in.
-	 * @throws SchemaValidationParseException if the specified pre-parsed input does not validate against this schema.
+	 * @throws SchemaValidationException if the specified pre-parsed input does not validate against this schema.
 	 */
-	public String validateInput(String in) throws SchemaValidationParseException {
+	public String validateInput(String in) throws SchemaValidationException {
 		if (! isValidRequired(in))
-			throw new SchemaValidationParseException("No value specified.");
+			throw new SchemaValidationException("No value specified.");
 		if (in != null) {
 			if (! isValidAllowEmpty(in))
-				throw new SchemaValidationParseException("Empty value not allowed.");
+				throw new SchemaValidationException("Empty value not allowed.");
 			if (! isValidPattern(in))
-				throw new SchemaValidationParseException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
+				throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
 			if (! isValidEnum(in))
-				throw new SchemaValidationParseException("Value does not match one of the expected values.  Must be one of the following: {0}", _enum);
+				throw new SchemaValidationException("Value does not match one of the expected values.  Must be one of the following: {0}", _enum);
 			if (! isValidMaxLength(in))
-				throw new SchemaValidationParseException("Maximum length of value exceeded.");
+				throw new SchemaValidationException("Maximum length of value exceeded.");
 			if (! isValidMinLength(in))
-				throw new SchemaValidationParseException("Minimum length of value not met.");
+				throw new SchemaValidationException("Minimum length of value not met.");
 		}
 		return in;
 	}
@@ -1007,13 +1007,13 @@ public class HttpPartSchema {
 	 * @param o The parsed output.
 	 * @param bc The bean context used to detect POJO types.
 	 * @return The same object passed in.
-	 * @throws SchemaValidationParseException if the specified parsed output does not validate against this schema.
+	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
 	@SuppressWarnings("rawtypes")
-	public Object validateOutput(Object o, BeanContext bc) throws SchemaValidationParseException {
+	public Object validateOutput(Object o, BeanContext bc) throws SchemaValidationException {
 		if (o == null) {
 			if (! isValidRequired(o))
-				throw new SchemaValidationParseException("Required value not provided.");
+				throw new SchemaValidationException("Required value not provided.");
 			return o;
 		}
 		ClassMeta<?> cm = bc.getClassMetaForObject(o);
@@ -1021,11 +1021,11 @@ public class HttpPartSchema {
 			case ARRAY: {
 				if (cm.isArray()) {
 					if (! isValidMinItems(o))
-						throw new SchemaValidationParseException("Minimum number of items not met.");
+						throw new SchemaValidationException("Minimum number of items not met.");
 					if (! isValidMaxItems(o))
-						throw new SchemaValidationParseException("Maximum number of items exceeded.");
+						throw new SchemaValidationException("Maximum number of items exceeded.");
 					if (! isValidUniqueItems(o))
-						throw new SchemaValidationParseException("Duplicate items not allowed.");
+						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
 					if (items != null)
 						for (int i = 0; i < Array.getLength(o); i++)
@@ -1033,11 +1033,11 @@ public class HttpPartSchema {
 				} else if (cm.isCollection()) {
 					Collection<?> c = (Collection<?>)o;
 					if (! isValidMinItems(c))
-						throw new SchemaValidationParseException("Minimum number of items not met.");
+						throw new SchemaValidationException("Minimum number of items not met.");
 					if (! isValidMaxItems(c))
-						throw new SchemaValidationParseException("Maximum number of items exceeded.");
+						throw new SchemaValidationException("Maximum number of items exceeded.");
 					if (! isValidUniqueItems(c))
-						throw new SchemaValidationParseException("Duplicate items not allowed.");
+						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
 					if (items != null)
 						for (Object o2 : c)
@@ -1049,11 +1049,11 @@ public class HttpPartSchema {
 				if (cm.isNumber()) {
 					Number n = (Number)o;
 					if (! isValidMinimum(n))
-						throw new SchemaValidationParseException("Minimum value not met.");
+						throw new SchemaValidationException("Minimum value not met.");
 					if (! isValidMaximum(n))
-						throw new SchemaValidationParseException("Maximum value exceeded.");
+						throw new SchemaValidationException("Maximum value exceeded.");
 					if (! isValidMultipleOf(n))
-						throw new SchemaValidationParseException("Multiple-of not met.");
+						throw new SchemaValidationException("Multiple-of not met.");
 				}
 				break;
 			}
@@ -1061,11 +1061,11 @@ public class HttpPartSchema {
 				if (cm.isNumber()) {
 					Number n = (Number)o;
 					if (! isValidMinimum(n))
-						throw new SchemaValidationParseException("Minimum value not met.");
+						throw new SchemaValidationException("Minimum value not met.");
 					if (! isValidMaximum(n))
-						throw new SchemaValidationParseException("Maximum value exceeded.");
+						throw new SchemaValidationException("Maximum value exceeded.");
 					if (! isValidMultipleOf(n))
-						throw new SchemaValidationParseException("Multiple-of not met.");
+						throw new SchemaValidationException("Multiple-of not met.");
 				}
 				break;
 			}
@@ -1073,9 +1073,9 @@ public class HttpPartSchema {
 				if (cm.isMapOrBean()) {
 					Map<?,?> m = cm.isMap() ? (Map<?,?>)o : bc.createSession().toBeanMap(o);
 					if (! isValidMinProperties(m))
-						throw new SchemaValidationParseException("Minimum number of properties not met.");
+						throw new SchemaValidationException("Minimum number of properties not met.");
 					if (! isValidMaxProperties(m))
-						throw new SchemaValidationParseException("Maximum number of properties exceeded.");
+						throw new SchemaValidationException("Maximum number of properties exceeded.");
 					for (Map.Entry e : m.entrySet()) {
 						String key = e.getKey().toString();
 						HttpPartSchema s2 = getProperty(key);
@@ -1090,7 +1090,7 @@ public class HttpPartSchema {
 			case BOOLEAN:
 			case FILE:
 			case STRING:
-			case NONE:
+			case NO_TYPE:
 				break;
 		}
 		return o;

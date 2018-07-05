@@ -256,7 +256,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 		try {
 			T t = parse(parser, schema, get(name), cm);
 			return (t == null ? def : t);
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			throw new BadRequest(e, "Validation failed on path parameter ''{0}''. ", name);
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse path parameter ''{0}''.", name) ;
@@ -266,7 +266,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationParseException, ParseException {
+	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
 		return parser.parse(HttpPartType.PATH, schema, val, cm);

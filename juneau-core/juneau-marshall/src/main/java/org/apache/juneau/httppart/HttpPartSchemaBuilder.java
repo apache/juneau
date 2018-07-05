@@ -35,9 +35,9 @@ public class HttpPartSchemaBuilder {
 	Set<Integer> codes;
 	Set<String> _enum;
 	Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
-	CollectionFormat collectionFormat = CollectionFormat.NONE;
-	Type type = Type.NONE;
-	Format format = Format.NONE;
+	CollectionFormat collectionFormat = CollectionFormat.NO_COLLECTION_FORMAT;
+	Type type = Type.NO_TYPE;
+	Format format = Format.NO_FORMAT;
 	Pattern pattern;
 	Number maximum, minimum, multipleOf;
 	Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;

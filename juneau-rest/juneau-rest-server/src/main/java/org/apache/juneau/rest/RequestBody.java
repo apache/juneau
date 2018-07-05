@@ -431,7 +431,7 @@ public class RequestBody {
 			return parse(partParser, schema, cm);
 		} catch (UnsupportedMediaType e) {
 			throw e;
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			throw new BadRequest("Validation failed on request body. " + e.getLocalizedMessage());
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not convert request body content to class type ''{0}''.", cm);
@@ -443,7 +443,7 @@ public class RequestBody {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> cm) throws SchemaValidationParseException, ParseException, UnsupportedMediaType, IOException {
+	private <T> T parse(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> cm) throws SchemaValidationException, ParseException, UnsupportedMediaType, IOException {
 
 		if (cm.isReader())
 			return (T)getReader();

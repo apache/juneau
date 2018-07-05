@@ -341,8 +341,7 @@ public @interface Query {
 	 * Determines whether the parameter is mandatory.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+ 	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 */
 	boolean required() default false;
 
@@ -530,8 +529,7 @@ public @interface Query {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -545,8 +543,7 @@ public @interface Query {
 	 * Defines whether the maximum is matched exclusively.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -562,8 +559,7 @@ public @interface Query {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -577,8 +573,7 @@ public @interface Query {
 	 * Defines whether the minimum is matched exclusively.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -595,8 +590,7 @@ public @interface Query {
 	 * <br>The value <code>-1</code> is always ignored.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -612,8 +606,7 @@ public @interface Query {
 	 * <br>The value <code>-1</code> is always ignored.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -627,8 +620,7 @@ public @interface Query {
 	 * A string input is valid if it matches the specified regular expression pattern.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -642,8 +634,7 @@ public @interface Query {
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -657,8 +648,7 @@ public @interface Query {
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -672,8 +662,7 @@ public @interface Query {
 	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 * <br>If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
 	 * <br>Otherwise, the collection or array is checked for duplicate items.
 	 *
@@ -689,8 +678,7 @@ public @interface Query {
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array or comma-delimited list.
@@ -724,8 +712,7 @@ public @interface Query {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part parser will throw a {@link SchemaValidationSerializeException}.
-	 * <br>If validation is not met during parsing, the part parser will throw a {@link SchemaValidationParseException}.
+	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.

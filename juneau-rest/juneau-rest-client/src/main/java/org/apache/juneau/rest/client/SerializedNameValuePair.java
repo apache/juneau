@@ -64,7 +64,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	public String getValue() {
 		try {
 			return serializer.serialize(HttpPartType.FORMDATA, schema, value);
-		} catch (SerializeException e) {
+		} catch (SerializeException | SchemaValidationException e) {
 			throw new RuntimeException(e);
 		}
 	}

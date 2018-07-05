@@ -13,6 +13,9 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
+import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
+import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
 
 import java.io.*;
 import java.util.*;
@@ -221,9 +224,9 @@ public class OpenApiPartParser extends UonPartParser {
 	 * @param type The category of value being parsed.
 	 * @return The parsed value.
 	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationParseException If the input or resulting HTTP part object fails schema validation.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartSchema schema, String in, Class<T> type) throws ParseException, SchemaValidationParseException {
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> type) throws ParseException, SchemaValidationException {
 		return parse(null, schema, in, getClassMeta(type));
 	}
 
@@ -239,15 +242,15 @@ public class OpenApiPartParser extends UonPartParser {
 	 * @param args The type arguments of the map or collection.
 	 * @return The parsed value.
 	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationParseException If the input or resulting HTTP part object fails schema validation.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T parse(HttpPartSchema schema, String in, java.lang.reflect.Type type, java.lang.reflect.Type...args) throws ParseException, SchemaValidationParseException {
+	public <T> T parse(HttpPartSchema schema, String in, java.lang.reflect.Type type, java.lang.reflect.Type...args) throws ParseException, SchemaValidationException {
 		return (T)parse(null, schema, in, getClassMeta(type, args));
 	}
 
 	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		schema = ObjectUtils.firstNonNull(schema, this.schema, DEFAULT_SCHEMA);
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
@@ -257,161 +260,144 @@ public class OpenApiPartParser extends UonPartParser {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationParseException, ParseException {
+	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
 		if (in == null) {
 			if (schema.getDefault() == null)
 				return null;
 			in = schema.getDefault();
 		} else {
-			switch (schema.getType(type)) {
-				case STRING: {
-					if (type.isObject()) {
-						switch (schema.getFormat()) {
-							case BYTE:
-								return (T)StringUtils.base64Decode(in);
-							case DATE:
-							case DATE_TIME:
-								return (T)StringUtils.parseIsoCalendar(in);
-							case BINARY:
-								return (T)StringUtils.fromHex(in);
-							case BINARY_SPACED:
-								return (T)StringUtils.fromSpacedHex(in);
-							case UON:
-								return super.parse(partType, schema, in, type);
-							default:
-								return (T)in;
-						}
-					}
-					switch (schema.getFormat()) {
-						case BYTE:
-							return toType(StringUtils.base64Decode(in), type);
-						case DATE:
-						case DATE_TIME:
-							return toType(StringUtils.parseIsoCalendar(in), type);
-						case BINARY:
-							return toType(StringUtils.fromHex(in), type);
-						case BINARY_SPACED:
-							return toType(StringUtils.fromSpacedHex(in), type);
-						case UON:
-							return super.parse(partType, schema, in, type);
-						default:
-							return toType(in, type);
-					}
-				}
-				case ARRAY: {
-					if (type.isObject())
-						type = (ClassMeta<T>)CM_ObjectList;
+			HttpPartSchema.Type t = schema.getType(type);
+			HttpPartSchema.Format f = schema.getFormat();
 
-					ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
-					if (eType == null)
-						eType = schema.getParsedType().getElementType();
+			if (t == STRING) {
+				if (type.isObject()) {
+					if (f == BYTE)
+						return (T)StringUtils.base64Decode(in);
+					if (f == DATE || f == DATE_TIME)
+						return (T)StringUtils.parseIsoCalendar(in);
+					if (f == BINARY)
+						return (T)StringUtils.fromHex(in);
+					if (f == BINARY_SPACED)
+						return (T)StringUtils.fromSpacedHex(in);
+					if (f == HttpPartSchema.Format.UON)
+						return super.parse(partType, schema, in, type);
+					return (T)in;
+				}
+				if (f == BYTE)
+					return toType(StringUtils.base64Decode(in), type);
+				if (f == DATE || f == DATE_TIME)
+					return toType(StringUtils.parseIsoCalendar(in), type);
+				if (f == BINARY)
+					return toType(StringUtils.fromHex(in), type);
+				if (f == BINARY_SPACED)
+					return toType(StringUtils.fromSpacedHex(in), type);
+				if (f == HttpPartSchema.Format.UON)
+					return super.parse(partType, schema, in, type);
+				return toType(in, type);
 
-					String[] ss = new String[0];
-					switch (schema.getCollectionFormat()) {
-						case MULTI:
-							ss = new String[]{in};
-							break;
-						case CSV:
-							ss = split(in, ',');
-							break;
-						case PIPES:
-							ss = split(in, '|');
-							break;
-						case SSV:
-							ss = splitQuoted(in);
-							break;
-						case TSV:
-							ss = split(in, '\t');
-							break;
-						case UON:
-							return super.parse(partType, null, in, type);
-						case NONE:
-							if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
-								return super.parse(partType, null, in, type);
-							ss = split(in, ',');
-					}
-					Object[] o = null;
-					if (schema.getItems() != null) {
-						o = new Object[ss.length];
-						for (int i = 0; i < ss.length; i++)
-							o[i] = parse(partType, schema.getItems(), ss[i], eType);
-					} else {
-						o = ss;
-					}
-					if (type.getTransform(schema.getParsedType().getInnerClass()) != null)
-						return toType(toType(o, schema.getParsedType()), type);
-					return toType(o, type);
-				}
-				case BOOLEAN: {
-					if (type.isObject())
-						type = (ClassMeta<T>)CM_Boolean;
-					if (type.isBoolean())
-						return super.parse(partType, schema, in, type);
-					return toType(super.parse(partType, schema, in, CM_Boolean), type);
-				}
-				case INTEGER: {
-					if (type.isObject()) {
-						switch (schema.getFormat()) {
-							case INT64:
-								type = (ClassMeta<T>)CM_Long;
-								break;
-							default:
-								type = (ClassMeta<T>)CM_Integer;
+			} else if (t == ARRAY) {
+				if (type.isObject())
+					type = (ClassMeta<T>)CM_ObjectList;
 
-						}
-					}
-					if (type.isNumber())
-						return super.parse(partType, schema, in, type);
-					return toType(super.parse(partType, schema, in, CM_Integer), type);
+				ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
+				if (eType == null)
+					eType = schema.getParsedType().getElementType();
+
+				HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
+				String[] ss = new String[0];
+
+				if (cf == MULTI)
+					ss = new String[]{in};
+				else if (cf == CSV)
+					ss = split(in, ',');
+				else if (cf == PIPES)
+					ss = split(in, '|');
+				else if (cf == SSV)
+					ss = splitQuoted(in);
+				else if (cf == TSV)
+					ss = split(in, '\t');
+				else if (cf == HttpPartSchema.CollectionFormat.UON)
+					return super.parse(partType, null, in, type);
+				else if (cf == NO_COLLECTION_FORMAT) {
+					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
+						return super.parse(partType, null, in, type);
+					ss = split(in, ',');
 				}
-				case NUMBER: {
-					if (type.isObject()) {
-						switch (schema.getFormat()) {
-							case DOUBLE:
-								type = (ClassMeta<T>)CM_Double;
-								break;
-							default:
-								type = (ClassMeta<T>)CM_Float;
-						}
-					}
-					if (type.isNumber())
-						return super.parse(partType, schema, in, type);
-					return toType(super.parse(partType, schema, in, CM_Integer), type);
+
+				Object[] o = null;
+				if (schema.getItems() != null) {
+					o = new Object[ss.length];
+					for (int i = 0; i < ss.length; i++)
+						o[i] = parse(partType, schema.getItems(), ss[i], eType);
+				} else {
+					o = ss;
 				}
-				case OBJECT: {
-					if (type.isObject())
-						type = (ClassMeta<T>)CM_ObjectMap;
-					if (schema.hasProperties() && type.isMapOrBean()) {
-						try {
-							if (type.isBean()) {
-								BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
-								for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
-									String key = e.getKey();
-									BeanPropertyMeta bpm = m.getPropertyMeta(key);
-									m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
-								}
-								return m.getBean();
-							}
-							Map<String,Object> m = (Map<String,Object>)type.newInstance();
+				if (type.getTransform(schema.getParsedType().getInnerClass()) != null)
+					return toType(toType(o, schema.getParsedType()), type);
+				return toType(o, type);
+
+			} else if (t == BOOLEAN) {
+				if (type.isObject())
+					type = (ClassMeta<T>)CM_Boolean;
+				if (type.isBoolean())
+					return super.parse(partType, schema, in, type);
+				return toType(super.parse(partType, schema, in, CM_Boolean), type);
+
+			} else if (t == INTEGER) {
+				if (type.isObject()) {
+					if (f == INT64)
+						type = (ClassMeta<T>)CM_Long;
+					else
+						type = (ClassMeta<T>)CM_Integer;
+				}
+				if (type.isNumber())
+					return super.parse(partType, schema, in, type);
+				return toType(super.parse(partType, schema, in, CM_Integer), type);
+
+			} else if (t == NUMBER) {
+				if (type.isObject()) {
+					if (f == DOUBLE)
+						type = (ClassMeta<T>)CM_Double;
+					else
+						type = (ClassMeta<T>)CM_Float;
+				}
+				if (type.isNumber())
+					return super.parse(partType, schema, in, type);
+				return toType(super.parse(partType, schema, in, CM_Integer), type);
+
+			} else if (t == OBJECT) {
+				if (type.isObject())
+					type = (ClassMeta<T>)CM_ObjectMap;
+				if (schema.hasProperties() && type.isMapOrBean()) {
+					try {
+						if (type.isBean()) {
+							BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
 							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
 								String key = e.getKey();
-								m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), object()));
+								BeanPropertyMeta bpm = m.getPropertyMeta(key);
+								m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
 							}
-							return (T)m;
-						} catch (Exception e1) {
-							throw new ParseException(e1, "Could not instantiate type ''{0}''.", type);
+							return m.getBean();
 						}
+						Map<String,Object> m = (Map<String,Object>)type.newInstance();
+						for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
+							String key = e.getKey();
+							m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), object()));
+						}
+						return (T)m;
+					} catch (Exception e1) {
+						throw new ParseException(e1, "Could not instantiate type ''{0}''.", type);
 					}
-					return super.parse(partType, schema, in, type);
 				}
-				case FILE: {
-					throw new ParseException("File part not supported.");
-				}
-				case NONE: {
-					// This should never be returned by HttpPartSchema.getType(ClassMeta).
-					throw new ParseException("Invalid type.");
-				}
+				return super.parse(partType, schema, in, type);
+
+			} else if (t == FILE) {
+				throw new ParseException("File part not supported.");
+
+			} else if (t == NO_TYPE) {
+				// This should never be returned by HttpPartSchema.getType(ClassMeta).
+				throw new ParseException("Invalid type.");
 			}
 		}
 

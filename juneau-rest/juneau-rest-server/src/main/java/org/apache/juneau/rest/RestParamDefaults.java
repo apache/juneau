@@ -629,7 +629,7 @@ class RestParamDefaults {
 				public void onSet(Object newValue) {
 					try {
 						res.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, schema, newValue));
-					} catch (SerializeException e) {
+					} catch (SerializeException | SchemaValidationException e) {
 						throw new RuntimeException(e);
 					}
 				}

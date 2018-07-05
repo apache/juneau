@@ -377,19 +377,19 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateInput("y");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getLocalizedMessage());
 		}
 		try {
 			s.validateInput("yx");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getLocalizedMessage());
 		}
 		try {
 			s.validateInput("");  // Empty headers are never allowed.
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Empty value not allowed.", e.getLocalizedMessage());
 		}
 	}
@@ -406,13 +406,13 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateInput("1");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.validateInput("1234");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -453,50 +453,50 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateInput("1");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateInput("12");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateInput("123");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateInput("1234");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum length of value not met.", e.getLocalizedMessage());
 		}
 
 		try {
 			s.getItems().validateInput("1234");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateInput("12345");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateInput("123456");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateInput("1234567");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum length of value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -513,7 +513,7 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateInput("Z");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X','Y']", e.getLocalizedMessage());
 		}
 	}
@@ -530,7 +530,7 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateInput("Z");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X','Y']", e.getLocalizedMessage());
 		}
 	}
@@ -547,7 +547,7 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateInput("Z");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X','Y']", e.getLocalizedMessage());
 		}
 	}
@@ -578,25 +578,25 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateInput("V");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['W']", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateInput("V");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['X']", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateInput("V");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['Y']", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateInput("V");
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['Z']", e.getLocalizedMessage());
 		}
 	}
@@ -617,13 +617,13 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateOutput(9, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.validateOutput(101, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -659,50 +659,50 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(9, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(99, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(999, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 
 		try {
 			s.getItems().validateOutput(101, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -719,13 +719,13 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateOutput(10, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.validateOutput(100, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -761,50 +761,50 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(10, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 
 		try {
 			s.getItems().validateOutput(100, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -821,13 +821,13 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateOutput(10f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.validateOutput(100.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -863,50 +863,50 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(10f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 
 		try {
 			s.getItems().validateOutput(100.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -923,13 +923,13 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateOutput(10.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.validateOutput(100.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -965,50 +965,50 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum value not met.", e.getLocalizedMessage());
 		}
 
 		try {
 			s.getItems().validateOutput(100.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum value exceeded.", e.getLocalizedMessage());
 		}
 	}
@@ -1028,7 +1028,7 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateOutput(11, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 	}
@@ -1079,25 +1079,25 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(11, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 	}
@@ -1115,7 +1115,7 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.validateOutput(10.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 	}
@@ -1156,25 +1156,25 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Multiple-of not met.", e.getLocalizedMessage());
 		}
 	}
@@ -1213,25 +1213,25 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 	}
@@ -1253,25 +1253,25 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Duplicate items not allowed.", e.getLocalizedMessage());
 		}
 	}
@@ -1308,50 +1308,50 @@ public class HttpPartSchemaTest_ResponseHeader {
 		try {
 			s.getItems().validateOutput(new String[0], BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Minimum number of items not met.", e.getLocalizedMessage());
 		}
 
 		try {
 			s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
 		}
 		try {
 			s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT);
 			fail();
-		} catch (SchemaValidationParseException e) {
+		} catch (SchemaValidationException e) {
 			assertEquals("Maximum number of items exceeded.", e.getLocalizedMessage());
 		}
 	}

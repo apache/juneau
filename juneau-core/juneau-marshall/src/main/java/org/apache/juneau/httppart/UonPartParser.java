@@ -81,14 +81,14 @@ public class UonPartParser extends UonParser implements HttpPartParser {
 	 * @param type The category of value being parsed.
 	 * @return The parsed value.
 	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationParseException If the input or resulting HTTP part object fails schema validation.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
+	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		return parse(partType, null, in, type);
 	}
 
 	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		if (in == null)
 			return null;
 		if (type.isString() && in.length() > 0) {

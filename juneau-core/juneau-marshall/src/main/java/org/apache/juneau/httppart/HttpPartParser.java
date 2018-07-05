@@ -52,7 +52,7 @@ public interface HttpPartParser {
 	 * @param type The category of value being parsed.
 	 * @return The parsed value.
 	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationParseException If the input or resulting HTTP part object fails schema validation.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException;
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException;
 }
