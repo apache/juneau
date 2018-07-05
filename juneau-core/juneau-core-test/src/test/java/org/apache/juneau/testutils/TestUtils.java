@@ -45,6 +45,7 @@ public class TestUtils {
 		.ssq()
 		.trimNullProperties(false)
 		.addBeanTypes().addRootType()
+		.pojoSwaps(CalendarSwap.ISO8601DTZ.class, DateSwap.ISO8601DTPZ.class)
 		.build();
 
 	private static JsonSerializer jsSorted = JsonSerializer.create()
@@ -53,6 +54,7 @@ public class TestUtils {
 		.sortMaps()
 		.trimNullProperties(false)
 		.addBeanTypes().addRootType()
+		.pojoSwaps(CalendarSwap.ISO8601DTZ.class, DateSwap.ISO8601DTPZ.class)
 		.build();
 
 
@@ -60,6 +62,7 @@ public class TestUtils {
 		.ssq()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.addBeanTypes().addRootType()
+		.pojoSwaps(CalendarSwap.ISO8601DTZ.class, DateSwap.ISO8601DTPZ.class)
 		.build();
 
 	private static JsonSerializer js3 = JsonSerializer.create()
@@ -67,6 +70,7 @@ public class TestUtils {
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
 		.addBeanTypes().addRootType()
+		.pojoSwaps(CalendarSwap.ISO8601DTZ.class, DateSwap.ISO8601DTPZ.class)
 		.build();
 
 	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();

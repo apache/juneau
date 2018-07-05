@@ -731,9 +731,9 @@ public class UonParserSession extends ReaderParserSession {
 		String s = parseString(r, false);
 		if (s == null || s.equals("null"))
 			return null;
-		if (s.equals("true"))
+		if (s.equalsIgnoreCase("true"))
 			return true;
-		if (s.equals("false"))
+		if (s.equalsIgnoreCase("false"))
 			return false;
 		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}

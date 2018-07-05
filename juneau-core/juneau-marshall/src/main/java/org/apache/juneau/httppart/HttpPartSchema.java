@@ -14,6 +14,8 @@ package org.apache.juneau.httppart;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
+import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -63,6 +65,7 @@ public class HttpPartSchema {
 	final Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
 	final Class<? extends HttpPartParser> parser;
 	final Class<? extends HttpPartSerializer> serializer;
+	final ClassMeta<?> parsedType;
 
 	final ObjectMap api;
 
@@ -138,6 +141,27 @@ public class HttpPartSchema {
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 		return create().apply(c, t).build();
+	}
+
+	/**
+	 * Shortcut for calling <code>create().type(type);</code>
+	 *
+	 * @param type The schema type value.
+	 * @return A new builder.
+	 */
+	public static HttpPartSchemaBuilder create(String type) {
+		return create().type(type);
+	}
+
+	/**
+	 * Shortcut for calling <code>create().type(type).format(format);</code>
+	 *
+	 * @param type The schema type value.
+	 * @param format The schema format value.
+	 * @return A new builder.
+	 */
+	public static HttpPartSchemaBuilder create(String type, String format) {
+		return create().type(type).format(format);
 	}
 
 	/**
@@ -245,6 +269,33 @@ public class HttpPartSchema {
 		this.api = b.api.unmodifiable();
 		this.parser = b.parser;
 		this.serializer = b.serializer;
+
+		// Calculate parse type
+		Class<?> parsedType = Object.class;
+		if (type == ARRAY) {
+			if (items != null)
+				parsedType = Array.newInstance(items.parsedType.getInnerClass(), 0).getClass();
+		} else if (type == BOOLEAN) {
+			parsedType = Boolean.class;
+		} else if (type == INTEGER) {
+			if (format == INT64)
+				parsedType = Long.class;
+			else
+				parsedType = Integer.class;
+		} else if (type == NUMBER) {
+			if (format == DOUBLE)
+				parsedType = Double.class;
+			else
+				parsedType = Float.class;
+		} else if (type == STRING) {
+			if (format == BYTE || format == BINARY || format == BINARY_SPACED)
+				parsedType = byte[].class;
+			else if (format == DATE || format == DATE_TIME)
+				parsedType = Calendar.class;
+			else
+				parsedType = String.class;
+		}
+		this.parsedType = BeanContext.DEFAULT.getClassMeta(parsedType);
 
 		if (b.noValidate)
 			return;
@@ -395,6 +446,8 @@ public class HttpPartSchema {
 			errors.add("minProperties cannot be less than zero.");
 		if (maxProperties != null && maxProperties < 0)
 			errors.add("maxProperties cannot be less than zero.");
+		if (type == ARRAY && items != null && items.getType() == OBJECT && (format != UON && format != Format.NONE))
+			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
 			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t"));
@@ -594,6 +647,15 @@ public class HttpPartSchema {
 					return true;
 			return false;
 		}
+	}
+
+	/**
+	 * Returns the default parsed type for this schema.
+	 *
+	 * @return The default parsed type for this schema.  Never <jk>null</jk>.
+	 */
+	public ClassMeta<?> getParsedType() {
+		return parsedType;
 	}
 
 	/**
@@ -1150,7 +1212,13 @@ public class HttpPartSchema {
 		return true;
 	}
 
-	private HttpPartSchema getProperty(String name) {
+	/**
+	 * Returns the schema information for the specified property.
+	 *
+	 * @param name The property name.
+	 * @return The schema information for the specified property, or <jk>null</jk> if properties are not defined on this schema.
+	 */
+	public HttpPartSchema getProperty(String name) {
 		if (properties != null) {
 			HttpPartSchema schema = properties.get(name);
 			if (schema != null)
@@ -1159,6 +1227,14 @@ public class HttpPartSchema {
 		return additionalProperties;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this schema has properties associated with it.
+	 *
+	 * @return <jk>true</jk> if this schema has properties associated with it.
+	 */
+	public boolean hasProperties() {
+		return properties != null || additionalProperties != null;
+	}
 
 	private static <T> Set<T> copy(Set<T> in) {
 		return in == null ? Collections.EMPTY_SET : unmodifiableSet(new LinkedHashSet<>(in));
@@ -1208,10 +1284,6 @@ public class HttpPartSchema {
 			throw new RuntimeException(e);
 		}
 	}
-
-//	final static Integer toInteger(int i) {
-//		return i == -1 ? null : i;
-//	}
 
 	final static Long toLong(long l) {
 		return l == -1 ? null : l;

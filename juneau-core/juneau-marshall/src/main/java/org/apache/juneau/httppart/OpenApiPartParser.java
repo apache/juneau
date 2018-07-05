@@ -35,10 +35,11 @@ import org.apache.juneau.parser.*;
  * 		</td>
  * 		<td>
  * 			<ul>
- * 				<li><code><jk>byte</jk>[]</code>
+ * 				<li><code><jk>byte</jk>[]</code> (default)
  * 				<li>{@link InputStream} - Returns a {@link ByteArrayInputStream}.
  * 				<li>{@link Reader} - Returns a {@link InputStreamReader} wrapped around a {@link ByteArrayInputStream}.
  * 				<li>{@link String} - Constructed using {@link String#String(byte[])}.
+ * 				<li>{@link Object} - Returns the default <code><jk>byte</jk>[]</code>.
  * 				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors or static create methods).
  * 			</ul>
  * 		</td>
@@ -51,10 +52,11 @@ import org.apache.juneau.parser.*;
  * 		</td>
  * 		<td>
  * 			<ul>
- * 				<li>{@link Calendar}
+ * 				<li>{@link Calendar} (default)
  * 				<li>{@link Date}
  * 				<li>{@link GregorianCalendar}
  * 				<li>{@link String} - Converted using {@link Calendar#toString()}.
+ * 				<li>{@link Object} - Returns the default {@link Calendar}.
  * 				<li>Any POJO transformable from a {@link Calendar} (via constructors or static create methods).
  * 			</ul>
  * 		</td>
@@ -73,7 +75,8 @@ import org.apache.juneau.parser.*;
  * 		<td>none specified</td>
  * 		<td>
  * 			<ul>
- * 				<li>{@link String}
+ * 				<li>{@link String} (default)
+ * 				<li>{@link Object} - Returns the default {@link String}.
  * 				<li>Any POJO transformable from a {@link String} (via constructors or static create methods).
  * 			</ul>
  * 		</td>
@@ -85,10 +88,11 @@ import org.apache.juneau.parser.*;
  * 		</td>
  * 		<td>
  * 			<ul>
+ * 				<li>{@link Boolean} (default)
  * 				<li><jk>boolean</code>
- * 				<li>{@link Boolean}
  * 				<li>{@link String}
- * 				<li>{@link Object} - Returns a {@link Boolean}.
+ * 				<li>{@link Object} - Returns the default {@link Boolean}.
+ * 				<li>Any POJO transformable from a {@link Boolean} (via constructors or static create methods).
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -98,7 +102,22 @@ import org.apache.juneau.parser.*;
  * 			&nbsp;
  * 		</td>
  * 		<td>
- * 			Arrays or Collections of anything on this list.
+ * 			<ul>
+ * 				<li>Arrays or Collections of anything on this list.
+ * 				<li>Any POJO transformable from arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
+ * 			</ul>
+ * 		</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td ><code>object</code></td>
+ * 		<td>
+ * 			&nbsp;
+ * 		</td>
+ * 		<td>
+ * 			<ul>
+ * 				<li>Beans with properties of anything on this list.
+ * 				<li>Maps with string keys.
+ * 			</ul>
  * 		</td>
  * 	</tr>
  * </table>
@@ -140,6 +159,17 @@ public class OpenApiPartParser extends UonPartParser {
 	/** Reusable instance of {@link OpenApiPartParser}. */
 	public static final OpenApiPartParser DEFAULT = new OpenApiPartParser(PropertyStore.DEFAULT);
 
+	// Cache these for faster lookup
+	private static final BeanContext BC = BeanContext.DEFAULT;
+	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
+	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
+	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
+	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
+	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
+	private static final ClassMeta<ObjectList> CM_ObjectList = BC.getClassMeta(ObjectList.class);
+	private static final ClassMeta<ObjectMap> CM_ObjectMap = BC.getClassMeta(ObjectMap.class);
+
+	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -156,7 +186,7 @@ public class OpenApiPartParser extends UonPartParser {
 		super(
 			ps.builder().build()
 		);
-		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, HttpPartSchema.DEFAULT);
+		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, DEFAULT_SCHEMA);
 	}
 
 	@Override /* Context */
@@ -194,7 +224,7 @@ public class OpenApiPartParser extends UonPartParser {
 	 * @throws SchemaValidationParseException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartSchema schema, String in, Class<T> type) throws ParseException, SchemaValidationParseException {
-		return parse(null, schema, in, BeanContext.DEFAULT.getClassMeta(type));
+		return parse(null, schema, in, getClassMeta(type));
 	}
 
 	/**
@@ -213,12 +243,12 @@ public class OpenApiPartParser extends UonPartParser {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T parse(HttpPartSchema schema, String in, java.lang.reflect.Type type, java.lang.reflect.Type...args) throws ParseException, SchemaValidationParseException {
-		return (T)parse(null, schema, in, BeanContext.DEFAULT.getClassMeta(type, args));
+		return (T)parse(null, schema, in, getClassMeta(type, args));
 	}
 
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationParseException {
-		schema = ObjectUtils.firstNonNull(schema, this.schema, HttpPartSchema.DEFAULT);
+		schema = ObjectUtils.firstNonNull(schema, this.schema, DEFAULT_SCHEMA);
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
 			t = type.getPrimitiveDefault();
@@ -271,11 +301,11 @@ public class OpenApiPartParser extends UonPartParser {
 				}
 				case ARRAY: {
 					if (type.isObject())
-						type = (ClassMeta<T>)getClassMeta(ObjectList.class);
+						type = (ClassMeta<T>)CM_ObjectList;
 
 					ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
 					if (eType == null)
-						throw new ParseException("Value of type ARRAY cannot be converted to type {0}", type);
+						eType = schema.getParsedType().getElementType();
 
 					String[] ss = new String[0];
 					switch (schema.getCollectionFormat()) {
@@ -309,50 +339,77 @@ public class OpenApiPartParser extends UonPartParser {
 					} else {
 						o = ss;
 					}
+					if (type.getTransform(schema.getParsedType().getInnerClass()) != null)
+						return toType(toType(o, schema.getParsedType()), type);
 					return toType(o, type);
 				}
 				case BOOLEAN: {
 					if (type.isObject())
-						type = (ClassMeta<T>)getClassMeta(Boolean.class);
-					return super.parse(partType, schema, toLowerCase(in), type);
+						type = (ClassMeta<T>)CM_Boolean;
+					if (type.isBoolean())
+						return super.parse(partType, schema, in, type);
+					return toType(super.parse(partType, schema, in, CM_Boolean), type);
 				}
 				case INTEGER: {
 					if (type.isObject()) {
 						switch (schema.getFormat()) {
 							case INT64:
-								type = (ClassMeta<T>)getClassMeta(Long.class);
+								type = (ClassMeta<T>)CM_Long;
 								break;
 							default:
-								type = (ClassMeta<T>)getClassMeta(Integer.class);
+								type = (ClassMeta<T>)CM_Integer;
 
 						}
 					}
-					return super.parse(partType, schema, in, type);
+					if (type.isNumber())
+						return super.parse(partType, schema, in, type);
+					return toType(super.parse(partType, schema, in, CM_Integer), type);
 				}
 				case NUMBER: {
 					if (type.isObject()) {
 						switch (schema.getFormat()) {
 							case DOUBLE:
-								type = (ClassMeta<T>)getClassMeta(Double.class);
+								type = (ClassMeta<T>)CM_Double;
 								break;
 							default:
-								type = (ClassMeta<T>)getClassMeta(Float.class);
+								type = (ClassMeta<T>)CM_Float;
 						}
 					}
-					return super.parse(partType, schema, in, type);
+					if (type.isNumber())
+						return super.parse(partType, schema, in, type);
+					return toType(super.parse(partType, schema, in, CM_Integer), type);
 				}
 				case OBJECT: {
 					if (type.isObject())
-						type = (ClassMeta<T>)getClassMeta(ObjectMap.class);
-					switch (schema.getFormat()) {
-						default:
-							return super.parse(partType, schema, in, type);
+						type = (ClassMeta<T>)CM_ObjectMap;
+					if (schema.hasProperties() && type.isMapOrBean()) {
+						try {
+							if (type.isBean()) {
+								BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
+								for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
+									String key = e.getKey();
+									BeanPropertyMeta bpm = m.getPropertyMeta(key);
+									m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
+								}
+								return m.getBean();
+							}
+							Map<String,Object> m = (Map<String,Object>)type.newInstance();
+							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
+								String key = e.getKey();
+								m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), object()));
+							}
+							return (T)m;
+						} catch (Exception e1) {
+							throw new ParseException(e1, "Could not instantiate type ''{0}''.", type);
+						}
 					}
+					return super.parse(partType, schema, in, type);
 				}
 				case FILE: {
 					throw new ParseException("File part not supported.");
 				}
 				case NONE: {
+					// This should never be returned by HttpPartSchema.getType(ClassMeta).
 					throw new ParseException("Invalid type.");
 				}
 			}

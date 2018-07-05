@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -1274,15 +1274,26 @@ public class HttpPartSchemaBuilder {
 	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
 	 * </ul>
 	 *
+	 * @param key
+	 *	The property name.
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Ignored if value is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public HttpPartSchemaBuilder properties(ObjectMap value) {
+	public HttpPartSchemaBuilder property(String key, HttpPartSchemaBuilder value) {
+		if ( key != null && value != null) {
+			if (properties == null)
+				properties = new LinkedHashMap<>();
+			properties.put(key, value);
+		}
+		return this;
+	}
+
+	private HttpPartSchemaBuilder properties(ObjectMap value) {
 		if (value != null && ! value.isEmpty())
-			for (Map.Entry<String,Object> e : value.entrySet())
-				properties.put(e.getKey(), HttpPartSchema.create().apply((ObjectMap)e.getValue()));
+		for (Map.Entry<String,Object> e : value.entrySet())
+			property(e.getKey(), HttpPartSchema.create().apply((ObjectMap)e.getValue()));
 		return this;
 	}
 
@@ -1300,7 +1311,13 @@ public class HttpPartSchemaBuilder {
 	 * 	<br>Ignored if value is <jk>null</jk> or empty.
 	 * @return This object (for method chaining).
 	 */
-	public HttpPartSchemaBuilder additionalProperties(ObjectMap value) {
+	public HttpPartSchemaBuilder additionalProperties(HttpPartSchemaBuilder value) {
+		if (value != null)
+			additionalProperties = value;
+		return this;
+	}
+
+	private HttpPartSchemaBuilder additionalProperties(ObjectMap value) {
 		if (value != null && ! value.isEmpty())
 			additionalProperties = HttpPartSchema.create().apply(value);
 		return this;
