@@ -2081,7 +2081,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
 	 */
 	public boolean hasReaderTransform() {
-		return getTransform(Reader.class) != null;
+		return hasTransform(Reader.class);
 	}
 
 	/**
@@ -2099,7 +2099,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
 	 */
 	public boolean hasInputStreamTransform() {
-		return getTransform(InputStream.class) != null;
+		return hasTransform(InputStream.class);
 	}
 
 	/**
@@ -2127,6 +2127,38 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public Transform<String,T> getStringTransform() {
 		return stringTransform;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class can be instantiated from the specified type.
+	 *
+	 * @param c The class type to convert from.
+	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
+	 */
+	public boolean hasTransform(Class<?> c) {
+		return getTransform(c) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class can be instantiated from the specified object.
+	 *
+	 * @param o The object to convert from.
+	 * @return <jk>true</jk> if this class can be instantiated from the specified object.
+	 */
+	public boolean hasTransformForObject(Object o) {
+		return getTransform(o.getClass()) != null;
+	}
+
+	/**
+	 * Transforms the specified object into an instance of this class.
+	 *
+	 * @param o The object to transform.
+	 * @return The transformed object.
+	 */
+	@SuppressWarnings({"unchecked","rawtypes"})
+	public T transform(Object o) {
+		Transform t = getTransform(o.getClass());
+		return (T)(t == null ? null : t.transform(o));
 	}
 
 	/**

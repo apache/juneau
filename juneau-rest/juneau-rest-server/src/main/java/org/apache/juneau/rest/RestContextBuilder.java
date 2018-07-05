@@ -223,6 +223,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					defaultCharset(vr.resolve(r.defaultCharset()));
 				if (! r.maxInput().isEmpty())
 					maxInput(vr.resolve(r.maxInput()));
+				if (! r.debug().isEmpty())
+					debug(Boolean.valueOf(vr.resolve(r.debug())));
 				mimeTypes(resolveVars(vr, r.mimeTypes()));
 
 				HtmlDoc hd = r.htmldoc();
@@ -770,6 +772,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder converters(RestConverter...values) {
 		return addTo(REST_converters, values);
+	}
+
+	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debug}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public RestContextBuilder debug(boolean value) {
+		super.debug(value);
+		return set(REST_debug, value);
 	}
 
 	/**

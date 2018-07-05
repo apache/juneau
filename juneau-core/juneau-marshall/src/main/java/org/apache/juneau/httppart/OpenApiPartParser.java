@@ -273,25 +273,25 @@ public class OpenApiPartParser extends UonPartParser {
 			if (t == STRING) {
 				if (type.isObject()) {
 					if (f == BYTE)
-						return (T)StringUtils.base64Decode(in);
+						return (T)base64Decode(in);
 					if (f == DATE || f == DATE_TIME)
-						return (T)StringUtils.parseIsoCalendar(in);
+						return (T)parseIsoCalendar(in);
 					if (f == BINARY)
-						return (T)StringUtils.fromHex(in);
+						return (T)fromHex(in);
 					if (f == BINARY_SPACED)
-						return (T)StringUtils.fromSpacedHex(in);
+						return (T)fromSpacedHex(in);
 					if (f == HttpPartSchema.Format.UON)
 						return super.parse(partType, schema, in, type);
 					return (T)in;
 				}
 				if (f == BYTE)
-					return toType(StringUtils.base64Decode(in), type);
+					return toType(base64Decode(in), type);
 				if (f == DATE || f == DATE_TIME)
-					return toType(StringUtils.parseIsoCalendar(in), type);
+					return toType(parseIsoCalendar(in), type);
 				if (f == BINARY)
-					return toType(StringUtils.fromHex(in), type);
+					return toType(fromHex(in), type);
 				if (f == BINARY_SPACED)
-					return toType(StringUtils.fromSpacedHex(in), type);
+					return toType(fromSpacedHex(in), type);
 				if (f == HttpPartSchema.Format.UON)
 					return super.parse(partType, schema, in, type);
 				return toType(in, type);
@@ -333,7 +333,7 @@ public class OpenApiPartParser extends UonPartParser {
 				} else {
 					o = ss;
 				}
-				if (type.getTransform(schema.getParsedType().getInnerClass()) != null)
+				if (type.hasTransform(schema.getParsedType().getInnerClass()))
 					return toType(toType(o, schema.getParsedType()), type);
 				return toType(o, type);
 

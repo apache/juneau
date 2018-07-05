@@ -681,9 +681,8 @@ public class BeanSession extends Session {
 					return (T)((Calendar)value).getTime();
 			}
 
-			Transform t = type.getTransform(value.getClass());
-			if (t != null)
-				return (T) t.transform(value);
+			if (type.hasTransformForObject(value))
+				return type.transform(value);
 
 			if (type.isBean())
 				return newBeanMap(type.getInnerClass()).load(value.toString()).getBean();

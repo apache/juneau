@@ -12,6 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
+import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
+import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.lang.reflect.*;
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -60,6 +68,12 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 	/** Reusable instance of {@link OpenApiPartSerializer}, all default settings. */
 	public static final OpenApiPartSerializer DEFAULT = new OpenApiPartSerializer(PropertyStore.DEFAULT);
 
+	// Cache these for faster lookup
+	private static final BeanContext BC = BeanContext.DEFAULT;
+	private static final ClassMeta<byte[]> CM_ByteArray = BC.getClassMeta(byte[].class);
+	private static final ClassMeta<Calendar> CM_Calendar = BC.getClassMeta(Calendar.class);
+
+	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -104,168 +118,116 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 	// Entry point methods
 	//--------------------------------------------------------------------------------
 
+	/**
+	 * Convenience method for serializing a part.
+	 *
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part serializers use the schema information.
+	 * @param value The value being serialized.
+	 * @return The serialized value.
+	 * @throws SerializeException If a problem occurred while trying to serialize the input.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public String serialize(HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+		return serialize(null, schema, value);
+	}
+
 	@Override /* PartSerializer */
+	@SuppressWarnings("rawtypes")
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-		schema = ObjectUtils.firstNonNull(schema, this.schema, HttpPartSchema.DEFAULT);
-//		ClassMeta<?> type = getClassMetaForObject(value);
-//		String out;
-//
-//		switch (schema.getType()) {
-//			case STRING: {
-//				if (type.isObject()) {
-//					switch (schema.getFormat()) {
-//						case BYTE:
-//							return (T)StringUtils.base64Decode(in);
-//						case DATE:
-//						case DATE_TIME:
-//							return (T)StringUtils.parseIsoCalendar(in);
-//						case BINARY:
-//							return (T)StringUtils.fromHex(in);
-//						case BINARY_SPACED:
-//							return (T)StringUtils.fromSpacedHex(in);
-//						case UON:
-//							return super.parse(partType, schema, in, type);
-//						default:
-//							return (T)in;
-//					}
-//				}
-//				switch (schema.getFormat()) {
-//					case BYTE:
-//						return toType(StringUtils.base64Decode(in), type);
-//					case DATE:
-//					case DATE_TIME:
-//						return toType(StringUtils.parseIsoCalendar(in), type);
-//					case BINARY:
-//						return toType(StringUtils.fromHex(in), type);
-//					case BINARY_SPACED:
-//						return toType(StringUtils.fromSpacedHex(in), type);
-//					case UON:
-//						return super.parse(partType, schema, in, type);
-//					default:
-//						return toType(in, type);
-//				}
-//			}
-//			case ARRAY: {
-//				if (type.isObject())
-//					type = (ClassMeta<T>)CM_ObjectList;
-//
-//				ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
-//				if (eType == null)
-//					eType = schema.getParsedType().getElementType();
-//
-//				String[] ss = new String[0];
-//				switch (schema.getCollectionFormat()) {
-//					case MULTI:
-//						ss = new String[]{in};
-//						break;
-//					case CSV:
-//						ss = split(in, ',');
-//						break;
-//					case PIPES:
-//						ss = split(in, '|');
-//						break;
-//					case SSV:
-//						ss = splitQuoted(in);
-//						break;
-//					case TSV:
-//						ss = split(in, '\t');
-//						break;
-//					case UON:
-//						return super.parse(partType, null, in, type);
-//					case NONE:
-//						if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
-//							return super.parse(partType, null, in, type);
-//						ss = split(in, ',');
-//				}
-//				Object[] o = null;
-//				if (schema.getItems() != null) {
-//					o = new Object[ss.length];
-//					for (int i = 0; i < ss.length; i++)
-//						o[i] = parse(partType, schema.getItems(), ss[i], eType);
-//				} else {
-//					o = ss;
-//				}
-//				if (type.getTransform(schema.getParsedType().getInnerClass()) != null)
-//					return toType(toType(o, schema.getParsedType()), type);
-//				return toType(o, type);
-//			}
-//			case BOOLEAN: {
-//				if (type.isObject())
-//					type = (ClassMeta<T>)CM_Boolean;
-//				if (type.isBoolean())
-//					return super.parse(partType, schema, in, type);
-//				return toType(super.parse(partType, schema, in, CM_Boolean), type);
-//			}
-//			case INTEGER: {
-//				if (type.isObject()) {
-//					switch (schema.getFormat()) {
-//						case INT64:
-//							type = (ClassMeta<T>)CM_Long;
-//							break;
-//						default:
-//							type = (ClassMeta<T>)CM_Integer;
-//
-//					}
-//				}
-//				if (type.isNumber())
-//					return super.parse(partType, schema, in, type);
-//				return toType(super.parse(partType, schema, in, CM_Integer), type);
-//			}
-//			case NUMBER: {
-//				if (type.isObject()) {
-//					switch (schema.getFormat()) {
-//						case DOUBLE:
-//							type = (ClassMeta<T>)CM_Double;
-//							break;
-//						default:
-//							type = (ClassMeta<T>)CM_Float;
-//					}
-//				}
-//				if (type.isNumber())
-//					return super.parse(partType, schema, in, type);
-//				return toType(super.parse(partType, schema, in, CM_Integer), type);
-//			}
-//			case OBJECT: {
-//				if (type.isObject())
-//					type = (ClassMeta<T>)CM_ObjectMap;
-//				if (schema.hasProperties() && type.isMapOrBean()) {
-//					try {
-//						if (type.isBean()) {
-//							BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
-//							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
-//								String key = e.getKey();
-//								BeanPropertyMeta bpm = m.getPropertyMeta(key);
-//								m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
-//							}
-//							return m.getBean();
-//						}
-//						Map<String,Object> m = (Map<String,Object>)type.newInstance();
-//						for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
-//							String key = e.getKey();
-//							m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), object()));
-//						}
-//						return (T)m;
-//					} catch (Exception e1) {
-//						throw new ParseException(e1, "Could not instantiate type ''{0}''.", type);
-//					}
-//				}
-//				return super.parse(partType, schema, in, type);
-//			}
-//			case FILE: {
-//				throw new ParseException("File part not supported.");
-//			}
-//			case NONE: {
-//				// This should never be returned by HttpPartSchema.getType(ClassMeta).
-//				throw new ParseException("Invalid type.");
-//			}
-//		}
-//	}
 
+		schema = ObjectUtils.firstNonNull(schema, this.schema, DEFAULT_SCHEMA);
+		ClassMeta<?> type = getClassMetaForObject(value);
+		if (type == null)
+			type = object();
+		HttpPartSchema.Type t = schema.getType(type);
+		HttpPartSchema.Format f = schema.getFormat();
 
+		String out = null;
 
+		schema.validateOutput(value, this);
 
-		String out = super.serialize(partType, schema, value);
+		if (t == STRING) {
+
+			if (f == BYTE)
+				out = base64Encode(toType(value, CM_ByteArray));
+			else if (f == BINARY)
+				out = toHex(toType(value, CM_ByteArray));
+			else if (f == BINARY_SPACED)
+				out = toSpacedHex(toType(value, CM_ByteArray));
+			else if (f == DATE)
+				out = toIsoDate(toType(value, CM_Calendar));
+			else if (f == DATE_TIME)
+				out = toIsoDateTime(toType(value, CM_Calendar));
+			else if (f == HttpPartSchema.Format.UON)
+				out = super.serialize(partType, schema, value);
+			else
+				out = toType(value, string());
+
+		} else if (t == ARRAY) {
+
+			List<String> l = new ArrayList<>();
+			HttpPartSchema items = schema.getItems();
+			if (type.isArray()) {
+				for (int i = 0; i < Array.getLength(value); i++)
+					l.add(serialize(partType, items, Array.get(value, i)));
+			} else if (type.isCollection()) {
+				for (Object o : (Collection<?>)value)
+					l.add(serialize(partType, items, o));
+			} else {
+				l.add(serialize(partType, items, value));
+			}
+
+			HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
+
+			if (cf == MULTI || cf == CSV)
+				out = join(l, ',');
+			else if (cf == PIPES)
+				out = join(l, '|');
+			else if (cf == SSV)
+				out = join(l, ' ');
+			else if (cf == TSV)
+				out = join(l, '\t');
+			else
+				out = super.serialize(partType, null, l);
+
+		} else if (t == BOOLEAN || t == INTEGER || t == NUMBER) {
+			out = super.serialize(partType, null, value);
+
+		} else if (t == OBJECT) {
+			if (schema.hasProperties() && type.isMapOrBean()) {
+				ObjectMap m = new ObjectMap();
+				if (type.isBean()) {
+					for (Map.Entry<String,Object> e : BC.createBeanSession().toBeanMap(value).entrySet())
+						m.put(e.getKey(), serialize(partType, schema.getProperty(e.getKey()), e.getValue()));
+				} else {
+					for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet())
+						m.put(asString(e.getKey()), serialize(partType, schema.getProperty(asString(e.getKey())), e.getValue()));
+				}
+				out = super.serialize(m);
+			} else {
+				out = super.serialize(partType, schema, value);
+			}
+
+		} else if (t == FILE) {
+			throw new SerializeException("File part not supported.");
+
+		} else if (t == NO_TYPE) {
+			// This should never be returned by HttpPartSchema.getType(ClassMeta).
+			throw new SerializeException("Invalid type.");
+		}
+
 		schema.validateInput(out);
 		return out;
+	}
+
+	private <T> T toType(Object in, ClassMeta<T> type) throws SerializeException {
+		try {
+			return createBeanSession().convertToType(in, type);
+		} catch (InvalidDataConversionException e) {
+			throw new SerializeException(e.getMessage());
+		}
 	}
 }

@@ -811,6 +811,34 @@ public final class RestContext extends BeanContext {
 	public static final String REST_converters = PREFIX + "converters.lo";
 
 	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.debug.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#debug()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#debug(boolean)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Enables the following:
+	 * <ul>
+	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestException)} is called.
+	 * </ul>
+	 */
+	public static final String REST_debug = PREFIX + "debug.b";
+
+	/**
 	 * Configuration property:  Default character encoding.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2749,7 +2777,8 @@ public final class RestContext extends BeanContext {
 		allowBodyParam,
 		renderResponseStackTraces,
 		useStackTraceHashes,
-		useClasspathResourceCaching;
+		useClasspathResourceCaching,
+		debug;
 	private final String
 		defaultCharset,
 		clientVersionHeader,
@@ -2874,6 +2903,7 @@ public final class RestContext extends BeanContext {
 			allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getStringProperty(REST_allowedMethodParams, "HEAD,OPTIONS")))));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
+			debug = getBooleanProperty(REST_debug, false);
 			defaultCharset = getStringProperty(REST_defaultCharset, "utf-8");
 			maxInput = getLongProperty(REST_maxInput, 100_000_000l);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
@@ -3897,6 +3927,20 @@ public final class RestContext extends BeanContext {
 	 */
 	public boolean isAllowBodyParam() {
 		return allowBodyParam;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if debug mode is enabled on this resource.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debug}
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if setting is enabled.
+	 */
+	public boolean isDebug() {
+		return debug;
 	}
 
 	/**

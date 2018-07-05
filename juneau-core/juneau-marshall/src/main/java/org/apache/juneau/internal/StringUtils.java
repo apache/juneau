@@ -1227,6 +1227,26 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Converts the specified object to an ISO8601 date string.
+	 *
+	 * @param c The object to convert.
+	 * @return The converted object.
+	 */
+	public static String toIsoDate(Calendar c) {
+		return DatatypeConverter.printDate(c);
+	}
+
+	/**
+	 * Converts the specified object to an ISO8601 date-time string.
+	 *
+	 * @param c The object to convert.
+	 * @return The converted object.
+	 */
+	public static String toIsoDateTime(Calendar c) {
+		return DatatypeConverter.printDateTime(c);
+	}
+
+	/**
 	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values in the specified map.
 	 *
 	 * <p>

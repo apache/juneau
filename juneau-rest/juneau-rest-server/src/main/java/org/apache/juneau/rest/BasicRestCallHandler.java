@@ -287,6 +287,13 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 */
 	@Override /* RestCallHandler */
 	public synchronized void handleError(HttpServletRequest req, HttpServletResponse res, RestException e) throws IOException {
+		if (context.isDebug()) {
+			String qs = req.getQueryString();
+			int c = e.getOccurrence();
+			String msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e.getStatus() + '.' + c + "] HTTP " + req.getMethod() + " " + e.getStatus() + " " + req.getRequestURI() + (qs == null ? "" : "?" + qs);
+			System.err.println(msg);
+			e.printStackTrace(System.err);
+		}
 		e.setOccurrence(context == null ? 0 : context.getStackTraceOccurrence(e));
 		logger.onError(req, res, e);
 		renderError(req, res, e);

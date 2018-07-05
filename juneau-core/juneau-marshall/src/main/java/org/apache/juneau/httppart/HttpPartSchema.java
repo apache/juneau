@@ -1010,7 +1010,7 @@ public class HttpPartSchema {
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
 	@SuppressWarnings("rawtypes")
-	public Object validateOutput(Object o, BeanContext bc) throws SchemaValidationException {
+	public <T> T validateOutput(T o, BeanContext bc) throws SchemaValidationException {
 		if (o == null) {
 			if (! isValidRequired(o))
 				throw new SchemaValidationException("Required value not provided.");

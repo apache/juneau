@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
@@ -943,4 +945,27 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String useStackTraceHashes() default "";
+
+	/**
+	 * Enable debug mode.
+	 *
+	 * <p>
+	 * Enables the following:
+	 * <ul>
+	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestException)} is called.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debug}
+	 * </ul>
+	 */
+	String debug() default "";
 }
