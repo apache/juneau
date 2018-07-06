@@ -565,26 +565,30 @@ public class OpenApiPartParserTest {
 		HttpPartSchema s = schema("boolean").build();
 		assertEquals(true, p.parse(s, "true", boolean.class));
 		assertEquals(true, p.parse(s, "true", Boolean.class));
+		assertNull(p.parse(s, "null", Boolean.class));
 		assertEquals(true, p.parse(s, "True", boolean.class));
 		assertEquals(true, p.parse(s, "TRUE", boolean.class));
 		assertEquals("true", p.parse(s, "true", String.class));
+		assertNull(p.parse(s, "null", String.class));
 		assertEquals(true, p.parse(s, "true", Object.class));
+		assertNull(p.parse(s, "null", Object.class));
 		assertObjectEquals("'E1-true'", p.parse(s, "true", E1.class));
+		assertNull(p.parse(s, "null", E1.class));
 	}
 
 	@Test
 	public void e02_booleanType_2d() throws Exception {
 		HttpPartSchema s = schema("array").items(schema("boolean")).build();
 		assertObjectEquals("[true,true]", p.parse(s, "true,true", boolean[].class));
-		assertObjectEquals("[true,true]", p.parse(s, "true,true", Boolean[].class));
-		assertObjectEquals("[true,true]", p.parse(s, "true,true", List.class, Boolean.class));
-		assertObjectEquals("['true','true']", p.parse(s, "true,true", String[].class));
-		assertObjectEquals("['true','true']", p.parse(s, "true,true", List.class, String.class));
-		assertObjectEquals("[true,true]", p.parse(s, "true,true", Object[].class));
-		assertObjectEquals("[true,true]", p.parse(s, "true,true", List.class, Object.class));
-		assertObjectEquals("['E1-true','E1-true']", p.parse(s, "true,true", E1[].class));
-		assertObjectEquals("['E1-true','E1-true']", p.parse(s, "true,true", List.class, E1.class));
-		assertObjectEquals("'E2-[true,true]'", p.parse(s, "true,true", E2.class));
+		assertObjectEquals("[true,true,null]", p.parse(s, "true,true,null", Boolean[].class));
+		assertObjectEquals("[true,true,null]", p.parse(s, "true,true,null", List.class, Boolean.class));
+		assertObjectEquals("['true','true',null]", p.parse(s, "true,true,null", String[].class));
+		assertObjectEquals("['true','true',null]", p.parse(s, "true,true,null", List.class, String.class));
+		assertObjectEquals("[true,true,null]", p.parse(s, "true,true,null", Object[].class));
+		assertObjectEquals("[true,true,null]", p.parse(s, "true,true,null", List.class, Object.class));
+		assertObjectEquals("['E1-true','E1-true',null]", p.parse(s, "true,true,null", E1[].class));
+		assertObjectEquals("['E1-true','E1-true',null]", p.parse(s, "true,true,null", List.class, E1.class));
+		assertObjectEquals("'E2-[true,true,null]'", p.parse(s, "true,true,null", E2.class));
 
 		assertObjectEquals("[true,true]", p.parse(s, "True,true", boolean[].class));
 		assertObjectEquals("[true,true]", p.parse(s, "TRUE,true", boolean[].class));
@@ -595,20 +599,20 @@ public class OpenApiPartParserTest {
 		HttpPartSchema s = schema("array").collectionFormat("pipes").items(schema("array").items(schema("boolean"))).build();
 		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", boolean[][].class));
 		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", List.class, boolean[].class));
-		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", Boolean[][].class));
-		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", List.class, Boolean[].class));
-		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", List.class, List.class, Boolean.class));
-		assertObjectEquals("[['true','true'],['false']]", p.parse(s, "true,true|false", String[][].class));
-		assertObjectEquals("[['true','true'],['false']]", p.parse(s, "true,true|false", List.class, List.class, String.class));
-		assertObjectEquals("[['true','true'],['false']]", p.parse(s, "true,true|false", List.class, String[].class));
-		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", Object[][].class));
-		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", List.class, List.class, Object.class));
-		assertObjectEquals("[[true,true],[false]]", p.parse(s, "true,true|false", List.class, Object[].class));
-		assertObjectEquals("[['E1-true','E1-true'],['E1-false']]", p.parse(s, "true,true|false", E1[][].class));
-		assertObjectEquals("[['E1-true','E1-true'],['E1-false']]", p.parse(s, "true,true|false", List.class, List.class, E1.class));
-		assertObjectEquals("[['E1-true','E1-true'],['E1-false']]", p.parse(s, "true,true|false", List.class, E1[].class));
-		assertObjectEquals("['E2-[true,true]','E2-[false]']", p.parse(s, "true,true|false", E2[].class));
-		assertObjectEquals("['E2-[true,true]','E2-[false]']", p.parse(s, "true,true|false", List.class, E2.class));
+		assertObjectEquals("[[true,true],[false,null]]", p.parse(s, "true,true|false,null", Boolean[][].class));
+		assertObjectEquals("[[true,true],[false,null]]", p.parse(s, "true,true|false,null", List.class, Boolean[].class));
+		assertObjectEquals("[[true,true],[false,null]]", p.parse(s, "true,true|false,null", List.class, List.class, Boolean.class));
+		assertObjectEquals("[['true','true'],['false',null]]", p.parse(s, "true,true|false,null", String[][].class));
+		assertObjectEquals("[['true','true'],['false',null]]", p.parse(s, "true,true|false,null", List.class, List.class, String.class));
+		assertObjectEquals("[['true','true'],['false',null]]", p.parse(s, "true,true|false,null", List.class, String[].class));
+		assertObjectEquals("[[true,true],[false,null]]", p.parse(s, "true,true|false,null", Object[][].class));
+		assertObjectEquals("[[true,true],[false,null]]", p.parse(s, "true,true|false,null", List.class, List.class, Object.class));
+		assertObjectEquals("[[true,true],[false,null]]", p.parse(s, "true,true|false,null", List.class, Object[].class));
+		assertObjectEquals("[['E1-true','E1-true'],['E1-false',null]]", p.parse(s, "true,true|false,null", E1[][].class));
+		assertObjectEquals("[['E1-true','E1-true'],['E1-false',null]]", p.parse(s, "true,true|false,null", List.class, List.class, E1.class));
+		assertObjectEquals("[['E1-true','E1-true'],['E1-false',null]]", p.parse(s, "true,true|false,null", List.class, E1[].class));
+		assertObjectEquals("['E2-[true,true]','E2-[false,null]']", p.parse(s, "true,true|false,null", E2[].class));
+		assertObjectEquals("['E2-[true,true]','E2-[false,null]']", p.parse(s, "true,true|false,null", List.class, E2.class));
 
 		assertObjectEquals("[[true,true],[false]]", p.parse(s, "True,true|false", boolean[][].class));
 		assertObjectEquals("[[true,true],[false]]", p.parse(s, "TRUE,true|false", boolean[][].class));

@@ -435,7 +435,7 @@ public class BeanSession extends Session {
 				}
 			}
 
-			if (type.isNumber()) {
+			if (type.isNumber() && (isEmpty(value) || ! hasTransform(vt, type))) {
 				if (value instanceof Number) {
 					Number n = (Number)value;
 					if (tc == Integer.class)
@@ -655,7 +655,7 @@ public class BeanSession extends Session {
 				return (T)new StringReader(value.toString());
 			}
 
-			if (type.isCalendar()) {
+			if (type.isCalendar() && ! hasTransform(vt, type)) {
 				if (vt.isCalendar()) {
 					Calendar c = (Calendar)value;
 					if (value instanceof GregorianCalendar) {
