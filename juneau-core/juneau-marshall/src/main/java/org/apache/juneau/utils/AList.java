@@ -35,6 +35,7 @@ public final class AList<T> extends LinkedList<T> {
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
+	@SafeVarargs
 	public static <T> AList<T> create(T...t) {
 		return new AList<T>().appendAll(t);
 	}

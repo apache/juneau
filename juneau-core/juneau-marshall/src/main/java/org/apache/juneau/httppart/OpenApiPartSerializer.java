@@ -170,28 +170,33 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 
 			List<String> l = new ArrayList<>();
 			HttpPartSchema items = schema.getItems();
+			ClassMeta<?> vt = getClassMetaForObject(value);
+
+			if (type.hasTransformTo(schema.getParsedType()) || schema.getParsedType().hasTransformFrom(type))
+				value = toType(value, schema.getParsedType());
+
 			if (type.isArray()) {
 				for (int i = 0; i < Array.getLength(value); i++)
 					l.add(serialize(partType, items, Array.get(value, i)));
 			} else if (type.isCollection()) {
 				for (Object o : (Collection<?>)value)
 					l.add(serialize(partType, items, o));
-			} else {
+			} else if (vt.hasTransformTo(String[].class)) {
 				l.add(serialize(partType, items, value));
 			}
 
 			HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
 
-			if (cf == MULTI || cf == CSV)
-				out = join(l, ',');
-			else if (cf == PIPES)
+			if (cf == PIPES)
 				out = join(l, '|');
 			else if (cf == SSV)
 				out = join(l, ' ');
 			else if (cf == TSV)
 				out = join(l, '\t');
-			else
+			else if (cf == HttpPartSchema.CollectionFormat.UON)
 				out = super.serialize(partType, null, l);
+			else
+				out = join(l, ',');
 
 		} else if (t == BOOLEAN || t == INTEGER || t == NUMBER) {
 			out = super.serialize(partType, null, value);

@@ -17,6 +17,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 public class OpenApiPartSerializerTest {
@@ -215,100 +217,86 @@ public class OpenApiPartSerializerTest {
 		byte[] foob = "foo".getBytes();
 		String expected = base64Encode(foob);
 		assertEquals(expected, s.serialize(ps, foob));
-		assertEquals(expected, s.serialize(ps, new C1(foob)).toString());
+		assertEquals(expected, s.serialize(ps, new C1(foob)));
 	}
 
-//	@Test
-//	public void c04_stringType_binaryFormat() throws Exception {
-//		HttpPartSchema ps = schema("string", "binary").build();
-//		String in = toHex("foo".getBytes());
-//		assertEquals("foo", s.serialize(ps, in, String.class));
-//		assertEquals("foo", IOUtils.read(s.serialize(ps, in, InputStream.class)));
-//		assertEquals("foo", IOUtils.read(s.serialize(ps, in, Reader.class)));
-//		assertEquals("C1-foo", s.serialize(ps, in, C1.class).toString());
-//	}
-//
-//	@Test
-//	public void c05_stringType_binarySpacedFormat() throws Exception {
-//		HttpPartSchema ps = schema("string", "binary-spaced").build();
-//		String in = toSpacedHex("foo".getBytes());
-//		assertEquals("foo", s.serialize(ps, in, String.class));
-//		assertEquals("foo", IOUtils.read(s.serialize(ps, in, InputStream.class)));
-//		assertEquals("foo", IOUtils.read(s.serialize(ps, in, Reader.class)));
-//		assertEquals("C1-foo", s.serialize(ps, in, C1.class).toString());
-//	}
-//
-//	@Test
-//	public void c06_stringType_dateFormat() throws Exception {
-//		HttpPartSchema ps = schema("string", "date").build();
-//		String in = "2012-12-21";
-//		assertTrue(s.serialize(ps, in, String.class).contains("2012"));
-//		assertTrue(s.serialize(ps, in, Date.class).toString().contains("2012"));
-//		assertEquals(2012, s.serialize(ps, in, Calendar.class).get(Calendar.YEAR));
-//		assertEquals(2012, s.serialize(ps, in, GregorianCalendar.class).get(Calendar.YEAR));
-//	}
-//
-//	@Test
-//	public void c07_stringType_dateTimeFormat() throws Exception {
-//		HttpPartSchema ps = schema("string", "date-time").build();
-//		String in = "2012-12-21T12:34:56.789";
-//		assertTrue(s.serialize(ps, in, String.class).contains("2012"));
-//		assertTrue(s.serialize(ps, in, Date.class).toString().contains("2012"));
-//		assertEquals(2012, s.serialize(ps, in, Calendar.class).get(Calendar.YEAR));
-//		assertEquals(2012, s.serialize(ps, in, GregorianCalendar.class).get(Calendar.YEAR));
-//	}
-//
-//	@Test
-//	public void c08_stringType_uonFormat() throws Exception {
-//		HttpPartSchema ps = schema("string", "uon").build();
-//		assertEquals("foo", s.serialize(ps, "foo", String.class));
-//		assertEquals("foo", s.serialize(ps, "'foo'", String.class));
-//		assertEquals("C2-foo", s.serialize(ps, "'foo'", C2.class).toString());
-//		// UonPartParserTest should handle all other cases.
-//	}
-//
-//	@Test
-//	public void c09_stringType_noneFormat() throws Exception {
-//		// If no format is specified, then we should transform directly from a string.
-//		HttpPartSchema ps = schema("string").build();
-//		assertEquals("foo", s.serialize(ps, "foo", String.class));
-//		assertEquals("'foo'", s.serialize(ps, "'foo'", String.class));
-//		assertEquals("C2-foo", s.serialize(ps, "foo", C2.class).toString());
-//	}
-//
-//	@Test
-//	public void c10_stringType_noneFormat_2d() throws Exception {
-//		HttpPartSchema ps = schema("array").items(schema("string")).build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", Object[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", List.class, Object.class));
-//		Object o = s.serialize(ps, "foo,bar", Object.class);
-//		assertObjectEquals("['foo','bar']", o);
-//		assertClass(ObjectList.class, o);
-//		assertObjectEquals("['C2-foo','C2-bar']", s.serialize(ps, "foo,bar", C2[].class));
-//		assertObjectEquals("['C2-foo','C2-bar']", s.serialize(ps, "foo,bar", List.class, C2.class));
-//		assertEquals("C3-['foo','bar']", s.serialize(ps, "foo,bar", C3.class).toString());
-//	}
-//
-//	@Test
-//	public void c11_stringType_noneFormat_3d() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("string"))).build();
-//		assertObjectEquals("[['foo','bar'],['baz']]", s.serialize(ps, "foo,bar|baz", String[][].class));
-//		assertObjectEquals("[['foo','bar'],['baz']]", s.serialize(ps, "foo,bar|baz", List.class, String[].class));
-//		assertObjectEquals("[['foo','bar'],['baz']]", s.serialize(ps, "foo,bar|baz", List.class, List.class, String.class));
-//		assertObjectEquals("[['foo','bar'],['baz']]", s.serialize(ps, "foo,bar|baz", Object[][].class));
-//		assertObjectEquals("[['foo','bar'],['baz']]", s.serialize(ps, "foo,bar|baz", List.class, Object[].class));
-//		assertObjectEquals("[['foo','bar'],['baz']]", s.serialize(ps, "foo,bar|baz", List.class, List.class, Object.class));
-//		Object o = s.serialize(ps, "foo,bar|baz", Object.class);
-//		assertObjectEquals("[['foo','bar'],['baz']]", o);
-//		assertClass(ObjectList.class, o);
-//		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", s.serialize(ps, "foo,bar|baz", C2[][].class));
-//		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", s.serialize(ps, "foo,bar|baz", List.class, C2[].class));
-//		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", s.serialize(ps, "foo,bar|baz", List.class, List.class, C2.class));
-//		assertObjectEquals("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']", s.serialize(ps, "foo,bar|baz", C3[].class));
-//		assertObjectEquals("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']", s.serialize(ps, "foo,bar|baz", List.class, C3.class));
-//	}
+	@Test
+	public void c04_stringType_binaryFormat() throws Exception {
+		HttpPartSchema ps = schema("string", "binary").build();
+		byte[] foob = "foo".getBytes();
+		String expected = toHex(foob);
+		assertEquals(expected, s.serialize(ps, foob));
+		assertEquals(expected, s.serialize(ps, new C1(foob)));
+	}
+
+	@Test
+	public void c05_stringType_binarySpacedFormat() throws Exception {
+		HttpPartSchema ps = schema("string", "binary-spaced").build();
+		byte[] foob = "foo".getBytes();
+		String expected = toSpacedHex(foob);
+		assertEquals(expected, s.serialize(ps, foob));
+		assertEquals(expected, s.serialize(ps, new C1(foob)));
+	}
+
+	@Test
+	public void c06_stringType_dateFormat() throws Exception {
+		HttpPartSchema ps = schema("string", "date").build();
+		Calendar in = StringUtils.parseIsoCalendar("2012-12-21");
+		assertTrue(s.serialize(ps, in).contains("2012"));
+	}
+
+	@Test
+	public void c07_stringType_dateTimeFormat() throws Exception {
+		HttpPartSchema ps = schema("string", "date-time").build();
+		Calendar in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
+		assertTrue(s.serialize(ps, in).contains("2012"));
+	}
+
+	@Test
+	public void c08_stringType_uonFormat() throws Exception {
+		HttpPartSchema ps = schema("string", "uon").build();
+		assertEquals("foo", s.serialize(ps, "foo"));
+		assertEquals("'foo'", s.serialize(ps, "'foo'"));
+		assertEquals("C2-foo", s.serialize(ps, new C2("foo")));
+		// UonPartSerializerTest should handle all other cases.
+	}
+
+	@Test
+	public void c09_stringType_noneFormat() throws Exception {
+		// If no format is specified, then we should transform directly from a string.
+		HttpPartSchema ps = schema("string").build();
+		assertEquals("foo", s.serialize(ps, "foo"));
+		assertEquals("'foo'", s.serialize(ps, "'foo'"));
+		assertEquals("C2-foo", s.serialize(ps, new C2("foo")));
+	}
+
+	@Test
+	public void c10_stringType_noneFormat_2d() throws Exception {
+		HttpPartSchema ps = schema("array").items(schema("string")).build();
+		assertEquals("foo,bar", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("foo,bar", s.serialize(ps, new AList<String>().appendAll("foo","bar")));
+		assertEquals("foo,bar", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("foo,bar", s.serialize(ps, new AList<String>().appendAll("foo","bar")));
+		assertEquals("C2-foo,C2-bar", s.serialize(ps, new C2[] {new C2("foo"), new C2("bar")}));
+		assertEquals("C2-foo,C2-bar", s.serialize(ps, new AList<C2>().appendAll(new C2("foo"), new C2("bar"))));
+//		assertEquals("['foo','bar']", s.serialize(ps, new C3("foo","bar")));
+	}
+
+	@Test
+	public void c11_stringType_noneFormat_3d() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("string"))).build();
+		assertEquals("foo,bar|baz", s.serialize(ps, new String[][]{{"foo","bar"},{"baz"}}));
+		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(new String[]{"foo","bar"}, new String[]{"baz"})));
+		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(AList.create("foo","bar"),AList.create("baz"))));
+		assertEquals("foo,bar|baz", s.serialize(ps, new Object[][]{{"foo","bar"},{"baz"}}));
+		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(new Object[]{"foo","bar"}, new String[]{"baz"})));
+		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(AList.create((Object)"foo",(Object)"bar"),AList.create((Object)"baz"))));
+		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, new C2[][]{{new C2("foo"),new C2("bar")},{new C2("baz")}}));
+		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, AList.create(new C2[]{new C2("foo"),new C2("bar")}, new C2[]{new C2("baz")})));
+		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, AList.create(AList.create(new C2("foo"),new C2("bar")),AList.create(new C2("baz")))));
+//		assertEquals("['foo','bar']|['baz']", s.serialize(ps, new C3[]{new C3("foo","bar"),new C3("baz")}));
+//		assertEquals("['foo','bar']|['baz']", s.serialize(ps, AList.create(AList.create(new C3("foo","bar"), new C3("baz")))));
+	}
 
 //	//-----------------------------------------------------------------------------------------------------------------
 //	// type = array

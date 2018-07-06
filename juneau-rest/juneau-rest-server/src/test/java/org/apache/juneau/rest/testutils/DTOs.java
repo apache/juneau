@@ -86,25 +86,25 @@ public class DTOs {
 		public static B create() {
 			B t = new B();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = new AList<String>().append("c").append("d");
+			t.f02 = AList.create("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = new AList<Integer>().append(3).append(4);
+			t.f04 = AList.create(3,4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = new AList<String[]>().append(new String[]{"i","j"}).append(new String[]{"k","l"});
+			t.f06 = AList.create(new String[]{"i","j"},new String[]{"k","l"});
 			t.f07 = new A[]{A.create(),A.create()};
-			t.f08 = new AList<A>().append(A.create()).append(A.create());
+			t.f08 = AList.create(A.create(),A.create());
 			t.f09 = new A[][]{{A.create()},{A.create()}};
-			t.f10 = new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create()));
+			t.f10 = AList.create(Arrays.asList(A.create()),Arrays.asList(A.create()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(new AList<String>().append("c").append("d"));
+			t.setF12(AList.create("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(new AList<Integer>().append(3).append(4));
+			t.setF14(AList.create(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(new AList<String[]>().append(new String[]{"i","j"}).append(new String[]{"k","l"}));
+			t.setF16(AList.create(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new A[]{A.create(),A.create()});
-			t.setF18(new AList<A>().append(A.create()).append(A.create()));
+			t.setF18(AList.create(A.create(),A.create()));
 			t.setF19(new A[][]{{A.create()},{A.create()}});
-			t.setF20(new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create())));
+			t.setF20(AList.create(Arrays.asList(A.create()),Arrays.asList(A.create())));
 			return t;
 		}
 
@@ -116,25 +116,25 @@ public class DTOs {
 		public static C create() {
 			C t = new C();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = new AList<String>().append("c").append("d");
+			t.f02 = AList.create("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = new AList<Integer>().append(3).append(4);
+			t.f04 = AList.create(3, 4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = new AList<String[]>().append(new String[]{"i","j"}).append(new String[]{"k","l"});
+			t.f06 = AList.create(new String[]{"i","j"}, new String[]{"k","l"});
 			t.f07 = new A[]{A.create(),A.create()};
-			t.f08 = new AList<A>().append(A.create()).append(A.create());
+			t.f08 = AList.create(A.create(), A.create());
 			t.f09 = new A[][]{{A.create()},{A.create()}};
-			t.f10 = new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create()));
+			t.f10 = AList.create(Arrays.asList(A.create()), Arrays.asList(A.create()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(new AList<String>().append("c").append("d"));
+			t.setF12(AList.create("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(new AList<Integer>().append(3).append(4));
+			t.setF14(AList.create(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(new AList<String[]>().append(new String[]{"i","j"}).append(new String[]{"k","l"}));
+			t.setF16(AList.create(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new A[]{A.create(),A.create()});
-			t.setF18(new AList<A>().append(A.create()).append(A.create()));
+			t.setF18(AList.create(A.create(), A.create()));
 			t.setF19(new A[][]{{A.create()},{A.create()}});
-			t.setF20(new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create())));
+			t.setF20(AList.create(Arrays.asList(A.create()), Arrays.asList(A.create())));
 			return t;
 		}
 
